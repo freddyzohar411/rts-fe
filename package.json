@@ -1,71 +1,11 @@
 {
-  "name": "rts-fe",
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "apexcharts": "3.41.0",
-    "axios": "^1.5.0",
-    "bootstrap": "5.3.0",
-    "feather-icons-react": "^0.6.2",
-    "formik": "^2.4.3",
-    "i18next": "^23.2.3",
-    "i18next-browser-languagedetector": "^7.1.0",
-    "i18next-loader": "^0.1.0",
-    "lord-icon-element": "^4.1.1",
-    "lottie-web": "^5.12.2",
-    "node-sass": "^9.0.0",
-    "react": "^18.2.0",
-    "react-apexcharts": "^1.4.0",
-    "react-countup": "^6.4.2",
-    "react-dom": "^18.2.0",
-    "react-flatpickr": "^3.10.13",
-    "react-hook-form": "^7.45.4",
-    "react-hot": "^0.0.1",
-    "react-i18next": "^13.0.1",
-    "react-jvectormap": "^0.0.16",
-    "react-redux": "^8.1.2",
-    "react-router-dom": "^6.15.0",
-    "react-scripts": "5.0.1",
-    "react-toastify": "^9.1.3",
-    "reactstrap": "^9.2.0",
-    "redux-saga": "^1.2.3",
-    "remixicon-react": "^1.0.0",
-    "reselect": "^4.1.8",
-    "resolve-url-loader": "^5.0.0",
-    "sass": "1.30.0",
-    "sass-loader": "11.0.1",
-    "simplebar-react": "^3.2.4",
-    "source-map-loader": "^4.0.1",
-    "swiper": "^9.4.1",
-    "url-loader": "^4.1.1",
-    "web-vitals": "^2.1.4",
-    "yup": "^1.2.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+  "workspaces": {
+    "packages": [
+      "./common",
+      "./dashboard",
+      "./login",
+      "./main"
     ]
   }
 }
