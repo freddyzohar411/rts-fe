@@ -1,16 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import { App } from "dashboard";
-import { LoginApp } from "login";
-import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
 
+import "@workspace/common/src/assets/scss/themes.scss";
+import reportWebVitals from "./reportWebVitals";
+import { configureStore } from "./store";
+
+//imoprt Route
+import Route from "./Routes";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-    <LoginApp />
-  </React.StrictMode>
+  <Provider store={configureStore({})}>
+    <React.Fragment>
+      <Route />
+    </React.Fragment>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

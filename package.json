@@ -3,9 +3,17 @@
   "workspaces": {
     "packages": [
       "./common",
+      "./main",
       "./dashboard",
-      "./login",
-      "./main"
+      "./login"
     ]
+  },
+  "scripts": {
+    "start": "lerna run --scope @workspace/main start",
+    "yarn:start": "yarn workspace main start",
+    "test": "yarn workspaces run test"
+  },
+  "devDependencies": {
+    "lerna": "^7.2.0"
   }
 }
