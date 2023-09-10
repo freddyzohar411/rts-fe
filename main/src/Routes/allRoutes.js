@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 import { DashboardEcommerce } from "@workspace/dashboard";
 
 // // User Profile
-import { Login, Logout, UserProfile } from "@workspace/login";
+import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 // import Welcome from "../pages/Authentication/Welcome";
 
 const authProtectedRoutes = [
@@ -29,6 +29,7 @@ const publicRoutes = [
   // Authentication Page
   { path: "/login", component: <Login /> },
   { path: "/logout", component: <Logout /> },
+  { path: "/forget-password", component: <ForgetPassword /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };

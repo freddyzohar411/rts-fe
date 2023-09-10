@@ -161,9 +161,8 @@ const ForgetPasswordPage = (props) => {
                     to="/login"
                     className="fw-semibold text-primary text-decoration-underline"
                   >
-                    {" "}
-                    Click here{" "}
-                  </Link>{" "}
+                    Click here
+                  </Link>
                 </p>
               </div>
             </Col>

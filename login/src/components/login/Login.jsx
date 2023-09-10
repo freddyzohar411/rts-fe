@@ -91,7 +91,7 @@ const Login = (props) => {
                           <div className="mb-3">
                             <div className="float-end">
                               <Link
-                                to="/forgot-password"
+                                to="/forget-password"
                                 className="text-muted"
                               >
                                 Forgot password?
