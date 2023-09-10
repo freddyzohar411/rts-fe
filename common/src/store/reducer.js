@@ -1,1 +1,2 @@
-export * from "./layouts/reducer";
+import Layout from "./layouts/reducer";
+export { Layout };

@@ -1,19 +1,20 @@
 import { combineReducers } from "redux";
 
+// Common
+import { Reducers } from "@workspace/common";
+
 // Authentication
-import { Reducers as Layout } from "@workspace/common";
+import { Reducers as LoginReducers } from "@workspace/login";
 
-import { Reducers as Login } from "@workspace/login";
-// import ForgetPassword from "./auth/forgetpwd/reducer";
-
-// import Profile from "./auth/profile/reducer";
+const { Layout } = Reducers;
+const { Login, ForgetPassword, Profile } = LoginReducers;
 
 const rootReducer = combineReducers({
   // public
   Login,
-  // ForgetPassword,
+  ForgetPassword,
   Layout,
-  // Profile,
+  Profile,
 });
 
 export default rootReducer;
