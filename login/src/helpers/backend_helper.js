@@ -1,6 +1,11 @@
 import { Axios } from "@workspace/common";
 
-import { POST_LOGIN, GET_LOGOUT, POST_PASSWORD_FORGET } from "./url_helper";
+import {
+  POST_LOGIN,
+  GET_LOGOUT,
+  POST_PASSWORD_FORGET,
+  GET_VALIDATE,
+} from "./url_helper";
 
 const { APIClient } = Axios;
 
@@ -28,4 +33,4 @@ export const getLogout = (data) => api.get(GET_LOGOUT, data);
 export const postForgetPwd = (data) => api.create(POST_PASSWORD_FORGET, data);
 
 // is user is logged in
-export const getValidate = (data) => api.get(url.GET_VALIDATE, data);
+export const getValidate = (data) => api.get(GET_VALIDATE, data);

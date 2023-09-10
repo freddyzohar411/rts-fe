@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
 import { setAuthorization } from "@workspace/common/src/helpers/api_helper";
 import { useDispatch } from "react-redux";
 
@@ -25,6 +25,9 @@ const AuthProtected = (props) => {
     */
 
   if (!userProfile && loading && !token) {
+    return (
+      <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
+    );
   }
 
   return <>{props.children}</>;

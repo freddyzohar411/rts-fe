@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useEffect } from "react";
+import { Navigate } from "react-router-dom";
 
 import { logoutUser } from "../../store/actions";
 
@@ -22,7 +23,7 @@ const Logout = (props) => {
   }, [dispatch]);
 
   if (isUserLogout) {
-    // window.location.replace(api.LOGIN_MS_URL);
+    return <Navigate to="/login" />;
   }
 
   return <></>;

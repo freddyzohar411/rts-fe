@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 import { DashboardEcommerce } from "@workspace/dashboard";
 
 // // User Profile
-import { useProfile, Login, Logout, UserProfile } from "@workspace/login";
+import { Login, Logout, UserProfile } from "@workspace/login";
 // import Welcome from "../pages/Authentication/Welcome";
 
 const authProtectedRoutes = [

@@ -27,7 +27,7 @@ const Login = (props) => {
   const [passwordShow, setPasswordShow] = useState(false);
 
   const handleFormSubmit = async (values) => {
-    dispatch(loginUser(values, props?.router));
+    dispatch(loginUser(values, props.router.navigate));
   };
 
   return (

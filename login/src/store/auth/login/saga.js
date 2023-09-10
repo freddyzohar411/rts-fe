@@ -4,7 +4,6 @@ import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { LOGIN_USER, LOGOUT_USER, SOCIAL_LOGIN } from "./actionTypes";
 import { apiError, loginSuccess, logoutUserSuccess } from "./actions";
 import { getLogout, postLogin } from "../../../helpers/backend_helper";
-import { URL  } from "@workspace/common";
 
 function* loginUser({ payload: { user, history } }) {
   try {
@@ -15,8 +14,7 @@ function* loginUser({ payload: { user, history } }) {
     if (response) {
       yield put(loginSuccess(response));
       sessionStorage.setItem("authUser", JSON.stringify(response));
-      const url = `${api.DASHBOARD_URL}/welcome?token=${response?.access_token}&refresh_token=${response?.refresh_token}`;
-      window.location.replace(url);
+      history("/dashboard");
     } else {
       yield put(apiError(response));
     }
