@@ -1,5 +1,5 @@
 import axios from "axios";
-import { api } from "../config";
+import * as api from "../config";
 
 // default
 axios.defaults.baseURL = api.API_URL;
@@ -7,9 +7,10 @@ axios.defaults.baseURL = api.API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 // content type
-const token = JSON.parse(sessionStorage.getItem("authUser")) ? JSON.parse(sessionStorage.getItem("authUser")).token : null;
-if(token)
-axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+const token = JSON.parse(sessionStorage.getItem("authUser"))
+  ? JSON.parse(sessionStorage.getItem("authUser")).token
+  : null;
+if (token) axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 
 // intercepting to capture errors
 axios.interceptors.response.use(
@@ -57,12 +58,13 @@ class APIClient {
     let paramKeys = [];
 
     if (params) {
-      Object.keys(params).map(key => {
-        paramKeys.push(key + '=' + params[key]);
+      Object.keys(params).map((key) => {
+        paramKeys.push(key + "=" + params[key]);
         return paramKeys;
       });
 
-      const queryString = paramKeys && paramKeys.length ? paramKeys.join('&') : "";
+      const queryString =
+        paramKeys && paramKeys.length ? paramKeys.join("&") : "";
       response = axios.get(`${url}?${queryString}`, params);
     } else {
       response = axios.get(`${url}`, params);

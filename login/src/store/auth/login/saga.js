@@ -4,7 +4,7 @@ import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { LOGIN_USER, LOGOUT_USER, SOCIAL_LOGIN } from "./actionTypes";
 import { apiError, loginSuccess, logoutUserSuccess } from "./actions";
 import { getLogout, postLogin } from "../../../helpers/backend_helper";
-import { api } from "../../../config";
+import { URL  } from "@workspace/common";
 
 function* loginUser({ payload: { user, history } }) {
   try {

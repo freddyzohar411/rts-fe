@@ -5,13 +5,12 @@ import { useDispatch } from "react-redux";
 
 import { useProfile } from "@workspace/common";
 
-import { logoutUser } from "../store/actions";
-
-import { api } from "@workspace/common/src/config";
+import { Actions } from "@workspace/login";
 
 const AuthProtected = (props) => {
   const dispatch = useDispatch();
   const { userProfile, loading, token } = useProfile();
+  const { logoutUser } = Actions;
   useEffect(() => {
     if (userProfile && !loading && token) {
       setAuthorization(token);
@@ -25,7 +24,6 @@ const AuthProtected = (props) => {
     */
 
   if (!userProfile && loading && !token) {
-    //window.location.replace(api.LOGIN_MS_URL);
   }
 
   return <>{props.children}</>;

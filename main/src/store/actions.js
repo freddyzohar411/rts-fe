@@ -1,8 +1,4 @@
 // Layout
-export * from "./layouts/action";
+export { Actions } from "@workspace/common";
 
-export * from "./auth/login/actions";
-export * from "./auth/forgetpwd/actions";
-export * from "./auth/profile/actions";
-
-export * from "./layouts/action";
+export { Actions as LoginActions } from "@workspace/login";
