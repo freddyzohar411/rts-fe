@@ -9,9 +9,9 @@ export * as Actions from "./store/actions";
 
 export * as ActionTypes from "./store/actiontypes";
 
-export * as Reducers from "./store/reducer";
+export * as Reducers from "./store/reducers";
 
-export * as Saga from "./store/saga";
+export * as Sagas from "./store/sagas";
 
 // Common Data
 export * from "./common/data";

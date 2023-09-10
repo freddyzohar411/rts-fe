@@ -1,13 +1,17 @@
 import { all, fork } from "redux-saga/effects";
 
 //layout
-import { Saga as CommonSaga } from "@workspace/common";
+import { Sagas as CommonSaga } from "@workspace/common";
 
 //Auth
-import { Saga as LoginSaga } from "@workspace/login";
+import { Sagas as LoginSaga } from "@workspace/login";
+
+//Auth
+import { Sagas as DashboardSaga } from "@workspace/dashboard";
 
 const { LayoutSaga } = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
+const { DashboardEcommerceSaga } = DashboardSaga;
 
 export default function* rootSaga() {
   yield all([
@@ -16,5 +20,6 @@ export default function* rootSaga() {
     fork(AuthSaga),
     fork(ForgetSaga),
     fork(ProfileSaga),
+    fork(DashboardEcommerceSaga),
   ]);
 }
