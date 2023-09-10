@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col } from 'reactstrap';
-import { recentOrders } from '../../common/data';
+import { recentOrders } from '@workspace/common';
 
 const RecentOrders = () => {
     return (

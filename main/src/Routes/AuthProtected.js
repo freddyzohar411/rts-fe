@@ -3,7 +3,7 @@ import { Route } from "react-router-dom";
 import { setAuthorization } from "@workspace/common/src/helpers/api_helper";
 import { useDispatch } from "react-redux";
 
-import { useProfile } from "@workspace/common";
+import { useProfile } from "@workspace/login";
 
 import { Actions } from "@workspace/login";
 
@@ -11,6 +11,7 @@ const AuthProtected = (props) => {
   const dispatch = useDispatch();
   const { userProfile, loading, token } = useProfile();
   const { logoutUser } = Actions;
+
   useEffect(() => {
     if (userProfile && !loading && token) {
       setAuthorization(token);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap';
-import { bestSellingProducts } from "../../common/data";
+import { bestSellingProducts } from "@workspace/common";
 
 const BestSellingProducts = () => {
     return (

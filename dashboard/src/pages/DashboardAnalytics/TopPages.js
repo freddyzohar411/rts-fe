@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
-import { topPages } from "../../common/data";
+import { topPages } from "@workspace/common";
 
 const TopPages = () => {
     const [isTopPageDropdown, setTopPageDropdown] = useState(false);

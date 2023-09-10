@@ -43,9 +43,6 @@ import WebAppsDropdown from "./Common/WebAppsDropdown";
 // Router
 import withRouter from "./Common/withRouter";
 
-// Hooks
-import { useProfile } from "./Hooks/UserHooks";
-
 // Constants
 import {
   layoutTypes,
@@ -98,7 +95,6 @@ export {
   UiContent,
   WebAppsDropdown,
   withRouter,
-  useProfile,
   //Layout
   layoutTypes,
   layoutModeTypes,

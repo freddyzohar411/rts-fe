@@ -26,3 +26,6 @@ export const getLogout = (data) => api.get(GET_LOGOUT, data);
 
 // postForgetPwd
 export const postForgetPwd = (data) => api.create(POST_PASSWORD_FORGET, data);
+
+// is user is logged in
+export const getValidate = (data) => api.get(url.GET_VALIDATE, data);

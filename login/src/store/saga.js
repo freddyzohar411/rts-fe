@@ -1,3 +1,5 @@
-export * from "./auth/login/saga";
-export * from "./auth/forgetpwd/saga";
-export * from "./auth/profile/saga";
+import AuthSaga from "./auth/login/saga";
+import ForgetSaga from "./auth/forgetpwd/saga";
+import ProfileSaga from "./auth/profile/saga";
+
+export { AuthSaga, ForgetSaga, ProfileSaga };

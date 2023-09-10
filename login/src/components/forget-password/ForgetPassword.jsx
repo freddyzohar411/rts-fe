@@ -27,10 +27,11 @@ import { userForgetPassword } from "../../store/actions";
 
 // import images
 // import profile from "../../assets/images/bg.png";
-import logoLight from "../../assets/images/logo-light.png";
+import logoLight from "@workspace/common/src/assets/images/logo-light.png";
+
 import ParticlesAuth from "../../ParticlesAuth";
 import { createSelector } from "reselect";
-import withRouter from "../common/withRouter";
+import { withRouter } from "@workspace/common";
 
 const ForgetPasswordPage = (props) => {
   const dispatch = useDispatch();

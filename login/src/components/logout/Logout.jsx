@@ -1,13 +1,11 @@
 import PropTypes from "prop-types";
 import React, { useEffect } from "react";
 
-import { api } from "../../config";
-
 import { logoutUser } from "../../store/actions";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import withRouter from "../../Components/Common/withRouter";
+import { withRouter } from "@workspace/common";
 import { createSelector } from "reselect";
 
 const Logout = (props) => {
@@ -24,7 +22,7 @@ const Logout = (props) => {
   }, [dispatch]);
 
   if (isUserLogout) {
-    window.location.replace(api.LOGIN_MS_URL);
+    // window.location.replace(api.LOGIN_MS_URL);
   }
 
   return <></>;

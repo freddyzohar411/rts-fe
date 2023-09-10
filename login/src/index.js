@@ -1,5 +1,7 @@
-import Login from "./components/login/Login.jsx";
-export { Login };
+export * from "./components";
+
+// User profile hook
+export * from "./hooks/UserHooks.js";
 
 // Redux Store
 export * as Actions from "./store/actions";

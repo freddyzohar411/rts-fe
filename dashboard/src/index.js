@@ -1,1 +1,3 @@
-export * from "./App";
+import DashboardEcommerce from "./pages/DashboardEcommerce";
+
+export { DashboardEcommerce };
