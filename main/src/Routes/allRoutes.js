@@ -6,7 +6,6 @@ import { DashboardEcommerce } from "@workspace/dashboard";
 
 // // User Profile
 import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
-// import Welcome from "../pages/Authentication/Welcome";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
