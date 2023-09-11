@@ -192,6 +192,18 @@ const Navdata = () => {
           link: "/dashboard-job",
           parentId: "dashboard",
         },
+        {
+          id: "account-creation",
+          label: "Account creation",
+          link: "/account/account-creation",
+          parentId: "dashboard",
+        },
+        {
+          id: "account-listing",
+          label: "Account listing",
+          link: "/accounts",
+          parentId: "dashboard",
+        },
       ],
     },
     {
