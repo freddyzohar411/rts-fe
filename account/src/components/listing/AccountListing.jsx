@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Input, ListGroup, ListGroupItem, Modal, ModalBody, ModalFooter, ModalHeader, Row, Table } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import Flatpickr from 'react-flatpickr';
-import SimpleBar from 'simplebar-react';
-import List from 'list.js';
+import { Badge, Button, Card, CardBody, Col, Container, Input, Row, Table } from 'reactstrap';
+import { Link } from 'react-router-dom';;
 
 function AccountListing() {
     document.title = "Accounts | RTS";
+
+    const [isSorted, setIsSorted] = useState(false);
+    const toggle = () => {
+        setIsSorted(!isSorted);
+    };
 
     return (
         <React.Fragment>
@@ -21,14 +23,14 @@ function AccountListing() {
                                             <Col>
                                                 <div className='search-box'>
                                                     <Input type='text' placeholder='Search' className='form-control search bg-light border-light' />
-                                                    {/* <i className='ri-search-line search-icon'></i> */}
+                                                    <i className='ri-search-line search-icon'></i>
                                                 </div>
                                             </Col>
                                             <Col>
                                                 <div className='d-flex column-gap-2 justify-content-end'>
-                                                    <Button type='button' color='light'>Imports</Button>
-                                                    <Button type='button' color='custom-button'>Custom View</Button>
-                                                    <Button type='button' color='custom-button'>Create New Account</Button>
+                                                    <Button type='button' className='btn btn-primary d-flex align-items-center column-gap-2'><span><i className='mdi mdi-download'></i></span> Imports</Button>
+                                                    <Button type='button' className='btn btn-primary d-flex align-items-center column-gap-2'><span><i className='ri-settings-3-fill'></i></span> Custom View</Button>
+                                                    <Button type='button' className='btn btn-primary'>Create New Account</Button>
                                                 </div>
                                             </Col>
                                         </Row>
@@ -43,13 +45,13 @@ function AccountListing() {
                                                             </div>
                                                         </th>
                                                         <th scope='col' class="text-uppercase"></th>
-                                                        <th scope='col' class="text-uppercase">Service</th>
-                                                        <th scope='col' class="text-uppercase">Account Number</th>
-                                                        <th scope='col' class="text-uppercase">Account Name</th>
-                                                        <th scope='col' class="text-uppercase">Account Owner</th>
-                                                        <th scope='col' class="text-uppercase">Created By</th>
-                                                        <th scope='col' class="text-uppercase">Parent Account</th>
-                                                        <th scope='col' class="text-uppercase">Account Status</th>
+                                                        <th scope='col' class="text-uppercase">Service <span onClick={toggle} style={{cursor: 'pointer'}}>{isSorted ? <i className='mdi mdi-sort-descending'></i> : <i className='mdi mdi-sort-ascending'></i>}</span></th>
+                                                        <th scope='col' class="text-uppercase">Account Number <i className="mdi mdi-sort-descending"></i></th>
+                                                        <th scope='col' class="text-uppercase">Account Name <i className="mdi mdi-sort-descending"></i></th>
+                                                        <th scope='col' class="text-uppercase">Account Owner <i className="mdi mdi-sort-descending"></i></th>
+                                                        <th scope='col' class="text-uppercase">Created By <i className="mdi mdi-sort-descending"></i></th>
+                                                        <th scope='col' class="text-uppercase">Parent Account<i className="mdi mdi-sort-descending"></i></th>
+                                                        <th scope='col' class="text-uppercase">Account Status <i className="mdi mdi-sort-descending"></i></th>
                                                         <th scope='col' class="text-uppercase">Action</th>
                                                     </tr>
                                                 </thead>
