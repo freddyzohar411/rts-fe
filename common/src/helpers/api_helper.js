@@ -75,8 +75,8 @@ class APIClient {
   /**
    * post given data to url
    */
-  create = (url, data) => {
-    return axios.post(url, data);
+  create = (url, data, config = {}) => {
+    return axios.post(url, data, config);
   };
   /**
    * Updates data
@@ -85,8 +85,8 @@ class APIClient {
     return axios.patch(url, data);
   };
 
-  put = (url, data) => {
-    return axios.put(url, data);
+  put = (url, data, config) => {
+    return axios.put(url, data, config);
   };
   /**
    * Delete
@@ -94,6 +94,12 @@ class APIClient {
   delete = (url, config) => {
     return axios.delete(url, { ...config });
   };
+
+  getToken = () => {
+    return sessionStorage.getItem("authUser")
+      ? JSON.parse(sessionStorage.getItem("authUser")).access_token
+      : null;
+  }
 }
 const getLoggedinUser = () => {
   const user = sessionStorage.getItem("authUser");
