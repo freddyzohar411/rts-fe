@@ -10,10 +10,11 @@ import {
   Table,
 } from "reactstrap";
 
+// Get the address string from the address object
 const getAddressString = (address) => {
     let addressFull = "";
     if (address.line1){
-        addressFull += (address.line1 + ", ");
+        addressFull += address.line1;
     }
     if (address.line2){
         addressFull += address.line2 + ", ";
@@ -32,7 +33,7 @@ const getAddressString = (address) => {
     }
 
     // Remove the last comma
-    return addressFull.substring(0, address.length - 2);
+    return addressFull.substring(0, addressFull.length - 2);
 }
 
 /**
@@ -99,8 +100,8 @@ export const accountListingOptions = {
     render: (data) => data.account.accountInformation.noOfEmployees || "-",
     sort: true,
   },
-  "Parent Company":{
-    header: "Parent Company",
+  "Parent Account":{
+    header: "Parent Account",
     name: "parentCompanyEntity",
     render: (data) => data.account.accountInformation?.parentCompanyEntity?.name || "-",
     sort: false,
@@ -141,4 +142,11 @@ export const accountListingOptions = {
     render: (data) => getAddressString(data.account.addressInformation.address) || "-",
     sort: false,
   },
+  "Created By":{
+    header: "Created By",
+    name: "createdBy",
+    render: (data) => `${data.user.firstName} ${data.user.lastName}` || "-",
+    sort: false,
+  },
+  
 };

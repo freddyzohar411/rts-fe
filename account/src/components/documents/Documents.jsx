@@ -19,6 +19,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FileHelper } from "@workspace/common";
 import { Axios } from "@workspace/common";
 const { APIClient } = Axios;
 const api = new APIClient();
@@ -34,6 +35,7 @@ function Documents() {
   const [updatedDocument, setUpdatedDocument] = useState(documents);
   const [editDocumentName, setEditDocumentName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [fileError, setFileError] = useState(null);
 
   // Update id state
   const [updateId, setUpdateId] = useState(null);
@@ -109,10 +111,28 @@ function Documents() {
   };
 
   // Handle file upload
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    setNewDocument(file);
+  const handleFileUpload = (e, form) => {
+    setFileError(null);
+
+    // Check if file is selected
+    if (e.target.files[0] ==  null) return;
+
+    // Check if file is correct format
+    if (!FileHelper.checkFileFormatValid(e.target.files[0], ["pdf","docx","doc"])){
+      e.target.value = null;
+      setFileError("Please upload only pdf, docx, doc file");
+      return;
+    }
+
+    // Check if file size les than 2MB
+    if (!FileHelper.checkFileSizeLimit(e.target.files[0], 2000000)){
+      e.target.value = null;
+      setFileError("Please upload file less than 2MB");
+      return;
+    }
+
+    // Set File
+    setNewDocument(e.target.files[0]);
   };
 
   // Handle delete
@@ -151,7 +171,7 @@ function Documents() {
       validationSchema={documentSchema}
       onSubmit={handleSubmit}
     >
-      {({ errors, touched, resetForm }) => (
+      {({ errors, touched, resetForm, values }) => (
         <Form>
           <div>
             <div className="mb-5">
@@ -241,6 +261,7 @@ function Documents() {
                         {errors.uploadDoc}
                       </FormFeedback>
                     )}
+                       {fileError && <div class="text-danger"><small>{fileError}</small></div> }
                     {editDocumentName && <span>{editDocumentName}</span>}
                     <div className="text-muted mt-2">
                       <div>Maximum Upload File Size: 2 MB.</div>

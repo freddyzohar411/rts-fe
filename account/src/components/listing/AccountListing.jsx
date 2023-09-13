@@ -28,7 +28,7 @@ function AccountListing() {
   const [searchInput, setSearchInput] = useState("");
   const [pageRequest, setPageRequest] = useState({
     page: 0,
-    pageSize: 3,
+    pageSize: 10,
     sortBy: null,
     sortDirection: "asc",
     searchTerm: null,
@@ -105,18 +105,28 @@ function AccountListing() {
   const handleSearch = (e) => {
     e.preventDefault();
     const search = e.target.value;
-    console.log("search", search)
+    console.log("search", search);
     setPageRequest((prev) => ({
       ...prev,
       searchTerm: searchInput === "" ? null : searchInput,
     }));
   };
 
+  //Handle Page size change
+    const handlePageSizeChange = (e) => {
+    const pageSize = e.target.value;
+    setPageRequest((prev) => ({
+      ...prev,
+      pageSize: pageSize,
+    }));
+    }
+
   document.title = "Accounts | RTS";
 
   // ========================================= Table Configuration ===========================
   // Set Custom view
-  const customView = "Account Name,Account Number,Msa,Parent Company,Account Owner,Address,Status";
+  const customView =
+    "Service,Account Number,Account Name,Account Owner,Created By,Parent Account,Status";
   //   const customView = "Account Name,Account Number";
   // Get the custom config
   const getCustomConfig = (customView) => {
@@ -159,9 +169,11 @@ function AccountListing() {
             </th>
           );
         } else {
-          return <th scope="col" class="text-uppercase">
-            {option.header}
-          </th>;
+          return (
+            <th scope="col" class="text-uppercase">
+              {option.header}
+            </th>
+          );
         }
       })}
       <th scope="col" class="text-uppercase">
@@ -229,6 +241,7 @@ function AccountListing() {
                               placeholder="Search"
                               className="form-control search bg-light border-light"
                               value={searchInput}
+                              style={{width:"350px"}}
                               onChange={(e) => setSearchInput(e.target.value)}
                             />
                           </form>
@@ -253,7 +266,7 @@ function AccountListing() {
                           >
                             <span>
                               <i className="ri-settings-3-fill"></i>
-                            </span>{" "}
+                            </span>
                             Custom View
                           </Button>
                           <Button type="button" className="btn btn-primary">
@@ -279,15 +292,20 @@ function AccountListing() {
 
                     <div className="d-flex justify-content-end">
                       <div className="pagination-wrap hstack gap-2">
+                        <Input onChange={handlePageSizeChange} type="select" className="form-select" style={{height:"34px", marginRight:"10px"}}>
+                          <option value="10">10</option>
+                          <option value="20">20</option>
+                          <option value="30">30</option>
+                        </Input>
                         <btn
-                          className="page-item pagination-prev disabled"
+                          className={`cursor-pointer page-item pagination-prev ${pageInfo.currentPage == 0 && "disabled"}`}
                           onClick={handlePreviousPage}
                         >
                           Previous
                         </btn>
                         <ul className="pagination listjs-pagination mb-0"></ul>
                         <btn
-                          className="page-item pagination-next"
+                          className={`cursor-pointer page-item pagination-next ${pageInfo.currentPage == pageInfo.totalPages - 1 && "disabled"}`}
                           onClick={handleNextPage}
                         >
                           Next

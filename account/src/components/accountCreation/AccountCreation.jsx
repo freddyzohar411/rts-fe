@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   FormFeedback,
   Button,
+  Alert
 } from "reactstrap";
 import SimpleBar from "simplebar-react";
 import { Form, Formik, Field } from "formik";
@@ -29,9 +30,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { set } from "react-hook-form";
 import * as yup from "yup";
+import { FileHelper } from "@workspace/common";
 import { Axios } from "@workspace/common";
 const { APIClient } = Axios;
 const api = new APIClient();
+
 
 export const AccountCreation = () => {
   const navigate = useNavigate();
@@ -62,20 +65,27 @@ export const AccountCreation = () => {
   const [accountDetails, setAccountDetails] = useState(null);
   const [accountStatus, setAccountStatus] = useState("new");
   const [agreementDocDetail, setAgreementDocDetail] = useState(null);
+  const [fileError, setFileError] = useState(null);
 
-  //
+  const handleFileChange = (e, form) => {
+    setFileError(null);
 
-  const handleFileChange = (e) => {
     // Check if file is selected
-    // if (e.target.files[0]) return;
+    if (e.target.files[0] ==  null) return;
 
-    // // Check if file extension is pdf
-    // if (e.target.files[0].name.split(".").pop() !== "pdf"){
-    //   return
-    // };
+    // Check if file is correct format
+    if (!FileHelper.checkFileFormatValid(e.target.files[0], ["pdf","docx","doc"])){
+      e.target.value = null;
+      setFileError("Please upload only pdf, docx, doc file");
+      return;
+    }
 
-    // // Check if file size is less than 5MB
-    // if (e.target.files[0].size > 5000000) return;
+    // Check if file size les than 2MB
+    if (!FileHelper.checkFileSizeLimit(e.target.files[0], 2000000)){
+      e.target.value = null;
+      setFileError("Please upload file less than 2MB");
+      return;
+    }
 
     // Set file
     setAgreementFile(e.target.files[0]);
@@ -319,7 +329,7 @@ export const AccountCreation = () => {
       form.setFieldValue("billingCity", form.values.city);
       dispatch(fetchBillingCity(getCountryId(form.values.country)));
       form.setFieldValue("billingPostalCode", form.values.postalCode);
-    }
+    } 
     setDisableForm(!disableForm);
   };
 
@@ -444,8 +454,8 @@ export const AccountCreation = () => {
                           id="accStatus"
                         >
                           <option>Select</option>
-                          <option defaultValue="1">Active</option>
-                          <option defaultValue="2">Inactive</option>
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
                         </select>
                       )}
                     </Field>
@@ -712,8 +722,8 @@ export const AccountCreation = () => {
                           id="accSource"
                         >
                           <option value="">Select</option>
-                          <option value="1">Professional Services</option>
-                          <option value="2">Talent Services</option>
+                          <option value="Professional Services">Professional Services</option>
+                          <option value="Talent Services">Talent Services</option>
                         </select>
                       )}
                     </Field>
@@ -882,7 +892,7 @@ export const AccountCreation = () => {
                         {errors.agreementDoc}
                       </FormFeedback>
                     )}
-
+                     {fileError && <div class="text-danger"><small>{fileError}</small></div> }
                     {agreementDocDetail && (
                       <span className="mt-2">
                         {agreementDocDetail.documentName}
