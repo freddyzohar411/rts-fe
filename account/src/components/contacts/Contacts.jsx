@@ -333,541 +333,545 @@ function Contacts() {
       {({ errors, touched, values, resetForm }) => (
         <div>
           <Form>
-            <div className="mb-3">
-              <div className="mb-2">
-                <div className="d-flex justify-content-between align-items-center">
-                  <Label className="h6">Contact Information</Label>
-                  <div className="d-flex gap-3">
-                    <Button type="submit" className="btn btn-primary">
-                      {updateId == null ? "Add" : "Save"}
-                    </Button>
-                    {updateId && (
-                      <Button
-                        type="submit"
-                        className="btn btn-primary"
-                        onClick={() => handleClearForm(resetForm)}
-                      >
-                        Cancel
+            <div className="mb-5">
+              <div className="mb-3">
+                <div className="mb-2">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <Label className="h6">Contact Information</Label>
+                    <div className="d-flex gap-3">
+                      <Button type="submit" className="btn btn-primary">
+                        {updateId == null ? "Add" : "Save"}
                       </Button>
-                    )}
+                      {updateId && (
+                        <Button
+                          type="submit"
+                          className="btn btn-primary"
+                          onClick={() => handleClearForm(resetForm)}
+                        >
+                          Cancel
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <Row>
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="title">
-                      Title*
-                    </Label>
-                    <Field name="title">
-                      {({ field }) => (
-                        <select
-                          className={`form-select ${
-                            touched.title && errors.title ? "is-invalid" : ""
-                          }`}
-                          id="title"
-                          {...field}
-                        >
-                          <option value="">Select</option>
-                          <option value="Mr">Mr</option>
-                          <option value="Miss">Miss</option>
-                          <option value="Mrs">Mrs</option>
-                        </select>
+                <Row>
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="title">
+                        Title*
+                      </Label>
+                      <Field name="title">
+                        {({ field }) => (
+                          <select
+                            className={`form-select ${
+                              touched.title && errors.title ? "is-invalid" : ""
+                            }`}
+                            id="title"
+                            {...field}
+                          >
+                            <option value="">Select</option>
+                            <option value="Mr">Mr</option>
+                            <option value="Miss">Miss</option>
+                            <option value="Mrs">Mrs</option>
+                          </select>
+                        )}
+                      </Field>
+                      {touched.title && errors.title && (
+                        <FormFeedback type="invalid">
+                          {errors.title}
+                        </FormFeedback>
                       )}
-                    </Field>
-                    {touched.title && errors.title && (
-                      <FormFeedback type="invalid">{errors.title}</FormFeedback>
-                    )}
-                  </div>
-                </Col>
+                    </div>
+                  </Col>
 
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="firstName">
-                      First Name*
-                    </Label>
-                    <Field name="firstName">
-                      {({ field }) => (
-                        <Input
-                          className={`form-control ${
-                            touched.firstName && errors.firstName
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Enter first name"
-                          id="firstName"
-                          {...field}
-                        />
-                      )}
-                    </Field>
-                    {touched.firstName && errors.firstName && (
-                      <FormFeedback type="invalid">
-                        {errors.firstName}
-                      </FormFeedback>
-                    )}
-                  </div>
-                </Col>
-
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="lastName">
-                      Last Name*
-                    </Label>
-                    <Field name="lastName">
-                      {({ field }) => (
-                        <Input
-                          className={`form-control ${
-                            touched.lastName && errors.lastName
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          placeholder="Enter last name"
-                          id="lastName"
-                          {...field}
-                        />
-                      )}
-                    </Field>
-                    {touched.lastName && errors.lastName && (
-                      <FormFeedback type="invalid">
-                        {errors.lastName}
-                      </FormFeedback>
-                    )}
-                  </div>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="designation">
-                      Designation
-                    </Label>
-                    <Field name="designation">
-                      {({ field }) => (
-                        <Input
-                          id="designation"
-                          className="form-control"
-                          placeholder="Enter Designation"
-                          {...field}
-                        />
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="department">
-                      Department
-                    </Label>
-                    <Field name="department">
-                      {({ field }) => (
-                        <select
-                          className="form-select"
-                          id="department"
-                          {...field}
-                        >
-                          <option>Select</option>
-                          {departmentData &&
-                            departmentData.map((department) => (
-                              <option value={department.name}>
-                                {department.name}
-                              </option>
-                            ))}
-                        </select>
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="industry">
-                      Industry
-                    </Label>
-                    <Field name="industry">
-                      {({ field, form }) => (
-                        <select
-                          className="form-select"
-                          id="industry"
-                          {...field}
-                          onChange={(e) => {
-                            form.handleChange(e);
-                            handleIndustrySelect(e);
-                          }}
-                        >
-                          <option>Select</option>
-                          {industryData &&
-                            industryData.map((industry) => (
-                              <option value={industry.name}>
-                                {industry.name}
-                              </option>
-                            ))}
-                        </select>
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="subIndustry">
-                      Sub Industry
-                    </Label>
-                    <Field name="subIndustry">
-                      {({ field }) => (
-                        <select
-                          className="form-select"
-                          id="subIndustry"
-                          {...field}
-                        >
-                          <option>Select</option>
-                          {subIndustryData &&
-                            subIndustryData.map((subIndustry) => (
-                              <option value={subIndustry.name}>
-                                {subIndustry.name}
-                              </option>
-                            ))}
-                        </select>
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="mobile">
-                      Mobile
-                    </Label>
-                    <Dropdown
-                      className="input-group"
-                      isOpen={landlineDropdown2}
-                      toggle={toggleLandlineDropdown2}
-                    >
-                      <DropdownToggle
-                        as="button"
-                        className="btn btn-primary arrow-none"
-                      >
-                        <span className="text-muted">
-                          {selectedLandline2.mobileCountry}
-                        </span>
-                      </DropdownToggle>
-                      <Field name="mobile">
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="firstName">
+                        First Name*
+                      </Label>
+                      <Field name="firstName">
                         {({ field }) => (
                           <Input
-                            type="number"
-                            id="mobile"
-                            className="form-control"
-                            placeholder="Enter mobile number"
+                            className={`form-control ${
+                              touched.firstName && errors.firstName
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            placeholder="Enter first name"
+                            id="firstName"
                             {...field}
                           />
                         )}
                       </Field>
-                      <DropdownMenu
-                        as="ul"
-                        className="list-unstyled w-100 dropdown-menu-list mb-0 overflow-auto"
-                        style={{ maxHeight: "240px" }}
-                      >
-                        <Input
-                          type="text"
-                          className="form-control search m-auto"
-                          placeholder="Search landline..."
-                          value={landline2SearchTerm}
-                          style={{ width: "95%" }}
-                          onChange={(e) =>
-                            setLandline2SearchTerm(e.target.value)
-                          }
-                        />
-                        {filteredLandlines2 &&
-                          filteredLandlines2.map((country) => (
-                            <DropdownItem
-                              as="li"
-                              onClick={() =>
-                                setSelectedLandline2((prev) => ({
-                                  ...prev,
-                                  mobileCountry: `${
-                                    country.phoneCode.charAt(0) == "+"
-                                      ? ""
-                                      : "+"
-                                  } ${country.phoneCode}`,
-                                  mobileCountryId: country.id,
-                                }))
-                              }
-                              className="dropdown-item d-flex"
-                            >
-                              <div className="flex-grow-1">
-                                <div className="d-flex">
-                                  <span className="text-muted">
-                                    {country.phoneCode.charAt(0) == "+"
-                                      ? ""
-                                      : "+"}
-                                    {country.phoneCode} {`(${country.name})`}
-                                  </span>
-                                </div>
-                              </div>
-                            </DropdownItem>
-                          ))}
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                </Col>
+                      {touched.firstName && errors.firstName && (
+                        <FormFeedback type="invalid">
+                          {errors.firstName}
+                        </FormFeedback>
+                      )}
+                    </div>
+                  </Col>
 
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="landline">
-                      Landline
-                    </Label>
-                    <Dropdown
-                      className="input-group"
-                      isOpen={landlineDropdown}
-                      toggle={toggleLandlineDropdown}
-                    >
-                      <DropdownToggle
-                        as="button"
-                        className="btn btn-primary arrow-none"
-                      >
-                        <span className="text-muted">
-                          {selectedLandline.landlineCountry}
-                        </span>
-                      </DropdownToggle>
-                      <Field name="landline">
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="lastName">
+                        Last Name*
+                      </Label>
+                      <Field name="lastName">
                         {({ field }) => (
                           <Input
-                            type="number"
-                            className="form-control"
-                            placeholder="Enter landline number"
-                            id="landline"
+                            className={`form-control ${
+                              touched.lastName && errors.lastName
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            placeholder="Enter last name"
+                            id="lastName"
                             {...field}
                           />
                         )}
                       </Field>
-                      <DropdownMenu
-                        as="ul"
-                        className="list-unstyled w-100 dropdown-menu-list mb-0 overflow-auto"
-                        style={{ maxHeight: "240px" }}
-                      >
-                        <Input
-                          type="text"
-                          className="form-control search m-auto"
-                          placeholder="Search landline..."
-                          value={landlineSearchTerm}
-                          style={{ width: "95%" }}
-                          onChange={(e) =>
-                            setLandlineSearchTerm(e.target.value)
-                          }
-                        />
-                        {filteredLandlines &&
-                          filteredLandlines.map((country) => (
-                            <DropdownItem
-                              as="li"
-                              onClick={() =>
-                                setSelectedLandline((prev) => ({
-                                  ...prev,
-                                  landlineCountry: `${
-                                    country.phoneCode.charAt(0) == "+"
-                                      ? ""
-                                      : "+"
-                                  } ${country.phoneCode}`,
-                                  landlineCountryId: country.id,
-                                }))
-                              }
-                              className="dropdown-item d-flex"
-                            >
-                              <div className="flex-grow-1">
-                                <div className="d-flex">
-                                  <span className="text-muted">
-                                    {country.phoneCode.charAt(0) == "+"
-                                      ? ""
-                                      : "+"}
-                                    {country.phoneCode} {`(${country.name})`}
-                                  </span>
-                                </div>
-                              </div>
-                            </DropdownItem>
-                          ))}
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="email">
-                      Email
-                    </Label>
-                    <Field name="email">
-                      {({ field }) => (
-                        <Input
-                          type="email"
-                          className="form-control"
-                          id="gen-info-website-input"
-                          placeholder="Enter email"
-                          {...field}
-                        />
+                      {touched.lastName && errors.lastName && (
+                        <FormFeedback type="invalid">
+                          {errors.lastName}
+                        </FormFeedback>
                       )}
-                    </Field>
-                  </div>
-                </Col>
-              </Row>
-            </div>
+                    </div>
+                  </Col>
+                </Row>
 
-            <div className="mb-3">
-              <div className="mb-2">
-                <div>
-                  <Label className="h6">Mailing Address</Label>
-                </div>
+                <Row>
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="designation">
+                        Designation
+                      </Label>
+                      <Field name="designation">
+                        {({ field }) => (
+                          <Input
+                            id="designation"
+                            className="form-control"
+                            placeholder="Enter Designation"
+                            {...field}
+                          />
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="department">
+                        Department
+                      </Label>
+                      <Field name="department">
+                        {({ field }) => (
+                          <select
+                            className="form-select"
+                            id="department"
+                            {...field}
+                          >
+                            <option>Select</option>
+                            {departmentData &&
+                              departmentData.map((department) => (
+                                <option value={department.name}>
+                                  {department.name}
+                                </option>
+                              ))}
+                          </select>
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="industry">
+                        Industry
+                      </Label>
+                      <Field name="industry">
+                        {({ field, form }) => (
+                          <select
+                            className="form-select"
+                            id="industry"
+                            {...field}
+                            onChange={(e) => {
+                              form.handleChange(e);
+                              handleIndustrySelect(e);
+                            }}
+                          >
+                            <option>Select</option>
+                            {industryData &&
+                              industryData.map((industry) => (
+                                <option value={industry.name}>
+                                  {industry.name}
+                                </option>
+                              ))}
+                          </select>
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="subIndustry">
+                        Sub Industry
+                      </Label>
+                      <Field name="subIndustry">
+                        {({ field }) => (
+                          <select
+                            className="form-select"
+                            id="subIndustry"
+                            {...field}
+                          >
+                            <option>Select</option>
+                            {subIndustryData &&
+                              subIndustryData.map((subIndustry) => (
+                                <option value={subIndustry.name}>
+                                  {subIndustry.name}
+                                </option>
+                              ))}
+                          </select>
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="mobile">
+                        Mobile
+                      </Label>
+                      <Dropdown
+                        className="input-group"
+                        isOpen={landlineDropdown2}
+                        toggle={toggleLandlineDropdown2}
+                      >
+                        <DropdownToggle
+                          as="button"
+                          className="btn btn-primary arrow-none"
+                        >
+                          <span className="text-muted">
+                            {selectedLandline2.mobileCountry}
+                          </span>
+                        </DropdownToggle>
+                        <Field name="mobile">
+                          {({ field }) => (
+                            <Input
+                              type="number"
+                              id="mobile"
+                              className="form-control"
+                              placeholder="Enter mobile number"
+                              {...field}
+                            />
+                          )}
+                        </Field>
+                        <DropdownMenu
+                          as="ul"
+                          className="list-unstyled w-100 dropdown-menu-list mb-0 overflow-auto"
+                          style={{ maxHeight: "240px" }}
+                        >
+                          <Input
+                            type="text"
+                            className="form-control search m-auto"
+                            placeholder="Search landline..."
+                            value={landline2SearchTerm}
+                            style={{ width: "95%" }}
+                            onChange={(e) =>
+                              setLandline2SearchTerm(e.target.value)
+                            }
+                          />
+                          {filteredLandlines2 &&
+                            filteredLandlines2.map((country) => (
+                              <DropdownItem
+                                as="li"
+                                onClick={() =>
+                                  setSelectedLandline2((prev) => ({
+                                    ...prev,
+                                    mobileCountry: `${
+                                      country.phoneCode.charAt(0) == "+"
+                                        ? ""
+                                        : "+"
+                                    } ${country.phoneCode}`,
+                                    mobileCountryId: country.id,
+                                  }))
+                                }
+                                className="dropdown-item d-flex"
+                              >
+                                <div className="flex-grow-1">
+                                  <div className="d-flex">
+                                    <span className="text-muted">
+                                      {country.phoneCode.charAt(0) == "+"
+                                        ? ""
+                                        : "+"}
+                                      {country.phoneCode} {`(${country.name})`}
+                                    </span>
+                                  </div>
+                                </div>
+                              </DropdownItem>
+                            ))}
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  </Col>
+
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="landline">
+                        Landline
+                      </Label>
+                      <Dropdown
+                        className="input-group"
+                        isOpen={landlineDropdown}
+                        toggle={toggleLandlineDropdown}
+                      >
+                        <DropdownToggle
+                          as="button"
+                          className="btn btn-primary arrow-none"
+                        >
+                          <span className="text-muted">
+                            {selectedLandline.landlineCountry}
+                          </span>
+                        </DropdownToggle>
+                        <Field name="landline">
+                          {({ field }) => (
+                            <Input
+                              type="number"
+                              className="form-control"
+                              placeholder="Enter landline number"
+                              id="landline"
+                              {...field}
+                            />
+                          )}
+                        </Field>
+                        <DropdownMenu
+                          as="ul"
+                          className="list-unstyled w-100 dropdown-menu-list mb-0 overflow-auto"
+                          style={{ maxHeight: "240px" }}
+                        >
+                          <Input
+                            type="text"
+                            className="form-control search m-auto"
+                            placeholder="Search landline..."
+                            value={landlineSearchTerm}
+                            style={{ width: "95%" }}
+                            onChange={(e) =>
+                              setLandlineSearchTerm(e.target.value)
+                            }
+                          />
+                          {filteredLandlines &&
+                            filteredLandlines.map((country) => (
+                              <DropdownItem
+                                as="li"
+                                onClick={() =>
+                                  setSelectedLandline((prev) => ({
+                                    ...prev,
+                                    landlineCountry: `${
+                                      country.phoneCode.charAt(0) == "+"
+                                        ? ""
+                                        : "+"
+                                    } ${country.phoneCode}`,
+                                    landlineCountryId: country.id,
+                                  }))
+                                }
+                                className="dropdown-item d-flex"
+                              >
+                                <div className="flex-grow-1">
+                                  <div className="d-flex">
+                                    <span className="text-muted">
+                                      {country.phoneCode.charAt(0) == "+"
+                                        ? ""
+                                        : "+"}
+                                      {country.phoneCode} {`(${country.name})`}
+                                    </span>
+                                  </div>
+                                </div>
+                              </DropdownItem>
+                            ))}
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="email">
+                        Email
+                      </Label>
+                      <Field name="email">
+                        {({ field }) => (
+                          <Input
+                            type="email"
+                            className="form-control"
+                            id="gen-info-website-input"
+                            placeholder="Enter email"
+                            {...field}
+                          />
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+                </Row>
               </div>
 
-              <Row>
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="line1">
-                      Line 1
-                    </Label>
-                    <Field name="line1">
-                      {({ field }) => (
-                        <Input
-                          type="text"
-                          className="form-control"
-                          id="line1"
-                          placeholder="Mail address line 1"
-                          {...field}
-                        />
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="line2">
-                      Line 2
-                    </Label>
-                    <Field name="line2">
-                      {({ field }) => (
-                        <Input
-                          type="text"
-                          className="form-control"
-                          id="line2"
-                          placeholder="Mail address line 2"
-                          {...field}
-                        />
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="line3">
-                      Line 3
-                    </Label>
-                    <Field name="line3">
-                      {({ field }) => (
-                        <Input
-                          type="text"
-                          className="form-control"
-                          id="line3"
-                          placeholder="Mail address line 3"
-                          {...field}
-                        />
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="country">
-                      Country
-                    </Label>
-                    <Field name="country">
-                      {({ field, form }) => (
-                        <select
-                          className="form-select"
-                          id="country"
-                          {...field}
-                          onChange={(e) => {
-                            form.handleChange(e);
-                            handleCountrySelect(e);
-                          }}
-                        >
-                          <option>Select</option>
-                          {countryData &&
-                            countryData.map((country) => (
-                              <option value={country.name}>
-                                {country.name}
-                              </option>
-                            ))}
-                        </select>
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="city">
-                      City
-                    </Label>
-                    <Field name="city">
-                      {({ field }) => (
-                        <select className="form-select" id="city" {...field}>
-                          <option value="">Select</option>
-                          {cityData &&
-                            cityData.map((city) => (
-                              <option value={city.name}>{city.name}</option>
-                            ))}
-                        </select>
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-                <Col lg={4}>
-                  <div className="mb-3">
-                    <Label className="form-label" htmlFor="postalCode">
-                      Postal Code
-                    </Label>
-                    <Field name="postalCode">
-                      {({ field }) => (
-                        <Input
-                          type="text"
-                          className="form-control"
-                          id="postalCode"
-                          placeholder="Enter postal code"
-                          {...field}
-                        />
-                      )}
-                    </Field>
-                  </div>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col lg={12}>
+              <div className="mb-3">
+                <div className="mb-2">
                   <div>
-                    <Label htmlFor="remarks" className="form-label">
-                      Contact Remarks
-                    </Label>
-                    <Field name="remarks">
-                      {({ field }) => (
-                        <textarea
-                          className="form-control"
-                          placeholder="Enter remarks"
-                          id="remarks"
-                          rows="3"
-                          {...field}
-                        ></textarea>
-                      )}
-                    </Field>
+                    <Label className="h6">Mailing Address</Label>
                   </div>
-                </Col>
-              </Row>
+                </div>
+
+                <Row>
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="line1">
+                        Line 1
+                      </Label>
+                      <Field name="line1">
+                        {({ field }) => (
+                          <Input
+                            type="text"
+                            className="form-control"
+                            id="line1"
+                            placeholder="Mail address line 1"
+                            {...field}
+                          />
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="line2">
+                        Line 2
+                      </Label>
+                      <Field name="line2">
+                        {({ field }) => (
+                          <Input
+                            type="text"
+                            className="form-control"
+                            id="line2"
+                            placeholder="Mail address line 2"
+                            {...field}
+                          />
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="line3">
+                        Line 3
+                      </Label>
+                      <Field name="line3">
+                        {({ field }) => (
+                          <Input
+                            type="text"
+                            className="form-control"
+                            id="line3"
+                            placeholder="Mail address line 3"
+                            {...field}
+                          />
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="country">
+                        Country
+                      </Label>
+                      <Field name="country">
+                        {({ field, form }) => (
+                          <select
+                            className="form-select"
+                            id="country"
+                            {...field}
+                            onChange={(e) => {
+                              form.handleChange(e);
+                              handleCountrySelect(e);
+                            }}
+                          >
+                            <option>Select</option>
+                            {countryData &&
+                              countryData.map((country) => (
+                                <option value={country.name}>
+                                  {country.name}
+                                </option>
+                              ))}
+                          </select>
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="city">
+                        City
+                      </Label>
+                      <Field name="city">
+                        {({ field }) => (
+                          <select className="form-select" id="city" {...field}>
+                            <option value="">Select</option>
+                            {cityData &&
+                              cityData.map((city) => (
+                                <option value={city.name}>{city.name}</option>
+                              ))}
+                          </select>
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+                  <Col lg={4}>
+                    <div className="mb-3">
+                      <Label className="form-label" htmlFor="postalCode">
+                        Postal Code
+                      </Label>
+                      <Field name="postalCode">
+                        {({ field }) => (
+                          <Input
+                            type="text"
+                            className="form-control"
+                            id="postalCode"
+                            placeholder="Enter postal code"
+                            {...field}
+                          />
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col lg={12}>
+                    <div>
+                      <Label htmlFor="remarks" className="form-label">
+                        Contact Remarks
+                      </Label>
+                      <Field name="remarks">
+                        {({ field }) => (
+                          <textarea
+                            className="form-control"
+                            placeholder="Enter remarks"
+                            id="remarks"
+                            rows="3"
+                            {...field}
+                          ></textarea>
+                        )}
+                      </Field>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
             </div>
 
             <div className="table-responsive mb-3">
@@ -877,12 +881,12 @@ function Contacts() {
               >
                 <thead className="table-light">
                   <tr>
-                    <th scope='col'>Personal Information</th>
-                    <th scope='col'>Professional Information</th>
-                    <th scope='col'>Address</th>
-                    <th scope='col'>Actions</th>
+                    <th scope="col">Personal Information</th>
+                    <th scope="col">Professional Information</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Actions</th>
                   </tr>
-                  </thead>
+                </thead>
                 <tbody style={{ maxHeight: "200px", overflowY: "auto" }}>
                   {tableData.length === 0 ? (
                     <tr>
@@ -897,22 +901,23 @@ function Contacts() {
                         </th>
                         <td>
                           <div>
-                            {row.designation}, {row.department}
+                            {row.designation} {row.department}
                           </div>
                           <div>
-                            {row.industry}, {row.subIndustry}
+                            {row.industry} {row.subIndustry}
                           </div>
                           <div>
-                            {row.mobile}, {row.landline}, {row.email}
+                            {row.mobile} {row.landline} {row.email}
                           </div>
                         </td>
                         <td>
                           <div>
-                            {row.country}, {row.city}, {row.postalCode}
+                            {row.country} {row.city} {row.postalCode}
                           </div>
                           <div>{row.line1}</div>
                           <div>{row.line2}</div>
                           <div>{row.line3}</div>
+                          <div>{row.remarks}</div>
                         </td>
                         <td>
                           <Button
@@ -947,7 +952,11 @@ function Contacts() {
               >
                 Back
               </Button>
-              <Button className="btn btn-primary" type="button" onClick={handleNext}>
+              <Button
+                className="btn btn-primary"
+                type="button"
+                onClick={handleNext}
+              >
                 Next
               </Button>
             </div>
