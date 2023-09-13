@@ -10,6 +10,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
 
 function Commercial() {
   const navigate = useNavigate();
@@ -24,8 +27,7 @@ function Commercial() {
   useEffect(() => {
     if (accountId) {
       // Check if commercial exist
-      axios
-        .get(`http://localhost:8100/accounts/${accountId}/commercials`)
+      api.get(`http://localhost:8100/accounts/${accountId}/commercials`)
         .then((res) => {
           setCommercialUpdateData(res.data);
           setCommercialInitialValuesData(
@@ -45,12 +47,10 @@ function Commercial() {
     };
 
     // Patch the commercial for account
-    const res = await axios
-      .patch(
+    const res = api.update(
         `http://localhost:8100/accounts/${accountId}/commercials`,
         newCommerical
-      )
-      .then((res) => {
+      ).then((res) => {
         navigate("/accounts");
       });
   };

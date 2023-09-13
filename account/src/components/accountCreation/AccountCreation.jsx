@@ -29,6 +29,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { set } from "react-hook-form";
 import * as yup from "yup";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
 
 export const AccountCreation = () => {
   const navigate = useNavigate();
@@ -87,14 +90,14 @@ export const AccountCreation = () => {
       console.log("Account creation Update Account Id", accountId)
       setAccountStatus("update");
       // Get account detail by fetching
-      axios.get(`http://localhost:8100/accounts/${accountId}`).then((res) => {
+      api.get(`http://localhost:8100/accounts/${accountId}`).then((res) => {
         const getAccountDetails = res.data;
         dispatch(fetchSubIndustry(res.data.accountInformation.accountIndustry));
         setAccountDetails(getAccountDetails);
       });
 
       // Here we fetch the agreement document
-      axios
+      api
         .get(
           `http://localhost:8500/documents?entityId=${accountId}&entityType=account`
         )
@@ -279,8 +282,7 @@ export const AccountCreation = () => {
     formData.append("accountRemarks", values.accRemarks);
 
     if (accountStatus === "new") {
-      axios
-        .post("http://localhost:8100/accounts", formData, {
+      api.create("http://localhost:8100/accounts", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -293,8 +295,7 @@ export const AccountCreation = () => {
 
     if (accountStatus === "update") {
       formData.append("id", +accountId);
-      axios
-        .put(`http://localhost:8100/accounts/${accountId}`, formData, {
+      api.put(`http://localhost:8100/accounts/${accountId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -318,13 +319,6 @@ export const AccountCreation = () => {
       form.setFieldValue("billingCity", form.values.city);
       dispatch(fetchBillingCity(getCountryId(form.values.country)));
       form.setFieldValue("billingPostalCode", form.values.postalCode);
-    } else {
-      form.setFieldValue("billingLine1", "");
-      form.setFieldValue("billingLine2", "");
-      form.setFieldValue("billingLine3", "");
-      form.setFieldValue("billingCity", "");
-      form.setFieldValue("billingCountry", "");
-      form.setFieldValue("billingPostalCode", "");
     }
     setDisableForm(!disableForm);
   };

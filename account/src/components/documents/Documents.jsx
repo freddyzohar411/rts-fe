@@ -19,6 +19,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
 
 function Documents() {
   const navigate = useNavigate();
@@ -66,14 +69,14 @@ function Documents() {
 
     // Create a document
     if (updateId) {
-      await axios.put(
+      await api.put(
         `http://localhost:8500/documents/${updateId}`,
         documentData
       );
     } else {
       // Save to database with file add header
 
-      await axios.post("http://localhost:8500/documents", documentData, {
+      await api.create("http://localhost:8500/documents", documentData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -100,7 +103,7 @@ function Documents() {
 
   // Fetch all documents for the account
   const fetchDocumentsWithEntityIdAndEntityType = async (accountId) => {
-    return axios.get(
+    return api.get(
       `http://localhost:8500/documents?entityId=${accountId}&entityType=account_document`
     );
   };
@@ -114,7 +117,7 @@ function Documents() {
 
   // Handle delete
   const handleDelete = async (documentId) => {
-    await axios.delete(`http://localhost:8500/documents/${documentId}`);
+    await api.delete(`http://localhost:8500/documents/${documentId}`);
     const response = await fetchDocumentsWithEntityIdAndEntityType(accountId);
     setDocuments(response.data);
   };
