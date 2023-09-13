@@ -871,14 +871,17 @@ export const AccountCreation = () => {
                         <div className="input-group">
                           <Input
                             type="file"
-                            className="form-control"
+                            className={`form-control ${
+                              touched.agreementDoc && errors.agreementDoc
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             id="agreementDoc"
                             {...field}
                             onChange={(e) => {
                               handleFileChange(e, form);
                               form.handleChange(e);
                             }}
-                            invalid={!!errors.agreementDoc}
                           />
                         </div>
                       )}

@@ -37,7 +37,7 @@ function JobListing() {
                           <Input
                             type="text"
                             placeholder="Search"
-                            className="form-control search bg-light border-light"
+                            className="form-control search bg-light border-light w-70"
                           />
                           <i className="ri-search-line search-icon"></i>
                         </div>
@@ -94,84 +94,84 @@ function JobListing() {
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Entry Date
+                              Entry Date <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Sales Person
+                              Sales Person <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Clients
+                              Clients <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Project Manager
+                              Project Manager <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Job ID
+                              Job ID <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Job Title
+                              Job Title <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Job Type
+                              Job Type <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Location
+                              Location <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Head Count
+                              Head Count <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Status
+                              Status <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Salary Budget
+                              Salary Budget <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Visa Status
+                              Visa Status <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
@@ -227,7 +227,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -282,7 +282,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -337,7 +337,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -392,7 +392,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -447,7 +447,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -502,7 +502,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -557,7 +557,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -612,7 +612,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -667,7 +667,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -722,7 +722,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -777,7 +777,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
@@ -832,7 +832,7 @@ function JobListing() {
                                     <i className="ri-file-copy-line"></i>
                                   </Button>
                                 </div>
-<div className="edit">
+                                <div className="edit">
                                   <Button
                                     className="btn btn-primary btn-sm"
                                     type="button"
