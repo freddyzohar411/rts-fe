@@ -379,7 +379,7 @@ export const AccountCreation = () => {
       onSubmit={handleFormSubmit}
     >
       {({ errors, touched }) => (
-        <div>
+        <React.Fragment>
           <Form>
             <div className="mb-3">
               <div className="mb-2">
@@ -1349,7 +1349,7 @@ export const AccountCreation = () => {
               </button>
             </div>
           </Form>
-        </div>
+        </React.Fragment>
       )}
     </Formik>
   );

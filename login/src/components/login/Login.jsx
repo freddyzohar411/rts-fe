@@ -78,7 +78,12 @@ const Login = (props) => {
                                 <Input
                                   {...field}
                                   placeholder="Enter email"
-                                  invalid={!!errors.username}
+                                  className={`form-control ${
+                                    touched.username && errors.username
+                                      ? "is-invalid"
+                                      : ""
+                                  }`}
+                                  // invalid={!!errors.username}
                                 />
                               )}
                             </Field>
@@ -107,7 +112,12 @@ const Login = (props) => {
                                     {...field}
                                     type={passwordShow ? "text" : "password"}
                                     placeholder="Enter password"
-                                    invalid={!!errors.password}
+                                    className={`form-control ${
+                                      touched.password && errors.password
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    // invalid={!!errors.password}
                                   />
                                 )}
                               </Field>
@@ -143,7 +153,7 @@ const Login = (props) => {
                           <div className="mt-4">
                             <Button
                               color="success"
-                              className="btn btn-success w-100"
+                              className="btn btn-primary w-100"
                               type="submit"
                             >
                               Sign In
