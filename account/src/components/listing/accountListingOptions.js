@@ -15,21 +15,21 @@ const getAddressString = (address) => {
     if (address.line1){
         addressFull += (address.line1 + ", ");
     }
-    // if (address.line2){
-    //     addressFull += address.line2 + ", ";
-    // }
-    // if (address.line3){
-    //     addressFull += address.line3 + ", ";
-    // }
-    // if (address.city){
-    //     addressFull += address.city + ", ";
-    // }
-    // if (address.postalCode){
-    //     addressFull += address.postalCode + ", ";
-    // }
-    // if (address.country){
-    //     addressFull += address.country + ", ";
-    // }
+    if (address.line2){
+        addressFull += address.line2 + ", ";
+    }
+    if (address.line3){
+        addressFull += address.line3 + ", ";
+    }
+    if (address.city){
+        addressFull += address.city + ", ";
+    }
+    if (address.postalCode){
+        addressFull += address.postalCode + ", ";
+    }
+    if (address.country){
+        addressFull += address.country + ", ";
+    }
 
     // Remove the last comma
     return addressFull.substring(0, address.length - 2);
