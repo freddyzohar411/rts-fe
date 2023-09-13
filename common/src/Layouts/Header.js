@@ -88,7 +88,7 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                                         <img src={logoSm} alt="" height="22" />
                                     </span>
                                     <span className="logo-lg">
-                                        <img src={logoLight} alt="" height="17" />
+                                        <img src={logoLight} alt="" height="50" />
                                     </span>
                                 </Link>
                             </div>
@@ -132,12 +132,6 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                             {/* LanguageDropdown */}
                             <LanguageDropdown />
 
-                            {/* WebAppsDropdown */}
-                            <WebAppsDropdown />
-
-                            {/* MyCartDropdwon */}
-                            <MyCartDropdown />
-
                             {/* FullScreenDropdown */}
                             <FullScreenDropdown />
 
@@ -146,9 +140,6 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                                 layoutMode={layoutModeType}
                                 onChangeLayoutMode={onChangeLayoutMode}
                             />
-
-                            {/* NotificationDropdown */}
-                            <NotificationDropdown />
 
                             {/* ProfileDropdown */}
                             <ProfileDropdown />
