@@ -1,1 +1,1 @@
-import Access from './Access';
+export { default as Access } from "./Access";
