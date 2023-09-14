@@ -11,15 +11,15 @@ import {
   Table,
 } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAccounts } from "../../store/account/action";
+import { fetchJobs } from "../../store/job/action";
 
-// Import the account listing options
-import { accountListingOptions } from "./accountListingOptions";
+// Import the job listing options
+import { jobsListingOptions } from "./jobsListingOptions";
 
-function AccountListing() {
+function JobListing() {
   const dispatch = useDispatch();
-  const accountsData = useSelector((state) => state.AccountReducer.accounts); 
-  const accountListing = accountsData.accounts;
+  const jobsData = useSelector((state) => state.JobReducer.jobs); 
+  const jobsListing = jobsData.jobs;
 
   const [searchInput, setSearchInput] = useState("");
   const [pageRequest, setPageRequest] = useState({
@@ -49,17 +49,17 @@ function AccountListing() {
 
   // Get all data on first render
   useEffect(() => {
-    dispatch(fetchAccounts(cleanPageRequest(pageRequest)));
+    dispatch(fetchJobs(cleanPageRequest(pageRequest)));
   }, [pageRequest]);
 
   // Update the page info
   useEffect(() => {
     setPageInfo({
-      currentPage: accountsData.number,
-      totalPages: accountsData.totalPages,
-      totalElements: accountsData.totalElements,
+      currentPage: jobsData.number,
+      totalPages: jobsData.totalPages,
+      totalElements: jobsData.totalElements,
     });
-  },[accountsData])
+  },[jobsData])
 
   // Handle Next Page
   const handleNextPage = () => {
@@ -98,7 +98,6 @@ function AccountListing() {
   const handleSearch = (e) => {
     e.preventDefault();
     const search = e.target.value;
-    console.log("search", search);
     setPageRequest((prev) => ({
       ...prev,
       searchTerm: searchInput === "" ? null : searchInput,
@@ -114,7 +113,7 @@ function AccountListing() {
     }));
     }
 
-  document.title = "Accounts | RTS";
+  document.title = "Jobs | RTS";
 
   // ========================================= Table Configuration ===========================
   // Set Custom view
@@ -125,10 +124,10 @@ function AccountListing() {
   const getCustomConfig = (customView) => {
     const customViewArray = customView.split(",");
     console.log("customViewArray", customViewArray);
-    // Get the array of options from the accountListingOptions based on the custom view array
+    // Get the array of options from the jobsListingOptions based on the custom view array
     const customConfig = [];
     customViewArray.forEach((element) => {
-      customConfig.push(accountListingOptions[element]);
+      customConfig.push(jobsListingOptions[element]);
     });
     return customConfig;
   };
@@ -175,10 +174,10 @@ function AccountListing() {
   );
 
   // Generate Body
-  const generateBodyJSX = (accountListing) => {
-    return accountListing.map((account) => {
+  const generateBodyJSX = (jobsListing) => {
+    return jobsListing.map((job) => {
       const rowdata = customConfig.map((option) => {
-        return <td>{option.render(account)}</td>;
+        return <td>{option.render(job)}</td>;
       });
       return (
         <tr>
@@ -237,6 +236,7 @@ function AccountListing() {
                               onChange={(e) => setSearchInput(e.target.value)}
                             />
                           </form>
+
                           <i className="ri-search-line search-icon"></i>
                         </div>
                       </Col>
@@ -270,13 +270,13 @@ function AccountListing() {
                     <div className="table-responsive table-hover table-card mt-3 mb-1">
                       <Table
                         className="table align-middle table-nowrap"
-                        id="accountListingTable"
+                        id="jobsListingTable"
                       >
                         <thead className="table-light">
-                          <tr>{accountListing && generateHeaderJSX}</tr>
+                          <tr>{jobsListing && generateHeaderJSX}</tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {accountListing && generateBodyJSX(accountListing)}
+                          {jobsListing && generateBodyJSX(jobsListing)}
                         </tbody>
                       </Table>
                     </div>
@@ -314,4 +314,4 @@ function AccountListing() {
   );
 }
 
-export default AccountListing;
+export default JobListing;
