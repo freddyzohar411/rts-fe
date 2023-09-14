@@ -73,7 +73,7 @@ const ForgetPasswordPage = (props) => {
                   </Link>
                 </div>
                 <p className="mt-3 fs-15 fw-medium">
-                  Premium Admin & Dashboard Template
+                  Talent and Recruitment Services to clients across the world.
                 </p>
               </div>
             </Col>
@@ -85,7 +85,7 @@ const ForgetPasswordPage = (props) => {
                 <CardBody className="p-4">
                   <div className="text-center mt-2">
                     <h5 className="text-primary">Forgot Password?</h5>
-                    <p className="text-muted">Reset password with velzon</p>
+                    <p className="text-muted">Reset password with Avensys.</p>
 
                     <lord-icon
                       src="https://cdn.lordicon.com/rhvddzym.json"
