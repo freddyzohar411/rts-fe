@@ -9,9 +9,22 @@ import { Reducers as LoginReducers } from "@workspace/login";
 // Dashboard
 import { Reducers as DashboardReducers } from "@workspace/dashboard";
 
+// Account
+import { Reducers as AccountReducers } from "@workspace/account";
+
 const { Layout } = Reducers;
 const { Login, ForgetPassword, Profile } = LoginReducers;
 const { DashboardEcommerce } = DashboardReducers;
+const {
+  AccountReducer,
+  AccountRegistrationReducer,
+  BillingCityReducer,
+  CityReducer,
+  CountryCurrencyReducer,
+  DepartmentReducer,
+  IndustryReducer,
+  ParentCompanyReducer,
+} = AccountReducers;
 
 const rootReducer = combineReducers({
   // public
@@ -20,6 +33,16 @@ const rootReducer = combineReducers({
   Layout,
   Profile,
   DashboardEcommerce,
+
+  // account
+  AccountReducer,
+  AccountRegistrationReducer,
+  BillingCityReducer,
+  CityReducer,
+  CountryCurrencyReducer,
+  DepartmentReducer,
+  IndustryReducer,
+  ParentCompanyReducer,
 });
 
 export default rootReducer;

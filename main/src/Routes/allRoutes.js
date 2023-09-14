@@ -1,13 +1,25 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-//Dashboard
+// Dashboard
 import { DashboardEcommerce } from "@workspace/dashboard";
 
-// // User Profile
+// User Profile
 import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 
-//Dashboard
+// Account
+import {
+  Access,
+  AccountCreation,
+  ClientInstructions,
+  Commercial,
+  Contacts,
+  Documents,
+  AccountListing,
+  Stepper,
+} from "@workspace/account";
+
+// Candidate
 import { CreateCandidate } from "@workspace/candidate";
 
 const authProtectedRoutes = [
@@ -19,6 +31,26 @@ const authProtectedRoutes = [
 
   // Create Candidate
   { path: "/create-candidate", component: <CreateCandidate /> },
+
+  // Account
+  {
+    path: null,
+    component: <Stepper />,
+    nested: true,
+    subroutes: [
+      { path: "/account/account-creation", component: <AccountCreation /> },
+      { path: "/account/contact-creation", component: <Contacts /> },
+      { path: "/account/document-creation", component: <Documents /> },
+      {
+        path: "/account/client-instructions-creation",
+        component: <ClientInstructions />,
+      },
+      { path: "/account/access-creation", component: <Access /> },
+      { path: "/account/commercial-creation", component: <Commercial /> },
+      { path: "/account/account-listing", component: <AccountListing /> },
+    ],
+  },
+  { path: "/accounts", component: <AccountListing /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

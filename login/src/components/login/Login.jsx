@@ -47,7 +47,7 @@ const Login = (props) => {
                   <div className="text-center mt-sm-5 mb-4 text-white-50">
                     <div>
                       <Link to="/login" className="d-inline-block auth-logo">
-                        <img src={logoLight} alt="" height="20" />
+                        <img src={logoLight} alt="" height="50" />
                       </Link>
                     </div>
                     <p className="mt-3 fs-15 fw-medium">
@@ -78,7 +78,11 @@ const Login = (props) => {
                                 <Input
                                   {...field}
                                   placeholder="Enter email"
-                                  invalid={!!errors.username}
+                                  className={`form-control ${
+                                    touched.username && errors.username
+                                      ? "is-invalid"
+                                      : ""
+                                  }`}
                                 />
                               )}
                             </Field>
@@ -107,7 +111,11 @@ const Login = (props) => {
                                     {...field}
                                     type={passwordShow ? "text" : "password"}
                                     placeholder="Enter password"
-                                    invalid={!!errors.password}
+                                    className={`form-control ${
+                                      touched.password && errors.password
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
                                   />
                                 )}
                               </Field>
@@ -143,7 +151,7 @@ const Login = (props) => {
                           <div className="mt-4">
                             <Button
                               color="success"
-                              className="btn btn-success w-100"
+                              className="btn btn-primary w-100"
                               type="submit"
                             >
                               Sign In

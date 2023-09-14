@@ -1,5 +1,5 @@
 {
   "npmClient": "yarn",
-  "packages": ["common", "main", "dashboard", "login", "candidate"],
+  "packages": ["common", "main", "dashboard", "login", "account","candidate"],
   "version": "0.0.0"
 }

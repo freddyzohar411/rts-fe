@@ -26,7 +26,6 @@ import { useFormik } from "formik";
 import { userForgetPassword } from "../../store/actions";
 
 // import images
-// import profile from "../../assets/images/bg.png";
 import logoLight from "@workspace/common/src/assets/images/logo-light.png";
 
 import ParticlesAuth from "../../ParticlesAuth";
@@ -70,11 +69,11 @@ const ForgetPasswordPage = (props) => {
               <div className="text-center mt-sm-5 mb-4 text-white-50">
                 <div>
                   <Link to="/" className="d-inline-block auth-logo">
-                    <img src={logoLight} alt="" height="20" />
+                    <img src={logoLight} alt="" height="50" />
                   </Link>
                 </div>
                 <p className="mt-3 fs-15 fw-medium">
-                  Premium Admin & Dashboard Template
+                  Talent and Recruitment Services to clients across the world.
                 </p>
               </div>
             </Col>
@@ -86,7 +85,7 @@ const ForgetPasswordPage = (props) => {
                 <CardBody className="p-4">
                   <div className="text-center mt-2">
                     <h5 className="text-primary">Forgot Password?</h5>
-                    <p className="text-muted">Reset password with velzon</p>
+                    <p className="text-muted">Reset password with Avensys.</p>
 
                     <lord-icon
                       src="https://cdn.lordicon.com/rhvddzym.json"
