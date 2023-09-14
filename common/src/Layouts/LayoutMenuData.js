@@ -20,6 +20,7 @@ const Navdata = () => {
   const [isAccounts, setIsAccounts] = useState(false);
   const [isContacts, setIsContacts] = useState(false);
   const [isJob, setIsJob] = useState(false);
+  const [isCandidates, setIsCandidates] = useState(false);
   const [isReports, setIsReports] = useState(false);
   const [isSettings, setIsSettings] = useState(false);
   // Apps
@@ -86,14 +87,14 @@ const Navdata = () => {
     if (iscurrentState !== "Job") {
       setIsJob(false);
     }
+    if (iscurrentState !== "Candidates") {
+      setIsJob(false);
+    }
     if (iscurrentState !== "Reports") {
       setIsReports(false);
     }
     if (iscurrentState !== "Settings") {
       setIsSettings(false);
-    }
-    if (iscurrentState !== "Dashboard") {
-      setIsDashboard(false);
     }
     if (iscurrentState !== "Apps") {
       setIsApps(false);
@@ -142,6 +143,7 @@ const Navdata = () => {
     isApps,
     isAccounts,
     isContacts,
+    isCandidates,
     isReports,
     isJob,
     isSettings,
@@ -270,6 +272,35 @@ const Navdata = () => {
       ],
     },
 
+    // Candidates
+    {
+      id: "candidates",
+      label: "Candidates",
+      icon: "ri-user-follow-fill",
+      link: "/#",
+      click: function (e) {
+        e.preventDefault();
+        setIsCandidates(!isCandidates);
+        setIscurrentState("Candidates");
+        updateIconSidebar(e);
+      },
+      stateVariables: isCandidates,
+      subItems: [
+        {
+          id: "allCandidates",
+          label: "All Candidates",
+          link: "/candidates",
+          parentId: "candidates",
+        },
+        {
+          id: "newCandidate",
+          label: "Create New Candidate",
+          link: "/candidate/candidate-creation",
+          parentId: "candidates",
+        },
+      ],
+    },
+
     // Reports
     {
       id: "reports",
@@ -284,7 +315,18 @@ const Navdata = () => {
       },
       stateVariables: isReports,
       subItems: [
-
+        {
+          id: "allReports",
+          label: "All Reports",
+          link: "/reports",
+          parentId: "reports",
+        },
+        {
+          id: "newReport",
+          label: "Create New Report",
+          link: "/report/report-creation",
+          parentId: "reports",
+        },
       ],
     },
 

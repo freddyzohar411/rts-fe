@@ -26,7 +26,6 @@ import { useFormik } from "formik";
 import { userForgetPassword } from "../../store/actions";
 
 // import images
-// import profile from "../../assets/images/bg.png";
 import logoLight from "@workspace/common/src/assets/images/logo-light.png";
 
 import ParticlesAuth from "../../ParticlesAuth";

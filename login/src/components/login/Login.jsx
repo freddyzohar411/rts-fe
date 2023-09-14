@@ -83,7 +83,6 @@ const Login = (props) => {
                                       ? "is-invalid"
                                       : ""
                                   }`}
-                                  // invalid={!!errors.username}
                                 />
                               )}
                             </Field>
@@ -117,7 +116,6 @@ const Login = (props) => {
                                         ? "is-invalid"
                                         : ""
                                     }`}
-                                    // invalid={!!errors.password}
                                   />
                                 )}
                               </Field>

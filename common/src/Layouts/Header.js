@@ -129,19 +129,14 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                                 </DropdownMenu>
                             </Dropdown>
 
-                            {/* LanguageDropdown */}
                             <LanguageDropdown />
 
-                            {/* FullScreenDropdown */}
                             <FullScreenDropdown />
 
-                            {/* Dark/Light Mode set */}
                             <LightDark
                                 layoutMode={layoutModeType}
                                 onChangeLayoutMode={onChangeLayoutMode}
                             />
-
-                            {/* ProfileDropdown */}
                             <ProfileDropdown />
                         </div>
                     </div>

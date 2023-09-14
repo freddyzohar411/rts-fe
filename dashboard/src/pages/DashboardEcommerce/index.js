@@ -25,7 +25,6 @@ const DashboardEcommerce = () => {
           <Row>
             <Col>
               <div className="h-100">
-               {/* <Section rightClickBtn={toggleRightColumn} /> */}
                 <Row>
                   <Widget />
                 </Row>
@@ -45,8 +44,6 @@ const DashboardEcommerce = () => {
                 </Row>
               </div>
             </Col>
-
-            {/* <RecentActivity rightColumn={rightColumn} hideRightColumn={toggleRightColumn} /> */}
           </Row>
         </Container>
       </div>
