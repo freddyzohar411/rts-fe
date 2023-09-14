@@ -4,16 +4,9 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Col,
   Container,
   Input,
-  ListGroup,
-  ListGroupItem,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
   Row,
   Table,
 } from "reactstrap";
@@ -94,28 +87,32 @@ function JobListing() {
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Entry Date <i className="mdi mdi-sort-descending"></i>
+                              Entry Date{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Sales Person <i className="mdi mdi-sort-descending"></i>
+                              Sales Person{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Clients <i className="mdi mdi-sort-descending"></i>
+                              Clients{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Project Manager <i className="mdi mdi-sort-descending"></i>
+                              Project Manager{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
@@ -129,28 +126,32 @@ function JobListing() {
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Job Title <i className="mdi mdi-sort-descending"></i>
+                              Job Title{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Job Type <i className="mdi mdi-sort-descending"></i>
+                              Job Type{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Location <i className="mdi mdi-sort-descending"></i>
+                              Location{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Head Count <i className="mdi mdi-sort-descending"></i>
+                              Head Count{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
@@ -164,14 +165,16 @@ function JobListing() {
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Salary Budget <i className="mdi mdi-sort-descending"></i>
+                              Salary Budget{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
                               class="text-uppercase"
                               style={{ fontSize: "12px" }}
                             >
-                              Visa Status <i className="mdi mdi-sort-descending"></i>
+                              Visa Status{" "}
+                              <i className="mdi mdi-sort-descending"></i>
                             </th>
                             <th
                               scope="col"
