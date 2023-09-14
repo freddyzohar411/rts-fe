@@ -31,18 +31,48 @@ const Index = () => {
           </Route>
 
           <Route>
-            {authProtectedRoutes.map((route, idx) => (
-              <Route
-                path={route.path}
-                element={
-                  <AuthProtected>
-                    <VerticalLayout>{route.component}</VerticalLayout>
-                  </AuthProtected>
-                }
-                key={idx}
-                exact={true}
-              />
-            ))}
+            {authProtectedRoutes.map((route, idx) => {
+              if (route?.nested) {
+                return (
+                  <Route
+                    path={route?.path}
+                    element={
+                      <AuthProtected>
+                        <VerticalLayout>{route.component}</VerticalLayout>
+                      </AuthProtected>
+                    }
+                    key={idx}
+                    exact={true}
+                  >
+                    {route.subroutes.map((route, idx) => (
+                      <Route
+                        path={route.path}
+                        element={
+                          <AuthProtected>
+                            <VerticalLayout>{route.component}</VerticalLayout>
+                          </AuthProtected>
+                        }
+                        key={idx}
+                        exact={true}
+                      />
+                    ))}
+                  </Route>
+                );
+              } else {
+                return (
+                  <Route
+                    path={route.path}
+                    element={
+                      <AuthProtected>
+                        <VerticalLayout>{route.component}</VerticalLayout>
+                      </AuthProtected>
+                    }
+                    key={idx}
+                    exact={true}
+                  />
+                );
+              }
+            })}
           </Route>
         </Routes>
       </Router>
