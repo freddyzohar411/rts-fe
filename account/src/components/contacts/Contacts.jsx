@@ -24,7 +24,9 @@ import {
 } from "./constants-contacts";
 import { fetchCity } from "../../store/city/action";
 import { fetchSubIndustry } from "../../store/industry/action";
-import { set } from "react-hook-form";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
 
 function Contacts() {
   const ENTITY_TYPE = "account_contact";
@@ -110,8 +112,7 @@ function Contacts() {
 
   // Fetch contact data if exist on first render
   useEffect(() => {
-    axios
-      .post("http://localhost:8700/contacts-by-entity-and-type", {
+    api.create("http://localhost:8700/contacts-by-entity-and-type", {
         entityType: ENTITY_TYPE,
         entityId: accountId,
       })
@@ -199,10 +200,10 @@ function Contacts() {
     };
 
     if (updateId) {
-      await axios.put(`http://localhost:8700/contacts/${updateId}`, newContact);
+      await api.put(`http://localhost:8700/contacts/${updateId}`, newContact);
     } else {
       // Save to database
-      await axios.post("http://localhost:8700/contacts", newContact);
+      await api.create("http://localhost:8700/contacts", newContact);
     }
 
     // Set contact data
@@ -215,7 +216,7 @@ function Contacts() {
 
   // Fetch contact data
   const fetchContactData = () => {
-    return axios.post("http://localhost:8700/contacts-by-entity-and-type", {
+    return api.create("http://localhost:8700/contacts-by-entity-and-type", {
       entityType: ENTITY_TYPE,
       entityId: accountId,
     });
@@ -262,7 +263,7 @@ function Contacts() {
   // Delete contact
   const handleContactDelete = async (id) => {
     console.log("To delete: ", id);
-    await axios.delete(`http://localhost:8700/contacts/${id}`);
+    await api.delete(`http://localhost:8700/contacts/${id}`);
     const response = await fetchContactData();
     setContactData(response.data);
   };

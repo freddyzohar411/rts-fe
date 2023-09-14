@@ -6,7 +6,8 @@
       "./main",
       "./dashboard",
       "./login",
-      "./account"
+      "./account",
+      "./job"
     ]
   },
   "scripts": {

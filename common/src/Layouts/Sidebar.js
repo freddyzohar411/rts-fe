@@ -42,7 +42,7 @@ const Sidebar = ({ layoutType }) => {
               <img src={logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
-              <img src={logoDark} alt="" height="17" />
+              <img src={logoDark} alt="" height="50" />
             </span>
           </Link>
 
