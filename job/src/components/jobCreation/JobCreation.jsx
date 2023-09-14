@@ -1230,23 +1230,6 @@ function JobCreation() {
                       </Row>
                     </div>
                     
-                    <div className="table-responsive mb-3">
-                      <Table className="table-bordered align-middle table-nowrap mb-0">
-                        <thead className="table-light">
-                          <tr>
-                            <th scope="col">Document</th>
-                            <th scope="col">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                          </tr>
-                        </tbody>
-                      </Table>
-                    </div>
-
                     <div className="text-end">
                       <Button
                         type="button"

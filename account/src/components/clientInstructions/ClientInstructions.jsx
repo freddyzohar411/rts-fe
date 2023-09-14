@@ -24,6 +24,10 @@ import {
   instructionInitialValues,
   instructionSchema,
 } from "./constants-clientInstructions";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
+
 
 function ClientInstructions() {
   const navigate = useNavigate();
@@ -41,17 +45,12 @@ function ClientInstructions() {
   const [instructionStatus, setInstructionStatus] = useState("new");
   const [documentUpdateId, setDocumentUpdateId] = useState(null);
 
-  // const checkClientInstructions = async () => {
-  //   return await axios.get(
-  //     `http://localhost:8800/instructions?accountId=${accountId}`
-  //   );
-  // };
 
   // Check if accound id exist and if client instructions exist
   useEffect(() => {
     if (accountId) {
       // Check if client instructions exist
-      axios
+      api
         .get(`http://localhost:8800/instructions?accountId=${accountId}`)
         .then((res) => {
           setInstructionUpdateData(res.data);
@@ -87,13 +86,13 @@ function ClientInstructions() {
     if (instructionStatus === "update") {
       console.log("Update");
       // Update the existing guideline
-      const response = await axios.put(
+      const response = await api.put(
         `http://localhost:8800/instructions/${instructionUpdateData.id}`,
         newGuideline
       );
     } else {
       // Create a new guideline
-      const response = await axios.post(
+      const response = await api.create(
         "http://localhost:8800/instructions",
         newGuideline
       );
@@ -113,7 +112,7 @@ function ClientInstructions() {
     documentData.append("entityId", +accountId);
 
     if (documentUpdateId) {
-      await axios.put(
+      await api.put(
         `http://localhost:8500/documents/${updateId}`,
         documentData, {
           headers: {
@@ -123,12 +122,15 @@ function ClientInstructions() {
       );
     } else {
       // Save to database
-      await axios.post("http://localhost:8500/documents", documentData, {
+      await api.create("http://localhost:8500/documents", documentData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
     }
+
+    // Reset form
+    values.clientInstrDocs = "";
 
     // get all documents and populate table
     const response = await fetchDocumentsWithEntityIdAndEntityType(accountId);
@@ -137,7 +139,7 @@ function ClientInstructions() {
 
   // Fetch all documents for the account
   const fetchDocumentsWithEntityIdAndEntityType = async (accountId) => {
-    return axios.get(
+    return api.get(
       `http://localhost:8500/documents?entityId=${accountId}&entityType=account_instruction`
     );
   };
@@ -150,7 +152,7 @@ function ClientInstructions() {
 
   // Handle remove file
   const handleRemovefile = async (id) => {
-    await axios.delete(`http://localhost:8500/documents/${id}`);
+    await api.delete(`http://localhost:8500/documents/${id}`);
     const response = await fetchDocumentsWithEntityIdAndEntityType(accountId);
     setDocuments(response.data);
   };

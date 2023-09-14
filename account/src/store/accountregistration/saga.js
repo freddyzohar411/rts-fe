@@ -3,10 +3,14 @@ import axios from "axios";
 
 import { FETCH_DRAFT_ACCOUNT } from "./actionTypes";
 import { setAccountId, deleteAccountId } from "./action";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+
+const api = new APIClient();
 
 function* workFetchDraftAccount(action) {
     try{
-        const response = yield call (axios.get,`http://localhost:8100/accounts/draft`);
+        const response = yield call (api.get,`http://localhost:8100/accounts/draft`);
         if (response.data === null) {
             yield put (deleteAccountId());
         } else {
