@@ -39,6 +39,8 @@ import TableContainer from "./Common/TableContainer";
 import TableContainerReactTable from "./Common/TableContainerReactTable";
 import UiContent from "./Common/UiContent";
 import WebAppsDropdown from "./Common/WebAppsDropdown";
+import FormInput from "./Common/FormInput";
+import FormSelection from "./Common/FormSelection";
 
 // Router
 import withRouter from "./Common/withRouter";
@@ -95,6 +97,8 @@ export {
   UiContent,
   WebAppsDropdown,
   withRouter,
+  FormInput,
+  FormSelection,
   //Layout
   layoutTypes,
   layoutModeTypes,

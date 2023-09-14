@@ -7,12 +7,18 @@ import { DashboardEcommerce } from "@workspace/dashboard";
 // // User Profile
 import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 
+//Dashboard
+import { CreateCandidate } from "@workspace/candidate";
+
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
   { path: "/index", component: <DashboardEcommerce /> },
 
-  //User Profile
+  // User Profile
   { path: "/profile", component: <UserProfile /> },
+
+  // Create Candidate
+  { path: "/create-candidate", component: <CreateCandidate /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
