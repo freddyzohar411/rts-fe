@@ -271,7 +271,7 @@ const Navdata = () => {
     },
 
     // Reports
-{
+    {
       id: "reports",
       label: "Reports",
       icon: "ri-bar-chart-grouped-fill",
@@ -284,24 +284,7 @@ const Navdata = () => {
       },
       stateVariables: isReports,
       subItems: [
-        {
-          id: "jobs",
-          label: "All Job Openings",
-          link: "/jobs",
-          parentId: "job",
-        },
-        {
-          id: "newJob",
-          label: "Create Job Openings",
-          link: "/job/job-creation",
-          parentId: "job",
-        },
-        {
-          id: "jobMassImport",
-          label: "Mass Imports",
-          link: "/job/mass-imports",
-          parentId: "job",
-        },
+
       ],
     },
 
@@ -314,7 +297,7 @@ const Navdata = () => {
       click: function (e) {
         e.preventDefault();
         setIsSettings(!isSettings);
-        setIscurrentState("Job");
+        setIscurrentState("Settings");
         updateIconSidebar(e);
       },
       stateVariables: isSettings,
@@ -345,8 +328,6 @@ const Navdata = () => {
         },
       ],
     },
-
-    
   ];
   return <React.Fragment>{menuItems}</React.Fragment>;
 };
