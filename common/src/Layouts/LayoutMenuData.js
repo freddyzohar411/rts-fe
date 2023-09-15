@@ -140,33 +140,6 @@ const Navdata = () => {
         },
       ],
     },
-    // {
-    //   id: "contact",
-    //   label: "Contacts",
-    //   icon: "ri-user-3-fill",
-    //   link: "/#",
-    //   click: function (e) {
-    //     e.preventDefault();
-    //     setIsContacts(!isContacts);
-    //     setIscurrentState("Contact");
-    //     updateIconSidebar(e);
-    //   },
-    //   stateVariables: isContacts,
-    //   subItems: [
-    //     {
-    //       id: "contacts",
-    //       label: "All Contacts",
-    //       link: "/contacts",
-    //       parentId: "contact",
-    //     },
-    //     {
-    //       id: "newContact",
-    //       label: "Create New Contact",
-    //       link: "/contact/contact-creation",
-    //       parentId: "contact",
-    //     },
-    //   ],
-    // },
 
     // Job Openings
     {
