@@ -1,5 +1,4 @@
-import FormInput from "@workspace/common/src/Components/Common/FormInput";
-import FormSelection from "@workspace/common/src/Components/Common/FormSelection";
+import { FormSelection, FormInput } from "@workspace/common";
 import React, { useState } from "react";
 import { useFormikContext } from "formik";
 import { Label, Row, Col, Input, Container } from "reactstrap";

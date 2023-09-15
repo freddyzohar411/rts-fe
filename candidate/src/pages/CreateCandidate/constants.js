@@ -98,12 +98,12 @@ export const FORM_OPTION = [
   {
     initialValues: candidateInitialValues,
     schema: candidateSchema,
-    form: Certifications,
+    form: Documents,
   },
   {
     initialValues: candidateInitialValues,
     schema: candidateSchema,
-    form: Documents,
+    form: WorkExperience,
   },
   {
     initialValues: candidateInitialValues,
@@ -113,7 +113,7 @@ export const FORM_OPTION = [
   {
     initialValues: candidateInitialValues,
     schema: candidateSchema,
-    form: EmployerDetails,
+    form: Certifications,
   },
   {
     initialValues: candidateInitialValues,
@@ -123,6 +123,6 @@ export const FORM_OPTION = [
   {
     initialValues: candidateInitialValues,
     schema: candidateSchema,
-    form: WorkExperience,
+    form: EmployerDetails,
   },
 ];

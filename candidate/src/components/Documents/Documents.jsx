@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import FormInput from "@workspace/common/src/Components/Common/FormInput";
 import { Label, Row, Col, Input, Container } from "reactstrap";
 import { useFormikContext, getIn } from "formik";
-import FormSelection from "@workspace/common/src/Components/Common/FormSelection";
+import { FormSelection, FormInput } from "@workspace/common";
 
 const Documents = () => {
   const [sortBy, setsortBy] = useState(null);
