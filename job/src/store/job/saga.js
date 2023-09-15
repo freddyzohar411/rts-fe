@@ -36,7 +36,7 @@ function* workCreateJob(action) {
 }
 
 function* workCreateJobAndDocuments(action) {
-  const { newJob, newDocuments } = action.payload;
+  const { newJob, newDocuments, navigate } = action.payload;
   try {
     // Create a job
     const jobResponse = yield call(createJob, newJob);
@@ -57,6 +57,7 @@ function* workCreateJobAndDocuments(action) {
         },
       });
     }
+    navigate("/jobs");
   } catch (error) {
     yield put(createJobFailure(error));
   }
