@@ -41,113 +41,84 @@ const getAddressString = (address) => {
  * name: spring entity field name
  */
 export const jobsListingOptions = {
-  "Account Name": {
-    header: "Account Name",
-    name: "name",
-    render: (data) => data.account.accountInformation.accountName,
+  "Entry Date": {
+    header: "Entry Date",
+    name: "openDate",
+    render: (data) => data.job.openDate,
     sort: true,
   },
-  "Account Number": {
-    header: "Account Number",
-    name: "accountNumber",
-    render: (data) => data.account.accountNumber,
-    sort: true,
-  },
-  "Account Rating": {
-    header: "Account Rating",
-    name: "accountRating",
-    render: (data) => data.account.accountInformation.accountRating,
-    sort: true,
-  },
-  "Account Owner": {
-    header: "Account Owner",
+  "Sales Person": {
+    header: "Sales Person",
     name: "salesName",
-    render: (data) => data.account.accountInformation.salesName || "-",
-    sort: true,
+    render: (data) =>
+      `${data.contact.contactInformation.firstName} ${data.contact.contactInformation.lastName}`,
+    sort: false,
+  },
+  Clients: {
+    header: "Clients",
+    name: "accountName",
+    render: (data) => data.account.accountName,
+    sort: false,
+  },
+  "Project Manager": {
+    header: "Project Manager",
+    name: "salesManager",
+    render: (data) => data.job.salesManager || "-",
+    sort: false,
   },
   Status: {
     header: "Status",
-    name: "status",
+    name: "jobStatus",
     render: (data) => (
       <Badge
-        color={
-          data.account.accountInformation.accountStatus == "active"
-            ? "success"
-            : "warning"
-        }
+        color={data.job.jobStatus == "active" ? "success" : "warning"}
         className="text-uppercase"
       >
-        {data.account.accountInformation.accountStatus}
+        {data.job.jobStatus}
       </Badge>
     ),
     sort: true,
   },
-  Service: {
-    header: "Service",
-    name: "accountSource",
-    render: (data) => data.account.accountInformation.accountSource,
+  "Job Id": {
+    header: "Job Id",
+    name: "clientJobId",
+    render: (data) => data.job.clientJobId || "-",
     sort: true,
   },
-  Msa: {
-    header: "Msa",
-    name: "msa",
-    render: (data) => data.account.accountInformation.msa,
+  "Job Title": {
+    header: "Job Title",
+    name: "title",
+    render: (data) => data.job.title || "-",
     sort: true,
   },
-  "No of Employees": {
-    header: "No of Employees",
-    name: "noOfEmployees",
-    render: (data) => data.account.accountInformation.noOfEmployees || "-",
+  "Job Type": {
+    header: "Job Type",
+    name: "jobType",
+    render: (data) => data.job.jobType || "-",
     sort: true,
   },
-  "Parent Account": {
-    header: "Parent Account",
-    name: "parentCompanyEntity",
-    render: (data) =>
-      data.account.accountInformation?.parentCompanyEntity?.name || "-",
-    sort: false,
-  },
-  "Secondary Owner": {
-    header: "Secondary Owner",
-    name: "secondaryOwner",
-    render: (data) => data.account.accountInformation.secondaryOwner || "-",
+  Location: {
+    header: "Location",
+    name: "workLocation",
+    render: (data) => data.job.workLocation || "-",
     sort: true,
   },
-  Website: {
-    header: "Website",
-    name: "website",
-    render: (data) => data.account.accountInformation.website || "-",
+  "Head Count": {
+    header: "Head Count",
+    name: "noOfHeadcount",
+    render: (data) => data.job.noOfHeadcount || "-",
     sort: true,
   },
-  "Lead Account Name": {
-    header: "Lead Account Name",
-    name: "accountName",
-    render: (data) => data.account.leadInformation.accountName || "-",
+  "Salary Budget": {
+    header: "Salary Budget",
+    name: "salaryBudget",
+    render: (data) => data.job.salaryBudget || "-",
     sort: true,
   },
-  "Lead Source": {
-    header: "Lead Source",
-    name: "leadSource",
-    render: (data) => data.account.leadInformation.leadSource || "-",
+  "Visa Status": {
+    header: "Visa Status",
+    name: "visaStatus",
+    render: (data) => data.job.visaStatus || "-",
     sort: true,
-  },
-  "Lead Sales Name": {
-    header: "Lead Sales Name",
-    name: "leadSalesName",
-    render: (data) => data.account.leadInformation.salesName || "-",
-    sort: true,
-  },
-  Address: {
-    header: "Address",
-    name: "address",
-    render: (data) =>
-      getAddressString(data.account.addressInformation.address) || "-",
-    sort: false,
-  },
-  "Created By": {
-    header: "Created By",
-    name: "createdBy",
-    render: (data) => `${data.user.firstName} ${data.user.lastName}` || "-",
-    sort: false,
   },
 };

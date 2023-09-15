@@ -149,15 +149,7 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                   </Form>
                 </DropdownMenu>
               </Dropdown>
-
-              <LanguageDropdown />
-
-              <FullScreenDropdown />
-
-              <LightDark
-                layoutMode={layoutModeType}
-                onChangeLayoutMode={onChangeLayoutMode}
-              />
+              <NotificationDropdown />
               <ProfileDropdown />
             </div>
           </div>

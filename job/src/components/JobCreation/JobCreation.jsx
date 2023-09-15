@@ -80,6 +80,7 @@ function JobCreation() {
       accountInformation: {
         accountId: +values.accName,
         contactId: +values.accContact,
+        salesManager: values.salesManager,
       },
       jobOpeningInformation: {
         jobTitle: values.jobTitle,
@@ -132,11 +133,12 @@ function JobCreation() {
       createJob({
         newJob,
         newDocuments: files,
+        navigate: navigate
       })
     );
 
     // Navigate to job listing
-    navigate("/jobs");
+    // navigate("/jobs");
   };
 
   // Submit Job form

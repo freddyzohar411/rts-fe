@@ -118,7 +118,7 @@ function JobListing() {
   // ========================================= Table Configuration ===========================
   // Set Custom view
   const customView =
-    "Service,Account Number,Account Name,Account Owner,Created By,Parent Account,Status";
+    "Entry Date,Sales Person,Clients,Project Manager,Job Id,Job Title,Job Type,Location,Head Count,Salary Budget,Visa Status";
 
   // Get the custom config
   const getCustomConfig = (customView) => {
@@ -148,20 +148,20 @@ function JobListing() {
       </th>
       <th scope="col" class="text-uppercase"></th>
       {customConfig.map((option) => {
-        if (option.sort === true) {
+        if (option?.sort === true) {
           return (
             <th
               scope="col"
               class="text-uppercase cursor-pointer"
               onClick={() => handleSort(option)}
             >
-              {option.header} <i className="mdi mdi-sort-descending"></i>
+              {option?.header} <i className="mdi mdi-sort-descending"></i>
             </th>
           );
         } else {
           return (
             <th scope="col" class="text-uppercase">
-              {option.header}
+              {option?.header}
             </th>
           );
         }
