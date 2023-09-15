@@ -28,7 +28,7 @@ const JobReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        accounts: action.payload,
+        jobs: action.payload,
       };
     case FETCH_JOBS_FAILURE:
       return {
