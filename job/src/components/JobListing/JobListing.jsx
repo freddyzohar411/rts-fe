@@ -55,7 +55,7 @@ function JobListing() {
   // Update the page info
   useEffect(() => {
     setPageInfo({
-      currentPage: jobsData.number,
+      currentPage: jobsData.page,
       totalPages: jobsData.totalPages,
       totalElements: jobsData.totalElements,
     });
@@ -224,19 +224,43 @@ function JobListing() {
                   <div className="listjs-table">
                     <Row className="d-flex column-gap-1 mb-3">
                       <Col>
-                        <div className="search-box">
-                          <form onSubmit={handleSearch}>
-                            <Input
-                              type="text"
-                              placeholder="Search"
-                              className="form-control search bg-light border-light"
-                              value={searchInput}
-                              style={{ width: "350px" }}
-                              onChange={(e) => setSearchInput(e.target.value)}
-                            />
-                          </form>
+                        <div className="d-flex column-gap-4">
+                          <div className="search-box">
+                            <form onSubmit={handleSearch}>
+                              <Input
+                                type="text"
+                                placeholder="Search"
+                                className="form-control search bg-light border-light"
+                                value={searchInput}
+                                style={{ width: "350px" }}
+                                onChange={(e) => setSearchInput(e.target.value)}
+                              />
+                            </form>
 
-                          <i className="ri-search-line search-icon"></i>
+                            <i className="ri-search-line search-icon"></i>
+                          </div>
+                          <div>
+                            <Input type="select" placeholder="form-select">
+                              <option value="New Job Openings">
+                                New Job Openings
+                              </option>
+                              <option value="Active Job Openings">
+                                Active Job Openings
+                              </option>
+                              <option value="Inactive Job Openings">
+                                Inactive Job Openings
+                              </option>
+                              <option value="Closed Job Openings">
+                                Closed Job Openings
+                              </option>
+                              <option value="Focus of the Day">
+                                Focus of the Day
+                              </option>
+                              <option value="Assigned Job Openings">
+                                Assigned Job Openings
+                              </option>
+                            </Input>
+                          </div>
                         </div>
                       </Col>
                       <Col>
@@ -261,6 +285,9 @@ function JobListing() {
                           </Button>
                           <Button type="button" className="btn btn-primary">
                             Create New Account
+                          </Button>
+                          <Button type="button" className="btn btn-primary">
+                            <i className="ri-filter-line"></i>
                           </Button>
                         </div>
                       </Col>

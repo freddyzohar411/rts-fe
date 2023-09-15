@@ -299,21 +299,20 @@ function Documents() {
               </Row>
             </div>
 
-            <div className="table-responsive mb-3">
-              <Table
-                className="table-bordered align-middle table-nowrap mb-0"
-                style={{ height: "200px", overflow: "scroll" }}
-              >
+            <div className="table-responsive mb-3" style={{maxHeight: '200px'}}>
+              <Table className="table-bordered align-middle table-nowrap mb-0">
                 <thead className="table-light">
                   <tr>
                     <th scope="col">Document Type</th>
                     <th scope="col">Document Title</th>
                     <th scope="col">Uploaded Document</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col" width="100">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style={{overflowY: 'auto', width: '100%'}}>
                   {documents.length === 0 ? (
                     <tr>
                       <td colSpan="5">
@@ -329,9 +328,9 @@ function Documents() {
                         <td>
                           {document.description ? document.description : "-"}
                         </td>
-                        <td>
+                        <td className="text-center">
                           <Button
-                            className="m-2 btn btn-outline-outline"
+                            className="m-2 btn btn-primary"
                             type="button"
                             outline
                             onClick={() => handleDocumentUpdate(document)}
@@ -340,7 +339,7 @@ function Documents() {
                           </Button>
 
                           <Button
-                            className="m-2 btn btn-outline-outline"
+                            className="m-2 btn btn-primary"
                             type="button"
                             outline
                             onClick={() => handleDelete(document.id)}
