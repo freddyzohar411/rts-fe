@@ -55,7 +55,7 @@ function AccountListing() {
   // Update the page info
   useEffect(() => {
     setPageInfo({
-      currentPage: accountsData.number,
+      currentPage: accountsData.page,
       totalPages: accountsData.totalPages,
       totalElements: accountsData.totalElements,
     });
@@ -260,6 +260,9 @@ function AccountListing() {
                           </Button>
                           <Button type="button" className="btn btn-primary">
                             Create New Account
+                          </Button>
+                          <Button type="button" className="btn btn-primary">
+                            <i className="ri-filter-line"></i>
                           </Button>
                         </div>
                       </Col>

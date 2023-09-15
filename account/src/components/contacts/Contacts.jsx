@@ -872,20 +872,19 @@ function Contacts() {
               </div>
             </div>
 
-            <div className="table-responsive mb-3">
-              <Table
-                className="table-bordered align-middle table-nowrap mb-0 "
-                style={{ maxHeight: "250px" }}
-              >
+            <div className="table-responsive mb-3" style={{maxHeight: '200px'}}>
+              <Table className="table-bordered align-middle table-nowrap mb-0 ">
                 <thead className="table-light">
                   <tr>
                     <th scope="col">Personal Information</th>
                     <th scope="col">Professional Information</th>
                     <th scope="col">Address</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col" width="100">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
-                <tbody style={{ maxHeight: "200px", overflowY: "auto" }}>
+                <tbody style={{overflowY: 'auto', width: '100%'}}>
                   {tableData.length === 0 ? (
                     <tr>
                       <td colSpan={4}>No contact information saved yet.</td>
@@ -917,16 +916,16 @@ function Contacts() {
                           <div>{row.line3}</div>
                           <div>{row.remarks}</div>
                         </td>
-                        <td>
+                        <td className="text-center">
                           <Button
-                            className="m-2 btn-outline-outline"
+                            className="m-2 btn-primary"
                             type="button"
                             onClick={() => handleContactDelete(row.id)}
                           >
                             Remove
                           </Button>
                           <Button
-                            className="m-2 btn-outline-outline"
+                            className="m-2 btn-primary"
                             type="button"
                             onClick={() => handleContactUpdate(row)}
                           >

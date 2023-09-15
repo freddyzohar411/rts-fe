@@ -133,7 +133,7 @@ function JobCreation() {
       createJob({
         newJob,
         newDocuments: files,
-        navigate: navigate
+        navigate: navigate,
       })
     );
 
@@ -239,6 +239,13 @@ function JobCreation() {
                   <Form>
                     <div className="mb-3">
                       <div>
+                        <div className="mb-2">
+                          <div>
+                            <Label className="h5">
+                              Create Manual Job Openings
+                            </Label>
+                          </div>
+                        </div>
                         <div className="mb-2">
                           <div>
                             <Label className="h6">Account Information</Label>
@@ -1157,8 +1164,8 @@ function JobCreation() {
                             <Label htmlFor="expectedMargin">
                               Expected Margin
                             </Label>
-                            <div className="d-flex ">
-                              <div className="col-3">
+                            <div className="d-flex column-gap-1">
+                              <div className="col-4">
                                 <Field name="expectedMarginMinInput">
                                   {({ field }) => (
                                     <Input
@@ -1171,24 +1178,8 @@ function JobCreation() {
                                   )}
                                 </Field>
                               </div>
-                              {/* <div className="col-3">
-                                <Field name="expectedMarginMinCurrency">
-                                  {({ field }) => (
-                                    <Input
-                                      {...field}
-                                      type="select"
-                                      id="priority"
-                                      className="form-select"
-                                    >
-                                      <option value="">USD</option>
-                                      <option value="1">One</option>
-                                      <option value="2">Two</option>
-                                      <option value="3">Three</option>
-                                    </Input>
-                                  )}
-                                </Field>
-                              </div> */}
-                              <div className="col-3">
+
+                              <div className="col-4">
                                 <Field name="expectedMarginMaxInput">
                                   {({ field }) => (
                                     <Input
@@ -1201,7 +1192,8 @@ function JobCreation() {
                                   )}
                                 </Field>
                               </div>
-                              <div className="col-3">
+
+                              <div className="col-4">
                                 <Field name="expectedMarginCurrency">
                                   {({ field }) => (
                                     <Input
@@ -1432,30 +1424,37 @@ function JobCreation() {
                       </Row>
                     </div>
 
-                    <div className="table-responsive mb-4">
+                    <div className="table-responsive mb-4" style={{maxHeight: '200px'}}>
                       <Table className="table-bordered align-middle table-nowrap mb-0">
                         <thead className="table-light">
                           <tr>
                             <th scope="col">Uploaded Documents</th>
-                            <th scope="col">Actions</th>
+                            <th scope="col" width="100">Actions</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          {files.length > 0 &&
+                        <tbody style={{overflowY: 'auto', width: '100%'}}>
+                          {files.length > 0 ? (
                             files.map((file, index) => (
-                              <tr>
+                              <tr key={index}>
+                                {" "}
+                                {/* Added a 'key' prop */}
                                 <td>{file.fileName}</td>
-                                <td>
+                                <td className="text-center">
                                   <Button
                                     type="button"
-                                    className="btn btn-danger"
+                                    className="btn btn-outline-danger"
                                     onClick={() => removeFileHandler(index)}
                                   >
-                                    Delete
+                                    <i className="ri-delete-bin-2-fill"></i>
                                   </Button>
                                 </td>
                               </tr>
-                            ))}
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={2}>No documents saved yet.</td>
+                            </tr>
+                          )}
                         </tbody>
                       </Table>
                     </div>

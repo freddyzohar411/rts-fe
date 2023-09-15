@@ -251,18 +251,17 @@ function ClientInstructions() {
             </Row>
           </div>
 
-          <div className="table-responsive mb-3">
-            <Table
-              className="table-bordered align-middle table-nowrap mb-0"
-              style={{ height: "200px", overflow: "scroll" }}
-            >
+          <div className="table-responsive mb-3" style={{maxHeight: '200px'}}>
+            <Table className="table-bordered align-middle table-nowrap mb-0">
               <thead className="table-light">
                 <tr>
                   <th scope="col">Documents</th>
-                  <th scope="col">Actions</th>
+                  <th scope="col" width="100">
+                    Actions
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style={{overflowY: 'auto', width: '100%'}}>
                 {documents.length === 0 ? (
                   <tr>
                     <td colSpan={5}>
@@ -276,10 +275,10 @@ function ClientInstructions() {
                       <td>
                         <Button
                           type="button"
-                          className="btn btn-outline-outline"
+                          className="btn btn-outline-danger"
                           onClick={() => handleRemovefile(document.id)}
                         >
-                          Remove
+                          <i className="ri-delete-bin-2-fill"></i>
                         </Button>
                       </td>
                     </tr>

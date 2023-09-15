@@ -108,7 +108,7 @@ function Stepper() {
                             toggleTab(1, 0);
                           }}
                           tag="button"
-                          color="custom-button"
+                          color="primary"
                         >
                           <div className="d-flex flex-column row-gap-2 justify-content-center align-items-center">
                             <i className="mdi mdi-account mt-2"></i>
