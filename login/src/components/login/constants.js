@@ -1,8 +1,8 @@
 import * as yup from "yup";
 
 export const initialValues = {
-  username: "rahul@aven-sys.com",
-  password: "pass1234",
+  username: "",
+  password: "",
 };
 
 export const schema = yup.object().shape({
