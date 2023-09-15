@@ -58,7 +58,6 @@ const MyCartDropdown = () => {
 
     const removeItem = (ele) => {
         var price = ele.closest(".dropdown-item-cart").querySelector('.cart-item-price').innerHTML;
-        console.log("cardItemTotal",cardItemTotal)
         var subTotal = cardItemTotal.current.innerHTML;
         cardItemTotal.current.innerHTML = subTotal - price;
 

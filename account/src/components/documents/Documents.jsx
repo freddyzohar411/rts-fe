@@ -16,9 +16,12 @@ import {
   populateDocumentForm,
   getUpdateSchema,
 } from "./constants-document";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { FileHelper } from "@workspace/common";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
 
 function Documents() {
   const navigate = useNavigate();
@@ -31,6 +34,7 @@ function Documents() {
   const [updatedDocument, setUpdatedDocument] = useState(documents);
   const [editDocumentName, setEditDocumentName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [fileError, setFileError] = useState(null);
 
   // Update id state
   const [updateId, setUpdateId] = useState(null);
@@ -58,7 +62,6 @@ function Documents() {
     documentData.append("description", values.docDesc);
     documentData.append("type", values.docType);
     if (values.uploadDoc) {
-      console.log("File added", newDocument);
       documentData.append("file", newDocument);
     }
     documentData.append("entityType", ENTITY_TYPE);
@@ -66,18 +69,18 @@ function Documents() {
 
     // Create a document
     if (updateId) {
-      await axios.put(
+      await api.put(
         `http://localhost:8500/documents/${updateId}`,
         documentData
       );
     } else {
       // Save to database with file add header
 
-      await axios.post("http://localhost:8500/documents", documentData, {
+      await api.create("http://localhost:8500/documents", documentData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      } );
+      });
     }
 
     // get all documents and populate table
@@ -94,27 +97,50 @@ function Documents() {
       navigate("/account/client-instructions-creation");
     } else {
       setErrorMessage("Please upload a document before you continue.");
-      console.log("ERROR");
     }
   };
 
   // Fetch all documents for the account
   const fetchDocumentsWithEntityIdAndEntityType = async (accountId) => {
-    return axios.get(
+    return api.get(
       `http://localhost:8500/documents?entityId=${accountId}&entityType=account_document`
     );
   };
 
   // Handle file upload
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    setNewDocument(file);
+  const handleFileUpload = (e, form) => {
+    setFileError(null);
+
+    // Check if file is selected
+    if (e.target.files[0] == null) return;
+
+    // Check if file is correct format
+    if (
+      !FileHelper.checkFileFormatValid(e.target.files[0], [
+        "pdf",
+        "docx",
+        "doc",
+      ])
+    ) {
+      e.target.value = null;
+      setFileError("Please upload only pdf, docx, doc file");
+      return;
+    }
+
+    // Check if file size les than 2MB
+    if (!FileHelper.checkFileSizeLimit(e.target.files[0], 2000000)) {
+      e.target.value = null;
+      setFileError("Please upload file less than 2MB");
+      return;
+    }
+
+    // Set File
+    setNewDocument(e.target.files[0]);
   };
 
   // Handle delete
   const handleDelete = async (documentId) => {
-    await axios.delete(`http://localhost:8500/documents/${documentId}`);
+    await api.delete(`http://localhost:8500/documents/${documentId}`);
     const response = await fetchDocumentsWithEntityIdAndEntityType(accountId);
     setDocuments(response.data);
   };
@@ -148,7 +174,7 @@ function Documents() {
       validationSchema={documentSchema}
       onSubmit={handleSubmit}
     >
-      {({ errors, touched, resetForm }) => (
+      {({ errors, touched, resetForm, values }) => (
         <Form>
           <div>
             <div className="mb-5">
@@ -237,6 +263,11 @@ function Documents() {
                       <FormFeedback type="invalid">
                         {errors.uploadDoc}
                       </FormFeedback>
+                    )}
+                    {fileError && (
+                      <div class="text-danger">
+                        <small>{fileError}</small>
+                      </div>
                     )}
                     {editDocumentName && <span>{editDocumentName}</span>}
                     <div className="text-muted mt-2">
@@ -336,7 +367,11 @@ function Documents() {
             >
               Back
             </Button>
-            <Button className="btn btn-primary" type="button" onClick={handleNext}>
+            <Button
+              className="btn btn-primary"
+              type="button"
+              onClick={handleNext}
+            >
               Next
             </Button>
           </div>

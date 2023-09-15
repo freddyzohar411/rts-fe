@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   FormFeedback,
   Button,
+  Alert,
 } from "reactstrap";
 import SimpleBar from "simplebar-react";
 import { Form, Formik, Field } from "formik";
@@ -24,11 +25,12 @@ import { fetchBillingCity } from "../../store/billingcity/action";
 import { fetchSubIndustry } from "../../store/industry/action";
 import { createAccount } from "../../store/account/action";
 import { setAccountId } from "../../store/accountregistration/action";
-// import { accountId } from "../../fakeData";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { set } from "react-hook-form";
 import * as yup from "yup";
+import { FileHelper } from "@workspace/common";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
 
 export const AccountCreation = () => {
   const navigate = useNavigate();
@@ -37,7 +39,6 @@ export const AccountCreation = () => {
     (state) => state.AccountRegistrationReducer.accountId
   );
 
-  console.log("Account creation Account Id", accountId)
   const countryData = useSelector(
     (state) => state.CountryCurrencyReducer.countryCurrency
   );
@@ -59,20 +60,33 @@ export const AccountCreation = () => {
   const [accountDetails, setAccountDetails] = useState(null);
   const [accountStatus, setAccountStatus] = useState("new");
   const [agreementDocDetail, setAgreementDocDetail] = useState(null);
+  const [fileError, setFileError] = useState(null);
 
-  //
+  const handleFileChange = (e, form) => {
+    setFileError(null);
 
-  const handleFileChange = (e) => {
     // Check if file is selected
-    // if (e.target.files[0]) return;
+    if (e.target.files[0] == null) return;
 
-    // // Check if file extension is pdf
-    // if (e.target.files[0].name.split(".").pop() !== "pdf"){
-    //   return
-    // };
+    // Check if file is correct format
+    if (
+      !FileHelper.checkFileFormatValid(e.target.files[0], [
+        "pdf",
+        "docx",
+        "doc",
+      ])
+    ) {
+      e.target.value = null;
+      setFileError("Please upload only pdf, docx, doc file");
+      return;
+    }
 
-    // // Check if file size is less than 5MB
-    // if (e.target.files[0].size > 5000000) return;
+    // Check if file size les than 2MB
+    if (!FileHelper.checkFileSizeLimit(e.target.files[0], 2000000)) {
+      e.target.value = null;
+      setFileError("Please upload file less than 2MB");
+      return;
+    }
 
     // Set file
     setAgreementFile(e.target.files[0]);
@@ -84,17 +98,15 @@ export const AccountCreation = () => {
   useEffect(() => {
     // If account id exists, fetch account details
     if (accountId) {
-      console.log("Account creation Update Account Id", accountId)
       setAccountStatus("update");
-      // Get account detail by fetching
-      axios.get(`http://localhost:8100/accounts/${accountId}`).then((res) => {
+      api.get(`http://localhost:8100/accounts/${accountId}`).then((res) => {
         const getAccountDetails = res.data;
         dispatch(fetchSubIndustry(res.data.accountInformation.accountIndustry));
         setAccountDetails(getAccountDetails);
       });
 
       // Here we fetch the agreement document
-      axios
+      api
         .get(
           `http://localhost:8500/documents?entityId=${accountId}&entityType=account`
         )
@@ -191,7 +203,6 @@ export const AccountCreation = () => {
   const getCountryName = (countryId) => {
     if (countryId !== 0) {
       const country = countryData.find((country) => country.id === countryId);
-
       return country.name;
     }
     return "";
@@ -200,7 +211,6 @@ export const AccountCreation = () => {
   const handleFormSubmit = async (values) => {
     // Create form data
     const formData = new FormData();
-    // Nested accoun infomation inside form data
 
     // Account Information form data
     formData.append("accountInformation.accountName", values.accName);
@@ -215,7 +225,7 @@ export const AccountCreation = () => {
       "accountInformation.revenueCur",
       +selectedCurrency.currencyId
     );
-    formData.append("accountInformation.parentCompany", +values.parentComp); // Please add this in
+    formData.append("accountInformation.parentCompany", +values.parentComp);
     formData.append("accountInformation.website", values.website);
     formData.append("accountInformation.accountSource", values.accSource);
     formData.append(
@@ -267,7 +277,6 @@ export const AccountCreation = () => {
     );
     formData.append(
       "addressInformation.billingAddress.country",
-      // getCountryName(+values.billingCountry)
       values.billingCountry
     );
     formData.append(
@@ -279,8 +288,8 @@ export const AccountCreation = () => {
     formData.append("accountRemarks", values.accRemarks);
 
     if (accountStatus === "new") {
-      axios
-        .post("http://localhost:8100/accounts", formData, {
+      api
+        .create("http://localhost:8100/accounts", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -293,7 +302,7 @@ export const AccountCreation = () => {
 
     if (accountStatus === "update") {
       formData.append("id", +accountId);
-      axios
+      api
         .put(`http://localhost:8100/accounts/${accountId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -309,7 +318,6 @@ export const AccountCreation = () => {
 
   // Handle checkbox change
   const handleCheckboxChange = (e, form) => {
-    console.log("Country IID", getCountryId(form.values.country));
     if (e.target.checked) {
       form.setFieldValue("billingLine1", form.values.line1);
       form.setFieldValue("billingLine2", form.values.line2);
@@ -318,13 +326,6 @@ export const AccountCreation = () => {
       form.setFieldValue("billingCity", form.values.city);
       dispatch(fetchBillingCity(getCountryId(form.values.country)));
       form.setFieldValue("billingPostalCode", form.values.postalCode);
-    } else {
-      form.setFieldValue("billingLine1", "");
-      form.setFieldValue("billingLine2", "");
-      form.setFieldValue("billingLine3", "");
-      form.setFieldValue("billingCity", "");
-      form.setFieldValue("billingCountry", "");
-      form.setFieldValue("billingPostalCode", "");
     }
     setDisableForm(!disableForm);
   };
@@ -450,8 +451,8 @@ export const AccountCreation = () => {
                           id="accStatus"
                         >
                           <option>Select</option>
-                          <option defaultValue="1">Active</option>
-                          <option defaultValue="2">Inactive</option>
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
                         </select>
                       )}
                     </Field>
@@ -594,9 +595,7 @@ export const AccountCreation = () => {
                         as="button"
                         className="btn btn-primary arrow-none"
                       >
-                        <span>
-                          {selectedCurrency.currency}
-                        </span>
+                        <span>{selectedCurrency.currency}</span>
                       </DropdownToggle>
                       <Field name="annualRev">
                         {({ field }) => (
@@ -718,8 +717,12 @@ export const AccountCreation = () => {
                           id="accSource"
                         >
                           <option value="">Select</option>
-                          <option value="1">Professional Services</option>
-                          <option value="2">Talent Services</option>
+                          <option value="Professional Services">
+                            Professional Services
+                          </option>
+                          <option value="Talent Services">
+                            Talent Services
+                          </option>
                         </select>
                       )}
                     </Field>
@@ -747,9 +750,7 @@ export const AccountCreation = () => {
                         as="button"
                         className="btn btn-primary arrow-none"
                       >
-                        <span>
-                          {selectedLandline.landlineCountry}
-                        </span>
+                        <span>{selectedLandline.landlineCountry}</span>
                       </DropdownToggle>
                       <Field name="landline">
                         {({ field }) => (
@@ -871,14 +872,17 @@ export const AccountCreation = () => {
                         <div className="input-group">
                           <Input
                             type="file"
-                            className="form-control"
+                            className={`form-control ${
+                              touched.agreementDoc && errors.agreementDoc
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             id="agreementDoc"
                             {...field}
                             onChange={(e) => {
                               handleFileChange(e, form);
                               form.handleChange(e);
                             }}
-                            invalid={!!errors.agreementDoc}
                           />
                         </div>
                       )}
@@ -888,7 +892,11 @@ export const AccountCreation = () => {
                         {errors.agreementDoc}
                       </FormFeedback>
                     )}
-
+                    {fileError && (
+                      <div class="text-danger">
+                        <small>{fileError}</small>
+                      </div>
+                    )}
                     {agreementDocDetail && (
                       <span className="mt-2">
                         {agreementDocDetail.documentName}

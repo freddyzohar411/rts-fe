@@ -88,7 +88,7 @@ const Navdata = () => {
       setIsJob(false);
     }
     if (iscurrentState !== "Candidates") {
-      setIsJob(false);
+      setIsCandidates(false);
     }
     if (iscurrentState !== "Reports") {
       setIsReports(false);

@@ -13,9 +13,7 @@ import {
 import { Field, Form, Formik } from "formik";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import { accountId } from "../../fakeData";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   guideLinesInitialValues,
@@ -24,6 +22,9 @@ import {
   instructionInitialValues,
   instructionSchema,
 } from "./constants-clientInstructions";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
 
 function ClientInstructions() {
   const navigate = useNavigate();
@@ -41,17 +42,11 @@ function ClientInstructions() {
   const [instructionStatus, setInstructionStatus] = useState("new");
   const [documentUpdateId, setDocumentUpdateId] = useState(null);
 
-  // const checkClientInstructions = async () => {
-  //   return await axios.get(
-  //     `http://localhost:8800/instructions?accountId=${accountId}`
-  //   );
-  // };
-
   // Check if accound id exist and if client instructions exist
   useEffect(() => {
     if (accountId) {
       // Check if client instructions exist
-      axios
+      api
         .get(`http://localhost:8800/instructions?accountId=${accountId}`)
         .then((res) => {
           setInstructionUpdateData(res.data);
@@ -61,39 +56,34 @@ function ClientInstructions() {
           setInstructionStatus("update");
         })
         .catch((err) => {
-          // if (err.response.status === 404) {
-            setGuideLineInitialvaluesData(guideLinesInitialValues);
-            setInstructionStatus("new");
-          // }
+          setGuideLineInitialvaluesData(guideLinesInitialValues);
+          setInstructionStatus("new");
         });
 
       // Fetch all documents for the account
       fetchDocumentsWithEntityIdAndEntityType(accountId)
         .then((response) => {
           setDocuments(response.data);
-        }).catch((err) => {})
-        
+        })
+        .catch((err) => {});
     }
   }, [accountId]);
 
   const handleGuideLineSubmit = async (values) => {
-    console.log("Guidelines Value", values);
-
     const newGuideline = {
       guidelines: values.submissionGuidelines,
       accountId: accountId,
     };
 
     if (instructionStatus === "update") {
-      console.log("Update");
       // Update the existing guideline
-      const response = await axios.put(
+      const response = await api.put(
         `http://localhost:8800/instructions/${instructionUpdateData.id}`,
         newGuideline
       );
     } else {
       // Create a new guideline
-      const response = await axios.post(
+      const response = await api.create(
         "http://localhost:8800/instructions",
         newGuideline
       );
@@ -104,7 +94,6 @@ function ClientInstructions() {
 
   // Handle instruction file upload submit
   const handleInstructionSubmit = async (values) => {
-    console.log("Instruction Value", values);
     const documentData = new FormData();
     if (values.clientInstrDocs) {
       documentData.append("file", newDocument);
@@ -113,9 +102,10 @@ function ClientInstructions() {
     documentData.append("entityId", +accountId);
 
     if (documentUpdateId) {
-      await axios.put(
+      await api.put(
         `http://localhost:8500/documents/${updateId}`,
-        documentData, {
+        documentData,
+        {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -123,12 +113,15 @@ function ClientInstructions() {
       );
     } else {
       // Save to database
-      await axios.post("http://localhost:8500/documents", documentData, {
+      await api.create("http://localhost:8500/documents", documentData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
     }
+
+    // Reset form
+    values.clientInstrDocs = "";
 
     // get all documents and populate table
     const response = await fetchDocumentsWithEntityIdAndEntityType(accountId);
@@ -137,7 +130,7 @@ function ClientInstructions() {
 
   // Fetch all documents for the account
   const fetchDocumentsWithEntityIdAndEntityType = async (accountId) => {
-    return axios.get(
+    return api.get(
       `http://localhost:8500/documents?entityId=${accountId}&entityType=account_instruction`
     );
   };
@@ -150,7 +143,7 @@ function ClientInstructions() {
 
   // Handle remove file
   const handleRemovefile = async (id) => {
-    await axios.delete(`http://localhost:8500/documents/${id}`);
+    await api.delete(`http://localhost:8500/documents/${id}`);
     const response = await fetchDocumentsWithEntityIdAndEntityType(accountId);
     setDocuments(response.data);
   };

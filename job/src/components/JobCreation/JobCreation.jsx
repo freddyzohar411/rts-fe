@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -9,46 +9,214 @@ import {
   CardBody,
   FormGroup,
   FormFeedback,
-  Table,
   Dropdown,
   DropdownItem,
   DropdownToggle,
   DropdownMenu,
   Button,
+  Table,
 } from "reactstrap";
 import { Form, Formik, Field } from "formik";
 import { initialValues, schema } from "./constants";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCountryCurrency } from "../../store/countrycurrency/action";
+import { fetchAccountNames } from "../../store/account/action";
+import { fetchAccountContacts } from "../../store/actions";
+import { createJob } from "../../store/job/action";
+import { Axios } from "@workspace/common";
+import {
+  primarySkills,
+  secondarySkills,
+  jobTypes,
+  jobDurations,
+} from "./values";
+import { FileHelper } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
 
 function JobCreation() {
+  const ENTITY_TYPE = "job";
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [files, setFiles] = useState([]);
+  const [oneFile, setOneFile] = useState(null);
+  const [fileError, setFileError] = useState(null);
+  const [filesError, setFilesError] = useState("");
+
+  const countryCurrencyData = useSelector(
+    (state) => state.JobCountryCurrencyReducer.countryCurrency
+  );
+  const accountsData = useSelector((state) => state.JobAccountReducer.accounts);
+  const accountContactData = useSelector(
+    (state) => state.JobAccountContactsReducer.accountContacts
+  );
+
+  // Fetch all the countries and account names
+  useEffect(() => {
+    dispatch(fetchCountryCurrency());
+    dispatch(fetchAccountNames());
+  }, []);
+
+  // Handle Account Change, get account contact details
+  const handleAccountChange = (e) => {
+    dispatch(fetchAccountContacts(parseInt(e.target.value)));
+  };
+
+  // Handle form submit
   const handleFormSubmit = async (values) => {
-    console.log(values);
+    // Check files array is empty or not
+    if (files.length === 0) {
+      setFileErrorMessage("Please upload at least one file");
+    }
+
+    if (fileError) {
+      return;
+    }
+
+    // Create a new Job
+    const newJob = {
+      accountInformation: {
+        accountId: +values.accName,
+        contactId: +values.accContact,
+      },
+      jobOpeningInformation: {
+        jobTitle: values.jobTitle,
+        dateOpen: values.dateOpen,
+        targetClosingDate: values.targetClosingDate,
+        clientJobID: values.clientJobId,
+        jobType: values.jobType,
+        duration: +values.duration,
+        primarySkills: values.primarySkills,
+        secondarySkills: values.secondarySkills,
+        noOfHeadcounts: values.noHeadcount,
+        workType: values.workType,
+        jobDescription: values.jobDesc,
+        visaStatus: values.visaStatus,
+        country: values.country,
+        languages: values.languages,
+        requiredDocuments: values.reqDocs,
+        workLocation: values.workLoc,
+        priority: values.priority,
+        qualification: values.qualification,
+        turnaroundTimeUnit: values.turnaroundTimeInput,
+        turnaroundTimeDay: +values.turnaroundTimeDays,
+        jobRatingSales: values.jobRatingSales,
+        securityClearance: values.securityClearance,
+      },
+      jobCommercials: {
+        salaryBudgetLocal: +values.salaryBudgetLocalInput,
+        salaryBudgetRange: values.salaryBudgetLocalRange,
+        localCurrency: values.localCurrency,
+
+        budgetType: values.budgetType,
+
+        salaryBudgetSGD: +values.salaryBudgetSGD,
+        expectedMarginSGD: +values.expectedMarginSGD,
+
+        expectedMarginMin: +values.expectedMarginMinInput,
+        expectedMarginMax: +values.expectedMarginMaxInput,
+        expectedMarginCurrency: values.expectedMarginCurrency,
+
+        screening: {
+          technicalScreening: values.technicalScreening,
+          selectTechnicalScreeningTemplate: values.technicalScreeningTemp,
+          selectRecruitmentScreeningTemplate: values.recruitmentScreeningTemp,
+        },
+      },
+      jobRemarks: values.jobRemarks,
+    };
+
+    dispatch(
+      createJob({
+        newJob,
+        newDocuments: files,
+      })
+    );
+
+    // Navigate to job listing
     navigate("/jobs");
   };
 
-  const countries = [
-    "United States",
-    "Canada",
-    "United Kingdom",
-    "Australia",
-    "France",
-    "Germany",
-    "Japan",
-    "Brazil",
-    "India",
-    "South Africa",
-  ];
+  // Submit Job form
+  const submitJobForm = async (newJob) => {
+    return api.create("http://localhost:9200/api/job", newJob);
+  };
+
+  // Handle file upload
+  const handleFileUpload = async (fileData, jobId) => {
+    const fileFormData = new FormData();
+    fileFormData.append("file", fileData.file);
+    fileFormData.append("entityType", ENTITY_TYPE);
+    fileFormData.append("entityId", +jobId);
+
+    api.create("http://localhost:8500/documents", fileFormData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
+
   const [countryDropdown, setCountryDropdown] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("Country");
   const toggleCountryDropdown = () =>
     setCountryDropdown((prevState) => !prevState);
   const [countrySearchTerm, setCountrySearchTerm] = useState("");
   const filteredCountries = countrySearchTerm
-    ? countries.filter((countries) =>
+    ? countryCurrencyData.filter((countries) =>
         countries.toLowerCase().includes(countrySearchTerm.toLowerCase())
       )
-    : countries;
+    : countryCurrencyData.country;
+
+  // Handle add files to array
+  const addFileHandler = (setFieldValue) => {
+    const newFile = {
+      fileName: oneFile.name,
+      file: oneFile,
+    };
+    setFiles([...files, newFile]);
+    setOneFile(null);
+    // Reset the file input through formik
+    setFieldValue("jobDocs", "");
+  };
+
+  // Handle remove files from array
+  const removeFileHandler = (index) => {
+    const newFiles = files.filter((file, i) => i !== index);
+    setFiles(newFiles);
+  };
+
+  // Handle file change
+  const handleFileChange = (e) => {
+    setFileError(null);
+
+    // Check if file is selected
+    if (e.target.files[0] == null) return;
+
+    // Check if file is correct format
+    if (
+      !FileHelper.checkFileFormatValid(e.target.files[0], [
+        "pdf",
+        "docx",
+        "doc",
+      ])
+    ) {
+      e.target.value = null;
+      setFileError("Please upload only pdf, docx, doc file");
+      return;
+    }
+
+    // Check if file size les than 2MB
+    if (!FileHelper.checkFileSizeLimit(e.target.files[0], 2000000)) {
+      e.target.value = null;
+      setFileError("Please upload file less than 2MB");
+      return;
+    }
+
+    // Set File
+    setOneFile(e.target.files[0]);
+  };
 
   document.title = "Job Creation | RTS";
 
@@ -60,7 +228,7 @@ function JobCreation() {
       validationSchema={schema}
       onSubmit={handleFormSubmit}
     >
-      {({ errors, touched }) => (
+      {({ errors, touched, setFieldValue }) => (
         <React.Fragment>
           <div className="page-content">
             <Container>
@@ -80,7 +248,7 @@ function JobCreation() {
                           <div className="mb-3">
                             <Label htmlFor="accName">Account Name*</Label>
                             <Field name="accName">
-                              {({ field }) => (
+                              {({ field, form }) => (
                                 <Input
                                   type="select"
                                   id="accName"
@@ -90,17 +258,17 @@ function JobCreation() {
                                       ? "is-invalid"
                                       : ""
                                   }`}
+                                  onChange={(e) => {
+                                    form.handleChange(e);
+                                    handleAccountChange(e);
+                                  }}
                                 >
                                   <option value="">Select</option>
-                                  <option value="DBS Bank Singapore">
-                                    DBS Singapore
-                                  </option>
-                                  <option value="OCBC Bank Singapore">
-                                    OCBC Bank Singapore
-                                  </option>
-                                  <option value="UOB Bank Singapore">
-                                    UOB Bank Singapore
-                                  </option>
+                                  {accountsData.map((account) => (
+                                    <option value={account.id}>
+                                      {account.name}
+                                    </option>
+                                  ))}
                                 </Input>
                               )}
                             </Field>
@@ -127,9 +295,11 @@ function JobCreation() {
                                   {...field}
                                 >
                                   <option>Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  {accountContactData.map((contact) => (
+                                    <option
+                                      value={contact.id}
+                                    >{`${contact.contactInformation.title} ${contact.contactInformation.firstName} ${contact.contactInformation.lastName}`}</option>
+                                  ))}
                                 </Input>
                               )}
                             </Field>
@@ -252,22 +422,30 @@ function JobCreation() {
                         </Col>
                         <Col lg={4}>
                           <div className="mb-3">
-                            <Label htmlFor="jobType">Job Type</Label>
+                            <Label htmlFor="jobType">Job Type*</Label>
                             <Field name="jobType">
                               {({ field }) => (
                                 <Input
                                   type="select"
                                   id="jobType"
                                   {...field}
-                                  className="form-select"
+                                  className={`form-control ${
+                                    touched.jobType && errors.jobType
+                                      ? "is-invalid"
+                                      : ""
+                                  }`}
                                 >
                                   <option value="">Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  <option value="Permanent">Permanent</option>
+                                  <option value="Contract">Contract</option>
                                 </Input>
                               )}
                             </Field>
+                            {touched.jobType && errors.jobType && (
+                              <FormFeedback type="invalid">
+                                {errors.jobType}
+                              </FormFeedback>
+                            )}
                           </div>
                         </Col>
                         <Col lg={4}>
@@ -282,9 +460,9 @@ function JobCreation() {
                                   className="form-select"
                                 >
                                   <option value="">Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  {jobDurations.map((duration, index) => (
+                                    <option value={index}>{duration}</option>
+                                  ))}
                                 </Input>
                               )}
                             </Field>
@@ -311,9 +489,9 @@ function JobCreation() {
                                   }`}
                                 >
                                   <option value="">Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  {primarySkills.map((skill) => (
+                                    <option value={skill}>{skill}</option>
+                                  ))}
                                 </Input>
                               )}
                             </Field>
@@ -343,9 +521,9 @@ function JobCreation() {
                                   }`}
                                 >
                                   <option value="">Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  {secondarySkills.map((skill) => (
+                                    <option value={skill}>{skill}</option>
+                                  ))}
                                 </Input>
                               )}
                             </Field>
@@ -366,19 +544,14 @@ function JobCreation() {
                               {({ field }) => (
                                 <Input
                                   {...field}
-                                  className={`form-select ${
+                                  className={`form-control ${
                                     touched.noHeadcount && errors.noHeadcount
                                       ? "is-invalid"
                                       : ""
                                   }`}
-                                  type="select"
+                                  type="number"
                                   id="noHeadcount"
-                                >
-                                  <option>Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
-                                </Input>
+                                ></Input>
                               )}
                             </Field>
                             {touched.noHeadcount && errors.noHeadcount && (
@@ -575,8 +748,10 @@ function JobCreation() {
                                   {...field}
                                 >
                                   <option value="">Select</option>
-                                  {countries.map((country) => (
-                                    <option value={country}>{country}</option>
+                                  {countryCurrencyData.map((country) => (
+                                    <option value={country.name}>
+                                      {country.name}
+                                    </option>
                                   ))}
                                 </Input>
                               )}
@@ -654,9 +829,9 @@ function JobCreation() {
                                   className="form-select"
                                 >
                                   <option value="">Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  <option value="1">Low</option>
+                                  <option value="2">Mid</option>
+                                  <option value="3">High</option>
                                 </Input>
                               )}
                             </Field>
@@ -691,9 +866,9 @@ function JobCreation() {
                                   {({ field }) => (
                                     <Input
                                       {...field}
-                                      type="text"
+                                      type="number"
                                       placeholder="Type"
-                                      className={`form-select ${
+                                      className={`form-control ${
                                         touched.turnaroundTimeInput &&
                                         errors.turnaroundTimeInput
                                           ? "is-invalid"
@@ -735,10 +910,10 @@ function JobCreation() {
                                           : ""
                                       }`}
                                     >
-                                      <option value="">In Days</option>
-                                      <option value="1">One</option>
-                                      <option value="2">Two</option>
-                                      <option value="3">Three</option>
+                                      <option value="0">Days</option>
+                                      <option value="1">Weeks</option>
+                                      <option value="2">Months</option>
+                                      <option value="3">Years</option>
                                     </Input>
                                   )}
                                 </Field>
@@ -760,9 +935,9 @@ function JobCreation() {
                                   className="form-select"
                                 >
                                   <option>Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  <option value="Tier 1">Tier 1</option>
+                                  <option value="Tier 2">Tier 2</option>
+                                  <option value="Tier 3">Tier 3</option>
                                 </Input>
                               )}
                             </Field>
@@ -785,8 +960,8 @@ function JobCreation() {
                                         type="radio"
                                         name="securityClearance"
                                         id="yesSC"
-                                        value="Yes"
-                                        checked={field.value === "Yes"}
+                                        value="0"
+                                        checked={field.value === "0"}
                                       />
                                       <Label
                                         className="form-check-label"
@@ -802,8 +977,8 @@ function JobCreation() {
                                         type="radio"
                                         name="securityClearance"
                                         id="noSC"
-                                        value="No"
-                                        checked={field.value === "No"}
+                                        value="1"
+                                        checked={field.value === "1"}
                                       />
                                       <Label
                                         className="form-check-label"
@@ -887,9 +1062,11 @@ function JobCreation() {
                                       }`}
                                     >
                                       <option value="">Range</option>
-                                      <option value="1">One</option>
-                                      <option value="2">Two</option>
-                                      <option value="3">Three</option>
+                                      <option value="1">0 - 2000</option>
+                                      <option value="2">2000 - 5000</option>
+                                      <option value="3">5000 - 7000</option>
+                                      <option value="4">7000 - 10000</option>
+                                      <option value="4">&gt; 10000</option>
                                     </Input>
                                   )}
                                 </Field>
@@ -910,10 +1087,13 @@ function JobCreation() {
                                   {...field}
                                   className="form-select"
                                 >
-                                  <option value="">Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  <option value="">Currency</option>
+                                  {countryCurrencyData.map((country) => (
+                                    <option value={country.currency}>
+                                      {country.currency}
+                                      {` (${country.name})`}
+                                    </option>
+                                  ))}
                                 </Input>
                               )}
                             </Field>
@@ -937,9 +1117,9 @@ function JobCreation() {
                                   }`}
                                 >
                                   <option>Select</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  <option value="1">Junior</option>
+                                  <option value="2">Mid</option>
+                                  <option value="3">Senior</option>
                                 </Input>
                               )}
                             </Field>
@@ -989,7 +1169,7 @@ function JobCreation() {
                                   )}
                                 </Field>
                               </div>
-                              <div className="col-3">
+                              {/* <div className="col-3">
                                 <Field name="expectedMarginMinCurrency">
                                   {({ field }) => (
                                     <Input
@@ -1005,7 +1185,7 @@ function JobCreation() {
                                     </Input>
                                   )}
                                 </Field>
-                              </div>
+                              </div> */}
                               <div className="col-3">
                                 <Field name="expectedMarginMaxInput">
                                   {({ field }) => (
@@ -1020,7 +1200,7 @@ function JobCreation() {
                                 </Field>
                               </div>
                               <div className="col-3">
-                                <Field name="expectedMarginMaxCurrency">
+                                <Field name="expectedMarginCurrency">
                                   {({ field }) => (
                                     <Input
                                       {...field}
@@ -1028,10 +1208,12 @@ function JobCreation() {
                                       id="priority"
                                       className="form-select"
                                     >
-                                      <option value="">USD</option>
-                                      <option value="1">One</option>
-                                      <option value="2">Two</option>
-                                      <option value="3">Three</option>
+                                      <option value="">Currency</option>
+                                      {countryCurrencyData.map((country) => (
+                                        <option value={country.currency}>
+                                          {country.currency}
+                                        </option>
+                                      ))}
                                     </Input>
                                   )}
                                 </Field>
@@ -1084,8 +1266,8 @@ function JobCreation() {
                                         type="radio"
                                         name="technicalScreening"
                                         id="yesTS"
-                                        value="Yes"
-                                        checked={field.value === "Yes"}
+                                        value="0"
+                                        checked={field.value === "0"}
                                       />
                                       <Label
                                         className="form-check-label"
@@ -1101,8 +1283,8 @@ function JobCreation() {
                                         type="radio"
                                         name="technicalScreening"
                                         id="noTS"
-                                        value="No"
-                                        checked={field.value === "No"}
+                                        value="1"
+                                        checked={field.value === "1"}
                                       />
                                       <Label
                                         className="form-check-label"
@@ -1201,52 +1383,82 @@ function JobCreation() {
                         </Label>
                       </div>
                       <Row>
-                        <Col lg={4}>
+                        <Col lg={12}>
                           <div className="mb-3">
                             <Label htmlFor="jobDocs">
                               Upload Job Documents*
                             </Label>
-                            <Field name="jobDocs">
-                              {({ field }) => (
-                                <Input
-                                  type="file"
-                                  className={`form-control ${
-                                    touched.jobDocs && errors.jobDocs
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                  id="jobDocs"
-                                  {...field}
-                                />
-                              )}
-                            </Field>
+                            <div className="d-flex justify-content-between">
+                              <Field name="jobDocs">
+                                {({ field, form }) => (
+                                  <Input
+                                    type="file"
+                                    className={`w-50 form-control ${
+                                      touched.jobDocs && errors.jobDocs
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    id="jobDocs"
+                                    {...field}
+                                    onChange={(e) => {
+                                      handleFileChange(e, form);
+                                      form.handleChange(e);
+                                    }}
+                                  />
+                                )}
+                              </Field>
+                              <Button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={() => addFileHandler(setFieldValue)}
+                              >
+                                Add
+                              </Button>
+                            </div>
                             {touched.jobDocs && errors.jobDocs && (
                               <FormFeedback type="invalid">
                                 {errors.jobDocs}
                               </FormFeedback>
                             )}
+                            {fileError && (
+                              <div class="text-danger">
+                                <small>{fileError}</small>
+                              </div>
+                            )}
                           </div>
                         </Col>
                       </Row>
                     </div>
-                    
-                    <div className="table-responsive mb-3">
+
+                    <div className="table-responsive mb-4">
                       <Table className="table-bordered align-middle table-nowrap mb-0">
                         <thead className="table-light">
                           <tr>
-                            <th scope="col">Document</th>
+                            <th scope="col">Uploaded Documents</th>
                             <th scope="col">Actions</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                          </tr>
+                          {files.length > 0 &&
+                            files.map((file, index) => (
+                              <tr>
+                                <td>{file.fileName}</td>
+                                <td>
+                                  <Button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={() => removeFileHandler(index)}
+                                  >
+                                    Delete
+                                  </Button>
+                                </td>
+                              </tr>
+                            ))}
                         </tbody>
                       </Table>
                     </div>
 
+                    {filesError && <Alert color="danger">{filesError}</Alert>}
                     <div className="text-end">
                       <Button
                         type="button"
