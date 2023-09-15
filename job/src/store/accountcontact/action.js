@@ -18,4 +18,3 @@ export const fetchAccountContactsFailure = (error) => ({
   type: FETCH_ACCOUNTCONTACTS_FAILURE,
   payload: error,
 });
-

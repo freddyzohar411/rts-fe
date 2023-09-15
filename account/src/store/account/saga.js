@@ -12,6 +12,7 @@ import {
 } from "./action";
 import { getAccounts } from "../../helpers/backend_helper";
 
+// Fetch Account
 function* workFetchAccount(action) {
   try {
     const response = yield call(
@@ -27,15 +28,14 @@ function* workFetchAccount(action) {
 // Fetch Accounts
 function* workFetchAccounts(action) {
   try {
-    console.log("workFetchAccounts", action.payload)
     const response = yield call(getAccounts, action.payload);
-    console.log("SAGA response", response.data)
     yield put(fetchAccountsSuccess(response.data));
   } catch (error) {
     yield put(fetchAccountsFailure(error));
   }
 }
 
+// Create an Account
 function* workCreateAccount(action) {
   try {
     const response = yield call(

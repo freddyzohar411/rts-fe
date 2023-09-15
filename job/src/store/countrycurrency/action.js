@@ -4,17 +4,16 @@ import {
   FETCH_COUNTRYCURRENCY_FAILURE,
 } from "./actionTypes";
 
-
 export const fetchCountryCurrency = () => ({
-    type: FETCH_COUNTRYCURRENCY,
-})
+  type: FETCH_COUNTRYCURRENCY,
+});
 
 export const fetchCountryCurrencySuccess = (countrycurrency) => ({
-    type: FETCH_COUNTRYCURRENCY_SUCCESS,
-    payload: countrycurrency,
-})
+  type: FETCH_COUNTRYCURRENCY_SUCCESS,
+  payload: countrycurrency,
+});
 
 export const fetchCountryCurrencyFailure = (error) => ({
-    type: FETCH_COUNTRYCURRENCY_FAILURE,
-    payload: error,
-})
+  type: FETCH_COUNTRYCURRENCY_FAILURE,
+  payload: error,
+});

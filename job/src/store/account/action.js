@@ -17,4 +17,3 @@ export const fetchAccountNamesFailure = (error) => ({
   type: FETCH_ACCOUNTNAMES_FAILURE,
   payload: error,
 });
-

@@ -5,8 +5,8 @@ import JobAccountContactsSaga from "./accountcontact/saga";
 import JobSaga from "./job/saga";
 
 export {
-    JobCountryCurrencySaga,
-    JobAccountSaga,
-    JobAccountContactsSaga,
-    JobSaga
-}
+  JobCountryCurrencySaga,
+  JobAccountSaga,
+  JobAccountContactsSaga,
+  JobSaga,
+};

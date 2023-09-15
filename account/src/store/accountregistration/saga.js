@@ -9,20 +9,21 @@ const { APIClient } = Axios;
 const api = new APIClient();
 
 function* workFetchDraftAccount(action) {
-    try{
-        const response = yield call (api.get,`http://localhost:8100/accounts/draft`);
-        if (response.data === null) {
-            yield put (deleteAccountId());
-        } else {
-        yield put (setAccountId(response.data.id));
-        }
-    } catch (error) {
-        throw error;
+  try {
+    const response = yield call(
+      api.get,
+      `http://localhost:8100/accounts/draft`
+    );
+    if (response.data === null) {
+      yield put(deleteAccountId());
+    } else {
+      yield put(setAccountId(response.data.id));
     }
+  } catch (error) {
+    throw error;
+  }
 }
 
 export default function* watchFetchDraftAccount() {
-    yield takeEvery(FETCH_DRAFT_ACCOUNT, workFetchDraftAccount);
-
+  yield takeEvery(FETCH_DRAFT_ACCOUNT, workFetchDraftAccount);
 }
-

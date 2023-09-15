@@ -18,7 +18,7 @@ import { accountListingOptions } from "./accountListingOptions";
 
 function AccountListing() {
   const dispatch = useDispatch();
-  const accountsData = useSelector((state) => state.AccountReducer.accounts); 
+  const accountsData = useSelector((state) => state.AccountReducer.accounts);
   const accountListing = accountsData.accounts;
 
   const [searchInput, setSearchInput] = useState("");
@@ -59,7 +59,7 @@ function AccountListing() {
       totalPages: accountsData.totalPages,
       totalElements: accountsData.totalElements,
     });
-  },[accountsData])
+  }, [accountsData]);
 
   // Handle Next Page
   const handleNextPage = () => {
@@ -98,7 +98,6 @@ function AccountListing() {
   const handleSearch = (e) => {
     e.preventDefault();
     const search = e.target.value;
-    console.log("search", search);
     setPageRequest((prev) => ({
       ...prev,
       searchTerm: searchInput === "" ? null : searchInput,
@@ -106,13 +105,13 @@ function AccountListing() {
   };
 
   //Handle Page size change
-    const handlePageSizeChange = (e) => {
+  const handlePageSizeChange = (e) => {
     const pageSize = e.target.value;
     setPageRequest((prev) => ({
       ...prev,
       pageSize: pageSize,
     }));
-    }
+  };
 
   document.title = "Accounts | RTS";
 
@@ -124,7 +123,6 @@ function AccountListing() {
   // Get the custom config
   const getCustomConfig = (customView) => {
     const customViewArray = customView.split(",");
-    console.log("customViewArray", customViewArray);
     // Get the array of options from the accountListingOptions based on the custom view array
     const customConfig = [];
     customViewArray.forEach((element) => {
@@ -233,7 +231,7 @@ function AccountListing() {
                               placeholder="Search"
                               className="form-control search bg-light border-light"
                               value={searchInput}
-                              style={{width:"350px"}}
+                              style={{ width: "350px" }}
                               onChange={(e) => setSearchInput(e.target.value)}
                             />
                           </form>
@@ -283,20 +281,30 @@ function AccountListing() {
 
                     <div className="d-flex justify-content-end">
                       <div className="pagination-wrap hstack gap-2">
-                        <Input onChange={handlePageSizeChange} type="select" className="form-select" style={{height:"34px", marginRight:"10px"}}>
+                        <Input
+                          onChange={handlePageSizeChange}
+                          type="select"
+                          className="form-select"
+                          style={{ height: "34px", marginRight: "10px" }}
+                        >
                           <option value="10">10</option>
                           <option value="20">20</option>
                           <option value="30">30</option>
                         </Input>
                         <btn
-                          className={`cursor-pointer page-item pagination-prev ${pageInfo.currentPage == 0 && "disabled"}`}
+                          className={`cursor-pointer page-item pagination-prev ${
+                            pageInfo.currentPage == 0 && "disabled"
+                          }`}
                           onClick={handlePreviousPage}
                         >
                           Previous
                         </btn>
                         <ul className="pagination listjs-pagination mb-0"></ul>
                         <btn
-                          className={`cursor-pointer page-item pagination-next ${pageInfo.currentPage == pageInfo.totalPages - 1 && "disabled"}`}
+                          className={`cursor-pointer page-item pagination-next ${
+                            pageInfo.currentPage == pageInfo.totalPages - 1 &&
+                            "disabled"
+                          }`}
                           onClick={handleNextPage}
                         >
                           Next

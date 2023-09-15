@@ -12,7 +12,7 @@ import {
 
 const initialState = {
   account: {},
-  accounts:[],
+  accounts: [],
   errorMsg: "",
   loading: false,
   error: false,
@@ -43,7 +43,6 @@ const AccountReducer = (state = initialState, action) => {
 
     // Fetch all accounts
     case FETCH_ACCOUNTS:
-      console.log("FETCH_ACCOUNTS");
       return {
         ...state,
         loading: true,

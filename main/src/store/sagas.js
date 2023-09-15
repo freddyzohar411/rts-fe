@@ -33,7 +33,7 @@ const {
   JobCountryCurrencySaga,
   JobAccountSaga,
   JobAccountContactsSaga,
-  JobSaga
+  JobSaga,
 } = JobSagas;
 
 export default function* rootSaga() {
@@ -55,10 +55,10 @@ export default function* rootSaga() {
     fork(AccountRegistrationSaga),
     fork(DepartmentSaga),
 
-     //Job
-     fork(JobCountryCurrencySaga),
-     fork(JobAccountSaga),
-     fork(JobAccountContactsSaga),
-     fork(JobSaga)
+    //Job
+    fork(JobCountryCurrencySaga),
+    fork(JobAccountSaga),
+    fork(JobAccountContactsSaga),
+    fork(JobSaga),
   ]);
 }

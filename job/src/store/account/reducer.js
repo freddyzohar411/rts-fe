@@ -20,7 +20,6 @@ const AccountNamesReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_ACCOUNTNAMES_SUCCESS:
-      console.log("reducer")
       return {
         ...state,
         loading: false,

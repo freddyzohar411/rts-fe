@@ -7,7 +7,6 @@ import {
   CREATE_JOB_FAILURE,
 } from "./actionTypes";
 
-
 // Fetch Accounts
 export const fetchJobs = (params) => ({
   type: FETCH_JOBS,
@@ -24,11 +23,10 @@ export const fetchJobsFailure = (error) => ({
   payload: error,
 });
 
-
 // Create an Account
-export const createJob = (accountRequest) => ({
+export const createJob = (jobRequest) => ({
   type: CREATE_JOB,
-  payload: accountRequest,
+  payload: jobRequest,
 });
 
 export const createJobSuccess = (job) => ({
@@ -40,5 +38,3 @@ export const createJobFailure = (error) => ({
   type: CREATE_JOB_FAILURE,
   payload: error,
 });
-
-

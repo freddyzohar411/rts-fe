@@ -15,7 +15,7 @@ function* workFetchAccountContacts(action) {
       "http://localhost:8700/contacts-by-entity-and-type",
       {
         entityId: action.payload,
-        entityType: "account_contact"
+        entityType: "account_contact",
       }
     );
     yield put(fetchAccountContactsSuccess(response.data));

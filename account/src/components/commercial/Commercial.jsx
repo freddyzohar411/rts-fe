@@ -7,10 +7,9 @@ import {
   populateCommercialInitialValues,
 } from "./constants-commercials";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Axios } from "@workspace/common";
-import { deleteAccountId } from "../../store/accountregistration/action"
+import { deleteAccountId } from "../../store/accountregistration/action";
 const { APIClient } = Axios;
 const api = new APIClient();
 
@@ -28,7 +27,8 @@ function Commercial() {
   useEffect(() => {
     if (accountId) {
       // Check if commercial exist
-      api.get(`http://localhost:8100/accounts/${accountId}/commercials`)
+      api
+        .get(`http://localhost:8100/accounts/${accountId}/commercials`)
         .then((res) => {
           setCommercialUpdateData(res.data);
           setCommercialInitialValuesData(
@@ -38,20 +38,20 @@ function Commercial() {
     }
   }, []);
 
-  console.log("Com data", commercialUpdateData);
-
+  // Hand submit and patch the commercial information
   const handleSubmit = async (values) => {
-    console.log(values);
     const newCommerical = {
       markUp: values.markUp,
       msp: values.msp,
     };
 
     // Patch the commercial for account
-    const res = api.update(
+    const res = api
+      .update(
         `http://localhost:8100/accounts/${accountId}/commercials`,
         newCommerical
-      ).then((res) => {
+      )
+      .then((res) => {
         dispatch(deleteAccountId());
         navigate("/accounts");
       });

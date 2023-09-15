@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCountryCurrency } from "../../store/countrycurrency/action";
 import { fetchAccountNames } from "../../store/account/action";
 import { fetchAccountContacts } from "../../store/actions";
+import { createJob } from "../../store/job/action";
 import { Axios } from "@workspace/common";
 import {
   primarySkills,
@@ -51,10 +52,8 @@ function JobCreation() {
   const accountContactData = useSelector(
     (state) => state.JobAccountContactsReducer.accountContacts
   );
-  console.log(countryCurrencyData);
-  console.log("Accounts Data", accountsData);
-  console.log("Accounts Contacts", accountContactData);
 
+  // Fetch all the countries and account names
   useEffect(() => {
     dispatch(fetchCountryCurrency());
     dispatch(fetchAccountNames());
@@ -67,7 +66,6 @@ function JobCreation() {
 
   // Handle form submit
   const handleFormSubmit = async (values) => {
-    console.log(values);
     // Check files array is empty or not
     if (files.length === 0) {
       setFileErrorMessage("Please upload at least one file");
@@ -130,21 +128,15 @@ function JobCreation() {
       jobRemarks: values.jobRemarks,
     };
 
-    const res = await submitJobForm(newJob);
-    console.log("New Job Created", res.data);
+    dispatch(
+      createJob({
+        newJob,
+        newDocuments: files,
+      })
+    );
 
-    // Upload files
-    const jobId = res.data.id;
-    try {
-      files.forEach((file) => {
-        handleFileUpload(file, jobId);
-      });
-    } catch (error) {
-      // Delete above created job
-
-    }
-
-    // navigate("/jobs");
+    // Navigate to job listing
+    navigate("/jobs");
   };
 
   // Submit Job form

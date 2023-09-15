@@ -16,8 +16,7 @@ import {
   populateDocumentForm,
   getUpdateSchema,
 } from "./constants-document";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FileHelper } from "@workspace/common";
 import { Axios } from "@workspace/common";
@@ -63,7 +62,6 @@ function Documents() {
     documentData.append("description", values.docDesc);
     documentData.append("type", values.docType);
     if (values.uploadDoc) {
-      console.log("File added", newDocument);
       documentData.append("file", newDocument);
     }
     documentData.append("entityType", ENTITY_TYPE);
@@ -82,7 +80,7 @@ function Documents() {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      } );
+      });
     }
 
     // get all documents and populate table
@@ -99,7 +97,6 @@ function Documents() {
       navigate("/account/client-instructions-creation");
     } else {
       setErrorMessage("Please upload a document before you continue.");
-      console.log("ERROR");
     }
   };
 
@@ -115,17 +112,23 @@ function Documents() {
     setFileError(null);
 
     // Check if file is selected
-    if (e.target.files[0] ==  null) return;
+    if (e.target.files[0] == null) return;
 
     // Check if file is correct format
-    if (!FileHelper.checkFileFormatValid(e.target.files[0], ["pdf","docx","doc"])){
+    if (
+      !FileHelper.checkFileFormatValid(e.target.files[0], [
+        "pdf",
+        "docx",
+        "doc",
+      ])
+    ) {
       e.target.value = null;
       setFileError("Please upload only pdf, docx, doc file");
       return;
     }
 
     // Check if file size les than 2MB
-    if (!FileHelper.checkFileSizeLimit(e.target.files[0], 2000000)){
+    if (!FileHelper.checkFileSizeLimit(e.target.files[0], 2000000)) {
       e.target.value = null;
       setFileError("Please upload file less than 2MB");
       return;
@@ -261,7 +264,11 @@ function Documents() {
                         {errors.uploadDoc}
                       </FormFeedback>
                     )}
-                       {fileError && <div class="text-danger"><small>{fileError}</small></div> }
+                    {fileError && (
+                      <div class="text-danger">
+                        <small>{fileError}</small>
+                      </div>
+                    )}
                     {editDocumentName && <span>{editDocumentName}</span>}
                     <div className="text-muted mt-2">
                       <div>Maximum Upload File Size: 2 MB.</div>
@@ -360,7 +367,11 @@ function Documents() {
             >
               Back
             </Button>
-            <Button className="btn btn-primary" type="button" onClick={handleNext}>
+            <Button
+              className="btn btn-primary"
+              type="button"
+              onClick={handleNext}
+            >
               Next
             </Button>
           </div>

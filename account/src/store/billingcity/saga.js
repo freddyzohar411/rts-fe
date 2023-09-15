@@ -4,30 +4,18 @@ import axios from "axios";
 import { FETCH_BILLINGCITY } from "./actionTypes";
 import { fetchBillingCitySuccess, fetchBillingCityFailure } from "./action";
 
-// function* workFetchCity(action) {
-//     console.log(`localhost:8600/geo/cities/country/${action.payload}`)
-//     try{
-//         const response = yield call (axios.get, `http://localhost:8600/geo/cities/country/${action.payload}`);
-//         yield put (fetchCitySuccess(response.data.data));
-//     } catch (error) {
-//         yield put (fetchCityFailure(error));
-//     }
-// }
-
 function* workFetchBillingCity(action) {
-    console.log(`localhost:8600/geo/cities/country/${action.payload}`)
-    try{
-        const response = yield call (axios.get, `http://localhost:8600/geo/cities/country/${action.payload}`);
-        console.log('Billing city: ',response)
-        yield put (fetchBillingCitySuccess(response.data));
-    } catch (error) {
-        throw error;
-        yield put (fetchBillingCityFailure(error));
-    }
+  try {
+    const response = yield call(
+      axios.get,
+      `http://localhost:8600/geo/cities/country/${action.payload}`
+    );
+    yield put(fetchBillingCitySuccess(response.data));
+  } catch (error) {
+    yield put(fetchBillingCityFailure(error));
+  }
 }
 
 export default function* watchFetchBillingCitySaga() {
-    yield takeEvery(FETCH_BILLINGCITY, workFetchBillingCity);
-
+  yield takeEvery(FETCH_BILLINGCITY, workFetchBillingCity);
 }
-

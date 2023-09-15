@@ -2,11 +2,9 @@ import {
   FETCH_ACCOUNT,
   FETCH_ACCOUNT_SUCCESS,
   FETCH_ACCOUNT_FAILURE,
-
   FETCH_ACCOUNTS,
   FETCH_ACCOUNTS_SUCCESS,
   FETCH_ACCOUNTS_FAILURE,
-
   CREATE_ACCOUNT,
   CREATE_ACCOUNT_SUCCESS,
   CREATE_ACCOUNT_FAILURE,
@@ -43,7 +41,6 @@ export const fetchAccountsFailure = (error) => ({
   payload: error,
 });
 
-
 // Create an Account
 export const createAccount = (accountRequest) => ({
   type: CREATE_ACCOUNT,
@@ -59,5 +56,3 @@ export const createAccountFailure = (error) => ({
   type: CREATE_ACCOUNT_FAILURE,
   payload: error,
 });
-
-

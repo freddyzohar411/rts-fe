@@ -8,7 +8,8 @@ import {
 } from "./actionTypes";
 
 const initialState = {
-  jobs:[],
+  job: {},
+  jobs: [],
   errorMsg: "",
   loading: false,
   error: false,
@@ -16,10 +17,8 @@ const initialState = {
 
 const JobReducer = (state = initialState, action) => {
   switch (action.type) {
-    
     // Fetch all jobs
     case FETCH_JOBS:
-      console.log("FETCH_JOBS");
       return {
         ...state,
         loading: true,
@@ -50,7 +49,7 @@ const JobReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        account: action.payload,
+        job: action.payload,
       };
     case CREATE_JOB_FAILURE:
       return {

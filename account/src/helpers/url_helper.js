@@ -1,4 +1,2 @@
 //ACCOUNT
-export const GET_ACCOUNTS= "/accounts";
-
-
+export const GET_ACCOUNTS = "/accounts";

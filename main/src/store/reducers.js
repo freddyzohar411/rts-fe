@@ -29,11 +29,11 @@ const {
   ParentCompanyReducer,
 } = AccountReducers;
 
-const  {
+const {
   JobCountryCurrencyReducer,
   JobAccountReducer,
   JobAccountContactsReducer,
-  JobReducer
+  JobReducer,
 } = JobReducers;
 
 const rootReducer = combineReducers({
@@ -54,11 +54,11 @@ const rootReducer = combineReducers({
   IndustryReducer,
   ParentCompanyReducer,
 
-   // Job
-   JobCountryCurrencyReducer,
-   JobAccountReducer,
-   JobAccountContactsReducer,
-   JobReducer
+  // Job
+  JobCountryCurrencyReducer,
+  JobAccountReducer,
+  JobAccountContactsReducer,
+  JobReducer,
 });
 
 export default rootReducer;
