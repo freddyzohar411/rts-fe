@@ -9,12 +9,12 @@ import AccountRegistrationSaga from "./accountregistration/saga";
 import DepartmentSaga from "./department/saga";
 
 export {
-    CountryCurrencySaga,
-    CitySaga,
-    IndustrySaga,
-    ParentCompanySaga,
-    AccountSaga,
-    BillingCitySaga,
-    AccountRegistrationSaga,
-    DepartmentSaga
-}
+  CountryCurrencySaga,
+  CitySaga,
+  IndustrySaga,
+  ParentCompanySaga,
+  AccountSaga,
+  BillingCitySaga,
+  AccountRegistrationSaga,
+  DepartmentSaga,
+};

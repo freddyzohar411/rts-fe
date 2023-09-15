@@ -12,6 +12,9 @@ import { Reducers as DashboardReducers } from "@workspace/dashboard";
 // Account
 import { Reducers as AccountReducers } from "@workspace/account";
 
+// Job
+import { Reducers as JobReducers } from "@workspace/job";
+
 const { Layout } = Reducers;
 const { Login, ForgetPassword, Profile } = LoginReducers;
 const { DashboardEcommerce } = DashboardReducers;
@@ -25,6 +28,13 @@ const {
   IndustryReducer,
   ParentCompanyReducer,
 } = AccountReducers;
+
+const {
+  JobCountryCurrencyReducer,
+  JobAccountReducer,
+  JobAccountContactsReducer,
+  JobReducer,
+} = JobReducers;
 
 const rootReducer = combineReducers({
   // public
@@ -43,6 +53,12 @@ const rootReducer = combineReducers({
   DepartmentReducer,
   IndustryReducer,
   ParentCompanyReducer,
+
+  // Job
+  JobCountryCurrencyReducer,
+  JobAccountReducer,
+  JobAccountContactsReducer,
+  JobReducer,
 });
 
 export default rootReducer;

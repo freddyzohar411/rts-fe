@@ -10,21 +10,17 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import { Link } from "react-router-dom";
-import { Axios } from "@workspace/common";
-const { APIClient } = Axios;
+import { useSelector, useDispatch } from "react-redux";
+import { fetchAccounts } from "../../store/account/action";
 
 // Import the account listing options
 import { accountListingOptions } from "./accountListingOptions";
 
 function AccountListing() {
-  const api = new APIClient();
-  const [isSorted, setIsSorted] = useState(false);
-  const toggle = () => {
-    setIsSorted(!isSorted);
-  };
+  const dispatch = useDispatch();
+  const accountsData = useSelector((state) => state.AccountReducer.accounts);
+  const accountListing = accountsData.accounts;
 
-  const [accountListing, setAccountListing] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [pageRequest, setPageRequest] = useState({
     page: 0,
@@ -40,9 +36,6 @@ function AccountListing() {
     totalElements: 0,
   });
 
-  console.log("pageRequest", pageRequest);
-  console.log("Account Listing", accountListing);
-
   // Clean Page Request, remove null values
   function cleanPageRequest(pageRequest) {
     const cleanPage = { ...pageRequest };
@@ -56,17 +49,17 @@ function AccountListing() {
 
   // Get all data on first render
   useEffect(() => {
-    api
-      .get("http://localhost:8100/accounts", cleanPageRequest(pageRequest))
-      .then((response) => {
-        setAccountListing(response.data.accounts);
-        setPageInfo({
-          currentPage: response.data.page,
-          totalPages: response.data.totalPages,
-          totalElements: response.data.totalElements,
-        });
-      });
+    dispatch(fetchAccounts(cleanPageRequest(pageRequest)));
   }, [pageRequest]);
+
+  // Update the page info
+  useEffect(() => {
+    setPageInfo({
+      currentPage: accountsData.number,
+      totalPages: accountsData.totalPages,
+      totalElements: accountsData.totalElements,
+    });
+  }, [accountsData]);
 
   // Handle Next Page
   const handleNextPage = () => {
@@ -105,7 +98,6 @@ function AccountListing() {
   const handleSearch = (e) => {
     e.preventDefault();
     const search = e.target.value;
-    console.log("search", search);
     setPageRequest((prev) => ({
       ...prev,
       searchTerm: searchInput === "" ? null : searchInput,
@@ -113,13 +105,13 @@ function AccountListing() {
   };
 
   //Handle Page size change
-    const handlePageSizeChange = (e) => {
+  const handlePageSizeChange = (e) => {
     const pageSize = e.target.value;
     setPageRequest((prev) => ({
       ...prev,
       pageSize: pageSize,
     }));
-    }
+  };
 
   document.title = "Accounts | RTS";
 
@@ -127,11 +119,10 @@ function AccountListing() {
   // Set Custom view
   const customView =
     "Service,Account Number,Account Name,Account Owner,Created By,Parent Account,Status";
-  //   const customView = "Account Name,Account Number";
+
   // Get the custom config
   const getCustomConfig = (customView) => {
     const customViewArray = customView.split(",");
-    console.log("customViewArray", customViewArray);
     // Get the array of options from the accountListingOptions based on the custom view array
     const customConfig = [];
     customViewArray.forEach((element) => {
@@ -141,7 +132,6 @@ function AccountListing() {
   };
 
   const customConfig = getCustomConfig(customView);
-  console.log("customConfig", customConfig);
 
   // Generate Header
   const generateHeaderJSX = (
@@ -241,11 +231,10 @@ function AccountListing() {
                               placeholder="Search"
                               className="form-control search bg-light border-light"
                               value={searchInput}
-                              style={{width:"350px"}}
+                              style={{ width: "350px" }}
                               onChange={(e) => setSearchInput(e.target.value)}
                             />
                           </form>
-
                           <i className="ri-search-line search-icon"></i>
                         </div>
                       </Col>
@@ -282,30 +271,40 @@ function AccountListing() {
                         id="accountListingTable"
                       >
                         <thead className="table-light">
-                          <tr>{generateHeaderJSX}</tr>
+                          <tr>{accountListing && generateHeaderJSX}</tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {generateBodyJSX(accountListing)}
+                          {accountListing && generateBodyJSX(accountListing)}
                         </tbody>
                       </Table>
                     </div>
 
                     <div className="d-flex justify-content-end">
                       <div className="pagination-wrap hstack gap-2">
-                        <Input onChange={handlePageSizeChange} type="select" className="form-select" style={{height:"34px", marginRight:"10px"}}>
+                        <Input
+                          onChange={handlePageSizeChange}
+                          type="select"
+                          className="form-select"
+                          style={{ height: "34px", marginRight: "10px" }}
+                        >
                           <option value="10">10</option>
                           <option value="20">20</option>
                           <option value="30">30</option>
                         </Input>
                         <btn
-                          className={`cursor-pointer page-item pagination-prev ${pageInfo.currentPage == 0 && "disabled"}`}
+                          className={`cursor-pointer page-item pagination-prev ${
+                            pageInfo.currentPage == 0 && "disabled"
+                          }`}
                           onClick={handlePreviousPage}
                         >
                           Previous
                         </btn>
                         <ul className="pagination listjs-pagination mb-0"></ul>
                         <btn
-                          className={`cursor-pointer page-item pagination-next ${pageInfo.currentPage == pageInfo.totalPages - 1 && "disabled"}`}
+                          className={`cursor-pointer page-item pagination-next ${
+                            pageInfo.currentPage == pageInfo.totalPages - 1 &&
+                            "disabled"
+                          }`}
                           onClick={handleNextPage}
                         >
                           Next

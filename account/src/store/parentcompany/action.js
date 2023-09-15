@@ -17,4 +17,3 @@ export const fetchParentCompanyFailure = (error) => ({
   type: FETCH_PARENTCOMPANY_FAILURE,
   payload: error,
 });
-

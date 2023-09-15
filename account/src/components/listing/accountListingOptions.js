@@ -12,29 +12,29 @@ import {
 
 // Get the address string from the address object
 const getAddressString = (address) => {
-    let addressFull = "";
-    if (address.line1){
-        addressFull += address.line1;
-    }
-    if (address.line2){
-        addressFull += address.line2 + ", ";
-    }
-    if (address.line3){
-        addressFull += address.line3 + ", ";
-    }
-    if (address.city){
-        addressFull += address.city + ", ";
-    }
-    if (address.postalCode){
-        addressFull += address.postalCode + ", ";
-    }
-    if (address.country){
-        addressFull += address.country + ", ";
-    }
+  let addressFull = "";
+  if (address.line1) {
+    addressFull += address.line1;
+  }
+  if (address.line2) {
+    addressFull += address.line2 + ", ";
+  }
+  if (address.line3) {
+    addressFull += address.line3 + ", ";
+  }
+  if (address.city) {
+    addressFull += address.city + ", ";
+  }
+  if (address.postalCode) {
+    addressFull += address.postalCode + ", ";
+  }
+  if (address.country) {
+    addressFull += address.country + ", ";
+  }
 
-    // Remove the last comma
-    return addressFull.substring(0, addressFull.length - 2);
-}
+  // Remove the last comma
+  return addressFull.substring(0, addressFull.length - 2);
+};
 
 /**
  * header: Header of the column
@@ -65,7 +65,7 @@ export const accountListingOptions = {
     render: (data) => data.account.accountInformation.salesName || "-",
     sort: true,
   },
-  "Status": {
+  Status: {
     header: "Status",
     name: "status",
     render: (data) => (
@@ -82,28 +82,29 @@ export const accountListingOptions = {
     ),
     sort: true,
   },
-  "Service": {
+  Service: {
     header: "Service",
     name: "accountSource",
     render: (data) => data.account.accountInformation.accountSource,
     sort: true,
   },
-  "Msa": {
+  Msa: {
     header: "Msa",
     name: "msa",
     render: (data) => data.account.accountInformation.msa,
     sort: true,
   },
-  "No of Employees":{
+  "No of Employees": {
     header: "No of Employees",
     name: "noOfEmployees",
     render: (data) => data.account.accountInformation.noOfEmployees || "-",
     sort: true,
   },
-  "Parent Account":{
+  "Parent Account": {
     header: "Parent Account",
     name: "parentCompanyEntity",
-    render: (data) => data.account.accountInformation?.parentCompanyEntity?.name || "-",
+    render: (data) =>
+      data.account.accountInformation?.parentCompanyEntity?.name || "-",
     sort: false,
   },
   "Secondary Owner": {
@@ -112,41 +113,41 @@ export const accountListingOptions = {
     render: (data) => data.account.accountInformation.secondaryOwner || "-",
     sort: true,
   },
-  "Website": {
+  Website: {
     header: "Website",
     name: "website",
     render: (data) => data.account.accountInformation.website || "-",
     sort: true,
   },
-  "Lead Account Name":{
+  "Lead Account Name": {
     header: "Lead Account Name",
     name: "accountName",
     render: (data) => data.account.leadInformation.accountName || "-",
     sort: true,
   },
-  "Lead Source":{
+  "Lead Source": {
     header: "Lead Source",
     name: "leadSource",
     render: (data) => data.account.leadInformation.leadSource || "-",
     sort: true,
   },
-  "Lead Sales Name":{
+  "Lead Sales Name": {
     header: "Lead Sales Name",
     name: "leadSalesName",
     render: (data) => data.account.leadInformation.salesName || "-",
     sort: true,
   },
-  "Address": {
+  Address: {
     header: "Address",
     name: "address",
-    render: (data) => getAddressString(data.account.addressInformation.address) || "-",
+    render: (data) =>
+      getAddressString(data.account.addressInformation.address) || "-",
     sort: false,
   },
-  "Created By":{
+  "Created By": {
     header: "Created By",
     name: "createdBy",
     render: (data) => `${data.user.firstName} ${data.user.lastName}` || "-",
     sort: false,
   },
-  
 };

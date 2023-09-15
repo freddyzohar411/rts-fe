@@ -1,10 +1,7 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 
-import {
-  FETCH_INDUSTRY,
-  FETCH_SUBINDUSTRY,
-} from "./actionTypes";
+import { FETCH_INDUSTRY, FETCH_SUBINDUSTRY } from "./actionTypes";
 import {
   fetchIndustrySuccess,
   fetchIndustryFailure,
@@ -30,7 +27,6 @@ function* workFetchSubIndustry(action) {
       axios.get,
       `http://localhost:8200/industries/${action.payload}/sub`
     );
-    console.log(response);
     yield put(fetchSubIndustrySuccess(response.data));
   } catch (error) {
     yield put(fetchSubIndustryFailure(error));

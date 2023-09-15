@@ -2,9 +2,6 @@ import {
   FETCH_CITY,
   FETCH_CITY_SUCCESS,
   FETCH_CITY_FAILURE,
-  // FETCH_BILLINGCITY,
-  // FETCH_BILLINGCITY_SUCCESS,
-  // FETCH_BILLINGCITY_FAILURE,
 } from "./actionTypes";
 
 export const fetchCity = (countryId) => ({
@@ -22,17 +19,4 @@ export const fetchCityFailure = (error) => ({
   payload: error,
 });
 
-// export const fetchBillingCity = (countryId) => ({
-//   type: FETCH_BILLINGCITY,
-//   payload: countryId,
-// });
 
-// export const fetchBillingCitySuccess = (billingCity) => ({
-//   type: FETCH_BILLINGCITY_SUCCESS,
-//   payload: billingCity,
-// });
-
-// export const fetchBillingCityFailure = (error) => ({
-//   type: FETCH_BILLINGCITY_FAILURE,
-//   payload: error,
-// });

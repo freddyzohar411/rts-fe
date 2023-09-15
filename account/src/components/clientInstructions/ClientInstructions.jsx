@@ -13,9 +13,7 @@ import {
 import { Field, Form, Formik } from "formik";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import { accountId } from "../../fakeData";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   guideLinesInitialValues,
@@ -27,7 +25,6 @@ import {
 import { Axios } from "@workspace/common";
 const { APIClient } = Axios;
 const api = new APIClient();
-
 
 function ClientInstructions() {
   const navigate = useNavigate();
@@ -45,7 +42,6 @@ function ClientInstructions() {
   const [instructionStatus, setInstructionStatus] = useState("new");
   const [documentUpdateId, setDocumentUpdateId] = useState(null);
 
-
   // Check if accound id exist and if client instructions exist
   useEffect(() => {
     if (accountId) {
@@ -60,31 +56,26 @@ function ClientInstructions() {
           setInstructionStatus("update");
         })
         .catch((err) => {
-          // if (err.response.status === 404) {
-            setGuideLineInitialvaluesData(guideLinesInitialValues);
-            setInstructionStatus("new");
-          // }
+          setGuideLineInitialvaluesData(guideLinesInitialValues);
+          setInstructionStatus("new");
         });
 
       // Fetch all documents for the account
       fetchDocumentsWithEntityIdAndEntityType(accountId)
         .then((response) => {
           setDocuments(response.data);
-        }).catch((err) => {})
-        
+        })
+        .catch((err) => {});
     }
   }, [accountId]);
 
   const handleGuideLineSubmit = async (values) => {
-    console.log("Guidelines Value", values);
-
     const newGuideline = {
       guidelines: values.submissionGuidelines,
       accountId: accountId,
     };
 
     if (instructionStatus === "update") {
-      console.log("Update");
       // Update the existing guideline
       const response = await api.put(
         `http://localhost:8800/instructions/${instructionUpdateData.id}`,
@@ -103,7 +94,6 @@ function ClientInstructions() {
 
   // Handle instruction file upload submit
   const handleInstructionSubmit = async (values) => {
-    console.log("Instruction Value", values);
     const documentData = new FormData();
     if (values.clientInstrDocs) {
       documentData.append("file", newDocument);
@@ -114,7 +104,8 @@ function ClientInstructions() {
     if (documentUpdateId) {
       await api.put(
         `http://localhost:8500/documents/${updateId}`,
-        documentData, {
+        documentData,
+        {
           headers: {
             "Content-Type": "multipart/form-data",
           },

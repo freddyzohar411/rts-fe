@@ -1,19 +1,18 @@
-import * as yup from 'yup';
+import * as yup from "yup";
 
 export const populateCommercialInitialValues = (commercial) => {
-    console.log("Commercial", commercial)
-    return {
-        markUp: commercial.markUp,
-        msp: commercial.msp,
-    }
-}
+  return {
+    markUp: commercial.markUp,
+    msp: commercial.msp,
+  };
+};
 
 export const initialValues = {
-    markUp: "",
-    msp: "",
-}
+  markUp: "",
+  msp: "",
+};
 
 export const schema = yup.object().shape({
-    markUp: yup.string().nullable().notRequired(),
-    msp: yup.string().nullable().notRequired(),
-})
+  markUp: yup.string().nullable().notRequired(),
+  msp: yup.string().nullable().notRequired(),
+});
