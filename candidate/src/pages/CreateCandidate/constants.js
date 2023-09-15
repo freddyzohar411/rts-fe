@@ -5,7 +5,7 @@ import {
   EducationDetails,
   EmployerDetails,
   Languages,
-  WorkExperience,
+  CandidateWorkExperience,
 } from "../../components";
 import * as yup from "yup";
 
@@ -103,7 +103,7 @@ export const FORM_OPTION = [
   {
     initialValues: candidateInitialValues,
     schema: candidateSchema,
-    form: WorkExperience,
+    form: CandidateWorkExperience,
   },
   {
     initialValues: candidateInitialValues,

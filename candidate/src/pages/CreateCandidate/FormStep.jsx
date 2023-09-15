@@ -5,7 +5,7 @@ import {
   EducationDetails,
   EmployerDetails,
   Languages,
-  WorkExperience,
+  CandidateWorkExperience,
 } from "../../components";
 
 const FormStep = ({ step, handleNext = { handleNext } }) => {
@@ -13,7 +13,7 @@ const FormStep = ({ step, handleNext = { handleNext } }) => {
     <div>
       {step === 0 && <BasicInfo handleNext={handleNext} />}
       {step === 1 && <Documents />}
-      {step === 2 && <WorkExperience />}
+      {step === 2 && <CandidateWorkExperience />}
       {step === 3 && <EducationDetails />}
       {step === 4 && <Certifications />}
       {step === 5 && <Languages />}
