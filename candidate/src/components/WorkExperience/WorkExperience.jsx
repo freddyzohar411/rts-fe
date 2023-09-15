@@ -1,7 +1,5 @@
-import React from "react"
+import React from "react";
 
-const WorkExperience = () => {
-   <h1>WorkExperience Page</h1>
-}
+const WorkExperience = () => <h6>Work Experience Page</h6>;
 
 export default WorkExperience;

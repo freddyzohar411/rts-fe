@@ -5,3 +5,4 @@ export * from "./EducationDetails";
 export * from "./EmployerDetails";
 export * from "./Languages";
 export * from "./WorkExperience";
+export * from "./Stepper";

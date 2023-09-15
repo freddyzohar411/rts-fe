@@ -11,12 +11,73 @@ import * as yup from "yup";
 
 export const candidateInitialValues = {
   basicInfo: {
-    firstName: "Rahul",
+    firstName: "",
+    lastName: "",
+    gender: "",
+    email: "",
+    phone: "",
+    candidateNationality: "",
+    currentLocation: "",
+    visaStatus: "",
+    languageKnown: "",
+    candidateOwner: "",
+    totalExperience: "",
+    relevantExperience: "",
+    currentEmployer: "",
+    currentPositionTitle: "",
+    candidateCurrentSalary: "",
+    candidateExpectedSalary: "",
+    reasonforChange: "",
+    noticeperiod: "",
+    profileSummary: "",
+    primarySkills: "",
+    secondarySkills: "",
+    additionalInfo: "",
+    candidateStatus: "",
+    source: "",
+    referrerName: "",
+  },
+  documents: {
+    tittle: "",
+    type: "",
+    comments: "",
   },
 };
 
-export const candidateSchema = yup.object().shape({});
-export const candidateSchemaDefault = yup.object().shape({});
+export const candidateSchema = yup.object().shape({
+  basicInfo: yup.object().shape({
+    firstName: yup.string().required("First Name is required"),
+    lastName: yup.string().required("Last Name is required"),
+    gender: yup.string().required("Gender is required"),
+    email: yup
+      .string()
+      .email("Please enter a valid email address")
+      .required("Email is required"),
+    phone: yup.string().required("Phone is required"),
+    // candidateNationality: yup
+    //   .string()
+    //   .required("Candidate Nationality is required"),
+    currentLocation: yup.string().required("Current location is required"),
+    visaStatus: yup.string().required("Visa Status is required"),
+    totalExperience: yup.string().required("Total Experience is required"),
+    relevantExperience: yup
+      .string()
+      .required("Relevant Experience is required"),
+    currentEmployer: yup.string().required("Current Employer is required"),
+    currentPositionTitle: yup
+      .string()
+      .required("Current Position Title is required"),
+    candidateCurrentSalary: yup
+      .string()
+      .required("Candidate Current Salary is required"),
+    candidateExpectedSalary: yup
+      .string()
+      .required("Candidate Expected Salary is required"),
+    reasonforChange: yup.string().required("Reason for Change is required"),
+    noticeperiod: yup.string().required("Notice period is required"),
+    profileSummary: yup.string().required("Profile Summary is required"),
+  }),
+});
 
 export const steps = [
   { label: "Basic Info", value: "Basic-Info" },
@@ -30,38 +91,38 @@ export const steps = [
 
 export const FORM_OPTION = [
   {
-    initialValue: candidateInitialValues,
-    schema: candidateSchemaDefault,
+    initialValues: candidateInitialValues,
+    schema: candidateSchema,
     form: BasicInfo,
   },
   {
-    initialValue: candidateInitialValues,
-    schema: candidateSchemaDefault,
+    initialValues: candidateInitialValues,
+    schema: candidateSchema,
     form: Certifications,
   },
   {
-    initialValue: candidateInitialValues,
-    schema: candidateSchemaDefault,
+    initialValues: candidateInitialValues,
+    schema: candidateSchema,
     form: Documents,
   },
   {
-    initialValue: candidateInitialValues,
-    schema: candidateSchemaDefault,
+    initialValues: candidateInitialValues,
+    schema: candidateSchema,
     form: EducationDetails,
   },
   {
-    initialValue: candidateInitialValues,
-    schema: candidateSchemaDefault,
+    initialValues: candidateInitialValues,
+    schema: candidateSchema,
     form: EmployerDetails,
   },
   {
-    initialValue: candidateInitialValues,
-    schema: candidateSchemaDefault,
+    initialValues: candidateInitialValues,
+    schema: candidateSchema,
     form: Languages,
   },
   {
-    initialValue: candidateInitialValues,
-    schema: candidateSchemaDefault,
+    initialValues: candidateInitialValues,
+    schema: candidateSchema,
     form: WorkExperience,
   },
 ];

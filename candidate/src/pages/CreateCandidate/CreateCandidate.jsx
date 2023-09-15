@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Field, Formik, Form } from "formik";
+import { Formik } from "formik";
 import { FORM_OPTION } from "./constants";
 import FormStep from "./FormStep";
 import FormStepper from "./FormStepper";
+import { Container } from "reactstrap";
 
 const CreateCandidate = () => {
   const [step, setStep] = useState(0);
@@ -10,31 +11,35 @@ const CreateCandidate = () => {
   const handleFormSubmit = () => {};
 
   const handleBack = () => {
-    setStep((prevStep) => prevStep - 1);
+    if (step > 0) {
+      setStep((prevStep) => prevStep - 1);
+    }
   };
 
   const handleNext = () => {
-    if (step < 7) {
+    if (step < 6) {
       setStep((prevStep) => prevStep + 1);
     }
   };
 
   return (
-    <Formik
-      validateOnBlur
-      validateOnChange={false}
-      initialValues={FORM_OPTION[step].initialValues}
-      validationSchema={FORM_OPTION[step].schema}
-      onSubmit={handleFormSubmit}
-    >
-      <FormStepper
-        activeStep={step}
-        handleBack={handleBack}
-        handleNext={handleNext}
+    <Container className="page-content">
+      <Formik
+        validateOnBlur
+        validateOnChange={false}
+        initialValues={FORM_OPTION[step].initialValues}
+        validationSchema={FORM_OPTION[step].schema}
+        onSubmit={handleFormSubmit}
       >
-        <FormStep step={step} handleNext={handleNext} />
-      </FormStepper>
-    </Formik>
+        <FormStepper
+          activeStep={step}
+          handleBack={handleBack}
+          handleNext={handleNext}
+        >
+          <FormStep step={step} handleNext={handleNext} />
+        </FormStepper>
+      </Formik>
+    </Container>
   );
 };
 export default CreateCandidate;

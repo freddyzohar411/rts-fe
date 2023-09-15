@@ -9,16 +9,15 @@ import {
 } from "../../components";
 
 const FormStep = ({ step, handleNext = { handleNext } }) => {
-  console.log("test step", step);
   return (
     <div>
       {step === 0 && <BasicInfo handleNext={handleNext} />}
-      {step === 1 && <Certifications />}
-      {step === 2 && <Documents />}
+      {step === 1 && <Documents />}
+      {step === 2 && <WorkExperience />}
       {step === 3 && <EducationDetails />}
-      {step === 4 && <EmployerDetails />}
+      {step === 4 && <Certifications />}
       {step === 5 && <Languages />}
-      {step === 6 && <WorkExperience />}
+      {step === 6 && <EmployerDetails />}
     </div>
   );
 };

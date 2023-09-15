@@ -1,9 +1,23 @@
 import React from "react";
 import { Field } from "formik";
-import { Label } from "reactstrap";
+import { Label, FormFeedback } from "reactstrap";
 import Select from "react-select";
 
 const FormSelection = ({ name, ...props }) => {
+  const isValid = !props?.error;
+
+  const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      // state.isFocused can display different borderColor if you need it
+      borderColor: state.isFocused ? "#ddd" : isValid ? "#ddd" : "red",
+      // overwrittes hover style
+      "&:hover": {
+        borderColor: state.isFocused ? "#ddd" : isValid ? "#ddd" : "red",
+      },
+    }),
+  };
+
   return (
     <div>
       {props?.label && (
@@ -11,9 +25,12 @@ const FormSelection = ({ name, ...props }) => {
           {props?.label}
         </Label>
       )}
-      <Field name={name}>
-        {({ field }) => <Select {...field} {...props} />}
+      <Field as="select" name={name}>
+        {({ field }) => <Select styles={customStyles} {...field} {...props} />}
       </Field>
+      {props?.error && (
+        <FormFeedback type="invalid">{props?.error}</FormFeedback>
+      )}
     </div>
   );
 };
