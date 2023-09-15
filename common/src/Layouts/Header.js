@@ -40,7 +40,7 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
     var windowSize = document.documentElement.clientWidth;
     dispatch(changeSidebarVisibility("show"));
     if (windowSize > 767)
-      document.querySelector(".hamburger-icon").classList.toggle("open");
+      document?.querySelector(".hamburger-icon")?.classList?.toggle("open");
     //For collapse horizontal menu
     if (document.documentElement.getAttribute("data-layout") === "horizontal") {
       document.body.classList.contains("menu")

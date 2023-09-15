@@ -22,6 +22,7 @@ module.exports = function override(config, env) {
     resolveApp("../dashboard"),
     resolveApp("../common"),
     resolveApp("../account"),
+    resolveApp("../candidate"),
     resolveApp("../job")
   );
 

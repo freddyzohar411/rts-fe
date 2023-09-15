@@ -199,7 +199,7 @@ const Navdata = () => {
         {
           id: "newCandidate",
           label: "Create New Candidate",
-          link: "/candidate/candidate-creation",
+          link: "/create-candidate",
           parentId: "candidates",
         },
       ],

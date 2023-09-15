@@ -1,13 +1,13 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-//Dashboard
+// Dashboard
 import { DashboardEcommerce } from "@workspace/dashboard";
 
-// // User Profile
+// User Profile
 import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 
-//Account
+// Account
 import {
   Access,
   AccountCreation,
@@ -19,6 +19,9 @@ import {
   Stepper,
 } from "@workspace/account";
 
+// Candidate
+import { CreateCandidate } from "@workspace/candidate";
+
 // Job
 import { JobCreation, JobListing } from "@workspace/job";
 
@@ -26,8 +29,11 @@ const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
   { path: "/index", component: <DashboardEcommerce /> },
 
-  //User Profile
+  // User Profile
   { path: "/profile", component: <UserProfile /> },
+
+  // Create Candidate
+  { path: "/create-candidate", component: <CreateCandidate /> },
 
   // Account
   {

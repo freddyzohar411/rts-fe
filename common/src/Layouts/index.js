@@ -106,9 +106,9 @@ const Layout = (props) => {
       layoutType === "vertical" ||
       layoutType === "twocolumn"
     ) {
-      document.querySelector(".hamburger-icon").classList.remove("open");
+      document?.querySelector(".hamburger-icon")?.classList?.remove("open");
     } else {
-      document.querySelector(".hamburger-icon").classList.add("open");
+      document?.querySelector(".hamburger-icon")?.classList?.add("open");
     }
   }, [sidebarVisibilitytype, layoutType]);
 
