@@ -17,6 +17,7 @@
     "@workspace/candidate": "*",
     "@workspace/job": "*",
     "@workspace/settings": "*",
+    "@workspace/formbuilder": "*",
     "axios": "^1.5.0",
     "feather-icons-react": "^0.6.2",
     "formik": "^2.4.3",

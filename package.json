@@ -9,7 +9,8 @@
       "./account",
       "./candidate",
       "./job",
-      "./settings"
+      "./settings",
+      "./formbuilder"
     ]
   },
   "scripts": {
