@@ -239,7 +239,7 @@ const Navdata = () => {
       id: "settings",
       label: "Settings",
       icon: "ri-settings-4-fill",
-      link: "/#",
+      link: "/settings",
       click: function (e) {
         e.preventDefault();
         setIsSettings(!isSettings);
@@ -251,7 +251,7 @@ const Navdata = () => {
         {
           id: "settingsGeneral",
           label: "General",
-          link: "/jobs",
+          link: "/settings",
           parentId: "settings",
         },
         {

@@ -23,7 +23,8 @@ module.exports = function override(config, env) {
     resolveApp("../common"),
     resolveApp("../account"),
     resolveApp("../candidate"),
-    resolveApp("../job")
+    resolveApp("../job"),
+    resolveApp("../settings")
   );
 
   // black-list some modules from the babel-loader pipeline

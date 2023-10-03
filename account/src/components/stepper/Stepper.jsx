@@ -19,6 +19,7 @@ import { fetchParentCompany } from "../../store/parentcompany/action";
 import { fetchDraftAccount } from "../../store/accountregistration/action";
 import { fetchDepartment } from "../../store/department/action";
 import { useDispatch, useSelector } from "react-redux";
+import CountryModal from "../CountryModal/CountryModal";
 
 function Stepper() {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ function Stepper() {
   const [passedSteps, setPassedSteps] = useState([1]);
   const [progressBarValue, setProgressBarValue] = useState(0);
   const location = useLocation().pathname;
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   function getTabNumber(location) {
     if (location === "/account/account-creation") {
@@ -73,6 +75,7 @@ function Stepper() {
   useEffect(() => {
     setActiveTab(getTabNumber(location)[0]);
     setProgressBarValue(getTabNumber(location)[1]);
+    setIsModalOpen(true);
   }, [location]);
 
   document.title = "Account Creation | RTS";
@@ -80,6 +83,7 @@ function Stepper() {
   return (
     <React.Fragment>
       <div className="page-content">
+        {isModalOpen && <CountryModal/>}
         <Container>
           <Row>
             <Col xl={12}>

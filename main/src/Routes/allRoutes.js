@@ -25,6 +25,9 @@ import { CreateCandidate } from "@workspace/candidate";
 // Job
 import { JobCreation, JobListing } from "@workspace/job";
 
+// Settings
+import { MainSettings, CustomisationSettings } from "@workspace/settings";
+
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
   { path: "/index", component: <DashboardEcommerce /> },
@@ -58,6 +61,10 @@ const authProtectedRoutes = [
   // Job
   { path: "/job/job-creation", component: <JobCreation /> },
   { path: "/jobs", component: <JobListing /> },
+
+  // Settings
+  { path: "/settings", component: <MainSettings /> },
+  { path: "/settings/customisation", component: <CustomisationSettings /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
