@@ -15,6 +15,10 @@ import { Reducers as AccountReducers } from "@workspace/account";
 // Job
 import { Reducers as JobReducers } from "@workspace/job";
 
+// Form
+// import { Reducers as SettingsReducers } from "@workspace/settings";
+import { Reducers as FormBuilderReducers } from "@workspace/formbuilder";
+
 const { Layout } = Reducers;
 const { Login, ForgetPassword, Profile } = LoginReducers;
 const { DashboardEcommerce } = DashboardReducers;
@@ -28,6 +32,8 @@ const {
   IndustryReducer,
   ParentCompanyReducer,
 } = AccountReducers;
+
+const { FormReducer } = FormBuilderReducers;
 
 const {
   JobCountryCurrencyReducer,
@@ -59,6 +65,9 @@ const rootReducer = combineReducers({
   JobAccountReducer,
   JobAccountContactsReducer,
   JobReducer,
+
+  // Form
+  FormReducer
 });
 
 export default rootReducer;

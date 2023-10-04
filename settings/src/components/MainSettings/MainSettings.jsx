@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Row, Col, Nav, NavItem, NavLink } from "reactstrap";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function MainSettings() {
@@ -24,7 +25,9 @@ function MainSettings() {
                   <NavLink href="#">Personal Settings</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="/settings/customisation">Customise Form</NavLink>
+                  <Link to="/settings/customisation">
+                    Customization Setting
+                  </Link>
                 </NavItem>
                 <NavItem>
                   <NavLink href="#">Calendar Settings</NavLink>

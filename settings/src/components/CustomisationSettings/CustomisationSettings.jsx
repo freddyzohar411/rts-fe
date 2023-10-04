@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Col,
@@ -9,8 +9,22 @@ import {
   CardBody,
   Input,
 } from "reactstrap";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { Actions as formActions } from "@workspace/formbuilder";
+import { UserDetailsHelper } from "@workspace/common";
 
 function CustomisationSettings() {
+  const dispatch = useDispatch();
+  const { forms } = useSelector((state) => state.FormReducer);
+
+  console.log("Forms: ", forms);
+
+  // Get the list of forms from the API on first render
+  useEffect(() => {
+    dispatch(formActions.fetchForms());
+  }, []);
+
   const data = [
     {
       id: "120923",
@@ -81,7 +95,9 @@ function CustomisationSettings() {
 
                           <i className="ri-search-line search-icon"></i>
                         </div>
-                        <Button>New Form</Button>
+                        <Link to="/form-builder">
+                          <Button>New Form</Button>
+                        </Link>
                       </Col>
                     </Row>
 
@@ -122,7 +138,7 @@ function CustomisationSettings() {
                               className="align-middle text-uppercase"
                             >
                               <span>
-                                Template Name{" "}
+                                Base Template Name
                                 <i className="bx bxs-sort-alt text-dark"></i>
                               </span>
                             </th>
@@ -163,33 +179,41 @@ function CustomisationSettings() {
                           </tr>
                         </thead>
                         <tbody>
-                          {data.map((item, index) => (
+                          {forms.map((item, index) => (
                             <tr key={index}>
                               <td className="fw-medium align-middle">
-                                {item.id}
+                                {item.formId}
                               </td>
                               <td className="align-middle">{item.formName}</td>
-                              <td className=" align-middle">{item.module}</td>
+                              <td className=" align-middle">
+                                {item.entityType || "-"}{" "}
+                              </td>
+                              <td className="align-middle">
+                                {item.baseFormName || "-"}
+                              </td>
                               <td className="align-middle">{item.formType}</td>
                               <td className="align-middle">
-                                {item.templateName}
+                                {item.modifiedBy}
                               </td>
                               <td className="align-middle">
-                                {item.lastModifiedBy}
-                              </td>
-                              <td className="align-middle">
-                                {item.lastModifiedTime}
+                                {item.modifiedAt}
                               </td>
                               <td className="d-flex align-middle gap-2">
-                                <Button
-                                  type="button"
-                                  className="btn btn-primary"
-                                >
-                                  <i className="ri-edit-2-line"></i>
-                                </Button>
+                                <Link to={`/form-builder/${item.formId}`}>
+                                  <Button
+                                    type="button"
+                                    className="btn btn-primary"
+                                  >
+                                    <i className="ri-edit-2-line"></i>
+                                  </Button>
+                                </Link>
+
                                 <Button
                                   type="button"
                                   className="btn btn-danger"
+                                  onClick={() =>
+                                    dispatch(formActions.deleteForm(item.formId))
+                                  }
                                 >
                                   <i className="ri-delete-bin-2-line text-light"></i>
                                 </Button>

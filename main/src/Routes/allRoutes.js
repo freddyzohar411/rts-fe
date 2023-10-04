@@ -28,6 +28,9 @@ import { JobCreation, JobListing } from "@workspace/job";
 // Settings
 import { MainSettings, CustomisationSettings } from "@workspace/settings";
 
+// Form Builder
+import { FormbuilderMain } from "@workspace/formbuilder";
+
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
   { path: "/index", component: <DashboardEcommerce /> },
@@ -65,6 +68,10 @@ const authProtectedRoutes = [
   // Settings
   { path: "/settings", component: <MainSettings /> },
   { path: "/settings/customisation", component: <CustomisationSettings /> },
+
+  // Form Builder
+  { path: "/form-builder", component: <FormbuilderMain />},
+  { path: "/form-builder/:templateId", component: <FormbuilderMain />},
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
