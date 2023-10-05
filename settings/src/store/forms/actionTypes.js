@@ -6,4 +6,6 @@ export const DELETE_FORM = 'DELETE_FORM';
 export const DELETE_FORM_SUCCESS = 'DELETE_FORM_SUCCESS';
 export const DELETE_FORM_FAILURE = 'DELETE_FORM_FAILURE';
 
+export const CLEAR_FORM = 'CLEAR_FORM';
+
 

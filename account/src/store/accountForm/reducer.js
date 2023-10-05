@@ -3,6 +3,7 @@ import {
   FETCH_ACCOUNTFORM_SUCCESS,
   FETCH_ACCOUNTFORM_FAILURE,
 } from "./actionTypes";
+import { JsonHelper } from "@workspace/common";
 
 const initialState = {
   forms: [],
@@ -30,7 +31,7 @@ const AccountFormReducer = (state = initialState, action) => {
         baseFormId: data?.baseFormId || 0,
         entityType: data?.entityType,
         stepperNumber: parseInt(data?.stepperNumber),
-        formSchema: data.formFieldsList,
+        formSchema: JsonHelper.parseArrayObjectValues(data.formFieldsList),
         formLayoutSchema: data.formSchemaList,
       };
       return {

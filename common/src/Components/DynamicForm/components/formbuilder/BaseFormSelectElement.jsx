@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { JsonHelper } from "@workspace/common";
 
 const BaseFormSelectElement = ({
   setBaseFormTemplate,
@@ -40,7 +41,7 @@ const BaseFormSelectElement = ({
             baseFormId: data.data?.baseFormId || 0,
             entityType: data.data?.entityType,
             formStepperNumber: data.data?.formStepperNumber,
-            formSchema: data.data.formFieldsList,
+            formSchema: JsonHelper.parseArrayObjectValues(data.data.formFieldsList),
             formLayoutSchema: data.data.formSchemaList,
           };
           setBaseFormTemplate(newTemplate);

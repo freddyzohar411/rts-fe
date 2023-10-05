@@ -31,6 +31,8 @@ const DroppableList = ({
   userDetails,
   country,
   showAll,
+  removeUnusedFieldFromSchema,
+  formOptions,
 }) => {
   const { rowId, title, isTitle } = row;
 
@@ -74,7 +76,8 @@ const DroppableList = ({
                         checkAccessible(field, userDetails) &&
                         (field?.countryOptions?.countryField === ""
                           ? checkVisibleOnGlobalCountry(field, country)
-                          : checkVisibleOnCountry(field, formik))
+                          : checkVisibleOnCountry(field, formik)) &&
+                        field.isUsed
                       : true
                   ) {
                     return (
@@ -100,7 +103,8 @@ const DroppableList = ({
                                 </label>
                                 <div className="editable">
                                   <div className={`d-flex gap-2`}>
-                                    {field?.fieldType === "custom" && (
+                                    {(field?.fieldType === "custom" ||
+                                      formOptions.formType === "base") && (
                                       <button
                                         className="btn btn-secondary"
                                         style={{ fontSize: "0.8rem" }}
@@ -111,7 +115,25 @@ const DroppableList = ({
                                         <AiFillEdit />
                                       </button>
                                     )}
-                                    {field?.fieldType !== "static" && (
+                                    {(field?.fieldType === "predefined" ) && (
+                                      <button
+                                        className="btn btn-warning"
+                                        style={{ fontSize: "0.8rem" }}
+                                        onClick={() => {
+                                          setUnusedFieldIsUsed(
+                                            field.fieldId,
+                                            false
+                                          );
+                                          removeUnusedFieldFromSchema(
+                                            field.fieldId
+                                          );
+                                        }}
+                                      >
+                                        <AiFillDelete />
+                                      </button>
+                                    )}
+                                    {(field?.fieldType !== "static" && field?.fieldType !== "predefined" ||
+                                      formOptions.formType === "base") && (
                                       <button
                                         className="btn btn-danger"
                                         style={{ fontSize: "0.8rem" }}
@@ -120,14 +142,6 @@ const DroppableList = ({
                                             field.fieldId,
                                             `${rowId}_${i}`
                                           );
-                                          if (
-                                            field?.fieldType === "predefined"
-                                          ) {
-                                            setUnusedFieldIsUsed(
-                                              field.fieldId,
-                                              false
-                                            );
-                                          }
                                         }}
                                       >
                                         <AiFillDelete />

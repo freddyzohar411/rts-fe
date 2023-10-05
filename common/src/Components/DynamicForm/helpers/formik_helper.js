@@ -72,7 +72,12 @@ const generateValidationSchema = (formFieldData) => {
 };
 
 // Generate validation schema 2 Using Yup
-const generateValidationSchema2 = (formFieldData, formik, userDetails, country) => {
+const generateValidationSchema2 = (
+  formFieldData,
+  formik,
+  userDetails,
+  country
+) => {
   const validationSchema = Yup.object(
     formFieldData?.reduce((acc, field) => {
       // if (field.name === "") return acc;
@@ -83,7 +88,8 @@ const generateValidationSchema2 = (formFieldData, formik, userDetails, country) 
             (field.countryOptions?.countryField === ""
               ? !checkVisibleOnGlobalCountry(field, country)
               : !checkVisibleOnCountry(field, formik)))) ||
-        !checkAccessible(field, userDetails)
+        !checkAccessible(field, userDetails) ||
+        !field.isUsed
       ) {
         return acc;
       }
@@ -114,7 +120,7 @@ const generateValidationSchema2 = (formFieldData, formik, userDetails, country) 
           break;
       }
 
-      if (field.required === "true") {
+      if (field.required === "true" || field.required === true) {
         fieldValidation = fieldValidation.required(field.requiredErrorMessage);
       }
 

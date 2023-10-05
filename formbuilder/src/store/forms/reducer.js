@@ -14,7 +14,9 @@ import {
   UPDATE_FORM,
   UPDATE_FORM_SUCCESS,
   UPDATE_FORM_FAILURE,
+  CLEAR_FORM,
 } from "./actionTypes";
+import { JsonHelper } from "@workspace/common";
 
 const initialState = {
   forms: [],
@@ -56,16 +58,24 @@ const FormReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_FORM_SUCCESS:
+      console.log("FETCH FORM SUCCESS");
       const data = action.payload;
+      // console.log("Before Parsing: ", data.formFieldsList);
+      // console.log(JsonHelper.parseArrayObjectValues);
+      // console.log(
+      //   "FORMDD",
+      //   JsonHelper.parseArrayObjectValues(data.formFieldsList)
+      // );
       const newForm = {
         formName: data?.formName,
         formType: data?.formType,
         baseFormId: data?.baseFormId || 0,
         entityType: data?.entityType,
         stepperNumber: parseInt(data?.stepperNumber),
-        formSchema: data.formFieldsList,
+        formSchema: JsonHelper.parseArrayObjectValues(data.formFieldsList),
         formLayoutSchema: data.formSchemaList,
       };
+      console.log("newForm", newForm);
       return {
         ...state,
         loading: false,
@@ -147,7 +157,11 @@ const FormReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
-
+    case CLEAR_FORM:
+      return {
+        ...state,
+        form: null,
+      };
     default:
       return state;
   }

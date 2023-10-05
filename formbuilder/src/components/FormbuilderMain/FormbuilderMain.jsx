@@ -88,7 +88,7 @@ const FormbuilderMain = () => {
       <FormBuilder
         initialFormState={form ? "update" : "create"}
         template={form}
-        fields={unusedFields}
+        // fields={unusedFields}
         userDetails={null}
         onSubmit={(values, formFields, formState) => {
           if (formState === "create") {

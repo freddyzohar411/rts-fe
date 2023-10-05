@@ -14,6 +14,7 @@ import {
   UPDATE_FORM,
   UPDATE_FORM_SUCCESS,
   UPDATE_FORM_FAILURE,
+  CLEAR_FORM,
 } from "./actionTypes";
 
 // Fetch forms
@@ -93,6 +94,11 @@ export const updateFormSuccess = (form) => ({
 export const updateFormFailure = (error) => ({
   type: UPDATE_FORM_FAILURE,
   payload: error,
+});
+
+// Clear Form
+export const clearForm = () => ({
+  type: CLEAR_FORM,
 });
 
 

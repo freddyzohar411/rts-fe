@@ -573,6 +573,34 @@ const FieldBuilder = ({
       ],
     },
     {
+      label: "Is Used",
+      type: "radio",
+      name: "isUsed",
+      options: [
+        { label: "Yes", value: "true" },
+        { label: "No", value: "false" },
+      ],
+      defaultValue: "true",
+      apply: [
+        "text",
+        "email",
+        "number",
+        "textarea",
+        "file",
+        "select",
+        "radio",
+        "checkbox",
+        "password",
+        "date",
+        "selectindustry",
+        "selectsubindustry",
+        "selectcountry",
+        "selectstate",
+        "submit",
+        "table",
+      ],
+    },
+    {
       label: "Button Text",
       type: "text",
       name: "buttonText",
@@ -686,7 +714,7 @@ const FieldBuilder = ({
 
   //Additional default key value
   const defaultKeyValue = {
-    isUsed: false,
+    // isUsed: false,
     type: type,
     fieldId: uuid(),
   };

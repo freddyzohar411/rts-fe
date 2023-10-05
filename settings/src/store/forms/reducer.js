@@ -59,6 +59,11 @@ const FormReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
+    case CLEAR_FORM:
+      return {
+        ...state,
+        form: null,
+      };
     default:
       return state;
   }

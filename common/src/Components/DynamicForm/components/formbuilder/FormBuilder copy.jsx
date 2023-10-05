@@ -82,6 +82,7 @@ const FormBuilder = ({
    * Set template data
    */
   useEffect(() => {
+
     if (baseFormTemplate && formState === "create") {
       setFormFields(baseFormTemplate?.formSchema);
       // setFormName(baseFormTemplate?.formName);
@@ -99,7 +100,7 @@ const FormBuilder = ({
       setFormFields(template?.formSchema);
       setFormName(template?.formName);
       setFormLayoutSchema(template?.formLayoutSchema);
-      return;
+      return
     }
 
     if (template && formState === "update" && template?.baseFormId !== 0) {
@@ -130,42 +131,28 @@ const FormBuilder = ({
       // setFormName(baseFormTemplate?.formName);?
       setFormLayoutSchema(baseFormTemplate?.formLayoutSchema);
     }
-  }, [formOptions.baseFormId]);
+  },[formOptions.baseFormId])
 
   /**
    * Set unused fields
    */
-  // useEffect(() => {
-  //   if (fields && formFields) {
-  //     const newFields = [...fields];
-  //     // Let find from form fields and set isUsed to true
-  //     newFields.forEach((field) => {
-  //       const index = formFields.findIndex((formField) => {
-  //         return formField.fieldId === field.fieldId;
-  //       });
-  //       if (index !== -1 && formFields[index].isUsed) {
-  //         field.isUsed = true;
-  //       }
-  //     });
-  //     setUnusedFields(newFields);
-  //   } else {
-  //     setUnusedFields([]);
-  //   }
-  // }, [fields, formFields]);
   useEffect(() => {
-    // Get all the prederfined field from form fields
-    if (formFields) {
-      const predefinedFields = formFields.filter(
-        (field) => field.fieldType === "predefined"
-      );
-      // Set unused fields
-      setUnusedFields([...predefinedFields]);
+    if (fields && formFields) {
+      const newFields = [...fields];
+      // Let find from form fields and set isUsed to true
+      newFields.forEach((field) => {
+        const index = formFields.findIndex((formField) => {
+          return formField.fieldId === field.fieldId;
+        });
+        if (index !== -1 && formFields[index].isUsed) {
+          field.isUsed = true;
+        }
+      });
+      setUnusedFields(newFields);
     } else {
       setUnusedFields([]);
     }
-  }, [formFields]);
-
-  console.log("Unused Fields: ", unusedFields);
+  }, [fields, formFields]);
 
   // =====================================================
   /**
@@ -208,7 +195,7 @@ const FormBuilder = ({
   const handleFormSubmit = async (values, event) => {
     const clickedButtonId = event?.nativeEvent?.submitter?.id;
     if (clickedButtonId) {
-      console.log("Submit button clicked with id:", clickedButtonId);
+      console.log('Submit button clicked with id:', clickedButtonId);
     }
     await onSubmit(values, formFields, formState);
 
@@ -221,8 +208,7 @@ const FormBuilder = ({
           !checkAccessible(field, userDetails) ||
           (field.countryOptions?.countryField === ""
             ? !checkVisibleOnGlobalCountry(field, country)
-            : !checkVisibleOnCountry(field, formik)) ||
-          !field.isUsed
+            : !checkVisibleOnCountry(field, formik))
         ) {
           delete newValues[field.name];
         }
@@ -616,15 +602,20 @@ const FormBuilder = ({
       console.log("Unused Field Drag and Drop");
       const fieldId = draggableId.split("-").slice(1).join("-");
       console.log("fieldId", fieldId);
-
-      // Go formfield array and find the field and set is in used to true
-      const newFormFields = [...formFields];
-      const index = newFormFields.findIndex(
+      // const fieldId = parseInt(draggableId.split("-")[1]);
+      const field = unusedFields.find((field) => field.fieldId === fieldId);
+      // Add form field to form field array
+      addFormField(field);
+      // Change used to true
+      const newUnusedFields = [...unusedFields];
+      const index = newUnusedFields.findIndex(
         (field) => field.fieldId === fieldId
       );
-      newFormFields[index].isUsed = true;
-      setFormFields(newFormFields);
-      setSchemaInDroppableZone(destination, fieldId);
+      console.log("newUnusedFields", newUnusedFields);
+      console.log("index", index);
+      newUnusedFields[index].isUsed = true;
+      setUnusedFields(newUnusedFields);
+      setSchemaInDroppableZone(destination, field.fieldId);
       return;
     }
   };
@@ -692,17 +683,6 @@ const FormBuilder = ({
     newUnusedFields[index].isUsed = isUsed;
     setUnusedFields(newUnusedFields);
   };
-
-  const removeUnusedFieldFromSchema = (fieldId) => {
-      // remove formfield ID from layout schema using splice
-      const newFormLayoutSchema = [...formLayoutSchema];
-      newFormLayoutSchema.forEach((row) => {
-        row.droppableZones.forEach((zone) => {
-          zone.fieldIds = zone.fieldIds.filter((id) => id !== fieldId);
-        });
-      });
-      setFormLayoutSchema(newFormLayoutSchema);
-  }
 
   /**
    * Handle JSON Methods
@@ -943,8 +923,6 @@ const FormBuilder = ({
                             userDetails={userDetails}
                             country={country}
                             showAll={showAll}
-                            removeUnusedFieldFromSchema={removeUnusedFieldFromSchema}
-                            formOptions={formOptions}
                           />
                         </DnDWrapper>
                       ))

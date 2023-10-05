@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Actions as formActions } from "@workspace/formbuilder";
 import { UserDetailsHelper } from "@workspace/common";
 
+
 function CustomisationSettings() {
   const dispatch = useDispatch();
   const { forms } = useSelector((state) => state.FormReducer);
@@ -96,7 +97,7 @@ function CustomisationSettings() {
                           <i className="ri-search-line search-icon"></i>
                         </div>
                         <Link to="/form-builder">
-                          <Button>New Form</Button>
+                          <Button onClick={() => dispatch(formActions.clearForm())}>New Form</Button>
                         </Link>
                       </Col>
                     </Row>

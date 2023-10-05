@@ -5,6 +5,7 @@ import {
   DELETE_FORM,
   DELETE_FORM_SUCCESS,
   DELETE_FORM_FAILURE,
+  CLEAR_FORM
 } from "./actionTypes";
 
 export const fetchForms = () => ({
@@ -35,5 +36,9 @@ export const deleteFormSuccess = (id) => ({
 export const deleteFormFailure = (error) => ({
   type: DELETE_FORM_FAILURE,
   payload: error,
+});
+
+export const clearForm = () => ({
+  type: CLEAR_FORM,
 });
 
