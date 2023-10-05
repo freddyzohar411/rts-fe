@@ -116,7 +116,7 @@ const FormReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        form: action.payload,
+        form: null,
       };
 
     case CREATE_FORM_FAILURE:
@@ -138,7 +138,7 @@ const FormReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        form: action.payload,
+        form: null,
       };
     case UPDATE_FORM_FAILURE:
       return {

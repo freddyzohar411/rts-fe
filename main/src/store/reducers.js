@@ -16,7 +16,6 @@ import { Reducers as AccountReducers } from "@workspace/account";
 import { Reducers as JobReducers } from "@workspace/job";
 
 // Form
-// import { Reducers as SettingsReducers } from "@workspace/settings";
 import { Reducers as FormBuilderReducers } from "@workspace/formbuilder";
 
 const { Layout } = Reducers;
@@ -31,6 +30,7 @@ const {
   DepartmentReducer,
   IndustryReducer,
   ParentCompanyReducer,
+  AccountFormReducer
 } = AccountReducers;
 
 const { FormReducer } = FormBuilderReducers;
@@ -59,6 +59,7 @@ const rootReducer = combineReducers({
   DepartmentReducer,
   IndustryReducer,
   ParentCompanyReducer,
+  AccountFormReducer,
 
   // Job
   JobCountryCurrencyReducer,

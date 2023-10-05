@@ -106,7 +106,7 @@ const Navdata = () => {
         {
           id: "newAccount",
           label: "Create New Account",
-          link: "/account/account-creation",
+          link: "/create-account",
           parentId: "account",
         },
       ],

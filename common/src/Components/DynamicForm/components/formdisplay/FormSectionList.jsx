@@ -15,6 +15,7 @@ const FormSectionList = ({
   setFormState,
   userDetails,
   country,
+  setButtonName
 }) => {
   const { rowId, title, isTitle } = row;
   const col = row.droppableZones.length;
@@ -34,7 +35,7 @@ const FormSectionList = ({
           ) {
             return (
               <div className="draggable-item">
-                <div className="mb-4">
+                <div className="mb-1">
                   <label htmlFor={field.name} className="form-label">
                     {field.label}
                   </label>
@@ -42,7 +43,8 @@ const FormSectionList = ({
                     field,
                     formik,
                     deleteTableData,
-                    setFormState
+                    setFormState,
+                    setButtonName,
                   )}
                   <div style={{ minHeight: "25px" }}>
                     {formik.errors[field.name] && formik.touched[field.name] ? (
@@ -62,7 +64,7 @@ const FormSectionList = ({
 
   return (
     <div>
-      {isTitle && <h3>{title}</h3>}
+      {isTitle && <h5 className="mb-3">{title}</h5>}
       <div className="d-flex gap-3">{lists}</div>
     </div>
   );

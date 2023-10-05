@@ -12,7 +12,15 @@ import {
   generateValidationSchema2,
 } from "../../helpers/formik_helper";
 
-const Form = ({ template, userDetails, country, editData }) => {
+const Form = ({
+  template,
+  userDetails,
+  country,
+  editData,
+  showFormName,
+  onFormikChange,
+  onSubmit
+}) => {
   const [formState, setFormState] = useState("create");
   const [formFields, setFormFields] = useState(template?.formSchema || []);
   const [formLayoutSchema, setFormLayoutSchema] = useState(
@@ -21,6 +29,7 @@ const Form = ({ template, userDetails, country, editData }) => {
   const [formikInitialValues, setFormikInitialValues] = useState({});
   const [formikValidationSchema, setFormikValidationSchema] = useState({});
   const [formName, setFormName] = useState(template?.formName || "");
+  const [buttonName, setButtonName] = useState("");
 
   /**
    * Set Form state
@@ -78,7 +87,7 @@ const Form = ({ template, userDetails, country, editData }) => {
    * Handle Form Submit
    * @param {*} values
    */
-  const handleFormSubmit = (values) => {
+  const handleFormSubmit = async(values, event) => {
     console.log("values", values);
 
     // Remove fields that are not visible or accessible
@@ -113,19 +122,8 @@ const Form = ({ template, userDetails, country, editData }) => {
     });
     setFormFields(newFormFields);
 
-    console.log("FormDataOut: ", newValues);
+    await onSubmit(event, values, newValues, buttonName);
 
-    // Download the form data as JSON
-    const element = document.createElement("a");
-    const file = new Blob([JSON.stringify(newValues, null, 2)], {
-      type: "application/json",
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = `${formName}.json`;
-    document.body.appendChild(element); // Required for this to work in FireFox
-    element.click();
-    // remove it once done
-    document.body.removeChild(element);
   };
 
   /**
@@ -162,15 +160,28 @@ const Form = ({ template, userDetails, country, editData }) => {
     }
   }, [formik.values, editData]);
 
+  /**
+   * onFormikChange
+   */
+  useEffect(() => {
+    if (onFormikChange) {
+      onFormikChange(formik);
+    }
+  }, [onFormikChange]);
+
   return (
     <div className="">
       {formik && (
         <FormikProvider value={formik}>
-          <div className="d-flex gap-2 mb-4">
-            <h1>{formName}</h1>
-          </div>
-          <hr />
-          <div className="mt-4">
+          {showFormName && (
+            <>
+              <div className="d-flex gap-2 mb-4">
+                <h1>{formName}</h1>
+              </div>
+              <hr />
+            </>
+          )}
+          <div>
             <form onSubmit={formik.handleSubmit} className="drag-zone">
               <div className="lists-container">
                 {formLayoutSchema.map((row) => (
@@ -183,16 +194,19 @@ const Form = ({ template, userDetails, country, editData }) => {
                     setFormState={setFormState}
                     userDetails={userDetails}
                     country={country}
+                    setButtonName={setButtonName}
                   />
                 ))}
               </div>
-              {formFields.length > 0 && (
+              
+
+              {/* {formFields.length > 0 && (
                 <button type="submit" className="btn btn-primary mt-3">
                   {formState === "create" ? "Create" : "Update"}
                 </button>
-              )}
-              {/* // Need a cancel button */}
-              {formState === "update" && (
+              )} */}
+
+              {/* {formState === "update" && (
                 <button
                   type="button"
                   className="btn btn-danger mt-3 ms-3"
@@ -204,7 +218,8 @@ const Form = ({ template, userDetails, country, editData }) => {
                 >
                   Cancel
                 </button>
-              )}
+              )} */}
+
             </form>
           </div>
         </FormikProvider>

@@ -17,7 +17,7 @@ import TextElement from "./TextElement";
  * @param {*} field
  * @param {*} formik
  */
-const generateFormField = (field, formik, deleteTableData, setFormState) => {
+const generateFormField = (field, formik, deleteTableData, setFormState, setButtonName) => {
   const { type } = field;
 
   if (
@@ -78,7 +78,7 @@ const generateFormField = (field, formik, deleteTableData, setFormState) => {
   }
 
   if (type === "button") {
-    return <ButtonElement field={field} />;
+    return <ButtonElement field={field} setButtonName={setButtonName}/>;
   }
 
   if (type === "word") {

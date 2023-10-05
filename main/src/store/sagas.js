@@ -31,6 +31,7 @@ const {
   BillingCitySaga,
   AccountRegistrationSaga,
   DepartmentSaga,
+  AccountFormSaga
 } = AccountSagas;
 
 const {
@@ -60,6 +61,7 @@ export default function* rootSaga() {
     fork(BillingCitySaga),
     fork(AccountRegistrationSaga),
     fork(DepartmentSaga),
+    fork(AccountFormSaga),
 
     //Job
     fork(JobCountryCurrencySaga),

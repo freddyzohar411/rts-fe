@@ -592,7 +592,19 @@ const FieldBuilder = ({
         { label: "Button", value: "button" },
         { label: "Submit", value: "submit" },
       ],
-      defaultValue: "button",
+      defaultValue: formBuilderUpdateData?.buttonType || "button",
+      apply: ["button"],
+    },
+    {
+      label: "Button Location",
+      type: "radio",
+      name: "buttonLocation",
+      options: [
+        { label: "Left", value: "left" },
+        { label: "Center", value: "center" },
+        { label: "Right", value: "right" },
+      ],
+      defaultValue: formBuilderUpdateData?.buttonLocation || "left",
       apply: ["button"],
     },
     {

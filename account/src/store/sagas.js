@@ -7,6 +7,7 @@ import AccountSaga from "./account/saga";
 import BillingCitySaga from "./billingcity/saga";
 import AccountRegistrationSaga from "./accountregistration/saga";
 import DepartmentSaga from "./department/saga";
+import AccountFormSaga from "./accountForm/saga";
 
 export {
   CountryCurrencySaga,
@@ -17,4 +18,5 @@ export {
   BillingCitySaga,
   AccountRegistrationSaga,
   DepartmentSaga,
+  AccountFormSaga
 };

@@ -19,6 +19,8 @@ import {
   Stepper,
 } from "@workspace/account";
 
+import { CreateAccount } from "@workspace/account";
+
 // Candidate
 import { CreateCandidate } from "@workspace/candidate";
 
@@ -42,23 +44,24 @@ const authProtectedRoutes = [
   { path: "/create-candidate", component: <CreateCandidate /> },
 
   // Account
-  {
-    path: null,
-    component: <Stepper />,
-    nested: true,
-    subroutes: [
-      { path: "/account/account-creation", component: <AccountCreation /> },
-      { path: "/account/contact-creation", component: <Contacts /> },
-      { path: "/account/document-creation", component: <Documents /> },
-      {
-        path: "/account/client-instructions-creation",
-        component: <ClientInstructions />,
-      },
-      { path: "/account/access-creation", component: <Access /> },
-      { path: "/account/commercial-creation", component: <Commercial /> },
-      { path: "/account/account-listing", component: <AccountListing /> },
-    ],
-  },
+  { path: "/create-account", component: <CreateAccount />},
+  // {
+  //   path: null,
+  //   component: <Stepper />,
+  //   nested: true,
+  //   subroutes: [
+  //     { path: "/account/account-creation", component: <AccountCreation /> },
+  //     { path: "/account/contact-creation", component: <Contacts /> },
+  //     { path: "/account/document-creation", component: <Documents /> },
+  //     {
+  //       path: "/account/client-instructions-creation",
+  //       component: <ClientInstructions />,
+  //     },
+  //     { path: "/account/access-creation", component: <Access /> },
+  //     { path: "/account/commercial-creation", component: <Commercial /> },
+  //     { path: "/account/account-listing", component: <AccountListing /> },
+  //   ],
+  // },
   { path: "/accounts", component: <AccountListing /> },
 
   // Job
