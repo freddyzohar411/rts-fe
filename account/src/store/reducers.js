@@ -12,10 +12,10 @@ export {
   AccountReducer,
   AccountRegistrationReducer,
   BillingCityReducer,
-  CityReducer,
-  CountryCurrencyReducer,
-  DepartmentReducer,
-  IndustryReducer,
+  // CityReducer,
+  // CountryCurrencyReducer,
+  // DepartmentReducer,
+  // IndustryReducer,
   ParentCompanyReducer,
   AccountFormReducer
 };

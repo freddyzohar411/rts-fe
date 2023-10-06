@@ -14,6 +14,15 @@ const generateInitialValues = (formFieldData) => {
     }
     // if (field.name === "") return acc;
 
+    // If there is a subname, then add it to the initial values
+    if ( field.subName && field.subName !== "") {
+      return {
+        ...acc,
+        [field.name]: "",
+        [field.subName]: "",
+      };
+    }
+
     return { ...acc, [field.name]: "" };
   }, {});
 

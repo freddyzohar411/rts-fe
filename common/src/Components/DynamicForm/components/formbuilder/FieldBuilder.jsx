@@ -38,8 +38,19 @@ const FieldBuilder = ({
         "selectsubindustry",
         "selectcountry",
         "selectstate",
+        "selectcurrency",
+        "selectlandline",
         "submit",
         "table",
+      ],
+    },
+    {
+      label: "Sub Name/Key",
+      type: "text",
+      name: "subName",
+      apply: [
+        "selectcurrency",
+        "selectlandline"
       ],
     },
     {
@@ -60,9 +71,12 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcurrency",
         "selectstate",
+        "selectlandline"
       ],
     },
+    
     {
       label: "PlaceHolder",
       type: "text",
@@ -80,7 +94,9 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcurrency",
         "selectstate",
+        "selectlandline"
       ],
     },
     {
@@ -119,7 +135,9 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcurrency",
         "selectstate",
+        "selectlandline"
       ],
     },
     {
@@ -140,7 +158,9 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcurrency",
         "selectstate",
+        "selectlandline"
       ],
     },
     {
@@ -447,6 +467,8 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcurrency",
+        "selectlandline",
         "selectstate",
       ],
     },
@@ -472,6 +494,8 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcurrency",
+        "selectlandline",
         "selectstate",
       ],
     },
@@ -539,6 +563,8 @@ const FieldBuilder = ({
         "date",
         "selectindustry",
         "selectsubindustry",
+        "selectcurrency",
+        "selectlandline",
         "selectcountry",
         "selectstate",
       ],
@@ -552,7 +578,7 @@ const FieldBuilder = ({
         { label: "Predefined", value: "predefined" },
         { label: "Custom", value: "custom" },
       ],
-      defaultValue: "custom",
+      defaultValue: formBuilderUpdateData?.fieldType || "custom",
       apply: [
         "text",
         "email",
@@ -567,6 +593,8 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcurrency",
+        "selectlandline",
         "selectstate",
         "submit",
         "table",
@@ -580,7 +608,7 @@ const FieldBuilder = ({
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
       ],
-      defaultValue: "true",
+      defaultValue: formBuilderUpdateData?.isUsed || "true",
       apply: [
         "text",
         "email",
@@ -595,6 +623,8 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcurrency",
+        "selectlandline",
         "selectstate",
         "submit",
         "table",
@@ -709,6 +739,10 @@ const FieldBuilder = ({
     case "word":
       header = "Word Field";
       break;
+    case "selectcurrency":
+      header = "Select Currency Field";
+    case "selectlandline":
+      header = "Select Landline Field";
     default:
   }
 
@@ -1100,7 +1134,7 @@ const FieldBuilder = ({
                       <option value="">Select a field</option>
                       {formFields.map((field) => {
                         return (
-                          <option value={field.name}>{field.label}</option>
+                          <option value={field.name}>{field.name}</option>
                         );
                       })}
                     </select>

@@ -5,5 +5,4 @@ export const AccountFormConstant = {
     3: "Account_client_instruction",
     4: "Account_access",
     5: "Account_commercial",
-
 }

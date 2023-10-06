@@ -11,6 +11,8 @@ import StateSelectElement from "./StateSelectElement";
 import TableElement from "./TableElement";
 import ButtonElement from "./ButtonElement";
 import TextElement from "./TextElement";
+import CurrencyElement from "./CurrencyElement";
+import LandlineElement from "./LandlineElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -83,6 +85,14 @@ const generateFormField = (field, formik, deleteTableData, setFormState, setButt
 
   if (type === "word") {
     return <TextElement field={field} />;
+  }
+
+  if (type === "selectcurrency"){
+    return <CurrencyElement field={field} formik={formik} />
+  }
+
+  if (type === "selectlandline"){
+    return <LandlineElement field={field} formik={formik} />
   }
 };
 

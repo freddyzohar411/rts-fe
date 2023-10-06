@@ -10,13 +10,13 @@ import DepartmentSaga from "./department/saga";
 import AccountFormSaga from "./accountForm/saga";
 
 export {
-  CountryCurrencySaga,
-  CitySaga,
-  IndustrySaga,
+  // CountryCurrencySaga,
+  // CitySaga,
+  // IndustrySaga,
   ParentCompanySaga,
   AccountSaga,
   BillingCitySaga,
   AccountRegistrationSaga,
-  DepartmentSaga,
+  // DepartmentSaga,
   AccountFormSaga
 };

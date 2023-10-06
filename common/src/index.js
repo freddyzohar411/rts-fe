@@ -10,6 +10,8 @@ export * as UserDetailsHelper from "./helpers/userDetails_helper";
 
 export * as JsonHelper from "./helpers/json_helper";
 
+export * as ObjectHelper from "./helpers/object_helper";
+
 // Redux Store
 export * as Actions from "./store/actions";
 
