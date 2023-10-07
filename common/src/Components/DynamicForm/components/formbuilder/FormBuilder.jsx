@@ -17,6 +17,7 @@ import {
   checkVisibleOnCountry,
   checkAccessible,
   checkVisibleOnGlobalCountry,
+  checkCopyFieldConditions,
 } from "../../formelements/formElements_helper";
 import BaseFormSelectElement from "./BaseFormSelectElement";
 
@@ -189,7 +190,7 @@ const FormBuilder = ({
    */
   let formik = null;
   useEffect(() => {
-    setFormikInitialValues(generateInitialValues(formFields));
+    setFormikInitialValues(generateInitialValues(formFields, formik));
     setFormikValidationSchema(
       generateValidationSchema2(formFields, formik, userDetails)
     );
@@ -285,6 +286,20 @@ const FormBuilder = ({
     setFormikValidationSchema(
       generateValidationSchema2(formFields, formik, userDetails)
     );
+  }, [formik.values]);
+
+  // Handle copy field options if exist for fields
+  useEffect(() => {
+    if (formik.values) {
+      // Check whether copy options is selected based on condition copy over the value
+      formFields.forEach((field) => {
+        if (!field?.copyFields?.copyField) return;
+        if (checkCopyFieldConditions(field, formik)) {
+          const copyField = formik.values[field.copyFields.copyField];
+          formik.setFieldValue(field.name, copyField);
+        }
+      });
+    }
   }, [formik.values]);
 
   // =====================================================
@@ -694,15 +709,15 @@ const FormBuilder = ({
   };
 
   const removeUnusedFieldFromSchema = (fieldId) => {
-      // remove formfield ID from layout schema using splice
-      const newFormLayoutSchema = [...formLayoutSchema];
-      newFormLayoutSchema.forEach((row) => {
-        row.droppableZones.forEach((zone) => {
-          zone.fieldIds = zone.fieldIds.filter((id) => id !== fieldId);
-        });
+    // remove formfield ID from layout schema using splice
+    const newFormLayoutSchema = [...formLayoutSchema];
+    newFormLayoutSchema.forEach((row) => {
+      row.droppableZones.forEach((zone) => {
+        zone.fieldIds = zone.fieldIds.filter((id) => id !== fieldId);
       });
-      setFormLayoutSchema(newFormLayoutSchema);
-  }
+    });
+    setFormLayoutSchema(newFormLayoutSchema);
+  };
 
   /**
    * Handle JSON Methods
@@ -943,7 +958,9 @@ const FormBuilder = ({
                             userDetails={userDetails}
                             country={country}
                             showAll={showAll}
-                            removeUnusedFieldFromSchema={removeUnusedFieldFromSchema}
+                            removeUnusedFieldFromSchema={
+                              removeUnusedFieldFromSchema
+                            }
                             formOptions={formOptions}
                           />
                         </DnDWrapper>

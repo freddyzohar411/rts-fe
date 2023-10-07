@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCountryCurrency } from "../../../store/actions";
 
 const CountrySelectElement = ({ formik, field }) => {
+  const countryData = useSelector(
+    (state) => state.CountryCurrencyReducer.countryCurrency
+  );
+  const dispatch = useDispatch();
   const [fetchData, setFetchData] = useState([]);
+
   useEffect(() => {
-    // Fetch data from API
-    fetch("http://localhost:8600/geo/country-currency").then((res) => {
-      res.json().then((data) => {
-        setFetchData(data.data);
-      });
-    });
+    dispatch(fetchCountryCurrency());
   }, []);
+
+  useEffect(() => {
+    if (countryData) {
+      setFetchData(countryData);
+    }
+  }, [countryData]);
 
   return (
     <div>
@@ -19,6 +27,7 @@ const CountrySelectElement = ({ formik, field }) => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="form-select"
+          value={formik.values[field.name]}
         >
           <option value="">{field.placeholder}</option>
           {fetchData.map((item, index) => (

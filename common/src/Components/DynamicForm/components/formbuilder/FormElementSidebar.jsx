@@ -90,6 +90,12 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabel: "City Select",
+      draggablePrefix: "element",
+      draggableId: "selectcity",
+      type: "field",
+    },
+    {
       draggableLabel: "Currency Select",
       draggablePrefix: "element",
       draggableId: "selectcurrency",

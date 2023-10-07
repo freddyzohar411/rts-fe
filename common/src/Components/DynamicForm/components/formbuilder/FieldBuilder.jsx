@@ -38,6 +38,7 @@ const FieldBuilder = ({
         "selectsubindustry",
         "selectcountry",
         "selectstate",
+        "selectcity",
         "selectcurrency",
         "selectlandline",
         "submit",
@@ -48,10 +49,7 @@ const FieldBuilder = ({
       label: "Sub Name/Key",
       type: "text",
       name: "subName",
-      apply: [
-        "selectcurrency",
-        "selectlandline"
-      ],
+      apply: ["selectcurrency", "selectlandline"],
     },
     {
       label: "Name/Key",
@@ -71,12 +69,13 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcity",
         "selectcurrency",
         "selectstate",
-        "selectlandline"
+        "selectlandline",
       ],
     },
-    
+
     {
       label: "PlaceHolder",
       type: "text",
@@ -94,15 +93,17 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcity",
         "selectcurrency",
         "selectstate",
-        "selectlandline"
+        "selectlandline",
       ],
     },
     {
       label: "Required",
       type: "radio",
       name: "required",
+      defaultValue: formBuilderUpdateData?.required?.toString() || "false",
       options: [
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
@@ -135,9 +136,10 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcity",
         "selectcurrency",
         "selectstate",
-        "selectlandline"
+        "selectlandline",
       ],
     },
     {
@@ -158,9 +160,10 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcity",
         "selectcurrency",
         "selectstate",
-        "selectlandline"
+        "selectlandline",
       ],
     },
     {
@@ -430,10 +433,10 @@ const FieldBuilder = ({
       type: "select",
       name: "parent",
       options: formFields.map((field) => ({
-        label: field.label,
+        label: field.name,
         value: field.name,
       })),
-      apply: ["selectsubindustry", "selectstate"],
+      apply: ["selectsubindustry", "selectstate", "selectcity"],
     },
     {
       label: "Visible Off (Conditions)",
@@ -466,7 +469,46 @@ const FieldBuilder = ({
         "date",
         "selectindustry",
         "selectsubindustry",
+        "selectcity",
         "selectcountry",
+        "selectcurrency",
+        "selectlandline",
+        "selectstate",
+      ],
+    },
+    {
+      label: "Copy Fields",
+      type: "copyFields",
+      name: "copyFields",
+      conditionTypes: [
+        "equals",
+        "notEquals",
+        "contains",
+        "notContains",
+        "greaterThan",
+        "lessThan",
+        "greaterThanOrEqual",
+        "lessThanOrEqual",
+        "startsWith",
+        "endsWith",
+        "isEmpty",
+        "isNotEmpty",
+      ],
+      apply: [
+        "text",
+        "email",
+        "number",
+        "textarea",
+        "file",
+        "select",
+        "radio",
+        "checkbox",
+        "password",
+        "date",
+        "selectindustry",
+        "selectsubindustry",
+        "selectcountry",
+        "selectcity",
         "selectcurrency",
         "selectlandline",
         "selectstate",
@@ -494,6 +536,7 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcity",
         "selectcurrency",
         "selectlandline",
         "selectstate",
@@ -511,41 +554,47 @@ const FieldBuilder = ({
       apply: ["table"],
     },
     {
-      label: "Table Edit",
-      type: "radio",
-      name: "tableEdit",
-      options: [
-        { label: "Yes", value: "true" },
-        { label: "No", value: "false" },
-      ],
+      label: "Table Setting",
+      type: "tableSetting",
+      name: "tableSetting",
       apply: ["table"],
     },
-    {
-      label: "Table Delete",
-      type: "radio",
-      name: "tableDelete",
-      options: [
-        { label: "Yes", value: "true" },
-        { label: "No", value: "false" },
-      ],
-      apply: ["table"],
-    },
-    {
-      label: "Table Use API",
-      type: "radio",
-      name: "tableAPI",
-      options: [
-        { label: "Yes", value: "true" },
-        { label: "No", value: "false" },
-      ],
-      apply: ["table"],
-    },
-    {
-      label: "Table API URL",
-      type: "text",
-      name: "tableAPIURL",
-      apply: ["table"],
-    },
+    // {
+    //   label: "Table Edit",
+    //   type: "radio",
+    //   name: "tableEdit",
+    //   options: [
+    //     { label: "Yes", value: "true" },
+    //     { label: "No", value: "false" },
+    //   ],
+    //   apply: ["table"],
+    // },
+    // {
+    //   label: "Table Delete",
+    //   type: "radio",
+    //   name: "tableDelete",
+    //   options: [
+    //     { label: "Yes", value: "true" },
+    //     { label: "No", value: "false" },
+    //   ],
+    //   apply: ["table"],
+    // },
+    // {
+    //   label: "Table Use API",
+    //   type: "radio",
+    //   name: "tableAPI",
+    //   options: [
+    //     { label: "Yes", value: "true" },
+    //     { label: "No", value: "false" },
+    //   ],
+    //   apply: ["table"],
+    // },
+    // {
+    //   label: "Table API URL",
+    //   type: "text",
+    //   name: "tableAPIURL",
+    //   apply: ["table"],
+    // },
     {
       label: "Global Country Condition (Visible On)",
       type: "countryselect",
@@ -593,6 +642,7 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcity",
         "selectcurrency",
         "selectlandline",
         "selectstate",
@@ -608,7 +658,7 @@ const FieldBuilder = ({
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
       ],
-      defaultValue: formBuilderUpdateData?.isUsed || "true",
+      defaultValue: formBuilderUpdateData?.isUsed.toString() || "true",
       apply: [
         "text",
         "email",
@@ -623,6 +673,7 @@ const FieldBuilder = ({
         "selectindustry",
         "selectsubindustry",
         "selectcountry",
+        "selectcity",
         "selectcurrency",
         "selectlandline",
         "selectstate",
@@ -682,7 +733,7 @@ const FieldBuilder = ({
       type: "text",
       name: "wordSize",
       apply: ["word"],
-    }
+    },
   ];
 
   let schema = config;
@@ -741,8 +792,13 @@ const FieldBuilder = ({
       break;
     case "selectcurrency":
       header = "Select Currency Field";
+      break;
     case "selectlandline":
       header = "Select Landline Field";
+      break;
+    case "selectcity":
+      header = "Select City Field";
+      break;
     default:
   }
 
@@ -753,6 +809,19 @@ const FieldBuilder = ({
     fieldId: uuid(),
   };
   //=================================================================
+  // Table setting
+  const [tableSetting, setTableSetting] = useState(
+    formBuilderUpdateData?.tableSetting
+      ? formBuilderUpdateData.tableSetting
+      : {
+          tableEdit: false,
+          tableDelete: false,
+          tableUseAPI: false,
+          tableGetAPI: "",
+          tableDeleteAPI: "",
+        }
+  );
+
   // COuntry
   const [country, setCountry] = useState("");
 
@@ -771,9 +840,16 @@ const FieldBuilder = ({
     formBuilderUpdateData?.tableConfig ? formBuilderUpdateData.tableConfig : []
   );
 
-  // Key vidsible condition state
+  // Key visible condition state
   const [conditionList, setConditionList] = useState(
     formBuilderUpdateData?.visible ? formBuilderUpdateData.visible : []
+  );
+
+  // Key copy condition state
+  const [copyConditionList, setCopyConditionList] = useState(
+    formBuilderUpdateData?.copyFields
+      ? formBuilderUpdateData?.copyFields
+      : { copyField: "", conditionList: [] }
   );
 
   // Key value state
@@ -816,11 +892,12 @@ const FieldBuilder = ({
         validationSchema.tableConfig = tableConfig;
         validationSchema.tableData = formBuilderUpdateData.tableData;
         validationSchema.tableRerender = true;
+        validationSchema.tableSetting = tableSetting;
       }
 
       validationSchema.countryOptions = countryList;
-
       validationSchema.visible = conditionList;
+      validationSchema.copyFields = copyConditionList;
       updateFormField(validationSchema, formBuilderUpdateData.index);
       setFormBuilderType(null);
       setFormBuilderUpdateData(null);
@@ -839,11 +916,11 @@ const FieldBuilder = ({
         validationSchema.tableConfig = tableConfig;
         validationSchema.tableData = [];
         validationSchema.tableRerender = true;
+        validationSchema.tableSetting = tableSetting;
       }
-
       validationSchema.countryOptions = countryList;
-
       validationSchema.visible = conditionList;
+      validationSchema.copyFields = copyConditionList;
       console.log("ValidationSchema", validationSchema);
       addFormField(validationSchema);
       // Set Form Schema
@@ -1133,9 +1210,7 @@ const FieldBuilder = ({
                     >
                       <option value="">Select a field</option>
                       {formFields.map((field) => {
-                        return (
-                          <option value={field.name}>{field.name}</option>
-                        );
+                        return <option value={field.name}>{field.name}</option>;
                       })}
                     </select>
                     <select
@@ -1180,6 +1255,125 @@ const FieldBuilder = ({
                           setConditionList(
                             conditionList.filter((item, i) => i !== index)
                           );
+                        }}
+                      />
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        } else if (
+          field.type === "copyFields" &&
+          ifContainsType(type, field.apply)
+        ) {
+          return (
+            <div className="mb-3">
+              <label htmlFor={field.name} className="form-label">
+                {field.label}
+              </label>
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <select
+                  className="form-select w-50"
+                  value={copyConditionList.copyField}
+                  onChange={(e) =>
+                    setCopyConditionList((prev) => ({
+                      ...prev,
+                      copyField: e.target.value,
+                    }))
+                  }
+                >
+                  <option value="">Select a field</option>
+                  {formFields.map((field) => {
+                    return <option value={field.name}>{field.name}</option>;
+                  })}
+                </select>
+                <button
+                  type="button"
+                  className="btn btn-success btn-sm"
+                  onClick={() => {
+                    setCopyConditionList({
+                      ...copyConditionList,
+                      conditionList: [
+                        ...copyConditionList.conditionList,
+                        { field: "", condition: "", value: "" },
+                      ],
+                    });
+                  }}
+                >
+                  +add
+                </button>
+              </div>
+              {copyConditionList.conditionList.map((condition, index) => {
+                return (
+                  <div className="d-flex gap-2 mb-2 align-items-center">
+                    <span>{index + 1}) </span>
+                    <select
+                      className="form-select"
+                      value={condition.field}
+                      onChange={(e) =>
+                        setCopyConditionList((prev) => ({
+                          ...prev,
+                          conditionList: prev.conditionList.map((item, i) =>
+                            i === index
+                              ? { ...item, field: e.target.value }
+                              : item
+                          ),
+                        }))
+                      }
+                    >
+                      <option value="">Select a field</option>
+                      {formFields.map((field) => {
+                        return <option value={field.name}>{field.name}</option>;
+                      })}
+                    </select>
+                    <select
+                      className="form-select"
+                      value={condition.condition}
+                      onChange={(e) =>
+                        setCopyConditionList((prev) => ({
+                          ...prev,
+                          conditionList: prev.conditionList.map((item, i) =>
+                            i === index
+                              ? { ...item, condition: e.target.value }
+                              : item
+                          ),
+                        }))
+                      }
+                    >
+                      <option value="">Select a condition</option>
+                      {field.conditionTypes.map((conditionType) => (
+                        <option value={conditionType}>{conditionType}</option>
+                      ))}
+                    </select>
+                    <input
+                      id="conditionValue"
+                      name="conditionValue"
+                      type="text"
+                      className="form-control"
+                      onChange={(e) =>
+                        setCopyConditionList((prev) => ({
+                          ...prev,
+                          conditionList: prev.conditionList.map((item, i) =>
+                            i === index
+                              ? { ...item, value: e.target.value }
+                              : item
+                          ),
+                        }))
+                      }
+                      value={condition.value}
+                      placeholder="Value"
+                    />
+                    <span>
+                      <AiFillDelete
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setCopyConditionList((prev) => ({
+                            ...prev,
+                            conditionList: prev.conditionList.filter(
+                              (item, i) => i !== index
+                            ),
+                          }));
                         }}
                       />
                     </span>
@@ -1340,6 +1534,110 @@ const FieldBuilder = ({
                   </div>
                 );
               })}
+            </div>
+          );
+        } else if (
+          field.type === "tableSetting" &&
+          ifContainsType(type, field.apply)
+        ) {
+          return (
+            <div className="mb-3">
+              <div className="d-flex gap-3">
+                <div className="form-check mb-3">
+                  <label className="form-check-label" htmlFor="tableEdit">
+                    Table Edit
+                  </label>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="tableEdit"
+                    id="tableEdit"
+                    checked={tableSetting.tableEdit}
+                    onChange={(e) => {
+                      setTableSetting((prev) => ({
+                        ...prev,
+                        tableEdit: !prev.tableEdit,
+                      }));
+                    }}
+                  />
+                </div>
+                <div className="form-check mb-3">
+                  <label className="form-check-label" htmlFor="tableDelete">
+                    Table Delete
+                  </label>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="tableDelete"
+                    id="tableDelete"
+                    checked={tableSetting.tableDelete}
+                    onChange={(e) => {
+                      setTableSetting((prev) => ({
+                        ...prev,
+                        tableDelete: !prev.tableDelete,
+                      }));
+                    }}
+                  />
+                </div>
+                <div className="form-check mb-3">
+                  <label className="form-check-label" htmlFor="tableUseAPI">
+                    Table Use API
+                  </label>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="tableUseAPI"
+                    id="tableUseAPI"
+                    checked={tableSetting.tableUseAPI}
+                    onChange={(e) => {
+                      setTableSetting((prev) => ({
+                        ...prev,
+                        tableUseAPI: !prev.tableUseAPI,
+                      }));
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="tableGetAPI" className="form-label">
+                  Table Get API
+                </label>
+                <input
+                  id="tableGetAPI"
+                  name="tableGetAPI"
+                  type="text"
+                  className="form-control"
+                  onChange={(e) =>
+                    setTableSetting((prev) => ({
+                      ...prev,
+                      tableGetAPI: e.target.value,
+                    }))
+                  }
+                  value={tableSetting.tableGetAPI}
+                  placeholder="Table Get API"
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="tableDeleteAPI" className="form-label">
+                  Table Delete API
+                </label>
+                <input
+                  id="tableDeleteAPI"
+                  name="tableDeleteAPI"
+                  type="text"
+                  className="form-control"
+                  onChange={(e) =>
+                    setTableSetting((prev) => ({
+                      ...prev,
+                      tableDeleteAPI: e.target.value,
+                    }))
+                  }
+                  value={tableSetting.tableDeleteAPI}
+                  placeholder="Table Delete API"
+                />
+              </div>
             </div>
           );
         } else if (

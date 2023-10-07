@@ -7,7 +7,7 @@ import {
 } from "../formelements/formElements_helper";
 
 // Generate the initial values for Formik
-const generateInitialValues = (formFieldData) => {
+const generateInitialValues = (formFieldData, formik) => {
   const initialValues = formFieldData?.reduce((acc, field) => {
     if (field.type === "checkbox") {
       return { ...acc, [field.name]: [] };

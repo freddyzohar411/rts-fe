@@ -6,6 +6,7 @@ import {
   checkVisibleOnCountry,
   checkAccessible,
   checkVisibleOnGlobalCountry,
+  checkCopyFieldConditions,
 } from "../../formelements/formElements_helper";
 import {
   generateInitialValues,
@@ -19,7 +20,7 @@ const Form = ({
   editData,
   showFormName,
   onFormikChange,
-  onSubmit
+  onSubmit,
 }) => {
   const [formState, setFormState] = useState("create");
   const [formFields, setFormFields] = useState(template?.formSchema || []);
@@ -87,7 +88,7 @@ const Form = ({
    * Handle Form Submit
    * @param {*} values
    */
-  const handleFormSubmit = async(values, event) => {
+  const handleFormSubmit = async (values, event) => {
     console.log("values", values);
 
     // Remove fields that are not visible or accessible
@@ -107,14 +108,14 @@ const Form = ({
 
     // Remove empty fields
     Object.keys(newValues).forEach((key) => {
-      if (newValues[key] === "") {
+      if (key === "") {
         delete newValues[key];
       }
     });
 
     // Set table data and toggle rerender
     let newFormFields = JSON.parse(JSON.stringify(formFields));
-    newFormFields = setTableData(newFormFields, newValues);
+    // newFormFields = setTableData(newFormFields, newValues);
     newFormFields.forEach((field) => {
       if (field.type === "table") {
         field.tableRerender = !field.tableRerender;
@@ -123,7 +124,6 @@ const Form = ({
     setFormFields(newFormFields);
 
     await onSubmit(event, values, newValues, buttonName);
-
   };
 
   /**
@@ -159,6 +159,20 @@ const Form = ({
       setFormikValidationSchema(generateValidationSchema2(formFields, formik));
     }
   }, [formik.values, editData]);
+
+  // Handle copy field options if exist for fields
+  useEffect(() => {
+    if (formik.values) {
+      // Check whether copy options is selected based on condition copy over the value
+      formFields.forEach((field) => {
+        if (!field?.copyFields?.copyField) return;
+        if (checkCopyFieldConditions(field, formik)) {
+          const copyField = formik.values[field.copyFields.copyField];
+          formik.setFieldValue(field.name, copyField);
+        }
+      });
+    }
+  }, [formik.values]);
 
   /**
    * onFormikChange
@@ -198,7 +212,6 @@ const Form = ({
                   />
                 ))}
               </div>
-              
 
               {/* {formFields.length > 0 && (
                 <button type="submit" className="btn btn-primary mt-3">
@@ -219,7 +232,6 @@ const Form = ({
                   Cancel
                 </button>
               )} */}
-
             </form>
           </div>
         </FormikProvider>

@@ -13,6 +13,7 @@ import ButtonElement from "./ButtonElement";
 import TextElement from "./TextElement";
 import CurrencyElement from "./CurrencyElement";
 import LandlineElement from "./LandlineElement";
+import CitySelectElement from "./CitySelectElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -93,6 +94,10 @@ const generateFormField = (field, formik, deleteTableData, setFormState, setButt
 
   if (type === "selectlandline"){
     return <LandlineElement field={field} formik={formik} />
+  }
+
+  if (type === "selectcity"){
+    return <CitySelectElement field={field} formik={formik} />
   }
 };
 
@@ -194,10 +199,42 @@ const checkAccessible = (field, userDetails) => {
   return false;
 };
 
+const checkCopyFieldConditions = (field, formik) => {
+  if (!field.copyFields.copyField) return false;
+  let conditionMet = true;
+  for (const copyField of field.copyFields.conditionList) {
+    if (copyField.condition === "equals") {
+      if (formik.values[copyField.field] !== copyField.value) {
+        conditionMet = false;
+      }
+    }
+
+    if (copyField.condition === "notEquals") {
+      if (formik.values[copyField.field] === copyField.value) {
+        conditionMet = false;
+      }
+    }
+
+    if (copyField.condition === "contains") {
+      if (!formik.values[copyField.field]?.includes(copyField.value)) {
+        conditionMet = false;
+      }
+    }
+
+    if (copyField.condition === "notContains") {
+      if (formik.values[copyField.field]?.includes(copyField.value)) {
+        conditionMet = false;
+      }
+    }
+  }
+  return conditionMet;
+}
+
 export {
   generateFormField,
   checkVisibleConditions,
   checkVisibleOnCountry,
   checkVisibleOnGlobalCountry,
   checkAccessible,
+  checkCopyFieldConditions
 };

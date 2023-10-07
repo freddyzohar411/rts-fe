@@ -2,63 +2,93 @@ import React, { useState, useEffect } from "react";
 
 const TableElement = ({ formik, field, deleteTableData, setFormState }) => {
   console.log("TableElement", field);
-  const [config, setConfig] = useState(
+  const [tableConfig, setTableConfig] = useState(
     field?.tableConfig ? field.tableConfig : []
   );
+  const [tableSetting, setTableSetting] = useState(
+    field?.tableSettings ? field.tableSettings : {}
+  );
   const [table, setTable] = useState(field.tableData);
+
+  console.log("table Field in Table Element", field);
+
+  useEffect(() => {
+    setTableConfig(field.tableConfig);
+    setTableSetting(field.tableSetting);
+  }, [field.tableConfig, field.tableSettings]);
+
+  console.log("tableConfig", tableConfig);
+  console.log("tableSettings", tableSetting);
 
   // API Services
   // Get
   const getTableData = () => {
-    fetch(field.tableAPIURL).then((response) => {
+    fetch(tableSetting.tableGetAPI).then((response) => {
       response.json().then((data) => {
-        // console.log("data", data);
-        setTable(data);
+        const formDataList = data.data;
+        console.log("formDataList", formDataList);
+        setTable(mapTableData(formDataList));
       });
     });
   };
 
-  console.log("TABBLE RENDER", field.tableRerender)
+  console.log("TABBLE RENDER", field.tableRerender);
 
   // Get data on load
   useEffect(() => {
-    console.log("Table rerender", field.tableRerender);
-    if (field.tableAPI === "true") {
-      // Get and set data if API is required
-      getTableData();
-    } else {
-      setTable([...field.tableData]);
+    if (tableSetting) {
+      if (
+        tableSetting.tableUseAPI === "true" ||
+        tableSetting.tableUseAPI === true
+      ) {
+        getTableData();
+      }
+      // } else {
+      //   setTable([...field.tableData]);
+      // }
+      setTableConfig([...field.tableConfig]);
     }
-    setConfig([...field.tableConfig]);
-  }, [field]);
+  }, [field, tableSetting]);
 
   console.log("table", table);
-  console.log("config", config);
+  console.log("config", tableConfig);
+
+  const mapTableData = (dataList) => {
+    const tableData = dataList.map((data) => {
+      return {
+        id: data.id,
+        data: JSON.parse(data.submissionData),
+      };
+    });
+    return tableData;
+  };
 
   const handleEdit = (row) => {
     // Set formik values based on row value and config
     console.log("row", row);
-    config.forEach((item) => {
-      formik.setFieldValue(item.name, row[item.name]);
+    tableConfig.forEach((item) => {
+      formik.setFieldValue(item.name, row.data[item.name]);
     });
     setFormState("update");
   };
 
   // Delete from formfields
-  const handleDelete = (row, rowIndex) => {
-    if (field.tableAPI === "true") {
-      console.log("Deleting", row);
+  const handleDelete = (id) => {
+    if (tableSetting.tableUseAPI === "true" || tableSetting.tableUseAPI === true) {
       // Delete from API
-      fetch(`${field.tableAPIURL}/${row.id}`, {
+      console.log("Deleteing from table")
+      console.log(`${tableSetting.tableDeleteAPI}/${id}`)
+      fetch(`${tableSetting.tableDeleteAPI}/${id}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
         .then((data) => {
           getTableData();
         });
-    } else {
-      deleteTableData(rowIndex);
     }
+    // } else {
+    //   deleteTableData(rowIndex);
+    // }
   };
 
   return (
@@ -66,46 +96,53 @@ const TableElement = ({ formik, field, deleteTableData, setFormState }) => {
       <table className="table">
         <thead className="table-secondary">
           <tr>
-            {config.map((item, index) => (
-              <th key={index}>{item.label}</th>
-            ))}
-            {field.tableEdit === "true" && <th>Edit</th>}
-            {field.tableDelete === "true" && <th>Delete</th>}
+            {tableConfig &&
+              tableConfig.map((item, index) => (
+                <th key={index}>{item.label}</th>
+              ))}
+            {tableSetting.tableEdit === "true" ||
+              (tableSetting.tableEdit === true && <th>Edit</th>)}
+            {tableSetting.tableDelete === "true" ||
+              (tableSetting.tableDelete === true && <th>Delete</th>)}
           </tr>
         </thead>
-        <tbody>
-          {table.map((row, rowIndex) => {
-            return (
-              <tr key={rowIndex}>
-                {config.map((item, index) => (
-                  <td key={index}>{row[item.name]}</td>
-                ))}
-                {field.tableEdit === "true" && (
-                  <td>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={() => handleEdit(row)}
-                    >
-                      Edit
-                    </button>
-                  </td>
-                )}
-                {field.tableDelete === "true" && (
-                  <td>
-                    <button
-                      type="button"
-                      className="btn btn-danger"
-                      onClick={() => handleDelete(row, rowIndex)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                )}
-              </tr>
-            );
-          })}
-        </tbody>
+        {table && table.length > 0 && (
+          <tbody>
+            {table.map((row, rowIndex) => {
+              return (
+                <tr key={rowIndex}>
+                  {tableConfig.map((item, index) => (
+                    <td key={index}>{row.data[item.name]}</td>
+                  ))}
+                  {tableSetting.tableEdit === "true" ||
+                    (tableSetting.tableEdit === true && (
+                      <td>
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() => handleEdit(row)}
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    ))}
+                  {tableSetting.tableDelete === "true" ||
+                    (tableSetting.tableDelete === true && (
+                      <td>
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(row.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        )}
       </table>
     </div>
   );

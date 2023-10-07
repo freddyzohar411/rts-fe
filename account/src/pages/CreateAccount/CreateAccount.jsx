@@ -4,7 +4,7 @@ import { Button, Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAccountForm } from "../../store/accountForm/action"
+import { fetchAccountForm } from "../../store/accountForm/action";
 import { AccountFormConstant } from "./accountFormConstant";
 
 const AccountCreation = () => {
@@ -12,33 +12,84 @@ const AccountCreation = () => {
 
   const form = useSelector((state) => state.AccountFormReducer.form);
   const MAX_STEP = 6;
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const [formFormik, setFormFormik] = useState(null);
 
   const handleFormikChange = useCallback((formik) => {
     // Handle formik change here
     setFormFormik(formik);
-    console.log('Formik has changed:', formik);
+    console.log("Formik has changed:", formik);
   }, []);
 
   useEffect(() => {
-    dispatch(fetchAccountForm(AccountFormConstant[step]))
-  },[step])
+    dispatch(fetchAccountForm(AccountFormConstant[step]));
+  }, [step]);
 
   const handleFormSubmit = (event, values, newValues, buttonName) => {
     console.log("values", values);
     console.log("newValues", newValues);
-    console.log('Button Name:', buttonName);
-    if (step === 1){
+    console.log("Button Name:", buttonName);
+    if (step === 0) {
       // const buttonName = event;
-
-
+      // const submitData = {
+      //   formId: form.id,
+      //   submissionData: JSON.stringify(newValues),
+      //   entityId: 1,
+      //   entityType: "Account",
+      // };
+      // fetch("http://localhost:9400/form-submissions", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(submitData),
+      // })
+      //   .then((response) => response.json())
+      //   .then(
+      //     (data) => {
+      //       const reponseData = data.data;
+      //       reponseData.submissionData = JSON.parse(reponseData.submissionData);
+      //       console.log("Success Data:", reponseData);
+      //     },
+      //     (error) => {
+      //       console.error("Error:", error);
+      //     }
+      //   );
     }
-    if (step === 2){
-
+    if (step === 1) {
+      if (buttonName === "add") {
+        console.log("add a contact now!");
+        const submitData = {
+          formId: form.id,
+          submissionData: JSON.stringify(newValues),
+          entityId: 1,
+          entityType: "Account",
+        };
+        fetch("http://localhost:9400/form-submissions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(submitData),
+        })
+          .then((response) => response.json())
+          .then(
+            (data) => {
+              const reponseData = data.data;
+              reponseData.submissionData = JSON.parse(
+                reponseData.submissionData
+              );
+              console.log("Success Data:", reponseData);
+              formFormik.resetForm();
+            },
+            (error) => {
+              console.error("Error:", error);
+            }
+          );
+      }
     }
 
-    handleNext();
+    // handleNext();
   };
 
   const handleBack = () => {
