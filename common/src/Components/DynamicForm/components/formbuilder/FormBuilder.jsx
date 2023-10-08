@@ -29,6 +29,7 @@ const FormBuilder = ({
   onSave,
   initialFormState,
 }) => {
+  const [buttonName, setButtonName] = useState("");
   const [baseFormTemplate, setBaseFormTemplate] = useState(null);
   const [formOptions, setFormOptions] = useState({
     formType: template?.formType || "",
@@ -962,6 +963,8 @@ const FormBuilder = ({
                               removeUnusedFieldFromSchema
                             }
                             formOptions={formOptions}
+                            formStateHook={{formState, setFormState}}
+                            buttonNameHook={{buttonName, setButtonName}}
                           />
                         </DnDWrapper>
                       ))

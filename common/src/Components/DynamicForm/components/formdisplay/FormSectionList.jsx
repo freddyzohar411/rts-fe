@@ -15,7 +15,8 @@ const FormSectionList = ({
   setFormState,
   userDetails,
   country,
-  setButtonName
+  buttonNameHook,
+  formStateHook,
 }) => {
   const { rowId, title, isTitle } = row;
   const col = row.droppableZones.length;
@@ -43,8 +44,8 @@ const FormSectionList = ({
                     field,
                     formik,
                     deleteTableData,
-                    setFormState,
-                    setButtonName,
+                    buttonNameHook,
+                    formStateHook,
                   )}
                   <div style={{ minHeight: "25px" }}>
                     {formik.errors[field.name] && formik.touched[field.name] ? (

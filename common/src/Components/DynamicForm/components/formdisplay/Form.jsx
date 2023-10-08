@@ -59,7 +59,7 @@ const Form = ({
   console.log("Form State: ", formState);
 
   useEffect(() => {
-    if (formState === "create") {
+    if (formState === "create" || formState === "tableUpdate") {
       setFormikInitialValues(generateInitialValues(formFields));
       setFormikValidationSchema(generateValidationSchema2(formFields));
     } else {
@@ -123,7 +123,10 @@ const Form = ({
     });
     setFormFields(newFormFields);
 
-    await onSubmit(event, values, newValues, buttonName);
+    // Reset formik values
+
+
+    await onSubmit(event, values, newValues, buttonName , { formState, setFormState });
   };
 
   /**
@@ -151,7 +154,7 @@ const Form = ({
   });
 
   useEffect(() => {
-    if (formState === "create") {
+    if (formState === "create" || formState === "tableUpdate") {
       setFormikInitialValues(generateInitialValues(formFields));
       setFormikValidationSchema(generateValidationSchema2(formFields, formik));
     } else {
@@ -208,7 +211,8 @@ const Form = ({
                     setFormState={setFormState}
                     userDetails={userDetails}
                     country={country}
-                    setButtonName={setButtonName}
+                    buttonNameHook={{ buttonName, setButtonName }}
+                    formStateHook={{ formState, setFormState }}
                   />
                 ))}
               </div>

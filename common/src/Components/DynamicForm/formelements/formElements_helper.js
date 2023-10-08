@@ -14,13 +14,21 @@ import TextElement from "./TextElement";
 import CurrencyElement from "./CurrencyElement";
 import LandlineElement from "./LandlineElement";
 import CitySelectElement from "./CitySelectElement";
+import ButtonUpdateElement from "./ButtonUpdateElement";
+import DepartmentSelectElement from "./DepartmentSelectElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
  * @param {*} field
  * @param {*} formik
  */
-const generateFormField = (field, formik, deleteTableData, setFormState, setButtonName) => {
+const generateFormField = (
+  field,
+  formik,
+  deleteTableData,
+  buttonNameHook,
+  formStateHook
+) => {
   const { type } = field;
 
   if (
@@ -75,29 +83,45 @@ const generateFormField = (field, formik, deleteTableData, setFormState, setButt
         field={field}
         formik={formik}
         deleteTableData={deleteTableData}
-        setFormState={setFormState}
+        setFormState={formStateHook.setFormState}
       />
     );
   }
 
-  if (type === "button") {
-    return <ButtonElement field={field} setButtonName={setButtonName}/>;
+  if (type === "selectcurrency") {
+    return <CurrencyElement field={field} formik={formik} />;
   }
+
+  if (type === "selectlandline") {
+    return <LandlineElement field={field} formik={formik} />;
+  }
+
+  if (type === "selectcity") {
+    return <CitySelectElement field={field} formik={formik} />;
+  }
+
+  if (type === "selectdepartment") {
+    return <DepartmentSelectElement field={field} formik={formik} />;
+  }
+
+  // text & button
 
   if (type === "word") {
     return <TextElement field={field} />;
   }
 
-  if (type === "selectcurrency"){
-    return <CurrencyElement field={field} formik={formik} />
+  if (type === "button") {
+    return <ButtonElement field={field} buttonNameHook={buttonNameHook} />;
   }
 
-  if (type === "selectlandline"){
-    return <LandlineElement field={field} formik={formik} />
-  }
-
-  if (type === "selectcity"){
-    return <CitySelectElement field={field} formik={formik} />
+  if (type === "buttonupdate") {
+    return (
+      <ButtonUpdateElement
+        field={field}
+        buttonNameHook={buttonNameHook}
+        formStateHook={formStateHook}
+      />
+    );
   }
 };
 
@@ -228,7 +252,7 @@ const checkCopyFieldConditions = (field, formik) => {
     }
   }
   return conditionMet;
-}
+};
 
 export {
   generateFormField,
@@ -236,5 +260,5 @@ export {
   checkVisibleOnCountry,
   checkVisibleOnGlobalCountry,
   checkAccessible,
-  checkCopyFieldConditions
+  checkCopyFieldConditions,
 };

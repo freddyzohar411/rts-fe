@@ -15,7 +15,7 @@ const TableElement = ({ formik, field, deleteTableData, setFormState }) => {
   useEffect(() => {
     setTableConfig(field.tableConfig);
     setTableSetting(field.tableSetting);
-  }, [field.tableConfig, field.tableSettings]);
+  }, [field.tableConfig, field.tableSettings, field.tableRerender]);
 
   console.log("tableConfig", tableConfig);
   console.log("tableSettings", tableSetting);
@@ -66,10 +66,13 @@ const TableElement = ({ formik, field, deleteTableData, setFormState }) => {
   const handleEdit = (row) => {
     // Set formik values based on row value and config
     console.log("row", row);
-    tableConfig.forEach((item) => {
+    tableConfig.forEach((item, index) => {
+      // console.log(index)
+      // console.log("Item Name: ", item.name)
+      // console.log("Item Value: ", row.data[item.name])
       formik.setFieldValue(item.name, row.data[item.name]);
     });
-    setFormState("update");
+    setFormState("tableUpdate");
   };
 
   // Delete from formfields

@@ -78,6 +78,12 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabel: "Department Select",
+      draggablePrefix: "element",
+      draggableId: "selectdepartment",
+      type: "field",
+    },
+    {
       draggableLabel: "Country Select",
       draggablePrefix: "element",
       draggableId: "selectcountry",
@@ -114,15 +120,27 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
-      draggableLabel: "Button",
+      draggableLabel: "Editor",
       draggablePrefix: "element",
-      draggableId: "button",
+      draggableId: "editor",
       type: "field",
     },
     {
       draggableLabel: "Text",
       draggablePrefix: "element",
       draggableId: "word",
+      type: "field",
+    },
+    {
+      draggableLabel: "Button",
+      draggablePrefix: "element",
+      draggableId: "button",
+      type: "field",
+    },
+    {
+      draggableLabel: "Button-Update",
+      draggablePrefix: "element",
+      draggableId: "buttonupdate",
       type: "field",
     },
   ];
@@ -158,7 +176,7 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggablePrefix: "layout",
       draggableId: "Column",
       type: "col",
-    }
+    },
   ];
 
   const unusedFieldsLength = (unusedFields) =>

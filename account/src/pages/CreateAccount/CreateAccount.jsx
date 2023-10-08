@@ -14,6 +14,7 @@ const AccountCreation = () => {
   const MAX_STEP = 6;
   const [step, setStep] = useState(1);
   const [formFormik, setFormFormik] = useState(null);
+  const [editData, setEditData] = useState(null);
 
   const handleFormikChange = useCallback((formik) => {
     // Handle formik change here
@@ -25,7 +26,8 @@ const AccountCreation = () => {
     dispatch(fetchAccountForm(AccountFormConstant[step]));
   }, [step]);
 
-  const handleFormSubmit = (event, values, newValues, buttonName) => {
+  const handleFormSubmit = (event, values, newValues, buttonName, formStateHook) => {
+    const { formState, setFormState } = formStateHook;
     console.log("values", values);
     console.log("newValues", newValues);
     console.log("Button Name:", buttonName);
@@ -86,6 +88,11 @@ const AccountCreation = () => {
               console.error("Error:", error);
             }
           );
+      }
+
+      if (buttonName === "cancel" && !editData) {
+        setFormState("create")
+        formFormik.resetForm();
       }
     }
 

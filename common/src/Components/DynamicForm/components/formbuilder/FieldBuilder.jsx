@@ -43,6 +43,7 @@ const FieldBuilder = ({
         "selectlandline",
         "submit",
         "table",
+        "selectdepartment"
       ],
     },
     {
@@ -73,6 +74,7 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectstate",
         "selectlandline",
+        "selectdepartment"
       ],
     },
 
@@ -97,6 +99,7 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectstate",
         "selectlandline",
+        "selectdepartment"
       ],
     },
     {
@@ -140,6 +143,7 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectstate",
         "selectlandline",
+        "selectdepartment"
       ],
     },
     {
@@ -164,6 +168,7 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectstate",
         "selectlandline",
+        "selectdepartment"
       ],
     },
     {
@@ -474,6 +479,7 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectlandline",
         "selectstate",
+        "selectdepartment"
       ],
     },
     {
@@ -512,6 +518,7 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectlandline",
         "selectstate",
+        "selectdepartment"
       ],
     },
     {
@@ -540,6 +547,7 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectlandline",
         "selectstate",
+        "selectdepartment"
       ],
     },
     // Which include key value pair for table
@@ -559,42 +567,6 @@ const FieldBuilder = ({
       name: "tableSetting",
       apply: ["table"],
     },
-    // {
-    //   label: "Table Edit",
-    //   type: "radio",
-    //   name: "tableEdit",
-    //   options: [
-    //     { label: "Yes", value: "true" },
-    //     { label: "No", value: "false" },
-    //   ],
-    //   apply: ["table"],
-    // },
-    // {
-    //   label: "Table Delete",
-    //   type: "radio",
-    //   name: "tableDelete",
-    //   options: [
-    //     { label: "Yes", value: "true" },
-    //     { label: "No", value: "false" },
-    //   ],
-    //   apply: ["table"],
-    // },
-    // {
-    //   label: "Table Use API",
-    //   type: "radio",
-    //   name: "tableAPI",
-    //   options: [
-    //     { label: "Yes", value: "true" },
-    //     { label: "No", value: "false" },
-    //   ],
-    //   apply: ["table"],
-    // },
-    // {
-    //   label: "Table API URL",
-    //   type: "text",
-    //   name: "tableAPIURL",
-    //   apply: ["table"],
-    // },
     {
       label: "Global Country Condition (Visible On)",
       type: "countryselect",
@@ -616,6 +588,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectcountry",
         "selectstate",
+        "selectdepartment"
       ],
     },
     {
@@ -648,6 +621,7 @@ const FieldBuilder = ({
         "selectstate",
         "submit",
         "table",
+        "selectdepartment"
       ],
     },
     {
@@ -679,19 +653,20 @@ const FieldBuilder = ({
         "selectstate",
         "submit",
         "table",
+        "selectdepartment"
       ],
     },
     {
       label: "Button Text",
       type: "text",
       name: "buttonText",
-      apply: ["button"],
+      apply: ["button","buttonupdate"],
     },
     {
       label: "Button name",
       type: "text",
       name: "buttonName",
-      apply: ["button"],
+      apply: ["button","buttonupdate"],
     },
     {
       label: "Button Type",
@@ -702,7 +677,7 @@ const FieldBuilder = ({
         { label: "Submit", value: "submit" },
       ],
       defaultValue: formBuilderUpdateData?.buttonType || "button",
-      apply: ["button"],
+      apply: ["button","buttonupdate"],
     },
     {
       label: "Button Location",
@@ -714,13 +689,13 @@ const FieldBuilder = ({
         { label: "Right", value: "right" },
       ],
       defaultValue: formBuilderUpdateData?.buttonLocation || "left",
-      apply: ["button"],
+      apply: ["button","buttonupdate"],
     },
     {
       label: "Button Class",
       type: "text",
       name: "buttonClass",
-      apply: ["button"],
+      apply: ["button","buttonupdate"],
     },
     {
       label: "Text",
@@ -787,6 +762,9 @@ const FieldBuilder = ({
     case "button":
       header = "Button Field";
       break;
+    case "buttonupdate":
+      header = "Button Update Field";
+      break;
     case "word":
       header = "Word Field";
       break;
@@ -798,6 +776,12 @@ const FieldBuilder = ({
       break;
     case "selectcity":
       header = "Select City Field";
+      break;
+    case "selectdepartment":
+      header = "Select Department Field";
+      break;
+    case "editor":
+      header = "Editor Field";
       break;
     default:
   }

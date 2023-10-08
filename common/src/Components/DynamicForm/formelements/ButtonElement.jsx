@@ -1,6 +1,7 @@
 import React from "react";
 
-const ButtonElement = ({ field, setButtonName }) => {
+const ButtonElement = ({ field, buttonNameHook }) => {
+  const {buttonName, setButtonName} = buttonNameHook;
   const buttonLocation = {
     left: "d-flex justify-content-start",
     center: "d-flex justify-content-center",
