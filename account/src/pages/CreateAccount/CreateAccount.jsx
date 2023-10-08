@@ -88,12 +88,17 @@ const AccountCreation = () => {
               console.error("Error:", error);
             }
           );
+          return;
       }
 
       if (buttonName === "cancel" && !editData) {
         setFormState("create")
         formFormik.resetForm();
+        return;
       }
+
+        console.log("Form Submission: ", newValues)
+      
     }
 
     // handleNext();

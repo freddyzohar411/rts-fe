@@ -15,6 +15,7 @@ const FieldBuilder = ({
   setFormFieldId,
   formFields,
   setShowModalSchema,
+  formOptions,
 }) => {
   // ========================= Field Setting =========================
   // Overall Form schema config (For all types of fields)
@@ -43,7 +44,8 @@ const FieldBuilder = ({
         "selectlandline",
         "submit",
         "table",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
     {
@@ -74,7 +76,8 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectstate",
         "selectlandline",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
 
@@ -99,7 +102,8 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectstate",
         "selectlandline",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
     {
@@ -143,7 +147,8 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectstate",
         "selectlandline",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
     {
@@ -168,7 +173,8 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectstate",
         "selectlandline",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
     {
@@ -479,7 +485,8 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectlandline",
         "selectstate",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
     {
@@ -518,7 +525,8 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectlandline",
         "selectstate",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
     {
@@ -547,7 +555,8 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectlandline",
         "selectstate",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
     // Which include key value pair for table
@@ -588,18 +597,21 @@ const FieldBuilder = ({
         "selectlandline",
         "selectcountry",
         "selectstate",
-        "selectdepartment"
+        "selectdepartment",
       ],
     },
     {
       label: "Field Type",
       type: "radio",
       name: "fieldType",
-      options: [
-        { label: "Static", value: "static" },
-        { label: "Predefined", value: "predefined" },
-        { label: "Custom", value: "custom" },
-      ],
+      options:
+        formOptions.formType === "base"
+          ? [
+              { label: "Static", value: "static" },
+              { label: "Predefined", value: "predefined" },
+              { label: "Custom", value: "custom" },
+            ]
+          : [{ label: "Custom", value: "custom" }],
       defaultValue: formBuilderUpdateData?.fieldType || "custom",
       apply: [
         "text",
@@ -621,7 +633,8 @@ const FieldBuilder = ({
         "selectstate",
         "submit",
         "table",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
     {
@@ -653,20 +666,21 @@ const FieldBuilder = ({
         "selectstate",
         "submit",
         "table",
-        "selectdepartment"
+        "selectdepartment",
+        "editor",
       ],
     },
     {
       label: "Button Text",
       type: "text",
       name: "buttonText",
-      apply: ["button","buttonupdate"],
+      apply: ["button", "buttonupdate"],
     },
     {
       label: "Button name",
       type: "text",
       name: "buttonName",
-      apply: ["button","buttonupdate"],
+      apply: ["button", "buttonupdate"],
     },
     {
       label: "Button Type",
@@ -677,7 +691,7 @@ const FieldBuilder = ({
         { label: "Submit", value: "submit" },
       ],
       defaultValue: formBuilderUpdateData?.buttonType || "button",
-      apply: ["button","buttonupdate"],
+      apply: ["button", "buttonupdate"],
     },
     {
       label: "Button Location",
@@ -689,13 +703,13 @@ const FieldBuilder = ({
         { label: "Right", value: "right" },
       ],
       defaultValue: formBuilderUpdateData?.buttonLocation || "left",
-      apply: ["button","buttonupdate"],
+      apply: ["button", "buttonupdate"],
     },
     {
       label: "Button Class",
       type: "text",
       name: "buttonClass",
-      apply: ["button","buttonupdate"],
+      apply: ["button", "buttonupdate"],
     },
     {
       label: "Text",

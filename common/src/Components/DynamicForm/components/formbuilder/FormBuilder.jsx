@@ -1078,6 +1078,7 @@ const FormBuilder = ({
               setFormFieldId={setFormFieldId}
               formFields={formFields}
               setShowModalSchema={setShowModalSchema}
+              formOptions={formOptions}
             />
           )}
         </Modal>
