@@ -28,7 +28,8 @@ const generateFormField = (
   formik,
   deleteTableData,
   buttonNameHook,
-  formStateHook
+  formStateHook,
+  formFieldsHook
 ) => {
   const { type } = field;
 
@@ -85,6 +86,7 @@ const generateFormField = (
         formik={formik}
         deleteTableData={deleteTableData}
         setFormState={formStateHook.setFormState}
+        formFieldsHook={formFieldsHook}
       />
     );
   }

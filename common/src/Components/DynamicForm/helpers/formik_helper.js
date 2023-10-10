@@ -15,7 +15,7 @@ const generateInitialValues = (formFieldData, formik) => {
     // if (field.name === "") return acc;
 
     // If there is a subname, then add it to the initial values
-    if ( field.subName && field.subName !== "") {
+    if (field.subName && field.subName !== "") {
       return {
         ...acc,
         [field.name]: "",
@@ -172,33 +172,45 @@ const generateValidationSchema2 = (
         );
       }
 
-      // File
-      if (field.fileTypeValidation) {
-        fieldValidation = fieldValidation.test(
-          "fileType",
-          field.fileTypeValidationErrorMessage,
-          (value) => {
-            if (!value) return true; // allow empty values
-            const validExtensions = field.fileTypeValidation; // List of valid extensions
-            const extension = value.name.split(".").pop(); // Extract extension
-            return validExtensions.includes(extension);
-          }
-        );
-      }
+      if (field.type === "file") {
+        console.log("Field Type", field.type);
+        // 
+        // File
 
-      if (field.fileSizeValidation) {
-        fieldValidation = fieldValidation.test(
-          "fileSize",
-          field.fileSizeValidationErrorMessage,
-          (value) => {
-            if (!value) return true; // allow empty values
-            const maxFileSize =
-              parseInt(field.fileSizeValidation) * 1024 * 1024; // Maximum file size (in bytes)
-            console.log("Max file size allowable", maxFileSize);
-            console.log("File size", value.size);
-            return value.size <= maxFileSize;
-          }
-        );
+        if (field.fileTypeValidation) {
+          fieldValidation = fieldValidation.test(
+            "fileType",
+            field.fileTypeValidationErrorMessage,
+            (value) => {
+              if (!value) return true; // allow empty values
+              const validExtensions = field.fileTypeValidation; // List of valid extensions
+              let extension = null;
+              if (value?.name) {
+               extension = value.name.split(".").pop(); // Extract extension
+              } else {
+                extension = value.split(".").pop(); // Extract extension
+              }
+              return validExtensions.includes(extension);
+            }
+          );
+        }
+
+        if (field.fileSizeValidation) {
+          fieldValidation = fieldValidation.test(
+            "fileSize",
+            field.fileSizeValidationErrorMessage,
+            (value) => {
+              console.log("File size validation", value)
+              if (!value || value === undefined) return true; // allow empty values
+              if (typeof value === "string") return true; // allow empty values
+              const maxFileSize =
+                parseInt(field.fileSizeValidation) * 1024 * 1024; // Maximum file size (in bytes)
+              console.log("Max file size allowable", maxFileSize);
+              console.log("File size", value.size);
+              return value.size <= maxFileSize;
+            }
+          );
+        }
       }
 
       return { ...acc, [field.name]: fieldValidation };

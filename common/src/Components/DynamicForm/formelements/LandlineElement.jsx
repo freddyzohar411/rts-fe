@@ -35,6 +35,20 @@ const LandlineElement = ({ field, formik }) => {
   });
 
   useEffect(() => {
+    if (formik.values[field.subName] && countryData) {
+      const country = countryData.find(
+        (country) => country.id === formik.values[field.subName]
+      );
+      setSelectedLandline({
+        landlineCountry: `${country?.phoneCode.charAt(0) == "+" ? "" : "+"} ${
+          country?.phoneCode
+        } (${country?.name})`,
+        landlineCountryId: formik.values[field.subName],
+      });
+    }
+  }, [formik.values[field.subName]]);
+
+  useEffect(() => {
     if (selectedLandline.landlineCountryId) {
       formik.setFieldValue(field.subName, selectedLandline.landlineCountryId);
     }
@@ -71,6 +85,7 @@ const LandlineElement = ({ field, formik }) => {
         className="form-control"
         placeholder={field.placeholder}
         onChange={formik.handleChange}
+        value={formik.values[field.name]}
       />
       <DropdownMenu
         as="ul"

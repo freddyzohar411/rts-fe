@@ -20,6 +20,7 @@ const IndustrySelectElement = ({ formik, field }) => {
         <select
           name={field.name}
           onChange={formik.handleChange}
+          value={formik.values[field.name]}
           onBlur={formik.handleBlur}
           className="form-select"
         >

@@ -1,14 +1,9 @@
 import React from "react";
+import { fieldLocation } from "./constant";
 
 const ButtonUpdateElement = ({ field, formik, buttonNameHook, formStateHook }) => {
   const {buttonName, setButtonName} = buttonNameHook;
   const {formState, setFormState} = formStateHook;
-
-  const buttonLocation = {
-    left: "d-flex justify-content-start",
-    center: "d-flex justify-content-center",
-    right: "d-flex justify-content-end",
-  };
 
   const buttonJsx = (
     <button
@@ -43,7 +38,7 @@ const ButtonUpdateElement = ({ field, formik, buttonNameHook, formStateHook }) =
   );
 
   return (
-    <div className={buttonLocation[field.buttonLocation]}>
+    <div className={fieldLocation[field.fieldLocation]}>
       {(formState === "create" || formState === "update") && buttonJsx}
       {formState === "tableUpdate" && updateButtonJsx}
     </div>

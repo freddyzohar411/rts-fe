@@ -12,20 +12,6 @@ import {
   generateInitialValues,
   generateValidationSchema2,
 } from "../../helpers/formik_helper";
-import {
-  Label,
-  Row,
-  Col,
-  Input,
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
-  FormFeedback,
-  Button,
-  Alert,
-  Container,
-} from "reactstrap";
 
 const Form = ({
   template,
@@ -35,7 +21,6 @@ const Form = ({
   showFormName,
   onFormikChange,
   onSubmit,
-  onFormFieldsChange
 }) => {
   const [formState, setFormState] = useState("create");
   const [formFields, setFormFields] = useState(template?.formSchema || []);
@@ -46,28 +31,15 @@ const Form = ({
   const [formikValidationSchema, setFormikValidationSchema] = useState({});
   const [formName, setFormName] = useState(template?.formName || "");
   const [buttonName, setButtonName] = useState("");
-  const [editDataValues, setEditDataValues] = useState(null);
-
-  console.log("Form Fields: ", formFields);
-
-  useEffect(() => {
-    onFormFieldsChange(formFields)
-  },[formFields])
 
   /**
    * Set Form state
    */
   useEffect(() => {
-    if (editData !== null) {
+    if (editData) {
       setFormState("update");
-      setEditDataValues(editData);
-    } else {
-      setFormState("create");
-      setEditDataValues(null);
     }
   }, [editData]);
-
-  console.log("editDataValues", editDataValues)
 
   /**
    * Set template data
@@ -91,10 +63,10 @@ const Form = ({
       setFormikInitialValues(generateInitialValues(formFields));
       setFormikValidationSchema(generateValidationSchema2(formFields));
     } else {
-      setFormikInitialValues(editDataValues);
+      setFormikInitialValues(editData);
       setFormikValidationSchema(generateValidationSchema2(formFields));
     }
-  }, [formFields, editDataValues]);
+  }, [formFields, editData]);
 
   // =====================================================
   /**
@@ -153,10 +125,8 @@ const Form = ({
 
     // Reset formik values
 
-    await onSubmit(event, values, newValues, buttonName, {
-      formState,
-      setFormState,
-    });
+
+    await onSubmit(event, values, newValues, buttonName , { formState, setFormState });
   };
 
   /**
@@ -188,10 +158,10 @@ const Form = ({
       setFormikInitialValues(generateInitialValues(formFields));
       setFormikValidationSchema(generateValidationSchema2(formFields, formik));
     } else {
-      setFormikInitialValues(editDataValues);
+      setFormikInitialValues(editData);
       setFormikValidationSchema(generateValidationSchema2(formFields, formik));
     }
-  }, [formik.values, editDataValues]);
+  }, [formik.values, editData]);
 
   // Handle copy field options if exist for fields
   useEffect(() => {
@@ -217,65 +187,60 @@ const Form = ({
   }, [onFormikChange]);
 
   return (
-    <Container style={{ paddingRight: "40px" }}>
-      <div className="">
-        {formik && (
-          <FormikProvider value={formik}>
-            {showFormName && (
-              <>
-                <div className="d-flex gap-2 mb-4">
-                  <h1>{formName}</h1>
-                </div>
-                <hr />
-              </>
-            )}
-            <div>
-              <form onSubmit={formik.handleSubmit} className="drag-zone">
-                {/* <div className="lists-container"> */}
+    <div className="">
+      {formik && (
+        <FormikProvider value={formik}>
+          {showFormName && (
+            <>
+              <div className="d-flex gap-2 mb-4">
+                <h1>{formName}</h1>
+              </div>
+              <hr />
+            </>
+          )}
+          <div>
+            <form onSubmit={formik.handleSubmit} className="drag-zone">
+              <div className="lists-container">
                 {formLayoutSchema.map((row) => (
-                  <Row>
-                    <FormSectionList
-                      key={row.rowId}
-                      row={row}
-                      formik={formik}
-                      formFields={formFields}
-                      formFieldsHook={{ formFields, setFormFields }}
-                      deleteTableData={deleteTableData}
-                      setFormState={setFormState}
-                      userDetails={userDetails}
-                      country={country}
-                      buttonNameHook={{ buttonName, setButtonName }}
-                      formStateHook={{ formState, setFormState }}
-                    />
-                  </Row>
+                  <FormSectionList
+                    key={row.rowId}
+                    row={row}
+                    formik={formik}
+                    formFields={formFields}
+                    deleteTableData={deleteTableData}
+                    setFormState={setFormState}
+                    userDetails={userDetails}
+                    country={country}
+                    buttonNameHook={{ buttonName, setButtonName }}
+                    formStateHook={{ formState, setFormState }}
+                  />
                 ))}
-                {/* </div> */}
+              </div>
 
-                {/* {formFields.length > 0 && (
-              <button type="submit" className="btn btn-primary mt-3">
-                {formState === "create" ? "Create" : "Update"}
-              </button>
-            )} */}
+              {/* {formFields.length > 0 && (
+                <button type="submit" className="btn btn-primary mt-3">
+                  {formState === "create" ? "Create" : "Update"}
+                </button>
+              )} */}
 
-                {/* {formState === "update" && (
-              <button
-                type="button"
-                className="btn btn-danger mt-3 ms-3"
-                onClick={() => {
-                  setFormState("create");
-                  // Reset formik values
-                  formik.resetForm();
-                }}
-              >
-                Cancel
-              </button>
-            )} */}
-              </form>
-            </div>
-          </FormikProvider>
-        )}
-      </div>
-    </Container>
+              {/* {formState === "update" && (
+                <button
+                  type="button"
+                  className="btn btn-danger mt-3 ms-3"
+                  onClick={() => {
+                    setFormState("create");
+                    // Reset formik values
+                    formik.resetForm();
+                  }}
+                >
+                  Cancel
+                </button>
+              )} */}
+            </form>
+          </div>
+        </FormikProvider>
+      )}
+    </div>
   );
 };
 

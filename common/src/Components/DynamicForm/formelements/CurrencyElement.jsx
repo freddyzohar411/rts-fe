@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, DropdownToggle, Input, DropdownMenu, DropdownItem } from "reactstrap";
+import {
+  Dropdown,
+  DropdownToggle,
+  Input,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
 import { fetchCountryCurrency } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -25,8 +31,20 @@ const CurrencyElement = ({ field, formik }) => {
   const [currencyDropdown, setCurrencyDropdown] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState({
     currency: "Currency",
-    currencyId: null,
+    currencyId: formik.values[field.subName],
   });
+
+  useEffect(() => {
+    if (formik.values[field.subName] && countryData) {
+      const country = countryData.find(
+        (country) => country.id === formik.values[field.subName]
+      );
+      setSelectedCurrency({
+        currency: `${country?.currency} ${country?.currencySymbol}`,
+        currencyId: formik.values[field.subName],
+      });
+    }
+  }, [formik.values[field.subName]]);
 
   useEffect(() => {
     if (selectedCurrency.currencyId) {

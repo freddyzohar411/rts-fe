@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-const TableElement = ({ formik, field, deleteTableData, setFormState }) => {
+const TableElement = ({ formik, field, deleteTableData, setFormState, formFieldsHook }) => {
+  const { formFields, setFormFields } = formFieldsHook;
   console.log("TableElement", field);
   const [tableConfig, setTableConfig] = useState(
     field?.tableConfig ? field.tableConfig : []
@@ -13,8 +14,13 @@ const TableElement = ({ formik, field, deleteTableData, setFormState }) => {
   console.log("table Field in Table Element", field);
 
   useEffect(() => {
+    setFormFieldTableData(table)
+  }, [table]);
+
+  useEffect(() => {
     setTableConfig(field.tableConfig);
     setTableSetting(field.tableSetting);
+    // setFormFieldTableData(table);
   }, [field.tableConfig, field.tableSettings, field.tableRerender]);
 
   console.log("tableConfig", tableConfig);
@@ -28,9 +34,20 @@ const TableElement = ({ formik, field, deleteTableData, setFormState }) => {
         const formDataList = data.data;
         console.log("formDataList", formDataList);
         setTable(mapTableData(formDataList));
+        // setFormFieldTableData(mapTableData(formDataList));
       });
     });
   };
+
+  const setFormFieldTableData = (data) => {
+    const newFormFields = [...formFields];
+    newFormFields.forEach((formField) => {
+      if (formField.name === field.name) {
+        formField.tableData = data;
+      }
+    });
+    setFormFields(newFormFields);
+  }
 
   console.log("TABBLE RENDER", field.tableRerender);
 
@@ -89,6 +106,7 @@ const TableElement = ({ formik, field, deleteTableData, setFormState }) => {
           getTableData();
         });
     }
+
     // } else {
     //   deleteTableData(rowIndex);
     // }

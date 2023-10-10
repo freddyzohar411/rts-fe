@@ -963,8 +963,9 @@ const FormBuilder = ({
                               removeUnusedFieldFromSchema
                             }
                             formOptions={formOptions}
-                            formStateHook={{formState, setFormState}}
-                            buttonNameHook={{buttonName, setButtonName}}
+                            formStateHook={{ formState, setFormState }}
+                            buttonNameHook={{ buttonName, setButtonName }}
+                            formFieldsHook={{ formFields, setFormFields }}
                           />
                         </DnDWrapper>
                       ))

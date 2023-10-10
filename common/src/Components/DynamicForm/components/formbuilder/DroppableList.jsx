@@ -34,7 +34,8 @@ const DroppableList = ({
   removeUnusedFieldFromSchema,
   formOptions,
   buttonNameHook,
-  formStateHook
+  formStateHook,
+  formFieldsHook,
 }) => {
   const { rowId, title, isTitle } = row;
 
@@ -158,6 +159,7 @@ const DroppableList = ({
                                 deleteTableData,
                                 buttonNameHook,
                                 formStateHook,
+                                formFieldsHook
                               )}
                               {formik.errors[field.name] &&
                               formik.touched[field.name] ? (
