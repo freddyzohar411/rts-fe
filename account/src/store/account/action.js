@@ -62,3 +62,37 @@ export const createAccountFailure = (error) => ({
   type: CREATE_ACCOUNT_FAILURE,
   payload: error,
 });
+
+// Post an account
+export const postAccount = (accountRequest) => ({
+  type: POST_ACCOUNT,
+  payload: accountRequest,
+});
+
+export const postAccountSuccess = (account) => ({
+  type: POST_ACCOUNT_SUCCESS,
+  payload: account,
+});
+
+export const postAccountFailure = (error) => ({
+  type: POST_ACCOUNT_FAILURE,
+  payload: error,
+});
+
+// Put an account
+export const putAccount = (accountRequest) => ({
+  type: PUT_ACCOUNT,
+  payload: accountRequest,
+});
+
+export const putAccountSuccess = (account) => ({
+  type: PUT_ACCOUNT_SUCCESS,
+  payload: account,
+});
+
+export const putAccountFailure = (error) => ({
+  type: PUT_ACCOUNT_FAILURE,
+  payload: error,
+});
+
+

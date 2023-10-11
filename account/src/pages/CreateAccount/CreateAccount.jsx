@@ -4,6 +4,11 @@ import { Button, Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  postAccount,
+  putAccount,
+  postAccountSuccess,
+} from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
 import { AccountFormConstant } from "./accountFormConstant";
 import { fetchDraftAccount } from "../../store/accountregistration/action";
@@ -35,6 +40,8 @@ const AccountCreation = () => {
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
 
+  console.log("STEP: ", step);
+
   /**
    * Fetch form template based on step
    * Can make changes to form template here before loading to form
@@ -42,7 +49,22 @@ const AccountCreation = () => {
   useEffect(() => {
     if (form) {
       if (step === 1) {
-        const formEdited = setTableAPI(form, "contactList", "xxxx", "yyyy")
+        const formEdited = setTableAPI(
+          form,
+          "contactList",
+          `http://localhost:8700/contacts/entity/account_contact/${accountId}`,
+          `http://localhost:8700/contacts`
+        );
+        setFormTemplate(formEdited);
+        return;
+      }
+      if (step === 2) {
+        const formEdited = setTableAPI(
+          form,
+          "documentList",
+          `http://localhost:8500/documents/entity/account_document/${accountId}`,
+          `http://localhost:8500/documents`
+        );
         setFormTemplate(formEdited);
         return;
       }
@@ -52,11 +74,11 @@ const AccountCreation = () => {
 
   /**
    * Set table API method
-   * @param {*} form 
-   * @param {*} tableName 
-   * @param {*} getAPI 
-   * @param {*} deleteAPI 
-   * @returns 
+   * @param {*} form
+   * @param {*} tableName
+   * @param {*} getAPI
+   * @param {*} deleteAPI
+   * @returns
    */
   const setTableAPI = (form, tableName, getAPI, deleteAPI) => {
     const newForm = JSON.parse(JSON.stringify(form));
@@ -67,7 +89,7 @@ const AccountCreation = () => {
       }
     });
     return newForm;
-  }
+  };
 
   /**
    * Fetch draft account if there is
@@ -86,9 +108,6 @@ const AccountCreation = () => {
     if (accountId) {
       if (step === 0) {
         dispatch(fetchAccountFormSubmission("account_account", accountId));
-      }
-      if(step === 1) {
-        // dispatch(fetchAccountFormSubmission("account_contact", accountId));
       }
     }
   }, [accountId, step]);
@@ -126,17 +145,30 @@ const AccountCreation = () => {
    * @param {*} formStateHook
    * @returns
    */
-  const handleFormSubmit = (
+  const handleFormSubmit = async (
     event,
     values,
     newValues,
     buttonName,
-    formStateHook
+    formStateHook,
+    rerenderTable
   ) => {
     const { formState, setFormState } = formStateHook;
     console.log("values", values);
     console.log("newValues", newValues);
     console.log("Button Name:", buttonName);
+    console.log("Step: ", step);
+    // Set a reset form function
+    const resetForm = (arrayFields = []) => {
+      formFormik.resetForm();
+      if (arrayFields.length > 0) {
+        arrayFields.forEach((fieldName) =>
+          formFormik.setFieldValue(fieldName, "")
+        );
+      }
+      setFormState("create");
+    };
+
     if (step === 0) {
       console.log("Step 0");
       if (formSubmissionData === null) {
@@ -192,25 +224,21 @@ const AccountCreation = () => {
           formId: parseInt(form.formId),
         };
 
-        console.log("Account data Object", accountDataOut);
-
         const formDataUpdate =
           ObjectHelper.convertObjectToFormData(accountDataOut);
-        axios
-          .put(`http://localhost:8100/accounts/${accountId}`, formDataUpdate, {
-            headers: {
+
+        dispatch(
+          putAccount({
+            entity: "account_account",
+            id: accountId,
+            newData: formDataUpdate,
+            config: {
               "Content-Type": "multipart/form-data",
             },
           })
-          .then((response) => {
-            console.log("Account Update Success: ", response);
-            console.log("Dispatching...")
-            // dispatch(clearAccountFormSubmission());
-            handleNext();
-          })
-          .catch((error) => {
-            console.log("Account Update Error: ", error);
-          });
+        );
+
+        handleNext();
       }
 
       // fetch("http://localhost:9400/form-submissions", {
@@ -235,45 +263,147 @@ const AccountCreation = () => {
     }
 
     if (step === 1) {
+      console.log("Step 1");
       if (buttonName === "add") {
-        console.log("add a contact now!");
-        const submitData = {
-          formId: form.id,
-          submissionData: JSON.stringify(newValues),
-          entityId: 1,
-          entityType: "Account",
+        const newData = {
+          ...newValues,
+          entityId: accountId,
+          entityType: "account_contact",
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
         };
-        fetch("http://localhost:9400/form-submissions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(submitData),
-        })
-          .then((response) => response.json())
-          .then(
-            (data) => {
-              const reponseData = data.data;
-              reponseData.submissionData = JSON.parse(
-                reponseData.submissionData
-              );
-              console.log("Success Data:", reponseData);
-              formFormik.resetForm();
-            },
-            (error) => {
-              console.error("Error:", error);
-            }
-          );
+
+        dispatch(
+          postAccount({
+            entity: "account_contact",
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm,
+          })
+        );
         return;
       }
 
       if (buttonName === "cancel" && !editData) {
-        setFormState("create");
-        formFormik.resetForm();
+        resetForm();
         return;
       }
 
-      console.log("Form Submission: ", newValues);
+      if (buttonName === "tableUpdate") {
+        console.log("Update Contact");
+        const newData = {
+          ...newValues,
+          entityId: accountId,
+          entityType: "account_contact",
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
+
+        // Get update id
+        const table = formFieldsData.find(
+          (field) => field.type === "table" && field.name === "contactList"
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putAccount({
+            entity: "account_contact",
+            id: tableEditId,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm(),
+          })
+        );
+      }
+    }
+
+    if (step === 2) {
+      if (buttonName === "add") {
+        console.log("Add Address");
+        let formValues = { ...newValues };
+        const documentData = { ...formValues };
+        const fileData = formValues?.file;
+        const fileName = fileData?.name;
+        formValues = { ...formValues, file: fileName };
+        const documentDataOut = {
+          ...documentData,
+          entityType: "account_document",
+          entityId: parseInt(accountId),
+          formData: JSON.stringify(formValues),
+          formId: parseInt(form.formId),
+        };
+        delete documentDataOut.documentList;
+        console.log("Document Data: ", documentDataOut);
+
+        const documentFormData =
+          ObjectHelper.convertObjectToFormData(documentDataOut);
+        console.log("Document Data Form: ", documentFormData);
+        dispatch(
+          postAccount({
+            entity: "account_document",
+            newData: documentFormData,
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
+            rerenderTable: rerenderTable,
+            resetForm: resetForm(['file']),
+          })
+        );
+      }
+
+      if (buttonName === "cancel" && !editData) {
+        resetForm();
+        return;
+      }
+
+      if (buttonName === "tableUpdate") {
+        console.log("Update Document");
+        let formValues = { ...newValues };
+        const documentData = { ...formValues };
+        const fileData = formValues?.file;
+        if (typeof fileData === "string") {
+          // Remove upload agreement from object
+          formValues = { ...formValues, file: fileData };
+          delete documentData.file;
+        } else {
+          const fileName = fileData?.name;
+          formValues = { ...formValues, file: fileName };
+        }
+
+        const documentDataOut = {
+          ...documentData,
+          entityType: "account_document",
+          entityId: parseInt(accountId),
+          formData: JSON.stringify(formValues),
+          formId: parseInt(form.formId),
+        };
+        delete documentDataOut.documentList;
+
+        const documentFormData =
+          ObjectHelper.convertObjectToFormData(documentDataOut);
+
+        // Get update id
+        const table = formFieldsData.find(
+          (field) => field.type === "table" && field.name === "documentList"
+        );
+        const { tableEditId } = table.tableSetting;
+        console.log("Table edit Id: ", tableEditId);
+        dispatch(
+          putAccount({
+            entity: "account_document",
+            id: tableEditId,
+            newData: documentFormData,
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
+            rerenderTable: rerenderTable,
+            resetForm: resetForm(['file']),
+          })
+        );
+      }
     }
   };
 

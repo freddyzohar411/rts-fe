@@ -35,7 +35,7 @@ const Form = ({
   showFormName,
   onFormikChange,
   onSubmit,
-  onFormFieldsChange
+  onFormFieldsChange,
 }) => {
   const [formState, setFormState] = useState("create");
   const [formFields, setFormFields] = useState(template?.formSchema || []);
@@ -51,8 +51,8 @@ const Form = ({
   console.log("Form Fields: ", formFields);
 
   useEffect(() => {
-    onFormFieldsChange(formFields)
-  },[formFields])
+    onFormFieldsChange(formFields);
+  }, [formFields]);
 
   /**
    * Set Form state
@@ -67,7 +67,7 @@ const Form = ({
     }
   }, [editData]);
 
-  console.log("editDataValues", editDataValues)
+  console.log("editDataValues", editDataValues);
 
   /**
    * Set template data
@@ -112,6 +112,21 @@ const Form = ({
     setFormFields(newFormFields);
   };
 
+  const rerenderTable = () => {
+    let newFormFields = JSON.parse(JSON.stringify(formFields));
+    // newFormFields = setTableData(newFormFields, newValues);
+    newFormFields.forEach((field) => {
+      if (field.type === "table") {
+        field.tableSetting = {
+          ...field.tableSetting,
+          tableRerender: !field.tableSetting.tableRerender,
+        };
+      }
+    });
+    setFormFields(newFormFields);
+  }
+
+
   /**
    * Handle Form Submit
    * @param {*} values
@@ -142,22 +157,41 @@ const Form = ({
     });
 
     // Set table data and toggle rerender
-    let newFormFields = JSON.parse(JSON.stringify(formFields));
-    // newFormFields = setTableData(newFormFields, newValues);
-    newFormFields.forEach((field) => {
-      if (field.type === "table") {
-        field.tableRerender = !field.tableRerender;
-      }
-    });
-    setFormFields(newFormFields);
+    // let newFormFields = JSON.parse(JSON.stringify(formFields));
+    // // newFormFields = setTableData(newFormFields, newValues);
+    // newFormFields.forEach((field) => {
+    //   if (field.type === "table") {
+    //     field.tableRerender = !field.tableRerender;
+    //   }
+    // });
+    // setFormFields(newFormFields);
 
-    // Reset formik values
+    await onSubmit(
+      event,
+      values,
+      newValues,
+      buttonName,
+      {
+        formState,
+        setFormState,
+      },
+      rerenderTable
+    );
 
-    await onSubmit(event, values, newValues, buttonName, {
-      formState,
-      setFormState,
-    });
+    // let newFormFields = JSON.parse(JSON.stringify(formFields));
+    // // newFormFields = setTableData(newFormFields, newValues);
+    // newFormFields.forEach((field) => {
+    //   if (field.type === "table") {
+    //     console.log("FLIP!!");
+    //     field.tableSetting = {
+    //       ...field.tableSetting,
+    //       tableRerender: !field.tableSetting.tableRerender,
+    //     };
+    //   }
+    // });
+    // setFormFields(newFormFields);
   };
+
 
   /**
    * Check which field with tableData and  add it to the array

@@ -1,56 +1,66 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 
-import { FETCH_ACCOUNT, FETCH_ACCOUNTS, CREATE_ACCOUNT } from "./actionTypes";
 import {
-  fetchAccountSuccess,
-  fetchAccountFailure,
-  fetchAccountsSuccess,
-  fetchAccountsFailure,
-  createAccountSuccess,
-  createAccountFailure,
+  // FETCH_ACCOUNT,
+  // FETCH_ACCOUNTS,
+  // CREATE_ACCOUNT,
+  POST_ACCOUNT,
+  PUT_ACCOUNT,
+} from "./actionTypes";
+import {
+  // fetchAccountSuccess,
+  // fetchAccountFailure,
+  // fetchAccountsSuccess,
+  // fetchAccountsFailure,
+  postAccountSuccess,
+  postAccountFailure,
+  putAccountSuccess,
+  putAccountFailure,
 } from "./action";
-import { getAccounts } from "../../helpers/backend_helper";
+import {
+  getAccounts,
+  createAccount,
+  updateAccount,
+} from "../../helpers/backend_helper";
 
-// Fetch Account
-function* workFetchAccount(action) {
+// Post account
+function* workPostAccount(action) {
+  const { entity, newData, config, rerenderTable, resetForm } = action.payload;
+  console.log("Config", config)
   try {
-    const response = yield call(
-      axios.get,
-      `http://localhost:8100/accounts/${action.payload}`
-    );
-    yield put(fetchAccountSuccess(response.data));
+    const response = yield call(createAccount, entity, newData, config);
+    yield put(postAccountSuccess(response.data));
+    if (typeof rerenderTable === "function") {
+      console.log("WorkPost table renderer");
+      rerenderTable();
+    }
+    if (typeof resetForm === "function") {
+      resetForm();
+    }
   } catch (error) {
-    yield put(fetchAccountFailure(error));
+    yield put(postAccountFailure(error));
   }
 }
 
-// Fetch Accounts
-function* workFetchAccounts(action) {
+// Put Account
+function* workPutAccount(action) {
+  const { entity, id, newData, config, rerenderTable, resetForm } = action.payload;
   try {
-    const response = yield call(getAccounts, action.payload);
-    yield put(fetchAccountsSuccess(response.data));
+    const response = yield call(updateAccount, entity, id, newData, config);
+    yield put(putAccountSuccess(response.data));
+    if (typeof rerenderTable === "function") {
+      rerenderTable();
+    }
+    if (typeof resetForm === "function") {
+      resetForm();
+    }
   } catch (error) {
-    yield put(fetchAccountsFailure(error));
-  }
-}
-
-// Create an Account
-function* workCreateAccount(action) {
-  try {
-    const response = yield call(
-      axios.post,
-      "http://localhost:8100/accounts",
-      action.payload
-    );
-    yield put(createAccountSuccess(response.data));
-  } catch (error) {
-    yield put(createAccountFailure(error));
+    yield put(putAccountFailure(error));
   }
 }
 
 export default function* watchFetchAccountSaga() {
-  yield takeEvery(FETCH_ACCOUNT, workFetchAccount);
-  yield takeEvery(FETCH_ACCOUNTS, workFetchAccounts);
-  yield takeEvery(CREATE_ACCOUNT, workCreateAccount);
+  yield takeEvery(POST_ACCOUNT, workPostAccount);
+  yield takeEvery(PUT_ACCOUNT, workPutAccount);
 }

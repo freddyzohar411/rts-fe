@@ -15,11 +15,9 @@ const FormStepper = ({
       console.log("SUBMITT NO VALIDAtion");
     }
     if (activeStep === 1) {
-      console.log("Form field Data: ", formFieldsData)
       const table = formFieldsData.filter(
         (field) => field.name === "contactList"
       );
-      console.log('table: ', table)
       if (table.length === 1 && table[0]?.tableData?.length > 1) {
         handleNext();
       } else {

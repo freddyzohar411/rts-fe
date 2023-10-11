@@ -22,7 +22,6 @@ const AccountFormReducer = (state = initialState, action) => {
   console.log("AccountFormReducer", action.type, action.payload)
   switch (action.type) {
     case CLEAR_ACCOUNTFORM_SUBMISSION:
-      console.log("Clearing.....");
       return {
         ...state,
         formSubmission: null,
@@ -66,7 +65,6 @@ const AccountFormReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_ACCOUNTFORM_SUBMISSION_SUCCESS:
-      console.log("FETCH_ACCOUNTFORM_SUBMISSION_SUCCESS", action.payload);
       const submissionData = JSON.parse(action.payload.submissionData);
       return {
         ...state,

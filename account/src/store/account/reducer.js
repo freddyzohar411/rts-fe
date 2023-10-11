@@ -8,6 +8,12 @@ import {
   CREATE_ACCOUNT,
   CREATE_ACCOUNT_SUCCESS,
   CREATE_ACCOUNT_FAILURE,
+  POST_ACCOUNT,
+  POST_ACCOUNT_SUCCESS,
+  POST_ACCOUNT_FAILURE,
+  PUT_ACCOUNT,
+  PUT_ACCOUNT_SUCCESS,
+  PUT_ACCOUNT_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
@@ -16,6 +22,7 @@ const initialState = {
   errorMsg: "",
   loading: false,
   error: false,
+  success: false,
 };
 
 const AccountReducer = (state = initialState, action) => {
@@ -76,12 +83,62 @@ const AccountReducer = (state = initialState, action) => {
         account: action.payload,
       };
     case CREATE_ACCOUNT_FAILURE:
+    return {
+      ...state,
+      loading: false,
+      error: true,
+      errorMsg: action.payload,
+    };
+
+    // Post an Account
+    case POST_ACCOUNT:
+      console.log("POST_ACCOUNT")
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case POST_ACCOUNT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        account: action.payload,
+        success: true,
+      };
+    case POST_ACCOUNT_FAILURE:
       return {
         ...state,
         loading: false,
         error: true,
         errorMsg: action.payload,
+        success: true
       };
+    
+
+    // Put an Account
+    case PUT_ACCOUNT:
+      console.log("PUT_ACCOUNT")
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case PUT_ACCOUNT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        account: action.payload,
+        success: true,
+      };
+    case PUT_ACCOUNT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+        success: false,
+      };
+
     default:
       return state;
   }

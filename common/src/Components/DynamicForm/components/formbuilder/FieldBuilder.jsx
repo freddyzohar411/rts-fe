@@ -888,6 +888,8 @@ const FieldBuilder = ({
           tableUseAPI: false,
           tableGetAPI: "",
           tableDeleteAPI: "",
+          tableRenderer: false,
+          tableEditId: null
         }
   );
 
