@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import AccountStepper from "../../components/AccountStepper/AccountStepper";
+import { useNavigate } from "react-router-dom";
 import { Button, Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
@@ -21,6 +21,7 @@ import axios from "axios";
 
 const AccountCreation = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const form = useSelector((state) => state.AccountFormReducer.form);
   const accountId = useSelector(
@@ -29,8 +30,15 @@ const AccountCreation = () => {
   const formSubmissionData = useSelector(
     (state) => state.AccountFormReducer.formSubmission
   );
+
+  const editId = useSelector((state) => state.AccountFormReducer.editId);
+
+  const updateData = useSelector(
+    (state) => state.AccountFormReducer.formSubmission
+  );
+
   const formSubmissionDataLoading = useSelector(
-    (state) => state.AccountFormReducer.loading
+    (state) => state.AccountFormReducer.formSubmissionLoading
   );
 
   const MAX_STEP = 6;
@@ -68,6 +76,16 @@ const AccountCreation = () => {
         setFormTemplate(formEdited);
         return;
       }
+      if (step === 3) {
+        const formEdited = setTableAPI(
+          form,
+          "instructionDocumentList",
+          `http://localhost:8500/documents/entity/account_instruction_document/${accountId}`,
+          `http://localhost:8500/documents`
+        );
+        setFormTemplate(formEdited);
+        return;
+      }
       setFormTemplate(form);
     }
   }, [step, form]);
@@ -95,8 +113,10 @@ const AccountCreation = () => {
    * Fetch draft account if there is
    */
   useEffect(() => {
+
     dispatch(fetchDraftAccount());
-  }, []);
+
+  }, [step]);
 
   console.log("Draft Account Id: ", accountId);
 
@@ -108,6 +128,12 @@ const AccountCreation = () => {
     if (accountId) {
       if (step === 0) {
         dispatch(fetchAccountFormSubmission("account_account", accountId));
+      }
+      if (step === 3) {
+        dispatch(fetchAccountFormSubmission("account_instruction", accountId));
+      }
+      if (step === 5){
+        dispatch(fetchAccountFormSubmission("account_commercial", accountId));
       }
     }
   }, [accountId, step]);
@@ -126,7 +152,6 @@ const AccountCreation = () => {
    */
   const handleFormFieldChange = useCallback((formFields) => {
     setFormFieldsData(formFields);
-    console.log("Form field changed");
   }, []);
 
   /**
@@ -149,16 +174,17 @@ const AccountCreation = () => {
     event,
     values,
     newValues,
-    buttonName,
+    buttonNameHook,
     formStateHook,
     rerenderTable
   ) => {
     const { formState, setFormState } = formStateHook;
+    const { buttonName, setButtonName } = buttonNameHook;
     console.log("values", values);
     console.log("newValues", newValues);
     console.log("Button Name:", buttonName);
     console.log("Step: ", step);
-    // Set a reset form function
+    // Set a reset form functions
     const resetForm = (arrayFields = []) => {
       formFormik.resetForm();
       if (arrayFields.length > 0) {
@@ -167,6 +193,15 @@ const AccountCreation = () => {
         );
       }
       setFormState("create");
+    };
+
+    const resetFormFields = (arrayFields = []) => {
+      if (arrayFields.length > 0) {
+        arrayFields.forEach((fieldName) =>
+          formFormik.setFieldValue(fieldName, "")
+        );
+      }
+      // setFormState("create");
     };
 
     if (step === 0) {
@@ -190,20 +225,16 @@ const AccountCreation = () => {
         console.log("Account data Object", accountDataOut);
         console.log("Account Data FORM: ", formData1);
 
-        // Post data to account creation
-        axios
-          .post("http://localhost:8100/accounts", formData1, {
+        dispatch(postAccount({
+          entity: "account_account",
+          newData: formData1,
+          config: {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          })
-          .then((response) => {
-            const responseData = response.data;
-            console.log("Account Creation Success: ", responseData);
-          })
-          .catch((error) => {
-            console.log("Account Creation Error: ", error);
-          });
+          }, 
+          handleNext: handleNext,
+        }))
       } else {
         console.log("Update Form");
         let formValues = { ...newValues };
@@ -233,15 +264,14 @@ const AccountCreation = () => {
             id: accountId,
             newData: formDataUpdate,
             config: {
-              "Content-Type": "multipart/form-data",
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
             },
+            handleNext: handleNext,
           })
         );
-
-        handleNext();
       }
-
-      // fetch("http://localhost:9400/form-submissions", {
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json",
@@ -265,6 +295,7 @@ const AccountCreation = () => {
     if (step === 1) {
       console.log("Step 1");
       if (buttonName === "add") {
+        setButtonName("");
         const newData = {
           ...newValues,
           entityId: accountId,
@@ -285,11 +316,13 @@ const AccountCreation = () => {
       }
 
       if (buttonName === "cancel" && !editData) {
+        setButtonName("");
         resetForm();
         return;
       }
 
       if (buttonName === "tableUpdate") {
+        setButtonName("");
         console.log("Update Contact");
         const newData = {
           ...newValues,
@@ -347,7 +380,7 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm(['file']),
+            resetForm: resetForm(["file"]),
           })
         );
       }
@@ -400,10 +433,111 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm(['file']),
+            resetForm: resetForm(["file"]),
           })
         );
       }
+    }
+
+    if (step === 3) {
+      console.log("Step 3");
+      if (buttonName === "add") {
+        setButtonName("");
+        console.log("Add client instruction");
+        let formValues = { file: newValues.file };
+        const documentData = { ...formValues };
+        const fileData = formValues?.file;
+        const fileName = fileData?.name;
+        formValues = { ...formValues, file: fileName };
+        const documentDataOut = {
+          ...documentData,
+          entityType: "account_instruction_document",
+          entityId: parseInt(accountId),
+          formData: JSON.stringify(formValues),
+          formId: parseInt(form.formId),
+        };
+
+        const documentFormData =
+          ObjectHelper.convertObjectToFormData(documentDataOut);
+        dispatch(
+          postAccount({
+            entity: "account_document",
+            newData: documentFormData,
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
+            rerenderTable: rerenderTable,
+            resetForm: resetFormFields(["file"]),
+          })
+        );
+        return
+      }
+      if (formSubmissionData === null) {
+        console.log("Create instruction");
+        const formData = {
+          guidelines: newValues.guidelines,
+        };
+        const newData = {
+          ...formData,
+          entityId: accountId,
+          entityType: "account_instruction",
+          formData: JSON.stringify(formData),
+          formId: parseInt(form.formId),
+        };
+
+        dispatch(
+          postAccount({
+            entity: "account_instruction",
+            newData,
+            rerenderTable: rerenderTable,
+            handleNext: handleNext,
+          })
+        );
+      } else {
+        console.log("Update instruction");
+        const formData = {
+          guidelines: newValues.guidelines,
+        };
+        const newData = {
+          ...formData,
+          entityId: accountId,
+          entityType: "account_instruction",
+          formData: JSON.stringify(formData),
+          formId: parseInt(form.formId),
+        };
+
+        dispatch(
+          putAccount({
+            entity: "account_instruction",
+            id: editId,
+            newData,
+            rerenderTable: rerenderTable,
+            handleNext: handleNext,
+          })
+        );
+      }
+    }
+
+    if (step === 5) {
+      console.log("Create Commercial");
+      const formData = {
+        ...newValues,
+        entityType: "account_commercial",
+        entityId: parseInt(accountId),
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form.formId),
+      };
+      dispatch(
+        postAccount({
+          entity: "account_commercial",
+          id: accountId,
+          newData: formData,
+          navigate: navigate,
+          link: "/accounts",
+        })
+      );
     }
   };
 
@@ -446,7 +580,7 @@ const AccountCreation = () => {
           onSubmit={handleFormSubmit}
           onFormFieldsChange={handleFormFieldChange}
         />
-        {/* )} */}
+         {/* )}  */}
       </FormStepper>
     </Container>
   );

@@ -78,7 +78,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "editor",
-        "table"
+        "table",
       ],
     },
 
@@ -137,8 +137,8 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "editor",
-        "button", 
-        "buttonupdate"
+        "button",
+        "buttonupdate",
       ],
     },
     {
@@ -173,7 +173,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "editor",
-        // "button", 
+        // "button",
         // "buttonupdate"
       ],
     },
@@ -784,7 +784,7 @@ const FieldBuilder = ({
     },
     {
       label: "Text",
-      type: "text",
+      type: "textarea",
       name: "wordText",
       apply: ["word"],
     },
@@ -889,7 +889,7 @@ const FieldBuilder = ({
           tableGetAPI: "",
           tableDeleteAPI: "",
           tableRenderer: false,
-          tableEditId: null
+          tableEditId: null,
         }
   );
 
@@ -1027,6 +1027,29 @@ const FieldBuilder = ({
                 {field.label}
               </label>
               <input
+                id={field.name}
+                name={field.name}
+                type={field.type}
+                className="form-control"
+                onChange={formik.handleChange}
+                value={formik.values[field.name]}
+                {...field.events}
+              />
+              {formik.errors[field.name] && formik.touched[field.name] ? (
+                <div>{formik.errors[field.name]}</div>
+              ) : null}
+            </div>
+          );
+        } else if (
+          field.type === "textarea" &&
+          ifContainsType(type, field.apply)
+        ) {
+          return (
+            <div className="mb-3">
+              <label htmlFor={field.name} className="form-label">
+                {field.label}
+              </label>
+              <textarea
                 id={field.name}
                 name={field.name}
                 type={field.type}
@@ -1570,9 +1593,7 @@ const FieldBuilder = ({
                     >
                       <option value="">Select a field</option>
                       {formFields.map((field) => {
-                        return (
-                          <option value={field.name}>{field.label}</option>
-                        );
+                        return <option value={field.name}>{field.name}</option>;
                       })}
                     </select>
                     <input

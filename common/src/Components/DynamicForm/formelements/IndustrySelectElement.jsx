@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 const IndustrySelectElement = ({ formik, field }) => {
   const [industry, setIndustry] = useState([]);
   useEffect(() => {
-    // Fetch data from API
-    // console.log("Fetching data from API")
     fetch("http://localhost:8200/industries/parent").then((res) => {
       res.json().then((data) => {
         setIndustry(data.data);

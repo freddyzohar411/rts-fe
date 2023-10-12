@@ -26,17 +26,31 @@ import {
 
 // Post account
 function* workPostAccount(action) {
-  const { entity, newData, config, rerenderTable, resetForm } = action.payload;
-  console.log("Config", config)
+  const {
+    entity,
+    newData,
+    config,
+    rerenderTable,
+    resetForm,
+    id,
+    navigate,
+    link,
+    handleNext,
+  } = action.payload;
   try {
-    const response = yield call(createAccount, entity, newData, config);
+    const response = yield call(createAccount, entity, id, newData, config);
     yield put(postAccountSuccess(response.data));
     if (typeof rerenderTable === "function") {
-      console.log("WorkPost table renderer");
       rerenderTable();
     }
     if (typeof resetForm === "function") {
       resetForm();
+    }
+    if (typeof navigate === "function") {
+      navigate(link);
+    }
+    if (typeof handleNext === "function") {
+      handleNext();
     }
   } catch (error) {
     yield put(postAccountFailure(error));
@@ -45,7 +59,17 @@ function* workPostAccount(action) {
 
 // Put Account
 function* workPutAccount(action) {
-  const { entity, id, newData, config, rerenderTable, resetForm } = action.payload;
+  const {
+    entity,
+    id,
+    newData,
+    config,
+    rerenderTable,
+    resetForm,
+    navigate,
+    link,
+    handleNext,
+  } = action.payload;
   try {
     const response = yield call(updateAccount, entity, id, newData, config);
     yield put(putAccountSuccess(response.data));
@@ -54,6 +78,12 @@ function* workPutAccount(action) {
     }
     if (typeof resetForm === "function") {
       resetForm();
+    }
+    if (typeof navigate === "function") {
+      navigate(link);
+    }
+    if (typeof handleNext === "function") {
+      handleNext();
     }
   } catch (error) {
     yield put(putAccountFailure(error));

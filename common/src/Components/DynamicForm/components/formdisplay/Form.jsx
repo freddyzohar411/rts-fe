@@ -48,7 +48,7 @@ const Form = ({
   const [buttonName, setButtonName] = useState("");
   const [editDataValues, setEditDataValues] = useState(null);
 
-  console.log("Form Fields: ", formFields);
+  // console.log("Form Fields: ", formFields);
 
   useEffect(() => {
     onFormFieldsChange(formFields);
@@ -67,7 +67,7 @@ const Form = ({
     }
   }, [editData]);
 
-  console.log("editDataValues", editDataValues);
+  // console.log("editDataValues", editDataValues);
 
   /**
    * Set template data
@@ -84,7 +84,7 @@ const Form = ({
     }
   }, [template]);
 
-  console.log("Form State: ", formState);
+  // console.log("Form State: ", formState);
 
   useEffect(() => {
     if (formState === "create" || formState === "tableUpdate") {
@@ -101,7 +101,6 @@ const Form = ({
    * Delete Table data by index
    */
   const deleteTableData = (index) => {
-    console.log("Delete table row: ", index);
     const newFormFields = JSON.parse(JSON.stringify(formFields));
     // const newFormFields = [...formFields];
     newFormFields.forEach((field) => {
@@ -132,8 +131,6 @@ const Form = ({
    * @param {*} values
    */
   const handleFormSubmit = async (values, event) => {
-    console.log("values", values);
-
     // Remove fields that are not visible or accessible
     const newValues = { ...values };
     formFields.forEach((field) => {
@@ -144,7 +141,6 @@ const Form = ({
           ? !checkVisibleOnGlobalCountry(field, country)
           : !checkVisibleOnCountry(field, formik))
       ) {
-        console.log("Delete Field: ", field.name);
         delete newValues[field.name];
       }
     });
@@ -156,21 +152,14 @@ const Form = ({
       }
     });
 
-    // Set table data and toggle rerender
-    // let newFormFields = JSON.parse(JSON.stringify(formFields));
-    // // newFormFields = setTableData(newFormFields, newValues);
-    // newFormFields.forEach((field) => {
-    //   if (field.type === "table") {
-    //     field.tableRerender = !field.tableRerender;
-    //   }
-    // });
-    // setFormFields(newFormFields);
-
     await onSubmit(
       event,
       values,
       newValues,
-      buttonName,
+      {
+        buttonName,
+        setButtonName,
+      },
       {
         formState,
         setFormState,
@@ -178,18 +167,6 @@ const Form = ({
       rerenderTable
     );
 
-    // let newFormFields = JSON.parse(JSON.stringify(formFields));
-    // // newFormFields = setTableData(newFormFields, newValues);
-    // newFormFields.forEach((field) => {
-    //   if (field.type === "table") {
-    //     console.log("FLIP!!");
-    //     field.tableSetting = {
-    //       ...field.tableSetting,
-    //       tableRerender: !field.tableSetting.tableRerender,
-    //     };
-    //   }
-    // });
-    // setFormFields(newFormFields);
   };
 
 

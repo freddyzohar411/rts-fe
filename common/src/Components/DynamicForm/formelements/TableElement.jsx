@@ -19,17 +19,13 @@ const TableElement = ({
   formFieldsHook,
 }) => {
   const { formFields, setFormFields } = formFieldsHook;
-  console.log("TableElement", field);
   const [tableConfig, setTableConfig] = useState(
     field?.tableConfig ? field.tableConfig : []
   );
   const [tableSetting, setTableSetting] = useState(
     field?.tableSettings ? field.tableSettings : {}
   );
-  const [table, setTable] = useState(field.tableData);
-
-  console.log("table Field in Table Element", field);
-  console.log("TABLE: ", table);
+  const [table, setTable] = useState(field.tableData || []);
 
   useEffect(() => {
     setFormFieldTableData(table);
@@ -45,20 +41,13 @@ const TableElement = ({
     field.tableSetting.tableRerender,
   ]);
 
-  console.log("tableConfig", tableConfig);
-  console.log("tableSettings", tableSetting);
-
   // API Services
   // Get
   const getTableData = () => {
     axios
       .get(tableSetting.tableGetAPI)
       .then((data) => {
-        console.log("data", data);
         const formDataList = data.data;
-        console.log("formDataList", formDataList);
-        console.log("mapTableData", mapTableData(formDataList));
-        console.log("FLOP", mapTableData(formDataList));
         setTable(mapTableData(formDataList));
         // setFormFieldTableData(mapTableData(formDataList));
       })
@@ -77,7 +66,6 @@ const TableElement = ({
     setFormFields(newFormFields);
   };
 
-  console.log("TABBLE RENDER", field.tableRerender);
 
   // Get data on load
   useEffect(() => {
@@ -86,7 +74,6 @@ const TableElement = ({
         tableSetting.tableUseAPI === "true" ||
         tableSetting.tableUseAPI === true
       ) {
-        console.log("Fetch API URL: ", tableSetting.tableGetAPI);
         getTableData();
       }
       // } else {
@@ -100,9 +87,6 @@ const TableElement = ({
     tableSetting.tableDeleteAPI,
     field.tableSetting.tableRerender,
   ]);
-
-  console.log("table", table);
-  console.log("config", tableConfig);
 
   const mapTableData = (dataList) => {
     const tableData = dataList?.map((data) => {
@@ -128,8 +112,6 @@ const TableElement = ({
 
   const handleEdit = (row) => {
     // Set formik values based on row value and config
-    console.log("row", row);
-    console.log("Check field", field.name);
     // Set all the formik values in this table based on the API
     for (const [key, value] of Object.entries(row.data)) {
       formik.setFieldValue(key, value);

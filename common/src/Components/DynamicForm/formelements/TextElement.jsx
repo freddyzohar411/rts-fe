@@ -2,7 +2,7 @@ import React from 'react'
 
 const TextElement = ({field}) => {
   return (
-    <span style={{fontSize:field.wordSize}}>{field.wordText}</span>
+    <pre style={{fontSize:field.wordSize,fontFamily:"inherit"}}>{field.wordText}</pre>
   )
 }
 

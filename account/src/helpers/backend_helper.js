@@ -20,9 +20,7 @@ import {
   FORM_URL,
 } from "@workspace/common/src/config";
 
-import { accountModuleURL } from "./constant";
-
-console.log("accountModuleURL", accountModuleURL)
+import { generateAccountModuleURL, accountModuleURL } from "./constant";
 
 const { APIClient } = Axios;
 
@@ -43,8 +41,8 @@ export const getFormByFormName = (formName) =>
  * Account_account
  */
 // Create a new account
-export const createAccount = (entity, data, config) =>
-  api.create(accountModuleURL[entity], data, config);
+export const createAccount = (entity, id, data, config) =>
+  api.create(generateAccountModuleURL(entity, id), data, config);
 
 // Update an account
 export const updateAccount = (entity, id, data, config) =>
@@ -53,3 +51,16 @@ export const updateAccount = (entity, id, data, config) =>
 // Get account by id
 export const getAccountById = (id) =>
   api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/${id}`);
+
+// Get account Instruction by id
+export const getAccountInstructionById = (id) =>
+  api.get(
+    `${ACCOUNT_INSTRUCTION_URL}${BASE_CLIENT_INSTRUCTIONS}/entity/account_instruction/${id}`
+  );
+
+
+  // Get account Commercial by id
+export const getAccountCommercialById = (id) =>
+api.get(
+  `${ACCOUNT_URL}${BASE_COMMERCIAL}/${id}`
+);

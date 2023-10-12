@@ -173,10 +173,6 @@ const generateValidationSchema2 = (
       }
 
       if (field.type === "file") {
-        console.log("Field Type", field.type);
-        // 
-        // File
-
         if (field.fileTypeValidation) {
           fieldValidation = fieldValidation.test(
             "fileType",
@@ -186,7 +182,7 @@ const generateValidationSchema2 = (
               const validExtensions = field.fileTypeValidation; // List of valid extensions
               let extension = null;
               if (value?.name) {
-               extension = value.name.split(".").pop(); // Extract extension
+                extension = value.name.split(".").pop(); // Extract extension
               } else {
                 extension = value.split(".").pop(); // Extract extension
               }
@@ -200,13 +196,10 @@ const generateValidationSchema2 = (
             "fileSize",
             field.fileSizeValidationErrorMessage,
             (value) => {
-              console.log("File size validation", value)
               if (!value || value === undefined) return true; // allow empty values
               if (typeof value === "string") return true; // allow empty values
               const maxFileSize =
                 parseInt(field.fileSizeValidation) * 1024 * 1024; // Maximum file size (in bytes)
-              console.log("Max file size allowable", maxFileSize);
-              console.log("File size", value.size);
               return value.size <= maxFileSize;
             }
           );

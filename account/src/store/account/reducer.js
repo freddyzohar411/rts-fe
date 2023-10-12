@@ -92,7 +92,6 @@ const AccountReducer = (state = initialState, action) => {
 
     // Post an Account
     case POST_ACCOUNT:
-      console.log("POST_ACCOUNT")
       return {
         ...state,
         loading: true,

@@ -18,7 +18,9 @@ const LandlineElement = ({ field, formik }) => {
 
   // Fetch country currency
   useEffect(() => {
-    dispatch(fetchCountryCurrency());
+    if (!countryData) {
+      dispatch(fetchCountryCurrency());
+    }
   }, []);
 
   useEffect(() => {
@@ -34,8 +36,17 @@ const LandlineElement = ({ field, formik }) => {
     landlineCountryId: null,
   });
 
+
+
   useEffect(() => {
-    if (formik.values[field.subName] && countryData) {
+    if ( countryData) {
+      if (formik.values[field.subName] === "") {
+        setSelectedLandline({
+          landlineCountry: "Phone Code",
+          landlineCountryId: null,
+        });
+        return;
+      }
       const country = countryData.find(
         (country) => country.id === formik.values[field.subName]
       );

@@ -12,18 +12,36 @@ const FormStepper = ({
   const handleNextStep = () => {
     if (activeStep === 0 && formFormik) {
       formFormik.submitForm();
-      console.log("SUBMITT NO VALIDAtion");
     }
     if (activeStep === 1) {
       const table = formFieldsData.filter(
         (field) => field.name === "contactList"
       );
-      if (table.length === 1 && table[0]?.tableData?.length > 1) {
+      if (table.length === 1 && table[0]?.tableData?.length > 0) {
         handleNext();
       } else {
         console.log("Please add 1 contact to proceed")
       }
 
+    }
+    if (activeStep === 2) {
+      const table = formFieldsData.filter(
+        (field) => field.name === "documentList"
+      );
+      if (table.length === 1 && table[0]?.tableData?.length > 0) {
+        handleNext();
+      } else {
+        console.log("Please add 1 document to proceed")
+      }
+    }
+    if (activeStep === 3 && formFormik) {
+      formFormik.submitForm();
+    }
+    if (activeStep === 4) {
+      handleNext();
+    }
+    if (activeStep === 5 && formFormik) {
+      formFormik.submitForm();
     }
   };
   return (

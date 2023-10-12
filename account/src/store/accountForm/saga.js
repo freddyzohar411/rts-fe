@@ -8,10 +8,12 @@ import {
   fetchAccountFormSubmissionSuccess,
   fetchAccountFormSubmissionFailure,
 } from "./action";
-import { getFormById, getFormByFormName, getAccountById } from "../../helpers/backend_helper";
+import { getFormById, getFormByFormName, getAccountById, getAccountInstructionById, getAccountCommercialById } from "../../helpers/backend_helper";
 
 const formURL = {
-  "account_account": getAccountById
+  "account_account": getAccountById,
+  "account_instruction": getAccountInstructionById,
+  "account_commercial": getAccountCommercialById
 }
 
 function* workFetchAccountForm(action) {

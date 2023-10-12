@@ -41,9 +41,9 @@ const FileInputElement = ({ formik, field }) => {
           ChooseFile
         </button>
         <div
-          className="w-100"
+          className="w-100 border-secondary border"
           style={{
-            border: "1px solid grey",
+            // border: "1px solid grey",
             padding: "8px 15px",
             position: "relative",
             borderTopRightRadius: "5px",
@@ -56,10 +56,10 @@ const FileInputElement = ({ formik, field }) => {
             ? truncateString(formik.values[field.name]?.name, 15)
             : formik.values[field.name] &&
               truncateString(formik.values[field.name], 15)}
-          {!formik.values[field.name] &&
-            !formik.values[field.name]?.name &&
+          {(!formik.values[field.name] &&
+            !formik.values[field.name]?.name) &&
             "No file chosen"}
-          {formik.values[field.name]?.name && (
+          {(formik.values[field.name]?.name ||  formik.values[field.name]) && (
             <span
               className="cursor-pointer"
               style={{ position: "absolute", right: "10px" }}

@@ -18,7 +18,9 @@ const CurrencyElement = ({ field, formik }) => {
 
   // Fetch country currency
   useEffect(() => {
-    dispatch(fetchCountryCurrency());
+    if (!countryData) {
+      dispatch(fetchCountryCurrency());
+    }
   }, []);
 
   useEffect(() => {

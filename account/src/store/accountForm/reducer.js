@@ -13,13 +13,14 @@ const initialState = {
   forms: [],
   form: null,
   formSubmission: null,
+  editId: null,
   errorMsg: "",
-  loading: true,
+  loading: false,
+  formSubmissionLoading: false,
   error: false,
 };
 
 const AccountFormReducer = (state = initialState, action) => {
-  console.log("AccountFormReducer", action.type, action.payload)
   switch (action.type) {
     case CLEAR_ACCOUNTFORM_SUBMISSION:
       return {
@@ -62,19 +63,21 @@ const AccountFormReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        formSubmissionLoading: true,
         error: false,
       };
     case FETCH_ACCOUNTFORM_SUBMISSION_SUCCESS:
       const submissionData = JSON.parse(action.payload.submissionData);
       return {
         ...state,
-        loading: false,
+        formSubmissionLoading: false,
         formSubmission: submissionData,
+        editId: parseInt(action.payload.id),
       };
     case FETCH_ACCOUNTFORM_SUBMISSION_FAILURE:
       return {
         ...state,
-        loading: false,
+        formSubmissionLoading: false,
         error: true,
         errorMsg: action.payload,
       };
