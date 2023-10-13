@@ -36,28 +36,31 @@ const LandlineElement = ({ field, formik }) => {
     landlineCountryId: null,
   });
 
-
-
-  useEffect(() => {
-    if ( countryData) {
-      if (formik.values[field.subName] === "") {
-        setSelectedLandline({
-          landlineCountry: "Phone Code",
-          landlineCountryId: null,
-        });
-        return;
-      }
-      const country = countryData.find(
-        (country) => country.id === formik.values[field.subName]
-      );
-      setSelectedLandline({
-        landlineCountry: `${country?.phoneCode.charAt(0) == "+" ? "" : "+"} ${
-          country?.phoneCode
-        } (${country?.name})`,
-        landlineCountryId: formik.values[field.subName],
-      });
-    }
-  }, [formik.values[field.subName]]);
+  // useEffect(() => {
+  //   if (countryData) {
+  //     if (
+  //       formik.values[field.subName] === "" &&
+  //       selectedLandline.landlineCountryId !== null
+  //     ) {
+  //       setSelectedLandline({
+  //         landlineCountry: "Phone Code",
+  //         landlineCountryId: null,
+  //       });
+  //       return;
+  //     }
+  //     const country = countryData.find(
+  //       (country) => country.id === formik.values[field.subName]
+  //     );
+  //     if (formik.values[field.subName] !== "") {
+  //       setSelectedLandline({
+  //         landlineCountry: `${country?.phoneCode.charAt(0) == "+" ? "" : "+"} ${
+  //           country?.phoneCode
+  //         } (${country?.name})`,
+  //         landlineCountryId: formik.values[field.subName],
+  //       });
+  //     }
+  //   }
+  // }, [formik.values[field.subName]]);
 
   useEffect(() => {
     if (selectedLandline.landlineCountryId) {

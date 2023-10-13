@@ -14,6 +14,7 @@ function* workFetchDraftAccount(action) {
       api.get,
       `http://localhost:8100/accounts/draft`
     );
+    console.log("DRAFTTT",response.data)
     if (response.data === null) {
       yield put(deleteAccountId());
     } else {

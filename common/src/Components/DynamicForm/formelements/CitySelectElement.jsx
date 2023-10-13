@@ -18,7 +18,7 @@ const CitySelectElement = ({ formik, field }) => {
 
   useEffect(() => {
     if (formik.values[field.parent]) {
-      setFetchData([]);
+      // setFetchData([]);
       dispatch(fetchCity(countryToCountryId(formik.values[field.parent])));
     }
   }, [formik.values[field.parent]]);
