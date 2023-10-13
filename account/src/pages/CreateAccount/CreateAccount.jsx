@@ -11,13 +11,12 @@ import {
 } from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
 import { AccountFormConstant } from "./accountFormConstant";
-import { fetchDraftAccount } from "../../store/accountregistration/action";
+import { fetchDraftAccount, deleteAccountId } from "../../store/accountregistration/action";
 import {
   fetchAccountFormSubmission,
   clearAccountFormSubmission,
 } from "../../store/accountForm/action";
 import { ObjectHelper } from "@workspace/common";
-import axios from "axios";
 
 const AccountCreation = () => {
   const dispatch = useDispatch();
@@ -113,9 +112,7 @@ const AccountCreation = () => {
    * Fetch draft account if there is
    */
   useEffect(() => {
-
     dispatch(fetchDraftAccount());
-
   }, [step]);
 
   console.log("Draft Account Id: ", accountId);
@@ -352,6 +349,7 @@ const AccountCreation = () => {
     if (step === 2) {
       if (buttonName === "add") {
         console.log("Add Address");
+        setButtonName("");
         let formValues = { ...newValues };
         const documentData = { ...formValues };
         const fileData = formValues?.file;

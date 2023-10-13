@@ -23,6 +23,7 @@ import {
   createAccount,
   updateAccount,
 } from "../../helpers/backend_helper";
+import { setAccountId, deleteAccountId } from "../accountregistration/action";
 
 // Post account
 function* workPostAccount(action) {
@@ -51,6 +52,15 @@ function* workPostAccount(action) {
     }
     if (typeof handleNext === "function") {
       handleNext();
+    }
+    if (entity === "account_account") {
+      // Set the account id to the accountregistration reducer
+      yield put(setAccountId(response.data.id));
+    }
+    if (entity === "account_commercial") {
+      // Delete the account id from the accountregistration reducer
+      console.log("delete account id")
+      yield put(deleteAccountId());
     }
   } catch (error) {
     yield put(postAccountFailure(error));
