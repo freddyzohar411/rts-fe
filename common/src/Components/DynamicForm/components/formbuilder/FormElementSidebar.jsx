@@ -143,6 +143,12 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableId: "buttonupdate",
       type: "field",
     },
+    {
+      draggableLabel: "Parent Company",
+      draggablePrefix: "element",
+      draggableId: "parentcompany",
+      type: "field",
+    }
   ];
 
   // Layout List

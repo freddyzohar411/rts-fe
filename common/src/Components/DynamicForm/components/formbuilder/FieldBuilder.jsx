@@ -46,6 +46,7 @@ const FieldBuilder = ({
         "table",
         "selectdepartment",
         "editor",
+        "parentcompany"
       ],
     },
     {
@@ -79,6 +80,7 @@ const FieldBuilder = ({
         "selectdepartment",
         "editor",
         "table",
+        "parentcompany"
       ],
     },
 
@@ -105,6 +107,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "editor",
+        "parentcompany"
       ],
     },
     {
@@ -139,6 +142,7 @@ const FieldBuilder = ({
         "editor",
         "button",
         "buttonupdate",
+        "parentcompany"
       ],
     },
     {
@@ -175,6 +179,7 @@ const FieldBuilder = ({
         "editor",
         // "button",
         // "buttonupdate"
+        "parentcompany"
       ],
     },
     {
@@ -220,6 +225,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "editor",
+        "parentcompany"
       ],
     },
     {
@@ -246,6 +252,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "editor",
+        "parentcompany"
       ],
     },
     {
@@ -558,6 +565,7 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "editor",
+        "parentcompany"
       ],
     },
     {
@@ -628,6 +636,7 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "editor",
+        "parentcompany"
       ],
     },
     // Which include key value pair for table
@@ -669,6 +678,7 @@ const FieldBuilder = ({
         "selectcountry",
         "selectstate",
         "selectdepartment",
+        "parentcompany"
       ],
     },
     {
@@ -706,6 +716,7 @@ const FieldBuilder = ({
         "table",
         "selectdepartment",
         "editor",
+        "parentcompany"
       ],
     },
     {
@@ -739,6 +750,7 @@ const FieldBuilder = ({
         "table",
         "selectdepartment",
         "editor",
+        "parentcompany"
       ],
     },
     {
@@ -867,6 +879,9 @@ const FieldBuilder = ({
       break;
     case "editor":
       header = "Editor Field";
+      break;
+    case "parentcompany":
+      header = "Parent Company Field";
       break;
     default:
   }

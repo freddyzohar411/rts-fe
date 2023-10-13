@@ -3,11 +3,11 @@ import axios from "axios";
 
 import { FETCH_PARENTCOMPANY } from "./actionTypes";
 import { fetchParentCompanySuccess, fetchParentCompanyFailure } from "./action";
-// import { getAccountNamesFromUser } from "../../helpers/backend_helper";
+import { getAccountNamesFromUser } from "../../helpers/backend_helper";
 
 function* workFetchParentCompany() {
   try {
-    // const response = yield call(getAccountNamesFromUser);
+    const response = yield call(getAccountNamesFromUser);
     // const response = yield call(
     //   axios.get,
     //   `http://localhost:8100/accounts/names`

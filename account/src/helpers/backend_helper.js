@@ -1,5 +1,5 @@
 import { Axios } from "@workspace/common";
-import axios from "axios";
+// import axios from "axios";
 
 import {
   GET_ACCOUNTS,
@@ -58,6 +58,7 @@ export const getAccountInstructionById = (id) =>
     `${ACCOUNT_INSTRUCTION_URL}${BASE_CLIENT_INSTRUCTIONS}/entity/account_instruction/${id}`
   );
 
+// export const getAccountNamesFromUser = () => api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/names`);
 
   // Get account Commercial by id
 export const getAccountCommercialById = (id) =>

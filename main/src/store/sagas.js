@@ -25,6 +25,7 @@ const {
   CitySaga,
   IndustrySaga,
   DepartmentSaga,
+  ParentCompanySaga,
 } = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
 const { DashboardEcommerceSaga } = DashboardSaga;
@@ -32,7 +33,7 @@ const {
   // CountryCurrencySaga,
   // CitySaga,
   // IndustrySaga,
-  ParentCompanySaga,
+  // ParentCompanySaga,
   AccountSaga,
   BillingCitySaga,
   AccountRegistrationSaga,
@@ -57,6 +58,7 @@ export default function* rootSaga() {
     fork(IndustrySaga),
     fork(DepartmentSaga),
     fork(LayoutSaga),
+    fork(ParentCompanySaga),
 
     //public
     fork(AuthSaga),
@@ -68,7 +70,7 @@ export default function* rootSaga() {
     // fork(CountryCurrencySaga),
     // fork(CitySaga),
     fork(IndustrySaga),
-    fork(ParentCompanySaga),
+    // fork(ParentCompanySaga),
     fork(AccountSaga),
     // fork(BillingCitySaga),
     fork(AccountRegistrationSaga),

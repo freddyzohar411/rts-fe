@@ -24,6 +24,7 @@ const {
   CountryCurrencyReducer,
   DepartmentReducer,
   IndustryReducer,
+  ParentCompanyReducer,
 } = Reducers;
 const { Login, ForgetPassword, Profile } = LoginReducers;
 const { DashboardEcommerce } = DashboardReducers;
@@ -35,7 +36,7 @@ const {
   // CountryCurrencyReducer,
   // DepartmentReducer,
   // IndustryReducer,
-  ParentCompanyReducer,
+  // ParentCompanyReducer,
   AccountFormReducer,
 } = AccountReducers;
 
@@ -55,6 +56,7 @@ const rootReducer = combineReducers({
   CountryCurrencyReducer,
   DepartmentReducer,
   IndustryReducer,
+  ParentCompanyReducer,
 
   // public
   Login,
@@ -70,7 +72,7 @@ const rootReducer = combineReducers({
   // CountryCurrencyReducer,
   // DepartmentReducer,
   // IndustryReducer,
-  ParentCompanyReducer,
+  // ParentCompanyReducer,
   AccountFormReducer,
 
   // Job

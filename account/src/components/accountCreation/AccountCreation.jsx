@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { FileHelper } from "@workspace/common";
 import { Axios } from "@workspace/common";
+console.log("Axios", Axios);
 const { APIClient } = Axios;
 const api = new APIClient();
 

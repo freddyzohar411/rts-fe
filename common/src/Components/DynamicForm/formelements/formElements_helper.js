@@ -17,6 +17,7 @@ import CitySelectElement from "./CitySelectElement";
 import ButtonUpdateElement from "./ButtonUpdateElement";
 import DepartmentSelectElement from "./DepartmentSelectElement";
 import EditorElement from "./EditorElement";
+import AccountParentElement from "./AccountParentElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -109,6 +110,10 @@ const generateFormField = (
 
   if (type === "editor") {
     return <EditorElement field={field} formik={formik} />;
+  }
+
+  if (type === "parentcompany") {
+    return <AccountParentElement field={field} formik={formik} />;
   }
 
   // text & button
