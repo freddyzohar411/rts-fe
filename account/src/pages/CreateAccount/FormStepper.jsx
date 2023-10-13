@@ -8,6 +8,7 @@ const FormStepper = ({
   children,
   formFormik,
   formFieldsData,
+  setErrorMessage
 }) => {
   const handleNextStep = () => {
     if (activeStep === 0 && formFormik) {
@@ -18,9 +19,11 @@ const FormStepper = ({
         (field) => field.name === "contactList"
       );
       if (table.length === 1 && table[0]?.tableData?.length > 0) {
+        setErrorMessage(null)
         handleNext();
       } else {
-        console.log("Please add 1 contact to proceed")
+        setErrorMessage("Please add 1 contact to proceed")
+        // console.log("Please add 1 contact to proceed")
       }
 
     }
@@ -29,9 +32,11 @@ const FormStepper = ({
         (field) => field.name === "documentList"
       );
       if (table.length === 1 && table[0]?.tableData?.length > 0) {
+        setErrorMessage(null)
         handleNext();
       } else {
-        console.log("Please add 1 document to proceed")
+        setErrorMessage("Please add 1 document to proceed")
+        // console.log("Please add 1 document to proceed")
       }
     }
     if (activeStep === 3 && formFormik) {

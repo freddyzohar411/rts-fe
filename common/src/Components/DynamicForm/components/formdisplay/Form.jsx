@@ -36,6 +36,7 @@ const Form = ({
   onFormikChange,
   onSubmit,
   onFormFieldsChange,
+  errorMessage,
 }) => {
   const [formState, setFormState] = useState("create");
   const [formFields, setFormFields] = useState(template?.formSchema || []);
@@ -286,6 +287,7 @@ const Form = ({
           </FormikProvider>
         )}
       </div>
+      {errorMessage && <Alert color="danger">{errorMessage}</Alert>}
     </Container>
   );
 };

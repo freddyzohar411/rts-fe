@@ -46,6 +46,7 @@ const AccountCreation = () => {
   const [editData, setEditData] = useState(formSubmissionData || null);
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   console.log("STEP: ", step);
 
@@ -292,6 +293,7 @@ const AccountCreation = () => {
     if (step === 1) {
       console.log("Step 1");
       if (buttonName === "add") {
+        setErrorMessage(null);
         setButtonName("");
         const newData = {
           ...newValues,
@@ -349,6 +351,7 @@ const AccountCreation = () => {
     if (step === 2) {
       if (buttonName === "add") {
         console.log("Add Address");
+        setErrorMessage(null);
         setButtonName("");
         let formValues = { ...newValues };
         const documentData = { ...formValues };
@@ -545,6 +548,7 @@ const AccountCreation = () => {
   const handleBack = () => {
     if (step > 0) {
       setStep((prevStep) => prevStep - 1);
+      setErrorMessage(null);
     }
   };
 
@@ -567,6 +571,7 @@ const AccountCreation = () => {
         handleNext={handleNext}
         formFormik={formFormik}
         formFieldsData={formFieldsData}
+        setErrorMessage={setErrorMessage}
       >
         {/* {!formSubmissionDataLoading && ( */}
         <Form
@@ -577,6 +582,7 @@ const AccountCreation = () => {
           onFormikChange={handleFormikChange}
           onSubmit={handleFormSubmit}
           onFormFieldsChange={handleFormFieldChange}
+          errorMessage={errorMessage}
         />
          {/* )}  */}
       </FormStepper>
