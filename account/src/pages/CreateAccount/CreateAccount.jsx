@@ -123,6 +123,7 @@ const AccountCreation = () => {
    */
   useEffect(() => {
     dispatch(clearAccountFormSubmission());
+    setEditData(null);
     if (accountId) {
       if (step === 0) {
         dispatch(fetchAccountFormSubmission("account_account", accountId));
@@ -134,7 +135,7 @@ const AccountCreation = () => {
         dispatch(fetchAccountFormSubmission("account_commercial", accountId));
       }
     }
-  }, [accountId, step]);
+  }, [step]);
 
   /**
    * Get Formik hook from Form component

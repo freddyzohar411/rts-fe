@@ -15,14 +15,6 @@ import {
 import {
   Label,
   Row,
-  Col,
-  Input,
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
-  FormFeedback,
-  Button,
   Alert,
   Container,
 } from "reactstrap";
@@ -68,7 +60,7 @@ const Form = ({
     }
   }, [editData]);
 
-  // console.log("editDataValues", editDataValues);
+  console.log("editDataValues", editDataValues);
 
   /**
    * Set template data

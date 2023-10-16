@@ -12,29 +12,153 @@ import {
 } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAccounts } from "../../store/account/action";
+import DualListBox from "react-dual-listbox";
+import "react-dual-listbox/lib/react-dual-listbox.css";
+import axios from "axios";
 
 // Import the account listing options
 import { accountListingOptions } from "./accountListingOptions";
 
 function AccountListing() {
-  const dispatch = useDispatch();
-  const accountsData = useSelector((state) => state.AccountReducer.accounts);
+  // const dispatch = useDispatch();
+  // const accountsData = useSelector((state) => state.AccountReducer.accounts);
+  // const accountListing = accountsData.accounts;
+  const [customViewShow, setCustomViewShow] = useState(false);
+  const [accountsData, setAccountsData] = useState({});
+  const [optGroup, setOptGroup] = useState([]);
+  const [selectedOptGroup, setSelectedOptGroup] = useState([]);
+
   const accountListing = accountsData.accounts;
+
+  console.log("ACCOUNTS DATA", accountsData)
+  console.log("ACCOUNT LISTING", accountListing);
+
+  //==============================================================================
+
+  useEffect(() => {
+    axios.get("http://localhost:8100/accounts/fields").then((res) => {
+      console.log(res.data);
+      setOptGroup(res.data);
+    });
+  }, []);
+
+  console.log("OPT GROUP", optGroup);
+
+  const handleChange = (selected) => {
+    const selectedObjects = selected.map((value) => {
+      return optGroup.find((option) => option.value === value);
+    });
+    setSelectedOptGroup(selectedObjects);
+  };
+
+  const getDynamicNestedResult = (data, value) => {
+    const result = value.split(".").reduce((acc, part) => {
+      return acc ? acc[part] : undefined;
+    }, data);
+    return result;
+  };
+
+  const generateConfig = (selectedOptGroup) => {
+    const config = [];
+    selectedOptGroup.forEach((opt) => {
+      config.push({
+        header: opt.label,
+        name: opt.value,
+        sort: opt.sort,
+        sortValue: opt.sortValue,
+        render: (data) => getDynamicNestedResult(data, opt.value) || "-",
+      });
+    });
+    return config;
+  };
+
+  const [customConfig, setCustomConfig] = useState(
+    generateConfig([
+      {
+        label: "Account Source",
+        value: "accountSubmissionData.accountSource",
+        sort: true,
+        sortValue: "account_submission_data.accountSource",
+      },
+      {
+        label: "Account Number",
+        value: "accountNumber",
+        sort: true,
+        sortValue: "account_submission_data.accountNumber",
+      },
+      {
+        label: "Account Name",
+        value: "accountSubmissionData.accountName",
+        sort: true,
+        sortValue: "account_submission_data.accountName",
+      },
+      {
+        label: "Account Owner",
+        value: "accountSubmissionData.secondaryOwner",
+        sort: true,
+        sortValue: "account_submission_data.secondaryOwner",
+      },
+      {
+        label: "Created By",
+        value: "createdByName",
+        sort: false,
+        sortValue: "createdByName",
+      },
+      {
+        label: "Parent Account",
+        value: "accountSubmissionData.parentAccount",
+        sort: false,
+        sortValue: "account_submission_data.parentAccount",
+      },
+      {
+        label: "Status",
+        value: "accountSubmissionData.accountStatus",
+        sort: true,
+        sortValue: "account_submission_data.accountStatus",
+      },
+    ])
+  );
+
+  // console.log("CONFIG", config);
+
+  console.log("Selected OPS Grp", selectedOptGroup);
+
+  // ===============================================================
 
   const [searchInput, setSearchInput] = useState("");
   const [pageRequest, setPageRequest] = useState({
     page: 0,
-    pageSize: 10,
+    pageSize: 5,
     sortBy: null,
     sortDirection: "asc",
     searchTerm: null,
+    searchFields: [],
   });
+
+  console.log("Page Request", pageRequest)
 
   const [pageInfo, setPageInfo] = useState({
     currentPage: 0,
     totalPages: 0,
     totalElements: 0,
   });
+
+  useEffect(() => {
+    fetchAccounts(pageRequest);
+  }, [pageRequest]);
+
+  const fetchAccounts = (pageRequest) => {
+    console.log("Fetching...")
+    axios
+      .post(
+        "http://localhost:8100/accounts/listing",
+        cleanPageRequest(pageRequest)
+      )
+      .then((res) => {
+        console.log(res.data);
+        setAccountsData(res.data);
+      });
+  };
 
   // Clean Page Request, remove null values
   function cleanPageRequest(pageRequest) {
@@ -46,11 +170,6 @@ function AccountListing() {
     });
     return cleanPage;
   }
-
-  // Get all data on first render
-  useEffect(() => {
-    dispatch(fetchAccounts(cleanPageRequest(pageRequest)));
-  }, [pageRequest]);
 
   // Update the page info
   useEffect(() => {
@@ -84,12 +203,13 @@ function AccountListing() {
   // Handle Sort
   const handleSort = (option) => {
     let sortDir = "asc";
-    if (pageRequest.sortBy === option.name) {
+    console.log("Page Request SortBy", pageRequest)
+    if (pageRequest.sortBy === option.sortValue) {
       sortDir = pageRequest.sortDirection === "asc" ? "desc" : "asc";
     }
     setPageRequest((prev) => ({
       ...prev,
-      sortBy: option.name,
+      sortBy: option.sortValue,
       sortDirection: sortDir,
     }));
   };
@@ -116,22 +236,6 @@ function AccountListing() {
   document.title = "Accounts | RTS";
 
   // ========================================= Table Configuration ===========================
-  // Set Custom view
-  const customView =
-    "Service,Account Number,Account Name,Account Owner,Created By,Parent Account,Status";
-
-  // Get the custom config
-  const getCustomConfig = (customView) => {
-    const customViewArray = customView.split(",");
-    // Get the array of options from the accountListingOptions based on the custom view array
-    const customConfig = [];
-    customViewArray.forEach((element) => {
-      customConfig.push(accountListingOptions[element]);
-    });
-    return customConfig;
-  };
-
-  const customConfig = getCustomConfig(customView);
 
   // Generate Header
   const generateHeaderJSX = (
@@ -217,6 +321,82 @@ function AccountListing() {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
+          {/* My dual listbox */}
+          {optGroup && optGroup.length > 0 && customViewShow && (
+            <div>
+              <Row>
+                <Col lg={6}>
+                  <div className="mt-4 mt-lg-0">
+                    <h5 className="fs-14 mb-1">Headers</h5>
+                    <p className="text-muted">
+                      Example of Dual Listbox Headers{" "}
+                    </p>
+                    <DualListBox
+                      canFilter
+                      filterCallback={(optGroup, filterInput) => {
+                        if (filterInput === "") {
+                          return true;
+                        }
+                        return new RegExp(filterInput, "i").test(
+                          optGroup.label
+                        );
+                      }}
+                      filterPlaceholder="Search..."
+                      options={optGroup}
+                      selected={selectedOptGroup.map((option) => option?.value)}
+                      onChange={handleChange}
+                      icons={{
+                        moveLeft: (
+                          <span className="mdi mdi-chevron-left" key="key" />
+                        ),
+                        moveAllLeft: [
+                          <span
+                            className="mdi mdi-chevron-double-left"
+                            key="key"
+                          />,
+                        ],
+                        moveRight: (
+                          <span className="mdi mdi-chevron-right" key="key" />
+                        ),
+                        moveAllRight: [
+                          <span
+                            className="mdi mdi-chevron-double-right"
+                            key="key"
+                          />,
+                        ],
+                        moveDown: (
+                          <span className="mdi mdi-chevron-down" key="key" />
+                        ),
+                        moveUp: (
+                          <span className="mdi mdi-chevron-up" key="key" />
+                        ),
+                        moveTop: (
+                          <span
+                            className="mdi mdi-chevron-double-up"
+                            key="key"
+                          />
+                        ),
+                        moveBottom: (
+                          <span
+                            className="mdi mdi-chevron-double-down"
+                            key="key"
+                          />
+                        ),
+                      }}
+                    />
+                  </div>
+                </Col>
+              </Row>
+              <button
+                className="btn btn-primary mt-3"
+                onClick={() =>
+                  setCustomConfig(generateConfig(selectedOptGroup))
+                }
+              >
+                Set
+              </button>
+            </div>
+          )}
           <Row>
             <Col lg={12}>
               <Card className="m-3">
@@ -251,6 +431,7 @@ function AccountListing() {
                           </Button>
                           <Button
                             type="button"
+                            onClick={() => setCustomViewShow(!customViewShow)}
                             className="btn btn-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
@@ -290,6 +471,7 @@ function AccountListing() {
                           className="form-select"
                           style={{ height: "34px", marginRight: "10px" }}
                         >
+                          <option value="5">5</option>
                           <option value="10">10</option>
                           <option value="20">20</option>
                           <option value="30">30</option>
