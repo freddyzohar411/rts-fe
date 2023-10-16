@@ -19,15 +19,6 @@ function NewUser(props) {
     resetForm();
   };
 
-  const validatePassword = (values) => {
-    const errors = {};
-
-    if (values.password !== values.confirmPassword) {
-      errors.confirmPassword = "Passwords do not match!";
-    }
-
-    return errors;
-  };
   return (
     <Modal
       isOpen={props.show}
@@ -52,7 +43,6 @@ function NewUser(props) {
             <Formik
               validateOnBlur
               validateOnChange={false}
-              validate={validatePassword}
               onSubmit={handleSubmit}
               initialValues={initialValues}
               validationSchema={schema}
