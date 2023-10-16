@@ -12,6 +12,8 @@ export * as JsonHelper from "./helpers/json_helper";
 
 export * as ObjectHelper from "./helpers/object_helper";
 
+export * as DateHelper from "./helpers/date_helper";
+
 // Redux Store
 export * as Actions from "./store/actions";
 

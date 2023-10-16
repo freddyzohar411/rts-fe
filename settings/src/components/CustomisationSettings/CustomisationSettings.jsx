@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Actions as formActions } from "@workspace/formbuilder";
 import { UserDetailsHelper } from "@workspace/common";
+import { DateHelper } from "@workspace/common";
 
 
 function CustomisationSettings() {
@@ -23,6 +24,7 @@ function CustomisationSettings() {
 
   // Get the list of forms from the API on first render
   useEffect(() => {
+    dispatch(formActions.clearForm())
     dispatch(formActions.fetchForms());
   }, []);
 
@@ -197,7 +199,7 @@ function CustomisationSettings() {
                                 {item.modifiedBy}
                               </td>
                               <td className="align-middle">
-                                {item.modifiedAt}
+                                { DateHelper.formatDateStandard(item.modifiedAt)}
                               </td>
                               <td className="d-flex align-middle gap-2">
                                 <Link to={`/form-builder/${item.formId}`}>

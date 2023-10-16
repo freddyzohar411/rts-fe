@@ -15,6 +15,7 @@ import { fetchAccounts } from "../../store/account/action";
 import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import axios from "axios";
+import { DateHelper } from "@workspace/common";
 
 const accountInitialConfig = [
   {
@@ -111,7 +112,14 @@ function AccountListing() {
         name: opt.value,
         sort: opt.sort,
         sortValue: opt.sortValue,
-        render: (data) => getDynamicNestedResult(data, opt.value) || "-",
+        render: (data) => {
+          if (opt.value === "createdAt" || opt.value === "updatedAt") {
+            return DateHelper.formatDateStandard(
+              getDynamicNestedResult(data, opt.value) || "-"
+            );
+          }
+          return getDynamicNestedResult(data, opt.value) || "-";
+        },
       });
     });
     return config;
