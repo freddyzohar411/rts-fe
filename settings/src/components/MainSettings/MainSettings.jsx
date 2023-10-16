@@ -1,9 +1,8 @@
 import React from "react";
-import { Card, Row, Col, Nav, NavItem, NavLink } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { Card, Row, Col, Nav, NavItem, NavLink, List } from "reactstrap";
+import { Link } from "react-router-dom";
 
 function MainSettings() {
-  const navigate = useNavigate();
   document.title = "Settings | RTS";
   return (
     <React.Fragment>
@@ -19,23 +18,36 @@ function MainSettings() {
                 <h6>General</h6>
               </div>
 
-              <Nav vertical pills className="mt-3 ms-4">
-                <NavItem>
-                  <NavLink href="#">Personal Settings</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/settings/customisation">Customise Form</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="#">Calendar Settings</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="#">New Email Settings</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="#">Notification Settings</NavLink>
-                </NavItem>
-              </Nav>
+              <List
+                type="unstyled"
+                className="d-flex flex-column gap-3 ms-5 mt-4"
+              >
+                <li>
+                  <Link className="text-dark" to="#">
+                    Personal Settings
+                  </Link>
+                </li>
+                <li>
+                  <Link className="text-dark" to="/settings/customisation">
+                    Customise Form
+                  </Link>
+                </li>
+                <li>
+                  <Link className="text-dark" to="#">
+                    Calendar Settings
+                  </Link>
+                </li>
+                <li>
+                  <Link className="text-dark" to="#">
+                    New Email Settings
+                  </Link>
+                </li>
+                <li>
+                  <Link className="text-dark" to="#">
+                    Notification Settings
+                  </Link>
+                </li>
+              </List>
             </Card>
           </Col>
 
@@ -48,17 +60,26 @@ function MainSettings() {
                 ></i>
                 <h6>Users and Control</h6>
               </div>
-              <Nav vertical pills className="mt-3 ms-4">
-                <NavItem>
-                  <NavLink href="#">Users</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="#">Security Control</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="#">Territory Management</NavLink>
-                </NavItem>
-              </Nav>
+              <List
+                type="unstyled"
+                className="d-flex flex-column gap-3 ms-5 mt-4"
+              >
+                <li>
+                  <Link className="text-dark" to="/settings/access">
+                    Access Management
+                  </Link>
+                </li>
+                <li>
+                  <Link className="text-dark" to="#">
+                    Security Control
+                  </Link>
+                </li>
+                <li>
+                  <Link className="text-dark" to="#">
+                    Territory Management
+                  </Link>
+                </li>
+              </List>
             </Card>
           </Col>
 
