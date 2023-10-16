@@ -16,6 +16,51 @@ import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import axios from "axios";
 
+const accountInitialConfig = [
+  {
+    label: "Account Source",
+    value: "accountSubmissionData.accountSource",
+    sort: true,
+    sortValue: "account_submission_data.accountSource",
+  },
+  {
+    label: "Account Number",
+    value: "accountNumber",
+    sort: true,
+    sortValue: "account_submission_data.accountNumber",
+  },
+  {
+    label: "Account Name",
+    value: "accountSubmissionData.accountName",
+    sort: true,
+    sortValue: "account_submission_data.accountName",
+  },
+  {
+    label: "Account Owner",
+    value: "accountSubmissionData.secondaryOwner",
+    sort: true,
+    sortValue: "account_submission_data.secondaryOwner",
+  },
+  {
+    label: "Created By",
+    value: "createdByName",
+    sort: false,
+    sortValue: "createdByName",
+  },
+  {
+    label: "Parent Account",
+    value: "accountSubmissionData.parentAccount",
+    sort: false,
+    sortValue: "account_submission_data.parentAccount",
+  },
+  {
+    label: "Status",
+    value: "accountSubmissionData.accountStatus",
+    sort: true,
+    sortValue: "account_submission_data.accountStatus",
+  },
+];
+
 // Import the account listing options
 import { accountListingOptions } from "./accountListingOptions";
 
@@ -30,7 +75,7 @@ function AccountListing() {
 
   const accountListing = accountsData.accounts;
 
-  console.log("ACCOUNTS DATA", accountsData)
+  console.log("ACCOUNTS DATA", accountsData);
   console.log("ACCOUNT LISTING", accountListing);
 
   //==============================================================================
@@ -72,51 +117,18 @@ function AccountListing() {
     return config;
   };
 
+  const generateSeachFieldArray = (selectedOptGroup) => {
+    const searchFields = [];
+    selectedOptGroup.forEach((opt) => {
+      if (opt.sort === true) {
+        searchFields.push(opt.sortValue);
+      }
+    });
+    return searchFields;
+  };
+
   const [customConfig, setCustomConfig] = useState(
-    generateConfig([
-      {
-        label: "Account Source",
-        value: "accountSubmissionData.accountSource",
-        sort: true,
-        sortValue: "account_submission_data.accountSource",
-      },
-      {
-        label: "Account Number",
-        value: "accountNumber",
-        sort: true,
-        sortValue: "account_submission_data.accountNumber",
-      },
-      {
-        label: "Account Name",
-        value: "accountSubmissionData.accountName",
-        sort: true,
-        sortValue: "account_submission_data.accountName",
-      },
-      {
-        label: "Account Owner",
-        value: "accountSubmissionData.secondaryOwner",
-        sort: true,
-        sortValue: "account_submission_data.secondaryOwner",
-      },
-      {
-        label: "Created By",
-        value: "createdByName",
-        sort: false,
-        sortValue: "createdByName",
-      },
-      {
-        label: "Parent Account",
-        value: "accountSubmissionData.parentAccount",
-        sort: false,
-        sortValue: "account_submission_data.parentAccount",
-      },
-      {
-        label: "Status",
-        value: "accountSubmissionData.accountStatus",
-        sort: true,
-        sortValue: "account_submission_data.accountStatus",
-      },
-    ])
+    generateConfig(accountInitialConfig)
   );
 
   // console.log("CONFIG", config);
@@ -132,10 +144,15 @@ function AccountListing() {
     sortBy: null,
     sortDirection: "asc",
     searchTerm: null,
-    searchFields: [],
+    searchFields: generateSeachFieldArray(accountInitialConfig),
   });
 
-  console.log("Page Request", pageRequest)
+  console.log(
+    "Inital Search array",
+    generateSeachFieldArray(accountInitialConfig)
+  );
+
+  console.log("Page Request", pageRequest);
 
   const [pageInfo, setPageInfo] = useState({
     currentPage: 0,
@@ -148,7 +165,7 @@ function AccountListing() {
   }, [pageRequest]);
 
   const fetchAccounts = (pageRequest) => {
-    console.log("Fetching...")
+    console.log("Fetching...");
     axios
       .post(
         "http://localhost:8100/accounts/listing",
@@ -203,7 +220,7 @@ function AccountListing() {
   // Handle Sort
   const handleSort = (option) => {
     let sortDir = "asc";
-    console.log("Page Request SortBy", pageRequest)
+    console.log("Page Request SortBy", pageRequest);
     if (pageRequest.sortBy === option.sortValue) {
       sortDir = pageRequest.sortDirection === "asc" ? "desc" : "asc";
     }
@@ -389,9 +406,13 @@ function AccountListing() {
               </Row>
               <button
                 className="btn btn-primary mt-3"
-                onClick={() =>
-                  setCustomConfig(generateConfig(selectedOptGroup))
-                }
+                onClick={() => {
+                  setCustomConfig(generateConfig(selectedOptGroup));
+                  setPageRequest((prev) => ({
+                    ...prev,
+                    searchFields: generateSeachFieldArray(selectedOptGroup),
+                  }));
+                }}
               >
                 Set
               </button>

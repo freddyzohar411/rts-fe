@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { JsonHelper } from "@workspace/common";
+import axios from "axios";
 
 const BaseFormSelectElement = ({
   setBaseFormTemplate,
@@ -16,11 +17,12 @@ const BaseFormSelectElement = ({
     }
   }, [initialBaseFormId]);
 
+  console.log("BaseFormId:", baseFormId)
+
   useEffect(() => {
-    fetch(`http://localhost:9400/forms/base`)
-      .then((data) => data.json())
+    axios(`http://localhost:9400/forms/base`)
       .then((data) => {
-        console.log(data);
+        console.log("BASE FORMS: ", data);
         setBaseFormList(data.data);
       })
       .catch((err) => {
@@ -28,28 +30,30 @@ const BaseFormSelectElement = ({
       });
   }, []);
 
+  console.log("Base Form List: ", baseFormList)
+
   useEffect(() => {
     console.log("Base form Id: ", baseFormId);
     if (baseFormId && baseFormId !== 0) {
-      fetch(`http://localhost:9400/forms/${baseFormId}`)
-        .then((data) => data.json())
-        .then((data) => {
-          console.log(data);
-          const newTemplate = {
-            formName: data.data?.formName,
-            formType: data.data?.formType,
-            baseFormId: data.data?.baseFormId || 0,
-            entityType: data.data?.entityType,
-            formStepperNumber: data.data?.formStepperNumber,
-            formSchema: JsonHelper.parseArrayObjectValues(data.data.formFieldsList),
-            formLayoutSchema: data.data.formSchemaList,
-          };
-          setBaseFormTemplate(newTemplate);
-          setFormOptions((prev) => ({
-            ...prev,
-            baseFormId: baseFormId,
-          }));
-        });
+      axios(`http://localhost:9400/forms/${baseFormId}`).then((data) => {
+        console.log(data);
+        const newTemplate = {
+          formName: data.data?.formName,
+          formType: data.data?.formType,
+          baseFormId: data.data?.baseFormId || 0,
+          entityType: data.data?.entityType,
+          formStepperNumber: data.data?.formStepperNumber,
+          formSchema: JsonHelper.parseArrayObjectValues(
+            data?.data?.formFieldsList
+          ),
+          formLayoutSchema: data.data.formSchemaList,
+        };
+        setBaseFormTemplate(newTemplate);
+        setFormOptions((prev) => ({
+          ...prev,
+          baseFormId: baseFormId,
+        }));
+      });
     } else {
       setBaseFormTemplate(null);
     }

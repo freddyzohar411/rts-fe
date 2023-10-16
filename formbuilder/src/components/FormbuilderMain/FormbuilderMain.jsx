@@ -23,6 +23,8 @@ const FormbuilderMain = () => {
     }
   }, [templateId]);
 
+  console.log("Main Form Builder Template ID :", templateId)
+
   /**
    * This useEffect is to load the unused fields json file
    */
