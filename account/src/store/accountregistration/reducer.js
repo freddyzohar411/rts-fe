@@ -2,10 +2,16 @@ import {
   SET_ACCOUNT_ID,
   DELETE_ACCOUNT_ID,
   FETCH_DRAFT_ACCOUNT,
+  DELETE_DRAFT_ACCOUNT,
+  DELETE_DRAFT_ACCOUNT_SUCCESS,
+  DELETE_DRAFT_ACCOUNT_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
   accountId: null,
+  loading: false,
+  error: false,
+  success: false,
 };
 
 const AccountRegistrationReducer = (state = initialState, action) => {
@@ -21,6 +27,23 @@ const AccountRegistrationReducer = (state = initialState, action) => {
     case FETCH_DRAFT_ACCOUNT:
       return {
         ...state,
+      };
+    case DELETE_DRAFT_ACCOUNT:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_DRAFT_ACCOUNT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+    case DELETE_DRAFT_ACCOUNT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
       };
     default:
       return state;

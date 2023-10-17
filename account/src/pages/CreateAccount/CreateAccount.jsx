@@ -562,6 +562,13 @@ const AccountCreation = () => {
     }
   };
 
+   /**
+    * Reset Stepper to number
+    */
+  const resetStepper = (number) => {
+    setStep(number);
+  }
+
   console.log("Form Submission Data Loading: ", formSubmissionDataLoading);
 
   return (
@@ -573,6 +580,8 @@ const AccountCreation = () => {
         formFormik={formFormik}
         formFieldsData={formFieldsData}
         setErrorMessage={setErrorMessage}
+        accountId={accountId}
+        resetStepper={resetStepper}
       >
         {/* {!formSubmissionDataLoading && ( */}
         <Form
