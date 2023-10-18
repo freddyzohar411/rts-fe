@@ -64,6 +64,10 @@ import {
 import FormBuilder from "./DynamicForm/components/formbuilder/FormBuilder";
 import Form from "./DynamicForm/components/formdisplay/Form";
 
+//Import Dynamic Table
+import DynamicTable from "./DynamicTable/DynamicTable";
+import useTableHook from "./DynamicTable/useTableHook";
+
 export {
   BreadCrumb,
   getChartColorsArray,
@@ -119,4 +123,8 @@ export {
   // Export form builder and form display
   FormBuilder,
   Form,
+
+  // Export Dynamic Table
+  DynamicTable,
+  useTableHook
 };

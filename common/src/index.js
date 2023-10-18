@@ -1,3 +1,5 @@
+import { DynamicTable } from "./Components";
+
 export * from "./Components";
 
 export * as URL from "./config";
@@ -13,6 +15,8 @@ export * as JsonHelper from "./helpers/json_helper";
 export * as ObjectHelper from "./helpers/object_helper";
 
 export * as DateHelper from "./helpers/date_helper";
+
+export * as DynamicTableHelper from "./helpers/dynamicTable_helper";
 
 // Redux Store
 export * as Actions from "./store/actions";
