@@ -13,7 +13,7 @@ import {
   TabPane,
 } from "reactstrap";
 import classnames from "classnames";
-import RolesTab from "./Roles/RolesTab"
+import RolesTab from "./Roles/RolesTab";
 import UsersTab from "./User/UsersTab";
 import GroupsTab from "./Group/GroupsTab";
 import NewGroup from "./Group/NewGroup";
@@ -111,7 +111,10 @@ function AccessManagement() {
                           </Button>
                         </Col>
                       </Row>
-                      <NewUser show={newUserModal} cancel={() => setNewUserModal(!newUserModal)}/>
+                      <NewUser
+                        show={newUserModal}
+                        cancel={() => setNewUserModal(!newUserModal)}
+                      />
                       <NewGroup
                         show={newGroupModal}
                         cancel={() => setNewGroupModal(!newGroupModal)}
@@ -152,20 +155,20 @@ function AccessManagement() {
                           <TabContent activeTab={ugTab}>
                             {/* USERS MANAGEMENT */}
                             <TabPane tabId="1" id="manageUsers">
-                              <Row>
-                                <Col lg={12}>
+                              <Card>
+                                <CardBody>
                                   <UsersTab />
-                                </Col>
-                              </Row>
+                                </CardBody>
+                              </Card>
                             </TabPane>
 
                             {/* GROUPS MANAGEMENT */}
                             <TabPane tabId="2" id="manageGroups">
-                              <Row className="my-3">
-                                <Col lg={12}>
+                              <Card>
+                                <CardBody>
                                   <GroupsTab />
-                                </Col>
-                              </Row>
+                                </CardBody>
+                              </Card>
                             </TabPane>
                           </TabContent>
                         </Col>

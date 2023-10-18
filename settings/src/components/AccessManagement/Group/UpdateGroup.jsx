@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -26,6 +26,7 @@ import {
   userData,
   roleGroupData,
   roleData,
+  userGroupData,
 } from "../dataSample";
 
 function UpdateGroup(props) {
@@ -60,12 +61,24 @@ function UpdateGroup(props) {
   );
 
   // DUAL LIST BOX
-  const formattedUsers = memberDetails.map((user) => ({
+  const [selected, setSelected] = useState([]);
+
+  // Reformat all the users
+  const formattedUsers = userData.map((user) => ({
     value: user.username,
     label: user.firstName,
   }));
-  const [selected, setSelected] = useState([formattedUsers]);
-  console.log("members", memberDetails);
+
+  // Get members who are already in the group
+  const existingMembers = userData.map()
+
+  const formattedRoles = groupRoles.map((role) => ({
+    value: role.roleName,
+    label: role.roleName,
+  }));
+
+  // const [selected, setSelected] = useState([]);
+  const [selectedRoles, setSelectedRoles] = useState([formattedRoles]);
 
   return (
     <Modal
@@ -75,19 +88,35 @@ function UpdateGroup(props) {
       size="xl"
       scrollable
     >
-      <ModalHeader className="modal-title border-bottom">Editing Group</ModalHeader>
-      <ModalBody>
+      <ModalHeader className="modal-title border-bottom">
+        <div className="d-flex flex-column gap-1">
+          <span className="modal-title">Editing Group</span>
+          <span className="fs-6 text-muted">
+            Make changes to the group details and members assigned to this
+            group.
+          </span>
+        </div>
+      </ModalHeader>
+      <ModalBody className="bg-light">
         <Row>
           <Col>
             <Card>
               <CardBody>
                 <div className="mb-3">
                   <Label>Group Name</Label>
-                  <Input type="text" className="form-control" value={props.groupData.groupName} />
+                  <Input
+                    type="text"
+                    className="form-control"
+                    value={props.groupData.groupName}
+                  />
                 </div>
                 <div className="mb-3">
                   <Label>Group Description</Label>
-                  <Input type="textarea" className="form-control" value={props.groupData.groupDescription} />
+                  <Input
+                    type="textarea"
+                    className="form-control"
+                    value={props.groupData.groupDescription}
+                  />
                 </div>
               </CardBody>
             </Card>
@@ -121,66 +150,71 @@ function UpdateGroup(props) {
                   <TabPane tabId="1" id="manageUsers">
                     <Card>
                       <CardBody>
-                        <Row>
-                          <Col className="p-3">
-                            <Table className="table table-hover table-striped table-bordered border-light align-middle">
-                              <DualListBox
-                                options={formattedUsers}
-                                selected={selected}
-                                onChange={(e) => setSelected(e)}
-                                canFilter={true}
-                                icons={{
-                                  moveLeft: (
-                                    <span
-                                      className="mdi mdi-chevron-left"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveAllLeft: [
-                                    <span
-                                      className="mdi mdi-chevron-double-left"
-                                      key="key"
-                                    />,
-                                  ],
-                                  moveRight: (
-                                    <span
-                                      className="mdi mdi-chevron-right"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveAllRight: [
-                                    <span
-                                      className="mdi mdi-chevron-double-right"
-                                      key="key"
-                                    />,
-                                  ],
-                                  moveDown: (
-                                    <span
-                                      className="mdi mdi-chevron-down"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveUp: (
-                                    <span
-                                      className="mdi mdi-chevron-up"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveTop: (
-                                    <span
-                                      className="mdi mdi-chevron-double-up"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveBottom: (
-                                    <span
-                                      className="mdi mdi-chevron-double-down"
-                                      key="key"
-                                    />
-                                  ),
-                                }}
-                              />
-                            </Table>
+                        <Row className="mb-3">
+                          <Col lg={12}>
+                            <span className="text-muted">
+                              Viewing all the members that belong to this group.
+                            </span>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col lg={12}>
+                            <DualListBox
+                              options={formattedUsers}
+                              selected={selected}
+                              onChange={(e) => setSelected(e)}
+                              canFilter={true}
+                              icons={{
+                                moveLeft: (
+                                  <span
+                                    className="mdi mdi-chevron-left"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllLeft: [
+                                  <span
+                                    className="mdi mdi-chevron-double-left"
+                                    key="key"
+                                  />,
+                                ],
+                                moveRight: (
+                                  <span
+                                    className="mdi mdi-chevron-right"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllRight: [
+                                  <span
+                                    className="mdi mdi-chevron-double-right"
+                                    key="key"
+                                  />,
+                                ],
+                                moveDown: (
+                                  <span
+                                    className="mdi mdi-chevron-down"
+                                    key="key"
+                                  />
+                                ),
+                                moveUp: (
+                                  <span
+                                    className="mdi mdi-chevron-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveTop: (
+                                  <span
+                                    className="mdi mdi-chevron-double-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveBottom: (
+                                  <span
+                                    className="mdi mdi-chevron-double-down"
+                                    key="key"
+                                  />
+                                ),
+                              }}
+                            />
                           </Col>
                         </Row>
                       </CardBody>
@@ -188,13 +222,76 @@ function UpdateGroup(props) {
                   </TabPane>
                   <TabPane tabId="2" id="manageRoles">
                     <Card>
-                        <CardBody>
-                            <Row>
-                                <Col className="p-3">
-                                
-                                </Col>
-                            </Row>
-                        </CardBody>
+                      <CardBody>
+                        <Row className="mb-3">
+                          <Col lg={12}>
+                            <span className="text-muted">
+                              Viewing all the roles that are assigned to this
+                              group.
+                            </span>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col lg={12}>
+                            {/* <DualListBox
+                              options={formattedRoles}
+                              selected={selectedRoles}
+                              onChange={(e) => setSelectedRoles(e)}
+                              canFilter={true}
+                              icons={{
+                                moveLeft: (
+                                  <span
+                                    className="mdi mdi-chevron-left"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllLeft: [
+                                  <span
+                                    className="mdi mdi-chevron-double-left"
+                                    key="key"
+                                  />,
+                                ],
+                                moveRight: (
+                                  <span
+                                    className="mdi mdi-chevron-right"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllRight: [
+                                  <span
+                                    className="mdi mdi-chevron-double-right"
+                                    key="key"
+                                  />,
+                                ],
+                                moveDown: (
+                                  <span
+                                    className="mdi mdi-chevron-down"
+                                    key="key"
+                                  />
+                                ),
+                                moveUp: (
+                                  <span
+                                    className="mdi mdi-chevron-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveTop: (
+                                  <span
+                                    className="mdi mdi-chevron-double-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveBottom: (
+                                  <span
+                                    className="mdi mdi-chevron-double-down"
+                                    key="key"
+                                  />
+                                ),
+                              }}
+                            /> */}
+                          </Col>
+                        </Row>
+                      </CardBody>
                     </Card>
                   </TabPane>
                 </TabContent>

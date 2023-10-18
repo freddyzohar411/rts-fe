@@ -1,15 +1,28 @@
 import React, { useState } from "react";
-import { Table, Button, Badge, Row, Col, ButtonGroup, Input } from "reactstrap";
+import {
+  Table,
+  Button,
+  Badge,
+  Row,
+  Col,
+  ButtonGroup,
+  Input,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+} from "reactstrap";
 import { userData, userGroupMembersData, roleGroupData } from "../dataSample";
 import AssignToGroup from "../Group/AssignToGroup";
 import User from "./User";
 import AssignToRole from "../Roles/AssignToRole";
+import UpdateUser from "./UpdateUser";
 
 function UsersTab() {
   // MODAL OPENING
   const [assignGroupModal, setAssignGroupModal] = useState(false);
   const [assignRoleModal, setAssignRoleModal] = useState(false);
   const [viewUserModal, setViewUserModal] = useState(false);
+  const [updateUserModal, setUpdateUserModal] = useState(false);
 
   // SELECTED USER MODAL
   const [selectedUser, setSelectedUser] = useState(null);
@@ -17,6 +30,12 @@ function UsersTab() {
     const viewUser = userData.find((item) => item.username === user);
     setSelectedUser(viewUser);
     setViewUserModal(!viewUserModal);
+  };
+
+  const handleUpdateUser = (user) => {
+    const updateUser = userData.find((item) => item.username === user);
+    setSelectedUser(updateUser);
+    setUpdateUserModal(!updateUserModal);
   };
 
   // PAGINATION
@@ -93,7 +112,7 @@ function UsersTab() {
                 <tr>
                   <th></th>
                   <th>Name</th>
-                  <th scope="col">Username</th>
+                  <th scope="col">Employee ID</th>
                   <th scope="col">Roles</th>
                   <th scope="col">Member of Group(s)</th>
                   <th scope="col">Date Joined</th>
@@ -114,7 +133,7 @@ function UsersTab() {
                     <td>
                       {user.firstName} {user.lastName}
                     </td>
-                    <td>{user.username}</td>
+                    <td>{user.employeeId}</td>
                     <td>
                       {userGroupMembersData
                         .filter(
@@ -132,9 +151,9 @@ function UsersTab() {
                             .map((role) => role.roleName)
                             .join(", ");
 
-                          return `${group.groupName} (${groupRoles})`;
+                          return `${groupRoles}`;
                         })
-                        .join(", ")}
+                        .join(", ") || "Not Assigned"}
                     </td>
                     <td>
                       {userGroupMembersData
@@ -142,7 +161,7 @@ function UsersTab() {
                           group.members.includes(user.username)
                         )
                         .map((group) => group.groupName)
-                        .join(", ")}
+                        .join(", ") || "Not Assigned"}
                     </td>
                     <td>21-08-2022</td>
                     <td>09-10-2023</td>
@@ -154,7 +173,7 @@ function UsersTab() {
                       <Button onClick={() => handleViewUser(user.username)}>
                         <i className="ri-eye-line"></i>
                       </Button>
-                      <Button>
+                      <Button onClick={() => handleUpdateUser(user.username)}>
                         <i className="ri-pencil-line"></i>
                       </Button>
                       <Button>
@@ -170,27 +189,28 @@ function UsersTab() {
               cancel={() => setViewUserModal(!viewUserModal)}
               user={selectedUser}
             />
-            <div className="d-flex flex-row justify-content-end">
-              <ButtonGroup>
-                <Button
-                  className="btn btn-primary"
-                  onClick={() => handlePrevPage()}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </Button>
-                <Button className="btn btn-primary">
-                  <span>Page {currentPage}</span>
-                </Button>
-                <Button
-                  className="btn btn-primary"
-                  onClick={() => handleNextPage()}
-                  disabled={currentPage * itemsPerPage >= userData.length}
-                >
-                  Next
-                </Button>
-              </ButtonGroup>
-            </div>
+            <UpdateUser
+              show={updateUserModal}
+              cancel={() => setUpdateUserModal(!updateUserModal)}
+              user={selectedUser}
+            />
+            <Pagination className="d-flex flex-row justify-content-end">
+              <PaginationItem
+                onClick={() => handlePrevPage()}
+                disabled={currentPage === 1}
+              >
+                <PaginationLink>← &nbsp; Prev</PaginationLink>
+              </PaginationItem>
+              <PaginationItem active>
+                <PaginationLink>{currentPage}</PaginationLink>
+              </PaginationItem>
+              <PaginationItem
+                onClick={() => handleNextPage()}
+                disabled={currentPage * itemsPerPage >= userData.length}
+              >
+                <PaginationLink>Next &nbsp; →</PaginationLink>
+              </PaginationItem>
+            </Pagination>
           </div>
         </Col>
       </Row>

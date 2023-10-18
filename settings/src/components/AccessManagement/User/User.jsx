@@ -8,10 +8,15 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
+  ModalHeader,
   Row,
   Table,
 } from "reactstrap";
-import { userGroupMembersData, roleGroupData } from "../dataSample";
+import {
+  userGroupMembersData,
+  roleGroupData,
+  permissionRoleData,
+} from "../dataSample";
 import SimpleBar from "simplebar-react";
 
 function User(props) {
@@ -23,15 +28,24 @@ function User(props) {
     group.members.includes(props.user.username)
   );
 
-  const userRoles = userGroupMembersData
-    .filter(
-      (group) => group.members && group.members.includes(props.user.username)
-    )
-    .flatMap((group) =>
-      roleGroupData
-        .filter((role) => role.groups && role.groups.includes(group.groupName))
-        .map((role) => role.roleName)
-    );
+  const userRoles = groupForMember
+    ? userGroupMembersData
+        .filter(
+          (group) =>
+            group.members && group.members.includes(props.user.username)
+        )
+        .flatMap((group) =>
+          roleGroupData
+            .filter(
+              (role) => role.groups && role.groups.includes(group.groupName)
+            )
+            .map((role) => role.roleName)
+        )
+    : null;
+
+  const rolePermissionData = permissionRoleData.filter(
+    (role) => role.roleName === userRoles.roleName
+  );
 
   return (
     <Modal
@@ -41,17 +55,20 @@ function User(props) {
       centered
       scrollable
     >
+      <ModalHeader className="border-bottom">
+        <div className="d-flex flex-column gap-1">
+          <span className="modal-title">User Profile</span>
+          <span className="text-muted fs-6">
+            Manage user details, view user groups and roles.
+          </span>
+        </div>
+      </ModalHeader>
       <ModalBody className="d-flex flex-column gap-3 bg-light p-4">
         <SimpleBar
           style={{ height: "490px", overflowX: "hidden", overflowY: "auto" }}
         >
           <Row>
-            <Col lg={12}>
-              <h5 className="fw-bold">User Profile</h5>
-              <p className="text-muted">
-                Manage user details, view user groups and roles.
-              </p>
-            </Col>
+            <Col lg={12}></Col>
           </Row>
           <Row className="d-flex align-items-stretch justify-content-between">
             <Col lg={12}>
@@ -129,7 +146,7 @@ function User(props) {
                   </Row>
                   <Row>
                     <Col>
-                      <Table className="table table-hover table-bordered align-middle  border-light">
+                      <Table className="table table-hover table-bordered align-middle border-light">
                         <thead>
                           <tr>
                             <th style={{ width: "10px" }}>
@@ -139,12 +156,18 @@ function User(props) {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>
-                              <Input type="checkbox" />
-                            </td>
-                            <td>{groupForMember.groupName}</td>
-                          </tr>
+                          {groupForMember ? (
+                            <tr>
+                              <td>
+                                <Input type="checkbox" />
+                              </td>
+                              <td>{groupForMember.groupName}</td>
+                            </tr>
+                          ) : (
+                            <tr>
+                              <td colSpan={2}>No group assigned.</td>
+                            </tr>
+                          )}
                         </tbody>
                       </Table>
                     </Col>
@@ -165,27 +188,42 @@ function User(props) {
                     </Col>
                   </Row>
                   <Row>
-                    <Table className="table table-hover table-bordered table-striped border-light align-middle">
-                      <thead>
-                        <tr>
-                          <th scope="col" style={{width: "10px"}}></th>
-                          <th scope="col">Role Name</th>
-                          <th scope="col" style={{width: "170px"}}>Permissions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          userRoles.map((role, idx) => (
-                            <tr key={idx}>
-                              <td><Input type="checkbox" /></td>
-                              <td>{role}</td>
-                              <td><Button>View Permissions</Button></td>
+                    <Col>
+                      <Table className="table table-hover table-bordered table-striped border-light align-middle">
+                        <thead>
+                          <tr>
+                            <th scope="col" style={{ width: "10px" }}>
+                              <Input type="checkbox" />
+                            </th>
+                            <th scope="col">Role Name</th>
+                            <th scope="col" style={{ width: "170px" }}>
+                              Permissions
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {userRoles ? (
+                            userRoles.map((role, idx) => (
+                              <tr key={idx}>
+                                <td>
+                                  <Input type="checkbox" />
+                                </td>
+                                <td>{role}</td>
+                                <td>
+                                  <Button>View Permissions</Button>
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={3}>No roles assigned.</td>
                             </tr>
-                          ))
-                        }
-                      </tbody>
-                    </Table>
+                          )}
+                        </tbody>
+                      </Table>
+                    </Col>
                   </Row>
+                  
                 </CardBody>
               </Card>
             </Col>

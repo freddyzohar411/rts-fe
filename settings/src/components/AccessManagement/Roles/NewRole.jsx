@@ -5,6 +5,7 @@ import {
   CardBody,
   CardHeader,
   Col,
+  FormFeedback,
   Input,
   Label,
   Modal,
@@ -20,14 +21,48 @@ import {
   Table,
 } from "reactstrap";
 import classnames from "classnames";
-import { userGroupData, userData, permissionData } from "../dataSample";
+import {
+  userGroupData,
+  userData,
+  permissionData,
+  roleData,
+  roleGroupData,
+} from "../dataSample";
+import "react-dual-listbox/lib/react-dual-listbox.css";
+import DualListBox from "react-dual-listbox";
+import { Field, Form, Formik } from "formik";
+import { initialValues, schema } from "./constants";
 
 function NewRole(props) {
+  // TABS
   const [activeTab, setActiveTab] = useState("1");
   const toggle = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
     }
+  };
+
+  // DUAL LIST BOX
+  const [selected, setSelected] = useState([]);
+  const formattedGroupData = userGroupData.map((group) => ({
+    value: group.groupName,
+    label: group.groupName,
+  }));
+
+  const handleSubmit = async (values) => {
+    const newRoleData = {
+      roleName: values.roleName,
+      roleDescription: values.roleDescription,
+    };
+    roleData.push(newRoleData);
+
+    const newRoleGroups = {
+      roleName: values.roleName,
+      groups: selected,
+    };
+    roleGroupData.push(newRoleGroups);
+
+    props.cancel();
   };
 
   return (
@@ -38,236 +73,268 @@ function NewRole(props) {
       centered
       scrollable
     >
-      <ModalHeader>
-        <h5 className="fw-bold">Create New Role</h5>
+      <ModalHeader className="modal-title border-bottom">
+        Create a New Role
       </ModalHeader>
-      <ModalBody>
-        <div className="mb-3">
-          <Row>
-            <Col lg={12} className="mb-3">
-              <Label>Role Name</Label>
-              <Input
-                type="text"
-                className="form-control"
-                placeholder="Enter role name.."
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col lg={12} className="mb-3">
-              <Label>Role Description</Label>
-              <Input
-                type="textarea"
-                className="form-control"
-                placeholder="Enter role description.."
-              />
-            </Col>
-          </Row>
-        </div>
+      <ModalBody className="bg-light">
+        <Formik
+          validateOnBlur
+          validateOnChange={false}
+          validationSchema={schema}
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+        >
+          {({ touched, errors, resetForm }) => (
+            <Form>
+              <Card>
+                <CardBody>
+                  <div className="mb-3">
+                    <Row>
+                      <Col lg={12} className="mb-3">
+                        <Label>Role Name</Label>
 
-        <Row>
-          <Col lg={12}>
-            <Nav tabs>
-              <NavItem>
-                <NavLink
-                  style={{ cursor: "pointer" }}
-                  className={classnames({ active: activeTab === "1" })}
-                  onClick={() => {
-                    toggle("1");
-                  }}
-                >
-                  Permissions
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  style={{ cursor: "pointer" }}
-                  className={classnames({ active: activeTab === "2" })}
-                  onClick={() => {
-                    toggle("2");
-                  }}
-                >
-                  Members
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <TabContent activeTab={activeTab}>
-              <TabPane tabId="1" id="permissions">
-                <div className="my-3">
-                  <h6>Permissions</h6>
-                  <p className="text-muted">
-                    Permissions control the types of activities that a user or
-                    group can do. Please tick the appropriate boxes for
-                    permission to carry out these actions for this role.
-                  </p>
-                  <Table
-                    className="table table-hover table-bordered table-striped border-light align-middle table-nowrap rounded-3"
-                    id="permissionsTable"
-                  >
-                    <thead>
-                      <tr>
-                        <th>Module</th>
-                        <th>Create</th>
-                        <th>Retrieve</th>
-                        <th>Update</th>
-                        <th>Delete</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {permissionData.map((module) => (
-                        <tr>
-                          <td>{module.moduleName}</td>
-                          <td>
-                            <Input
-                              type="checkbox"
-                              name="createCheckbox"
-                              className="form-check-input"
-                            />
-                          </td>
-                          <td>
-                            <Input
-                              type="checkbox"
-                              name="retrieveCheckbox"
-                              className="form-check-input"
-                            />
-                          </td>
-                          <td>
-                            <Input
-                              type="checkbox"
-                              name="updateCheckbox"
-                              className="form-check-input"
-                            />
-                          </td>
-                          <td>
-                            <Input
-                              type="checkbox"
-                              name="deleteCheckbox"
-                              className="form-check-input"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
-              </TabPane>
+                        <Field
+                          name="roleName"
+                          type="text"
+                          className={`form-control ${
+                            errors.roleName && touched.roleName
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          placeholder="Enter role name.."
+                        />
+                        {errors.roleName && touched.roleName && (
+                          <FormFeedback typeof="invalid">
+                            {errors.roleName}
+                          </FormFeedback>
+                        )}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg={12} className="mb-3">
+                        <Label>Role Description</Label>
+                        <Field
+                          name="roleDescription"
+                          type="textarea"
+                          className={`form-control ${
+                            errors.roleDescription && touched.roleDescription
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          placeholder="Enter role description.."
+                        />
+                        {errors.roleDescription && touched.roleDescription && (
+                          <FormFeedback typeof="invalid">
+                            {errors.roleDescription}
+                          </FormFeedback>
+                        )}
+                      </Col>
+                    </Row>
+                  </div>
+                </CardBody>
+              </Card>
 
-              <TabPane tabId="2" id="members">
-                <div className="my-3">
-                  <Row>
-                    <Col lg={12}>
-                      <h6>Members</h6>
-                      <p className="text-muted">
-                        Assign users or user groups to this role.
-                      </p>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col
-                      lg={12}
-                      className="d-flex flex-start justify-content-between mt-2"
-                    >
-                      <div
-                        className="border col-6"
-                        style={{ maxHeight: "300px", overflowY: "auto" }}
-                      >
-                        <Card>
-                          <CardHeader className="d-flex align-items-center gap-3">
-                            <i className="ri-user-fill"></i>
-                            <span>User</span>
-                          </CardHeader>
-                          <CardBody>
-                            <div className="table-responsive">
-                              <div className="search-box">
-                                <Input
-                                  type="text"
-                                  placeholder="Search.."
-                                  className="form-control mb-2"
-                                />
-                                <i className="ri-search-line search-icon"></i>
-                              </div>
-                              <Table className="table table-hover table-striped border-light align-middle table-nowrap rounded-3">
-                                <thead>
-                                  <tr>
-                                    <th scope="col" style={{ width: "20px" }}>
-                                      <Input type="checkbox" name="group" />
-                                    </th>
-                                    <th scope="col">
-                                      <span>Users</span>
-                                    </th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {userData.map((item, idx) => (
-                                    <tr key={idx}>
-                                      <td>
-                                        <Input type="checkbox" name="group" />
-                                      </td>
-                                      <td>{item.username}</td>
+              <Row>
+                <Col lg={12}>
+                  <Card>
+                    <CardBody>
+                      <Nav tabs>
+                        <NavItem>
+                          <NavLink
+                            style={{ cursor: "pointer" }}
+                            className={classnames({
+                              active: activeTab === "1",
+                            })}
+                            onClick={() => {
+                              toggle("1");
+                            }}
+                          >
+                            Permissions
+                          </NavLink>
+                        </NavItem>
+                        <NavItem>
+                          <NavLink
+                            style={{ cursor: "pointer" }}
+                            className={classnames({
+                              active: activeTab === "2",
+                            })}
+                            onClick={() => {
+                              toggle("2");
+                            }}
+                          >
+                            Groups
+                          </NavLink>
+                        </NavItem>
+                      </Nav>
+                      <TabContent activeTab={activeTab}>
+                        {/* PERMISSIONS */}
+                        <TabPane tabId="1" id="permissions">
+                          <div className="my-3 p-1">
+                            <Row>
+                              <Col>
+                                <h6>Permissions</h6>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <p className="text-muted">
+                                  Permissions control the types of activities
+                                  that a user or group can do. Please tick the
+                                  appropriate boxes for permission to carry out
+                                  these actions for this role.
+                                </p>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <Table
+                                  className="table table-hover table-bordered table-striped border-light align-middle table-nowrap rounded-3"
+                                  id="permissionsTable"
+                                >
+                                  <thead>
+                                    <tr>
+                                      <th>Module</th>
+                                      <th>Create</th>
+                                      <th>Retrieve</th>
+                                      <th>Update</th>
+                                      <th>Delete</th>
                                     </tr>
-                                  ))}
-                                </tbody>
-                              </Table>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </div>
-                      <div
-                        className="border col-6"
-                        style={{ maxHeight: "300px", overflowY: "auto" }}
-                      >
-                        <Card>
-                          <CardHeader className="d-flex align-items-center gap-3">
-                            <i className="ri-team-fill"></i> <span>Groups</span>
-                          </CardHeader>
-                          <CardBody>
-                            <div className="table-responsive">
-                              <div className="search-box">
-                                <Input
-                                  type="text"
-                                  placeholder="Search.."
-                                  className="form-control mb-2"
+                                  </thead>
+                                  <tbody>
+                                    {permissionData.map((module) => (
+                                      <tr>
+                                        <td>{module.moduleName}</td>
+                                        <td>
+                                          <Input
+                                            type="checkbox"
+                                            name="createCheckbox"
+                                            className="form-check-input"
+                                          />
+                                        </td>
+                                        <td>
+                                          <Input
+                                            type="checkbox"
+                                            name="retrieveCheckbox"
+                                            className="form-check-input"
+                                          />
+                                        </td>
+                                        <td>
+                                          <Input
+                                            type="checkbox"
+                                            name="updateCheckbox"
+                                            className="form-check-input"
+                                          />
+                                        </td>
+                                        <td>
+                                          <Input
+                                            type="checkbox"
+                                            name="deleteCheckbox"
+                                            className="form-check-input"
+                                          />
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </Table>
+                              </Col>
+                            </Row>
+                          </div>
+                        </TabPane>
+
+                        {/* NEW GROUPS */}
+                        <TabPane tabId="2" id="members">
+                          <div className="my-3 p-1">
+                            <Row>
+                              <Col lg={12}>
+                                <h6>Groups</h6>
+                                <p className="text-muted">
+                                  Assign user groups to this role.
+                                </p>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <DualListBox
+                                  options={formattedGroupData}
+                                  selected={selected}
+                                  onChange={(e) => setSelected(e)}
+                                  canFilter={true}
+                                  icons={{
+                                    moveLeft: (
+                                      <span
+                                        className="mdi mdi-chevron-left"
+                                        key="key"
+                                      />
+                                    ),
+                                    moveAllLeft: [
+                                      <span
+                                        className="mdi mdi-chevron-double-left"
+                                        key="key"
+                                      />,
+                                    ],
+                                    moveRight: (
+                                      <span
+                                        className="mdi mdi-chevron-right"
+                                        key="key"
+                                      />
+                                    ),
+                                    moveAllRight: [
+                                      <span
+                                        className="mdi mdi-chevron-double-right"
+                                        key="key"
+                                      />,
+                                    ],
+                                    moveDown: (
+                                      <span
+                                        className="mdi mdi-chevron-down"
+                                        key="key"
+                                      />
+                                    ),
+                                    moveUp: (
+                                      <span
+                                        className="mdi mdi-chevron-up"
+                                        key="key"
+                                      />
+                                    ),
+                                    moveTop: (
+                                      <span
+                                        className="mdi mdi-chevron-double-up"
+                                        key="key"
+                                      />
+                                    ),
+                                    moveBottom: (
+                                      <span
+                                        className="mdi mdi-chevron-double-down"
+                                        key="key"
+                                      />
+                                    ),
+                                  }}
                                 />
-                                <i className="ri-search-line search-icon"></i>
-                              </div>
-                              <Table className="table table-hover table-striped border-light align-middle table-nowrap rounded-3">
-                                <thead>
-                                  <tr>
-                                    <th scope="col" style={{ width: "20px" }}>
-                                      <Input type="checkbox" name="group" />
-                                    </th>
-                                    <th scope="col">
-                                      <span>Group Name</span>
-                                    </th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {userGroupData.map((group, idx) => (
-                                    <tr key={idx}>
-                                      <td>
-                                        <Input type="checkbox" name="group" />
-                                      </td>
-                                      <td>{group.groupName}</td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </Table>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
-              </TabPane>
-            </TabContent>
-          </Col>
-        </Row>
+                              </Col>
+                            </Row>
+                          </div>
+                        </TabPane>
+                      </TabContent>
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col lg={12}>
+                  <div className="d-flex flex-row justify-content-between">
+                    <Button type="button" className="btn btn-dark" onClick={() => {resetForm(); setSelected([]);}}>Reset</Button>
+                    <div className="d-flex flex-row gap-2">
+                      <Button type="submit" className="btn btn-dark">Save</Button>
+                      <Button type="button" className="btn btn-dark" onClick={props.cancel}>Cancel</Button>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </Form>
+          )}
+        </Formik>
       </ModalBody>
-      <ModalFooter>
-        <Button>Save</Button>
-        <Button onClick={props.cancel}>Cancel</Button>
-      </ModalFooter>
     </Modal>
   );
 }

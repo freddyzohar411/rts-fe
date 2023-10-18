@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Modal,
   ModalBody,
@@ -12,6 +12,7 @@ import {
   ListGroup,
   ListGroupItem,
   Input,
+  ModalHeader,
 } from "reactstrap";
 import {
   userData,
@@ -20,6 +21,7 @@ import {
   roleData,
 } from "../dataSample";
 import SimpleBar from "simplebar-react";
+
 function Group(props) {
   if (!props.groupData) {
     return null;
@@ -42,9 +44,6 @@ function Group(props) {
     roleNames.includes(role.roleName)
   );
 
-  console.log("Group:", memberDetails);
-  console.log("Roles:", groupRoles);
-
   return (
     <Modal
       isOpen={props.show}
@@ -53,16 +52,19 @@ function Group(props) {
       centered
       scrollable
     >
-      <ModalBody>
-        <SimpleBar style={{ height: "490px", overflowX: "hidden", overflowY: "auto" }}>
-          <Row>
-            <Col>
-              <h5 className="fw-bold mb-4">Group Details</h5>
-            </Col>
-          </Row>
+      <ModalHeader className="border-bottom">
+        <div className="d-flex flex-column gap-1">
+          <span className="modal-title">Group</span>
+          <span className="text-muted fs-6">View group details and members assigned to this group.</span>
+        </div>
+        </ModalHeader>
+      <ModalBody className="bg-light">
+        <SimpleBar
+          style={{ height: "450px", overflowX: "hidden", overflowY: "auto" }}
+        >
           <Row>
             <Col lg={6}>
-              <Card style={{minHeight: "300px"}}>
+              <Card style={{ minHeight: "300px" }}>
                 <CardBody className="p-4">
                   <div className="mb-4">
                     <div className="d-flex flex-column gap-2 mb-3">
@@ -79,7 +81,7 @@ function Group(props) {
               </Card>
             </Col>
             <Col lg={6}>
-              <Card style={{minHeight: "300px"}}>
+              <Card style={{ minHeight: "300px" }}>
                 <CardBody className="p-4">
                   <div className="mb-4">
                     <div className="d-flex flex-column gap-2 mb-3">
@@ -90,14 +92,22 @@ function Group(props) {
                     </div>
 
                     <ListGroup>
-                      {roleDetails.map((role, index) => (
-                        <ListGroupItem key={index} color="dark">
-                          <div className="d-flex flex-column gap-2">
-                            <span className="fw-semibold">{role.roleName}</span>
-                            <span>{role.roleDescription}</span>
-                          </div>
-                        </ListGroupItem>
-                      ))}
+                      {roleDetails ? (
+                        roleDetails.map((role, index) => (
+                          <ListGroupItem key={index} color="dark">
+                            <div className="d-flex flex-column gap-2">
+                              <span className="fw-semibold">
+                                {role.roleName}
+                              </span>
+                              <span>{role.roleDescription}</span>
+                            </div>
+                          </ListGroupItem>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={4}>No roles assigned to this group.</td>
+                        </tr>
+                      )}
                     </ListGroup>
                   </div>
                 </CardBody>
@@ -122,6 +132,7 @@ function Group(props) {
                           <th scope="col" style={{ width: "10px" }}></th>
                           <th scope="col">Name</th>
                           <th scope="col">Username</th>
+                          <th scope="col">Email Address</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -134,6 +145,7 @@ function Group(props) {
                               {member.firstName} {member.lastName}
                             </td>
                             <td>{member.username}</td>
+                            <td>{member.email}</td>
                           </tr>
                         ))}
                       </tbody>

@@ -7,6 +7,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
+  ModalHeader,
   Row,
   UncontrolledTooltip,
 } from "reactstrap";
@@ -17,16 +18,29 @@ import DualListBox from "react-dual-listbox";
 function AssignToGroup(props) {
   const [selected, setSelected] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState("");
-  
-    // Filter out the users who are already assigned to this group *FIX
-  // const filteredGroup = userData.filter((user) => {
-  //   return !user.groups.includes(selectedGroup);
-  // });
+  // Filter out the users who are already assigned to this group *FIX
+  const usersNotInChosenGroup = userData.filter((user) => {
+    const userGroups = userGroupMembersData
+      .filter((group) => group.members.includes(user.username))
+      .map((group) => group.groupName);
+    return !userGroups.includes(selectedGroup);
+  });
 
-  const formattedUserData = userData.map((user) => ({
+  const formattedUserData = usersNotInChosenGroup.map((user) => ({
     value: user.username,
     label: user.firstName,
   }));
+
+  const handleSave = () => {
+    // Find the group
+    const assignedGroup = userGroupMembersData.find(
+      (group) => group.groupName === selectedGroup
+    );
+    // Push the new members into the group
+    selected.map((member) => assignedGroup.members.push(member));
+    console.log("Assigned Group:", assignedGroup);
+    props.cancel();
+  };
 
   return (
     <Modal
@@ -36,17 +50,15 @@ function AssignToGroup(props) {
       centered
       scrollable
     >
+      <ModalHeader className="border-bottom">
+        <div className="d-flex flex-column gap-1">
+          <span className="modal-title">Assign User to Group</span>
+          <span className="fs-6 text-muted">
+            Assign new members to user groups.
+          </span>
+        </div>
+      </ModalHeader>
       <ModalBody>
-        <Row>
-          <Col>
-            <div className="mb-4">
-              <h5 className="fw-bold">Assign User to Group</h5>
-              <p className="text-muted fs-6">
-                Assign new members to user groups.
-              </p>
-            </div>
-          </Col>
-        </Row>
         <Row>
           <Col>
             <div className="mb-1">
@@ -152,12 +164,43 @@ function AssignToGroup(props) {
             )}
           </Col>
         </Row>
+        <Row>
+          <Col>
+            <div className="d-flex flex-row justify-content-between">
+              <Button
+                className="btn btn-dark"
+                type="button"
+                onClick={() => {
+                  setSelected([]);
+                  setSelectedGroup("");
+                }}
+              >
+                Reset
+              </Button>
+              <div className="d-flex flex-row gap-2">
+                <Button
+                  className="btn btn-dark"
+                  onClick={() => handleSave()}
+                  type="submit"
+                >
+                  Save
+                </Button>
+                <Button
+                  className="btn btn-dark"
+                  type="button"
+                  onClick={() => {
+                    props.cancel();
+                    setSelected([]);
+                    setSelectedGroup("");
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </Col>
+        </Row>
       </ModalBody>
-      <ModalFooter>
-        <Button onClick={props.cancel}>Cancel</Button>
-        <Button onClick={() => {setSelectedGroup(""); setSelected([]);}}>Reset Form</Button>
-        <Button onClick={() => {console.log(selected); props.cancel;}}>Save</Button>
-      </ModalFooter>
     </Modal>
   );
 }

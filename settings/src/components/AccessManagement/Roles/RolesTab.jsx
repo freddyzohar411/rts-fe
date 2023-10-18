@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Table } from "reactstrap";
-import { roleData } from "../dataSample";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Table,
+  Toast,
+  ToastBody,
+  ToastHeader,
+} from "reactstrap";
+import { roleData, roleGroupData } from "../dataSample";
 import NewRole from "./NewRole";
 import Role from "./Role";
 import UpdateRole from "./UpdateRole";
+
 function RolesTab() {
   const [createRole, setCreateRole] = useState(false);
   const [viewRoleModal, setViewRoleModal] = useState(false);
   const [selectedRoleData, setSelectedRoleData] = useState(null);
   const [updateRoleModal, setUpdateRoleModal] = useState(false);
+  const [selectedRoleToDelete, setSelectedRoleToDelete] = useState(null);
+  const [toggleDelete, setToggleDelete] = useState(false);
 
   const handleUpdateView = (role) => {
     const selectedRole = roleData.find((item) => item.roleName === role);
@@ -23,10 +36,25 @@ function RolesTab() {
     console.log("Selected Role:", selectedRole);
   };
 
-  useEffect(() => {
-    // This code will run after the state update is processed
-    console.log("Selected Role Data:", selectedRoleData);
-  }, [selectedRoleData]); // Use selectedRoleData as a dependency
+  const handleDelete = (role) => {
+    setSelectedRoleToDelete(role);
+  };
+
+  const confirmDelete = () => {
+    // Filter roles from roleData
+    const updateRoles = roleData.filter(
+      (role) => role.roleName !== selectedRoleToDelete
+    );
+
+    // Filter roles from roleGroupData
+    const updatedRoleGroupData = roleGroupData.filter(
+      (role) => role.roleName !== selectedRoleToDelete
+    );
+
+    setSelectedRoleToDelete(null);
+  };
+
+  useEffect(() => {}, [selectedRoleData]);
 
   return (
     <div>
@@ -43,10 +71,6 @@ function RolesTab() {
         >
           <i className="ri-contacts-line me-2"></i>
           <span>ADD NEW ROLE</span>
-        </Button>
-        <Button className="btn btn-dark btn-sm d-flex flex-row align-items-center">
-          <i className="ri-lock-2-line me-2"></i>
-          <span>ADD NEW PERMISSIONS</span>
         </Button>
       </div>
 
@@ -72,7 +96,9 @@ function RolesTab() {
                   <Input type="checkbox" />
                 </td>
                 <td>{role.roleName}</td>
-                <td>{role.roleDescription}</td>
+                <td className="text-truncate" style={{ maxWidth: "450px" }}>
+                  {role.roleDescription}
+                </td>
                 <td className="d-flex flex-start gap-3">
                   <Button
                     className="btn btn-dark"
@@ -86,7 +112,10 @@ function RolesTab() {
                   >
                     <i className="ri-pencil-line"></i>
                   </Button>
-                  <Button className="btn btn-dark">
+                  <Button
+                    className="btn btn-dark"
+                    onClick={() => handleDelete(role.roleName)}
+                  >
                     <i className="ri-delete-bin-2-line"></i>
                   </Button>
                 </td>
@@ -107,6 +136,36 @@ function RolesTab() {
             cancel={() => setUpdateRoleModal(!updateRoleModal)}
             roleItemData={selectedRoleData}
           />
+          <Modal
+            isOpen={selectedRoleToDelete !== null}
+            toggle={() => setSelectedRoleToDelete(null)}
+            centered
+          >
+            <ModalHeader className="modal-title">
+              Delete Role: {selectedRoleToDelete}
+            </ModalHeader>
+            <ModalBody>
+              <div className="d-flex flex-column gap-4">
+                <span>Are you sure you would like to delete this role?</span>
+                <div className="d-flex flex-row gap-3">
+                  <Button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={confirmDelete}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    type="button"
+                    className="btn btn-dark"
+                    onClick={() => setSelectedRoleToDelete(null)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </ModalBody>
+          </Modal>
         </Table>
       </div>
     </div>
