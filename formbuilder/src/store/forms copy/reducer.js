@@ -98,11 +98,9 @@ const FormReducer = (state = initialState, action) => {
       };
     case DELETE_FORM_SUCCESS:
       // Let filter away the deleted form from forms
-      const newForms = JSON.parse(JSON.stringify(state.forms));
-      const formsData = newForms.forms.filter(
+      const newForms = state.forms.filter(
         (form) => parseInt(form.formId) !== action.payload
-      );  
-      newForms.forms = formsData;
+      );
       return {
         ...state,
         loading: false,

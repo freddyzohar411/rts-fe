@@ -18,9 +18,8 @@ import {
 } from "./actionTypes";
 
 // Fetch forms
-export const fetchForms = (formPageRequest) => ({
+export const fetchForms = () => ({
   type: FETCH_FORMS,
-  payload: formPageRequest,
 });
 
 export const fetchFormsSuccess = (forms) => ({
@@ -101,3 +100,6 @@ export const updateFormFailure = (error) => ({
 export const clearForm = () => ({
   type: CLEAR_FORM,
 });
+
+
+

@@ -3,7 +3,7 @@ const CUSTOMISATION_INITIAL_OPTION = [
       label: "Form Id",
       value: "formId",
       sort: true,
-      sortValue: "formId",
+      sortValue: "id",
     },
     {
       label: "Form Name",

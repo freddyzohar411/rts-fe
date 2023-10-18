@@ -43,9 +43,12 @@ function CustomisationSettings() {
   };
   // =================================================================
   const dispatch = useDispatch();
+  const { forms } = useSelector((state) => state.FormReducer);
   const [formsData, setFormsData] = useState([]);
   const { generateConfig, generateSeachFieldArray, cleanPageRequest } =
     DynamicTableHelper;
+
+  console.log("forms ::", forms)
 
   const {
     pageRequest,
@@ -67,20 +70,21 @@ function CustomisationSettings() {
     generateConfig(CUSTOMISATION_INITIAL_OPTION)
   );
 
-  const fetchForms = (pageRequest) => {
-    axios
-      .post(
-        "http://localhost:9400/forms/listing",
-        cleanPageRequest(pageRequest)
-      )
-      .then((res) => {
-        console.log(res.data);
-        setFormsData(res.data);
-      });
-  };
+  // const fetchForms = (pageRequest) => {
+  //   axios
+  //     .post(
+  //       "http://localhost:9400/forms/listing",
+  //       cleanPageRequest(pageRequest)
+  //     )
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setFormsData(res.data);
+  //     });
+  // };
 
   useEffect(() => {
-    fetchForms(pageRequest);
+    // fetchForms(pageRequest);
+    dispatch(formActions.fetchForms(cleanPageRequest(pageRequest)));
   }, [pageRequest]);
 
   // Update the page info when account Data changes
@@ -92,7 +96,7 @@ function CustomisationSettings() {
 
   return (
     <CustomisationTableWrapper
-      data={formsData.forms}
+      data={forms.forms}
       config={generateFormConfig(customConfig)}
       pageInfo={pageInfo}
       pageRequest={pageRequest}

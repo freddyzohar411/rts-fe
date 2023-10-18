@@ -76,8 +76,7 @@ function AccountListing() {
             >
               <span>
                 <i className="mdi mdi-pencil"></i>
-              </span>{" "}
-              Edit
+              </span>
             </Button>
             <Button
               type="button"
@@ -85,8 +84,7 @@ function AccountListing() {
             >
               <span>
                 <i className="mdi mdi-delete"></i>
-              </span>{" "}
-              Delete
+              </span>
             </Button>
           </div>
         ),

@@ -16,9 +16,9 @@ import {
 import { getForms , createForm, deleteFormById, updateFormById, getFormById } from "../../helpers/backend_helper";
 
 
-function* workFetchForms(action) {
+function* workFetchForms() {
   try {
-    const response = yield call(getForms, action.payload);
+    const response = yield call(getForms);
     yield put(fetchFormsSuccess(response.data));
   } catch (error) {
     yield put(fetchFormsFailure(error));
@@ -28,7 +28,6 @@ function* workFetchForms(action) {
 function* workDeleteForm(action) {
   try {
     const response = yield call(deleteFormById, action.payload);
-    console.log("Deleting... This: ", action.payload)
     yield put(deleteFormSuccess(action.payload));
   } catch (error) {
     yield put(deleteFormFailure(error));
