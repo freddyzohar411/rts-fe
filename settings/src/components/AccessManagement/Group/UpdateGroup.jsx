@@ -19,7 +19,7 @@ import {
   Table,
 } from "reactstrap";
 import classnames from "classnames";
-import "react-dual-listbox/lib/react-dual-listbox.css";
+// import "react-dual-listbox/lib/react-dual-listbox.css";
 import DualListBox from "react-dual-listbox";
 import {
   userGroupMembersData,
@@ -61,7 +61,6 @@ function UpdateGroup(props) {
   );
 
   // DUAL LIST BOX
-  const [selected, setSelected] = useState([]);
 
   // Reformat all the users
   const formattedUsers = userData.map((user) => ({
@@ -70,15 +69,26 @@ function UpdateGroup(props) {
   }));
 
   // Get members who are already in the group
-  const existingMembers = userData.map()
+  const existingMembers = memberDetails.map((user) => ({
+    value: user.username,
+  }));
+
+  const [selected, setSelected] = useState([existingMembers]);
 
   const formattedRoles = groupRoles.map((role) => ({
     value: role.roleName,
     label: role.roleName,
   }));
 
+  console.log("Existing Members:", existingMembers);
+  console.log("All Member:", formattedUsers);
+
   // const [selected, setSelected] = useState([]);
   const [selectedRoles, setSelectedRoles] = useState([formattedRoles]);
+
+  useEffect(() => {
+    console.log("Selected Users:", selected);
+  });
 
   return (
     <Modal
@@ -233,7 +243,7 @@ function UpdateGroup(props) {
                         </Row>
                         <Row className="mb-3">
                           <Col lg={12}>
-                            {/* <DualListBox
+                            <DualListBox
                               options={formattedRoles}
                               selected={selectedRoles}
                               onChange={(e) => setSelectedRoles(e)}
@@ -288,7 +298,7 @@ function UpdateGroup(props) {
                                   />
                                 ),
                               }}
-                            /> */}
+                            />
                           </Col>
                         </Row>
                       </CardBody>
@@ -301,7 +311,7 @@ function UpdateGroup(props) {
         </Row>
       </ModalBody>
       <ModalFooter>
-        <Button className="btn btn-dark" onClick={props.cancel}>
+        <Button className="btn btn-dark" onClick={(props.cancel)}>
           Cancel
         </Button>
         <Button className="btn btn-dark">Save</Button>

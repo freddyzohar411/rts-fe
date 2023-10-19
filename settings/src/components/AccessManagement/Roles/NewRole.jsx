@@ -73,8 +73,12 @@ function NewRole(props) {
       centered
       scrollable
     >
-      <ModalHeader className="modal-title border-bottom">
-        Create a New Role
+      <ModalHeader className="border-bottom">
+        <div className="d-flex flex-column gap-1"> 
+          <span className="modal-title">Create a New Role</span>
+          <span className="text-muted fs-6">Create a new role to begin assigning access permissions to user groups.</span>
+        </div>
+        
       </ModalHeader>
       <ModalBody className="bg-light">
         <Formik

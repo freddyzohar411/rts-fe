@@ -3,8 +3,10 @@ import { Button, ButtonGroup, Col, Input, Row, Table } from "reactstrap";
 import { userGroupData, userGroupMembersData } from "../dataSample";
 import Group from "./Group";
 import UpdateGroup from "./UpdateGroup";
+import Delete from "./Delete";
 
 function GroupsTab() {
+  const [showDelete, setShowDelete] = useState(false);
   // PAGINATION
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -96,7 +98,10 @@ function GroupsTab() {
                     >
                       <i className="ri-pencil-line"></i>
                     </Button>
-                    <Button className="btn btn-dark">
+                    <Button
+                      className="btn btn-dark"
+                      onClick={() => setShowDelete(!showDelete)}
+                    >
                       <i className="ri-delete-bin-line"></i>
                     </Button>
                   </td>
@@ -104,6 +109,7 @@ function GroupsTab() {
               ))}
             </tbody>
           </Table>
+          <Delete show={showDelete} cancel={() => setShowDelete(!showDelete)} groupName="Hi" />
           <Group
             show={groupModal}
             cancel={() => setGroupModal(!groupModal)}

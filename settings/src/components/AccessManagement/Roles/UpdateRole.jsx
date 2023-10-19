@@ -34,47 +34,32 @@ function UpdateRole(props) {
     return null;
   }
 
-  // Retrieve all the groups belonging to this role
-  const roleData = roleGroupData.find((role) => {
-    return (
-      props.roleItemData && role.roleName.includes(props.roleItemData.roleName)
-    );
-  });
-
   // Retrieve all the permissions from the role
   const allPermissions = permissionRoleData.find(
-    (role) => role.roleName === props.roleItemData.roleNem
+    (role) => role.roleName === props.roleItemData.roleName
   );
 
+  if (!allPermissions) {
+    console.log("No permissions found.");
+  } else {
+    console.log("Permissions:", allPermissions);
+  }
+
   // DUAL LIST BOX
-  const formattedGroupData = roleData.groups.map((group) => ({
-    value: group.groupName,
-    label: group.groupName,
+  const [selected, setSelected] = useState([]);
+  const findGroups = roleGroupData.find(
+    (role) => role.roleName === props.roleItemData.roleName
+  );
+  const formattedGroupData = findGroups.groups.map((group) => ({
+    value: group,
+    label: group,
   }));
-  const [selectedGroups, setSelectedGroups] = useState([formattedGroupData]);
 
   // TABS
   const [activeTab, setActiveTab] = useState("1");
   const toggle = (tab) => {
     setActiveTab(tab);
   };
-
-  const roleGroups = roleData.groups;
-
-  // For each group, get the group members from userGroupMembersData
-  const userGroup = userGroupMembersData.filter((group) =>
-    roleGroups.includes(group.groupName)
-  );
-
-  // From userGroupMembersData, retrieve individual information from userData
-  const allUsernames = userGroup.reduce(
-    (usernames, group) => usernames.concat(group.members),
-    []
-  );
-
-  const usersInGroups = userData.filter((user) =>
-    allUsernames.includes(user.username)
-  );
 
   return (
     <Modal
@@ -128,7 +113,7 @@ function UpdateRole(props) {
                       className={classnames({ active: activeTab == "1" })}
                       onClick={() => toggle("1")}
                     >
-                      Groups
+                      Permissions
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -137,12 +122,137 @@ function UpdateRole(props) {
                       className={classnames({ active: activeTab == "2" })}
                       onClick={() => toggle("2")}
                     >
-                      Permissions
+                      Groups
                     </NavLink>
                   </NavItem>
                 </Nav>
                 <TabContent activeTab={activeTab}>
-                  <TabPane tabId="1" id="manageGroups">
+                  <TabPane tabId="1" id="managePermissions">
+                    <Card>
+                      <CardBody>
+                        <Row className="mb-3">
+                          <Col lg={12}>
+                            <span className="text-muted">
+                              Viewing all the permissions assigned to this role.
+                            </span>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col lg={12}>
+                            <Table className="table table-striped table-bordered table-hover border-light align-middle">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Module</th>
+                                  <th scope="col" className="text-center">
+                                    Read
+                                  </th>
+                                  <th scope="col" className="text-center">
+                                    Write
+                                  </th>
+                                  <th scope="col" className="text-center">
+                                    Edit
+                                  </th>
+                                  <th scope="col" className="text-center">
+                                    Delete
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {allPermissions ? (
+                                  <>
+                                    {allPermissions.permissionData.map(
+                                      (module) => (
+                                        <tr>
+                                          <td>{module.moduleName}</td>
+                                          {module.permissions.map((access) => (
+                                            <>
+                                              <td>
+                                                {access.read ? (
+                                                  <Input
+                                                    type="checkbox"
+                                                    checked
+                                                  />
+                                                ) : (
+                                                  <Input type="checkbox" />
+                                                )}
+                                              </td>
+                                              <td>
+                                                {access.write ? (
+                                                  <Input
+                                                    type="checkbox"
+                                                    checked
+                                                  />
+                                                ) : (
+                                                  <Input type="checkbox" />
+                                                )}
+                                              </td>
+                                              <td>
+                                                {access.edit ? (
+                                                  <Input
+                                                    type="checkbox"
+                                                    checked
+                                                  />
+                                                ) : (
+                                                  <Input type="checkbox" />
+                                                )}
+                                              </td>
+                                              <td>
+                                                {access.delete ? (
+                                                  <Input
+                                                    type="checkbox"
+                                                    checked
+                                                  />
+                                                ) : (
+                                                  <Input type="checkbox" />
+                                                )}
+                                              </td>
+                                            </>
+                                          ))}
+                                        </tr>
+                                      )
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    {permissionData.map((module) => (
+                                      <tr>
+                                        <td>{module.moduleName}</td>
+                                        {module.permissions.map((access) => (
+                                          <>
+                                            <td className="text-center">
+                                              {!access.read && (
+                                                <Input type="checkbox" />
+                                              )}
+                                            </td>
+                                            <td className="text-center">
+                                              {!access.write && (
+                                                <Input type="checkbox" />
+                                              )}
+                                            </td>
+                                            <td className="text-center">
+                                              {!access.edit && (
+                                                <Input type="checkbox" />
+                                              )}
+                                            </td>
+                                            <td className="text-center">
+                                              {!access.delete && (
+                                                <Input type="checkbox" />
+                                              )}
+                                            </td>
+                                          </>
+                                        ))}
+                                      </tr>
+                                    ))}
+                                  </>
+                                )}
+                              </tbody>
+                            </Table>
+                          </Col>
+                        </Row>
+                      </CardBody>
+                    </Card>
+                  </TabPane>
+                  <TabPane tabId="2" id="manageGroups">
                     <Card>
                       <CardBody>
                         <Row className="mb-3">
@@ -156,8 +266,8 @@ function UpdateRole(props) {
                           <Col lg={12}>
                             <DualListBox
                               options={formattedGroupData}
-                              selected={selectedGroups}
-                              onChange={(e) => setSelectedGroups(e)}
+                              selected={selected}
+                              onChange={(e) => setSelected(e)}
                               canFilter={true}
                               icons={{
                                 moveLeft: (
@@ -210,127 +320,6 @@ function UpdateRole(props) {
                                 ),
                               }}
                             />
-                          </Col>
-                        </Row>
-                      </CardBody>
-                    </Card>
-                  </TabPane>
-
-                  <TabPane tabId="2" id="managePermissions">
-                    <Card>
-                      <CardBody>
-                        <Row className="mb-3">
-                          <Col lg={12}>
-                            <span className="text-muted">
-                              Viewing all the permissions assigned to this role.
-                            </span>
-                          </Col>
-                        </Row>
-                        <Row className="mb-3">
-                          <Col lg={12}>
-                            <Table className="table table-striped table-bordered table-hover border-light align-middle">
-                              <thead>
-                                <tr>
-                                  <th scope="col">Module</th>
-                                  <th scope="col" className="text-center">
-                                    Read
-                                  </th>
-                                  <th scope="col" className="text-center">
-                                    Write
-                                  </th>
-                                  <th scope="col" className="text-center">
-                                    Edit
-                                  </th>
-                                  <th scope="col" className="text-center">
-                                    Delete
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {allPermissions
-                                  ? allPermissions.map((permission, idx) => (
-                                      <tr key={idx}>
-                                        <td>{permission.moduleName}</td>
-                                        {permission.permissions((data) => (
-                                          <>
-                                            <td>
-                                              {data.read ? (
-                                                <Input
-                                                  type="checkbox"
-                                                  checked
-                                                />
-                                              ) : (
-                                                <Input type="checkbox" />
-                                              )}
-                                            </td>
-
-                                            <td>
-                                              {data.write ? (
-                                                <Input
-                                                  type="checkbox"
-                                                  checked
-                                                />
-                                              ) : (
-                                                <Input type="checkbox" />
-                                              )}
-                                            </td>
-
-                                            <td>
-                                              {data.edit ? (
-                                                <Input
-                                                  type="checkbox"
-                                                  checked
-                                                />
-                                              ) : (
-                                                <Input type="checkbox" />
-                                              )}
-                                            </td>
-
-                                            <td>
-                                              {data.delete ? (
-                                                <Input
-                                                  type="checkbox"
-                                                  checked
-                                                />
-                                              ) : (
-                                                <Input type="checkbox" />
-                                              )}
-                                            </td>
-                                          </>
-                                        ))}
-                                      </tr>
-                                    ))
-                                  : permissionData.map((permission, idx) => (
-                                      <tr key={idx}>
-                                        <td>{permission.moduleName}</td>
-                                        {permission.permissions.map((data) => (
-                                          <>
-                                            <td className="text-center">
-                                              {!data.read && (
-                                                <Input type="checkbox" />
-                                              )}
-                                            </td>
-                                            <td className="text-center">
-                                              {!data.write && (
-                                                <Input type="checkbox" />
-                                              )}
-                                            </td>
-                                            <td className="text-center">
-                                              {!data.edit && (
-                                                <Input type="checkbox" />
-                                              )}
-                                            </td>
-                                            <td className="text-center">
-                                              {!data.delete && (
-                                                <Input type="checkbox" />
-                                              )}
-                                            </td>
-                                          </>
-                                        ))}
-                                      </tr>
-                                    ))}
-                              </tbody>
-                            </Table>
                           </Col>
                         </Row>
                       </CardBody>
