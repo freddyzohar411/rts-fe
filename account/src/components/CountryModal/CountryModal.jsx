@@ -14,7 +14,7 @@ import { countries } from "./countries";
 import ReactCountryFlag from "react-country-flag";
 import SimpleBar from "simplebar-react";
 
-function CountryModal() {
+function CountryModal({ setCountry }) {
   const [modal, setModal] = useState(true);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,6 +36,12 @@ function CountryModal() {
     setSelectedCountry(country);
   };
 
+  useEffect(() => {
+    if (selectedCountry) {
+      setCountry(selectedCountry);
+    }
+  }, [selectedCountry]);
+
   const renderCountries = (country, index) => (
     <Col key={index}>
       <Card
@@ -49,10 +55,14 @@ function CountryModal() {
           value={searchQuery}
           onChange={() => handleCountrySelect(country)}
         />
-        
-          <ReactCountryFlag style={{fontSize: "25px"}} className="mx-1" countryCode={country.code} svg />
-          <span style={{fontSize: "15px"}}>{country.name}</span>
-        
+
+        <ReactCountryFlag
+          style={{ fontSize: "25px" }}
+          className="mx-1"
+          countryCode={country.code}
+          svg
+        />
+        <span style={{ fontSize: "15px" }}>{country.name}</span>
       </Card>
     </Col>
   );
@@ -76,7 +86,9 @@ function CountryModal() {
       <ModalHeader className="border-bottom d-flex flex-column align-items-center">
         <Row>
           <Col>
-            <h4 className="modal-title my-3 text-center">Select a Country for Account</h4>
+            <h4 className="modal-title my-3 text-center">
+              Select a Country for Account
+            </h4>
           </Col>
         </Row>
         <Row>
@@ -102,7 +114,7 @@ function CountryModal() {
                 className="form-control"
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                style={{width: "1050px"}}
+                style={{ width: "1050px" }}
               />
               <i className="ri-search-line search-icon"></i>
             </div>
@@ -125,7 +137,9 @@ function CountryModal() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-muted">No country found. Please try again.</div>
+                  <div className="text-muted">
+                    No country found. Please try again.
+                  </div>
                 )}
               </div>
             </Col>

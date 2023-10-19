@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
-import DynamicTable from "./DynamicTable";
+import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
+
 
 const DynamicTableWrapper = ({
   data,
@@ -27,6 +28,7 @@ const DynamicTableWrapper = ({
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
+   
           {optGroup && optGroup.length > 0 && customViewShow && (
             <div>
               <Row>

@@ -68,6 +68,12 @@ import Form from "./DynamicForm/components/formdisplay/Form";
 import DynamicTable from "./DynamicTable/DynamicTable";
 import useTableHook from "./DynamicTable/useTableHook";
 
+// Import Delete Modal
+import DeleteCustomModal from "./DeleteModal/DeleteCustomModal";
+
+// Import general Modal
+import GeneralModal from "./GeneralModal/GeneralModal";
+
 export {
   BreadCrumb,
   getChartColorsArray,
@@ -126,5 +132,11 @@ export {
 
   // Export Dynamic Table
   DynamicTable,
-  useTableHook
+  useTableHook,
+
+  // Export Delete Modal
+  DeleteCustomModal,
+
+  // Export general Modal
+  GeneralModal,
 };

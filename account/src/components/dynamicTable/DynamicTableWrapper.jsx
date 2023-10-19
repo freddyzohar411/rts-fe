@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
 import DynamicTable from "./DynamicTable";
 import DualListBox from "react-dual-listbox";
+import { GeneralModal } from "@Workspace/common";
 
 const DynamicTableWrapper = ({
   data,
@@ -12,9 +13,13 @@ const DynamicTableWrapper = ({
   setSearch,
   optGroup,
   setCustomConfigData,
+  confirmDelete,
 }) => {
   const [customViewShow, setCustomViewShow] = useState(false);
   const [selectedOptGroup, setSelectedOptGroup] = useState([]);
+
+  const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const handleChange = (selected) => {
     const selectedObjects = selected.map((value) => {
@@ -26,8 +31,82 @@ const DynamicTableWrapper = ({
   return (
     <React.Fragment>
       <div className="page-content">
+        <GeneralModal
+          isOpen={isCustomViewModalOpen}
+          setIsOpen={setIsCustomModalView}
+        >
+          <div>
+            <Row>
+              <Col lg={12}>
+                <div className="mt-4 mt-lg-0 p-4">
+                  <h5 className="fs-14 mb-1">Account Fields Options</h5>
+                  <p className="text-muted">
+                    Select fields to show on account listing table
+                  </p>
+                  <DualListBox
+                    canFilter
+                    filterCallback={(optGroup, filterInput) => {
+                      if (filterInput === "") {
+                        return true;
+                      }
+                      return new RegExp(filterInput, "i").test(optGroup.label);
+                    }}
+                    filterPlaceholder="Search..."
+                    options={optGroup}
+                    selected={selectedOptGroup.map((option) => option?.value)}
+                    onChange={handleChange}
+                    icons={{
+                      moveLeft: (
+                        <span className="mdi mdi-chevron-left" key="key" />
+                      ),
+                      moveAllLeft: [
+                        <span
+                          className="mdi mdi-chevron-double-left"
+                          key="key"
+                        />,
+                      ],
+                      moveRight: (
+                        <span className="mdi mdi-chevron-right" key="key" />
+                      ),
+                      moveAllRight: [
+                        <span
+                          className="mdi mdi-chevron-double-right"
+                          key="key"
+                        />,
+                      ],
+                      moveDown: (
+                        <span className="mdi mdi-chevron-down" key="key" />
+                      ),
+                      moveUp: <span className="mdi mdi-chevron-up" key="key" />,
+                      moveTop: (
+                        <span className="mdi mdi-chevron-double-up" key="key" />
+                      ),
+                      moveBottom: (
+                        <span
+                          className="mdi mdi-chevron-double-down"
+                          key="key"
+                        />
+                      ),
+                    }}
+                  />
+                  <div className="d-flex justify-content-end">
+                    <button
+                      className="btn btn-primary mt-3 "
+                      onClick={() => {
+                        setCustomConfigData(selectedOptGroup);
+                        setIsCustomModalView(false);
+                      }}
+                    >
+                      Set
+                    </button>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </GeneralModal>
         <Container fluid>
-          {optGroup && optGroup.length > 0 && customViewShow && (
+          {/* {optGroup && optGroup.length > 0 && customViewShow && (
             <div>
               <Row>
                 <Col lg={6}>
@@ -99,7 +178,7 @@ const DynamicTableWrapper = ({
                 Set
               </button>
             </div>
-          )}
+          )} */}
           <Row>
             <Col lg={12}>
               <Card className="m-3">
@@ -136,7 +215,10 @@ const DynamicTableWrapper = ({
                           </Button>
                           <Button
                             type="button"
-                            onClick={() => setCustomViewShow(!customViewShow)}
+                            onClick={() => {
+                              setIsCustomModalView(true);
+                              setCustomViewShow(!customViewShow);
+                            }}
                             className="btn btn-primary d-flex align-items-center column-gap-2"
                           >
                             <span>

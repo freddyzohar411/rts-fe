@@ -11,12 +11,16 @@ import {
 } from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
 import { AccountFormConstant } from "./accountFormConstant";
-import { fetchDraftAccount, deleteAccountId } from "../../store/accountregistration/action";
+import {
+  fetchDraftAccount,
+  deleteAccountId,
+} from "../../store/accountregistration/action";
 import {
   fetchAccountFormSubmission,
   clearAccountFormSubmission,
 } from "../../store/accountForm/action";
 import { ObjectHelper } from "@workspace/common";
+import CountryModal from "../../components/CountryModal/CountryModal";
 
 const AccountCreation = () => {
   const dispatch = useDispatch();
@@ -47,8 +51,11 @@ const AccountCreation = () => {
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [country, setCountry] = useState(null);
 
   console.log("STEP: ", step);
+  console.log('Form Submission Data: ', formSubmissionData)
 
   /**
    * Fetch form template based on step
@@ -114,6 +121,10 @@ const AccountCreation = () => {
    */
   useEffect(() => {
     dispatch(fetchDraftAccount());
+
+    return () => {
+      dispatch(deleteAccountId());
+    }
   }, [step]);
 
   console.log("Draft Account Id: ", accountId);
@@ -131,11 +142,11 @@ const AccountCreation = () => {
       if (step === 3) {
         dispatch(fetchAccountFormSubmission("account_instruction", accountId));
       }
-      if (step === 5){
+      if (step === 5) {
         dispatch(fetchAccountFormSubmission("account_commercial", accountId));
       }
     }
-  }, [step]);
+  }, [step,accountId]);
 
   /**
    * Get Formik hook from Form component
@@ -224,16 +235,18 @@ const AccountCreation = () => {
         console.log("Account data Object", accountDataOut);
         console.log("Account Data FORM: ", formData1);
 
-        dispatch(postAccount({
-          entity: "account_account",
-          newData: formData1,
-          config: {
-            headers: {
-              "Content-Type": "multipart/form-data",
+        dispatch(
+          postAccount({
+            entity: "account_account",
+            newData: formData1,
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
             },
-          }, 
-          handleNext: handleNext,
-        }))
+            handleNext: handleNext,
+          })
+        );
       } else {
         console.log("Update Form");
         let formValues = { ...newValues };
@@ -474,7 +487,7 @@ const AccountCreation = () => {
             resetForm: resetFormFields(["file"]),
           })
         );
-        return
+        return;
       }
       if (formSubmissionData === null) {
         console.log("Create instruction");
@@ -562,41 +575,45 @@ const AccountCreation = () => {
     }
   };
 
-   /**
-    * Reset Stepper to number
-    */
+  /**
+   * Reset Stepper to number
+   */
   const resetStepper = (number) => {
     setStep(number);
-  }
+  };
 
   console.log("Form Submission Data Loading: ", formSubmissionDataLoading);
 
+
   return (
-    <Container className="page-content">
-      <FormStepper
-        activeStep={step}
-        handleBack={handleBack}
-        handleNext={handleNext}
-        formFormik={formFormik}
-        formFieldsData={formFieldsData}
-        setErrorMessage={setErrorMessage}
-        accountId={accountId}
-        resetStepper={resetStepper}
-      >
-        {/* {!formSubmissionDataLoading && ( */}
-        <Form
-          template={formTemplate}
-          userDetails={null}
-          country={null}
-          editData={formSubmissionData}
-          onFormikChange={handleFormikChange}
-          onSubmit={handleFormSubmit}
-          onFormFieldsChange={handleFormFieldChange}
-          errorMessage={errorMessage}
-        />
-         {/* )}  */}
-      </FormStepper>
-    </Container>
+    <>
+      {isModalOpen && !accountId && <CountryModal setCountry={setCountry}/>}
+      <Container className="page-content">
+        <FormStepper
+          activeStep={step}
+          handleBack={handleBack}
+          handleNext={handleNext}
+          formFormik={formFormik}
+          formFieldsData={formFieldsData}
+          setErrorMessage={setErrorMessage}
+          accountId={accountId}
+          resetStepper={resetStepper}
+        >
+          {/* {!formSubmissionDataLoading && ( */}
+          <Form
+            template={formTemplate}
+            userDetails={null}
+            country={null}
+            editData={formSubmissionData}
+            onFormikChange={handleFormikChange}
+            onSubmit={handleFormSubmit}
+            onFormFieldsChange={handleFormFieldChange}
+            errorMessage={errorMessage}
+          />
+          {/* )}  */}
+        </FormStepper>
+      </Container>
+    </>
   );
 };
 

@@ -1,4 +1,5 @@
 import { formatDateStandard } from "./date_helper";
+import { Badge } from "reactstrap";
 
 function cleanPageRequest(pageRequest) {
   const cleanPage = { ...pageRequest };
@@ -40,6 +41,18 @@ function generateConfig(selectedOptGroup) {
           return formatDateStandard(
             getDynamicNestedResult(data, opt.value) || "-"
           );
+        }
+        if (opt.label.toLowerCase().includes("status")) {
+          return <Badge
+            color={
+              getDynamicNestedResult(data, opt.value).toLowerCase() === "active"
+                ? "success"
+                : "warning"
+            }
+            className="text-uppercase"
+          >
+            {getDynamicNestedResult(data, opt.value) || "-"}
+          </Badge>;
         }
         return getDynamicNestedResult(data, opt.value) || "-";
       },

@@ -1,55 +1,24 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-} from "reactstrap";
+import { Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Actions as formActions } from "@workspace/formbuilder";
 import CustomisationTableWrapper from "./CustomisationTableWrapper";
 import { useTableHook } from "@workspace/common";
 import { DynamicTableHelper } from "@workspace/common";
-import axios from "axios";
 import { CUSTOMISATION_INITIAL_OPTION } from "./customisationTableInitialOptions";
+import { DeleteCustomModal } from "@Workspace/common";
 
 function CustomisationSettings() {
-  //========================== User Setup ============================
-  // This will vary with the table main page. Each table have it own config with additional columns
-  const generateFormConfig = (customConfig) => {
-    return [
-      ...customConfig,
-      {
-        header: "Action",
-        name: "action",
-        sort: false,
-        sortValue: "action",
-        render: (data) => (
-          <div className="d-flex column-gap-2">
-            <Link to={`/form-builder/${data.formId}`}>
-              <Button type="button" className="btn btn-primary">
-                <i className="ri-edit-2-line"></i>
-              </Button>
-            </Link>
-            <Button
-              type="button"
-              className="btn btn-danger"
-              onClick={() => dispatch(formActions.deleteForm(data.formId))}
-            >
-              <i className="ri-delete-bin-2-line text-light"></i>
-            </Button>
-          </div>
-        ),
-      },
-    ];
-  };
-  // =================================================================
+  // Delete modal states
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const dispatch = useDispatch();
   const { forms } = useSelector((state) => state.FormReducer);
-  const [formsData, setFormsData] = useState([]);
   const { generateConfig, generateSeachFieldArray, cleanPageRequest } =
     DynamicTableHelper;
 
-  console.log("forms ::", forms)
-
+  // Use Use table hook
   const {
     pageRequest,
     pageRequestSet,
@@ -70,40 +39,82 @@ function CustomisationSettings() {
     generateConfig(CUSTOMISATION_INITIAL_OPTION)
   );
 
-  // const fetchForms = (pageRequest) => {
-  //   axios
-  //     .post(
-  //       "http://localhost:9400/forms/listing",
-  //       cleanPageRequest(pageRequest)
-  //     )
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setFormsData(res.data);
-  //     });
-  // };
+  //========================== User Setup ============================
+  // This will vary with the table main page. Each table have it own config with additional columns
+  const generateFormConfig = (customConfig) => {
+    return [
+      ...customConfig,
+      {
+        header: "Action",
+        name: "action",
+        sort: false,
+        sortValue: "action",
+        render: (data) => (
+          <div className="d-flex column-gap-2">
+            <Link to={`/form-builder/${data.formId}`}>
+              <Button type="button" className="btn btn-primary">
+                <i className="ri-edit-2-line"></i>
+              </Button>
+            </Link>
+            <Button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => {
+                console.log("Delete id: ", data.formId);
+                setDeleteId(data.formId);
+                setIsDeleteModalOpen(true);
+              }}
+            >
+              <i className="ri-delete-bin-2-line text-light"></i>
+            </Button>
+          </div>
+        ),
+      },
+    ];
+  };
+  // =================================================================
 
+  // Fetch the forms data
   useEffect(() => {
-    // fetchForms(pageRequest);
     dispatch(formActions.fetchForms(cleanPageRequest(pageRequest)));
+
+    return () => {
+      dispatch(formActions.clearForm());
+    };
   }, [pageRequest]);
 
   // Update the page info when account Data changes
   useEffect(() => {
-    if (formsData) {
-      setPageInfoData(formsData);
+    if (forms) {
+      setPageInfoData(forms);
     }
-  }, [formsData]);
+  }, [forms]);
+
+  // Modal Delete
+  const confirmDelete = () => {
+    dispatch(formActions.deleteForm(deleteId));
+    setIsDeleteModalOpen(false);
+  };
 
   return (
-    <CustomisationTableWrapper
-      data={forms.forms}
-      config={generateFormConfig(customConfig)}
-      pageInfo={pageInfo}
-      pageRequest={pageRequest}
-      pageRequestSet={pageRequestSet}
-      search={search}
-      setSearch={setSearch}
-    />
+    <>
+      <DeleteCustomModal
+        isOpen={isDeleteModalOpen}
+        setIsOpen={setIsDeleteModalOpen}
+        confirmDelete={confirmDelete}
+        header="Delete Form Template"
+        deleteText={"Are you sure you would like to delete this form template?"}
+      />
+      <CustomisationTableWrapper
+        data={forms.forms}
+        config={generateFormConfig(customConfig)}
+        pageInfo={pageInfo}
+        pageRequest={pageRequest}
+        pageRequestSet={pageRequestSet}
+        search={search}
+        setSearch={setSearch}
+      />
+    </>
   );
 }
 

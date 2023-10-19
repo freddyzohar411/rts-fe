@@ -1,22 +1,44 @@
 import React, { useState, useEffect } from "react";
-import {
-  Badge,
-  Button,
-  Input,
-} from "reactstrap";
+import { Badge, Button, Input } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import axios from "axios";
-import { DateHelper } from "@workspace/common";
-import useTableHook from "../../hooks/useTableHook";
+import { useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
-import {
-  generateConfig,
-  generateSeachFieldArray,
-  cleanPageRequest
-} from "../../components/dynamicTable/dynamicTable_helper";
-import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants"
+import { DynamicTableHelper } from "@workspace/common";
+import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
+import { DeleteCustomModal } from "@Workspace/common";
 
 function AccountListing() {
+  // Delete modal states
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  
+  // Table Hooks
+  const {
+    pageRequest,
+    pageRequestSet,
+    pageInfo,
+    setPageInfoData,
+    search,
+    setSearch,
+    customConfig,
+    setCustomConfigData,
+  } = useTableHook(
+    {
+      page: 0,
+      pageSize: 5,
+      sortBy: null,
+      sortDirection: "asc",
+      searchTerm: null,
+      searchFields: DynamicTableHelper.generateSeachFieldArray(ACCOUNT_INITIAL_OPTIONS),
+    },
+    DynamicTableHelper.generateConfig(ACCOUNT_INITIAL_OPTIONS)
+  );
+
+  const [accountsData, setAccountsData] = useState({});
+  const [optGroup, setOptGroup] = useState([]);
+
+  console.log("Account DatA: ", accountsData)
 
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
@@ -68,7 +90,7 @@ function AccountListing() {
         name: "action",
         sort: false,
         sortValue: "action",
-        render: () => (
+        render: (data) => (
           <div className="d-flex column-gap-2">
             <Button
               type="button"
@@ -81,6 +103,10 @@ function AccountListing() {
             <Button
               type="button"
               className="btn btn-danger d-flex align-items-center column-gap-2"
+              onClick={() => {
+                setDeleteId(data.id);
+                setIsDeleteModalOpen(true);
+              }}
             >
               <span>
                 <i className="mdi mdi-delete"></i>
@@ -91,31 +117,15 @@ function AccountListing() {
       },
     ];
   };
-  // =================================================================
+  // ==================================================================
 
-  const {
-    pageRequest,
-    pageRequestSet,
-    pageInfo,
-    setPageInfoData,
-    search,
-    setSearch,
-    customConfig,
-    setCustomConfigData,
-  } = useTableHook(
-    {
-      page: 0,
-      pageSize: 5,
-      sortBy: null,
-      sortDirection: "asc",
-      searchTerm: null,
-      searchFields: generateSeachFieldArray(ACCOUNT_INITIAL_OPTIONS),
-    },
-    generateConfig(ACCOUNT_INITIAL_OPTIONS)
-  );
+  // Modal Delete
+  const confirmDelete = () => {
+    console.log("Delete confirmed id: ", deleteId);
+    // Logic to delete the account
 
-  const [accountsData, setAccountsData] = useState({});
-  const [optGroup, setOptGroup] = useState([]);
+    setIsDeleteModalOpen(false);
+  };
 
   // Get all the option groups
   useEffect(() => {
@@ -125,16 +135,15 @@ function AccountListing() {
     });
   }, []);
 
-
-  // Fetch account using axios  
+  // Fetch account using axios
   const fetchAccounts = (pageRequest) => {
     axios
       .post(
         "http://localhost:8100/accounts/listing",
-        cleanPageRequest(pageRequest)
+        DynamicTableHelper.cleanPageRequest(pageRequest)
       )
       .then((res) => {
-        console.log(res.data);
+        console.log("ACCOUNT LISTING:", res.data);
         setAccountsData(res.data);
       });
   };
@@ -154,17 +163,26 @@ function AccountListing() {
   document.title = "Accounts | RTS";
 
   return (
-    <DynamicTableWrapper
-      data={accountsData.accounts}
-      config={generateAccountConfig(customConfig)}
-      pageInfo={pageInfo}
-      pageRequest={pageRequest}
-      pageRequestSet={pageRequestSet}
-      search={search}
-      setSearch={setSearch}
-      optGroup={optGroup}
-      setCustomConfigData={setCustomConfigData}
-    />
+    <>
+      <DeleteCustomModal
+        isOpen={isDeleteModalOpen}
+        setIsOpen={setIsDeleteModalOpen}
+        confirmDelete={confirmDelete}
+        header="Delete Account"
+        deleteText={"Are you sure you would like to delete this account?"}
+      />
+      <DynamicTableWrapper
+        data={accountsData.accounts}
+        config={generateAccountConfig(customConfig)}
+        pageInfo={pageInfo}
+        pageRequest={pageRequest}
+        pageRequestSet={pageRequestSet}
+        search={search}
+        setSearch={setSearch}
+        optGroup={optGroup}
+        setCustomConfigData={setCustomConfigData}
+      />
+    </>
   );
 }
 

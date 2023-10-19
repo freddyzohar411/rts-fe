@@ -15,7 +15,7 @@ const Modal = ({ children, isOpen, closeModal, height, backgroundClose }) => {
   const modalContent = (
     <div className="modal-container">
       <div className="modal-backdrop" onClick={() => backgroundClose && closeModal()}></div>
-      <div className="modal-content" style={{ height: height }}>
+      <div className="modal-content-custom" style={{ height: height }}>
         {children}
       </div>
     </div>

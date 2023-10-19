@@ -31,12 +31,12 @@ const ACCOUNT_INITIAL_OPTIONS = [
     },
     {
       label: "Parent Account",
-      value: "accountSubmissionData.parentAccount",
-      sort: false,
-      sortValue: "account_submission_data.parentAccount",
+      value: "accountSubmissionData.parentCompany",
+      sort: true,
+      sortValue: "account_submission_data.parentCompany",
     },
     {
-      label: "Status",
+      label: "Account Status",
       value: "accountSubmissionData.accountStatus",
       sort: true,
       sortValue: "account_submission_data.accountStatus",

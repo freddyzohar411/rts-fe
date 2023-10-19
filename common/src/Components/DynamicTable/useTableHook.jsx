@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { DateHelper } from "@workspace/common";
+import {
+  generateSeachFieldArray,
+  generateConfig,
+} from "../../helpers/dynamicTable_helper";
 
 const useTableHook = (initialPageRequest = {}, initialConfig = []) => {
   // Set state for page request
@@ -23,44 +27,6 @@ const useTableHook = (initialPageRequest = {}, initialConfig = []) => {
   const [search, setSearch] = useState("");
 
   const [customConfig, setCustomConfig] = useState(initialConfig);
-
-  function generateSeachFieldArray(selectedOptGroup) {
-    const searchFields = [];
-    selectedOptGroup.forEach((opt) => {
-      if (opt.sort === true) {
-        searchFields.push(opt.sortValue);
-      }
-    });
-    return searchFields;
-  }
-
-  function getDynamicNestedResult(data, value) {
-    const result = value.split(".").reduce((acc, part) => {
-      return acc ? acc[part] : undefined;
-    }, data);
-    return result;
-  }
-
-  function generateConfig(selectedOptGroup) {
-    const config = [];
-    selectedOptGroup.forEach((opt) => {
-      config.push({
-        header: opt.label,
-        name: opt.value,
-        sort: opt.sort,
-        sortValue: opt.sortValue,
-        render: (data) => {
-          if (opt.value === "createdAt" || opt.value === "updatedAt") {
-            return DateHelper.formatDateStandard(
-              getDynamicNestedResult(data, opt.value) || "-"
-            );
-          }
-          return getDynamicNestedResult(data, opt.value) || "-";
-        },
-      });
-    });
-    return config;
-  }
 
   const setCustomConfigData = (selectedOptGroup) => {
     setCustomConfig(generateConfig(selectedOptGroup));
