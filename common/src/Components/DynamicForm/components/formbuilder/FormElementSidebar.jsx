@@ -148,7 +148,7 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggablePrefix: "element",
       draggableId: "parentcompany",
       type: "field",
-    }
+    },
   ];
 
   // Layout List
@@ -190,7 +190,24 @@ const FormElementSidebar = ({ unusedFields }) => {
 
   return (
     <div>
-      <h3>Elements</h3>
+        <div className="d-flex gap-2 align-item-center justify-content-center">
+        <h3>Unused Fields</h3>
+        <span
+          style={{
+            width: "25px",
+            height: "25px",
+            backgroundColor: "grey",
+            borderRadius: "100%",
+            fontSize: "15px",
+          }}
+          className="d-flex align-items-center justify-content-center"
+        >
+          {unusedFieldsLength(unusedFields)}
+        </span>
+      </div>
+      {unusedFields?.length > 0 && <UnusedFields unusedFields={unusedFields} />}
+
+      <h3 className="my-3">Elements</h3>
       <div>
         {elementLists.map((element) => (
           <DraggableBox
@@ -214,22 +231,7 @@ const FormElementSidebar = ({ unusedFields }) => {
         ))}
       </div>
 
-      <div className="d-flex gap-2 align-item-center justify-content-center">
-        <h4>Unused Fields</h4>
-        <span
-          style={{
-            width: "25px",
-            height: "25px",
-            backgroundColor: "grey",
-            borderRadius: "100%",
-            fontSize: "15px",
-          }}
-          className="d-flex align-items-center justify-content-center"
-        >
-          {unusedFieldsLength(unusedFields)}
-        </span>
-      </div>
-      {unusedFields?.length > 0 && <UnusedFields unusedFields={unusedFields} />}
+   
     </div>
   );
 };

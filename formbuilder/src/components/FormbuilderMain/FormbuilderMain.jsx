@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+
 import { FormBuilder } from "@workspace/common";
 import { useDispatch, useSelector } from "react-redux";
 import { createForm, updateForm, fetchForm } from "../../store/forms/action";
@@ -86,7 +87,7 @@ const FormbuilderMain = () => {
   };
 
   return (
-    <div className="page-content">
+    <div className="" style={{marginTop:"70px",marginBottom:"60px"}}>
       <FormBuilder
         initialFormState={form ? "update" : "create"}
         template={form}

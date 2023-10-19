@@ -3,6 +3,7 @@ import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
 import DynamicTable from "./DynamicTable";
 import DualListBox from "react-dual-listbox";
 import { GeneralModal } from "@Workspace/common";
+import "./DynamicTableWrapper.scss"
 
 const DynamicTableWrapper = ({
   data,
@@ -38,12 +39,13 @@ const DynamicTableWrapper = ({
           <div>
             <Row>
               <Col lg={12}>
-                <div className="mt-4 mt-lg-0 p-4">
+                <div className="mt-4 mt-lg-0 p-4" style={{height:'1000px'}}>
                   <h5 className="fs-14 mb-1">Account Fields Options</h5>
                   <p className="text-muted">
                     Select fields to show on account listing table
                   </p>
-                  <DualListBox
+                  <DualListBox 
+                  style={{height:'700px'}}
                     canFilter
                     filterCallback={(optGroup, filterInput) => {
                       if (filterInput === "") {

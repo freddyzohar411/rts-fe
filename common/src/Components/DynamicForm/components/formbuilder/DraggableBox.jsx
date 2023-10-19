@@ -22,7 +22,8 @@ const DraggableBox = ({
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
-                className="type-box"
+                // className="type-box "
+                className="bg-light border-dark border rounded-pill p-2 my-3 fs-5"
                 id={`${draggablePrefix}-${draggableId}`}
               >
                 {draggableLabel}

@@ -5,9 +5,9 @@
   }
   
   .left-sidebar {
-    background-color: orange;
+    // background-color: var(--primary);
     text-align: center;
-    padding: 15px;
+    // padding: 15px;
     height: 100vh;
     overflow: hidden;
     overflow-y: auto;
@@ -17,7 +17,7 @@
   .middle-sidebar {
     overflow: hidden;
     overflow-y: auto;
-    height: 100vh;
+    // height: 100vh;
     padding: 25px;
     padding-bottom: 35px;
 

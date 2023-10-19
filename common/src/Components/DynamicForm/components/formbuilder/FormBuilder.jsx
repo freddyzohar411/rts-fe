@@ -20,6 +20,7 @@ import {
   checkCopyFieldConditions,
 } from "../../formelements/formElements_helper";
 import BaseFormSelectElement from "./BaseFormSelectElement";
+import SimpleBar from "simplebar-react";
 
 const FormBuilder = ({
   onSubmit,
@@ -827,236 +828,242 @@ const FormBuilder = ({
         />
       </Modal>
       <div className="grid-formbuilder">
-        <div className="left-sidebar text-center">
+
+      {/* <SimpleBar style={{height:"160vh"}}> */}
+        <div className="left-sidebar text-center bg-secondary px-4 py-3">
           <FormElementSidebar unusedFields={unusedFields} />
         </div>
+        {/* </SimpleBar> */}
 
-        <div className="middle-sidebar">
-          <div className="form-container">
-            <FormikProvider value={formik}>
-              <div className="d-flex justify-content-between align-items-center">
-                <h1 className="mb-4 mt-4">{`Form Builder (Total Fields: ${formFields?.length})`}</h1>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  style={{ padding: "10px 20px" }}
-                  onClick={() => setShowAll((prev) => !prev)}
-                >
-                  {showAll ? "Hide Fields" : "Show All Fields"}
-                </button>
-              </div>
 
-              <div className="d-flex gap-2 mb-4">
-                <label htmlFor="" className="">
-                  Form Name:
-                </label>
-                <input
-                  type="text"
-                  value={formName}
-                  onChange={(e) => setFormName(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="d-flex align-items-center gap-4 mb-3">
-                <div className="flex-grow-1">
-                  <label htmlFor="" className="">
-                    Form Type
-                  </label>
-                  <select
-                    value={formOptions.formType}
-                    onChange={(e) =>
-                      setFormOptions((prev) => ({
-                        ...prev,
-                        formType: e.target.value,
-                      }))
-                    }
-                    className="form-select w-100"
+        <SimpleBar style={{height:"800px"}}>
+          <div className="middle-sidebar">
+            <div className="form-container">
+              <FormikProvider value={formik}>
+                <div className="d-flex justify-content-between align-items-center">
+                  <h1 className="mb-4 mt-4">{`Form Builder (Total Fields: ${formFields?.length})`}</h1>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    style={{ padding: "10px 20px" }}
+                    onClick={() => setShowAll((prev) => !prev)}
                   >
-                    <option value="">Select Form Type</option>
-                    <option value="custom">Custom</option>
-                    <option value="base">Base</option>
-                  </select>
+                    {showAll ? "Hide Fields" : "Show All Fields"}
+                  </button>
                 </div>
-              </div>
-              {formOptions.formType === "custom" && (
-                <div className="d-flex align-items-center gap-4">
-                  <div className="flex-grow-1">
-                    <BaseFormSelectElement
-                      setBaseFormTemplate={setBaseFormTemplate}
-                      setFormOptions={setFormOptions}
-                      initialBaseFormId={formOptions.baseFormId}
-                    />
-                  </div>
 
+                <div className="d-flex gap-2 mb-4">
+                  <label htmlFor="" className="">
+                    Form Name:
+                  </label>
+                  <input
+                    type="text"
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
+                    className="form-control"
+                  />
+                </div>
+
+                <div className="d-flex align-items-center gap-4 mb-3">
                   <div className="flex-grow-1">
-                    <label htmlFor="" className="form-label">
-                      Entity Type
+                    <label htmlFor="" className="">
+                      Form Type
                     </label>
-                    <input
-                      value={formOptions.entityType}
+                    <select
+                      value={formOptions.formType}
                       onChange={(e) =>
                         setFormOptions((prev) => ({
                           ...prev,
-                          entityType: e.target.value,
+                          formType: e.target.value,
                         }))
                       }
-                      type="text"
-                      className="form-control w-100"
-                    />
-                  </div>
-
-                  <div className="flex-grow-1">
-                    <label htmlFor="" className="form-label">
-                      Stepper No
-                    </label>
-                    <input
-                      value={formOptions.stepperNumber}
-                      onChange={(e) =>
-                        setFormOptions((prev) => ({
-                          ...prev,
-                          stepperNumber: parseInt(e.target.value),
-                        }))
-                      }
-                      type="number"
-                      className="form-control w-100"
-                    />
+                      className="form-select w-100"
+                    >
+                      <option value="">Select Form Type</option>
+                      <option value="custom">Custom</option>
+                      <option value="base">Base</option>
+                    </select>
                   </div>
                 </div>
-              )}
-              <hr />
-              <div className="layout-drop-zone">
-                <form onSubmit={formik.handleSubmit} className="drag-zone">
-                  <div className="lists-container">
-                    {formLayoutSchema.length > 0 ? (
-                      formLayoutSchema.map((row, index) => (
-                        <DnDWrapper
-                          key={index}
-                          droppableType="row"
-                          draggablePrefix="draggable-row-"
-                          draggableId={index}
-                          placeholder
-                          index={index}
-                          dropColor="#eeeeee"
-                        >
-                          <DroppableList
-                            key={row.rowId}
-                            row={row}
-                            setRowtitle={setRowtitle}
-                            formik={formik}
-                            handleFormFieldEdit={handleFormFieldEdit}
-                            handleFormFieldDelete={handleFormFieldDelete}
-                            formFields={formFields}
-                            handleDeleteLayoutAndField={
-                              handleDeleteLayoutAndField
-                            }
-                            toggleRowLayoutTitle={toggleRowLayoutTitle}
-                            addDropzoneToRowLayout={addDropzoneToRowLayout}
-                            deleteColumn={deleteColumn}
-                            setUnusedFieldIsUsed={setUnusedFieldIsUsed}
-                            deleteTableData={deleteTableData}
-                            setFormState={setFormState}
-                            userDetails={userDetails}
-                            country={country}
-                            showAll={showAll}
-                            removeUnusedFieldFromSchema={
-                              removeUnusedFieldFromSchema
-                            }
-                            formOptions={formOptions}
-                            formStateHook={{ formState, setFormState }}
-                            buttonNameHook={{ buttonName, setButtonName }}
-                            formFieldsHook={{ formFields, setFormFields }}
-                          />
-                        </DnDWrapper>
-                      ))
-                    ) : (
-                      <div style={{ position: "relative" }}>
-                        {formFields.length === 0 && (
-                          <div className="drop-zone-text">DROP ZONE</div>
-                        )}
-                        <DnDWrapper
-                          droppableType="row"
-                          draggablePrefix="draggable-row-"
-                          draggableId={0}
-                          placeholder
-                          index={0}
-                          dropColor="#eeeeee"
-                        >
-                          <div
-                            className="d-flex justify-content-center align-items-center absolute"
-                            style={{ height: "200px" }}
+                {formOptions.formType === "custom" && (
+                  <div className="d-flex align-items-center gap-4">
+                    <div className="flex-grow-1">
+                      <BaseFormSelectElement
+                        setBaseFormTemplate={setBaseFormTemplate}
+                        setFormOptions={setFormOptions}
+                        initialBaseFormId={formOptions.baseFormId}
+                      />
+                    </div>
+
+                    <div className="flex-grow-1">
+                      <label htmlFor="" className="form-label">
+                        Entity Type
+                      </label>
+                      <input
+                        value={formOptions.entityType}
+                        onChange={(e) =>
+                          setFormOptions((prev) => ({
+                            ...prev,
+                            entityType: e.target.value,
+                          }))
+                        }
+                        type="text"
+                        className="form-control w-100"
+                      />
+                    </div>
+
+                    <div className="flex-grow-1">
+                      <label htmlFor="" className="form-label">
+                        Stepper No
+                      </label>
+                      <input
+                        value={formOptions.stepperNumber}
+                        onChange={(e) =>
+                          setFormOptions((prev) => ({
+                            ...prev,
+                            stepperNumber: parseInt(e.target.value),
+                          }))
+                        }
+                        type="number"
+                        className="form-control w-100"
+                      />
+                    </div>
+                  </div>
+                )}
+                <hr />
+                <div className="layout-drop-zone">
+                  <form onSubmit={formik.handleSubmit} className="drag-zone">
+                    <div className="lists-container">
+                      {formLayoutSchema.length > 0 ? (
+                        formLayoutSchema.map((row, index) => (
+                          <DnDWrapper
+                            key={index}
+                            droppableType="row"
+                            draggablePrefix="draggable-row-"
+                            draggableId={index}
+                            placeholder
+                            index={index}
+                            dropColor="#eeeeee"
                           >
-                            {/* <span>DROP ZONE</span> */}
-                          </div>
-                        </DnDWrapper>
-                      </div>
+                            <DroppableList
+                              key={row.rowId}
+                              row={row}
+                              setRowtitle={setRowtitle}
+                              formik={formik}
+                              handleFormFieldEdit={handleFormFieldEdit}
+                              handleFormFieldDelete={handleFormFieldDelete}
+                              formFields={formFields}
+                              handleDeleteLayoutAndField={
+                                handleDeleteLayoutAndField
+                              }
+                              toggleRowLayoutTitle={toggleRowLayoutTitle}
+                              addDropzoneToRowLayout={addDropzoneToRowLayout}
+                              deleteColumn={deleteColumn}
+                              setUnusedFieldIsUsed={setUnusedFieldIsUsed}
+                              deleteTableData={deleteTableData}
+                              setFormState={setFormState}
+                              userDetails={userDetails}
+                              country={country}
+                              showAll={showAll}
+                              removeUnusedFieldFromSchema={
+                                removeUnusedFieldFromSchema
+                              }
+                              formOptions={formOptions}
+                              formStateHook={{ formState, setFormState }}
+                              buttonNameHook={{ buttonName, setButtonName }}
+                              formFieldsHook={{ formFields, setFormFields }}
+                            />
+                          </DnDWrapper>
+                        ))
+                      ) : (
+                        <div style={{ position: "relative" }}>
+                          {formFields.length === 0 && (
+                            <div className="drop-zone-text">DROP ZONE</div>
+                          )}
+                          <DnDWrapper
+                            droppableType="row"
+                            draggablePrefix="draggable-row-"
+                            draggableId={0}
+                            placeholder
+                            index={0}
+                            dropColor="#eeeeee"
+                          >
+                            <div
+                              className="d-flex justify-content-center align-items-center absolute"
+                              style={{ height: "200px" }}
+                            >
+                              {/* <span>DROP ZONE</span> */}
+                            </div>
+                          </DnDWrapper>
+                        </div>
+                      )}
+                    </div>
+                    {formFields.length > 0 && (
+                      <button type="submit" className="btn btn-primary mt-3">
+                        {formState === "create" ? "Create" : "Update"}
+                      </button>
                     )}
-                  </div>
-                  {formFields.length > 0 && (
-                    <button type="submit" className="btn btn-primary mt-3">
-                      {formState === "create" ? "Create" : "Update"}
-                    </button>
-                  )}
-                  {formState === "update" && (
-                    <button
-                      type="button"
-                      className="btn btn-danger mt-3 ms-3"
-                      onClick={() => {
-                        setFormState("create");
-                        formik.resetForm();
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  )}
+                    {formState === "update" && (
+                      <button
+                        type="button"
+                        className="btn btn-danger mt-3 ms-3"
+                        onClick={() => {
+                          setFormState("create");
+                          formik.resetForm();
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    )}
 
-                  {formFields.length > 0 && (
-                    <button
-                      type="button"
-                      className="btn btn-primary mt-3 ms-3"
-                      onClick={() => {
-                        const JSONData = {
-                          formName,
-                          formSchema: formFields,
-                          formLayoutSchema,
-                        };
-                        setJsonData(JSON.stringify(JSONData));
-                        console.log(JSON.stringify(JSONData));
-                        setShowModal(true);
-                      }}
-                    >
-                      Preview
-                    </button>
-                  )}
-                  {formFields.length > 0 && (
-                    <button
-                      className="btn btn-primary mt-3 ms-3"
-                      onClick={viewJSON}
-                    >
-                      View JSON
-                    </button>
-                  )}
-                  {formFields.length > 0 && (
-                    <button
-                      className="btn btn-primary mt-3 ms-3"
-                      onClick={handleSaveJSONData}
-                    >
-                      Save
-                    </button>
-                  )}
-                  {formFields.length > 0 && (
-                    <button
-                      className="btn btn-primary mt-3 ms-3"
-                      onClick={handleSaveJsonAPI}
-                    >
-                      Save to API
-                    </button>
-                  )}
-                </form>
-              </div>
-            </FormikProvider>
+                    {formFields.length > 0 && (
+                      <button
+                        type="button"
+                        className="btn btn-primary mt-3 ms-3"
+                        onClick={() => {
+                          const JSONData = {
+                            formName,
+                            formSchema: formFields,
+                            formLayoutSchema,
+                          };
+                          setJsonData(JSON.stringify(JSONData));
+                          console.log(JSON.stringify(JSONData));
+                          setShowModal(true);
+                        }}
+                      >
+                        Preview
+                      </button>
+                    )}
+                    {formFields.length > 0 && (
+                      <button
+                        className="btn btn-primary mt-3 ms-3"
+                        onClick={viewJSON}
+                      >
+                        View JSON
+                      </button>
+                    )}
+                    {formFields.length > 0 && (
+                      <button
+                        className="btn btn-primary mt-3 ms-3"
+                        onClick={handleSaveJSONData}
+                      >
+                        Save
+                      </button>
+                    )}
+                    {formFields.length > 0 && (
+                      <button
+                        className="btn btn-primary mt-3 ms-3"
+                        onClick={handleSaveJsonAPI}
+                      >
+                        Save to API
+                      </button>
+                    )}
+                  </form>
+                </div>
+              </FormikProvider>
+            </div>
           </div>
-        </div>
+        </SimpleBar>
 
         <Modal
           isOpen={showModalSchema}
