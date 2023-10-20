@@ -30,13 +30,15 @@ function RolesTab() {
     setUpdateRoleModal(!updateRoleModal);
   };
 
-  // const handleView = (role) => {
-  //   const selectedRole = roleData.find((item) => item.roleName === role);
-  //   setSelectedRoleData(selectedRole);
-  //   setViewRoleModal(!viewRoleModal);
-  //   console.log("Selected Role:", selectedRole);
-  // };
+  // Modal View *To change to page viewing only
+  const handleView = (role) => {
+    const selectedRole = roleData.find((item) => item.roleName === role);
+    setSelectedRoleData(selectedRole);
+    setViewRoleModal(!viewRoleModal);
+    console.log("Selected Role:", selectedRole);
+  };
 
+  // Page View for Role **To pass props
   const handleViewRole = (role) => {
     const selectedRole = roleData.find((item) => item.roleName === role);
     setSelectedRoleData(selectedRole);
@@ -108,7 +110,7 @@ function RolesTab() {
                 <td className="d-flex flex-start gap-3">
                   <Button
                     className="btn btn-primary"
-                    onClick={() => handleViewRole(role.roleName)}
+                    onClick={() => handleView(role.roleName)}
                   >
                       <i className="ri-eye-line"></i>
                     

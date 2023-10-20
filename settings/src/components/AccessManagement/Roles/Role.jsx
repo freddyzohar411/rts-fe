@@ -77,7 +77,7 @@ function Role(props) {
           </span>
         </div>
       </ModalHeader>
-      <SimpleBar style={{ height: "500px" }}>
+      <SimpleBar style={{ height: "400px" }}>
         <ModalBody className="bg-light">
           <Row>
             <Col>

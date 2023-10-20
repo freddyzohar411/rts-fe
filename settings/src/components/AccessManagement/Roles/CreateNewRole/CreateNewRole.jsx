@@ -294,9 +294,11 @@ function CreateNewRole() {
                       Reset
                     </Button>
                     <div className="d-flex flex-row gap-3">
-                      <Button className="btn btn-primary" type="button">
-                        Cancel
-                      </Button>
+                      <Link to="/settings/access" className="text-dark">
+                        <Button className="btn btn-primary" type="button">
+                          Cancel
+                        </Button>
+                      </Link>
                       <Button className="btn btn-primary" type="submit">
                         Save
                       </Button>

@@ -65,7 +65,7 @@ function User(props) {
       </ModalHeader>
       <ModalBody className="d-flex flex-column gap-3 bg-light p-4">
         <SimpleBar
-          style={{ height: "600px", overflowX: "hidden", overflowY: "auto" }}
+          style={{ height: "400px", overflowX: "hidden", overflowY: "auto" }}
         >
           <Row>
             <Col lg={12}></Col>
