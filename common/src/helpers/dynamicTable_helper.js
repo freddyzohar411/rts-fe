@@ -42,10 +42,10 @@ function generateConfig(selectedOptGroup) {
             getDynamicNestedResult(data, opt.value) || "-"
           );
         }
-        if (opt.label.toLowerCase().includes("status")) {
+        if (opt.label?.toLowerCase().includes("status")) {
           return <Badge
             color={
-              getDynamicNestedResult(data, opt.value).toLowerCase() === "active"
+              getDynamicNestedResult(data, opt.value)?.toLowerCase() === "active"
                 ? "success"
                 : "warning"
             }
