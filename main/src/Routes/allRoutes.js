@@ -50,7 +50,7 @@ const authProtectedRoutes = [
   { path: "/create-candidate", component: <CreateCandidate /> },
 
   // Account
-  { path: "/create-account", component: <CreateAccount />},
+  { path: "/create-account", component: <CreateAccount /> },
   // {
   //   path: null,
   //   component: <Stepper />,
@@ -77,17 +77,14 @@ const authProtectedRoutes = [
   // Settings
   { path: "/settings", component: <MainSettings /> },
   { path: "/settings/customisation", component: <CustomisationSettings /> },
-<<<<<<< HEAD
-
   // Form Builder
-  { path: "/form-builder", component: <FormbuilderMain />},
-  { path: "/form-builder/:templateId", component: <FormbuilderMain />},
-
-=======
+  { path: "/form-builder", component: <FormbuilderMain /> },
+  { path: "/form-builder/:templateId", component: <FormbuilderMain /> },
+  // Access Management
   { path: "/settings/access", component: <AccessManagement /> },
   { path: "/settings/access/role/role-creation", component: <CreateNewRole /> },
   { path: "/settings/access/role/view-role", component: <ViewRole /> },
->>>>>>> develop-settings
+
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
   {
