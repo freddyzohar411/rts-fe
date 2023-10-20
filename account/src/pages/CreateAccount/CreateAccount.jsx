@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Container } from "reactstrap";
+import { Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
 import {
   postAccount,
   putAccount,
-  postAccountSuccess,
 } from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
 import { AccountFormConstant } from "./accountFormConstant";
@@ -599,7 +598,6 @@ const AccountCreation = () => {
           accountId={accountId}
           resetStepper={resetStepper}
         >
-          {/* {!formSubmissionDataLoading && ( */}
           <Form
             template={formTemplate}
             userDetails={null}
@@ -610,7 +608,6 @@ const AccountCreation = () => {
             onFormFieldsChange={handleFormFieldChange}
             errorMessage={errorMessage}
           />
-          {/* )}  */}
         </FormStepper>
       </Container>
     </>

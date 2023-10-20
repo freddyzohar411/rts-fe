@@ -14,6 +14,17 @@ function* loginUser({ payload: { user, history } }) {
     if (response) {
       yield put(loginSuccess(response));
       sessionStorage.setItem("authUser", JSON.stringify(response));
+
+      // Implementation of permissions 
+      // Response should also return the users permissions
+      // const permissions = {
+      //   account: ['read', 'write', 'delete', 'edit'],
+      //   job: ['read', 'write', 'delete', 'edit'],
+      //   candidate: ['read', 'write', 'delete', 'edit'],
+      // };
+      // sessionStorage.setItem("permissions", JSON.stringify(permissions));
+
+
       history("/dashboard");
     } else {
       yield put(apiError(response));

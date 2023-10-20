@@ -22,7 +22,6 @@ const FormStepper = ({
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
 
   const handleNextStep = () => {
     if (activeStep === 0 && formFormik) {

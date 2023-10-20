@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import DraggableBox from "./DraggableBox";
 import UnusedFields from "../../unusedfields/UnusedFields";
+import "./FormElementSidebar.scss"
 
 const FormElementSidebar = ({ unusedFields }) => {
+  const [isListOpen, setIsListOpen] = useState({
+    unusedFields: false,
+    elements: false,
+    layout: true,
+  });
+
   // Element List
   const elementLists = [
     {
@@ -189,49 +196,88 @@ const FormElementSidebar = ({ unusedFields }) => {
     unusedFields.filter((field) => field.isUsed === false).length;
 
   return (
-    <div>
-        <div className="d-flex gap-2 align-item-center justify-content-center">
-        <h3>Unused Fields</h3>
+    <div className="mt-2">
+
+      {/* Unused Fields */}
+      <div className="d-flex align-items-center justify-content-center">
+        <h3
+          onClick={() => {
+            setIsListOpen({
+              ...isListOpen,
+              unusedFields: !isListOpen.unusedFields,
+            });
+          }}
+          className="sidebar-heading cursor-pointer"
+        >
+          Unused Fields
+        </h3>
         <span
           style={{
-            width: "25px",
-            height: "25px",
+            width: "35px",
+            height: "35px",
             backgroundColor: "grey",
             borderRadius: "100%",
             fontSize: "15px",
           }}
-          className="d-flex align-items-center justify-content-center"
+          className="d-flex align-items-center justify-content-center "
         >
           {unusedFieldsLength(unusedFields)}
         </span>
       </div>
-      {unusedFields?.length > 0 && <UnusedFields unusedFields={unusedFields} />}
+      {isListOpen.unusedFields && unusedFields?.length > 0 && (
+        <UnusedFields unusedFields={unusedFields} />
+      )}
+      <hr />
 
-      <h3 className="my-3">Elements</h3>
-      <div>
-        {elementLists.map((element) => (
-          <DraggableBox
-            draggableLabel={element.draggableLabel}
-            draggablePrefix={element.draggablePrefix}
-            draggableId={element.draggableId}
-            type={element.type}
-          />
-        ))}
-      </div>
-
-      <h3>Layout</h3>
-      <div className="mt-1">
-        {layoutLists.map((layout) => (
-          <DraggableBox
-            draggableLabel={layout.draggableLabel}
-            draggablePrefix={layout.draggablePrefix}
-            draggableId={layout.draggableId}
-            type={layout.type}
-          />
-        ))}
-      </div>
-
-   
+      {/* Elements */}
+      <h3
+        onClick={() => {
+          setIsListOpen({
+            ...isListOpen,
+            elements: !isListOpen.elements,
+          });
+        }}
+        className="my-3 cursor-pointer sidebar-heading"
+      >
+        Elements
+      </h3>
+      {isListOpen.elements && (
+        <div>
+          {elementLists.map((element) => (
+            <DraggableBox
+              draggableLabel={element.draggableLabel}
+              draggablePrefix={element.draggablePrefix}
+              draggableId={element.draggableId}
+              type={element.type}
+            />
+          ))}
+        </div>
+      )}
+      <hr />
+      {/* Layout */}
+      <h3
+        onClick={() => {
+          setIsListOpen({
+            ...isListOpen,
+            layout: !isListOpen.layout,
+          });
+        }}
+        className="my-3 cursor-pointer sidebar-heading"
+      >
+        Layout
+      </h3>
+      {isListOpen.layout && (
+        <div className="mt-1">
+          {layoutLists.map((layout) => (
+            <DraggableBox
+              draggableLabel={layout.draggableLabel}
+              draggablePrefix={layout.draggablePrefix}
+              draggableId={layout.draggableId}
+              type={layout.type}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

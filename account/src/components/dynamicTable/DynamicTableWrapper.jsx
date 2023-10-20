@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
+import { Link } from "react-router-dom";
 import DynamicTable from "./DynamicTable";
 import DualListBox from "react-dual-listbox";
 import { GeneralModal } from "@Workspace/common";
-import "./DynamicTableWrapper.scss"
+import { ACCOUNT_INITIAL_OPTIONS } from "../../pages/AccountListing/accountListingConstants";
+import "./DynamicTableWrapper.scss";
 
 const DynamicTableWrapper = ({
   data,
@@ -17,7 +19,9 @@ const DynamicTableWrapper = ({
   confirmDelete,
 }) => {
   const [customViewShow, setCustomViewShow] = useState(false);
-  const [selectedOptGroup, setSelectedOptGroup] = useState([]);
+  const [selectedOptGroup, setSelectedOptGroup] = useState(
+    ACCOUNT_INITIAL_OPTIONS
+  );
 
   const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -39,13 +43,16 @@ const DynamicTableWrapper = ({
           <div>
             <Row>
               <Col lg={12}>
-                <div className="mt-4 mt-lg-0 p-4" style={{height:'1000px'}}>
+                <div className="mt-4 mt-lg-0 p-4">
                   <h5 className="fs-14 mb-1">Account Fields Options</h5>
                   <p className="text-muted">
                     Select fields to show on account listing table
                   </p>
-                  <DualListBox 
-                  style={{height:'700px'}}
+                  {/* <div className="d-flex w-100 mb-3">
+                    <div className="w-50">Hello</div>
+                    <div className="w-50" style={{marginLeft:'60px'}}>World</div>
+                  </div> */}
+                  <DualListBox
                     canFilter
                     filterCallback={(optGroup, filterInput) => {
                       if (filterInput === "") {
@@ -212,7 +219,7 @@ const DynamicTableWrapper = ({
                           >
                             <span>
                               <i className="mdi mdi-download"></i>
-                            </span>{" "}
+                            </span>
                             Imports
                           </Button>
                           <Button
@@ -228,9 +235,13 @@ const DynamicTableWrapper = ({
                             </span>
                             Custom View
                           </Button>
+
                           <Button type="button" className="btn btn-primary">
-                            Create New Account
+                            <Link to="/create-account" style={{ color: "black" }}>
+                              Create New Account
+                            </Link>
                           </Button>
+
                           <Button type="button" className="btn btn-primary">
                             <i className="ri-filter-line"></i>
                           </Button>

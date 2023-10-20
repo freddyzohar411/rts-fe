@@ -8,6 +8,7 @@ const DeleteCustomModal = ({
   confirmDelete,
   header,
   deleteText,
+  confirmButtonText = "Confirm"
 }) => {
   return (
       <Modal isOpen={isOpen} centered backdropClassName="modal">
@@ -22,7 +23,7 @@ const DeleteCustomModal = ({
                 className="btn btn-danger"
                 onClick={confirmDelete}
               >
-                Delete
+                {confirmButtonText}
               </Button>
 
               <Button
