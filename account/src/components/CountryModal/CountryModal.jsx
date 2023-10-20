@@ -10,15 +10,27 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
-import { countries } from "./countries";
-import ReactCountryFlag from "react-country-flag";
+// import { countries } from "./countries";
 import SimpleBar from "simplebar-react";
+import { useDispatch, useSelector } from "react-redux";
+import Flag from "react-world-flags";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
 
+<<<<<<< HEAD
 function CountryModal({ setCountry }) {
+=======
+function CountryModal() {
+  const dispatch = useDispatch();
+  const countryData = useSelector(
+    (state) => state.CountryCurrencyReducer.countryCurrency
+  );
+>>>>>>> develop-settings
   const [modal, setModal] = useState(true);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredCountries, setFilteredCountries] = useState(countries);
+  const [filteredCountries, setFilteredCountries] = useState([]);
 
   function toggle() {
     setModal(!modal);
@@ -26,27 +38,35 @@ function CountryModal({ setCountry }) {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    const filtered = countries.filter((country) =>
-      country.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredCountries(filtered);
+    if (query.trim() === "") {
+      setFilteredCountries(countryData);
+    } else {
+      const filtered = countryData.filter((country) =>
+        country.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredCountries(filtered);
+    }
   };
 
   const handleCountrySelect = (country) => {
     setSelectedCountry(country);
   };
 
+<<<<<<< HEAD
   useEffect(() => {
     if (selectedCountry) {
       setCountry(selectedCountry);
     }
   }, [selectedCountry]);
 
+=======
+  // Render the card of each country
+>>>>>>> develop-settings
   const renderCountries = (country, index) => (
-    <Col key={index}>
+    <Col lg={4} md={4} sm={4} xs={4} key={index}>
       <Card
         className="p-3 my-2 d-flex flex-row gap-2 align-items-center"
-        style={{ minHeight: "60px" }}
+        style={{ height: "70px" }}
       >
         <Input
           type="radio"
@@ -56,12 +76,16 @@ function CountryModal({ setCountry }) {
           onChange={() => handleCountrySelect(country)}
         />
 
+<<<<<<< HEAD
         <ReactCountryFlag
           style={{ fontSize: "25px" }}
           className="mx-1"
           countryCode={country.code}
           svg
         />
+=======
+        <Flag code={country.iso3} height="17" width="25.5" />
+>>>>>>> develop-settings
         <span style={{ fontSize: "15px" }}>{country.name}</span>
       </Card>
     </Col>
@@ -72,7 +96,11 @@ function CountryModal({ setCountry }) {
     rows.push(filteredCountries.slice(i, i + 3));
   }
 
-  useEffect(() => {}, [filteredCountries]);
+  useEffect(() => {
+    if (countryData && countryData.length > 0) {
+      setFilteredCountries(countryData);
+    }
+  }, [countryData]);
 
   return (
     <Modal
@@ -82,7 +110,9 @@ function CountryModal({ setCountry }) {
       scrollable={true}
       toggle={toggle}
       backdrop="static"
+      centered
     >
+<<<<<<< HEAD
       <ModalHeader className="border-bottom d-flex flex-column align-items-center">
         <Row>
           <Col>
@@ -117,11 +147,36 @@ function CountryModal({ setCountry }) {
                 style={{ width: "1050px" }}
               />
               <i className="ri-search-line search-icon"></i>
+=======
+      <ModalHeader className="border-bottom d-flex flex-column justify-content-center p-4">
+        <div className="modal-title text-center mb-3">
+          Select a Country for Account Creation
+        </div>
+        <div className="mb-2 text-center">
+          {selectedCountry ? (
+            <div className="text-muted" style={{ fontSize: "13px" }}>
+              You have selected: {selectedCountry.name}
             </div>
-          </Col>
-        </Row>
+          ) : (
+            <div className="text-muted" style={{ fontSize: "13px" }}>
+              Please select a country to continue.
+>>>>>>> develop-settings
+            </div>
+          )}
+        </div>
+        <div className="search-box" style={{ minWidth: "1070px" }}>
+          <Input
+            type="text"
+            placeholder="Search for a country.."
+            className="form-control"
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+          <i className="ri-search-line search-icon"></i>
+        </div>
       </ModalHeader>
       <ModalBody>
+<<<<<<< HEAD
         <div className="p-4">
           <Row>
             <Col lg={12}>
@@ -145,6 +200,33 @@ function CountryModal({ setCountry }) {
             </Col>
           </Row>
         </div>
+=======
+        <SimpleBar style={{ height: "330px", overflowY: "auto" }}>
+          <div className="p-3">
+            <Row>
+              <Col lg={12}>
+                <div>
+                  {rows && rows.length > 0 ? (
+                    <div>
+                      {rows.map((row, rowIndex) => (
+                        <Row key={rowIndex}>
+                          {row.map((country, index) =>
+                            renderCountries(country, index)
+                          )}
+                        </Row>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-muted">
+                      No country found. Please try again.
+                    </div>
+                  )}
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </SimpleBar>
+>>>>>>> develop-settings
       </ModalBody>
       <ModalFooter>
         <Button
@@ -175,3 +257,48 @@ function CountryModal({ setCountry }) {
 }
 
 export default CountryModal;
+
+{
+  /* <Row>
+          <Col lg={12}>
+            <h4 className="modal-title my-3 text-center">
+              Select a Country for Account
+            </h4>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={12}>
+            <div>
+              {selectedCountry ? (
+                <p
+                  className="text-muted text-center"
+                  style={{ fontSize: "15px" }}
+                >
+                  You have selected: {selectedCountry.name}
+                </p>
+              ) : (
+                <p
+                  className="text-muted text-center"
+                  style={{ fontSize: "15px" }}
+                >
+                  You have not chosen a country.
+                </p>
+              )}
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={12}>
+            <div className="search-box">
+              <Input
+                type="text"
+                placeholder="Search for a country.."
+                className="form-control"
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
+              <i className="ri-search-line search-icon"></i>
+            </div>
+          </Col>
+        </Row> */
+}

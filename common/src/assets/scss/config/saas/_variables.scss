@@ -326,12 +326,14 @@ $cyans: (
 
 // scss-docs-start theme-color-variables
 $theme-primary:   #B4D0F0;
+$theme-primary-custom:   #8aaed6;
 $theme-secondary: #DAECFB;
 $theme-color-1:   #D4E4FB;
 $theme-color-2:   #F0F5FC;
 $theme-color-3:   #CCE0F4;
 
 $primary:       $theme-primary;
+$primary-custom:$theme-primary-custom;
 $secondary:     $theme-secondary;
 $success:       $green;
 $info:          $cyan;

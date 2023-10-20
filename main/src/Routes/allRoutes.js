@@ -28,7 +28,13 @@ import { CreateCandidate } from "@workspace/candidate";
 import { JobCreation, JobListing } from "@workspace/job";
 
 // Settings
-import { MainSettings, CustomisationSettings } from "@workspace/settings";
+import {
+  MainSettings,
+  CustomisationSettings,
+  AccessManagement,
+  CreateNewRole,
+  ViewRole,
+} from "@workspace/settings";
 
 // Form Builder
 import { FormbuilderMain } from "@workspace/formbuilder";
@@ -71,11 +77,17 @@ const authProtectedRoutes = [
   // Settings
   { path: "/settings", component: <MainSettings /> },
   { path: "/settings/customisation", component: <CustomisationSettings /> },
+<<<<<<< HEAD
 
   // Form Builder
   { path: "/form-builder", component: <FormbuilderMain />},
   { path: "/form-builder/:templateId", component: <FormbuilderMain />},
 
+=======
+  { path: "/settings/access", component: <AccessManagement /> },
+  { path: "/settings/access/role/role-creation", component: <CreateNewRole /> },
+  { path: "/settings/access/role/view-role", component: <ViewRole /> },
+>>>>>>> develop-settings
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
   {
