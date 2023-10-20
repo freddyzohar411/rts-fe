@@ -77,21 +77,23 @@ function AccessManagement() {
                     </NavItem>
                   </Nav>
 
-                  <TabContent activeTab={activeTab} className="text-muted">
+                  <TabContent activeTab={activeTab}>
                     <TabPane tabId="1" id="manageUsersGroups">
                       <Row>
                         <Col lg={12}>
-                          <h5 className="fw-bolder mb-3">
-                            Manage Users & Groups
-                          </h5>
-                          <p className="text-muted">
-                            Manage different users and user groups in this
-                            system.
-                          </p>
+                          <div className="d-flex flex-column mb-3">
+                            <h5 className="fw-bolder">
+                              Manage Users & Groups
+                            </h5>
+                            <span className="text-muted">
+                              Manage different users and user groups in this
+                              system.
+                            </span>
+                          </div>
                         </Col>
                       </Row>
                       <Row>
-                        <Col lg={12} className="d-flex flex-start gap-3 mb-5">
+                        <Col lg={12} className="d-flex flex-start gap-3 mb-3">
                           <Button
                             className="btn btn-secondary btn-sm"
                             type="button"

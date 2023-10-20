@@ -30,6 +30,8 @@ import {
   MainSettings,
   CustomisationSettings,
   AccessManagement,
+  CreateNewRole,
+  ViewRole,
 } from "@workspace/settings";
 
 const authProtectedRoutes = [
@@ -70,7 +72,8 @@ const authProtectedRoutes = [
   { path: "/settings", component: <MainSettings /> },
   { path: "/settings/customisation", component: <CustomisationSettings /> },
   { path: "/settings/access", component: <AccessManagement /> },
-
+  { path: "/settings/access/role/role-creation", component: <CreateNewRole /> },
+  { path: "/settings/access/role/view-role", component: <ViewRole /> },
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
   {

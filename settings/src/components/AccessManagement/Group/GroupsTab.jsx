@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Button, ButtonGroup, Col, Input, Row, Table } from "reactstrap";
+import {
+  Button,
+  ButtonGroup,
+  Col,
+  Input,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Row,
+  Table,
+} from "reactstrap";
 import { userGroupData, userGroupMembersData } from "../dataSample";
 import Group from "./Group";
 import UpdateGroup from "./UpdateGroup";
@@ -87,19 +97,19 @@ function GroupsTab() {
                   <td className="text-wrap">{item.groupDescription}</td>
                   <td className="d-flex flex-row justify-between gap-2">
                     <Button
-                      className="btn btn-dark"
+                      className="btn btn-primary"
                       onClick={() => handleView(item.groupName)}
                     >
                       <i className="ri-eye-line"></i>
                     </Button>
                     <Button
-                      className="btn btn-dark"
+                      className="btn btn-primary"
                       onClick={() => handleUpdateView(item.groupName)}
                     >
                       <i className="ri-pencil-line"></i>
                     </Button>
                     <Button
-                      className="btn btn-dark"
+                      className="btn btn-primary"
                       onClick={() => setShowDelete(!showDelete)}
                     >
                       <i className="ri-delete-bin-line"></i>
@@ -109,7 +119,11 @@ function GroupsTab() {
               ))}
             </tbody>
           </Table>
-          <Delete show={showDelete} cancel={() => setShowDelete(!showDelete)} groupName="Hi" />
+          <Delete
+            show={showDelete}
+            cancel={() => setShowDelete(!showDelete)}
+            groupName="Hi"
+          />
           <Group
             show={groupModal}
             cancel={() => setGroupModal(!groupModal)}
@@ -121,25 +135,23 @@ function GroupsTab() {
             groupData={selectedGroupData}
           />
           <div className="d-flex flex-row justify-content-end">
-            <ButtonGroup>
-              <Button
-                className="btn btn-dark"
+            <Pagination>
+              <PaginationItem
                 onClick={() => handlePrevPage()}
                 disabled={currentPage === 1}
               >
-                Previous
-              </Button>
-              <Button className="btn btn-dark">
-                <span>Page {currentPage}</span>
-              </Button>
-              <Button
-                className="btn btn-dark"
+                <PaginationLink>← &nbsp; Previous</PaginationLink>
+              </PaginationItem>
+              <PaginationItem active>
+                <PaginationLink>Page {currentPage}</PaginationLink>
+              </PaginationItem>
+              <PaginationItem
                 onClick={() => handleNextPage()}
                 disabled={currentPage * itemsPerPage >= userGroupData.length}
               >
-                Next
-              </Button>
-            </ButtonGroup>
+                <PaginationLink>Next &nbsp; →</PaginationLink>
+              </PaginationItem>
+            </Pagination>
           </div>
         </Col>
       </Row>

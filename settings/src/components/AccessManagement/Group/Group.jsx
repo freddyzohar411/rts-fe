@@ -60,7 +60,7 @@ function Group(props) {
         </ModalHeader>
       <ModalBody className="bg-light">
         <SimpleBar
-          style={{ height: "450px", overflowX: "hidden", overflowY: "auto" }}
+          style={{ height: "600px", overflowX: "hidden", overflowY: "auto" }}
         >
           <Row>
             <Col lg={6}>
@@ -158,7 +158,7 @@ function Group(props) {
         </SimpleBar>
       </ModalBody>
       <ModalFooter>
-        <Button className="btn btn-dark" onClick={props.cancel}>
+        <Button className="btn btn-primary" onClick={props.cancel}>
           Close
         </Button>
       </ModalFooter>

@@ -11,11 +11,12 @@ import {
   ToastHeader,
 } from "reactstrap";
 import { roleData, roleGroupData } from "../dataSample";
-import NewRole from "./NewRole";
 import Role from "./Role";
 import UpdateRole from "./UpdateRole";
+import { Link, useNavigate } from "react-router-dom";
 
 function RolesTab() {
+  const navigate = useNavigate();
   const [createRole, setCreateRole] = useState(false);
   const [viewRoleModal, setViewRoleModal] = useState(false);
   const [selectedRoleData, setSelectedRoleData] = useState(null);
@@ -29,11 +30,19 @@ function RolesTab() {
     setUpdateRoleModal(!updateRoleModal);
   };
 
-  const handleView = (role) => {
+  // const handleView = (role) => {
+  //   const selectedRole = roleData.find((item) => item.roleName === role);
+  //   setSelectedRoleData(selectedRole);
+  //   setViewRoleModal(!viewRoleModal);
+  //   console.log("Selected Role:", selectedRole);
+  // };
+
+  const handleViewRole = (role) => {
     const selectedRole = roleData.find((item) => item.roleName === role);
     setSelectedRoleData(selectedRole);
-    setViewRoleModal(!viewRoleModal);
-    console.log("Selected Role:", selectedRole);
+    navigate("/settings/access/role/view-role", {
+      state: { selectedRoleData },
+    });
   };
 
   const handleDelete = (role) => {
@@ -63,14 +72,11 @@ function RolesTab() {
         Configure roles to define the different groups of authorities.
       </p>
       <div className="d-flex flex-row gap-2 mb-4">
-        <Button
-          className="btn btn-dark btn-sm d-flex flex-row align-items-center"
-          onClick={() => {
-            setCreateRole(true);
-          }}
-        >
-          <i className="ri-contacts-line me-2"></i>
-          <span>ADD NEW ROLE</span>
+        <Button className="btn btn-primary btn-sm d-flex flex-row align-items-center">
+          <Link to="/settings/access/role/role-creation" className="text-dark">
+            <i className="ri-contacts-line me-2"></i>
+            <span>ADD NEW ROLE</span>
+          </Link>
         </Button>
       </div>
 
@@ -101,19 +107,20 @@ function RolesTab() {
                 </td>
                 <td className="d-flex flex-start gap-3">
                   <Button
-                    className="btn btn-dark"
-                    onClick={() => handleView(role.roleName)}
+                    className="btn btn-primary"
+                    onClick={() => handleViewRole(role.roleName)}
                   >
-                    <i className="ri-eye-line"></i>
+                      <i className="ri-eye-line"></i>
+                    
                   </Button>
                   <Button
-                    className="btn btn-dark"
+                    className="btn btn-primary"
                     onClick={() => handleUpdateView(role.roleName)}
                   >
                     <i className="ri-pencil-line"></i>
                   </Button>
                   <Button
-                    className="btn btn-dark"
+                    className="btn btn-primary"
                     onClick={() => handleDelete(role.roleName)}
                   >
                     <i className="ri-delete-bin-2-line"></i>
@@ -127,10 +134,7 @@ function RolesTab() {
             cancel={() => setViewRoleModal(!viewRoleModal)}
             roleItemData={selectedRoleData}
           />
-          <NewRole
-            show={createRole}
-            cancel={() => setCreateRole(!createRole)}
-          />
+
           <UpdateRole
             show={updateRoleModal}
             cancel={() => setUpdateRoleModal(!updateRoleModal)}
@@ -157,7 +161,7 @@ function RolesTab() {
                   </Button>
                   <Button
                     type="button"
-                    className="btn btn-dark"
+                    className="btn btn-primary"
                     onClick={() => setSelectedRoleToDelete(null)}
                   >
                     Cancel

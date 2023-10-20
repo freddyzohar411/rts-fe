@@ -41,7 +41,9 @@ function UpdateUser(props) {
       <ModalHeader className="border-bottom">
         <div className="d-flex flex-column gap-1">
           <span className="modal-title">Edit User</span>
-          <span className="fs-6 text-muted">Make changes to the user details.</span>
+          <span className="fs-6 text-muted">
+            Make changes to the user details.
+          </span>
         </div>
       </ModalHeader>
 
@@ -203,22 +205,22 @@ function UpdateUser(props) {
                       )}
                     </Col>
                   </Row>
-                  <Row>
-                    <Col className="d-flex flex-row gap-2 justify-content-end">
-                      <Button
-                        className="btn btn-dark"
-                        type="button"
-                        onClick={props.cancel}
-                      >
-                        Cancel
-                      </Button>
-                      <Button className="btn btn-dark" type="submit">
-                        Save
-                      </Button>
-                    </Col>
-                  </Row>
                 </CardBody>
               </Card>
+              <Row>
+                <Col className="d-flex flex-row gap-2 justify-content-end">
+                  <Button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={props.cancel}
+                  >
+                    Cancel
+                  </Button>
+                  <Button className="btn btn-primary" type="submit">
+                    Save
+                  </Button>
+                </Col>
+              </Row>
             </Form>
           )}
         </Formik>

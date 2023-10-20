@@ -112,69 +112,84 @@ function NewGroup(props) {
                     </Col>
                   </Row>
                   <Row>
-                    <Col className="d-flex flex-row justify-content-center mb-2">
-                      <i className="ri-arrow-down-circle-line fs-3 text-primary"></i>
+                    <Col className="mb-2">
+                      <span className="fw-medium">Assign Members</span>
                     </Col>
                   </Row>
+
                   <Row className="mb-3">
                     <Col>
-                      <div className="bg-light rounded p-3 d-flex flex-column gap-3">
-                        <span className="text-muted">
-                          Add members into this group below.
-                        </span>
-                        <DualListBox
-                          options={formattedUserData}
-                          selected={selected}
-                          onChange={(e) => setSelected(e)}
-                          canFilter={true}
-                          icons={{
-                            moveLeft: (
-                              <span
-                                className="mdi mdi-chevron-left"
-                                key="key"
-                              />
-                            ),
-                            moveAllLeft: [
-                              <span
-                                className="mdi mdi-chevron-double-left"
-                                key="key"
-                              />,
-                            ],
-                            moveRight: (
-                              <span
-                                className="mdi mdi-chevron-right"
-                                key="key"
-                              />
-                            ),
-                            moveAllRight: [
-                              <span
-                                className="mdi mdi-chevron-double-right"
-                                key="key"
-                              />,
-                            ],
-                            moveDown: (
-                              <span
-                                className="mdi mdi-chevron-down"
-                                key="key"
-                              />
-                            ),
-                            moveUp: (
-                              <span className="mdi mdi-chevron-up" key="key" />
-                            ),
-                            moveTop: (
-                              <span
-                                className="mdi mdi-chevron-double-up"
-                                key="key"
-                              />
-                            ),
-                            moveBottom: (
-                              <span
-                                className="mdi mdi-chevron-double-down"
-                                key="key"
-                              />
-                            ),
-                          }}
-                        />
+                      <div className="border border-secondary rounded p-3">
+                        <Row className="mb-3">
+                          <Col>
+                            <div className="d-flex flex-row justify-content-around">
+                              <span className="fw-semibold">All Users</span>
+                              <span className="fw-semibold">
+                                Assigned Users
+                              </span>
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <DualListBox
+                              options={formattedUserData}
+                              selected={selected}
+                              onChange={(e) => setSelected(e)}
+                              canFilter={true}
+                              icons={{
+                                moveLeft: (
+                                  <span
+                                    className="mdi mdi-chevron-left"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllLeft: [
+                                  <span
+                                    className="mdi mdi-chevron-double-left"
+                                    key="key"
+                                  />,
+                                ],
+                                moveRight: (
+                                  <span
+                                    className="mdi mdi-chevron-right"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllRight: [
+                                  <span
+                                    className="mdi mdi-chevron-double-right"
+                                    key="key"
+                                  />,
+                                ],
+                                moveDown: (
+                                  <span
+                                    className="mdi mdi-chevron-down"
+                                    key="key"
+                                  />
+                                ),
+                                moveUp: (
+                                  <span
+                                    className="mdi mdi-chevron-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveTop: (
+                                  <span
+                                    className="mdi mdi-chevron-double-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveBottom: (
+                                  <span
+                                    className="mdi mdi-chevron-double-down"
+                                    key="key"
+                                  />
+                                ),
+                              }}
+                            />
+                          </Col>
+                        </Row>
                       </div>
                     </Col>
                   </Row>
@@ -187,7 +202,7 @@ function NewGroup(props) {
                   className="d-flex flex-row justify-content-between"
                 >
                   <Button
-                    className="btn btn-dark"
+                    className="btn btn-primary"
                     type="button"
                     onClick={() => {
                       resetForm();
@@ -198,13 +213,13 @@ function NewGroup(props) {
                   </Button>
                   <div className="d-flex flex-row gap-2">
                     <Button
-                      className="btn btn-dark"
+                      className="btn btn-primary"
                       type="button"
                       onClick={props.cancel}
                     >
                       Cancel
                     </Button>
-                    <Button className="btn btn-dark" type="submit">
+                    <Button className="btn btn-primary" type="submit">
                       Save
                     </Button>
                   </div>

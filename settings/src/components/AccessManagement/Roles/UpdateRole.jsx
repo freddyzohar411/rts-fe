@@ -26,6 +26,7 @@ import {
   userData,
   permissionRoleData,
   permissionData,
+  userGroupData,
 } from "../dataSample";
 import classnames from "classnames";
 
@@ -39,27 +40,33 @@ function UpdateRole(props) {
     (role) => role.roleName === props.roleItemData.roleName
   );
 
-  if (!allPermissions) {
-    console.log("No permissions found.");
-  } else {
-    console.log("Permissions:", allPermissions);
-  }
-
   // DUAL LIST BOX
-  const [selected, setSelected] = useState([]);
+
+  // Groups that are assigned to the role
   const findGroups = roleGroupData.find(
     (role) => role.roleName === props.roleItemData.roleName
   );
-  const formattedGroupData = findGroups.groups.map((group) => ({
-    value: group,
-    label: group,
+
+  // Format all groups
+  const formattedAllGroups = userGroupData.map((group) => ({
+    value: group.groupName,
+    label: group.groupName,
   }));
+
+  // Format assigned groups
+  const formattedGroupData = findGroups.groups.map((group) => group);
+
+  const [selected, setSelected] = useState(formattedGroupData);
 
   // TABS
   const [activeTab, setActiveTab] = useState("1");
   const toggle = (tab) => {
     setActiveTab(tab);
   };
+
+  useEffect(() => {
+    setSelected(formattedGroupData);
+  }, [formattedGroupData]);
 
   return (
     <Modal
@@ -102,6 +109,7 @@ function UpdateRole(props) {
             </Card>
           </Col>
         </Row>
+
         <Row>
           <Col>
             <Card>
@@ -126,6 +134,7 @@ function UpdateRole(props) {
                     </NavLink>
                   </NavItem>
                 </Nav>
+
                 <TabContent activeTab={activeTab}>
                   <TabPane tabId="1" id="managePermissions">
                     <Card>
@@ -252,6 +261,7 @@ function UpdateRole(props) {
                       </CardBody>
                     </Card>
                   </TabPane>
+
                   <TabPane tabId="2" id="manageGroups">
                     <Card>
                       <CardBody>
@@ -262,10 +272,22 @@ function UpdateRole(props) {
                             </span>
                           </Col>
                         </Row>
+
+                        <Row>
+                          <Col>
+                            <div className="d-flex justify-content-around mb-3">
+                              <span className="fw-semibold">All Groups</span>
+                              <span className="fw-semibold">
+                                Assigned Groups
+                              </span>
+                            </div>
+                          </Col>
+                        </Row>
+
                         <Row className="mb-3">
                           <Col lg={12}>
                             <DualListBox
-                              options={formattedGroupData}
+                              options={formattedAllGroups}
                               selected={selected}
                               onChange={(e) => setSelected(e)}
                               canFilter={true}

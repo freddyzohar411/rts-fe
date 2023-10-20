@@ -69,26 +69,16 @@ function UpdateGroup(props) {
   }));
 
   // Get members who are already in the group
-  const existingMembers = memberDetails.map((user) => ({
-    value: user.username,
-  }));
+  const existingMembers = memberDetails.map((user) => (user.username));
+  const [selected, setSelected] = useState(existingMembers);
 
-  const [selected, setSelected] = useState([existingMembers]);
-
-  const formattedRoles = groupRoles.map((role) => ({
+  const formattedRoles = roleGroupData.map((role) => ({
     value: role.roleName,
     label: role.roleName,
   }));
 
-  console.log("Existing Members:", existingMembers);
-  console.log("All Member:", formattedUsers);
-
   // const [selected, setSelected] = useState([]);
-  const [selectedRoles, setSelectedRoles] = useState([formattedRoles]);
-
-  useEffect(() => {
-    console.log("Selected Users:", selected);
-  });
+  const [selectedRoles, setSelectedRoles] = useState(roleNames);
 
   return (
     <Modal
@@ -168,6 +158,16 @@ function UpdateGroup(props) {
                           </Col>
                         </Row>
                         <Row className="mb-3">
+                          <Col>
+                            <div className="d-flex flex-row justify-content-around">
+                              <span className="fw-semibold">All Users</span>
+                              <span className="fw-semibold">
+                                Assigned Members
+                              </span>
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
                           <Col lg={12}>
                             <DualListBox
                               options={formattedUsers}
@@ -242,6 +242,16 @@ function UpdateGroup(props) {
                           </Col>
                         </Row>
                         <Row className="mb-3">
+                          <Col>
+                            <div className="d-flex flex-row justify-content-around">
+                              <span className="fw-semibold">All Roles</span>
+                              <span className="fw-semibold">
+                                Assigned Roles
+                              </span>
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
                           <Col lg={12}>
                             <DualListBox
                               options={formattedRoles}
@@ -311,10 +321,10 @@ function UpdateGroup(props) {
         </Row>
       </ModalBody>
       <ModalFooter>
-        <Button className="btn btn-dark" onClick={(props.cancel)}>
+        <Button className="btn btn-primary" onClick={props.cancel}>
           Cancel
         </Button>
-        <Button className="btn btn-dark">Save</Button>
+        <Button className="btn btn-primary">Save</Button>
       </ModalFooter>
     </Modal>
   );

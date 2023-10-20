@@ -204,7 +204,7 @@ function Role(props) {
       </SimpleBar>
 
       <ModalFooter>
-        <Button onClick={props.cancel} className="btn btn-dark">
+        <Button onClick={props.cancel} className="btn btn-primary">
           Close
         </Button>
       </ModalFooter>

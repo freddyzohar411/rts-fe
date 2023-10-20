@@ -65,7 +65,7 @@ function User(props) {
       </ModalHeader>
       <ModalBody className="d-flex flex-column gap-3 bg-light p-4">
         <SimpleBar
-          style={{ height: "490px", overflowX: "hidden", overflowY: "auto" }}
+          style={{ height: "600px", overflowX: "hidden", overflowY: "auto" }}
         >
           <Row>
             <Col lg={12}></Col>
@@ -231,7 +231,7 @@ function User(props) {
         </SimpleBar>
       </ModalBody>
       <ModalFooter>
-        <Button className="btn btn-dark" onClick={props.cancel}>
+        <Button className="btn btn-primary" onClick={props.cancel}>
           Close
         </Button>
       </ModalFooter>

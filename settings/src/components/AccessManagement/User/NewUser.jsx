@@ -232,7 +232,7 @@ function NewUser(props) {
                   <Row className="mb-3">
                     <Col lg={12} className="d-flex flex-row justify-content-between">
                       <Button
-                        className="btn btn-dark"
+                        className="btn btn-primary"
                         type="button"
                         onClick={resetForm}
                       >
@@ -241,14 +241,14 @@ function NewUser(props) {
 
                       <div className="d-flex flex-row gap-3">
                         <Button
-                          className="btn btn-dark"
+                          className="btn btn-primary"
                           type="button"
                           onClick={props.cancel}
                         >
                           Cancel
                         </Button>
 
-                        <Button className="btn btn-dark" type="submit">
+                        <Button className="btn btn-primary" type="submit">
                           Save User
                         </Button>
                       </div>

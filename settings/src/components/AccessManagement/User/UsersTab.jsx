@@ -5,22 +5,17 @@ import {
   Badge,
   Row,
   Col,
-  ButtonGroup,
   Input,
   Pagination,
   PaginationItem,
   PaginationLink,
 } from "reactstrap";
 import { userData, userGroupMembersData, roleGroupData } from "../dataSample";
-import AssignToGroup from "../Group/AssignToGroup";
 import User from "./User";
-import AssignToRole from "../Roles/AssignToRole";
 import UpdateUser from "./UpdateUser";
 
 function UsersTab() {
   // MODAL OPENING
-  const [assignGroupModal, setAssignGroupModal] = useState(false);
-  const [assignRoleModal, setAssignRoleModal] = useState(false);
   const [viewUserModal, setViewUserModal] = useState(false);
   const [updateUserModal, setUpdateUserModal] = useState(false);
 
@@ -59,17 +54,6 @@ function UsersTab() {
   };
   return (
     <div>
-      <Row className="mt-3">
-        <Col lg={12} className="d-flex flex-start gap-3"></Col>
-      </Row>
-      <AssignToGroup
-        show={assignGroupModal}
-        cancel={() => setAssignGroupModal(!assignGroupModal)}
-      />
-      <AssignToRole
-        show={assignRoleModal}
-        cancel={() => setAssignRoleModal(!assignRoleModal)}
-      />
       <Row className="d-flex flex-row align-items-center">
         <Col>
           <div className="search-box my-2">
@@ -81,24 +65,6 @@ function UsersTab() {
             <i className="ri-search-line search-icon"></i>
           </div>
           <div className="table-responsive"></div>
-        </Col>
-        <Col className="d-flex flex-row gap-3 justify-content-end">
-          <Button
-            className="btn btn-primary btn-sm"
-            onClick={() => {
-              setAssignGroupModal(!assignGroupModal);
-            }}
-          >
-            <i className="ri-add-circle-line me-2"></i>
-            <span>ASSIGN TO USER GROUP</span>
-          </Button>
-          <Button
-            className="btn btn-primary btn-sm"
-            onClick={() => setAssignRoleModal(!assignRoleModal)}
-          >
-            <i className="ri-add-circle-line me-2"></i>
-            <span>ASSIGN TO ROLE</span>
-          </Button>
         </Col>
       </Row>
       <Row>
@@ -199,10 +165,10 @@ function UsersTab() {
                 onClick={() => handlePrevPage()}
                 disabled={currentPage === 1}
               >
-                <PaginationLink>← &nbsp; Prev</PaginationLink>
+                <PaginationLink>← &nbsp; Previous</PaginationLink>
               </PaginationItem>
               <PaginationItem active>
-                <PaginationLink>{currentPage}</PaginationLink>
+                <PaginationLink>Page {currentPage}</PaginationLink>
               </PaginationItem>
               <PaginationItem
                 onClick={() => handleNextPage()}
