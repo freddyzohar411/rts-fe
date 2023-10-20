@@ -1,9 +1,15 @@
 import React from "react";
-import { Input, Table } from "reactstrap";
+import {
+  Input,
+  Table,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+} from "reactstrap";
 
 const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
   // ========================================= Table Configuration ===========================
-
+  console.log("pageInfo PAGE: ", pageInfo);
   // Generate Header
   const generateHeaderJSX = (config) => (
     <>
@@ -58,37 +64,35 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
       </div>
 
       {/* Table Pagination */}
-      <div className="d-flex justify-content-end">
-        <div className="pagination-wrap hstack gap-2">
-          <Input
-            onChange={(e) => pageRequestSet.setPageSize(parseInt(e.target.value))}
-            type="select"
-            className="form-select"
-            style={{ height: "34px", marginRight: "10px" }}
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-          </Input>
-          <btn
-            className={`cursor-pointer page-item pagination-prev ${
-              pageInfo.currentPage == 0 && "disabled"
-            }`}
+      <div className="d-flex flex-row justify-content-end my-3">
+        <Input
+          onChange={(e) => pageRequestSet.setPageSize(parseInt(e.target.value))}
+          type="select"
+          className="form-select"
+          style={{ height: "34px", marginRight: "10px", width: "70px" }}
+        >
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+        </Input>
+
+        <Pagination>
+          <PaginationItem
+            
+            disabled={pageInfo.currentPage === 0}
             onClick={pageRequestSet.setPreviousPage}
           >
-            Previous
-          </btn>
-          <ul className="pagination listjs-pagination mb-0"></ul>
-          <btn
-            className={`cursor-pointer page-item pagination-next ${
-              pageInfo.currentPage == pageInfo.totalPages - 1 && "disabled"
-            }`}
+            <PaginationLink className={`${pageInfo.currentPage === 0 ? "bg-secondary border-primary text-muted disabled" : "bg-secondary border-primary text-dark" }`}>Previous</PaginationLink>
+          </PaginationItem>
+          <PaginationItem
+            
+            disabled={pageInfo.currentPage === pageInfo.totalPages - 1}
             onClick={pageRequestSet.setNextPage}
           >
-            Next
-          </btn>
-        </div>
+            <PaginationLink className={`${pageInfo.currentPage === pageInfo.totalPages - 1 ? "bg-secondary border-primary text-muted disabled" : "bg-secondary border-primary text-dark" }`}>Next</PaginationLink>
+          </PaginationItem>
+        </Pagination>
       </div>
     </>
   );

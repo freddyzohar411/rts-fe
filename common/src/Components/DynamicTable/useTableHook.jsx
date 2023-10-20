@@ -38,7 +38,7 @@ const useTableHook = (initialPageRequest = {}, initialConfig = []) => {
 
   const setPageInfoData = (data) => {
     setPageInfo((prev) => ({
-      currentPage: data.currentPage,
+      currentPage: data.page,
       totalPages: data.totalPages,
       totalElements: data.totalElements,
     }));

@@ -572,7 +572,7 @@ $border-widths: (
 );
 $border-style:                solid;
 $border-color:                $theme-primary;
-$border-color-translucent:    $theme-secondary;
+$border-color-translucent:    $theme-primary-custom;
 // scss-docs-end border-variables
 
 // scss-docs-start border-radius-variables

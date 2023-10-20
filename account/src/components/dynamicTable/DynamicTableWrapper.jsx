@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
 import { Link } from "react-router-dom";
-import DynamicTable from "./DynamicTable";
+// import DynamicTable from "./DynamicTable";
+import { DynamicTable } from "@Workspace/common";
 import DualListBox from "react-dual-listbox";
 import { GeneralModal } from "@Workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "../../pages/AccountListing/accountListingConstants";
