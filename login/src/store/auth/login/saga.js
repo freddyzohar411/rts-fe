@@ -17,12 +17,12 @@ function* loginUser({ payload: { user, history } }) {
 
       // Implementation of permissions 
       // Response should also return the users permissions
-      // const permissions = {
-      //   account: ['read', 'write', 'delete', 'edit'],
-      //   job: ['read', 'write', 'delete', 'edit'],
-      //   candidate: ['read', 'write', 'delete', 'edit'],
-      // };
-      // sessionStorage.setItem("permissions", JSON.stringify(permissions));
+      const permissions = {
+        account: ['read', 'write', 'delete', 'edit'],
+        job: ['read', 'write', 'delete', 'edit'],
+        candidate: ['read', 'write', 'delete', 'edit'],
+      };
+      sessionStorage.setItem("permissions", JSON.stringify(permissions));
 
 
       history("/dashboard");
