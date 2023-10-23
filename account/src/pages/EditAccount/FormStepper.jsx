@@ -85,7 +85,7 @@ const FormStepper = ({
       <Container fluid>
         <AccountStepper step={activeStep} />
         <div className="px-3"> {children}</div>
-        <div
+        {/* <div
           className={`d-flex ${
             accountId ? "justify-content-between" : "justify-content-end"
           } align-items-center mb-2`}
@@ -98,7 +98,8 @@ const FormStepper = ({
             >
               Delete
             </Button>
-          )}
+          )} */}
+        <div className={`d-flex justify-content-end align-items-center mb-2`}>
           <div className="d-flex gap-2">
             {activeStep > 0 && (
               <Button color="dark" onClick={handleBack}>

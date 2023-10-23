@@ -16,9 +16,13 @@ import {
   clearAccountFormSubmission,
 } from "../../store/accountForm/action";
 import { ObjectHelper } from "@workspace/common";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation  } from "react-router-dom";
+
 
 const EditAccount = () => {
+  const location = useLocation();
+  const linkState = location.state;
+  console.log("Link Props State: ", linkState)
   const formSubmissionData = useSelector(
     (state) => state.AccountFormReducer.formSubmission
   );
@@ -30,7 +34,7 @@ const EditAccount = () => {
   const navigate = useNavigate();
 
   const MAX_STEP = 6;
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(linkState?.stepNo || 0);
   const [formFormik, setFormFormik] = useState(null);
   const [editData, setEditData] = useState(formSubmissionData || null);
   const [formFieldsData, setFormFieldsData] = useState([]);
@@ -490,8 +494,6 @@ const EditAccount = () => {
   const resetStepper = (number) => {
     setStep(number);
   };
-
-  console.log("FORM SUBMIT DATA 88: ", formSubmissionData);
 
   return (
     <>

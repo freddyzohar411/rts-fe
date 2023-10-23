@@ -76,7 +76,7 @@ function CustomisationSettings() {
 
   // Fetch the forms data
   useEffect(() => {
-    dispatch(formActions.fetchForms(cleanPageRequest(pageRequest)));
+    dispatch(formActions.fetchForms(DynamicTableHelper.cleanPageRequest(pageRequest)));
 
     return () => {
       dispatch(formActions.clearForm());

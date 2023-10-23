@@ -14,6 +14,9 @@ import {
   PUT_ACCOUNT,
   PUT_ACCOUNT_SUCCESS,
   PUT_ACCOUNT_FAILURE,
+  DELETE_ACCOUNT,
+  DELETE_ACCOUNT_SUCCESS,
+  DELETE_ACCOUNT_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
@@ -130,6 +133,29 @@ const AccountReducer = (state = initialState, action) => {
         success: true,
       };
     case PUT_ACCOUNT_FAILURE:
+
+    // Delete an Account
+    case DELETE_ACCOUNT:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case DELETE_ACCOUNT_SUCCESS:
+      const newAccounts = JSON.parse(JSON.stringify(state.accounts));
+      console.log("newAccounts Before", newAccounts)
+      const filteredAccounts = newAccounts.accounts.filter(
+        (account) => account.id !== action.payload
+      );
+      newAccounts.accounts = filteredAccounts;
+      console.log("newAccounts After", filteredAccounts);
+      return {
+        ...state,
+        accounts: newAccounts,
+        loading: false,
+        success: true,
+      };
+    case DELETE_ACCOUNT_FAILURE:
       return {
         ...state,
         loading: false,

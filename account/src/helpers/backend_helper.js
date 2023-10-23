@@ -28,7 +28,7 @@ const api = new APIClient();
 
 // Get Accounts
 export const getAccounts = (data) =>
-  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}`, data);
+  api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing`, data);
 
 // Get Form by id
 export const getFormById = (id) => api.get(`${FORM_URL}${BASE_FORMS}/${id}`);
@@ -51,6 +51,10 @@ export const updateAccount = (entity, id, data, config) =>
 // Get account by id
 export const getAccountById = (id) =>
   api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/${id}`);
+
+// Delete an account
+export const deleteAccount = (id) =>
+  api.delete(`${ACCOUNT_URL}${BASE_ACCOUNTS}/${id}`);
 
 // Get account Instruction by id
 export const getAccountInstructionById = (id) =>

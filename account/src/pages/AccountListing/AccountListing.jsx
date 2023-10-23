@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Badge, Button, Input } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
@@ -9,8 +10,12 @@ import { DynamicTableHelper } from "@workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
 import { DeleteCustomModal } from "@Workspace/common";
 import { AuthHelper } from "@workspace/common";
+import { deleteAccount, fetchAccounts } from "../../store/account/action";
 
 function AccountListing() {
+  const dispatch = useDispatch();
+  const accountsData = useSelector((state) => state.AccountReducer.accounts);
+
   // Check if user is logged in
   useEffect(() => {
     console.log("IsUserLogged in: ", AuthHelper.isUserLoggedIn());
@@ -47,7 +52,6 @@ function AccountListing() {
     DynamicTableHelper.generateConfig(ACCOUNT_INITIAL_OPTIONS)
   );
 
-  const [accountsData, setAccountsData] = useState({});
   const [optGroup, setOptGroup] = useState([]);
 
   console.log("Account DatA: ", accountsData);
@@ -104,14 +108,18 @@ function AccountListing() {
         sortValue: "action",
         render: (data) => (
           <div className="d-flex column-gap-2">
-            <Button
-              type="button"
-              className="btn btn-primary d-flex align-items-center column-gap-2"
+            <Link
+              to={`/accounts/${data.id}/edit`}
+              style={{ color: "black" }}
+              // state={{ stepNo: 3 }}
             >
-              <Link to={`/accounts/${data.id}/edit`} style={{ color: "black" }}>
+              <Button
+                type="button"
+                className="btn btn-primary d-flex align-items-center column-gap-2"
+              >
                 <i className="mdi mdi-pencil"></i>
-              </Link>
-            </Button>
+              </Button>
+            </Link>
             <Button
               type="button"
               className="btn btn-danger d-flex align-items-center column-gap-2"
@@ -133,9 +141,8 @@ function AccountListing() {
 
   // Modal Delete
   const confirmDelete = () => {
-    console.log("Delete confirmed id: ", deleteId);
     // Logic to delete the account
-
+    dispatch(deleteAccount(deleteId));
     setIsDeleteModalOpen(false);
   };
 
@@ -147,22 +154,9 @@ function AccountListing() {
     });
   }, []);
 
-  // Fetch account using axios
-  const fetchAccounts = (pageRequest) => {
-    axios
-      .post(
-        "http://localhost:8100/accounts/listing",
-        DynamicTableHelper.cleanPageRequest(pageRequest)
-      )
-      .then((res) => {
-        console.log("ACCOUNT LISTING:", res.data);
-        setAccountsData(res.data);
-      });
-  };
-
   // Fetch the account when the pageRequest changes
   useEffect(() => {
-    fetchAccounts(pageRequest);
+    dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
   }, [pageRequest]);
 
   // Update the page info when account Data changes

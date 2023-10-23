@@ -14,6 +14,9 @@ import {
   PUT_ACCOUNT,
   PUT_ACCOUNT_SUCCESS,
   PUT_ACCOUNT_FAILURE,
+  DELETE_ACCOUNT,
+  DELETE_ACCOUNT_SUCCESS,
+  DELETE_ACCOUNT_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -92,6 +95,21 @@ export const putAccountSuccess = (account) => ({
 
 export const putAccountFailure = (error) => ({
   type: PUT_ACCOUNT_FAILURE,
+  payload: error,
+});
+
+export const deleteAccount = (accountId) => ({
+  type: DELETE_ACCOUNT,
+  payload: accountId,
+});
+
+export const deleteAccountSuccess = (accountId) => ({
+  type: DELETE_ACCOUNT_SUCCESS,
+  payload: accountId,
+});
+
+export const deleteAccountFailure = (error) => ({
+  type: DELETE_ACCOUNT_FAILURE,
   payload: error,
 });
 

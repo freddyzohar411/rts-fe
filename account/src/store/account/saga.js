@@ -7,6 +7,8 @@ import {
   // CREATE_ACCOUNT,
   POST_ACCOUNT,
   PUT_ACCOUNT,
+  DELETE_ACCOUNT,
+  FETCH_ACCOUNTS
 } from "./actionTypes";
 import {
   // fetchAccountSuccess,
@@ -17,11 +19,16 @@ import {
   postAccountFailure,
   putAccountSuccess,
   putAccountFailure,
+  deleteAccountSuccess,
+  deleteAccountFailure,
+  fetchAccountsSuccess,
+  fetchAccountsFailure
 } from "./action";
 import {
   getAccounts,
   createAccount,
   updateAccount,
+  deleteAccount
 } from "../../helpers/backend_helper";
 import { setAccountId, deleteAccountId } from "../accountregistration/action";
 
@@ -105,7 +112,30 @@ function* workPutAccount(action) {
   }
 }
 
+// Fetch accounts listing
+function* workFetchAccounts(action) {
+  try {
+    const response = yield call(getAccounts, action.payload);
+    yield put(fetchAccountsSuccess(response.data));
+  } catch (error) {
+    yield put(fetchAccountsFailure(error));
+  }
+}
+
+
+// Delete Account
+function* workDeleteAccount(action) {
+  try {
+    const response = yield call(deleteAccount, action.payload);
+    yield put(deleteAccountSuccess(action.payload));
+  } catch (error) {
+    yield put(deleteAccountFailure(error));
+  }
+}
+
 export default function* watchFetchAccountSaga() {
   yield takeEvery(POST_ACCOUNT, workPostAccount);
   yield takeEvery(PUT_ACCOUNT, workPutAccount);
+  yield takeEvery(FETCH_ACCOUNTS, workFetchAccounts);
+  yield takeEvery(DELETE_ACCOUNT, workDeleteAccount);
 }
