@@ -8,7 +8,8 @@ import {
   POST_ACCOUNT,
   PUT_ACCOUNT,
   DELETE_ACCOUNT,
-  FETCH_ACCOUNTS
+  FETCH_ACCOUNTS,
+  FETCH_ACCOUNTS_FIELDS
 } from "./actionTypes";
 import {
   // fetchAccountSuccess,
@@ -22,13 +23,16 @@ import {
   deleteAccountSuccess,
   deleteAccountFailure,
   fetchAccountsSuccess,
-  fetchAccountsFailure
+  fetchAccountsFailure,
+  fetchAccountsFieldsSuccess,
+  fetchAccountsFieldsFailure
 } from "./action";
 import {
   getAccounts,
   createAccount,
   updateAccount,
-  deleteAccount
+  deleteAccount,
+  getAccountsFields
 } from "../../helpers/backend_helper";
 import { setAccountId, deleteAccountId } from "../accountregistration/action";
 
@@ -133,9 +137,21 @@ function* workDeleteAccount(action) {
   }
 }
 
+// Fetch accounts fields
+function* workFetchAccountsFields() {
+  try {
+    const response = yield call(getAccountsFields);
+    console.log("response.data", response.data)
+    yield put(fetchAccountsFieldsSuccess(response.data));
+  } catch (error) {
+    yield put(fetchAccountsFieldsFailure(error));
+  }
+}
+
 export default function* watchFetchAccountSaga() {
   yield takeEvery(POST_ACCOUNT, workPostAccount);
   yield takeEvery(PUT_ACCOUNT, workPutAccount);
   yield takeEvery(FETCH_ACCOUNTS, workFetchAccounts);
   yield takeEvery(DELETE_ACCOUNT, workDeleteAccount);
+  yield takeEvery(FETCH_ACCOUNTS_FIELDS, workFetchAccountsFields)
 }

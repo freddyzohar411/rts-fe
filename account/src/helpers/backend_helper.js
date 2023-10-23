@@ -26,6 +26,9 @@ const { APIClient } = Axios;
 
 const api = new APIClient();
 
+// Get Accounts Fields
+export const getAccountsFields = () => api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields`);
+
 // Get Accounts
 export const getAccounts = (data) =>
   api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing`, data);

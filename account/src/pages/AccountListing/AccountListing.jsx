@@ -10,11 +10,13 @@ import { DynamicTableHelper } from "@workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
 import { DeleteCustomModal } from "@Workspace/common";
 import { AuthHelper } from "@workspace/common";
-import { deleteAccount, fetchAccounts } from "../../store/account/action";
+import { deleteAccount, fetchAccounts, fetchAccountsFields } from "../../store/account/action";
 
 function AccountListing() {
   const dispatch = useDispatch();
   const accountsData = useSelector((state) => state.AccountReducer.accounts);
+  const accountsFields = useSelector((state) => state.AccountReducer.accountsFields);
+  console.log("Account Fields: ", accountsFields)
 
   // Check if user is logged in
   useEffect(() => {
@@ -51,10 +53,6 @@ function AccountListing() {
     },
     DynamicTableHelper.generateConfig(ACCOUNT_INITIAL_OPTIONS)
   );
-
-  const [optGroup, setOptGroup] = useState([]);
-
-  console.log("Account DatA: ", accountsData);
 
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
@@ -141,17 +139,13 @@ function AccountListing() {
 
   // Modal Delete
   const confirmDelete = () => {
-    // Logic to delete the account
     dispatch(deleteAccount(deleteId));
     setIsDeleteModalOpen(false);
   };
 
   // Get all the option groups
   useEffect(() => {
-    axios.get("http://localhost:8100/accounts/fields").then((res) => {
-      console.log(res.data);
-      setOptGroup(res.data);
-    });
+    dispatch(fetchAccountsFields());
   }, []);
 
   // Fetch the account when the pageRequest changes
@@ -165,8 +159,6 @@ function AccountListing() {
       setPageInfoData(accountsData);
     }
   }, [accountsData]);
-
-  document.title = "Accounts | RTS";
 
   return (
     <>
@@ -185,7 +177,7 @@ function AccountListing() {
         pageRequestSet={pageRequestSet}
         search={search}
         setSearch={setSearch}
-        optGroup={optGroup}
+        optGroup={accountsFields}
         setCustomConfigData={setCustomConfigData}
       />
     </>

@@ -22,7 +22,6 @@ import { useParams, useLocation  } from "react-router-dom";
 const EditAccount = () => {
   const location = useLocation();
   const linkState = location.state;
-  console.log("Link Props State: ", linkState)
   const formSubmissionData = useSelector(
     (state) => state.AccountFormReducer.formSubmission
   );

@@ -17,6 +17,9 @@ import {
   DELETE_ACCOUNT,
   DELETE_ACCOUNT_SUCCESS,
   DELETE_ACCOUNT_FAILURE,
+  FETCH_ACCOUNTS_FIELDS,
+  FETCH_ACCOUNTS_FIELDS_SUCCESS,
+  FETCH_ACCOUNTS_FIELDS_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -112,5 +115,22 @@ export const deleteAccountFailure = (error) => ({
   type: DELETE_ACCOUNT_FAILURE,
   payload: error,
 });
+
+// Fetch Accounts Fields
+export const fetchAccountsFields = () => ({
+  type: FETCH_ACCOUNTS_FIELDS,
+});
+
+export const fetchAccountsFieldsSuccess = (accountsFields) => ({
+  type: FETCH_ACCOUNTS_FIELDS_SUCCESS,
+  payload: accountsFields,
+});
+
+export const fetchAccountsFieldsFailure = (error) => ({
+  type: FETCH_ACCOUNTS_FIELDS_FAILURE,
+  payload: error,
+});
+
+
 
 
