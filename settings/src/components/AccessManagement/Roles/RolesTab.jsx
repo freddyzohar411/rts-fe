@@ -1,72 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Input,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Table,
-  Toast,
-  ToastBody,
-  ToastHeader,
-} from "reactstrap";
-import { roleData, roleGroupData } from "../dataSample";
-import Role from "./Role";
-import UpdateRole from "./UpdateRole";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Button, Input, Table } from "reactstrap";
+import { roleData } from "../dataSample";
+import { Link } from "react-router-dom";
 
 function RolesTab() {
-  const navigate = useNavigate();
-  const [createRole, setCreateRole] = useState(false);
-  const [viewRoleModal, setViewRoleModal] = useState(false);
-  const [selectedRoleData, setSelectedRoleData] = useState(null);
-  const [updateRoleModal, setUpdateRoleModal] = useState(false);
-  const [selectedRoleToDelete, setSelectedRoleToDelete] = useState(null);
-  const [toggleDelete, setToggleDelete] = useState(false);
-
-  const handleUpdateView = (role) => {
-    const selectedRole = roleData.find((item) => item.roleName === role);
-    setSelectedRoleData(selectedRole);
-    setUpdateRoleModal(!updateRoleModal);
-  };
-
-  // Modal View *To change to page viewing only
-  const handleView = (role) => {
-    const selectedRole = roleData.find((item) => item.roleName === role);
-    setSelectedRoleData(selectedRole);
-    setViewRoleModal(!viewRoleModal);
-    console.log("Selected Role:", selectedRole);
-  };
-
-  // Page View for Role **To pass props
-  const handleViewRole = (role) => {
-    const selectedRole = roleData.find((item) => item.roleName === role);
-    setSelectedRoleData(selectedRole);
-    navigate("/settings/access/role/view-role", {
-      state: { selectedRoleData },
-    });
-  };
-
-  const handleDelete = (role) => {
-    setSelectedRoleToDelete(role);
-  };
-
-  const confirmDelete = () => {
-    // Filter roles from roleData
-    const updateRoles = roleData.filter(
-      (role) => role.roleName !== selectedRoleToDelete
-    );
-
-    // Filter roles from roleGroupData
-    const updatedRoleGroupData = roleGroupData.filter(
-      (role) => role.roleName !== selectedRoleToDelete
-    );
-
-    setSelectedRoleToDelete(null);
-  };
-
-  useEffect(() => {}, [selectedRoleData]);
-
   return (
     <div>
       <h5 className="fw-bolder">Manage Roles and Permission</h5>
@@ -108,41 +45,32 @@ function RolesTab() {
                   {role.roleDescription}
                 </td>
                 <td className="d-flex flex-start gap-3">
-                  <Button
-                    className="btn btn-primary"
-                    onClick={() => handleView(role.roleName)}
-                  >
+                  <Link to={`/settings/access/role/${role.roleName}`}>
+                    <Button className="btn btn-primary">
                       <i className="ri-eye-line"></i>
-                    
-                  </Button>
-                  <Button
-                    className="btn btn-primary"
-                    onClick={() => handleUpdateView(role.roleName)}
-                  >
-                    <i className="ri-pencil-line"></i>
-                  </Button>
-                  <Button
-                    className="btn btn-primary"
-                    onClick={() => handleDelete(role.roleName)}
-                  >
+                    </Button>
+                  </Link>
+                  <Link to={`/settings/access/role/update/${role.roleName}`}>
+                    <Button className="btn btn-primary">
+                      <i className="ri-pencil-line"></i>
+                    </Button>
+                  </Link>
+                  <Button className="btn btn-primary">
                     <i className="ri-delete-bin-2-line"></i>
                   </Button>
                 </td>
               </tr>
             ))}
           </tbody>
-          <Role
-            show={viewRoleModal}
-            cancel={() => setViewRoleModal(!viewRoleModal)}
-            roleItemData={selectedRoleData}
-          />
 
-          <UpdateRole
+          {/* <UpdateRole
             show={updateRoleModal}
             cancel={() => setUpdateRoleModal(!updateRoleModal)}
             roleItemData={selectedRoleData}
-          />
-          <Modal
+          /> */}
+
+          {/* Delete Modal */}
+          {/* <Modal
             isOpen={selectedRoleToDelete !== null}
             toggle={() => setSelectedRoleToDelete(null)}
             centered
@@ -171,7 +99,7 @@ function RolesTab() {
                 </div>
               </div>
             </ModalBody>
-          </Modal>
+          </Modal> */}
         </Table>
       </div>
     </div>

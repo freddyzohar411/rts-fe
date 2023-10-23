@@ -82,7 +82,7 @@ $value in $theme-colors {
                 &:checked[type=checkbox] {
                     color: $value;
                     background-color: transparent;
-                    border-color: black;
+                    border-color: $value;
                 }
             }
         }

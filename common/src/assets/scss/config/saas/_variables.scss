@@ -572,7 +572,7 @@ $border-widths: (
 );
 $border-style:                solid;
 $border-color:                $theme-primary;
-$border-color-translucent:    $theme-secondary;
+$border-color-translucent:    $theme-primary-custom;
 // scss-docs-end border-variables
 
 // scss-docs-start border-radius-variables
@@ -596,7 +596,7 @@ $element-shadow:              none;
 // scss-docs-end box-shadow-variables
 
 $component-active-color:      $white;
-$component-active-bg:         $theme-primary;
+$component-active-bg:         $theme-primary-custom;
 
 // scss-docs-start focus-ring-variables
 $focus-ring-width:      0.25rem;

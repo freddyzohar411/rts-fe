@@ -51,7 +51,7 @@ function CreateNewRole() {
             <Col>
               <Breadcrumb>
                 <BreadcrumbItem>
-                  <Link to="/settings/access">Role</Link>
+                  <Link to="/settings/access">Settings</Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem active>Create New Role</BreadcrumbItem>
               </Breadcrumb>
@@ -60,7 +60,7 @@ function CreateNewRole() {
           <Row>
             <Col>
               <Card>
-                <CardHeader>
+                <CardHeader className="bg-secondary">
                   <div className="d-flex flex-column gap-1">
                     <span className="h5 fw-bold">Create New Role</span>
                     <span className="text-mute fs-6">
@@ -228,8 +228,9 @@ function CreateNewRole() {
                                           icons={{
                                             moveLeft: (
                                               <span
-                                                className="mdi mdi-chevron-left"
+                                                className="mdi mdi-chevron-left bg-primary"
                                                 key="key"
+                                                
                                               />
                                             ),
                                             moveAllLeft: [

@@ -16,14 +16,11 @@ import classnames from "classnames";
 import RolesTab from "./Roles/RolesTab";
 import UsersTab from "./User/UsersTab";
 import GroupsTab from "./Group/GroupsTab";
-import NewGroup from "./Group/NewGroup";
-import NewUser from "./User/NewUser";
+import { Link } from "react-router-dom";
 
 function AccessManagement() {
   document.title = "Access Management Settings | RTS";
   const [activeTab, setActiveTab] = useState("1");
-  const [newUserModal, setNewUserModal] = useState(false);
-  const [newGroupModal, setNewGroupModal] = useState(false);
   const toggle = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
@@ -82,9 +79,7 @@ function AccessManagement() {
                       <Row>
                         <Col lg={12}>
                           <div className="d-flex flex-column mb-3">
-                            <h5 className="fw-bolder">
-                              Manage Users & Groups
-                            </h5>
+                            <h5 className="fw-bolder">Manage Users & Groups</h5>
                             <span className="text-muted">
                               Manage different users and user groups in this
                               system.
@@ -94,33 +89,27 @@ function AccessManagement() {
                       </Row>
                       <Row>
                         <Col lg={12} className="d-flex flex-start gap-3 mb-3">
-                          <Button
-                            className="btn btn-secondary btn-sm"
-                            type="button"
-                            onClick={() => setNewUserModal(!newUserModal)}
-                          >
-                            <i className="ri-user-line me-2"></i>
-                            <span>NEW USER</span>
-                          </Button>
-                          <Button
-                            className="btn btn-secondary"
-                            type="button"
-                            size="sm"
-                            onClick={() => setNewGroupModal(!newGroupModal)}
-                          >
-                            <i className="ri-team-line me-2"></i>
-                            <span>NEW USER GROUP</span>
-                          </Button>
+                          <Link to="/settings/access/user/user-creation">
+                            <Button
+                              className="btn btn-secondary btn-sm"
+                              type="button"
+                            >
+                              <i className="ri-user-line me-2"></i>
+                              <span>NEW USER</span>
+                            </Button>
+                          </Link>
+                          <Link to="/settings/access/group/group-creation">
+                            <Button
+                              className="btn btn-secondary"
+                              type="button"
+                              size="sm"
+                            >
+                              <i className="ri-team-line me-2"></i>
+                              <span>NEW USER GROUP</span>
+                            </Button>
+                          </Link>
                         </Col>
                       </Row>
-                      <NewUser
-                        show={newUserModal}
-                        cancel={() => setNewUserModal(!newUserModal)}
-                      />
-                      <NewGroup
-                        show={newGroupModal}
-                        cancel={() => setNewGroupModal(!newGroupModal)}
-                      />
 
                       <Row>
                         <Col lg={12}>

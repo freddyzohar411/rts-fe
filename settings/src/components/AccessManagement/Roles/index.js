@@ -1,3 +1,3 @@
 export * from "./CreateNewRole"
-export * from "./UpdateCurrentRole"
+export * from "./UpdateRole"
 export * from "./ViewRole"

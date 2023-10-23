@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Button,
@@ -11,28 +11,9 @@ import {
   PaginationLink,
 } from "reactstrap";
 import { userData, userGroupMembersData, roleGroupData } from "../dataSample";
-import User from "./User";
-import UpdateUser from "./UpdateUser";
+import { Link } from "react-router-dom";
 
 function UsersTab() {
-  // MODAL OPENING
-  const [viewUserModal, setViewUserModal] = useState(false);
-  const [updateUserModal, setUpdateUserModal] = useState(false);
-
-  // SELECTED USER MODAL
-  const [selectedUser, setSelectedUser] = useState(null);
-  const handleViewUser = (user) => {
-    const viewUser = userData.find((item) => item.username === user);
-    setSelectedUser(viewUser);
-    setViewUserModal(!viewUserModal);
-  };
-
-  const handleUpdateUser = (user) => {
-    const updateUser = userData.find((item) => item.username === user);
-    setSelectedUser(updateUser);
-    setUpdateUserModal(!updateUserModal);
-  };
-
   // PAGINATION
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -135,13 +116,19 @@ function UsersTab() {
                       <Badge color="success">Active</Badge>
                     </td>
                     <td className="d-flex flex-start gap-2">
-                      {" "}
-                      <Button onClick={() => handleViewUser(user.username)}>
-                        <i className="ri-eye-line"></i>
-                      </Button>
-                      <Button onClick={() => handleUpdateUser(user.username)}>
-                        <i className="ri-pencil-line"></i>
-                      </Button>
+                      <Link to={`/settings/access/user/${user.username}`}>
+                        <Button>
+                          <i className="ri-eye-line"></i>
+                        </Button>
+                      </Link>
+                      <Link
+                        to={`/settings/access/user/update/${user.username}`}
+                      >
+                        <Button>
+                          <i className="ri-pencil-line"></i>
+                        </Button>
+                      </Link>
+
                       <Button>
                         <i className="ri-delete-bin-2-line"></i>
                       </Button>
@@ -150,16 +137,8 @@ function UsersTab() {
                 ))}
               </tbody>
             </Table>
-            <User
-              show={viewUserModal}
-              cancel={() => setViewUserModal(!viewUserModal)}
-              user={selectedUser}
-            />
-            <UpdateUser
-              show={updateUserModal}
-              cancel={() => setUpdateUserModal(!updateUserModal)}
-              user={selectedUser}
-            />
+
+            {/* Pagination */}
             <Pagination className="d-flex flex-row justify-content-end">
               <PaginationItem
                 onClick={() => handlePrevPage()}

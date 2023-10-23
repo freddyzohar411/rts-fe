@@ -19,7 +19,7 @@ import {
   Table,
 } from "reactstrap";
 import classnames from "classnames";
-// import "react-dual-listbox/lib/react-dual-listbox.css";
+import "react-dual-listbox/lib/react-dual-listbox.css";
 import DualListBox from "react-dual-listbox";
 import {
   userGroupMembersData,
