@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Badge, Button, Input } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import axios from "axios";
@@ -13,12 +14,15 @@ function AccountListing() {
   // Check if user is logged in
   useEffect(() => {
     console.log("IsUserLogged in: ", AuthHelper.isUserLoggedIn());
-    console.log("Account permission Create in: ", AuthHelper.checkPermission('account',['read','write','super']));
-  },[])
+    console.log(
+      "Account permission Create in: ",
+      AuthHelper.checkPermission("account", ["read", "write", "super"])
+    );
+  }, []);
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  
+
   // Table Hooks
   const {
     pageRequest,
@@ -36,7 +40,9 @@ function AccountListing() {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(ACCOUNT_INITIAL_OPTIONS),
+      searchFields: DynamicTableHelper.generateSeachFieldArray(
+        ACCOUNT_INITIAL_OPTIONS
+      ),
     },
     DynamicTableHelper.generateConfig(ACCOUNT_INITIAL_OPTIONS)
   );
@@ -44,7 +50,7 @@ function AccountListing() {
   const [accountsData, setAccountsData] = useState({});
   const [optGroup, setOptGroup] = useState([]);
 
-  console.log("Account DatA: ", accountsData)
+  console.log("Account DatA: ", accountsData);
 
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
@@ -102,9 +108,9 @@ function AccountListing() {
               type="button"
               className="btn btn-primary d-flex align-items-center column-gap-2"
             >
-              <span>
+              <Link to={`/accounts/${data.id}/edit`} style={{ color: "black" }}>
                 <i className="mdi mdi-pencil"></i>
-              </span>
+              </Link>
             </Button>
             <Button
               type="button"

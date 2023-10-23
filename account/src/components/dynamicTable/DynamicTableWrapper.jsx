@@ -238,7 +238,7 @@ const DynamicTableWrapper = ({
                           </Button>
 
                           <Button type="button" className="btn btn-primary">
-                            <Link to="/create-account" style={{ color: "black" }}>
+                            <Link to="/accounts/create" style={{ color: "black" }}>
                               Create New Account
                             </Link>
                           </Button>
