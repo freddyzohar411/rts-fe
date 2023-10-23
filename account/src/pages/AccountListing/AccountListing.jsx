@@ -7,8 +7,14 @@ import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapp
 import { DynamicTableHelper } from "@workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
 import { DeleteCustomModal } from "@Workspace/common";
+import { AuthHelper } from "@workspace/common";
 
 function AccountListing() {
+  // Check if user is logged in
+  useEffect(() => {
+    console.log("IsUserLogged in: ", AuthHelper.isUserLoggedIn());
+    console.log("Account permission Create in: ", AuthHelper.checkPermission('account',['read','write','super']));
+  },[])
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -118,8 +124,6 @@ function AccountListing() {
     ];
   };
   // ==================================================================
-
-  
 
   // Modal Delete
   const confirmDelete = () => {

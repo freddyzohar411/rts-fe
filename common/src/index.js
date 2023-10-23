@@ -18,6 +18,8 @@ export * as DateHelper from "./helpers/date_helper";
 
 export * as DynamicTableHelper from "./helpers/dynamicTable_helper";
 
+export * as AuthHelper from "./helpers/auth_helper";
+
 // Redux Store
 export * as Actions from "./store/actions";
 
