@@ -104,7 +104,13 @@ const Navdata = () => {
           link: "/accounts",
           parentId: "account",
         },
-        AuthHelper.checkPermission("account", ["write"]) && {
+        // AuthHelper.checkPermission("account", ["write"]) && {
+        //   id: "newAccount",
+        //   label: "Create New Account",
+        //   link: "/accounts/create",
+        //   parentId: "account",
+        // },
+        {
           id: "newAccount",
           label: "Create New Account",
           link: "/accounts/create",

@@ -55,9 +55,9 @@ const authProtectedRoutes = [
   {
     path: "/accounts/create",
     component: <CreateAccount />,
-    moduleName: "account",
-    requiredPermissions: ["write"],
-    requiredRoles: ["user"],
+    // moduleName: "account",
+    // requiredPermissions: ["write"],
+    // requiredRoles: ["user"],
   },
   { path: "/accounts/:accountId/edit", component: <EditAccount /> },
   { path: "/accounts", component: <AccountListing /> },
