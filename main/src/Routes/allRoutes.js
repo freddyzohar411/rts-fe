@@ -18,7 +18,7 @@ import {
   AccountListing,
   Stepper,
   EditAccount,
-  CreateAccount
+  CreateAccount,
 } from "@workspace/account";
 
 // import { CreateAccount } from "@workspace/account";
@@ -52,7 +52,13 @@ const authProtectedRoutes = [
   { path: "/create-candidate", component: <CreateCandidate /> },
 
   // Account
-  { path: "/accounts/create", component: <CreateAccount /> },
+  {
+    path: "/accounts/create",
+    component: <CreateAccount />,
+    moduleName: "account",
+    requiredPermissions: ["write"],
+    requiredRoles: ["user"],
+  },
   { path: "/accounts/:accountId/edit", component: <EditAccount /> },
   { path: "/accounts", component: <AccountListing /> },
 
@@ -63,9 +69,11 @@ const authProtectedRoutes = [
   // Settings
   { path: "/settings", component: <MainSettings /> },
   { path: "/settings/customisation", component: <CustomisationSettings /> },
+
   // Form Builder
   { path: "/form-builder", component: <FormbuilderMain /> },
   { path: "/form-builder/:templateId", component: <FormbuilderMain /> },
+
   // Access Management
   { path: "/settings/access", component: <AccessManagement /> },
   { path: "/settings/access/role/role-creation", component: <CreateNewRole /> },

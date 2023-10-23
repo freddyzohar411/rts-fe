@@ -13,6 +13,7 @@ import VerticalLayout from "@workspace/common/src/Layouts/index";
 //routes
 import { authProtectedRoutes, publicRoutes } from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";
+import RolesPermissionsComponent from "./RolesPermissionsProtected";
 
 const Index = () => {
   return (
@@ -38,7 +39,13 @@ const Index = () => {
                     path={route?.path}
                     element={
                       <AuthProtected>
-                        <VerticalLayout>{route.component}</VerticalLayout>
+                        <RolesPermissionsComponent
+                          moduleName={route.moduleName}
+                          requiredPermissions={route.requiredPermissions}
+                          requiredRoles={route.requiredRoles}
+                        >
+                          <VerticalLayout>{route.component}</VerticalLayout>
+                        </RolesPermissionsComponent>
                       </AuthProtected>
                     }
                     key={idx}
@@ -62,7 +69,13 @@ const Index = () => {
                     path={route.path}
                     element={
                       <AuthProtected>
-                        <VerticalLayout>{route.component}</VerticalLayout>
+                        <RolesPermissionsComponent
+                          moduleName={route.moduleName}
+                          requiredPermissions={route.requiredPermissions}
+                          requiredRoles={route.requiredRoles}
+                        >
+                          <VerticalLayout>{route.component}</VerticalLayout>
+                        </RolesPermissionsComponent>
                       </AuthProtected>
                     }
                     key={idx}

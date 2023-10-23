@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import  * as AuthHelper from "../helpers/auth_helper";
 
 const Navdata = () => {
   const history = useNavigate();
@@ -103,13 +104,13 @@ const Navdata = () => {
           link: "/accounts",
           parentId: "account",
         },
-        {
+        AuthHelper.checkPermission("account", ["write"]) && {
           id: "newAccount",
           label: "Create New Account",
           link: "/accounts/create",
           parentId: "account",
         },
-      ],
+      ].filter(Boolean),
     },
 
     // Contacts
@@ -260,7 +261,7 @@ const Navdata = () => {
           link: "/settings/control",
           parentId: "settings",
         },
-        {
+        AuthHelper.checkRole(["superadmin"]) && {
           id: "customisation",
           label: "Customisation",
           link: "/settings/customisation",
@@ -272,7 +273,7 @@ const Navdata = () => {
           link: "/settings/resume-management",
           parentId: "settings",
         },
-      ],
+      ].filter(Boolean),
     },
   ];
   return <React.Fragment>{menuItems}</React.Fragment>;

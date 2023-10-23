@@ -20,10 +20,14 @@ import {
 } from "../../store/accountForm/action";
 import { ObjectHelper } from "@workspace/common";
 import CountryModal from "../../components/CountryModal/CountryModal";
+import { AuthHelper } from "@workspace/common";
 
 const AccountCreation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const userDetails = AuthHelper.getUserDetails();
+  console.log("User Details: ", userDetails)
 
   const form = useSelector((state) => state.AccountFormReducer.form);
   const accountId = useSelector(
@@ -600,7 +604,7 @@ const AccountCreation = () => {
         >
           <Form
             template={formTemplate}
-            userDetails={null}
+            userDetails={userDetails}
             country={null}
             editData={formSubmissionData}
             onFormikChange={handleFormikChange}

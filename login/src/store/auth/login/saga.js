@@ -18,11 +18,16 @@ function* loginUser({ payload: { user, history } }) {
       // Implementation of permissions 
       // Response should also return the users permissions
       const permissions = {
-        account: ['read', 'write', 'delete', 'edit'],
+        account: ['write','delete', 'edit'],
         job: ['read', 'write', 'delete', 'edit'],
         candidate: ['read', 'write', 'delete', 'edit'],
       };
       sessionStorage.setItem("permissions", JSON.stringify(permissions));
+
+      // Implementation of roles
+      // Response should also return the users roles
+      const roles = ['user','superadmin'];
+      sessionStorage.setItem("roles", JSON.stringify(roles));
 
 
       history("/dashboard");
@@ -42,6 +47,9 @@ function* logoutUser({ payload: { history } }) {
     });
     if (response) {
       sessionStorage.removeItem("authUser");
+      // Extra user Info for access management
+      sessionStorage.removeItem("permissions");
+      sessionStorage.removeItem("roles");
       yield put(logoutUserSuccess(LOGOUT_USER, true));
     }
   } catch (error) {

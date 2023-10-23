@@ -18,6 +18,7 @@ import ButtonUpdateElement from "./ButtonUpdateElement";
 import DepartmentSelectElement from "./DepartmentSelectElement";
 import EditorElement from "./EditorElement";
 import AccountParentElement from "./AccountParentElement";
+import * as AuthHelper from "../../../helpers/auth_helper";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -221,18 +222,27 @@ const checkVisibleOnGlobalCountry = (field, country) => {
   return false;
 };
 
+// const checkAccessible = (field, userDetails) => {
+//   if (!userDetails) return true;
+//   // Check if field is accessible based on user role
+//   if (!field?.userGroup) return true;
+//   if (field?.userGroup.length === 0) return true;
+//   if (!userDetails?.userGroup) return true;
+//   const userGroupArray = userDetails?.userGroup.split(",");
+//   // Check if user is in userGroup. userDetails?.userGroup is an array
+//   if (userGroupArray.some((r) => field.userGroup.includes(r))) {
+//     return true;
+//   }
+//   return false;
+// };
+
 const checkAccessible = (field, userDetails) => {
   if (!userDetails) return true;
   // Check if field is accessible based on user role
   if (!field?.userGroup) return true;
   if (field?.userGroup.length === 0) return true;
-  if (!userDetails?.userGroup) return true;
-  const userGroupArray = userDetails?.userGroup.split(",");
-  // Check if user is in userGroup. userDetails?.userGroup is an array
-  if (userGroupArray.some((r) => field.userGroup.includes(r))) {
-    return true;
-  }
-  return false;
+  console.log("field.userGroup!!!", field.userGroup)
+  return AuthHelper.checkRole(field.userGroup);
 };
 
 const checkCopyFieldConditions = (field, formik) => {
