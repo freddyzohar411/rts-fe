@@ -10,9 +10,6 @@ import {
 import NonAuthLayout from "@workspace/common/src/Layouts/NonAuthLayout";
 import VerticalLayout from "@workspace/common/src/Layouts/index";
 
-//Constant
-import { AuthConstant } from "@workspace/common";
-
 //routes
 import { authProtectedRoutes, publicRoutes } from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";

@@ -24,8 +24,8 @@ function* loginUser({ payload: { user, history } }) {
       };
       sessionStorage.setItem("permissions", JSON.stringify(permissions));
 
-      // Implementation of roles
-      // Response should also return the users roles
+      // // Implementation of roles
+      // // Response should also return the users roles
       const roles = ['user','superadmin'];
       sessionStorage.setItem("roles", JSON.stringify(roles));
 

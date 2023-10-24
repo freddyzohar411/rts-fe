@@ -267,7 +267,7 @@ const Navdata = () => {
           link: "/settings/control",
           parentId: "settings",
         },
-        AuthHelper.checkRole(["superadmin"]) && {
+       {
           id: "customisation",
           label: "Customisation",
           link: "/settings/customisation",

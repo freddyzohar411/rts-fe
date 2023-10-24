@@ -19,6 +19,10 @@ import DepartmentSelectElement from "./DepartmentSelectElement";
 import EditorElement from "./EditorElement";
 import AccountParentElement from "./AccountParentElement";
 import * as AuthHelper from "../../../helpers/auth_helper";
+import {
+  moduleConstant,
+  permissionConstant,
+} from "../../../constants/authConstant";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -241,7 +245,7 @@ const checkAccessible = (field, userDetails) => {
   // Check if field is accessible based on user role
   if (!field?.userGroup) return true;
   if (field?.userGroup.length === 0) return true;
-  console.log("field.userGroup!!!", field.userGroup)
+  console.log("field.userGroup!!!", field.userGroup);
   return AuthHelper.checkRole(field.userGroup);
 };
 
