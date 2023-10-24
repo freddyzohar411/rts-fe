@@ -117,19 +117,19 @@ function UsersTab() {
                     </td>
                     <td className="d-flex flex-start gap-2">
                       <Link to={`/settings/access/user/${user.username}`}>
-                        <Button>
+                        <Button className="btn btn-custom-primary-hover" style={{pointerEvents: "none"}}>
                           <i className="ri-eye-line"></i>
                         </Button>
                       </Link>
                       <Link
                         to={`/settings/access/user/update/${user.username}`}
                       >
-                        <Button>
+                        <Button className="btn btn-custom-primary-hover" style={{pointerEvents: "none"}}>
                           <i className="ri-pencil-line"></i>
                         </Button>
                       </Link>
 
-                      <Button>
+                      <Button className="btn btn-custom-primary-hover" style={{pointerEvents: "none"}}>
                         <i className="ri-delete-bin-2-line"></i>
                       </Button>
                     </td>
@@ -147,7 +147,9 @@ function UsersTab() {
                 <PaginationLink>← &nbsp; Previous</PaginationLink>
               </PaginationItem>
               <PaginationItem active>
-                <PaginationLink>Page {currentPage}</PaginationLink>
+                <PaginationLink className="bg-custom-primary">
+                  Page {currentPage}
+                </PaginationLink>
               </PaginationItem>
               <PaginationItem
                 onClick={() => handleNextPage()}

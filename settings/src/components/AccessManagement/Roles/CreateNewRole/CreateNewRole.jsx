@@ -60,7 +60,7 @@ function CreateNewRole() {
           <Row>
             <Col>
               <Card>
-                <CardHeader className="bg-secondary">
+                <CardHeader className="bg-header">
                   <div className="d-flex flex-column gap-1">
                     <span className="h5 fw-bold">Create New Role</span>
                     <span className="text-mute fs-6">
@@ -228,7 +228,7 @@ function CreateNewRole() {
                                           icons={{
                                             moveLeft: (
                                               <span
-                                                className="mdi mdi-chevron-left bg-primary"
+                                                className="mdi mdi-chevron-left"
                                                 key="key"
                                                 
                                               />
@@ -291,16 +291,16 @@ function CreateNewRole() {
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex flex-row justify-content-between">
-                    <Button className="btn btn-primary" type="button">
+                    <Button className="btn btn-custom-primary" type="button">
                       Reset
                     </Button>
                     <div className="d-flex flex-row gap-3">
                       <Link to="/settings/access" className="text-dark">
-                        <Button className="btn btn-primary" type="button">
+                        <Button className="btn btn-custom-primary" type="button">
                           Cancel
                         </Button>
                       </Link>
-                      <Button className="btn btn-primary" type="submit">
+                      <Button className="btn btn-custom-primary" type="submit">
                         Save
                       </Button>
                     </div>

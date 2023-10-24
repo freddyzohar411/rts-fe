@@ -11,12 +11,12 @@ function RolesTab() {
         Configure roles to define the different groups of authorities.
       </p>
       <div className="d-flex flex-row gap-2 mb-4">
-        <Button className="btn btn-primary btn-sm d-flex flex-row align-items-center">
-          <Link to="/settings/access/role/role-creation" className="text-dark">
+        <Link to="/settings/access/role/role-creation">
+          <Button className="btn btn-custom-primary btn-sm d-flex flex-row align-items-center">
             <i className="ri-contacts-line me-2"></i>
             <span>ADD NEW ROLE</span>
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </div>
 
       <div className="table-responsive">
@@ -46,28 +46,31 @@ function RolesTab() {
                 </td>
                 <td className="d-flex flex-start gap-3">
                   <Link to={`/settings/access/role/${role.roleName}`}>
-                    <Button className="btn btn-primary">
+                    <Button
+                      className="btn btn-custom-primary-hover"
+                      style={{ pointerEvents: "none" }}
+                    >
                       <i className="ri-eye-line"></i>
                     </Button>
                   </Link>
                   <Link to={`/settings/access/role/update/${role.roleName}`}>
-                    <Button className="btn btn-primary">
+                    <Button
+                      className="btn btn-custom-primary-hover"
+                      style={{ pointerEvents: "none" }}
+                    >
                       <i className="ri-pencil-line"></i>
                     </Button>
                   </Link>
-                  <Button className="btn btn-primary">
+                  <Button
+                    className="btn btn-custom-primary-hover"
+                    style={{ pointerEvents: "none" }}
+                  >
                     <i className="ri-delete-bin-2-line"></i>
                   </Button>
                 </td>
               </tr>
             ))}
           </tbody>
-
-          {/* <UpdateRole
-            show={updateRoleModal}
-            cancel={() => setUpdateRoleModal(!updateRoleModal)}
-            roleItemData={selectedRoleData}
-          /> */}
 
           {/* Delete Modal */}
           {/* <Modal

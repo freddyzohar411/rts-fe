@@ -11,7 +11,6 @@ import {
   Table,
 } from "reactstrap";
 import { userGroupData } from "../dataSample";
-import UpdateGroup from "./UpdateGroup";
 import { Link } from "react-router-dom";
 
 function GroupsTab() {
@@ -77,20 +76,27 @@ function GroupsTab() {
                   <td className="text-wrap">{item.groupDescription}</td>
                   <td className="d-flex flex-row justify-between gap-2">
                     <Link to={`/settings/access/group/${item.groupName}`}>
-                      <Button className="btn btn-primary">
+                      <Button
+                        className="btn btn-custom-primary-hover"
+                        style={{ pointerEvents: "none" }}
+                      >
                         <i className="ri-eye-line"></i>
                       </Button>
                     </Link>
                     <Link
                       to={`/settings/access/group/update/${item.groupName}`}
                     >
-                      <Button className="btn btn-primary">
+                      <Button
+                        className="btn btn-custom-primary-hover"
+                        style={{ pointerEvents: "none" }}
+                      >
                         <i className="ri-pencil-line"></i>
                       </Button>
                     </Link>
 
                     <Button
-                      className="btn btn-primary"
+                      className="btn btn-custom-primary-hover"
+                      style={{ pointerEvents: "none" }}
                       onClick={() => setShowDelete(!showDelete)}
                     >
                       <i className="ri-delete-bin-line"></i>

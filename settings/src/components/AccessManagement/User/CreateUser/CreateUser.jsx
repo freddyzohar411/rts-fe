@@ -1,6 +1,6 @@
 import { BreadCrumb } from "@workspace/common";
 import { Form, Formik, Field } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Breadcrumb,
@@ -20,14 +20,30 @@ import {
 import { userData } from "../../dataSample";
 import { initialValues, schema } from "./constants";
 
+import { useDispatch, useSelector } from "react-redux";
+import { createUser } from "../../../../store/users/action";
+import { Axios } from "@workspace/common";
+const { APIClient } = Axios;
+const api = new APIClient();
+
 function CreateUser() {
   document.title = "Create New User | RTS";
   const navigate = useNavigate();
-  const handleSubmit = async (values, { resetForm }) => {
-    userData.push(values);
-    navigate("/settings/access");
-    resetForm();
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (values) => {
+    const newUser = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      username: values.username,
+      email: values.email,
+      contact: values.contact,
+      employeeId: values.employeeId,
+      password: values.password,
+    };
+    dispatch(createUser({ newUser, navigate: navigate }));
   };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -45,10 +61,10 @@ function CreateUser() {
           <Row>
             <Col>
               <Card>
-                <CardHeader className="h5 fw-bold">
+                <CardHeader className="bg-header">
                   <div className="d-flex flex-column gap-1">
                     <span className="h6 fw-bold">Create New User</span>
-                    <span className="text-muted fs-6 fw-medium">
+                    <span className="text-muted">
                       Begin the creation of a new user in this form.
                     </span>
                   </div>
@@ -161,18 +177,18 @@ function CreateUser() {
                               <Col lg={4}>
                                 <Label>Contact Number</Label>
                                 <Field
-                                  name="contactNo"
-                                  type="number"
+                                  name="mobile"
+                                  type="text"
                                   placeholder="Enter Contact Number"
                                   className={`form-control ${
-                                    touched.contactNo && errors.contactNo
+                                    touched.mobile && errors.mobile
                                       ? "is-invalid"
                                       : ""
                                   }`}
                                 />
-                                {errors.contactNo && touched.contactNo && (
+                                {errors.mobile && touched.mobile && (
                                   <FormFeedback typeof="invalid">
-                                    {errors.contactNo}
+                                    {errors.mobile}
                                   </FormFeedback>
                                 )}
                               </Col>
@@ -198,23 +214,12 @@ function CreateUser() {
                               </Col>
                               <Col lg={4}>
                                 <Label>Confirm Password</Label>
-                                <Field
-                                  name="confirmPassword"
+                                <Input
                                   type="password"
+                                  name="confirmPassword"
+                                  className="form-control"
                                   placeholder="Confirm Password"
-                                  className={`form-control ${
-                                    touched.confirmPassword &&
-                                    errors.confirmPassword
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
                                 />
-                                {errors.confirmPassword &&
-                                  touched.confirmPassword && (
-                                    <FormFeedback typeof="invalid">
-                                      {errors.confirmPassword}
-                                    </FormFeedback>
-                                  )}
                               </Col>
                             </Row>
                           </CardBody>
@@ -224,13 +229,17 @@ function CreateUser() {
                         <Row>
                           <Col>
                             <div className="d-flex flex-row justify-content-between">
-                              <Button className="btn btn-primary" type="button" onClick={() => resetForm()}>
+                              <Button
+                                className="btn btn-custom-primary"
+                                type="button"
+                                onClick={() => resetForm()}
+                              >
                                 Reset
                               </Button>
                               <div className="d-flex flex-row gap-2">
                                 <Link to="/settings/access">
                                   <Button
-                                    className="btn btn-primary"
+                                    className="btn btn-custom-primary"
                                     type="button"
                                   >
                                     Cancel
@@ -238,7 +247,7 @@ function CreateUser() {
                                 </Link>
 
                                 <Button
-                                  className="btn btn-primary"
+                                  className="btn btn-custom-primary"
                                   type="submit"
                                 >
                                   Submit

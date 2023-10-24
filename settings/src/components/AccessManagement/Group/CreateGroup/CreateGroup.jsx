@@ -74,7 +74,7 @@ function CreateGroup() {
   return (
     <React.Fragment>
       <div className="page-content">
-        <Container>
+        <Container fluid>
           <Row>
             <Col>
               <Breadcrumb>
@@ -88,10 +88,12 @@ function CreateGroup() {
           <Row>
             <Col>
               <Card>
-                <CardHeader>
+                <CardHeader className="bg-header">
                   <div className="d-flex flex-column gap-1">
-                    <span className="h5 fw-bold">Create User Group</span>
-                    <span className="text-muted fw-medium fs-6">
+                    <span className="h6 fw-bold text-dark">
+                      Create User Group
+                    </span>
+                    <span className="fw-medium fs-6 text-dark">
                       Begin creating a user group, assigning members and
                       permissions.
                     </span>
@@ -107,274 +109,266 @@ function CreateGroup() {
                   {({ touched, errors, resetForm }) => (
                     <Form>
                       <CardBody>
-                        <Row>
-                          <Col>
-                            <Card>
-                              <CardBody>
-                                <Row className="mb-3">
-                                  <Col>
-                                    <span className="h6 fw-bold">
-                                      General Information
-                                    </span>
-                                  </Col>
-                                </Row>
-                                <Row className="mb-3">
-                                  <Col>
-                                    <Label htmlFor="groupName">
-                                      Group Name
-                                    </Label>
-                                    <Field
-                                      name="groupName"
-                                      type="text"
-                                      placeholder="Enter Group Name"
-                                      className={`form-control ${
-                                        errors.groupName && touched.groupName
-                                          ? "is-invalid"
-                                          : ""
-                                      }`}
-                                    />
-                                    {errors.groupName && touched.groupName && (
+                        <div className="d-flex flex-column gap-2">
+                          <Row className="mb-3">
+                            <Col>
+                              <Row className="mb-3">
+                                <Col>
+                                  <span className="h6 fw-bold">
+                                    General Information
+                                  </span>
+                                </Col>
+                              </Row>
+                              <Row className="mb-3">
+                                <Col>
+                                  <Label htmlFor="groupName">Group Name</Label>
+                                  <Field
+                                    name="groupName"
+                                    type="text"
+                                    placeholder="Enter Group Name"
+                                    className={`form-control ${
+                                      errors.groupName && touched.groupName
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                  />
+                                  {errors.groupName && touched.groupName && (
+                                    <FormFeedback typeof="invalid">
+                                      {errors.groupName}
+                                    </FormFeedback>
+                                  )}
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col>
+                                  <Label htmlFor="groupDescription">
+                                    Group Description
+                                  </Label>
+                                  <Field
+                                    component="textarea"
+                                    name="groupDescription"
+                                    placeholder="Enter Group Description"
+                                    className={`form-control ${
+                                      errors.groupDescription &&
+                                      touched.groupDescription
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                  />
+                                  {errors.groupDescription &&
+                                    touched.groupDescription && (
                                       <FormFeedback typeof="invalid">
-                                        {errors.groupName}
+                                        {errors.groupDescription}
                                       </FormFeedback>
                                     )}
-                                  </Col>
-                                </Row>
-                                <Row>
-                                  <Col>
-                                    <Label htmlFor="groupDescription">
-                                      Group Description
-                                    </Label>
-                                    <Field
-                                      component="textarea"
-                                      name="groupDescription"
-                                      placeholder="Enter Group Description"
-                                      className={`form-control ${
-                                        errors.groupDescription &&
-                                        touched.groupDescription
-                                          ? "is-invalid"
-                                          : ""
-                                      }`}
-                                    />
-                                    {errors.groupDescription &&
-                                      touched.groupDescription && (
-                                        <FormFeedback typeof="invalid">
-                                          {errors.groupDescription}
-                                        </FormFeedback>
-                                      )}
-                                  </Col>
-                                </Row>
-                              </CardBody>
-                            </Card>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Card>
-                              <CardBody>
-                                <Row className="mb-4">
-                                  <Col>
-                                    <span className="h6 fw-bold">
-                                      Members and Roles
-                                    </span>
-                                  </Col>
-                                </Row>
-                                <Row>
-                                  <Col>
-                                    <Nav tabs>
-                                      <NavItem>
-                                        <NavLink
-                                          style={{ cursor: "pointer" }}
-                                          className={classnames({
-                                            active: activeTab === "1",
-                                          })}
-                                          onClick={() => toggle("1")}
-                                        >
-                                          Members
-                                        </NavLink>
-                                      </NavItem>
-                                      <NavItem>
-                                        <NavLink
-                                          style={{ cursor: "pointer" }}
-                                          className={classnames({
-                                            active: activeTab === "2",
-                                          })}
-                                          onClick={() => toggle("2")}
-                                        >
-                                          Roles
-                                        </NavLink>
-                                      </NavItem>
-                                    </Nav>
-                                    <TabContent activeTab={activeTab}>
-                                      <TabPane tabId="1">
-                                        <div className="p-3">
-                                          <Row className="mb-3">
-                                            <Col>
-                                              <div className="d-flex flex-row justify-content-around">
-                                                <span className="fw-semibold">
-                                                  All Users
-                                                </span>
-                                                <span className="fw-semibold">
-                                                  Assigned Users
-                                                </span>
-                                              </div>
-                                            </Col>
-                                          </Row>
-                                          <Row>
-                                            <Col>
-                                              <DualListBox
-                                                options={formattedUsers}
-                                                selected={selectedUsers}
-                                                onChange={(e) =>
-                                                  setSelectedUsers(e)
-                                                }
-                                                canFilter={true}
-                                                icons={{
-                                                  moveLeft: (
-                                                    <span
-                                                      className="mdi mdi-chevron-left"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveAllLeft: [
-                                                    <span
-                                                      className="mdi mdi-chevron-double-left"
-                                                      key="key"
-                                                    />,
-                                                  ],
-                                                  moveRight: (
-                                                    <span
-                                                      className="mdi mdi-chevron-right"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveAllRight: [
-                                                    <span
-                                                      className="mdi mdi-chevron-double-right"
-                                                      key="key"
-                                                    />,
-                                                  ],
-                                                  moveDown: (
-                                                    <span
-                                                      className="mdi mdi-chevron-down"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveUp: (
-                                                    <span
-                                                      className="mdi mdi-chevron-up"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveTop: (
-                                                    <span
-                                                      className="mdi mdi-chevron-double-up"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveBottom: (
-                                                    <span
-                                                      className="mdi mdi-chevron-double-down"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                }}
-                                              />
-                                            </Col>
-                                          </Row>
-                                        </div>
-                                      </TabPane>
-                                      <TabPane tabId="2">
-                                        <div className="p-3">
-                                          <Row className="mb-3">
-                                            <Col>
-                                              <div className="d-flex flex-row justify-content-around">
-                                                <span className="fw-semibold">
-                                                  All Roles
-                                                </span>
-                                                <span className="fw-semibold">
-                                                  Assigned Roles
-                                                </span>
-                                              </div>
-                                            </Col>
-                                          </Row>
-                                          <Row>
-                                            <Col>
-                                              <DualListBox
-                                                options={formattedRoles}
-                                                selected={selectedRoles}
-                                                onChange={(e) =>
-                                                  setSelectedRoles(e)
-                                                }
-                                                canFilter={true}
-                                                icons={{
-                                                  moveLeft: (
-                                                    <span
-                                                      className="mdi mdi-chevron-left"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveAllLeft: [
-                                                    <span
-                                                      className="mdi mdi-chevron-double-left"
-                                                      key="key"
-                                                    />,
-                                                  ],
-                                                  moveRight: (
-                                                    <span
-                                                      className="mdi mdi-chevron-right"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveAllRight: [
-                                                    <span
-                                                      className="mdi mdi-chevron-double-right"
-                                                      key="key"
-                                                    />,
-                                                  ],
-                                                  moveDown: (
-                                                    <span
-                                                      className="mdi mdi-chevron-down"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveUp: (
-                                                    <span
-                                                      className="mdi mdi-chevron-up"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveTop: (
-                                                    <span
-                                                      className="mdi mdi-chevron-double-up"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                  moveBottom: (
-                                                    <span
-                                                      className="mdi mdi-chevron-double-down"
-                                                      key="key"
-                                                    />
-                                                  ),
-                                                }}
-                                              />
-                                            </Col>
-                                          </Row>
-                                        </div>
-                                      </TabPane>
-                                    </TabContent>
-                                  </Col>
-                                </Row>
-                              </CardBody>
-                            </Card>
-                          </Col>
-                        </Row>
+                                </Col>
+                              </Row>
+                            </Col>
+                          </Row>
+                          <Row className="mb-3">
+                            <Col>
+                              <Row className="mb-3">
+                                <Col>
+                                  <span className="h6 fw-bold">
+                                    Members and Roles
+                                  </span>
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col>
+                                  <Nav tabs>
+                                    <NavItem>
+                                      <NavLink
+                                        style={{ cursor: "pointer" }}
+                                        className={classnames({
+                                          active: activeTab === "1",
+                                        })}
+                                        onClick={() => toggle("1")}
+                                      >
+                                        Members
+                                      </NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                      <NavLink
+                                        style={{ cursor: "pointer" }}
+                                        className={classnames({
+                                          active: activeTab === "2",
+                                        })}
+                                        onClick={() => toggle("2")}
+                                      >
+                                        Roles
+                                      </NavLink>
+                                    </NavItem>
+                                  </Nav>
+                                  <TabContent activeTab={activeTab}>
+                                    <TabPane tabId="1">
+                                      <div className="p-3">
+                                        <Row className="mb-3">
+                                          <Col>
+                                            <div className="d-flex flex-row justify-content-around">
+                                              <span className="fw-semibold">
+                                                All Users
+                                              </span>
+                                              <span className="fw-semibold">
+                                                Assigned Users
+                                              </span>
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                        <Row>
+                                          <Col>
+                                            <DualListBox
+                                              options={formattedUsers}
+                                              selected={selectedUsers}
+                                              onChange={(e) =>
+                                                setSelectedUsers(e)
+                                              }
+                                              canFilter={true}
+                                              icons={{
+                                                moveLeft: (
+                                                  <span
+                                                    className="mdi mdi-chevron-left"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveAllLeft: [
+                                                  <span
+                                                    className="mdi mdi-chevron-double-left"
+                                                    key="key"
+                                                  />,
+                                                ],
+                                                moveRight: (
+                                                  <span
+                                                    className="mdi mdi-chevron-right"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveAllRight: [
+                                                  <span
+                                                    className="mdi mdi-chevron-double-right"
+                                                    key="key"
+                                                  />,
+                                                ],
+                                                moveDown: (
+                                                  <span
+                                                    className="mdi mdi-chevron-down"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveUp: (
+                                                  <span
+                                                    className="mdi mdi-chevron-up"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveTop: (
+                                                  <span
+                                                    className="mdi mdi-chevron-double-up"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveBottom: (
+                                                  <span
+                                                    className="mdi mdi-chevron-double-down"
+                                                    key="key"
+                                                  />
+                                                ),
+                                              }}
+                                            />
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    </TabPane>
+                                    <TabPane tabId="2">
+                                      <div className="p-3">
+                                        <Row className="mb-3">
+                                          <Col>
+                                            <div className="d-flex flex-row justify-content-around">
+                                              <span className="fw-semibold">
+                                                All Roles
+                                              </span>
+                                              <span className="fw-semibold">
+                                                Assigned Roles
+                                              </span>
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                        <Row>
+                                          <Col>
+                                            <DualListBox
+                                              options={formattedRoles}
+                                              selected={selectedRoles}
+                                              onChange={(e) =>
+                                                setSelectedRoles(e)
+                                              }
+                                              canFilter={true}
+                                              icons={{
+                                                moveLeft: (
+                                                  <span
+                                                    className="mdi mdi-chevron-left"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveAllLeft: [
+                                                  <span
+                                                    className="mdi mdi-chevron-double-left"
+                                                    key="key"
+                                                  />,
+                                                ],
+                                                moveRight: (
+                                                  <span
+                                                    className="mdi mdi-chevron-right"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveAllRight: [
+                                                  <span
+                                                    className="mdi mdi-chevron-double-right"
+                                                    key="key"
+                                                  />,
+                                                ],
+                                                moveDown: (
+                                                  <span
+                                                    className="mdi mdi-chevron-down"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveUp: (
+                                                  <span
+                                                    className="mdi mdi-chevron-up"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveTop: (
+                                                  <span
+                                                    className="mdi mdi-chevron-double-up"
+                                                    key="key"
+                                                  />
+                                                ),
+                                                moveBottom: (
+                                                  <span
+                                                    className="mdi mdi-chevron-double-down"
+                                                    key="key"
+                                                  />
+                                                ),
+                                              }}
+                                            />
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    </TabPane>
+                                  </TabContent>
+                                </Col>
+                              </Row>
+                            </Col>
+                          </Row>
+                        </div>
                       </CardBody>
                       <CardFooter>
                         <div className="d-flex flex-row justify-content-between">
                           <Button
                             type="button"
-                            className="btn btn-primary"
+                            className="btn btn-custom-primary"
                             onClick={() => resetForm()}
                           >
                             Reset
@@ -383,13 +377,16 @@ function CreateGroup() {
                             <Link to="/settings/access">
                               <Button
                                 type="button"
-                                className="btn btn-primary"
+                                className="btn btn-custom-primary"
                                 onClick={() => resetForm()}
                               >
                                 Cancel
                               </Button>
                             </Link>
-                            <Button type="submit" className="btn btn-primary">
+                            <Button
+                              type="submit"
+                              className="btn btn-custom-primary"
+                            >
                               Submit
                             </Button>
                           </div>

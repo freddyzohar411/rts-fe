@@ -40,7 +40,7 @@ function UpdateUser() {
   return (
     <React.Fragment>
       <div className="page-content">
-        <Container>
+        <Container fluid>
           <Row>
             <Col>
               <Breadcrumb>
@@ -57,199 +57,187 @@ function UpdateUser() {
                 <CardHeader>
                   <div className="d-flex flex-column gap-1">
                     <span className="h5 fw-bold">Update User</span>
-                    <span className="text-muted">
-                      Make changes to user details, groups and roles.
-                    </span>
+                    <span>Make changes to user details, groups and roles.</span>
                   </div>
                 </CardHeader>
-                <CardBody className="bg-light">
-                  <Row>
+                <CardBody>
+                  <Row className="mb-3">
                     <Col>
-                      <Card>
-                        <CardBody>
-                          <Row className="mb-3">
-                            <Col>
-                              <span className="h6 fw-bold">
-                                General Information
-                              </span>
-                            </Col>
-                          </Row>
-                          <Row className="mb-3">
-                            <Col lg={4}>
-                              <Label>First Name</Label>
-                              <Input
-                                name="firstName"
-                                type="text"
-                                className="form-control"
-                                value={userDetails.firstName}
-                              />
-                            </Col>
-                            <Col lg={4}>
-                              <Label>Last Name</Label>
-                              <Input
-                                name="lastName"
-                                type="text"
-                                className="form-control"
-                                value={userDetails.lastName}
-                              />
-                            </Col>
-                            <Col lg={4}>
-                              <Label>Username</Label>
-                              <Input
-                                name="username"
-                                type="text"
-                                className="form-control"
-                                value={userDetails.username}
-                              />
-                            </Col>
-                          </Row>
-                          <Row className="mb-3">
-                            <Col lg={4}>
-                              <Label>Employee ID</Label>
-                              <Input
-                                name="employeeId"
-                                type="text"
-                                className="form-control"
-                                value={userDetails.employeeId}
-                              />
-                            </Col>
-                            <Col lg={4}>
-                              <Label>Email Address</Label>
-                              <Input
-                                name="email"
-                                type="email"
-                                className="form-control"
-                                value={userDetails.email}
-                              />
-                            </Col>
-                            <Col lg={4}>
-                              <Label>Contact Number</Label>
-                              <Input
-                                name="contactNo"
-                                type="number"
-                                className="form-control"
-                                value={userDetails.contactNo}
-                              />
-                            </Col>
-                          </Row>
-                          <Row className="mb-3">
-                            <Col lg={4}>
-                              <Label>Password</Label>
-                              <Input
-                                name="password"
-                                type="password"
-                                className="form-control"
-                                value={userDetails.password}
-                              />
-                            </Col>
-                            <Col lg={4}>
-                              <Label>Confirm Password</Label>
-                              <Input
-                                name="confirmPassword"
-                                type="password"
-                                className="form-control"
-                                value={userDetails.confirmPassword}
-                              />
-                            </Col>
-                          </Row>
-                        </CardBody>
-                      </Card>
+                      <Row className="mb-3">
+                        <Col>
+                          <span className="h6 fw-bold">
+                            General Information
+                          </span>
+                        </Col>
+                      </Row>
+                      <Row className="mb-3">
+                        <Col lg={4}>
+                          <Label>First Name</Label>
+                          <Input
+                            name="firstName"
+                            type="text"
+                            className="form-control"
+                            value={userDetails.firstName}
+                          />
+                        </Col>
+                        <Col lg={4}>
+                          <Label>Last Name</Label>
+                          <Input
+                            name="lastName"
+                            type="text"
+                            className="form-control"
+                            value={userDetails.lastName}
+                          />
+                        </Col>
+                        <Col lg={4}>
+                          <Label>Username</Label>
+                          <Input
+                            name="username"
+                            type="text"
+                            className="form-control"
+                            value={userDetails.username}
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="mb-3">
+                        <Col lg={4}>
+                          <Label>Employee ID</Label>
+                          <Input
+                            name="employeeId"
+                            type="text"
+                            className="form-control"
+                            value={userDetails.employeeId}
+                          />
+                        </Col>
+                        <Col lg={4}>
+                          <Label>Email Address</Label>
+                          <Input
+                            name="email"
+                            type="email"
+                            className="form-control"
+                            value={userDetails.email}
+                          />
+                        </Col>
+                        <Col lg={4}>
+                          <Label>Contact Number</Label>
+                          <Input
+                            name="contactNo"
+                            type="number"
+                            className="form-control"
+                            value={userDetails.contactNo}
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="mb-3">
+                        <Col lg={4}>
+                          <Label>Password</Label>
+                          <Input
+                            name="password"
+                            type="password"
+                            className="form-control"
+                            value={userDetails.password}
+                          />
+                        </Col>
+                        <Col lg={4}>
+                          <Label>Confirm Password</Label>
+                          <Input
+                            name="confirmPassword"
+                            type="password"
+                            className="form-control"
+                            value={userDetails.confirmPassword}
+                          />
+                        </Col>
+                      </Row>
                     </Col>
                   </Row>
-                  <Row>
+                  <Row className="mb-3">
                     <Col>
-                      <Card>
-                        <CardBody>
-                          <Row className="mb-3">
-                            <Col>
-                              <span className="h6 fw-bold">Group</span>
-                            </Col>
-                          </Row>
-                          <div className="border rounded p-3">
-                          <Row className="mb-3">
-                            <Col>
-                                <div className="d-flex flex-row justify-content-around">
-                                    <span className="fw-semibold">All Groups</span>
-                                    <span className="fw-semibold">Assigned Groups</span>
-                                </div>
-                            </Col>
-                          </Row>
-                          <Row className="mb-3">
-                            <Col>
-                            
-                                <DualListBox
-                                options={formattedGroups}
-                                selected={selectedGroup}
-                                onChange={(e) => setSelectedGroup(e)}
-                                canFilter={true}
-                                icons={{
-                                  moveLeft: (
-                                    <span
-                                      className="mdi mdi-chevron-left"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveAllLeft: [
-                                    <span
-                                      className="mdi mdi-chevron-double-left"
-                                      key="key"
-                                    />,
-                                  ],
-                                  moveRight: (
-                                    <span
-                                      className="mdi mdi-chevron-right"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveAllRight: [
-                                    <span
-                                      className="mdi mdi-chevron-double-right"
-                                      key="key"
-                                    />,
-                                  ],
-                                  moveDown: (
-                                    <span
-                                      className="mdi mdi-chevron-down"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveUp: (
-                                    <span
-                                      className="mdi mdi-chevron-up"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveTop: (
-                                    <span
-                                      className="mdi mdi-chevron-double-up"
-                                      key="key"
-                                    />
-                                  ),
-                                  moveBottom: (
-                                    <span
-                                      className="mdi mdi-chevron-double-down"
-                                      key="key"
-                                    />
-                                  ),
-                                }}
-                              />
-                              
-                            </Col>
-                          </Row></div>
-                        </CardBody>
-                      </Card>
+                      <Row className="mb-3">
+                        <Col>
+                          <span className="h6 fw-bold">Group</span>
+                        </Col>
+                      </Row>
+
+                      <Row className="mb-3">
+                        <Col>
+                          <div className="d-flex flex-row w-100">
+                            <span className="fw-semibold w-50">All Groups</span>
+                            <span className="fw-semibold w-50 ps-5">Assigned Groups</span>
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row className="mb-3">
+                        <Col>
+                          <DualListBox
+                            options={formattedGroups}
+                            selected={selectedGroup}
+                            onChange={(e) => setSelectedGroup(e)}
+                            canFilter={true}
+                            icons={{
+                              moveLeft: (
+                                <span
+                                  className="mdi mdi-chevron-left"
+                                  key="key"
+                                />
+                              ),
+                              moveAllLeft: [
+                                <span
+                                  className="mdi mdi-chevron-double-left"
+                                  key="key"
+                                />,
+                              ],
+                              moveRight: (
+                                <span
+                                  className="mdi mdi-chevron-right"
+                                  key="key"
+                                />
+                              ),
+                              moveAllRight: [
+                                <span
+                                  className="mdi mdi-chevron-double-right"
+                                  key="key"
+                                />,
+                              ],
+                              moveDown: (
+                                <span
+                                  className="mdi mdi-chevron-down"
+                                  key="key"
+                                />
+                              ),
+                              moveUp: (
+                                <span
+                                  className="mdi mdi-chevron-up"
+                                  key="key"
+                                />
+                              ),
+                              moveTop: (
+                                <span
+                                  className="mdi mdi-chevron-double-up"
+                                  key="key"
+                                />
+                              ),
+                              moveBottom: (
+                                <span
+                                  className="mdi mdi-chevron-double-down"
+                                  key="key"
+                                />
+                              ),
+                            }}
+                          />
+                        </Col>
+                      </Row>
                     </Col>
                   </Row>
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex flex-row justify-content-end gap-2">
                     <Link to="/settings/access">
-                      <Button className="btn btn-primary" type="button">
+                      <Button className="btn btn-custom-primary" type="button">
                         Cancel
                       </Button>
                     </Link>
 
-                    <Button className="btn btn-primary" type="submit">
+                    <Button className="btn btn-custom-primary" type="submit">
                       Save
                     </Button>
                   </div>

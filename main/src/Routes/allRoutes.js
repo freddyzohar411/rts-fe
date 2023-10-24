@@ -94,7 +94,7 @@ const authProtectedRoutes = [
 
   { path: "/settings/access/user/:username", component: <UserDetails /> },
   { path: "/settings/access/user/user-creation", component: <CreateUser /> },
-  { path: "/settings/access/user/update/:username", component: <></> },
+  { path: "/settings/access/user/update/:username", component: <UpdateUser/> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

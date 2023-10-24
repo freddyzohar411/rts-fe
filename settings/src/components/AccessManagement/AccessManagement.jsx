@@ -53,7 +53,7 @@ function AccessManagement() {
                     <NavItem>
                       <NavLink
                         style={{ cursor: "pointer" }}
-                        className={classnames({ active: activeTab === "1" })}
+                        className={classnames({ active: activeTab === "1"})}
                         onClick={() => {
                           toggle("1");
                         }}
@@ -64,7 +64,7 @@ function AccessManagement() {
                     <NavItem>
                       <NavLink
                         style={{ cursor: "pointer" }}
-                        className={classnames({ active: activeTab === "2" })}
+                        className={classnames({ active: activeTab === "2"})}
                         onClick={() => {
                           toggle("2");
                         }}
@@ -91,7 +91,7 @@ function AccessManagement() {
                         <Col lg={12} className="d-flex flex-start gap-3 mb-3">
                           <Link to="/settings/access/user/user-creation">
                             <Button
-                              className="btn btn-secondary btn-sm"
+                              className="btn btn-custom-primary btn-sm"
                               type="button"
                             >
                               <i className="ri-user-line me-2"></i>
@@ -100,7 +100,7 @@ function AccessManagement() {
                           </Link>
                           <Link to="/settings/access/group/group-creation">
                             <Button
-                              className="btn btn-secondary"
+                              className="btn btn-custom-primary"
                               type="button"
                               size="sm"
                             >

@@ -15,6 +15,9 @@ import { Sagas as AccountSagas } from "@workspace/account";
 //Job
 import { Sagas as JobSagas } from "@workspace/job";
 
+// Settings
+import { Sagas as UserSagas } from "@workspace/settings";
+
 const { LayoutSaga } = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
 const { DashboardEcommerceSaga } = DashboardSaga;
@@ -35,6 +38,10 @@ const {
   JobAccountContactsSaga,
   JobSaga,
 } = JobSagas;
+
+const {
+  UserSaga
+} = UserSagas;
 
 export default function* rootSaga() {
   yield all([
@@ -60,5 +67,8 @@ export default function* rootSaga() {
     fork(JobAccountSaga),
     fork(JobAccountContactsSaga),
     fork(JobSaga),
+
+    //Settings
+    fork(UserSaga)
   ]);
 }
