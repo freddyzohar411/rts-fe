@@ -10,10 +10,13 @@ import {
 import NonAuthLayout from "@workspace/common/src/Layouts/NonAuthLayout";
 import VerticalLayout from "@workspace/common/src/Layouts/index";
 
+//Constant
+import { AuthConstant } from "@workspace/common";
+
 //routes
 import { authProtectedRoutes, publicRoutes } from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";
-import RolesPermissionsComponent from "./RolesPermissionsProtected";
+import PermissionProtected from "./PermissionProtected";
 
 const Index = () => {
   return (
@@ -39,13 +42,12 @@ const Index = () => {
                     path={route?.path}
                     element={
                       <AuthProtected>
-                        <RolesPermissionsComponent
+                        <PermissionProtected
                           moduleName={route.moduleName}
                           requiredPermissions={route.requiredPermissions}
-                          requiredRoles={route.requiredRoles}
                         >
                           <VerticalLayout>{route.component}</VerticalLayout>
-                        </RolesPermissionsComponent>
+                        </PermissionProtected>
                       </AuthProtected>
                     }
                     key={idx}
@@ -69,13 +71,12 @@ const Index = () => {
                     path={route.path}
                     element={
                       <AuthProtected>
-                        <RolesPermissionsComponent
+                        <PermissionProtected
                           moduleName={route.moduleName}
                           requiredPermissions={route.requiredPermissions}
-                          requiredRoles={route.requiredRoles}
                         >
                           <VerticalLayout>{route.component}</VerticalLayout>
-                        </RolesPermissionsComponent>
+                        </PermissionProtected>
                       </AuthProtected>
                     }
                     key={idx}

@@ -1,6 +1,10 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
+//Constant
+import { AuthConstant } from "@workspace/common";
+
+
 // Dashboard
 import { DashboardEcommerce } from "@workspace/dashboard";
 
@@ -41,6 +45,8 @@ import {
 // Form Builder
 import { FormbuilderMain } from "@workspace/formbuilder";
 
+const { permissionConstant, moduleConstant } = AuthConstant;
+
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
   { path: "/index", component: <DashboardEcommerce /> },
@@ -55,9 +61,8 @@ const authProtectedRoutes = [
   {
     path: "/accounts/create",
     component: <CreateAccount />,
-    // moduleName: "account",
-    // requiredPermissions: ["write"],
-    // requiredRoles: ["user"],
+    moduleName: moduleConstant.ACCOUNT,
+    requiredPermissions: [permissionConstant.WRITE],
   },
   { path: "/accounts/:accountId/edit", component: <EditAccount /> },
   { path: "/accounts", component: <AccountListing /> },
