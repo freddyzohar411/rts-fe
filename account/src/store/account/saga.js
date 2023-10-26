@@ -2,9 +2,6 @@ import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 
 import {
-  // FETCH_ACCOUNT,
-  // FETCH_ACCOUNTS,
-  // CREATE_ACCOUNT,
   POST_ACCOUNT,
   PUT_ACCOUNT,
   DELETE_ACCOUNT,
@@ -12,10 +9,6 @@ import {
   FETCH_ACCOUNTS_FIELDS
 } from "./actionTypes";
 import {
-  // fetchAccountSuccess,
-  // fetchAccountFailure,
-  // fetchAccountsSuccess,
-  // fetchAccountsFailure,
   postAccountSuccess,
   postAccountFailure,
   putAccountSuccess,
@@ -63,15 +56,11 @@ function* workPostAccount(action) {
     }
   
     if (entity === "account_account") {
-      // Set the account id to the accountregistration reducer
-      console.log("set account id: LETS SEE:", response.data)
       yield put(setAccountId(response.data.id));
       handleNext();
       return
     }
     if (entity === "account_commercial") {
-      // Delete the account id from the accountregistration reducer
-      console.log("delete account id")
       yield put(deleteAccountId());
       return
     }

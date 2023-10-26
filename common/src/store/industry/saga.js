@@ -8,13 +8,15 @@ import {
   fetchSubIndustryFailure,
   fetchSubIndustrySuccess,
 } from "./action";
+import {
+  getParentIndustries,
+  getSubIndustries,
+} from "../../helpers/backend_helper";
+
 
 function* workFetchIndustry() {
   try {
-    const response = yield call(
-      axios.get,
-      `http://localhost:8200/industries/parent`
-    );
+    const response = yield call(getParentIndustries);
     yield put(fetchIndustrySuccess(response.data));
   } catch (error) {
     yield put(fetchIndustryFailure(error));
@@ -23,10 +25,7 @@ function* workFetchIndustry() {
 
 function* workFetchSubIndustry(action) {
   try {
-    const response = yield call(
-      axios.get,
-      `http://localhost:8200/industries/${action.payload}/sub`
-    );
+    const response = yield call(getSubIndustries, action.payload);
     yield put(fetchSubIndustrySuccess(response.data));
   } catch (error) {
     yield put(fetchSubIndustryFailure(error));

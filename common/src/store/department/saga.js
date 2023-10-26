@@ -1,12 +1,15 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import axios from "axios";
+import {
+  getDepartments
+} from "../../helpers/backend_helper"
 
 import { FETCH_DEPARTMENT } from "./actionTypes";
 import { fetchDepartmentSuccess, fetchDepartmentFailure } from "./action";
 
 function* workFetchDepartment() {
   try {
-    const response = yield call(axios.get, "http://localhost:8900/departments");
+    const response = yield call(getDepartments)
     yield put(fetchDepartmentSuccess(response.data));
   } catch (error) {
     yield put(fetchDepartmentFailure(error));

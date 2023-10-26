@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 // import DynamicTable from "./DynamicTable";
@@ -26,6 +26,37 @@ const DynamicTableWrapper = ({
 
   const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [isRefresh, setIsRefresh] = useState(false);
+  const customAvailableRef = useRef();
+
+  useEffect(() => {
+    const handleScrollEnd = (listRef) => {
+      const element = listRef.current;
+      if (
+        element.scrollTop + element.clientHeight >=
+        element.scrollHeight - 1
+      ) {
+        console.log("Reached end of scroll");
+      }
+    };
+
+    console.log("customAvailableRef: ", customAvailableRef);
+    const availableElement = customAvailableRef.current;
+    console.log("availableElement: ", availableElement);
+    console.log("Before Adding");
+    if (availableElement) {
+      console.log("Adding event listener");
+      availableElement.addEventListener("scroll", () =>
+        handleScrollEnd(customAvailableRef)
+      );
+
+      return () => {
+        availableElement.removeEventListener("scroll", () =>
+          handleScrollEnd(customAvailableRef)
+        );
+      };
+    }
+  }, [customAvailableRef, isRefresh]);
 
   const handleChange = (selected) => {
     const selectedObjects = selected.map((value) => {
@@ -54,6 +85,10 @@ const DynamicTableWrapper = ({
                     <div className="w-50" style={{marginLeft:'60px'}}>World</div>
                   </div> */}
                   <DualListBox
+                    availableRef={(availableRef) => {
+                      customAvailableRef.current = availableRef;
+                      setIsRefresh((prev) => !prev);
+                    }}
                     canFilter
                     filterCallback={(optGroup, filterInput) => {
                       if (filterInput === "") {
@@ -238,7 +273,10 @@ const DynamicTableWrapper = ({
                           </Button>
 
                           <Button type="button" className="btn btn-primary">
-                            <Link to="/accounts/create" style={{ color: "black" }}>
+                            <Link
+                              to="/accounts/create"
+                              style={{ color: "black" }}
+                            >
                               Create New Account
                             </Link>
                           </Button>

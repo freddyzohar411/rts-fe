@@ -14,6 +14,7 @@ import {
 import SimpleBar from "simplebar-react";
 import { useDispatch, useSelector } from "react-redux";
 import Flag from "react-world-flags";
+import { Actions } from "@Workspace/common"
 import { Axios } from "@workspace/common";
 const { APIClient } = Axios;
 const api = new APIClient();
@@ -23,13 +24,17 @@ function CountryModal({ setCountry }) {
 
   const dispatch = useDispatch();
   const countryData = useSelector(
-    (state) => state.CountryCurrencyReducer.countryCurrency
+    (state) => state.CountryCurrencyReducer.businessCountries
   );
 
   const [modal, setModal] = useState(true);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredCountries, setFilteredCountries] = useState([]);
+
+  useEffect(() => {
+    dispatch(Actions.fetchBusinessCountries())
+  },[])
 
   function toggle() {
     setModal(!modal);
