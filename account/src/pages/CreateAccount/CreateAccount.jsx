@@ -4,12 +4,13 @@ import { Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  postAccount,
-  putAccount,
-} from "../../store/account/action";
+import { postAccount, putAccount } from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
-import { AccountFormConstant } from "./accountFormConstant";
+import {
+  AccountFormConstant,
+  AccountEntityConstant,
+  AccountTableListConstant,
+} from "./accountConstant";
 import {
   fetchDraftAccount,
   deleteAccountId,
@@ -21,13 +22,20 @@ import {
 import { ObjectHelper } from "@workspace/common";
 import CountryModal from "../../components/CountryModal/CountryModal";
 import { AuthHelper } from "@workspace/common";
+import {
+  CONTACT_BASE_URL,
+  GET_CONTACT_BY_ENTITY_URL,
+  DOCUMENT_BASE_URL,
+  GET_DOCUMENT_BY_ENTITY_URL,
+} from "../../helpers/endpoint_helper";
+import { ACCOUNT } from "@workspace/common/src/baseUrl";
 
 const AccountCreation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const userDetails = AuthHelper.getUserDetails();
-  console.log("User Details: ", userDetails)
+  console.log("User Details: ", userDetails);
 
   const form = useSelector((state) => state.AccountFormReducer.form);
   const accountId = useSelector(
@@ -58,7 +66,7 @@ const AccountCreation = () => {
   const [country, setCountry] = useState(null);
 
   console.log("STEP: ", step);
-  console.log('Form Submission Data: ', formSubmissionData)
+  console.log("Form Submission Data: ", formSubmissionData);
 
   /**
    * Fetch form template based on step
@@ -69,9 +77,12 @@ const AccountCreation = () => {
       if (step === 1) {
         const formEdited = setTableAPI(
           form,
-          "contactList",
-          `http://localhost:8700/contacts/entity/account_contact/${accountId}`,
-          `http://localhost:8700/contacts`
+          AccountTableListConstant.CONTACT_LIST,
+          GET_CONTACT_BY_ENTITY_URL(
+            AccountEntityConstant.ACCOUNT_CONTACT,
+            accountId
+          ),
+          CONTACT_BASE_URL
         );
         setFormTemplate(formEdited);
         return;
@@ -79,9 +90,12 @@ const AccountCreation = () => {
       if (step === 2) {
         const formEdited = setTableAPI(
           form,
-          "documentList",
-          `http://localhost:8500/documents/entity/account_document/${accountId}`,
-          `http://localhost:8500/documents`
+          AccountTableListConstant.DOCUMENT_LIST,
+          GET_DOCUMENT_BY_ENTITY_URL(
+            AccountEntityConstant.ACCOUNT_DOCUMENT,
+            accountId
+          ),
+          DOCUMENT_BASE_URL
         );
         setFormTemplate(formEdited);
         return;
@@ -89,9 +103,12 @@ const AccountCreation = () => {
       if (step === 3) {
         const formEdited = setTableAPI(
           form,
-          "instructionDocumentList",
-          `http://localhost:8500/documents/entity/account_instruction_document/${accountId}`,
-          `http://localhost:8500/documents`
+          AccountTableListConstant.INSTRUCTION_DOCUMENT_LIST,
+          GET_DOCUMENT_BY_ENTITY_URL(
+            AccountEntityConstant.ACCOUNT_INSTRUCTION_DOCUMENT,
+            accountId
+          ),
+          DOCUMENT_BASE_URL
         );
         setFormTemplate(formEdited);
         return;
@@ -127,7 +144,7 @@ const AccountCreation = () => {
 
     return () => {
       dispatch(deleteAccountId());
-    }
+    };
   }, [step]);
 
   console.log("Draft Account Id: ", accountId);
@@ -140,16 +157,31 @@ const AccountCreation = () => {
     setEditData(null);
     if (accountId) {
       if (step === 0) {
-        dispatch(fetchAccountFormSubmission("account_account", accountId));
+        dispatch(
+          fetchAccountFormSubmission(
+            AccountEntityConstant.ACCOUNT_ACCOUNT,
+            accountId
+          )
+        );
       }
       if (step === 3) {
-        dispatch(fetchAccountFormSubmission("account_instruction", accountId));
+        dispatch(
+          fetchAccountFormSubmission(
+            AccountEntityConstant.ACCOUNT_INSTRUCTION,
+            accountId
+          )
+        );
       }
       if (step === 5) {
-        dispatch(fetchAccountFormSubmission("account_commercial", accountId));
+        dispatch(
+          fetchAccountFormSubmission(
+            AccountEntityConstant.ACCOUNT_COMMERCIAL,
+            accountId
+          )
+        );
       }
     }
-  }, [step,accountId]);
+  }, [step, accountId]);
 
   /**
    * Get Formik hook from Form component
@@ -240,7 +272,7 @@ const AccountCreation = () => {
 
         dispatch(
           postAccount({
-            entity: "account_account",
+            entity: AccountEntityConstant.ACCOUNT_ACCOUNT,
             newData: formData1,
             config: {
               headers: {
@@ -275,7 +307,7 @@ const AccountCreation = () => {
 
         dispatch(
           putAccount({
-            entity: "account_account",
+            entity: AccountEntityConstant.ACCOUNT_ACCOUNT,
             id: accountId,
             newData: formDataUpdate,
             config: {
@@ -315,14 +347,14 @@ const AccountCreation = () => {
         const newData = {
           ...newValues,
           entityId: accountId,
-          entityType: "account_contact",
+          entityType: AccountEntityConstant.ACCOUNT_CONTACT,
           formData: JSON.stringify(newValues),
           formId: parseInt(form.formId),
         };
 
         dispatch(
           postAccount({
-            entity: "account_contact",
+            entity: AccountEntityConstant.ACCOUNT_CONTACT,
             newData,
             rerenderTable: rerenderTable,
             resetForm: resetForm,
@@ -343,19 +375,21 @@ const AccountCreation = () => {
         const newData = {
           ...newValues,
           entityId: accountId,
-          entityType: "account_contact",
+          entityType: AccountEntityConstant.ACCOUNT_CONTACT,
           formData: JSON.stringify(newValues),
           formId: parseInt(form.formId),
         };
 
         // Get update id
         const table = formFieldsData.find(
-          (field) => field.type === "table" && field.name === "contactList"
+          (field) =>
+            field.type === "table" &&
+            field.name === AccountTableListConstant.CONTACT_LIST
         );
         const { tableEditId } = table.tableSetting;
         dispatch(
           putAccount({
-            entity: "account_contact",
+            entity: AccountEntityConstant.ACCOUNT_CONTACT,
             id: tableEditId,
             newData,
             rerenderTable: rerenderTable,
@@ -377,20 +411,19 @@ const AccountCreation = () => {
         formValues = { ...formValues, file: fileName };
         const documentDataOut = {
           ...documentData,
-          entityType: "account_document",
+          entityType: AccountEntityConstant.ACCOUNT_DOCUMENT,
           entityId: parseInt(accountId),
           formData: JSON.stringify(formValues),
           formId: parseInt(form.formId),
         };
         delete documentDataOut.documentList;
-        console.log("Document Data: ", documentDataOut);
 
         const documentFormData =
           ObjectHelper.convertObjectToFormData(documentDataOut);
-        console.log("Document Data Form: ", documentFormData);
+
         dispatch(
           postAccount({
-            entity: "account_document",
+            entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
             newData: documentFormData,
             config: {
               headers: {
@@ -424,7 +457,7 @@ const AccountCreation = () => {
 
         const documentDataOut = {
           ...documentData,
-          entityType: "account_document",
+          entityType: AccountEntityConstant.ACCOUNT_DOCUMENT,
           entityId: parseInt(accountId),
           formData: JSON.stringify(formValues),
           formId: parseInt(form.formId),
@@ -436,13 +469,15 @@ const AccountCreation = () => {
 
         // Get update id
         const table = formFieldsData.find(
-          (field) => field.type === "table" && field.name === "documentList"
+          (field) =>
+            field.type === "table" &&
+            field.name === AccountTableListConstant.DOCUMENT_LIST
         );
         const { tableEditId } = table.tableSetting;
         console.log("Table edit Id: ", tableEditId);
         dispatch(
           putAccount({
-            entity: "account_document",
+            entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
             id: tableEditId,
             newData: documentFormData,
             config: {
@@ -469,7 +504,7 @@ const AccountCreation = () => {
         formValues = { ...formValues, file: fileName };
         const documentDataOut = {
           ...documentData,
-          entityType: "account_instruction_document",
+          entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION_DOCUMENT,
           entityId: parseInt(accountId),
           formData: JSON.stringify(formValues),
           formId: parseInt(form.formId),
@@ -479,7 +514,7 @@ const AccountCreation = () => {
           ObjectHelper.convertObjectToFormData(documentDataOut);
         dispatch(
           postAccount({
-            entity: "account_document",
+            entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
             newData: documentFormData,
             config: {
               headers: {
@@ -500,14 +535,14 @@ const AccountCreation = () => {
         const newData = {
           ...formData,
           entityId: accountId,
-          entityType: "account_instruction",
+          entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION,
           formData: JSON.stringify(formData),
           formId: parseInt(form.formId),
         };
 
         dispatch(
           postAccount({
-            entity: "account_instruction",
+            entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
             newData,
             rerenderTable: rerenderTable,
             handleNext: handleNext,
@@ -521,14 +556,14 @@ const AccountCreation = () => {
         const newData = {
           ...formData,
           entityId: accountId,
-          entityType: "account_instruction",
+          entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION,
           formData: JSON.stringify(formData),
           formId: parseInt(form.formId),
         };
 
         dispatch(
           putAccount({
-            entity: "account_instruction",
+            entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
             id: editId,
             newData,
             rerenderTable: rerenderTable,
@@ -542,14 +577,14 @@ const AccountCreation = () => {
       console.log("Create Commercial");
       const formData = {
         ...newValues,
-        entityType: "account_commercial",
+        entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
         entityId: parseInt(accountId),
         formData: JSON.stringify(newValues),
         formId: parseInt(form.formId),
       };
       dispatch(
         postAccount({
-          entity: "account_commercial",
+          entity: AccountEntityConstant.ACCOUNT_COMMERCIAL,
           id: accountId,
           newData: formData,
           navigate: navigate,
@@ -587,10 +622,9 @@ const AccountCreation = () => {
 
   console.log("Form Submission Data Loading: ", formSubmissionDataLoading);
 
-
   return (
     <>
-      {isModalOpen && !accountId && <CountryModal setCountry={setCountry}/>}
+      {isModalOpen && !accountId && <CountryModal setCountry={setCountry} />}
       <Container className="page-content">
         <FormStepper
           activeStep={step}
