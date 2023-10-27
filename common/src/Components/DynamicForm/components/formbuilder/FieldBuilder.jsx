@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import { generateInitialValues } from "../../helpers/formik_helper";
+import { generateInitialValues, generateValidationSchemaForFieldBuilder } from "../../helpers/formik_helper";
 import { AiFillDelete } from "react-icons/ai";
 import { v4 as uuid } from "uuid";
 import CountrySelectField from "../../fieldbuilders/CountrySelectField";
@@ -48,12 +48,19 @@ const FieldBuilder = ({
         "editor",
         "parentcompany"
       ],
+     
     },
     {
       label: "Sub Name/Key",
       type: "text",
       name: "subName",
       apply: ["selectcurrency", "selectlandline"],
+      validation:[
+        {
+          required: true,
+          message: 'Sub key is required',
+        },
+      ]
     },
     {
       label: "Name/Key",
@@ -82,6 +89,12 @@ const FieldBuilder = ({
         "table",
         "parentcompany"
       ],
+      validation:[
+        {
+          required: true,
+          message: 'Key is required',
+        },
+      ]
     },
 
     {
@@ -950,8 +963,10 @@ const FieldBuilder = ({
 
   // Generate initial values for formik
   let initialValues = {};
+  let validationSchema = {};
   if (schema) {
     initialValues = generateInitialValues(schema);
+    validationSchema = generateValidationSchemaForFieldBuilder(schema, type);
   }
 
   // Use Update data if present
@@ -1019,6 +1034,7 @@ const FieldBuilder = ({
   // Formik for form field creation
   const formik = useFormik({
     initialValues: initialValues,
+    validationSchema: validationSchema,
     onSubmit: handleFormSchemaSubmit,
   });
 
@@ -1051,7 +1067,9 @@ const FieldBuilder = ({
                 {...field.events}
               />
               {formik.errors[field.name] && formik.touched[field.name] ? (
-                <div>{formik.errors[field.name]}</div>
+                 <div style={{ color: "red" }}>
+                 {formik.errors[field.name]}
+               </div>
               ) : null}
             </div>
           );
@@ -1400,6 +1418,7 @@ const FieldBuilder = ({
                 <button
                   type="button"
                   className="btn btn-success btn-sm"
+                  disabled={!copyConditionList.copyField}
                   onClick={() => {
                     setCopyConditionList({
                       ...copyConditionList,
@@ -1757,7 +1776,7 @@ const FieldBuilder = ({
                 {field.label}
               </label>
               <div className="d-flex justify-content-between gap-5">
-                <select
+                {/* <select
                   className="form-select w-50"
                   value={countryList.countryField}
                   onChange={(e) =>
@@ -1771,7 +1790,7 @@ const FieldBuilder = ({
                   {formFields.map((field) => {
                     return <option value={field.name}>{field.label}</option>;
                   })}
-                </select>
+                </select> */}
                 {/* // Add country select here to select country and add to countryList */}
                 <div className="d-flex gap-4">
                   <CountrySelectField
@@ -1784,6 +1803,7 @@ const FieldBuilder = ({
                   <button
                     type="button"
                     className="btn btn-success btn-sm"
+                    disabled={!country}
                     onClick={() => {
                       // Check if country is already added
                       if (countryList.countryList.includes(country)) {

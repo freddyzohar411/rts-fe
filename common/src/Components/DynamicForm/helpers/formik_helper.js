@@ -213,8 +213,49 @@ const generateValidationSchema2 = (
   return validationSchema;
 };
 
+// Generate validation schema for field Builder
+const generateValidationSchemaForFieldBuilder = (schema, type) => {
+  const validationSchema = Yup.object(
+    schema?.reduce((acc, field) => {
+      if (!field.apply.includes(type)) return acc;
+
+      let fieldValidation = null;
+      switch (field?.type) {
+        case "text":
+          fieldValidation = Yup.string();
+          break;
+      }
+
+      field?.validation?.forEach((validation) => {
+        if (validation.required) {
+          fieldValidation = fieldValidation.required(validation.message);
+        }
+        if (validation.minLength) {
+          fieldValidation = fieldValidation.min(
+            validation.minLength,
+            validation.message
+          );
+        }
+        if (validation.maxLength) {
+          fieldValidation = fieldValidation.max(
+            validation.maxLength,
+            validation.message
+          );
+        }
+        if (validation.email) {
+          fieldValidation = fieldValidation.email(validation.message);
+        }
+      });
+
+      return { ...acc, [field.name]: fieldValidation };
+    }, {})
+  );
+  return validationSchema;
+};
+
 export {
   generateInitialValues,
   generateValidationSchema,
   generateValidationSchema2,
+  generateValidationSchemaForFieldBuilder,
 };
