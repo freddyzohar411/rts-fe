@@ -3,12 +3,16 @@ import {
   PROFILE_SUCCESS,
   EDIT_PROFILE,
   RESET_PROFILE_FLAG,
+  PROFILE_PERMISSION_ERROR,
+  PROFILE_PERMISSION_SUCCESS,
 } from "./actionTypes";
 
 const initialState = {
   error: "",
   success: "",
   user: {},
+  userPermission: null,
+  userPermissionError: null,
 };
 
 const profile = (state = initialState, action) => {
@@ -33,6 +37,18 @@ const profile = (state = initialState, action) => {
       state = {
         ...state,
         success: null,
+      };
+      break;
+    case PROFILE_PERMISSION_SUCCESS:
+      state = {
+        ...state,
+        userPermission: action.payload,
+      };
+      break;
+    case PROFILE_PERMISSION_ERROR:
+      state = {
+        ...state,
+        userPermissionError: action.payload,
       };
       break;
     default:

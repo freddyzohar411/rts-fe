@@ -3,6 +3,8 @@ import {
   PROFILE_SUCCESS,
   EDIT_PROFILE,
   RESET_PROFILE_FLAG,
+  PROFILE_PERMISSION_SUCCESS,
+  PROFILE_PERMISSION_ERROR,
 } from "./actionTypes";
 
 export const editProfile = (user) => {
@@ -31,3 +33,18 @@ export const resetProfileFlag = (error) => {
     type: RESET_PROFILE_FLAG,
   };
 };
+
+// User profile permission actions
+export const profilePermissionSuccess = (profilePermission) => {
+  return {
+    type: PROFILE_PERMISSION_SUCCESS,
+    payload: profilePermission,
+  };
+};
+
+export const profilePermissionError = (error) => {
+  return {
+    type: PROFILE_PERMISSION_ERROR,
+    payload: error,
+  };
+}

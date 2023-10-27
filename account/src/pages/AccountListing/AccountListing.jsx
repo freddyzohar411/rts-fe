@@ -10,13 +10,46 @@ import { DynamicTableHelper } from "@workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
 import { DeleteCustomModal } from "@Workspace/common";
 import { AuthHelper } from "@workspace/common";
-import { deleteAccount, fetchAccounts, fetchAccountsFields } from "../../store/account/action";
+import {
+  deleteAccount,
+  fetchAccounts,
+  fetchAccountsFields,
+} from "../../store/account/action";
+import { useUserPermission } from "@workspace/login";
 
 function AccountListing() {
+  const {
+    userPermission,
+    checkAllPermission,
+    checkAnyPermission,
+    ModuleContants,
+    PermissionConstants,
+  } = useUserPermission();
   const dispatch = useDispatch();
   const accountsData = useSelector((state) => state.AccountReducer.accounts);
-  const accountsFields = useSelector((state) => state.AccountReducer.accountsFields);
-  console.log("Account Fields: ", accountsFields)
+  const accountsFields = useSelector(
+    (state) => state.AccountReducer.accountsFields
+  );
+
+  console.log("User Permission 1: ", userPermission);
+  console.log(
+    "User Check all permission: ",
+    checkAllPermission(ModuleContants.ACCOUNT, [
+      PermissionConstants.WRITE,
+      PermissionConstants.DELETE,
+    ])
+  );
+  console.log(
+    "User Check any permission: ",
+    checkAnyPermission(ModuleContants.ACCOUNT, [
+      PermissionConstants.WRITE,
+      PermissionConstants.DELETE,
+      PermissionConstants.READ,
+      PermissionConstants.EDIT,
+    ])
+  );
+
+  console.log("Account Fields: ", accountsFields);
 
   // Check if user is logged in
   useEffect(() => {

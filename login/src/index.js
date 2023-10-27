@@ -2,6 +2,7 @@ export * from "./components";
 
 // User profile hook
 export * from "./hooks/UserHooks.js";
+export * from "./hooks/UserPermissionHook"
 
 // Redux Store
 export * as Actions from "./store/actions";
