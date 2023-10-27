@@ -14,6 +14,7 @@ import {
 import {
   fetchDraftAccount,
   deleteAccountId,
+  deleteAccountCountry,
 } from "../../store/accountregistration/action";
 import {
   fetchAccountFormSubmission,
@@ -28,7 +29,6 @@ import {
   DOCUMENT_BASE_URL,
   GET_DOCUMENT_BY_ENTITY_URL,
 } from "../../helpers/endpoint_helper";
-import { ACCOUNT } from "@workspace/common/src/baseUrl";
 
 const AccountCreation = () => {
   const dispatch = useDispatch();
@@ -41,6 +41,8 @@ const AccountCreation = () => {
   const accountId = useSelector(
     (state) => state.AccountRegistrationReducer.accountId
   );
+  const accountCountry = useSelector((state) => state.AccountRegistrationReducer.accountCountry);
+
   const formSubmissionData = useSelector(
     (state) => state.AccountFormReducer.formSubmission
   );
@@ -64,6 +66,8 @@ const AccountCreation = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
+
+  console.log("Selected country: ", country)
 
   console.log("STEP: ", step);
   console.log("Form Submission Data: ", formSubmissionData);
@@ -144,6 +148,7 @@ const AccountCreation = () => {
 
     return () => {
       dispatch(deleteAccountId());
+      dispatch(deleteAccountCountry());
     };
   }, [step]);
 
@@ -261,6 +266,7 @@ const AccountCreation = () => {
 
         const accountDataOut = {
           ...accountData,
+          accountCountry: country.name,
           formData: JSON.stringify(formValues),
           formId: parseInt(form.formId),
         };
@@ -639,7 +645,7 @@ const AccountCreation = () => {
           <Form
             template={formTemplate}
             userDetails={userDetails}
-            country={null}
+            country={accountCountry || country?.name}
             editData={formSubmissionData}
             onFormikChange={handleFormikChange}
             onSubmit={handleFormSubmit}

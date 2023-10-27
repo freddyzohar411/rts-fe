@@ -17,7 +17,6 @@ const FormStepper = ({
   accountId,
   resetStepper,
 }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // Delete modal states
@@ -36,7 +35,6 @@ const FormStepper = ({
         handleNext();
       } else {
         setErrorMessage("Please add 1 contact to proceed");
-        // console.log("Please add 1 contact to proceed")
       }
     }
     if (activeStep === 2) {

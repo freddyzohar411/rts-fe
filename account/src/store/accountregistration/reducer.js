@@ -1,6 +1,8 @@
 import {
   SET_ACCOUNT_ID,
+  SET_ACCOUNT_COUNTRY,
   DELETE_ACCOUNT_ID,
+  DELETE_ACCOUNT_COUNTRY,
   FETCH_DRAFT_ACCOUNT,
   DELETE_DRAFT_ACCOUNT,
   DELETE_DRAFT_ACCOUNT_SUCCESS,
@@ -9,6 +11,7 @@ import {
 
 const initialState = {
   accountId: null,
+  accountCountry:null,
   loading: false,
   error: false,
   success: false,
@@ -18,11 +21,23 @@ const AccountRegistrationReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_ACCOUNT_ID:
       return {
+        ...state,
         accountId: action.payload,
+      };
+    case SET_ACCOUNT_COUNTRY:
+      return {
+        ...state,
+        accountCountry: action.payload,
       };
     case DELETE_ACCOUNT_ID:
       return {
+        ...state,
         accountId: null,
+      };
+    case DELETE_ACCOUNT_COUNTRY:
+      return {
+        ...state,
+        accountCountry: null,
       };
     case FETCH_DRAFT_ACCOUNT:
       return {

@@ -3,6 +3,7 @@ const user = {
   userName: "John",
   email: "john@gmail.com",
   permissions: {
+//  role : [permissions]
     admin: ["create", "read", "update", "delete"],
     superAdmin: ["create", "read", "update", "delete"],
     account: ["create", "read", "update", "delete"],

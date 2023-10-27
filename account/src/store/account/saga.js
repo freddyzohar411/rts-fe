@@ -27,7 +27,7 @@ import {
   deleteAccount,
   getAccountsFields
 } from "../../helpers/backend_helper";
-import { setAccountId, deleteAccountId } from "../accountregistration/action";
+import { setAccountId, deleteAccountId, setAccountCountry, deleteAccountCountry } from "../accountregistration/action";
 
 // Post account
 function* workPostAccount(action) {
@@ -57,11 +57,13 @@ function* workPostAccount(action) {
   
     if (entity === "account_account") {
       yield put(setAccountId(response.data.id));
+      yield put(setAccountCountry(response.data.accountCountry));
       handleNext();
       return
     }
     if (entity === "account_commercial") {
       yield put(deleteAccountId());
+      yield put(deleteAccountCountry());
       return
     }
     if (typeof handleNext === "function") {

@@ -2,7 +2,7 @@ import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 
 import { FETCH_DRAFT_ACCOUNT, DELETE_DRAFT_ACCOUNT } from "./actionTypes";
-import { setAccountId, deleteAccountId, deleteDraftAccount } from "./action";
+import { setAccountId, setAccountCountry, deleteAccountId, deleteAccountCountry, deleteDraftAccount } from "./action";
 import { deleteDraftAccountById } from "../../helpers/backend_helper";
 import { Axios } from "@workspace/common";
 const { APIClient } = Axios;
@@ -18,8 +18,10 @@ function* workFetchDraftAccount(action) {
     console.log("DRAFTTT", response.data);
     if (response.data === null) {
       yield put(deleteAccountId());
+      yield put(deleteAccountCountry());
     } else {
       yield put(setAccountId(response.data.id));
+      yield put(setAccountCountry(response.data.accountCountry));
     }
   } catch (error) {
     throw error;
@@ -31,6 +33,7 @@ function* workDeleteDraftAccount(action) {
   try {
     yield call(deleteDraftAccountById, accountId);
     yield put(deleteAccountId());
+    yield put(deleteAccountCountry());
     resetStepper(0);
   } catch (error) {
     throw error;

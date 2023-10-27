@@ -245,7 +245,7 @@ const checkAccessible = (field, userDetails) => {
   // Check if field is accessible based on user role
   if (!field?.userGroup) return true;
   if (field?.userGroup.length === 0) return true;
-  console.log("field.userGroup!!!", field.userGroup);
+  // console.log("field.userGroup!!!", field.userGroup);
   return AuthHelper.checkRole(field.userGroup);
 };
 
