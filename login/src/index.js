@@ -4,6 +4,10 @@ export * from "./components";
 export * from "./hooks/UserHooks.js";
 export * from "./hooks/UserPermissionHook"
 
+// Constants
+export * from "./constants/moduleConstant"
+export * from "./constants/permissionConstant"
+
 // Redux Store
 export * as Actions from "./store/actions";
 

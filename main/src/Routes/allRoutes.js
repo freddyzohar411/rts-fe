@@ -45,7 +45,8 @@ import {
 // Form Builder
 import { FormbuilderMain } from "@workspace/formbuilder";
 
-const { permissionConstant, moduleConstant } = AuthConstant;
+// Import constants for permission and module (Route guard)
+import  { PermissionConstants, ModuleConstants } from "@workspace/login";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
@@ -61,8 +62,8 @@ const authProtectedRoutes = [
   {
     path: "/accounts/create",
     component: <CreateAccount />,
-    moduleName: moduleConstant.ACCOUNT,
-    requiredPermissions: [permissionConstant.WRITE],
+    // moduleName: ModuleConstants.ACCOUNT,
+    // requiredPermissions: [PermissionConstants.WRITE, PermissionConstants.READ],
   },
   { path: "/accounts/:accountId/edit", component: <EditAccount /> },
   { path: "/accounts", component: <AccountListing /> },

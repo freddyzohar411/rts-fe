@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { profilePermissionSuccess } from "../store/auth/profile/actions";
 import { PermissionConstants } from "../constants/permissionConstant";
-import { ModuleContants } from "../constants/moduleConstant";
+import { ModuleConstants } from "../constants/moduleConstant";
 
 /**
  * Custom hook to get user permissions
@@ -68,7 +68,7 @@ const useUserPermission = () => {
     checkAllPermission,
     checkAnyPermission,
     PermissionConstants,
-    ModuleContants,
+    ModuleConstants,
   };
 };
 

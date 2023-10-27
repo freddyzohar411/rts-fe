@@ -22,7 +22,7 @@ function AccountListing() {
     userPermission,
     checkAllPermission,
     checkAnyPermission,
-    ModuleContants,
+    ModuleConstants,
     PermissionConstants,
   } = useUserPermission();
   const dispatch = useDispatch();
@@ -34,14 +34,14 @@ function AccountListing() {
   console.log("User Permission 1: ", userPermission);
   console.log(
     "User Check all permission: ",
-    checkAllPermission(ModuleContants.ACCOUNT, [
+    checkAllPermission(ModuleConstants.ACCOUNT, [
       PermissionConstants.WRITE,
       PermissionConstants.DELETE,
     ])
   );
   console.log(
     "User Check any permission: ",
-    checkAnyPermission(ModuleContants.ACCOUNT, [
+    checkAnyPermission(ModuleConstants.ACCOUNT, [
       PermissionConstants.WRITE,
       PermissionConstants.DELETE,
       PermissionConstants.READ,
