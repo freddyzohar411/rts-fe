@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Modal,
   Row,
@@ -14,14 +15,12 @@ import {
 import SimpleBar from "simplebar-react";
 import { useDispatch, useSelector } from "react-redux";
 import Flag from "react-world-flags";
-import { Actions } from "@Workspace/common"
+import { Actions } from "@Workspace/common";
 import { Axios } from "@workspace/common";
 const { APIClient } = Axios;
 const api = new APIClient();
 
-
 function CountryModal({ setCountry }) {
-
   const dispatch = useDispatch();
   const countryData = useSelector(
     (state) => state.CountryCurrencyReducer.businessCountries
@@ -33,8 +32,8 @@ function CountryModal({ setCountry }) {
   const [filteredCountries, setFilteredCountries] = useState([]);
 
   useEffect(() => {
-    dispatch(Actions.fetchBusinessCountries())
-  },[])
+    dispatch(Actions.fetchBusinessCountries());
+  }, []);
 
   function toggle() {
     setModal(!modal);
@@ -102,8 +101,6 @@ function CountryModal({ setCountry }) {
       backdrop="static"
       centered
     >
-
-
       <ModalHeader className="border-bottom d-flex flex-column justify-content-center p-4">
         <div className="modal-title text-center mb-3">
           Select a Country for Account Creation
@@ -116,7 +113,6 @@ function CountryModal({ setCountry }) {
           ) : (
             <div className="text-muted" style={{ fontSize: "13px" }}>
               Please select a country to continue.
-
             </div>
           )}
         </div>
@@ -158,33 +154,37 @@ function CountryModal({ setCountry }) {
           </div>
         </SimpleBar>
       </ModalBody>
-      <ModalFooter>
-        <Button
-          type="button"
-          disabled={!selectedCountry}
-          onClick={() => {
-            setSelectedCountry(null);
-            document.querySelector(
-              'input[name="country"]:checked'
-            ).checked = false;
-          }}
-        >
-          Clear Selection
-        </Button>
-        <Button
-          className="btn btn-success"
-          type="button"
-          disabled={!selectedCountry}
-          onClick={() => {
-            setModal(!modal);
-          }}
-        >
-          Proceed
-        </Button>
+      <ModalFooter as="div" className="d-flex justify-content-between align-items-center">
+          <Link to="/accounts">
+            <Button className="btn btn-danger">Cancel</Button>
+          </Link>
+          <div className="d-flex gap-3">
+            <Button
+              type="button"
+              disabled={!selectedCountry}
+              onClick={() => {
+                setSelectedCountry(null);
+                document.querySelector(
+                  'input[name="country"]:checked'
+                ).checked = false;
+              }}
+            >
+              Clear Selection
+            </Button>
+            <Button
+              className="btn btn-success"
+              type="button"
+              disabled={!selectedCountry}
+              onClick={() => {
+                setModal(!modal);
+              }}
+            >
+              Proceed
+            </Button>
+          </div>
       </ModalFooter>
     </Modal>
   );
 }
 
 export default CountryModal;
-
