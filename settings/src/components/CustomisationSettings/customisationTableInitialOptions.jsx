@@ -12,6 +12,12 @@ const CUSTOMISATION_INITIAL_OPTION = [
       sortValue: "formName",
     },
     {
+      label: "Category",
+      value: "formCategory",
+      sort: true,
+      sortValue: "formCategory",
+    },
+    {
       label: "Module",
       value: "entityType",
       sort: true,

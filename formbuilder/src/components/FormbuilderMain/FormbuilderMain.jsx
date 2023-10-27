@@ -57,6 +57,7 @@ const FormbuilderMain = () => {
     const JSONData = {
       formName: formName,
       formType: formOptions.formType,
+      formCategory: formOptions.formCategory,
       baseFormId: formOptions.baseFormId,
       entityType: formOptions.entityType,
       stepperNumber: formOptions.stepperNumber,
@@ -85,6 +86,8 @@ const FormbuilderMain = () => {
       );
     }
   };
+
+  console.log("Form 1: ", form)
 
   return (
     <div className="" style={{marginTop:"70px",marginBottom:"60px"}}>

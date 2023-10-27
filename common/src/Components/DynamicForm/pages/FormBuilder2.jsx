@@ -84,7 +84,6 @@ const FormBuilder2 = ({
    * Set template data
    */
   useEffect(() => {
-
     if (baseFormTemplate && formState === "create") {
       setFormFields(baseFormTemplate?.formSchema);
       // setFormName(baseFormTemplate?.formName);
@@ -98,11 +97,12 @@ const FormBuilder2 = ({
         entityType: template?.entityType,
         baseFormId: template?.baseFormId,
         stepperNumber: template?.stepperNumber,
+        formCategory: template?.formCategory,
       });
       setFormFields(template?.formSchema);
       setFormName(template?.formName);
       setFormLayoutSchema(template?.formLayoutSchema);
-      return
+      return;
     }
 
     if (template && formState === "update" && template?.baseFormId !== 0) {
@@ -133,7 +133,7 @@ const FormBuilder2 = ({
       // setFormName(baseFormTemplate?.formName);?
       setFormLayoutSchema(baseFormTemplate?.formLayoutSchema);
     }
-  },[formOptions.baseFormId])
+  }, [formOptions.baseFormId]);
 
   /**
    * Set unused fields
@@ -197,7 +197,7 @@ const FormBuilder2 = ({
   const handleFormSubmit = async (values, event) => {
     const clickedButtonId = event?.nativeEvent?.submitter?.id;
     if (clickedButtonId) {
-      console.log('Submit button clicked with id:', clickedButtonId);
+      console.log("Submit button clicked with id:", clickedButtonId);
     }
     await onSubmit(values, formFields, formState);
 
@@ -844,7 +844,25 @@ const FormBuilder2 = ({
                     <option value="base">Base</option>
                   </select>
                 </div>
+                <div>
+                  <label htmlFor="" className="">
+                    Form Type
+                  </label>
+                  <input
+                  className="form-control w-100"
+                    type="text"
+                    value={formOptions.formCategory}
+                    onChnange={(e) =>
+                      setFormOptions((prev) => ({
+                        ...prev,
+                        formCategory: e.target.value,
+                      }))
+                    }
+                    placeholder="Enter form category"
+                  />
+                </div>
               </div>
+
               {formOptions.formType === "custom" && (
                 <div className="d-flex align-items-center gap-4">
                   <div className="flex-grow-1">

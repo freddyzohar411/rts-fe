@@ -708,6 +708,7 @@ const FormBuilder = ({ onSubmit, userDetails, template, fields, onSave }) => {
         />
       </Modal>
       <div className="grid-formbuilder">
+        
         <div className="left-sidebar text-center">
           <FormElementSidebar unusedFields={unusedFields} />
         </div>

@@ -58,7 +58,7 @@ const FormReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_FORM_SUCCESS:
-      console.log("FETCH FORM SUCCESS");
+      console.log("FETCH FORM SUCCESS: ", action.payload);
       const data = action.payload;
       // console.log("Before Parsing: ", data.formFieldsList);
       // console.log(JsonHelper.parseArrayObjectValues);
@@ -70,6 +70,7 @@ const FormReducer = (state = initialState, action) => {
         formName: data?.formName,
         formType: data?.formType,
         baseFormId: data?.baseFormId || 0,
+        formCategory: data?.formCategory,
         entityType: data?.entityType,
         stepperNumber: parseInt(data?.stepperNumber),
         formSchema: JsonHelper.parseArrayObjectValues(data.formFieldsList),

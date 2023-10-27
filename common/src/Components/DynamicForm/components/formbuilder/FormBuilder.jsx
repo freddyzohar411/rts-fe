@@ -37,6 +37,7 @@ const FormBuilder = ({
     entityType: template?.entityType || "",
     baseFormId: template?.baseFormId || 0,
     stepperNumber: template?.stepperNumber || 0,
+    formCategory: template?.formCategory || "",
   });
   const [showAll, setShowAll] = useState(true);
   const [country, setCountry] = useState("");
@@ -98,6 +99,7 @@ const FormBuilder = ({
         entityType: template?.entityType,
         baseFormId: template?.baseFormId,
         stepperNumber: template?.stepperNumber,
+        formCategory: template?.formCategory,
       });
       setFormFields(template?.formSchema);
       setFormName(template?.formName);
@@ -111,6 +113,7 @@ const FormBuilder = ({
         entityType: template?.entityType,
         baseFormId: template?.baseFormId,
         stepperNumber: template?.stepperNumber,
+        formCategory: template?.formCategory,
       });
 
       setFormFields(template?.formSchema);
@@ -788,6 +791,7 @@ const FormBuilder = ({
       const JSONData = {
         formName: formName,
         formType: formOptions.formType,
+        formCategory: formOptions.formCategory,
         baseFormId: parseInt(formOptions.baseFormId),
         entityType: formOptions.entityType,
         formStepperNumber: formOptions.stepperNumber,
@@ -828,15 +832,13 @@ const FormBuilder = ({
         />
       </Modal>
       <div className="grid-formbuilder">
-
-      {/* <SimpleBar style={{height:"160vh"}}> */}
+        {/* <SimpleBar style={{height:"160vh"}}> */}
         <div className="left-sidebar text-center bg-secondary px-4 py-3">
           <FormElementSidebar unusedFields={unusedFields} />
         </div>
         {/* </SimpleBar> */}
 
-
-        <SimpleBar style={{height:"800px"}}>
+        <SimpleBar style={{ height: "800px" }}>
           <div className="middle-sidebar">
             <div className="form-container">
               <FormikProvider value={formik}>
@@ -865,7 +867,7 @@ const FormBuilder = ({
                 </div>
 
                 <div className="d-flex align-items-center gap-4 mb-3">
-                  <div className="flex-grow-1">
+                  <div className="w-100">
                     <label htmlFor="" className="">
                       Form Type
                     </label>
@@ -883,6 +885,23 @@ const FormBuilder = ({
                       <option value="custom">Custom</option>
                       <option value="base">Base</option>
                     </select>
+                  </div>
+                  <div className="w-100">
+                    <label htmlFor="" className="">
+                      Form Category
+                    </label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      value={formOptions.formCategory}
+                      onChange={(e) =>
+                        setFormOptions((prev) => ({
+                          ...prev,
+                          formCategory: e.target.value,
+                        }))
+                      }
+                      placeholder="Enter form category"
+                    />
                   </div>
                 </div>
                 {formOptions.formType === "custom" && (
