@@ -101,6 +101,7 @@ class APIClient {
       : null;
   }
 }
+
 const getLoggedinUser = () => {
   const user = sessionStorage.getItem("authUser");
   if (!user) {
