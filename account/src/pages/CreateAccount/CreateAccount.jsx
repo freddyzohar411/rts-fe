@@ -10,7 +10,7 @@ import {
   AccountFormConstant,
   AccountEntityConstant,
   AccountTableListConstant,
-} from "./accountConstant";
+} from "../../constants/accountConstant"
 import {
   fetchDraftAccount,
   deleteAccountId,
@@ -325,24 +325,6 @@ const AccountCreation = () => {
           })
         );
       }
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(submitData),
-      // })
-      //   .then((response) => response.json())
-      //   .then(
-      //     (data) => {
-      //       const reponseData = data.data;
-      //       reponseData.submissionData = JSON.parse(reponseData.submissionData);
-      //       console.log("Success Data:", reponseData);
-      //       handleNext();
-      //     },
-      //     (error) => {
-      //       console.error("Error:", error);
-      //     }
-      //   );
     }
 
     if (step === 1) {

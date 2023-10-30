@@ -23,8 +23,9 @@ import {
 } from "./actionTypes";
 
 // Fetch Account
-export const fetchAccount = () => ({
+export const fetchAccount = (accountId) => ({
   type: FETCH_ACCOUNT,
+  payload: accountId,
 });
 
 export const fetchAccountSuccess = (account) => ({

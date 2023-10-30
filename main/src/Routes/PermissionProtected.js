@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserPermission } from "@workspace/login";
+import { useUserAuth } from "@workspace/login";
 
 const PermissionProtected = ({
   moduleName,
@@ -8,7 +8,7 @@ const PermissionProtected = ({
   children,
 }) => {
   const navigate = useNavigate();
-  const { checkAllPermission, checkAnyPermission } = useUserPermission();
+  const { checkAllPermission, checkAnyPermission } = useUserAuth();
   // Check if requiredPermissions is empty
   if (requiredPermissions.length === 0) {
     return children;

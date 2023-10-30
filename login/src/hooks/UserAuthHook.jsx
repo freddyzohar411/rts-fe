@@ -8,7 +8,7 @@ import { ModuleConstants } from "../constants/moduleConstant";
  * Custom hook to get user permissions
  * @returns 
  */
-const useUserPermission = () => {
+const useUserAuth = () => {
   const dispatch = useDispatch();
   const userPermission = useSelector((state) => state.Profile.userPermission);
 
@@ -63,6 +63,11 @@ const useUserPermission = () => {
     [userPermission]
   );
 
+  // Check user group 
+
+
+  // Check user role
+
   return {
     userPermission,
     checkAllPermission,
@@ -72,4 +77,4 @@ const useUserPermission = () => {
   };
 };
 
-export { useUserPermission };
+export { useUserAuth };

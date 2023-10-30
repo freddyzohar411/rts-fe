@@ -8,7 +8,7 @@ import {
   fetchAccountFormSubmissionSuccess,
   fetchAccountFormSubmissionFailure,
 } from "./action";
-import { getFormById, getFormByFormName, getAccountById, getAccountInstructionById, getAccountCommercialById } from "../../helpers/backend_helper";
+import { getFormByFormName, getAccountById, getAccountInstructionById, getAccountCommercialById } from "../../helpers/backend_helper";
 
 const formURL = {
   "account_account": getAccountById,
@@ -27,7 +27,6 @@ function* workFetchAccountForm(action) {
 
 function* workFetchAccountFormSubmission(action) {
   const { formName, accountId } = action.payload;
-  console.log("workFetchAccountFormSubmission", formName, accountId)
   try {
     const response = yield call(
       formURL[formName],
@@ -42,7 +41,6 @@ function* workFetchAccountFormSubmission(action) {
 // function* workClearAccountFormSubmission() {
 //   yield put(clearAccountFormSubmission());
 // }
-
 
 export default function* watchFetchAccountFormsSaga() {
   yield takeEvery(FETCH_ACCOUNTFORM, workFetchAccountForm);

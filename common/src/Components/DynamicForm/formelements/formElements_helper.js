@@ -241,11 +241,12 @@ const checkVisibleOnGlobalCountry = (field, country) => {
 // };
 
 const checkAccessible = (field, userDetails) => {
-  if (!userDetails) return true;
+  // if (!userDetails) return true;s
   // Check if field is accessible based on user role
   if (!field?.userGroup) return true;
   if (field?.userGroup.length === 0) return true;
-  // console.log("field.userGroup!!!", field.userGroup);
+  console.log("field.userGroup!!!", field.userGroup);
+  console.log("Role Check :", AuthHelper.checkRole(field.userGroup));
   return AuthHelper.checkRole(field.userGroup);
 };
 

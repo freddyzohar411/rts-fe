@@ -65,6 +65,9 @@ export const getAccountInstructionById = (id) =>
     `${ACCOUNT_INSTRUCTION_URL}${BASE_CLIENT_INSTRUCTIONS}/entity/account_instruction/${id}`
   );
 
+// Get draft account 
+export const getDraftAccount = () => api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/draft`);
+
 // Delete draft account by id
 export const deleteDraftAccountById = (id) =>
   api.delete(`${ACCOUNT_URL}${BASE_ACCOUNTS}/draft/${id}`);

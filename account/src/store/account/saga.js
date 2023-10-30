@@ -1,14 +1,20 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
-import axios from "axios";
+import {
+  AccountFormConstant,
+  AccountEntityConstant,
+} from "../../constants/accountConstant";
 
 import {
+  FETCH_ACCOUNT,
   POST_ACCOUNT,
   PUT_ACCOUNT,
   DELETE_ACCOUNT,
   FETCH_ACCOUNTS,
-  FETCH_ACCOUNTS_FIELDS
+  FETCH_ACCOUNTS_FIELDS,
 } from "./actionTypes";
 import {
+  fetchAccountSuccess,
+  fetchAccountFailure,
   postAccountSuccess,
   postAccountFailure,
   putAccountSuccess,
@@ -18,16 +24,22 @@ import {
   fetchAccountsSuccess,
   fetchAccountsFailure,
   fetchAccountsFieldsSuccess,
-  fetchAccountsFieldsFailure
+  fetchAccountsFieldsFailure,
 } from "./action";
 import {
   getAccounts,
   createAccount,
   updateAccount,
   deleteAccount,
-  getAccountsFields
+  getAccountsFields,
+  getAccountById,
 } from "../../helpers/backend_helper";
-import { setAccountId, deleteAccountId, setAccountCountry, deleteAccountCountry } from "../accountregistration/action";
+import {
+  setAccountId,
+  deleteAccountId,
+  setAccountCountry,
+  deleteAccountCountry,
+} from "../accountregistration/action";
 
 // Post account
 function* workPostAccount(action) {
@@ -54,17 +66,17 @@ function* workPostAccount(action) {
     if (typeof navigate === "function") {
       navigate(link);
     }
-  
-    if (entity === "account_account") {
+
+    if (entity === AccountEntityConstant.ACCOUNT_ACCOUNT) {
       yield put(setAccountId(response.data.id));
       yield put(setAccountCountry(response.data.accountCountry));
       handleNext();
-      return
+      return;
     }
-    if (entity === "account_commercial") {
+    if (entity === AccountEntityConstant.ACCOUNT_COMMERCIAL) {
       yield put(deleteAccountId());
       yield put(deleteAccountCountry());
-      return
+      return;
     }
     if (typeof handleNext === "function") {
       handleNext();
@@ -117,7 +129,6 @@ function* workFetchAccounts(action) {
   }
 }
 
-
 // Delete Account
 function* workDeleteAccount(action) {
   try {
@@ -132,10 +143,20 @@ function* workDeleteAccount(action) {
 function* workFetchAccountsFields() {
   try {
     const response = yield call(getAccountsFields);
-    console.log("response.data", response.data)
     yield put(fetchAccountsFieldsSuccess(response.data));
   } catch (error) {
     yield put(fetchAccountsFieldsFailure(error));
+  }
+}
+
+// Fet account by id
+function* workFetchAccount(action) {
+  try {
+    const response = yield call(getAccountById, action.payload);
+    yield put(fetchAccountSuccess(response.data));
+    yield put(setAccountCountry(response.data.accountCountry));
+  } catch (error) {
+    yield put(fetchAccountFailure(error));
   }
 }
 
@@ -144,5 +165,6 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(PUT_ACCOUNT, workPutAccount);
   yield takeEvery(FETCH_ACCOUNTS, workFetchAccounts);
   yield takeEvery(DELETE_ACCOUNT, workDeleteAccount);
-  yield takeEvery(FETCH_ACCOUNTS_FIELDS, workFetchAccountsFields)
+  yield takeEvery(FETCH_ACCOUNTS_FIELDS, workFetchAccountsFields);
+  yield takeEvery(FETCH_ACCOUNT, workFetchAccount)
 }

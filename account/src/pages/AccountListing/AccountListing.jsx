@@ -3,19 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Badge, Button, Input } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
-import axios from "axios";
 import { useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
 import { DeleteCustomModal } from "@Workspace/common";
-import { AuthHelper } from "@workspace/common";
 import {
   deleteAccount,
   fetchAccounts,
   fetchAccountsFields,
 } from "../../store/account/action";
-import { useUserPermission } from "@workspace/login";
+import { useUserAuth } from "@workspace/login";
 
 function AccountListing() {
   const {
@@ -24,7 +22,7 @@ function AccountListing() {
     checkAnyPermission,
     ModuleConstants,
     PermissionConstants,
-  } = useUserPermission();
+  } = useUserAuth();
   const dispatch = useDispatch();
   const accountsData = useSelector((state) => state.AccountReducer.accounts);
   const accountsFields = useSelector(
@@ -49,16 +47,6 @@ function AccountListing() {
     ])
   );
 
-  console.log("Account Fields: ", accountsFields);
-
-  // Check if user is logged in
-  useEffect(() => {
-    console.log("IsUserLogged in: ", AuthHelper.isUserLoggedIn());
-    console.log(
-      "Account permission Create in: ",
-      AuthHelper.checkPermission("account", ["read", "write", "super"])
-    );
-  }, []);
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);

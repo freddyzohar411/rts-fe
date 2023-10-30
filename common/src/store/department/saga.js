@@ -1,5 +1,4 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
-import axios from "axios";
 import {
   getDepartments
 } from "../../helpers/backend_helper"

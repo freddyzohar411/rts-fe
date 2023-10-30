@@ -2,7 +2,7 @@ export * from "./components";
 
 // User profile hook
 export * from "./hooks/UserHooks.js";
-export * from "./hooks/UserPermissionHook"
+export * from "./hooks/UserAuthHook"
 
 // Constants
 export * from "./constants/moduleConstant"

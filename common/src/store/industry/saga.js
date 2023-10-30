@@ -1,6 +1,4 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
-import axios from "axios";
-
 import { FETCH_INDUSTRY, FETCH_SUBINDUSTRY } from "./actionTypes";
 import {
   fetchIndustrySuccess,
