@@ -12,12 +12,7 @@ import {
   generateInitialValues,
   generateValidationSchema2,
 } from "../../helpers/formik_helper";
-import {
-  Label,
-  Row,
-  Alert,
-  Container,
-} from "reactstrap";
+import { Label, Row, Alert, Container } from "reactstrap";
 
 const Form = ({
   template,
@@ -41,11 +36,13 @@ const Form = ({
   const [buttonName, setButtonName] = useState("");
   const [editDataValues, setEditDataValues] = useState(null);
 
-  console.log("country 1", country)
+  console.log("country 1", country);
   // console.log("Form Fields: ", formFields);
 
   useEffect(() => {
-    onFormFieldsChange(formFields);
+    if (onFormFieldsChange) {
+      onFormFieldsChange(formFields);
+    }
   }, [formFields]);
 
   /**
@@ -117,8 +114,7 @@ const Form = ({
       }
     });
     setFormFields(newFormFields);
-  }
-
+  };
 
   /**
    * Handle Form Submit
@@ -160,9 +156,7 @@ const Form = ({
       },
       rerenderTable
     );
-
   };
-
 
   /**
    * Check which field with tableData and  add it to the array

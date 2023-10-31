@@ -156,6 +156,12 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableId: "parentcompany",
       type: "field",
     },
+    {
+      draggableLabel: "Search Select",
+      draggablePrefix: "element",
+      draggableId: "searchselect",
+      type: "field",
+    }
   ];
 
   // Layout List
@@ -254,6 +260,7 @@ const FormElementSidebar = ({ unusedFields }) => {
         </div>
       )}
       <hr />
+
       {/* Layout */}
       <h3
         onClick={() => {

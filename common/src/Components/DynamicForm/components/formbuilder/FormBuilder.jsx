@@ -829,6 +829,11 @@ const FormBuilder = ({
           template={JSON.parse(jsonData)}
           userDetails={userDetails}
           country={country}
+          editData={null}
+          onFormikChange={null}
+          onSubmit={handleFormSubmit}
+          onFormFieldsChange={null}
+          errorMessage={null}
         />
       </Modal>
       <div className="grid-formbuilder">

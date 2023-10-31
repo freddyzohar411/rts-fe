@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import { generateInitialValues, generateValidationSchemaForFieldBuilder } from "../../helpers/formik_helper";
+import {
+  generateInitialValues,
+  generateValidationSchemaForFieldBuilder,
+} from "../../helpers/formik_helper";
 import { AiFillDelete } from "react-icons/ai";
 import { v4 as uuid } from "uuid";
 import CountrySelectField from "../../fieldbuilders/CountrySelectField";
@@ -46,21 +49,21 @@ const FieldBuilder = ({
         "table",
         "selectdepartment",
         "editor",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
-     
     },
     {
       label: "Sub Name/Key",
       type: "text",
       name: "subName",
       apply: ["selectcurrency", "selectlandline"],
-      validation:[
+      validation: [
         {
           required: true,
-          message: 'Sub key is required',
+          message: "Sub key is required",
         },
-      ]
+      ],
     },
     {
       label: "Name/Key",
@@ -87,14 +90,15 @@ const FieldBuilder = ({
         "selectdepartment",
         "editor",
         "table",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
-      validation:[
+      validation: [
         {
           required: true,
-          message: 'Key is required',
+          message: "Key is required",
         },
-      ]
+      ],
     },
 
     {
@@ -120,7 +124,8 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "editor",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
     },
     {
@@ -155,7 +160,8 @@ const FieldBuilder = ({
         "editor",
         "button",
         "buttonupdate",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
     },
     {
@@ -192,8 +198,35 @@ const FieldBuilder = ({
         "editor",
         // "button",
         // "buttonupdate"
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
+    },
+    {
+      label: "Module",
+      type: "select",
+      name: "module",
+      options: [
+        {
+          label: "Account",
+          value: "account",
+        },
+        {
+          label: "Job",
+          value: "job",
+        },
+        {
+          label: "Candidate",
+          value: "candidate",
+        },
+      ],
+      apply: ["searchselect"],
+    },
+    {
+      label: "Search Query Key",
+      type: "text",
+      name: "queryKey",
+      apply: ["searchselect"],
     },
     {
       label: "Required",
@@ -238,7 +271,8 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "editor",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
     },
     {
@@ -265,7 +299,8 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "editor",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
     },
     {
@@ -578,7 +613,8 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "editor",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
     },
     {
@@ -649,7 +685,8 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "editor",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
     },
     // Which include key value pair for table
@@ -691,7 +728,7 @@ const FieldBuilder = ({
         "selectcountry",
         "selectstate",
         "selectdepartment",
-        "parentcompany"
+        "parentcompany",
       ],
     },
     {
@@ -729,7 +766,8 @@ const FieldBuilder = ({
         "table",
         "selectdepartment",
         "editor",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
     },
     {
@@ -763,7 +801,8 @@ const FieldBuilder = ({
         "table",
         "selectdepartment",
         "editor",
-        "parentcompany"
+        "parentcompany",
+        "searchselect",
       ],
     },
     {
@@ -895,6 +934,9 @@ const FieldBuilder = ({
       break;
     case "parentcompany":
       header = "Parent Company Field";
+      break;
+    case "searchselect":
+      header = "Search Select Field";
       break;
     default:
   }
@@ -1067,9 +1109,7 @@ const FieldBuilder = ({
                 {...field.events}
               />
               {formik.errors[field.name] && formik.touched[field.name] ? (
-                 <div style={{ color: "red" }}>
-                 {formik.errors[field.name]}
-               </div>
+                <div style={{ color: "red" }}>{formik.errors[field.name]}</div>
               ) : null}
             </div>
           );

@@ -18,6 +18,7 @@ import ButtonUpdateElement from "./ButtonUpdateElement";
 import DepartmentSelectElement from "./DepartmentSelectElement";
 import EditorElement from "./EditorElement";
 import AccountParentElement from "./AccountParentElement";
+import SearchSelect from "./SearchSelect";
 import * as AuthHelper from "../../../helpers/auth_helper";
 import {
   moduleConstant,
@@ -119,6 +120,10 @@ const generateFormField = (
 
   if (type === "parentcompany") {
     return <AccountParentElement field={field} formik={formik} />;
+  }
+
+  if (type === "searchselect") {
+    return <SearchSelect field={field} formik={formik} />;
   }
 
   // text & button
