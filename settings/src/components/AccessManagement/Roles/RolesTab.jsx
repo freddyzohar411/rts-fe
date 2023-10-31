@@ -58,7 +58,7 @@ function RolesTab() {
               </th>
               <th scope="col">Roles</th>
               <th scope="col">Description</th>
-              <th scope="col" ></th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -69,10 +69,10 @@ function RolesTab() {
                     <Input type="checkbox" />
                   </td>
                   <td>{role.roleName}</td>
-                  <td className="text-truncate" style={{ maxWidth: "450px" }}>
+                  <td className="text-truncate" style={{ maxWidth: "650px" }}>
                     {role.roleDescription}
                   </td>
-                  <td className="d-flex flex-row gap-1">
+                  <td className="d-flex flex-row justify-content-between align-items-center">
                     <Link to={`/settings/access/role/${role.id}`}>
                       <Button className="btn btn-custom-primary-hover">
                         <i className="ri-eye-line"></i>

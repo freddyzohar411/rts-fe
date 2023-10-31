@@ -18,7 +18,6 @@ import { initialValues, schema, populateForm } from "../constants";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser, updateUser } from "../../../../store/users/action";
-import axios from "axios";
 
 function UpdateUser() {
   const { userId } = useParams();
@@ -121,6 +120,7 @@ function UpdateUser() {
                               <Field
                                 name="firstName"
                                 type="text"
+                                placeholder="Enter First Name"
                                 className={`form-control ${
                                   errors.firstName && touched.firstName
                                     ? "is-invalid"
@@ -140,6 +140,7 @@ function UpdateUser() {
                               <Field
                                 name="lastName"
                                 type="text"
+                                placeholder="Enter Last Name"
                                 className={`form-control ${
                                   errors.lastName && touched.lastName
                                     ? "is-invalid"
@@ -159,6 +160,7 @@ function UpdateUser() {
                               <Field
                                 name="username"
                                 type="text"
+                                placeholder="Enter Username"
                                 className={`form-control ${
                                   errors.username && touched.username
                                     ? "is-invalid"
@@ -182,6 +184,7 @@ function UpdateUser() {
                               <Field
                                 name="email"
                                 type="text"
+                                placeholder="Enter Email Address"
                                 className={`form-control ${
                                   errors.email && touched.email
                                     ? "is-invalid"
@@ -203,6 +206,7 @@ function UpdateUser() {
                               <Field
                                 name="mobile"
                                 type="text"
+                                placeholder="Enter Contact Number"
                                 className={`form-control ${
                                   errors.mobile && touched.mobile
                                     ? "is-invalid"
@@ -222,6 +226,7 @@ function UpdateUser() {
                               <Field
                                 name="employeeId"
                                 type="text"
+                                placeholder="Enter Employee ID"
                                 className={`form-control ${
                                   errors.employeeId && touched.employeeId
                                     ? "is-invalid"
@@ -248,7 +253,7 @@ function UpdateUser() {
                               <Field
                                 name="password"
                                 type="password"
-                                placeholder="Enter password"
+                                placeholder="Enter Password"
                                 className={`form-control ${
                                   touched.password && errors.password
                                     ? "is-invalid"
@@ -270,7 +275,7 @@ function UpdateUser() {
                               <Field
                                 name="confirmPassword"
                                 type="password"
-                                placeholder="Enter password"
+                                placeholder="Confirm Password"
                                 className={`form-control ${
                                   touched.confirmPassword &&
                                   errors.confirmPassword
@@ -286,7 +291,7 @@ function UpdateUser() {
                                 )}
                             </div>
                           </Col>
-                          <Col lg={4}>
+                          <Col lg={4} hidden>
                             <div className="d-flex flex-column mb-3 ">
                               <Label className="fw-semibold">ID</Label>
                               <Field

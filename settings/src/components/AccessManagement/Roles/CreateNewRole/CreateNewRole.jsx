@@ -124,7 +124,7 @@ function CreateNewRole() {
                             <Row>
                               <Col>
                                 <div className="mb-3">
-                                  <Label>Role Name</Label>
+                                  <Label className="fw-semibold">Role Name</Label>
                                   <Field
                                     name="roleName"
                                     className={`form-control ${
@@ -146,7 +146,7 @@ function CreateNewRole() {
                             <Row>
                               <Col>
                                 <div className="mb-3">
-                                  <Label>Role Description</Label>
+                                  <Label className="fw-semibold">Role Description</Label>
                                   <Field
                                     name="roleDescription"
                                     className={`form-control ${
@@ -156,7 +156,7 @@ function CreateNewRole() {
                                         : ""
                                     }`}
                                     placeholder="Enter role name"
-                                    rows="3"
+                                    component="textarea"
                                   />
                                   {errors.roleDescription &&
                                     touched.roleDescription && (

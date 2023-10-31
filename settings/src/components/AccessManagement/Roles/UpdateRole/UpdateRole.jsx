@@ -86,7 +86,7 @@ function UpdateRole() {
         modules: values.modules,
       };
       console.log("updatedRole:", updatedRole);
-      dispatch(updateRole({ updatedRole, navigate: navigate }));
+      // dispatch(updateRole({ updatedRole, navigate: navigate }));
     }
   };
 
@@ -163,6 +163,7 @@ function UpdateRole() {
                               </Label>
                               <Field
                                 name="roleDescription"
+                                component="textarea"
                                 className={`form-control ${
                                   touched.roleDescription &&
                                   errors.roleDescription
