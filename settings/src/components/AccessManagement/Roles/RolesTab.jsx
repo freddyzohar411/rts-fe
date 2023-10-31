@@ -1,9 +1,36 @@
-import React from "react";
-import { Button, Input, Table } from "reactstrap";
-import { roleData } from "../dataSample";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Input,
+  Table,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+} from "reactstrap";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRoles, deleteRole } from "../../../store/roles/action";
 
 function RolesTab() {
+  const roles = useSelector((state) => state.RoleReducer.users);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchRoles());
+  }, []);
+
+  const [modal, setModal] = useState(false);
+  const [selectedRole, setSelectedRole] = useState([]);
+  const confirmDelete = (role) => {
+    setSelectedRole(role);
+    setModal(!modal);
+  };
+
+  const handleDelete = (role) => {
+    dispatch(deleteRole(role));
+    setModal(!modal);
+  };
+
   return (
     <div>
       <h5 className="fw-bolder">Manage Roles and Permission</h5>
@@ -21,7 +48,7 @@ function RolesTab() {
 
       <div className="table-responsive">
         <Table
-          className="table table-hover table-bordered table-striped border-light align-middle table-nowrap rounded-3"
+          className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3"
           id="rolesTable"
         >
           <thead>
@@ -31,79 +58,60 @@ function RolesTab() {
               </th>
               <th scope="col">Roles</th>
               <th scope="col">Description</th>
-              <th scope="col" style={{ width: "40px" }}></th>
+              <th scope="col" ></th>
             </tr>
           </thead>
           <tbody>
-            {roleData.map((role, i) => (
-              <tr key={i}>
-                <td>
-                  <Input type="checkbox" />
-                </td>
-                <td>{role.roleName}</td>
-                <td className="text-truncate" style={{ maxWidth: "450px" }}>
-                  {role.roleDescription}
-                </td>
-                <td className="d-flex flex-start gap-3">
-                  <Link to={`/settings/access/role/${role.roleName}`}>
+            {roles &&
+              roles.map((role, index) => (
+                <tr key={index}>
+                  <td>
+                    <Input type="checkbox" />
+                  </td>
+                  <td>{role.roleName}</td>
+                  <td className="text-truncate" style={{ maxWidth: "450px" }}>
+                    {role.roleDescription}
+                  </td>
+                  <td className="d-flex flex-row gap-1">
+                    <Link to={`/settings/access/role/${role.id}`}>
+                      <Button className="btn btn-custom-primary-hover">
+                        <i className="ri-eye-line"></i>
+                      </Button>
+                    </Link>
+                    <Link to={`/settings/access/role/update/${role.id}`}>
+                      <Button className="btn btn-custom-primary-hover">
+                        <i className="ri-pencil-line"></i>
+                      </Button>
+                    </Link>
                     <Button
                       className="btn btn-custom-primary-hover"
-                      style={{ pointerEvents: "none" }}
+                      onClick={() => confirmDelete(role.id)}
                     >
-                      <i className="ri-eye-line"></i>
+                      <i className="ri-delete-bin-2-line"></i>
                     </Button>
-                  </Link>
-                  <Link to={`/settings/access/role/update/${role.roleName}`}>
-                    <Button
-                      className="btn btn-custom-primary-hover"
-                      style={{ pointerEvents: "none" }}
-                    >
-                      <i className="ri-pencil-line"></i>
-                    </Button>
-                  </Link>
-                  <Button
-                    className="btn btn-custom-primary-hover"
-                    style={{ pointerEvents: "none" }}
-                  >
-                    <i className="ri-delete-bin-2-line"></i>
-                  </Button>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              ))}
           </tbody>
-
-          {/* Delete Modal */}
-          {/* <Modal
-            isOpen={selectedRoleToDelete !== null}
-            toggle={() => setSelectedRoleToDelete(null)}
-            centered
-          >
-            <ModalHeader className="modal-title">
-              Delete Role: {selectedRoleToDelete}
-            </ModalHeader>
-            <ModalBody>
-              <div className="d-flex flex-column gap-4">
-                <span>Are you sure you would like to delete this role?</span>
-                <div className="d-flex flex-row gap-3">
-                  <Button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={confirmDelete}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => setSelectedRoleToDelete(null)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </ModalBody>
-          </Modal> */}
         </Table>
+        <Modal isOpen={modal} toggle={() => setModal(!modal)} centered>
+          <ModalHeader>Are you sure?</ModalHeader>
+          <ModalBody>You are deleting this role.</ModalBody>
+          <ModalFooter>
+            <Button
+              className="btn btn-custom-primary"
+              onClick={() => handleDelete(selectedRole)}
+            >
+              Delete
+            </Button>
+            <Button
+              className="btn btn-custom-primary"
+              onClick={() => setModal(!modal)}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
       </div>
     </div>
   );

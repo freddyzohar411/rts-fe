@@ -8,7 +8,7 @@ function MainSettings() {
     <React.Fragment>
       <div className="page-content">
         <Row className="align-items-start justify-content-center mt-2">
-          <Col md={3}>
+          <Col md={4}>
             <Card className=" d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
@@ -51,7 +51,7 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={3}>
+          <Col md={4}>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
@@ -83,7 +83,7 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={3}>
+          <Col md={3} hidden>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
@@ -99,7 +99,7 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={3}>
+          <Col md={3} hidden>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i

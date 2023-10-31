@@ -1,75 +1,70 @@
 import {
-  // Fetch User
-  FETCH_USER,
-  FETCH_USER_SUCCESS,
-  FETCH_USER_FAILURE,
-  // Fetch Users
-  FETCH_USERS,
-  FETCH_USERS_SUCCESS,
-  FETCH_USERS_FAILURE,
-  // Create
-  CREATE_USER,
-  CREATE_USER_SUCCESS,
-  CREATE_USER_FAILURE,
-  // Delete
-  DELETE_USER,
-  DELETE_USER_SUCCESS,
-  DELETE_USER_FAILURE,
-  // Update
-  UPDATE_USER,
-  UPDATE_USER_SUCCESS,
-  UPDATE_USER_FAILURE,
+  CREATE_ROLE,
+  CREATE_ROLE_SUCCESS,
+  CREATE_ROLE_FAILURE,
+  FETCH_ROLES,
+  FETCH_ROLES_SUCCESS,
+  FETCH_ROLES_FAILURE,
+  FETCH_ROLE,
+  FETCH_ROLE_SUCCESS,
+  FETCH_ROLE_FAILURE,
+  UPDATE_ROLE,
+  UPDATE_ROLE_SUCCESS,
+  UPDATE_ROLE_FAILURE,
+  DELETE_ROLE,
+  DELETE_ROLE_SUCCESS,
+  DELETE_ROLE_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
-  user: {},
-  users: [],
+  role: {},
+  roles: [],
   message: "",
   loading: false,
   error: false,
 };
 
-const UserReducer = (state = initialState, action) => {
+const RoleReducer = (state = initialState, action) => {
   switch (action.type) {
-    // Fetch User
-    case FETCH_USER:
+    // Create Role
+    case CREATE_ROLE:
       return {
         ...state,
         loading: true,
         error: false,
       };
 
-    case FETCH_USER_SUCCESS:
+    case CREATE_ROLE_SUCCESS:
       return {
         ...state,
         loading: false,
         user: action.payload,
       };
 
-    case FETCH_USER_FAILURE:
+    case CREATE_ROLE_FAILURE:
       return {
         ...state,
         loading: false,
         error: true,
         message: action.payload,
       };
-
-    // Fetch Users
-    case FETCH_USERS:
+      
+    // Fetch Roles
+    case FETCH_ROLES:
       return {
         ...state,
         loading: true,
         error: false,
       };
 
-    case FETCH_USERS_SUCCESS:
+    case FETCH_ROLES_SUCCESS:
       return {
         ...state,
         loading: false,
         users: action.payload,
       };
 
-    case FETCH_USERS_FAILURE:
+    case FETCH_ROLES_FAILURE:
       return {
         ...state,
         loading: false,
@@ -77,21 +72,22 @@ const UserReducer = (state = initialState, action) => {
         message: action.payload,
       };
 
-    // Create User
-    case CREATE_USER:
+    // Fetch Role
+    case FETCH_ROLE:
       return {
         ...state,
         loading: true,
         error: false,
       };
 
-    case CREATE_USER_SUCCESS:
+    case FETCH_ROLE_SUCCESS:
       return {
+        ...state,
         loading: false,
-        user: action.payload,
+        role: action.payload,
       };
 
-    case CREATE_USER_FAILURE:
+    case FETCH_ROLE_FAILURE:
       return {
         ...state,
         loading: false,
@@ -99,21 +95,22 @@ const UserReducer = (state = initialState, action) => {
         message: action.payload,
       };
 
-    case UPDATE_USER:
+    // Update Role
+    case UPDATE_ROLE:
       return {
         ...state,
         loading: true,
         error: false,
       };
 
-    case UPDATE_USER_SUCCESS:
+    case UPDATE_ROLE_SUCCESS:
       return {
         ...state,
         loading: false,
-        user: action.payload,
+        role: action.payload,
       };
 
-    case UPDATE_USER_FAILURE:
+    case UPDATE_ROLE_FAILURE:
       return {
         ...state,
         loading: false,
@@ -121,21 +118,22 @@ const UserReducer = (state = initialState, action) => {
         message: action.payload,
       };
 
-    case DELETE_USER:
+    // Delete Role
+    case DELETE_ROLE:
       return {
         ...state,
         loading: true,
         error: false,
       };
 
-    case DELETE_USER_SUCCESS:
+    case DELETE_ROLE_SUCCESS:
       return {
         ...state,
         loading: false,
-        user: action.payload,
+        role: action.payload,
       };
 
-    case DELETE_USER_FAILURE:
+    case DELETE_ROLE_FAILURE:
       return {
         ...state,
         loading: false,
@@ -148,4 +146,4 @@ const UserReducer = (state = initialState, action) => {
   }
 };
 
-export default UserReducer;
+export default RoleReducer;

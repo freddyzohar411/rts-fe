@@ -16,7 +16,7 @@ import { Reducers as AccountReducers } from "@workspace/account";
 import { Reducers as JobReducers } from "@workspace/job";
 
 // Settings
-import { Reducers as UserReducers } from "@workspace/settings";
+import { Reducers as SettingReducers } from "@workspace/settings";
 
 const { Layout } = Reducers;
 const { Login, ForgetPassword, Profile } = LoginReducers;
@@ -39,7 +39,12 @@ const {
   JobReducer,
 } = JobReducers;
 
-const { UserReducer } = UserReducers;
+const { 
+  UserReducer, 
+  RoleReducer,
+  ModuleReducer,
+  PermissionReducer
+} = SettingReducers;
 
 const rootReducer = combineReducers({
   // public
@@ -66,7 +71,10 @@ const rootReducer = combineReducers({
   JobReducer,
 
   // Settings
-  UserReducers,
+  UserReducer, 
+  RoleReducer,
+  ModuleReducer,
+  PermissionReducer
 });
 
 export default rootReducer;

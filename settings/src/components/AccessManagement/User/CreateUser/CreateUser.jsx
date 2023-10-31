@@ -17,14 +17,9 @@ import {
   Card,
   FormFeedback,
 } from "reactstrap";
-import { userData } from "../../dataSample";
-import { initialValues, schema } from "./constants";
-
-import { useDispatch, useSelector } from "react-redux";
+import { initialValues, schema } from "../constants";
+import { useDispatch } from "react-redux";
 import { createUser } from "../../../../store/users/action";
-import { Axios } from "@workspace/common";
-const { APIClient } = Axios;
-const api = new APIClient();
 
 function CreateUser() {
   document.title = "Create New User | RTS";
@@ -37,9 +32,10 @@ function CreateUser() {
       lastName: values.lastName,
       username: values.username,
       email: values.email,
-      contact: values.contact,
+      mobile: values.mobile,
       employeeId: values.employeeId,
       password: values.password,
+      confirmPassword: values.confirmPassword,
     };
     dispatch(createUser({ newUser, navigate: navigate }));
   };
@@ -64,9 +60,7 @@ function CreateUser() {
                 <CardHeader className="bg-header">
                   <div className="d-flex flex-column gap-1">
                     <span className="h6 fw-bold">Create New User</span>
-                    <span className="text-muted">
-                      Begin the creation of a new user in this form.
-                    </span>
+                    <span>Begin the creation of a new user in this form.</span>
                   </div>
                 </CardHeader>
                 <Formik
@@ -78,152 +72,175 @@ function CreateUser() {
                 >
                   {({ errors, touched, resetForm }) => (
                     <Form>
-                      <CardBody className="bg-light">
-                        <Card>
-                          <CardBody>
-                            <Row className="mb-4">
-                              <Col lg={4}>
-                                <Label>First Name</Label>
-                                <Field
-                                  type="text"
-                                  name="firstName"
-                                  placeholder="Enter First Name"
-                                  className={`form-control ${
-                                    touched.firstName && errors.firstName
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                {errors.firstName && touched.firstName && (
+                      <CardBody>
+                        <Row>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>First Name</Label>
+                              <Field
+                                type="text"
+                                name="firstName"
+                                placeholder="Enter First Name"
+                                className={`form-control ${
+                                  touched.firstName && errors.firstName
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.firstName && touched.firstName && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.firstName}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Last Name</Label>
+                              <Field
+                                name="lastName"
+                                type="text"
+                                placeholder="Enter Last Name"
+                                className={`form-control ${
+                                  touched.lastName && errors.lastName
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.lastName && touched.lastName && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.lastName}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Username</Label>
+                              <Field
+                                name="username"
+                                type="text"
+                                placeholder="Enter Username"
+                                className={`form-control ${
+                                  touched.username && errors.username
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.username && touched.username && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.username}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Employee ID</Label>
+                              <Field
+                                name="employeeId"
+                                type="text"
+                                placeholder="Enter Employee ID"
+                                className={`form-control ${
+                                  touched.employeeId && errors.employeeId
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.employeeId && touched.employeeId && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.employeeId}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Email Address</Label>
+                              <Field
+                                name="email"
+                                type="email"
+                                placeholder="Enter Email Address"
+                                className={`form-control ${
+                                  touched.email && errors.email
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.email && touched.email && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.email}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Contact Number</Label>
+                              <Field
+                                name="mobile"
+                                type="text"
+                                placeholder="Enter Contact Number"
+                                className={`form-control ${
+                                  touched.mobile && errors.mobile
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.mobile && touched.mobile && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.mobile}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Password</Label>
+                              <Field
+                                name="password"
+                                type="password"
+                                placeholder="Enter Password"
+                                className={`form-control ${
+                                  touched.password && errors.password
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.password && touched.password && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.password}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Confirm Password</Label>
+                              <Field
+                                type="password"
+                                name="confirmPassword"
+                                className={`form-control ${
+                                  errors.confirmPassword &&
+                                  touched.confirmPassword
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                placeholder="Confirm Password"
+                              />
+                              {errors.confirmPassword &&
+                                touched.confirmPassword && (
                                   <FormFeedback typeof="invalid">
-                                    {errors.firstName}
+                                    {errors.confirmPassword}
                                   </FormFeedback>
                                 )}
-                              </Col>
-                              <Col lg={4}>
-                                <Label>Last Name</Label>
-                                <Field
-                                  name="lastName"
-                                  type="text"
-                                  placeholder="Enter Last Name"
-                                  className={`form-control ${
-                                    touched.lastName && errors.lastName
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                {errors.lastName && touched.lastName && (
-                                  <FormFeedback typeof="invalid">
-                                    {errors.lastName}
-                                  </FormFeedback>
-                                )}
-                              </Col>
-                              <Col lg={4}>
-                                <Label>Username</Label>
-                                <Field
-                                  name="username"
-                                  type="text"
-                                  placeholder="Enter Username"
-                                  className={`form-control ${
-                                    touched.username && errors.username
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                {errors.username && touched.username && (
-                                  <FormFeedback typeof="invalid">
-                                    {errors.username}
-                                  </FormFeedback>
-                                )}
-                              </Col>
-                            </Row>
-                            <Row className="mb-4">
-                              <Col lg={4}>
-                                <Label>Employee ID</Label>
-                                <Field
-                                  name="employeeId"
-                                  type="text"
-                                  placeholder="Enter Employee ID"
-                                  className={`form-control ${
-                                    touched.employeeId && errors.employeeId
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                {errors.employeeId && touched.employeeId && (
-                                  <FormFeedback typeof="invalid">
-                                    {errors.employeeId}
-                                  </FormFeedback>
-                                )}
-                              </Col>
-                              <Col lg={4}>
-                                <Label>Email Address</Label>
-                                <Field
-                                  name="email"
-                                  type="email"
-                                  placeholder="Enter Email Address"
-                                  className={`form-control ${
-                                    touched.email && errors.email
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                {errors.email && touched.email && (
-                                  <FormFeedback typeof="invalid">
-                                    {errors.email}
-                                  </FormFeedback>
-                                )}
-                              </Col>
-                              <Col lg={4}>
-                                <Label>Contact Number</Label>
-                                <Field
-                                  name="mobile"
-                                  type="text"
-                                  placeholder="Enter Contact Number"
-                                  className={`form-control ${
-                                    touched.mobile && errors.mobile
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                {errors.mobile && touched.mobile && (
-                                  <FormFeedback typeof="invalid">
-                                    {errors.mobile}
-                                  </FormFeedback>
-                                )}
-                              </Col>
-                            </Row>
-                            <Row className="mb-4">
-                              <Col lg={4}>
-                                <Label>Password</Label>
-                                <Field
-                                  name="password"
-                                  type="password"
-                                  placeholder="Enter Password"
-                                  className={`form-control ${
-                                    touched.password && errors.password
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                {errors.password && touched.password && (
-                                  <FormFeedback typeof="invalid">
-                                    {errors.password}
-                                  </FormFeedback>
-                                )}
-                              </Col>
-                              <Col lg={4}>
-                                <Label>Confirm Password</Label>
-                                <Input
-                                  type="password"
-                                  name="confirmPassword"
-                                  className="form-control"
-                                  placeholder="Confirm Password"
-                                />
-                              </Col>
-                            </Row>
-                          </CardBody>
-                        </Card>
+                            </div>
+                          </Col>
+                        </Row>
                       </CardBody>
                       <CardFooter>
                         <Row>

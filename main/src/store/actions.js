@@ -9,4 +9,5 @@ export { Actions as AccountActions } from "@workspace/account";
 
 export { Actions as JobActions } from "@workspace/job";
 
-export { Actions as UserActions } from "@workspace/settings";
+export { Actions as SettingActions } from "@workspace/settings";
+

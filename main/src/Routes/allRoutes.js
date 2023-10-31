@@ -80,9 +80,9 @@ const authProtectedRoutes = [
   { path: "/settings/customisation", component: <CustomisationSettings /> },
   { path: "/settings/access", component: <AccessManagement /> },
   { path: "/settings/access/role/role-creation", component: <CreateNewRole /> },
-  { path: "/settings/access/role/:roleName", component: <ViewRole /> },
+  { path: "/settings/access/role/:roleId", component: <ViewRole /> },
   {
-    path: "/settings/access/role/update/:roleName",
+    path: "/settings/access/role/update/:roleId",
     component: <UpdateRole />,
   },
   { path: "/settings/access/group/group-creation", component: <CreateGroup /> },
@@ -92,9 +92,9 @@ const authProtectedRoutes = [
     component: <GroupUpdate />,
   },
 
-  { path: "/settings/access/user/:username", component: <UserDetails /> },
+  { path: "/settings/access/user/:userId", component: <UserDetails /> },
   { path: "/settings/access/user/user-creation", component: <CreateUser /> },
-  { path: "/settings/access/user/update/:username", component: <UpdateUser/> },
+  { path: "/settings/access/user/update/:userId", component: <UpdateUser/> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

@@ -1,41 +1,77 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Field, Form, Formik } from "formik";
+import React, { useEffect, useState } from "react";
 import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Input,
-  Label,
-  Button,
   Breadcrumb,
   BreadcrumbItem,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Col,
+  Container,
+  FormFeedback,
+  Label,
+  Row,
 } from "reactstrap";
-import DualListBox from "react-dual-listbox";
-import {
-  userGroupData,
-  userGroupMembersData,
-  userData,
-} from "../../dataSample";
+import { initialValues, schema, populateForm } from "../constants";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser, updateUser } from "../../../../store/users/action";
+import axios from "axios";
 
 function UpdateUser() {
-  const { username } = useParams();
-  const userDetails = userData.find((user) => user.username === username);
-  document.title = `${userDetails.firstName} ${userDetails.lastName} Update | RTS`;
-
-  const formattedGroups = userGroupData.map((group) => ({
-    value: group.groupName,
-    label: group.groupName,
-  }));
-
-  const userGroup = userGroupMembersData.find((group) =>
-    group.members.includes(username)
+  const { userId } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [userInitialValues, setUserInitialValues] = useState(
+    populateForm(initialValues)
   );
-  console.log(userGroup.groupName);
-  const [selectedGroup, setSelectedGroup] = useState([]);
+
+  // Get User Details
+  const user = useSelector((state) => state.UserReducer.user);
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUser(userId));
+    }
+  }, []);
+
+  // Set User Initial Values
+  useEffect(() => {
+    const fetchInitialValues = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      employeeId: user.employeeId,
+      mobile: user.mobile,
+      email: user.email,
+      id: user.id,
+    };
+    setUserInitialValues(populateForm(fetchInitialValues));
+  }, []);
+
+  // Document Title
+  useEffect(() => {
+    if (userId) {
+      document.title = `${user.firstName} ${user.lastName} Update | RTS`;
+    }
+  }, []);
+
+  // Handle Submit Button
+  const handleSubmit = async (values) => {
+    const updatedUser = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      username: values.username,
+      email: values.email,
+      mobile: values.mobile,
+      employeeId: values.employeeId,
+      id: values.id,
+      password: values.password,
+    };
+    console.log(updatedUser);
+    dispatch(updateUser({ updatedUser, navigate: navigate }));
+  };
 
   return (
     <React.Fragment>
@@ -45,7 +81,7 @@ function UpdateUser() {
             <Col>
               <Breadcrumb>
                 <BreadcrumbItem>
-                  <Link to="/settings/access/">Settings</Link>
+                  <Link to="/settings/access">Settings</Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem active>Update User</BreadcrumbItem>
               </Breadcrumb>
@@ -55,193 +91,242 @@ function UpdateUser() {
             <Col>
               <Card>
                 <CardHeader>
-                  <div className="d-flex flex-column gap-1">
+                  <div className="d-flex flex-column mb-3 gap-1">
                     <span className="h5 fw-bold">Update User</span>
-                    <span>Make changes to user details, groups and roles.</span>
+                    <span>Make changes to the user details.</span>
                   </div>
                 </CardHeader>
-                <CardBody>
-                  <Row className="mb-3">
-                    <Col>
-                      <Row className="mb-3">
-                        <Col>
-                          <span className="h6 fw-bold">
-                            General Information
-                          </span>
-                        </Col>
-                      </Row>
-                      <Row className="mb-3">
-                        <Col lg={4}>
-                          <Label>First Name</Label>
-                          <Input
-                            name="firstName"
-                            type="text"
-                            className="form-control"
-                            value={userDetails.firstName}
-                          />
-                        </Col>
-                        <Col lg={4}>
-                          <Label>Last Name</Label>
-                          <Input
-                            name="lastName"
-                            type="text"
-                            className="form-control"
-                            value={userDetails.lastName}
-                          />
-                        </Col>
-                        <Col lg={4}>
-                          <Label>Username</Label>
-                          <Input
-                            name="username"
-                            type="text"
-                            className="form-control"
-                            value={userDetails.username}
-                          />
-                        </Col>
-                      </Row>
-                      <Row className="mb-3">
-                        <Col lg={4}>
-                          <Label>Employee ID</Label>
-                          <Input
-                            name="employeeId"
-                            type="text"
-                            className="form-control"
-                            value={userDetails.employeeId}
-                          />
-                        </Col>
-                        <Col lg={4}>
-                          <Label>Email Address</Label>
-                          <Input
-                            name="email"
-                            type="email"
-                            className="form-control"
-                            value={userDetails.email}
-                          />
-                        </Col>
-                        <Col lg={4}>
-                          <Label>Contact Number</Label>
-                          <Input
-                            name="contactNo"
-                            type="number"
-                            className="form-control"
-                            value={userDetails.contactNo}
-                          />
-                        </Col>
-                      </Row>
-                      <Row className="mb-3">
-                        <Col lg={4}>
-                          <Label>Password</Label>
-                          <Input
-                            name="password"
-                            type="password"
-                            className="form-control"
-                            value={userDetails.password}
-                          />
-                        </Col>
-                        <Col lg={4}>
-                          <Label>Confirm Password</Label>
-                          <Input
-                            name="confirmPassword"
-                            type="password"
-                            className="form-control"
-                            value={userDetails.confirmPassword}
-                          />
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Row>
-                  <Row className="mb-3">
-                    <Col>
-                      <Row className="mb-3">
-                        <Col>
-                          <span className="h6 fw-bold">Group</span>
-                        </Col>
-                      </Row>
+                <Formik
+                  validateOnBlur
+                  validateOnChange={false}
+                  validationSchema={schema}
+                  initialValues={userInitialValues}
+                  enableReinitialize={true}
+                  onSubmit={handleSubmit}
+                >
+                  {({ errors, touched }) => (
+                    <Form>
+                      <CardBody>
+                        <Row className="mb-3">
+                          <Col>
+                            <span className="h6 fw-bold">
+                              General Information
+                            </span>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col lg={4}>
+                            <div className="d-flex flex-column mb-3 mb-3">
+                              <Label className="fw-semibold">First Name</Label>
+                              <Field
+                                name="firstName"
+                                type="text"
+                                className={`form-control ${
+                                  errors.firstName && touched.firstName
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.firstName && touched.firstName && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.firstName}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="d-flex flex-column mb-3">
+                              <Label className="fw-semibold">Last Name</Label>
+                              <Field
+                                name="lastName"
+                                type="text"
+                                className={`form-control ${
+                                  errors.lastName && touched.lastName
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.lastName && touched.lastName && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.lastName}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="d-flex flex-column mb-3">
+                              <Label className="fw-semibold">Username</Label>
+                              <Field
+                                name="username"
+                                type="text"
+                                className={`form-control ${
+                                  errors.username && touched.username
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.username && touched.username && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.username}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col lg={4}>
+                            <div className="d-flex flex-column mb-3">
+                              <Label className="fw-semibold">
+                                Email Address
+                              </Label>
+                              <Field
+                                name="email"
+                                type="text"
+                                className={`form-control ${
+                                  errors.email && touched.email
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.email && touched.email && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.email}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="d-flex flex-column mb-3">
+                              <Label className="fw-semibold">
+                                Contact Number
+                              </Label>
+                              <Field
+                                name="mobile"
+                                type="text"
+                                className={`form-control ${
+                                  errors.mobile && touched.mobile
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.mobile && touched.mobile && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.mobile}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="d-flex flex-column mb-3">
+                              <Label className="fw-semibold">Employee ID</Label>
+                              <Field
+                                name="employeeId"
+                                type="text"
+                                className={`form-control ${
+                                  errors.employeeId && touched.employeeId
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.employeeId && touched.employeeId && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.employeeId}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col>
+                            <span className="h6 fw-bold">Password</span>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col lg={4}>
+                            <div className="d-flex flex-column mb-3 ">
+                              <Label className="fw-semibold">Password</Label>
+                              <Field
+                                name="password"
+                                type="password"
+                                placeholder="Enter password"
+                                className={`form-control ${
+                                  touched.password && errors.password
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.password && touched.password && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.password}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="d-flex flex-column mb-3 ">
+                              <Label className="fw-semibold">
+                                Confirm Password
+                              </Label>
+                              <Field
+                                name="confirmPassword"
+                                type="password"
+                                placeholder="Enter password"
+                                className={`form-control ${
+                                  touched.confirmPassword &&
+                                  errors.confirmPassword
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.confirmPassword &&
+                                touched.confirmPassword && (
+                                  <FormFeedback typeof="invalid">
+                                    {errors.confirmPassword}
+                                  </FormFeedback>
+                                )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="d-flex flex-column mb-3 ">
+                              <Label className="fw-semibold">ID</Label>
+                              <Field
+                                name="id"
+                                type="number"
+                                className={`form-control ${
+                                  touched.id && errors.id ? "is-invalid" : ""
+                                }`}
+                              />
+                              {errors.id && touched.id && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.id}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                        </Row>
+                      </CardBody>
+                      <CardFooter>
+                        <div className="d-flex flex-row justify-content-end gap-3">
+                          <Link to="/settings/access">
+                            <Button
+                              className="btn btn-custom-primary"
+                              type="button"
+                            >
+                              Cancel
+                            </Button>
+                          </Link>
 
-                      <Row className="mb-3">
-                        <Col>
-                          <div className="d-flex flex-row w-100">
-                            <span className="fw-semibold w-50">All Groups</span>
-                            <span className="fw-semibold w-50 ps-5">Assigned Groups</span>
-                          </div>
-                        </Col>
-                      </Row>
-                      <Row className="mb-3">
-                        <Col>
-                          <DualListBox
-                            options={formattedGroups}
-                            selected={selectedGroup}
-                            onChange={(e) => setSelectedGroup(e)}
-                            canFilter={true}
-                            icons={{
-                              moveLeft: (
-                                <span
-                                  className="mdi mdi-chevron-left"
-                                  key="key"
-                                />
-                              ),
-                              moveAllLeft: [
-                                <span
-                                  className="mdi mdi-chevron-double-left"
-                                  key="key"
-                                />,
-                              ],
-                              moveRight: (
-                                <span
-                                  className="mdi mdi-chevron-right"
-                                  key="key"
-                                />
-                              ),
-                              moveAllRight: [
-                                <span
-                                  className="mdi mdi-chevron-double-right"
-                                  key="key"
-                                />,
-                              ],
-                              moveDown: (
-                                <span
-                                  className="mdi mdi-chevron-down"
-                                  key="key"
-                                />
-                              ),
-                              moveUp: (
-                                <span
-                                  className="mdi mdi-chevron-up"
-                                  key="key"
-                                />
-                              ),
-                              moveTop: (
-                                <span
-                                  className="mdi mdi-chevron-double-up"
-                                  key="key"
-                                />
-                              ),
-                              moveBottom: (
-                                <span
-                                  className="mdi mdi-chevron-double-down"
-                                  key="key"
-                                />
-                              ),
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Row>
-                </CardBody>
-                <CardFooter>
-                  <div className="d-flex flex-row justify-content-end gap-2">
-                    <Link to="/settings/access">
-                      <Button className="btn btn-custom-primary" type="button">
-                        Cancel
-                      </Button>
-                    </Link>
-
-                    <Button className="btn btn-custom-primary" type="submit">
-                      Save
-                    </Button>
-                  </div>
-                </CardFooter>
+                          <Button
+                            className="btn btn-custom-primary"
+                            type="submit"
+                          >
+                            Save
+                          </Button>
+                        </div>
+                      </CardFooter>
+                    </Form>
+                  )}
+                </Formik>
               </Card>
             </Col>
           </Row>

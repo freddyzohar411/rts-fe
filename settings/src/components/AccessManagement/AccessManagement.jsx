@@ -17,6 +17,8 @@ import RolesTab from "./Roles/RolesTab";
 import UsersTab from "./User/UsersTab";
 import GroupsTab from "./Group/GroupsTab";
 import { Link } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AccessManagement() {
   document.title = "Access Management Settings | RTS";
@@ -53,7 +55,7 @@ function AccessManagement() {
                     <NavItem>
                       <NavLink
                         style={{ cursor: "pointer" }}
-                        className={classnames({ active: activeTab === "1"})}
+                        className={classnames({ active: activeTab === "1" })}
                         onClick={() => {
                           toggle("1");
                         }}
@@ -64,7 +66,7 @@ function AccessManagement() {
                     <NavItem>
                       <NavLink
                         style={{ cursor: "pointer" }}
-                        className={classnames({ active: activeTab === "2"})}
+                        className={classnames({ active: activeTab === "2" })}
                         onClick={() => {
                           toggle("2");
                         }}

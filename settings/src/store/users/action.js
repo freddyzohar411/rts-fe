@@ -17,8 +17,9 @@ import {
 } from "./actionTypes";
 
 // Fetch User
-export const fetchUser = () => ({
+export const fetchUser = (userId) => ({
   type: FETCH_USER,
+  payload: userId,
 });
 
 export const fetchUserSuccess = (user) => ({
@@ -63,13 +64,13 @@ export const createUserFailure = (error) => ({
 });
 
 // Delete User
-export const deleteUser = () => ({
+export const deleteUser = (user) => ({
   type: DELETE_USER,
+  payload: user,
 });
 
-export const deleteUserSuccess = (user) => ({
+export const deleteUserSuccess = () => ({
   type: DELETE_USER_SUCCESS,
-  payload: user,
 });
 
 export const deleteUserFailure = (error) => ({
