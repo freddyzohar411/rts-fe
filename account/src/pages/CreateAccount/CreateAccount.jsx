@@ -34,7 +34,7 @@ import { useUserAuth } from "@workspace/login";
 const AccountCreation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { getAllRoles } = useUserAuth();
+  const { getAllUserGroups } = useUserAuth();
   const userDetails = AuthHelper.getUserDetails();
   console.log("User Details: ", userDetails);
 
@@ -627,7 +627,7 @@ const AccountCreation = () => {
         >
           <Form
             template={formTemplate}
-            userDetails={getAllRoles()}
+            userDetails={getAllUserGroups()}
             country={accountCountry || country?.name}
             editData={formSubmissionData}
             onFormikChange={handleFormikChange}

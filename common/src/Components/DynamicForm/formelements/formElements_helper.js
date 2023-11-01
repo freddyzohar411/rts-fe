@@ -248,18 +248,22 @@ const checkVisibleOnGlobalCountry = (field, country) => {
 const checkAccessible = (field, userDetails) => {
   // if (!userDetails) return true;s
   // Check if field is accessible based on user role
+  console.log("Form Element userDetails", userDetails)
+  console.log("Form Element field usergroup", field.userGroup)
   if (!field?.userGroup) return true;
   if (field?.userGroup.length === 0) return true;
-  // As userGroup is an array, check if any of the userGroup is in userDetails
-  // const userDetailsLowerCase = userDetails?.map((user) => user.toLowerCase()); 
-  // for (const userGroup of field.userGroup) {
-  //   if (userDetailsLowerCase?.includes(userGroup.toLowerCase())) {
-  //     return true;
-  //   }
-  // }
-  // return false;
 
-  return true;
+  // As userGroup is an array, check if any of the userGroup is in userDetails
+
+  const userDetailsLowerCase = userDetails?.map((user) => user.toLowerCase()); 
+  for (const userGroup of field.userGroup) {
+    if (userDetailsLowerCase?.includes(userGroup.toLowerCase())) {
+      return true;
+    }
+  }
+  return false;
+
+  // return true;
 };
 
 const checkCopyFieldConditions = (field, formik) => {
