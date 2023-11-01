@@ -10,10 +10,8 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import { userGroupData, userGroupMembersData } from "../dataSample";
-import Group from "./Group";
-import UpdateGroup from "./UpdateGroup";
-import Delete from "./Delete";
+import { userGroupData } from "../dataSample";
+import { Link } from "react-router-dom";
 
 function GroupsTab() {
   const [showDelete, setShowDelete] = useState(false);
@@ -34,25 +32,6 @@ function GroupsTab() {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
-  };
-
-  // MODALS
-  const [groupModal, setGroupModal] = useState(false);
-  const [selectedGroupData, setSelectedGroupData] = useState(null);
-  const handleView = (group) => {
-    const selectedGroup = userGroupData.find(
-      (item) => item.groupName === group
-    );
-    setSelectedGroupData(selectedGroup);
-    setGroupModal(!groupModal);
-  };
-  const [updateGroupModal, setUpdateGroupModal] = useState(false);
-  const handleUpdateView = (group) => {
-    const selectedGroup = userGroupData.find(
-      (item) => item.groupName === group
-    );
-    setSelectedGroupData(selectedGroup);
-    setUpdateGroupModal(!updateGroupModal);
   };
 
   return (
@@ -96,20 +75,28 @@ function GroupsTab() {
                   <td>{item.groupName}</td>
                   <td className="text-wrap">{item.groupDescription}</td>
                   <td className="d-flex flex-row justify-between gap-2">
-                    <Button
-                      className="btn btn-primary"
-                      onClick={() => handleView(item.groupName)}
+                    <Link to={`/settings/access/group/${item.groupName}`}>
+                      <Button
+                        className="btn btn-custom-primary-hover"
+                        style={{ pointerEvents: "none" }}
+                      >
+                        <i className="ri-eye-line"></i>
+                      </Button>
+                    </Link>
+                    <Link
+                      to={`/settings/access/group/update/${item.groupName}`}
                     >
-                      <i className="ri-eye-line"></i>
-                    </Button>
+                      <Button
+                        className="btn btn-custom-primary-hover"
+                        style={{ pointerEvents: "none" }}
+                      >
+                        <i className="ri-pencil-line"></i>
+                      </Button>
+                    </Link>
+
                     <Button
-                      className="btn btn-primary"
-                      onClick={() => handleUpdateView(item.groupName)}
-                    >
-                      <i className="ri-pencil-line"></i>
-                    </Button>
-                    <Button
-                      className="btn btn-primary"
+                      className="btn btn-custom-primary-hover"
+                      style={{ pointerEvents: "none" }}
                       onClick={() => setShowDelete(!showDelete)}
                     >
                       <i className="ri-delete-bin-line"></i>
@@ -119,21 +106,6 @@ function GroupsTab() {
               ))}
             </tbody>
           </Table>
-          <Delete
-            show={showDelete}
-            cancel={() => setShowDelete(!showDelete)}
-            groupName="Hi"
-          />
-          <Group
-            show={groupModal}
-            cancel={() => setGroupModal(!groupModal)}
-            groupData={selectedGroupData}
-          />
-          <UpdateGroup
-            show={updateGroupModal}
-            cancel={() => setUpdateGroupModal(!updateGroupModal)}
-            groupData={selectedGroupData}
-          />
           <div className="d-flex flex-row justify-content-end">
             <Pagination>
               <PaginationItem

@@ -15,6 +15,7 @@ import { Reducers as AccountReducers } from "@workspace/account";
 // Job
 import { Reducers as JobReducers } from "@workspace/job";
 
+
 // Form
 import { Reducers as FormBuilderReducers } from "@workspace/formbuilder";
 
@@ -26,6 +27,12 @@ const {
   IndustryReducer,
   ParentCompanyReducer,
 } = Reducers;
+
+// Settings
+import { Reducers as SettingReducers } from "@workspace/settings";
+
+// const { Layout } = Reducers;
+
 const { Login, ForgetPassword, Profile } = LoginReducers;
 const { DashboardEcommerce } = DashboardReducers;
 const {
@@ -49,7 +56,15 @@ const {
   JobReducer,
 } = JobReducers;
 
+const { 
+  UserReducer, 
+  RoleReducer,
+  ModuleReducer,
+  PermissionReducer
+} = SettingReducers;
+
 const rootReducer = combineReducers({
+
   // Common
   Layout,
   CityReducer,
@@ -57,6 +72,7 @@ const rootReducer = combineReducers({
   DepartmentReducer,
   IndustryReducer,
   ParentCompanyReducer,
+
 
   // public
   Login,
@@ -83,6 +99,13 @@ const rootReducer = combineReducers({
 
   // Form
   FormReducer,
+
+  // Settings
+  UserReducer, 
+  RoleReducer,
+  ModuleReducer,
+  PermissionReducer
+
 });
 
 export default rootReducer;

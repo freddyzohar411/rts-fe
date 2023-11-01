@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Button,
@@ -9,49 +9,37 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
-import { userData, userGroupMembersData, roleGroupData } from "../dataSample";
-import User from "./User";
-import UpdateUser from "./UpdateUser";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers, deleteUser } from "../../../store/users/action";
 
 function UsersTab() {
-  // MODAL OPENING
-  const [viewUserModal, setViewUserModal] = useState(false);
-  const [updateUserModal, setUpdateUserModal] = useState(false);
+  const [modal, setModal] = useState(false);
+  // Fetch Users
+  const users = useSelector((state) => state.UserReducer.users);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, []);
 
-  // SELECTED USER MODAL
+  // Open Delete User Modal
   const [selectedUser, setSelectedUser] = useState(null);
-  const handleViewUser = (user) => {
-    const viewUser = userData.find((item) => item.username === user);
-    setSelectedUser(viewUser);
-    setViewUserModal(!viewUserModal);
+  const openDeleteUserModal = (userId) => {
+    setSelectedUser(userId);
+    setModal(!modal);
   };
 
-  const handleUpdateUser = (user) => {
-    const updateUser = userData.find((item) => item.username === user);
-    setSelectedUser(updateUser);
-    setUpdateUserModal(!updateUserModal);
+  // Delete User
+  const handleDelete = (userId) => {
+    dispatch(deleteUser(userId));
+    setModal(!modal);
   };
 
-  // PAGINATION
-  const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = userData.slice(startIndex, endIndex);
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    const totalPages = Math.ceil(userData.length / itemsPerPage);
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
   return (
     <div>
       <Row className="d-flex flex-row align-items-center">
@@ -71,7 +59,7 @@ function UsersTab() {
         <Col lg={12}>
           <div className="table-responsive mb-1">
             <Table
-              className="table table-hover table-bordered table-striped border-light align-middle table-nowrap rounded-3"
+              className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3"
               id="customFormTable"
             >
               <thead>
@@ -91,76 +79,104 @@ function UsersTab() {
                 </tr>
               </thead>
               <tbody>
-                {currentData.map((user, idx) => (
-                  <tr key={idx}>
+                {users?.map((user, index) => (
+                  <tr key={index}>
                     <td>
                       <Input type="checkbox" />
                     </td>
                     <td>
-                      {user.firstName} {user.lastName}
+                      {user?.firstName} {user?.lastName}
                     </td>
-                    <td>{user.employeeId}</td>
+                    <td>{user?.employeeId}</td>
                     <td>
-                      {userGroupMembersData
-                        .filter(
-                          (group) =>
-                            group.members &&
-                            group.members.includes(user.username)
-                        )
-                        .map((group) => {
-                          const groupRoles = roleGroupData
-                            .filter(
-                              (role) =>
-                                role.groups &&
-                                role.groups.includes(group.groupName)
-                            )
-                            .map((role) => role.roleName)
-                            .join(", ");
+                      {user.userGroup.length > 0 ? (
+                        <>
+                          {user.userGroup.map((group, groupIndex) => (
+                            <>
+                              {group.roles.map((role, roleIndex) => (
+                                <span key={roleIndex}>{role.roleName}</span>
+                              ))}
+                            </>
+                          ))}
+                        </>
+                      ) : (
+                        <span>Not Assigned</span>
+                      )}
+                    </td>
+                    <td>
+                      {user.userGroup.length > 0 ? (
+                        user.userGroup
+                          .map((group, index) => (
+                            <span key={index}>{group.groupName}</span>
+                          ))
+                          .reduce((prev, curr) => [prev, ", ", curr])
+                      ) : (
+                        <span>Not Assigned</span>
+                      )}
+                    </td>
 
-                          return `${groupRoles}`;
-                        })
-                        .join(", ") || "Not Assigned"}
+                    <td>23/09/2023</td>
+                    <td>11/01/2023</td>
+                    <td>
+                      {user?.enabled ? (
+                        <Badge color="success">Active</Badge>
+                      ) : (
+                        <Badge color="danger">Inactive</Badge>
+                      )}
                     </td>
                     <td>
-                      {userGroupMembersData
-                        .filter((group) =>
-                          group.members.includes(user.username)
-                        )
-                        .map((group) => group.groupName)
-                        .join(", ") || "Not Assigned"}
-                    </td>
-                    <td>21-08-2022</td>
-                    <td>09-10-2023</td>
-                    <td>
-                      <Badge color="success">Active</Badge>
-                    </td>
-                    <td className="d-flex flex-start gap-2">
-                      {" "}
-                      <Button onClick={() => handleViewUser(user.username)}>
-                        <i className="ri-eye-line"></i>
-                      </Button>
-                      <Button onClick={() => handleUpdateUser(user.username)}>
-                        <i className="ri-pencil-line"></i>
-                      </Button>
-                      <Button>
-                        <i className="ri-delete-bin-2-line"></i>
-                      </Button>
+                      <div className="d-flex flex-start gap-2">
+                        <Link to={`/settings/access/user/${user.id}`}>
+                          <Button className="btn btn-custom-primary">
+                            <i className="ri-eye-line"></i>
+                          </Button>
+                        </Link>
+                        <Link to={`/settings/access/user/update/${user.id}`}>
+                          <Button className="btn btn-custom-primary">
+                            {" "}
+                            <i className="ri-pencil-line"></i>
+                          </Button>
+                        </Link>
+                        <Button
+                          className="btn btn-custom-primary"
+                          onClick={() => openDeleteUserModal(user.id)}
+                        >
+                          <i className="ri-delete-bin-2-line"></i>
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
-            <User
-              show={viewUserModal}
-              cancel={() => setViewUserModal(!viewUserModal)}
-              user={selectedUser}
-            />
-            <UpdateUser
-              show={updateUserModal}
-              cancel={() => setUpdateUserModal(!updateUserModal)}
-              user={selectedUser}
-            />
-            <Pagination className="d-flex flex-row justify-content-end">
+
+            <Modal isOpen={modal} toggle={() => setModal(!modal)} centered>
+              <ModalHeader>Are you sure?</ModalHeader>
+              <ModalBody>
+                You are trying to delete the following user.
+              </ModalBody>
+              <ModalFooter>
+                <div className="d-flex flex-row gap-3">
+                  <Button
+                    className="btn btn-custom-primary"
+                    onClick={() => setModal(!modal)}
+                  >
+                    Cancel
+                  </Button>
+                  {selectedUser && (
+                    <Button
+                      className="btn btn-custom-primary"
+                      onClick={() => handleDelete(selectedUser)}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </div>
+              </ModalFooter>
+            </Modal>
+
+            {/* Pagination */}
+            {/* <Pagination className="d-flex flex-row justify-content-end">
               <PaginationItem
                 onClick={() => handlePrevPage()}
                 disabled={currentPage === 1}
@@ -168,7 +184,9 @@ function UsersTab() {
                 <PaginationLink>← &nbsp; Previous</PaginationLink>
               </PaginationItem>
               <PaginationItem active>
-                <PaginationLink>Page {currentPage}</PaginationLink>
+                <PaginationLink className="bg-custom-primary">
+                  Page {currentPage}
+                </PaginationLink>
               </PaginationItem>
               <PaginationItem
                 onClick={() => handleNextPage()}
@@ -176,7 +194,7 @@ function UsersTab() {
               >
                 <PaginationLink>Next &nbsp; →</PaginationLink>
               </PaginationItem>
-            </Pagination>
+            </Pagination> */}
           </div>
         </Col>
       </Row>

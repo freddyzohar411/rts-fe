@@ -1,32 +1,55 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Breadcrumb,
   BreadcrumbItem,
+  Button,
+  Input,
   Card,
   CardBody,
+  CardFooter,
   CardHeader,
   Col,
   Container,
+  Nav,
+  NavItem,
+  NavLink,
   Row,
+  TabContent,
+  TabPane,
+  Table,
 } from "reactstrap";
+import classnames from "classnames";
+import { fetchRole } from "../../../../store/roles/action";
 
 function ViewRole() {
-  document.title = "Role | RTS";
-  const location = useLocation();
-  const selectedRoleData = location.state
-    ? location.state.selectedRoleData
-    : null;
+  const { roleId } = useParams();
+  const dispatch = useDispatch();
+  const role = useSelector((state) => state.RoleReducer.role);
+  useEffect(() => {
+    if (roleId) {
+      dispatch(fetchRole(roleId));
+    }
+  }, []);
 
-    return (
+  // Tabs
+  const [activeTab, setActiveTab] = useState("1");
+  const toggle = (tab) => {
+    if (activeTab != tab) {
+      setActiveTab(tab);
+    }
+  };
+
+  return (
     <React.Fragment>
       <div className="page-content">
-        <Container>
+        <Container fluid>
           <Row>
             <Col>
               <Breadcrumb>
                 <BreadcrumbItem>
-                  <Link to="/settings/access/">Role</Link>
+                  <Link to="/settings/access">Settings</Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem active>View Role</BreadcrumbItem>
               </Breadcrumb>
@@ -37,14 +60,145 @@ function ViewRole() {
               <Card>
                 <CardHeader>
                   <div className="d-flex flex-column gap-1">
-                    <span className="h5 fw-bold">Role</span>
-                    <span className="text-muted">
-                      View the role details, permissions and user groups
-                      assigned to this role.
+                    <span className="h5 fw-bold">View Role</span>
+                    <span>
+                      View role details, groups and permissions associated to
+                      this role.
                     </span>
                   </div>
                 </CardHeader>
-                <CardBody></CardBody>
+                <CardBody>
+                  <Row className="mb-3">
+                    <Col>
+                      <span className="fw-bold">General Information</span>
+                    </Col>
+                  </Row>
+                  <Row className="mb-3">
+                    <Col>
+                      <div className="d-flex flex-column gap-1">
+                        <span className="fw-semibold">Role Name</span>
+                        <span>{role?.roleName}</span>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row className="mb-3">
+                    <Col>
+                      <div className="d-flex flex-column gap-1">
+                        <span className="fw-semibold">Role Description</span>
+                        <span>{role?.roleDescription}</span>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row className="mb-3">
+                    <Col>
+                      <span className="fw-bold">Permissions and Groups</span>
+                    </Col>
+                  </Row>
+                  <Row className="mb-3">
+                    <Col>
+                      <Nav tabs>
+                        <NavItem>
+                          <NavLink
+                            style={{ cursor: "pointer" }}
+                            className={classnames({ active: activeTab == "1" })}
+                            onClick={() => toggle("1")}
+                          >
+                            Permissions
+                          </NavLink>
+                        </NavItem>
+                        <NavItem>
+                          <NavLink
+                            style={{ cursor: "pointer" }}
+                            className={classnames({ active: activeTab == "2" })}
+                            onClick={() => toggle("2")}
+                          >
+                            Groups
+                          </NavLink>
+                        </NavItem>
+                      </Nav>
+                      <TabContent activeTab={activeTab}>
+                        <TabPane tabId="1" id="viewRolePermissions">
+                          <Row>
+                            <Col>
+                              <Table className="table table-hover table-bordered table-striped align-middle border-secondary">
+                                <thead>
+                                  <tr>
+                                    <th>Modules</th>
+                                    <th>Read</th>
+                                    <th>Write</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {role && role.modules && role.modules.map((module, idx) => (
+                                    <tr key={idx}>
+                                      <td>{module.moduleName}</td>
+                                      <td>
+                                        {module.permissions.includes("Read") ? (
+                                          <Input
+                                            type="checkbox"
+                                            checked
+                                            disabled
+                                          />
+                                        ) : (
+                                          <Input type="checkbox" disabled />
+                                        )}
+                                      </td>
+                                      <td>
+                                        {module.permissions.includes(
+                                          "Write"
+                                        ) ? (
+                                          <Input
+                                            type="checkbox"
+                                            checked
+                                            disabled
+                                          />
+                                        ) : (
+                                          <Input type="checkbox" disabled />
+                                        )}
+                                      </td>
+                                      <td>
+                                        {module.permissions.includes("Edit") ? (
+                                          <Input
+                                            type="checkbox"
+                                            checked
+                                            disabled
+                                          />
+                                        ) : (
+                                          <Input type="checkbox" disabled />
+                                        )}
+                                      </td>
+                                      <td>
+                                        {module.permissions.includes(
+                                          "Delete"
+                                        ) ? (
+                                          <Input
+                                            type="checkbox"
+                                            checked
+                                            disabled
+                                          />
+                                        ) : (
+                                          <Input type="checkbox" disabled />
+                                        )}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </Table>
+                            </Col>
+                          </Row>
+                        </TabPane>
+                        <TabPane tabId="2" id="viewRoleGroups"></TabPane>
+                      </TabContent>
+                    </Col>
+                  </Row>
+                </CardBody>
+                <CardFooter>
+                  <Link to="/settings/access">
+                    <Button className="btn btn-custom-primary">Back</Button>
+                  </Link>
+                </CardFooter>
               </Card>
             </Col>
           </Row>

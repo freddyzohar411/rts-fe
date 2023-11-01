@@ -2,14 +2,16 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Row, Col, Nav, NavItem, NavLink, List } from "reactstrap";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function MainSettings() {
   document.title = "Settings | RTS";
+  
   return (
     <React.Fragment>
       <div className="page-content">
         <Row className="align-items-start justify-content-center mt-2">
-          <Col md={3}>
+          <Col md={4}>
             <Card className=" d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
@@ -51,7 +53,7 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={3}>
+          <Col md={4}>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
@@ -83,7 +85,7 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={3}>
+          <Col md={3} hidden>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
@@ -99,7 +101,7 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={3}>
+          <Col md={3} hidden>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i

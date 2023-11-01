@@ -221,9 +221,9 @@ $value in $theme-colors {
 }
 
 .rdl-move {
-  background: var(--#{$prefix}light) !important;
-  border: 1px solid var(--#{$prefix}light) !important;
-  color: var(--#{$prefix}body-color) !important;
+  background: var(--#{$prefix}header) !important;
+  border: 1px solid var(--#{$prefix}header) !important;
+  color: var(--#{$prefix}--#{$prefix}body-color) !important;
 }
 
 .react-dual-listbox {

@@ -30,7 +30,7 @@ import {
 
 const INIT_STATE = {
   layoutType: layoutTypes.VERTICAL,
-  leftSidebarType: leftSidebarTypes.LIGHT,
+  leftSidebarType: leftSidebarTypes.DARK,
   layoutModeType: layoutModeTypes.LIGHTMODE,
   layoutWidthType: layoutWidthTypes.FLUID,
   layoutPositionType: layoutPositionTypes.FIXED,
