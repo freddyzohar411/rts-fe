@@ -115,7 +115,7 @@ function AccountListing() {
                 <i className="mdi mdi-pencil"></i>
               </Button>
             </Link>
-            {/* {checkAllPermission([Permission.ACCOUNT_DELETE]) && ( */}
+            {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
               <Button
                 type="button"
                 className="btn btn-danger d-flex align-items-center column-gap-2"
@@ -128,7 +128,7 @@ function AccountListing() {
                   <i className="mdi mdi-delete"></i>
                 </span>
               </Button>
-            {/* )}  */}
+             )}  
           </div>
         ),
       },
