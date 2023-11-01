@@ -61,7 +61,8 @@ const EditAccount = () => {
     return hashHex;
   }
 
-  computeHash(editData).then((res) => console.log("HASH 1",res))
+  // console.log("HASH 1 Data",formSubmissionData)
+  // computeHash(JSON.stringify(formSubmissionData)).then((res) => console.log("HASH 1",res))
   
 
   /**
@@ -229,6 +230,17 @@ const EditAccount = () => {
     formStateHook,
     rerenderTable
   ) => {
+    // console.log("HASH 2 Data",newValues)
+    // await computeHash(JSON.stringify(newValues)).then((res) => console.log("HASH 2",res))
+    // return
+    if (!isFormEdited(formSubmissionData, newValues)){
+      if (step === 5) {
+        navigate("/accounts");
+      }
+      handleNext();
+      return
+    }
+    return
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
     console.log("values", values);
@@ -260,6 +272,10 @@ const EditAccount = () => {
       if (formSubmissionData != null) {
         let formValues = { ...newValues };
         const accountData = { ...formValues };
+
+
+
+        return
         const fileData = formValues?.uploadAgreement;
         if (typeof fileData === "string") {
           // Remove upload agreement from object
@@ -269,6 +285,7 @@ const EditAccount = () => {
           const fileName = fileData?.name;
           formValues = { ...formValues, uploadAgreement: fileName };
         }
+
 
         const accountDataOut = {
           ...accountData,
@@ -527,6 +544,18 @@ const EditAccount = () => {
       );
     }
   };
+
+  /**
+   * Check if form edited
+   */
+  const isFormEdited = (oldFormValues, newFormValues) => {
+    const oldFormValuesString = JSON.stringify(oldFormValues);
+    const newFormValuesString = JSON.stringify(newFormValues);
+    if (oldFormValuesString === newFormValuesString) {
+      return false;
+    }
+    return true;
+  }
 
   /**
    * Handle back button

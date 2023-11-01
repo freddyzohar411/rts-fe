@@ -131,16 +131,16 @@ function* workFetchAccounts(action) {
 
 // Delete Account
 function* workDeleteAccount(action) {
-  // try {
-  //   const response = yield call(deleteAccount, action.payload);
-  //   yield put(deleteAccountSuccess(action.payload));
-  // } catch (error) {
-  //   yield put(deleteAccountFailure(error));
-  //   console.log(error)
-  //   window.alert(error);
-  // }
-  const response = yield call(deleteAccount, action.payload);
-  yield put(deleteAccountSuccess(action.payload));
+  try {
+    const response = yield call(deleteAccount, action.payload);
+    yield put(deleteAccountSuccess(action.payload));
+  } catch (error) {
+    yield put(deleteAccountFailure(error));
+    console.log(error)
+    window.alert(error);
+  }
+  // const response = yield call(deleteAccount, action.payload);
+  // yield put(deleteAccountSuccess(action.payload));
 
 }
 
