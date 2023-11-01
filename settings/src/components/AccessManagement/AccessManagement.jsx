@@ -17,11 +17,17 @@ import RolesTab from "./Roles/RolesTab";
 import UsersTab from "./User/UsersTab";
 import GroupsTab from "./Group/GroupsTab";
 import { Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
 
 function AccessManagement() {
   document.title = "Access Management Settings | RTS";
+  const toastMsg = useSelector((state) => state.toast);
+  const dispatch = useDispatch();
+  const handleCloseToast = () => {
+    dispatch(clearToast());
+  };
+
+  // Tabs
   const [activeTab, setActiveTab] = useState("1");
   const toggle = (tab) => {
     if (activeTab !== tab) {
@@ -29,6 +35,7 @@ function AccessManagement() {
     }
   };
 
+  // User Group Tab
   const [ugTab, setUgTab] = useState("1");
   const toggleUg = (tab) => {
     if (ugTab !== tab) {
@@ -47,6 +54,7 @@ function AccessManagement() {
               </div>
             </Col>
           </Row>
+          
           <Row>
             <Col lg={12}>
               <Card>

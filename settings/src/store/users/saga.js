@@ -26,6 +26,7 @@ import {
   deleteUser,
   updateUser,
 } from "../../helpers/backend_helper";
+import { toast } from "react-toastify";
 
 function* workFetchUser(action) {
   try {
@@ -51,8 +52,10 @@ function* workCreateUser(action) {
     const userResponse = yield call(createUser, newUser);
     yield put(createUserSuccess(userResponse.data));
     navigate("/settings/access");
+    toast.success("User created successfully!");
   } catch (error) {
     yield put(createUserFailure(error));
+    toast.error("User creation failed!");
   }
 }
 
@@ -62,8 +65,10 @@ function* workDeleteUser(action) {
     const fetchUsers = yield call(getUsers);
     yield put(fetchUsersSuccess(fetchUsers.data));
     yield put(deleteUserSuccess(response.data));
+    toast.success("User deleted successfully!");
   } catch (error) {
     yield put(deleteUserFailure(error));
+    toast.error("User deletion failed!");
   }
 }
 
@@ -73,9 +78,10 @@ function* workUpdateUser(action) {
     const userResponse = yield call(updateUser, updatedUser);
     yield put(updateUserSuccess(userResponse.data));
     navigate("/settings/access");
+    toast.success("User updated successfully!");
   } catch (error) {
-    console.error("Error updating from SAGA:", error);
     yield put(updateUserFailure(error));
+    toast.error("User update failed!");
   }
 }
 

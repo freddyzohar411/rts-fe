@@ -12,9 +12,11 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRoles, deleteRole } from "../../../store/roles/action";
 
+
 function RolesTab() {
   const roles = useSelector((state) => state.RoleReducer.users);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchRoles());
   }, []);
@@ -72,23 +74,25 @@ function RolesTab() {
                   <td className="text-truncate" style={{ maxWidth: "650px" }}>
                     {role.roleDescription}
                   </td>
-                  <td className="d-flex flex-row justify-content-between align-items-center">
-                    <Link to={`/settings/access/role/${role.id}`}>
-                      <Button className="btn btn-custom-primary-hover">
-                        <i className="ri-eye-line"></i>
+                  <td>
+                    <div className="d-flex flex-start gap-2">
+                      <Link to={`/settings/access/role/${role.id}`}>
+                        <Button className="btn btn-custom-primary-hover">
+                          <i className="ri-eye-line"></i>
+                        </Button>
+                      </Link>
+                      <Link to={`/settings/access/role/update/${role.id}`}>
+                        <Button className="btn btn-custom-primary-hover">
+                          <i className="ri-pencil-line"></i>
+                        </Button>
+                      </Link>
+                      <Button
+                        className="btn btn-custom-primary-hover"
+                        onClick={() => confirmDelete(role.id)}
+                      >
+                        <i className="ri-delete-bin-2-line"></i>
                       </Button>
-                    </Link>
-                    <Link to={`/settings/access/role/update/${role.id}`}>
-                      <Button className="btn btn-custom-primary-hover">
-                        <i className="ri-pencil-line"></i>
-                      </Button>
-                    </Link>
-                    <Button
-                      className="btn btn-custom-primary-hover"
-                      onClick={() => confirmDelete(role.id)}
-                    >
-                      <i className="ri-delete-bin-2-line"></i>
-                    </Button>
+                    </div>
                   </td>
                 </tr>
               ))}

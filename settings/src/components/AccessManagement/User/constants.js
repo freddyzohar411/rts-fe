@@ -3,12 +3,14 @@ import * as yup from "yup";
 export const populateForm = (value) => {
   return {
     id: value.id,
+    keycloackId: value.keycloackId,
     firstName: value.firstName,
     lastName: value.lastName,
     username: value.username,
     email: value.email,
     mobile: value.mobile,
     password: value.password,
+    confirmPassword: value.confirmPassword,
     employeeId: value.employeeId,
   };
 };
@@ -22,11 +24,11 @@ export const initialValues = {
   password: "",
   confirmPassword: "",
   employeeId: "",
-  id: "",
 };
 
 export const schema = yup.object().shape({
   id: yup.number().nullable().notRequired(),
+  keycloackId: yup.string().nullable().notRequired(),
   firstName: yup.string().required("Please enter a first name."),
   lastName: yup.string().required("Please enter a last name."),
   username: yup.string().required("Please enter a username."),

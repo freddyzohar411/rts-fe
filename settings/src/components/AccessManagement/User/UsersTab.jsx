@@ -79,63 +79,77 @@ function UsersTab() {
                 </tr>
               </thead>
               <tbody>
-                {users &&
-                  users.map((user, index) => (
-                    <tr key={index}>
-                      {user.isDeleted === false && (
+                {users?.map((user, index) => (
+                  <tr key={index}>
+                    <td>
+                      <Input type="checkbox" />
+                    </td>
+                    <td>
+                      {user?.firstName} {user?.lastName}
+                    </td>
+                    <td>{user?.employeeId}</td>
+                    <td>
+                      {user.userGroup.length > 0 ? (
                         <>
-                          <td>
-                            <Input type="checkbox" />
-                          </td>
-                          <td>
-                            {user.firstName} {user.lastName}
-                          </td>
-                          <td>{user.employeeId}</td>
-                          <td>Not Assigned</td>
-                          <td>Not Assigned</td>
-                          <td>{user.createdAt}</td>
-                          <td>-</td>
-                          <td>
-                            {user.enabled ? (
-                              <Badge color="success">Active</Badge>
-                            ) : (
-                              <Badge color="danger">Inactive</Badge>
-                            )}
-                          </td>
-                          <td className="d-flex flex-start gap-2">
-                            <Link to={`/settings/access/user/${user.id}`}>
-                              <Button
-                                className="btn btn-custom-primary-hover"
-                                style={{ pointerEvents: "none" }}
-                              >
-                                <i className="ri-eye-line"></i>
-                              </Button>
-                            </Link>
-                            <Link
-                              to={`/settings/access/user/update/${user.id}`}
-                            >
-                              <Button
-                                className="btn btn-custom-primary-hover"
-                                style={{ pointerEvents: "none" }}
-                              >
-                                <i className="ri-pencil-line"></i>
-                              </Button>
-                            </Link>
-
-                            <Button
-                              className="btn btn-custom-primary-hover"
-                              style={{ cursor: "pointer" }}
-                              onClick={() => openDeleteUserModal(user.id)}
-                            >
-                              <i className="ri-delete-bin-2-line"></i>
-                            </Button>
-                          </td>
+                          {user.userGroup.map((group, groupIndex) => (
+                            <>
+                              {group.roles.map((role, roleIndex) => (
+                                <span key={roleIndex}>{role.roleName}</span>
+                              ))}
+                            </>
+                          ))}
                         </>
+                      ) : (
+                        <span>Not Assigned</span>
                       )}
-                    </tr>
-                  ))}
+                    </td>
+                    <td>
+                      {user.userGroup.length > 0 ? (
+                        user.userGroup
+                          .map((group, index) => (
+                            <span key={index}>{group.groupName}</span>
+                          ))
+                          .reduce((prev, curr) => [prev, ", ", curr])
+                      ) : (
+                        <span>Not Assigned</span>
+                      )}
+                    </td>
+
+                    <td>23/09/2023</td>
+                    <td>11/01/2023</td>
+                    <td>
+                      {user?.enabled ? (
+                        <Badge color="success">Active</Badge>
+                      ) : (
+                        <Badge color="danger">Inactive</Badge>
+                      )}
+                    </td>
+                    <td>
+                      <div className="d-flex flex-start gap-2">
+                        <Link to={`/settings/access/user/${user.id}`}>
+                          <Button className="btn btn-custom-primary">
+                            <i className="ri-eye-line"></i>
+                          </Button>
+                        </Link>
+                        <Link to={`/settings/access/user/update/${user.id}`}>
+                          <Button className="btn btn-custom-primary">
+                            {" "}
+                            <i className="ri-pencil-line"></i>
+                          </Button>
+                        </Link>
+                        <Button
+                          className="btn btn-custom-primary"
+                          onClick={() => openDeleteUserModal(user.id)}
+                        >
+                          <i className="ri-delete-bin-2-line"></i>
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
+
             <Modal isOpen={modal} toggle={() => setModal(!modal)} centered>
               <ModalHeader>Are you sure?</ModalHeader>
               <ModalBody>

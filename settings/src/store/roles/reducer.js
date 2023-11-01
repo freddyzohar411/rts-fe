@@ -48,7 +48,7 @@ const RoleReducer = (state = initialState, action) => {
         error: true,
         message: action.payload,
       };
-      
+
     // Fetch Roles
     case FETCH_ROLES:
       return {

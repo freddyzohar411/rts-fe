@@ -37,16 +37,19 @@ function UpdateUser() {
 
   // Set User Initial Values
   useEffect(() => {
-    const fetchInitialValues = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-      employeeId: user.employeeId,
-      mobile: user.mobile,
-      email: user.email,
-      id: user.id,
-    };
-    setUserInitialValues(populateForm(fetchInitialValues));
+    if (userId) {
+      const fetchInitialValues = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        employeeId: user.employeeId,
+        mobile: user.mobile,
+        email: user.email,
+        keycloackId: user.keycloackId,
+        id: user.id,
+      };
+      setUserInitialValues(populateForm(fetchInitialValues));
+    }
   }, []);
 
   // Document Title
@@ -66,9 +69,9 @@ function UpdateUser() {
       mobile: values.mobile,
       employeeId: values.employeeId,
       id: values.id,
+      keycloackId: values.keycloackId,
       password: values.password,
     };
-    console.log(updatedUser);
     dispatch(updateUser({ updatedUser, navigate: navigate }));
   };
 
@@ -249,11 +252,13 @@ function UpdateUser() {
                         <Row className="mb-3">
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3 ">
-                              <Label className="fw-semibold">Password</Label>
+                              <Label className="fw-semibold">
+                                Set New Password
+                              </Label>
                               <Field
                                 name="password"
                                 type="password"
-                                placeholder="Enter Password"
+                                placeholder="Enter New Password"
                                 className={`form-control ${
                                   touched.password && errors.password
                                     ? "is-invalid"

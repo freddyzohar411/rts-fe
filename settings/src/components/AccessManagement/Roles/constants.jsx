@@ -40,9 +40,7 @@ export const moduleSchema = yup.object().shape({
   id: yup.number().notRequired(),
   permissions: yup
     .array()
-    .of(yup.number())
-    .min(1, "At least one permission is required.")
-    .required("Permissions are needed"),
+    .of(yup.string())
 });
 
 // Define schema for main object
@@ -53,6 +51,4 @@ export const schema = yup.object().shape({
   modules: yup
     .array()
     .of(moduleSchema)
-    .min(1, "At least one module is required.")
-    .required("Module permissions are required."),
 });

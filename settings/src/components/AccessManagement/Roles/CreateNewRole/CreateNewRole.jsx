@@ -35,8 +35,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchModules } from "../../../../store/module/action";
 import { createRole } from "../../../../store/roles/action";
-import { fetchPermissions } from "../../../../store/permissions/action";
-import axios from "axios";
+
 function CreateNewRole() {
   document.title = "Create New Role | RTS";
 
@@ -71,7 +70,17 @@ function CreateNewRole() {
       roleDescription: values.roleDescription,
       modules: values.modules,
     };
-    dispatch(createRole({ newRole, navigate: navigate }));
+
+    try {
+      const response = await dispatch(
+        createRole({ newRole, navigate: navigate })
+      );
+      if (response && response.code === 200) {
+        dispatch(showSuccessToast("Role created successfully!"))
+      }
+    } catch (error) {
+      dispatch(showFailureToast("Role creation failed!"))
+    }
   };
 
   return (
@@ -124,7 +133,9 @@ function CreateNewRole() {
                             <Row>
                               <Col>
                                 <div className="mb-3">
-                                  <Label className="fw-semibold">Role Name</Label>
+                                  <Label className="fw-semibold">
+                                    Role Name
+                                  </Label>
                                   <Field
                                     name="roleName"
                                     className={`form-control ${
@@ -146,7 +157,9 @@ function CreateNewRole() {
                             <Row>
                               <Col>
                                 <div className="mb-3">
-                                  <Label className="fw-semibold">Role Description</Label>
+                                  <Label className="fw-semibold">
+                                    Role Description
+                                  </Label>
                                   <Field
                                     name="roleDescription"
                                     className={`form-control ${

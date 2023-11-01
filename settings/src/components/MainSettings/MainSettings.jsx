@@ -1,9 +1,11 @@
 import React from "react";
 import { Card, Row, Col, Nav, NavItem, NavLink, List } from "reactstrap";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function MainSettings() {
   document.title = "Settings | RTS";
+  
   return (
     <React.Fragment>
       <div className="page-content">

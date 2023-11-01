@@ -27,6 +27,8 @@ import {
   updateRole,
 } from "../../helpers/backend_helper";
 
+import { toast } from "react-toastify";
+
 // Create Role
 function* workCreateRole(action) {
   const { newRole, navigate } = action.payload;
@@ -34,8 +36,10 @@ function* workCreateRole(action) {
     const roleResponse = yield call(createRole, newRole);
     yield put(createRoleSuccess(roleResponse.data));
     navigate("/settings/access");
+    toast.success("Role creation success!");
   } catch (error) {
     yield put(createRoleFailure(error));
+    toast.error("Role creation failed!");
   }
 }
 
@@ -66,8 +70,10 @@ function* workUpdateRole(action) {
     const roleResponse = yield call(updateRole, updatedRole);
     yield put(updateRoleSuccess(roleResponse.data));
     navigate("/settings/access");
+    toast.success("Role update success!");
   } catch (error) {
     yield put(updateRoleFailure(error));
+    toast.error("Role deletion failed!");
   }
 }
 
@@ -76,10 +82,12 @@ function* workDeleteRole(action) {
   try {
     const response = yield call(deleteRole, action.payload);
     const fetchRoles = yield call(getRoles);
-    yield put(fetchRolesSuccess(fetchRoles.data));
     yield put(deleteRoleSuccess(response.data));
+    yield put(fetchRolesSuccess(fetchRoles.data));
+    toast.success("Role deletion success!");
   } catch (error) {
     yield put(deleteRoleFailure(error));
+    toast.error("Role deletion failed!");
   }
 }
 

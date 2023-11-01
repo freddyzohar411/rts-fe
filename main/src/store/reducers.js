@@ -47,6 +47,7 @@ const {
 } = SettingReducers;
 
 const rootReducer = combineReducers({
+  
   // public
   Login,
   ForgetPassword,
