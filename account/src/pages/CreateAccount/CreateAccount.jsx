@@ -29,11 +29,12 @@ import {
   DOCUMENT_BASE_URL,
   GET_DOCUMENT_BY_ENTITY_URL,
 } from "../../helpers/endpoint_helper";
+import { useUserAuth } from "@workspace/login";
 
 const AccountCreation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { getAllRoles } = useUserAuth();
   const userDetails = AuthHelper.getUserDetails();
   console.log("User Details: ", userDetails);
 
@@ -626,7 +627,7 @@ const AccountCreation = () => {
         >
           <Form
             template={formTemplate}
-            userDetails={userDetails}
+            userDetails={getAllRoles()}
             country={accountCountry || country?.name}
             editData={formSubmissionData}
             onFormikChange={handleFormikChange}

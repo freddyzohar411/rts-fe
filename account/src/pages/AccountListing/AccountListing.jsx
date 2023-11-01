@@ -16,35 +16,11 @@ import {
 import { useUserAuth } from "@workspace/login";
 
 function AccountListing() {
-  const {
-    userPermission,
-    checkAllPermission,
-    checkAnyPermission,
-    ModuleConstants,
-    PermissionConstants,
-  } = useUserAuth();
+  const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const accountsData = useSelector((state) => state.AccountReducer.accounts);
   const accountsFields = useSelector(
     (state) => state.AccountReducer.accountsFields
-  );
-
-  console.log("User Permission 1: ", userPermission);
-  console.log(
-    "User Check all permission: ",
-    checkAllPermission(ModuleConstants.ACCOUNT, [
-      PermissionConstants.WRITE,
-      PermissionConstants.DELETE,
-    ])
-  );
-  console.log(
-    "User Check any permission: ",
-    checkAnyPermission(ModuleConstants.ACCOUNT, [
-      PermissionConstants.WRITE,
-      PermissionConstants.DELETE,
-      PermissionConstants.READ,
-      PermissionConstants.EDIT,
-    ])
   );
 
   // Delete modal states
@@ -139,18 +115,20 @@ function AccountListing() {
                 <i className="mdi mdi-pencil"></i>
               </Button>
             </Link>
-            <Button
-              type="button"
-              className="btn btn-danger d-flex align-items-center column-gap-2"
-              onClick={() => {
-                setDeleteId(data.id);
-                setIsDeleteModalOpen(true);
-              }}
-            >
-              <span>
-                <i className="mdi mdi-delete"></i>
-              </span>
-            </Button>
+            {/* {checkAllPermission([Permission.ACCOUNT_DELETE]) && ( */}
+              <Button
+                type="button"
+                className="btn btn-danger d-flex align-items-center column-gap-2"
+                onClick={() => {
+                  setDeleteId(data.id);
+                  setIsDeleteModalOpen(true);
+                }}
+              >
+                <span>
+                  <i className="mdi mdi-delete"></i>
+                </span>
+              </Button>
+            {/* )} */}
           </div>
         ),
       },

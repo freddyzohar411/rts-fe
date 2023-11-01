@@ -19,7 +19,6 @@ import DepartmentSelectElement from "./DepartmentSelectElement";
 import EditorElement from "./EditorElement";
 import AccountParentElement from "./AccountParentElement";
 import SearchSelect from "./SearchSelect";
-import * as AuthHelper from "../../../helpers/auth_helper";
 import {
   moduleConstant,
   permissionConstant,
@@ -250,9 +249,16 @@ const checkAccessible = (field, userDetails) => {
   // Check if field is accessible based on user role
   if (!field?.userGroup) return true;
   if (field?.userGroup.length === 0) return true;
-  console.log("field.userGroup!!!", field.userGroup);
-  console.log("Role Check :", AuthHelper.checkRole(field.userGroup));
-  return AuthHelper.checkRole(field.userGroup);
+  // As userGroup is an array, check if any of the userGroup is in userDetails
+  // const userDetailsLowerCase = userDetails?.map((user) => user.toLowerCase()); 
+  // for (const userGroup of field.userGroup) {
+  //   if (userDetailsLowerCase?.includes(userGroup.toLowerCase())) {
+  //     return true;
+  //   }
+  // }
+  // return false;
+
+  return true;
 };
 
 const checkCopyFieldConditions = (field, formik) => {

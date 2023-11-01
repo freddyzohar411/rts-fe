@@ -1,10 +1,10 @@
 import {
+  FETCH_PROFILE,
   PROFILE_ERROR,
   PROFILE_SUCCESS,
   EDIT_PROFILE,
   RESET_PROFILE_FLAG,
-  PROFILE_PERMISSION_SUCCESS,
-  PROFILE_PERMISSION_ERROR,
+  DELETE_PROFILE
 } from "./actionTypes";
 
 export const editProfile = (user) => {
@@ -14,10 +14,16 @@ export const editProfile = (user) => {
   };
 };
 
-export const profileSuccess = (msg) => {
+export const fetchProfile = () => {
+  return {
+    type: FETCH_PROFILE,
+  };
+};
+
+export const profileSuccess = (userProfile) => {
   return {
     type: PROFILE_SUCCESS,
-    payload: msg,
+    payload: userProfile,
   };
 };
 
@@ -28,23 +34,15 @@ export const profileError = (error) => {
   };
 };
 
+export const deleteProfile = () => {
+  return {
+    type: DELETE_PROFILE,
+  };
+};
+
 export const resetProfileFlag = (error) => {
   return {
     type: RESET_PROFILE_FLAG,
   };
 };
 
-// User profile permission actions
-export const profilePermissionSuccess = (profilePermission) => {
-  return {
-    type: PROFILE_PERMISSION_SUCCESS,
-    payload: profilePermission,
-  };
-};
-
-export const profilePermissionError = (error) => {
-  return {
-    type: PROFILE_PERMISSION_ERROR,
-    payload: error,
-  };
-}

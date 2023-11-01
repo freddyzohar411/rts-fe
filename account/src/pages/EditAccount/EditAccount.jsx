@@ -52,6 +52,18 @@ const EditAccount = () => {
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  async function computeHash(input) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(input);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  }
+
+  computeHash(editData).then((res) => console.log("HASH 1",res))
+  
+
   /**
    * Get account id from url
    */

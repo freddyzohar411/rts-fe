@@ -7,6 +7,7 @@ import DualListBox from "react-dual-listbox";
 import { GeneralModal } from "@Workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "../../pages/AccountListing/accountListingConstants";
 import "./DynamicTableWrapper.scss";
+import { useUserAuth } from "@workspace/login";
 
 const DynamicTableWrapper = ({
   data,
@@ -19,6 +20,7 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   confirmDelete,
 }) => {
+  const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);
   const [selectedOptGroup, setSelectedOptGroup] = useState(
     ACCOUNT_INITIAL_OPTIONS
@@ -151,79 +153,6 @@ const DynamicTableWrapper = ({
           </div>
         </GeneralModal>
         <Container fluid>
-          {/* {optGroup && optGroup.length > 0 && customViewShow && (
-            <div>
-              <Row>
-                <Col lg={6}>
-                  <div className="mt-4 mt-lg-0">
-                    <h5 className="fs-14 mb-1">Headers</h5>
-                    <p className="text-muted">
-                      Example of Dual Listbox Headers{" "}
-                    </p>
-                    <DualListBox
-                      canFilter
-                      filterCallback={(optGroup, filterInput) => {
-                        if (filterInput === "") {
-                          return true;
-                        }
-                        return new RegExp(filterInput, "i").test(
-                          optGroup.label
-                        );
-                      }}
-                      filterPlaceholder="Search..."
-                      options={optGroup}
-                      selected={selectedOptGroup.map((option) => option?.value)}
-                      onChange={handleChange}
-                      icons={{
-                        moveLeft: (
-                          <span className="mdi mdi-chevron-left" key="key" />
-                        ),
-                        moveAllLeft: [
-                          <span
-                            className="mdi mdi-chevron-double-left"
-                            key="key"
-                          />,
-                        ],
-                        moveRight: (
-                          <span className="mdi mdi-chevron-right" key="key" />
-                        ),
-                        moveAllRight: [
-                          <span
-                            className="mdi mdi-chevron-double-right"
-                            key="key"
-                          />,
-                        ],
-                        moveDown: (
-                          <span className="mdi mdi-chevron-down" key="key" />
-                        ),
-                        moveUp: (
-                          <span className="mdi mdi-chevron-up" key="key" />
-                        ),
-                        moveTop: (
-                          <span
-                            className="mdi mdi-chevron-double-up"
-                            key="key"
-                          />
-                        ),
-                        moveBottom: (
-                          <span
-                            className="mdi mdi-chevron-double-down"
-                            key="key"
-                          />
-                        ),
-                      }}
-                    />
-                  </div>
-                </Col>
-              </Row>
-              <button
-                className="btn btn-primary mt-3"
-                onClick={() => setCustomConfigData(selectedOptGroup)}
-              >
-                Set
-              </button>
-            </div>
-          )} */}
           <Row>
             <Col lg={12}>
               <Card className="m-3">
@@ -271,16 +200,16 @@ const DynamicTableWrapper = ({
                             </span>
                             Custom View
                           </Button>
-
-                          <Button type="button" className="btn btn-primary">
-                            <Link
-                              to="/accounts/create"
-                              style={{ color: "black" }}
-                            >
-                              Create New Account
-                            </Link>
-                          </Button>
-
+                          {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
+                            <Button type="button" className="btn btn-primary">
+                              <Link
+                                to="/accounts/create"
+                                style={{ color: "black" }}
+                              >
+                                Create New Account
+                              </Link>
+                            </Button>
+                          )}
                           <Button type="button" className="btn btn-primary">
                             <i className="ri-filter-line"></i>
                           </Button>

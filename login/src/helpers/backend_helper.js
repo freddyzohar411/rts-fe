@@ -5,6 +5,7 @@ import {
   GET_LOGOUT,
   POST_PASSWORD_FORGET,
   GET_VALIDATE,
+  GET_USER_PROFILE
 } from "./url_helper";
 
 const { APIClient } = Axios;
@@ -34,3 +35,6 @@ export const postForgetPwd = (data) => api.create(POST_PASSWORD_FORGET, data);
 
 // is user is logged in
 export const getValidate = (data) => api.get(GET_VALIDATE, data);
+
+// Get User profile and details
+export const getUserProfile = () => api.get(GET_USER_PROFILE);

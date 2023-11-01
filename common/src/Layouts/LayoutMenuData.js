@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import  * as AuthHelper from "../helpers/auth_helper";
+import * as AuthHelper from "../helpers/auth_helper";
+import { useUserAuth } from "@workspace/login";
 
 const Navdata = () => {
+  const { checkAllPermission, Permission, checkAllRole } = useUserAuth();
   const history = useNavigate();
   //state data
   const [isDashboard, setIsDashboard] = useState(false);
@@ -104,18 +106,18 @@ const Navdata = () => {
           link: "/accounts",
           parentId: "account",
         },
-        // AuthHelper.checkPermission("account", ["write"]) && {
-        //   id: "newAccount",
-        //   label: "Create New Account",
-        //   link: "/accounts/create",
-        //   parentId: "account",
-        // },
-        {
+        checkAllPermission([Permission.ACCOUNT_WRITE]) && {
           id: "newAccount",
           label: "Create New Account",
           link: "/accounts/create",
           parentId: "account",
         },
+        // {
+        //   id: "newAccount",
+        //   label: "Create New Account",
+        //   link: "/accounts/create",
+        //   parentId: "account",
+        // },
       ].filter(Boolean),
     },
 
@@ -240,8 +242,7 @@ const Navdata = () => {
         },
       ],
     },
-
-    // Settings
+    checkAllRole(["Super Admin"]) && // Settings
     {
       id: "settings",
       label: "Settings",
@@ -267,7 +268,7 @@ const Navdata = () => {
           link: "/settings/control",
           parentId: "settings",
         },
-       {
+        {
           id: "customisation",
           label: "Customisation",
           link: "/settings/customisation",

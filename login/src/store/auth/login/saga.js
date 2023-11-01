@@ -3,7 +3,8 @@ import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 // Login Redux States
 import { LOGIN_USER, LOGOUT_USER, SOCIAL_LOGIN } from "./actionTypes";
 import { apiError, loginSuccess, logoutUserSuccess } from "./actions";
-import { getLogout, postLogin } from "../../../helpers/backend_helper";
+import { deleteProfile } from "../profile/actions";
+import { getLogout, postLogin, getUserProfile } from "../../../helpers/backend_helper";
 
 function* loginUser({ payload: { user, history } }) {
   try {
@@ -14,22 +15,6 @@ function* loginUser({ payload: { user, history } }) {
     if (response) {
       yield put(loginSuccess(response));
       sessionStorage.setItem("authUser", JSON.stringify(response));
-
-      // Implementation of permissions 
-      // Response should also return the users permissions
-      const permissions = {
-        account: ['write','delete', 'edit'],
-        job: ['read', 'write', 'delete', 'edit'],
-        candidate: ['read', 'write', 'delete', 'edit'],
-      };
-      sessionStorage.setItem("permissions", JSON.stringify(permissions));
-
-      // // Implementation of roles
-      // // Response should also return the users roles
-      const roles = ['user','superadmin'];
-      sessionStorage.setItem("roles", JSON.stringify(roles));
-
-
       history("/dashboard");
     } else {
       yield put(apiError(response));
@@ -47,9 +32,7 @@ function* logoutUser({ payload: { history } }) {
     });
     if (response) {
       sessionStorage.removeItem("authUser");
-      // Extra user Info for access management
-      sessionStorage.removeItem("permissions");
-      sessionStorage.removeItem("roles");
+      yield put(deleteProfile())
       yield put(logoutUserSuccess(LOGOUT_USER, true));
     }
   } catch (error) {
