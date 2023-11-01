@@ -9,7 +9,8 @@ import {
 import { fetchCountryCurrency } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 
-const CurrencyElement = ({ field, formik }) => {
+const CurrencyElement = ({ field, formik, formStateHook }) => {
+  const { formState } = formStateHook;
   const dispatch = useDispatch();
   const countryData = useSelector(
     (state) => state.CountryCurrencyReducer.countryCurrency
@@ -33,20 +34,20 @@ const CurrencyElement = ({ field, formik }) => {
   const [currencyDropdown, setCurrencyDropdown] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState({
     currency: "Currency",
-    currencyId: formik.values[field.subName],
+    currencyId: formik?.values?.[field.subName],
   });
 
   useEffect(() => {
-    if (formik.values[field.subName] && countryData) {
+    if (formik?.values?.[field.subName] && countryData) {
       const country = countryData.find(
-        (country) => country.id === formik.values[field.subName]
+        (country) => country.id === formik?.values?.[field.subName]
       );
       setSelectedCurrency({
         currency: `${country?.currency} ${country?.currencySymbol}`,
-        currencyId: formik.values[field.subName],
+        currencyId: formik?.values?.[field.subName],
       });
     }
-  }, [formik.values[field.subName]]);
+  }, [formik?.values?.[field.subName]]);
 
   useEffect(() => {
     if (selectedCurrency.currencyId) {
@@ -73,7 +74,11 @@ const CurrencyElement = ({ field, formik }) => {
       isOpen={currencyDropdown}
       toggle={toggleCurrencyDropdown}
     >
-      <DropdownToggle as="button" className="btn btn-primary arrow-none">
+      <DropdownToggle
+        as="button"
+        className="btn btn-primary arrow-none"
+        disabled={formState === "view" ? true : false}
+      >
         <span>{selectedCurrency.currency}</span>
       </DropdownToggle>
 
@@ -84,7 +89,8 @@ const CurrencyElement = ({ field, formik }) => {
         name={field.name}
         placeholder={field.placeholder}
         onChange={formik.handleChange}
-        value={formik.values[field.name]}
+        value={formik?.values?.[field.name]}
+        disabled={formState === "view" ? true : false}
       />
 
       <DropdownMenu

@@ -106,7 +106,20 @@ function AccountListing() {
             <Link
               to={`/accounts/${data.id}/edit`}
               style={{ color: "black" }}
-              // state={{ stepNo: 3 }}
+              // state={{ form: 3 }}
+              state={{ view: true }}
+            >
+              <Button
+                type="button"
+                className="btn btn-primary d-flex align-items-center column-gap-2"
+              >
+                <i className="ri-eye-line"></i>
+              </Button>
+            </Link>
+            <Link
+              to={`/accounts/${data.id}/edit`}
+              style={{ color: "black" }}
+              // state={{ form: 3 }}
             >
               <Button
                 type="button"
@@ -128,7 +141,7 @@ function AccountListing() {
                   <i className="mdi mdi-delete"></i>
                 </span>
               </Button>
-             )}  
+            )}
           </div>
         ),
       },

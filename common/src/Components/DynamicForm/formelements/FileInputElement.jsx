@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 
-const FileInputElement = ({ formik, field }) => {
+const FileInputElement = ({ formik, field, formStateHook }) => {
+  const { formState } = formStateHook;
   const fileInputRef = useRef();
   const truncateString = (str, num) => {
     if (str?.length <= num) {
@@ -37,6 +38,7 @@ const FileInputElement = ({ formik, field }) => {
           onClick={() => {
             fileInputRef.current.click();
           }}
+          disabled={formState === "view" ? true : false}
         >
           ChooseFile
         </button>
@@ -52,22 +54,23 @@ const FileInputElement = ({ formik, field }) => {
             overflow: "hidden",
           }}
         >
-          {formik.values[field.name]?.name
-            ? truncateString(formik.values[field.name]?.name, 15)
-            : formik.values[field.name] &&
-              truncateString(formik.values[field.name], 15)}
-          {(!formik.values[field.name] &&
-            !formik.values[field.name]?.name) &&
+          {formik?.values?.[field.name]?.name
+            ? truncateString(formik?.values?.[field.name]?.name, 15)
+            : formik?.values?.[field.name] &&
+              truncateString(formik?.values?.[field.name], 15)}
+          {!formik?.values?.[field.name] &&
+            !formik?.values?.[field.name]?.name &&
             "No file chosen"}
-          {(formik.values[field.name]?.name ||  formik.values[field.name]) && (
-            <span
-              className="cursor-pointer"
-              style={{ position: "absolute", right: "10px" }}
-              onClick={() => formik.setFieldValue(field.name, null)}
-            >
-              x
-            </span>
-          )}
+          {(formik?.values?.[field.name]?.name || formik?.values?.[field.name]) &&
+            formState !== "view" && (
+              <span
+                className="cursor-pointer"
+                style={{ position: "absolute", right: "10px" }}
+                onClick={() => formik.setFieldValue(field.name, null)}
+              >
+                x
+              </span>
+            )}
         </div>
       </div>
     </>

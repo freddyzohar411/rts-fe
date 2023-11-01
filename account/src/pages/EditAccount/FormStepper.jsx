@@ -16,9 +16,13 @@ const FormStepper = ({
   setErrorMessage,
   accountId,
   resetStepper,
+  toggleFormViewState,
+  viewState,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  console.log("Form Stepper View", viewState)
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -85,21 +89,20 @@ const FormStepper = ({
       <Container fluid>
         <AccountStepper step={activeStep} />
         <div className="px-3"> {children}</div>
-        {/* <div
+        <div
           className={`d-flex ${
             accountId ? "justify-content-between" : "justify-content-end"
           } align-items-center mb-2`}
         >
           {accountId && (
             <Button
-              // onClick={resetAndDeleteDraftForm}
-              onClick={() => setIsDeleteModalOpen(true)}
+              onClick={toggleFormViewState}
               className="btn btn-danger"
             >
-              Delete
+             {viewState ? "Edit" : "View"}
             </Button>
-          )} */}
-        <div className={`d-flex justify-content-end align-items-center mb-2`}>
+          )}
+        {/* <div className={`d-flex justify-content-end align-items-center mb-2`}> */}
           <div className="d-flex gap-2">
             {activeStep > 0 && (
               <Button color="dark" onClick={handleBack}>

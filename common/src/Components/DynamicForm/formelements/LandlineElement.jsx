@@ -9,7 +9,8 @@ import {
 import { fetchCountryCurrency } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 
-const LandlineElement = ({ field, formik }) => {
+const LandlineElement = ({ field, formik, formStateHook }) => {
+  const { formState } = formStateHook;
   const dispatch = useDispatch();
   const countryData = useSelector(
     (state) => state.CountryCurrencyReducer.countryCurrency
@@ -89,7 +90,11 @@ const LandlineElement = ({ field, formik }) => {
       isOpen={landlineDropdown}
       toggle={toggleLandlineDropdown}
     >
-      <DropdownToggle as="button" className="btn btn-primary arrow-none">
+      <DropdownToggle
+        as="button"
+        className="btn btn-primary arrow-none"
+        disabled={formState === "view" ? true : false}
+      >
         <span>{selectedLandline.landlineCountry}</span>
       </DropdownToggle>
       <Input
@@ -99,7 +104,8 @@ const LandlineElement = ({ field, formik }) => {
         className="form-control"
         placeholder={field.placeholder}
         onChange={formik.handleChange}
-        value={formik.values[field.name]}
+        value={formik?.values?.[field.name]}
+        disabled={formState === "view" ? true : false}
       />
       <DropdownMenu
         as="ul"

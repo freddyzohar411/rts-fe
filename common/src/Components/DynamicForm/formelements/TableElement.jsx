@@ -17,7 +17,9 @@ const TableElement = ({
   deleteTableData,
   setFormState,
   formFieldsHook,
+  formStateHook,
 }) => {
+  const { formState } = formStateHook;
   const { formFields, setFormFields } = formFieldsHook;
   const [tableConfig, setTableConfig] = useState(
     field?.tableConfig ? field.tableConfig : []
@@ -65,7 +67,6 @@ const TableElement = ({
     });
     setFormFields(newFormFields);
   };
-
 
   // Get data on load
   useEffect(() => {
@@ -162,9 +163,13 @@ const TableElement = ({
                 <th key={index}>{item.label}</th>
               ))}
             {tableSetting.tableEdit === "true" ||
-              (tableSetting.tableEdit === true && <th>Edit</th>)}
+              (tableSetting.tableEdit === true && formState !== "view" && (
+                <th>Edit</th>
+              ))}
             {tableSetting.tableDelete === "true" ||
-              (tableSetting.tableDelete === true && <th>Delete</th>)}
+              (tableSetting.tableDelete === true && formState !== "view" && (
+                <th>Delete</th>
+              ))}
           </tr>
         </thead>
         {/* {table && table.length > 0 && ( */}
@@ -183,29 +188,31 @@ const TableElement = ({
                     <td key={index}>{row.data[item.name]}</td>
                   ))}
                   {tableSetting.tableEdit === "true" ||
-                    (tableSetting.tableEdit === true && (
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={() => handleEdit(row)}
-                        >
-                          Edit
-                        </button>
-                      </td>
-                    ))}
+                    (tableSetting.tableEdit === true &&
+                      formState !== "view" && (
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() => handleEdit(row)}
+                          >
+                            Edit
+                          </button>
+                        </td>
+                      ))}
                   {tableSetting.tableDelete === "true" ||
-                    (tableSetting.tableDelete === true && (
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-danger"
-                          onClick={() => handleDelete(row.id)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    ))}
+                    (tableSetting.tableDelete === true &&
+                      formState !== "view" && (
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => handleDelete(row.id)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      ))}
                 </tr>
               );
             })

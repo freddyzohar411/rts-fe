@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-const StateSelectElement = ({ formik, field }) => {
+const StateSelectElement = ({ formik, field, formStateHook }) => {
+  const { formState } = formStateHook;
   const [fetchedData, setFetchData] = useState([]);
   useEffect(() => {
     if (formik.values[field.parent]) {
@@ -25,6 +26,7 @@ const StateSelectElement = ({ formik, field }) => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="form-select"
+          disabled={formState === "view" ? true : false}
         >
           <option value="">{field.placeholder}</option>
           {fetchedData.map((item, index) => (

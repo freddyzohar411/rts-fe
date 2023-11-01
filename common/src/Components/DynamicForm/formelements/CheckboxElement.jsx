@@ -1,6 +1,7 @@
 import React from "react";
 
-const CheckboxElement = ({ formik, field }) => {
+const CheckboxElement = ({ formik, field, formStateHook }) => {
+  const { formState } = formStateHook;
   return (
     <>
       {field?.options.map((option) => (
@@ -11,7 +12,8 @@ const CheckboxElement = ({ formik, field }) => {
             name={field.name}
             id={option.value}
             value={option.value}
-            checked={formik.values[field.name]?.includes(option.value)}
+            checked={formik?.values?.[field.name]?.includes(option.value)}
+            disabled={formState === "view" ? true : false}
             onChange={() => {
               // Write method in here
               const isChecked = formik.values[field.name]?.includes(

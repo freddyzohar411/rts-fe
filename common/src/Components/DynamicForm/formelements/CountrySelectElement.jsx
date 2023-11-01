@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCountryCurrency } from "../../../store/actions";
 
-const CountrySelectElement = ({ formik, field }) => {
+const CountrySelectElement = ({ formik, field, formStateHook }) => {
+  const { formState } = formStateHook;
   const countryData = useSelector(
     (state) => state.CountryCurrencyReducer.countryCurrency
   );
@@ -27,7 +28,8 @@ const CountrySelectElement = ({ formik, field }) => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="form-select"
-          value={formik.values[field.name]}
+          value={formik?.values?.[field.name]}
+          disabled={formState === "view" ? true : false}
         >
           <option value="">{field.placeholder}</option>
           {fetchData.map((item, index) => (

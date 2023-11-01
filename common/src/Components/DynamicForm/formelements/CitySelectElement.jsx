@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCity } from "../../../store/actions";
 
-const CitySelectElement = ({ formik, field }) => {
+const CitySelectElement = ({ formik, field, formStateHook }) => {
+  const { formState } = formStateHook;
   const dispatch = useDispatch();
   const cityData = useSelector((state) => state.CityReducer.city);
   const countryData = useSelector(
@@ -17,11 +18,11 @@ const CitySelectElement = ({ formik, field }) => {
   };
 
   useEffect(() => {
-    if (formik.values[field.parent]) {
+    if (formik?.values?.[field.parent]) {
       // setFetchData([]);
-      dispatch(fetchCity(countryToCountryId(formik.values[field.parent])));
+      dispatch(fetchCity(countryToCountryId(formik?.values?.[field.parent])));
     }
-  }, [formik.values[field.parent]]);
+  }, [formik?.values?.[field.parent]]);
 
   useEffect(() => {
     if (cityData) {
@@ -39,7 +40,8 @@ const CitySelectElement = ({ formik, field }) => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="form-select"
-          value={formik.values[field.name]}
+          value={formik?.values?.[field.name]}
+          disabled={formState === "view" ? true : false}
         >
           <option value="">{field.placeholder}</option>
           {fetchedData.map((item, index) => (

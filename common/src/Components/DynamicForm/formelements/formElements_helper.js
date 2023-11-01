@@ -46,43 +46,43 @@ const generateFormField = (
     type === "password" ||
     type === "date"
   ) {
-    return <InputElement field={field} formik={formik} />;
+    return <InputElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "file") {
-    return <FileInputElement field={field} formik={formik} />;
+    return <FileInputElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "textarea") {
-    return <TextAreaElement field={field} formik={formik} />;
+    return <TextAreaElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "select") {
-    return <SelectElement field={field} formik={formik} />;
+    return <SelectElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "radio") {
-    return <RadioElement field={field} formik={formik} />;
+    return <RadioElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "checkbox") {
-    return <CheckboxElement field={field} formik={formik} />;
+    return <CheckboxElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "selectindustry") {
-    return <IndustrySelectElement formik={formik} field={field} />;
+    return <IndustrySelectElement formik={formik} field={field} formStateHook={formStateHook}/>;
   }
 
   if (type === "selectsubindustry") {
-    return <SubIndustrySelectElement formik={formik} field={field} />;
+    return <SubIndustrySelectElement formik={formik} field={field} formStateHook={formStateHook}/>;
   }
 
   if (type === "selectcountry") {
-    return <CountrySelectElement formik={formik} field={field} />;
+    return <CountrySelectElement formik={formik} field={field} formStateHook={formStateHook}/>;
   }
 
   if (type === "selectstate") {
-    return <StateSelectElement formik={formik} field={field} />;
+    return <StateSelectElement formik={formik} field={field} formStateHook={formStateHook}/>;
   }
 
   if (type === "table") {
@@ -93,46 +93,47 @@ const generateFormField = (
         deleteTableData={deleteTableData}
         setFormState={formStateHook.setFormState}
         formFieldsHook={formFieldsHook}
+        formStateHook={formStateHook}
       />
     );
   }
 
   if (type === "selectcurrency") {
-    return <CurrencyElement field={field} formik={formik} />;
+    return <CurrencyElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "selectlandline") {
-    return <LandlineElement field={field} formik={formik} />;
+    return <LandlineElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "selectcity") {
-    return <CitySelectElement field={field} formik={formik} />;
+    return <CitySelectElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "selectdepartment") {
-    return <DepartmentSelectElement field={field} formik={formik} />;
+    return <DepartmentSelectElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "editor") {
-    return <EditorElement field={field} formik={formik} />;
+    return <EditorElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "parentcompany") {
-    return <AccountParentElement field={field} formik={formik} />;
+    return <AccountParentElement field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   if (type === "searchselect") {
-    return <SearchSelect field={field} formik={formik} />;
+    return <SearchSelect field={field} formik={formik} formStateHook={formStateHook}/>;
   }
 
   // text & button
 
   if (type === "word") {
-    return <TextElement field={field} />;
+    return <TextElement field={field}/>;
   }
 
   if (type === "button") {
-    return <ButtonElement field={field} buttonNameHook={buttonNameHook} />;
+    return <ButtonElement field={field} buttonNameHook={buttonNameHook}/>;
   }
 
   if (type === "buttonupdate") {

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-const SubIndustrySelectElement = ({ formik, field }) => {
+const SubIndustrySelectElement = ({ formik, field, formStateHook }) => {
+  const { formState } = formStateHook;
   const [subIndustry, setSubIndustry] = useState([]);
   useEffect(() => {
-    console.log("Parent",formik.values[field.parent])
-    if (formik.values[field.parent]) {
+    if (formik?.values?.[field.parent]) {
       // Fetch data from API
       setSubIndustry([])
       fetch(
         `http://localhost:8200/industries/${parseInt(
-          formik.values[field.parent]
+          formik?.values?.[field.parent]
         )}/sub`
       ).then((res) => {
         res.json().then((data) => {
@@ -17,16 +17,17 @@ const SubIndustrySelectElement = ({ formik, field }) => {
         });
       });
     }
-  }, [formik.values[field.parent]]);
+  }, [formik?.values?.[field.parent]]);
   return (
     <div>
       {subIndustry && (
         <select
           name={field.name}
           onChange={formik.handleChange}
-          value={formik.values[field.name]}
+          value={formik?.values?.[field.name]}
           onBlur={formik.handleBlur}
           className="form-select"
+          disabled={formState === "view" ? true : false}
         >
           <option value="">{field.placeholder}</option>
           {subIndustry.map((item, index) => (

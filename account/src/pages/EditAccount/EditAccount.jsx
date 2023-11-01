@@ -52,6 +52,7 @@ const EditAccount = () => {
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [view, setView] = useState(linkState?.view || false);
 
   // console.log("HASH 1 Data",formSubmissionData)
   // computeHash(JSON.stringify(formSubmissionData)).then((res) => console.log("HASH 1",res))
@@ -251,7 +252,7 @@ const EditAccount = () => {
           formFormik.setFieldValue(fieldName, "")
         );
       }
-      setFormState("create");
+      // setFormState("create");
     };
 
     const resetFormFields = (arrayFields = []) => {
@@ -546,8 +547,8 @@ const EditAccount = () => {
     const newFormValuesString = await CryptoHelper.computeHash(
       JSON.stringify(newFormValues)
     );
-    console.log("Old Form Values Hash: ", oldFormValuesString);
-    console.log("New Form Values Hash: ", newFormValuesString);
+    // console.log("Old Form Values Hash: ", oldFormValuesString);
+    // console.log("New Form Values Hash: ", newFormValuesString);
     if (oldFormValuesString === newFormValuesString) {
       return false;
     }
@@ -580,6 +581,13 @@ const EditAccount = () => {
     setStep(number);
   };
 
+  /**
+   * Toggle view
+   */
+  const toggleFormViewState = () => {
+    setView((prevState) => !prevState);
+  }
+
   return (
     <>
       <Container className="page-content">
@@ -592,6 +600,8 @@ const EditAccount = () => {
           setErrorMessage={setErrorMessage}
           accountId={accountId}
           resetStepper={resetStepper}
+          toggleFormViewState={toggleFormViewState}
+          viewState={view}
         >
           {/* {formSubmissionData && ( */}
           <Form
@@ -603,6 +613,7 @@ const EditAccount = () => {
             onSubmit={handleFormSubmit}
             onFormFieldsChange={handleFormFieldChange}
             errorMessage={errorMessage}
+            view={view}
           />
           {/* )} */}
         </FormStepper>
