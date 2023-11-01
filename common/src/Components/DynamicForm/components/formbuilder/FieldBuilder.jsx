@@ -7,6 +7,7 @@ import {
 import { AiFillDelete } from "react-icons/ai";
 import { v4 as uuid } from "uuid";
 import CountrySelectField from "../../fieldbuilders/CountrySelectField";
+import UserGroupSelectField from "../../fieldbuilders/UserGroupSelectField";
 
 const FieldBuilder = ({
   type,
@@ -657,14 +658,42 @@ const FieldBuilder = ({
         "editor",
       ],
     },
+    // {
+    //   label: "User Group Access",
+    //   type: "checkbox",
+    //   name: "userGroup",
+    //   options: [
+    //     { label: "Admin", value: "admin" },
+    //     { label: "User", value: "user" },
+    //   ],
+    //   apply: [
+    //     "text",
+    //     "email",
+    //     "number",
+    //     "textarea",
+    //     "file",
+    //     "select",
+    //     "radio",
+    //     "checkbox",
+    //     "password",
+    //     "date",
+    //     "selectindustry",
+    //     "selectsubindustry",
+    //     "selectcountry",
+    //     "selectcity",
+    //     "selectcurrency",
+    //     "selectlandline",
+    //     "selectstate",
+    //     "selectdepartment",
+    //     "editor",
+    //     "parentcompany",
+    //     "searchselect",
+    //   ],
+    // },
     {
       label: "User Group Access",
-      type: "checkbox",
+      type: "usergroupselect",
       name: "userGroup",
-      options: [
-        { label: "Admin", value: "admin" },
-        { label: "User", value: "user" },
-      ],
       apply: [
         "text",
         "email",
@@ -963,6 +992,18 @@ const FieldBuilder = ({
         }
   );
 
+  // User group
+  const [userGroup, setUserGroup] = useState("");
+
+  // User group List
+  const [userGroupList, setUserGroupList] = useState(
+     formBuilderUpdateData?.userGroup || [],
+  );
+
+  // const [userGroupList, setUserGroupList] = useState([]);
+
+  console.log("User Group List", userGroupList);
+
   // COuntry
   const [country, setCountry] = useState("");
 
@@ -1019,6 +1060,7 @@ const FieldBuilder = ({
   // Handle Submit
   const handleFormSchemaSubmit = (values) => {
     let validationSchema = { ...values };
+    console.log("Validation Schema", validationSchema);
     if (formBuilderUpdateData) {
       validationSchema = { ...formBuilderUpdateData, ...values };
       console.log("Update Data", formBuilderUpdateData);
@@ -1041,6 +1083,7 @@ const FieldBuilder = ({
       validationSchema.countryOptions = countryList;
       validationSchema.visible = conditionList;
       validationSchema.copyFields = copyConditionList;
+      validationSchema.userGroup = userGroupList;
       updateFormField(validationSchema, formBuilderUpdateData.index);
       setFormBuilderType(null);
       setFormBuilderUpdateData(null);
@@ -1064,6 +1107,7 @@ const FieldBuilder = ({
       validationSchema.countryOptions = countryList;
       validationSchema.visible = conditionList;
       validationSchema.copyFields = copyConditionList;
+      validationSchema.userGroup = userGroupList;
       console.log("ValidationSchema", validationSchema);
       addFormField(validationSchema);
       // Set Form Schema
@@ -1816,22 +1860,6 @@ const FieldBuilder = ({
                 {field.label}
               </label>
               <div className="d-flex justify-content-between gap-5">
-                {/* <select
-                  className="form-select w-50"
-                  value={countryList.countryField}
-                  onChange={(e) =>
-                    setCountryList((prev) => ({
-                      ...prev,
-                      countryField: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Select a Country field</option>
-                  {formFields.map((field) => {
-                    return <option value={field.name}>{field.label}</option>;
-                  })}
-                </select> */}
-                {/* // Add country select here to select country and add to countryList */}
                 <div className="d-flex gap-4">
                   <CountrySelectField
                     setData={setCountry}
@@ -1887,6 +1915,72 @@ const FieldBuilder = ({
                                 ...prev,
                                 countryList: newCountryList,
                               };
+                            });
+                          }}
+                        />
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          );
+        } else if (
+          field.type === "usergroupselect" &&
+          ifContainsType(type, field.apply)
+        ) {
+          return (
+            <div className="mb-3">
+              <label htmlFor={field.name} className="form-label">
+                {field.label}
+              </label>
+              <div className="d-flex justify-content-between gap-5">
+                <div className="d-flex gap-4">
+                  <UserGroupSelectField
+                    setData={setUserGroup}
+                    field={{
+                      name: "usergroupselect",
+                      placeholder: "Select a usergroup",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-success btn-sm"
+                    disabled={!userGroup}
+                    onClick={() => {
+                      // Check usergroup is already added
+                      if (userGroupList?.includes(userGroup)) {
+                        return;
+                      }
+                      setUserGroupList((prev) => [...prev, userGroup]);
+                    }}
+                  >
+                    +add
+                  </button>
+                </div>
+              </div>
+              <div className="d-flex gap-2 mt-2 flex-wrap">
+                {userGroupList?.length > 0 &&
+                  userGroupList?.map((usergroup) => (
+                    <div
+                      className="d-flex gap-3"
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "grey",
+                        color: "white",
+                        borderRadius: "100vh",
+                      }}
+                    >
+                      <span>{usergroup}</span>
+                      <span>
+                        <AiFillDelete
+                          className="cursor-pointer"
+                          onClick={() => {
+                            console.log("usergroup", usergroup)
+                            setUserGroupList((prev) => {
+                              const newUserGroupList = prev.filter(
+                                (item) => item !== usergroup
+                              );
+                              return [...newUserGroupList];
                             });
                           }}
                         />
