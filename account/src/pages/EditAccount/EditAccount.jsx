@@ -21,6 +21,7 @@ import {
   clearAccountFormSubmission,
 } from "../../store/accountForm/action";
 import { ObjectHelper } from "@workspace/common";
+import { CryptoHelper } from "@workspace/common";
 
 import {
   CONTACT_BASE_URL,
@@ -52,18 +53,8 @@ const EditAccount = () => {
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  async function computeHash(input) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(input);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-  }
-
   // console.log("HASH 1 Data",formSubmissionData)
   // computeHash(JSON.stringify(formSubmissionData)).then((res) => console.log("HASH 1",res))
-  
 
   /**
    * Get account id from url
@@ -233,14 +224,19 @@ const EditAccount = () => {
     // console.log("HASH 2 Data",newValues)
     // await computeHash(JSON.stringify(newValues)).then((res) => console.log("HASH 2",res))
     // return
-    if (!isFormEdited(formSubmissionData, newValues)){
+
+    const sameorNot = await isFormEdited(formSubmissionData, newValues);
+    console.log("Same or not: ", sameorNot);
+
+    if (!isFormEdited(formSubmissionData, newValues)) {
+      console.log("No Change!");
       if (step === 5) {
         navigate("/accounts");
       }
       handleNext();
-      return
+      return;
     }
-    return
+
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
     console.log("values", values);
@@ -272,10 +268,6 @@ const EditAccount = () => {
       if (formSubmissionData != null) {
         let formValues = { ...newValues };
         const accountData = { ...formValues };
-
-
-
-        return
         const fileData = formValues?.uploadAgreement;
         if (typeof fileData === "string") {
           // Remove upload agreement from object
@@ -285,7 +277,6 @@ const EditAccount = () => {
           const fileName = fileData?.name;
           formValues = { ...formValues, uploadAgreement: fileName };
         }
-
 
         const accountDataOut = {
           ...accountData,
@@ -548,14 +539,20 @@ const EditAccount = () => {
   /**
    * Check if form edited
    */
-  const isFormEdited = (oldFormValues, newFormValues) => {
-    const oldFormValuesString = JSON.stringify(oldFormValues);
-    const newFormValuesString = JSON.stringify(newFormValues);
+  const isFormEdited = async (oldFormValues, newFormValues) => {
+    const oldFormValuesString = await CryptoHelper.computeHash(
+      JSON.stringify(oldFormValues)
+    );
+    const newFormValuesString = await CryptoHelper.computeHash(
+      JSON.stringify(newFormValues)
+    );
+    console.log("Old Form Values Hash: ", oldFormValuesString);
+    console.log("New Form Values Hash: ", newFormValuesString);
     if (oldFormValuesString === newFormValuesString) {
       return false;
     }
     return true;
-  }
+  };
 
   /**
    * Handle back button

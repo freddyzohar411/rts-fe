@@ -20,6 +20,8 @@ export * as DynamicTableHelper from "./helpers/dynamicTable_helper";
 
 export * as AuthHelper from "./helpers/auth_helper";
 
+export * as CryptoHelper from "./helpers/crypto_helper";
+
 // Redux Store
 export * as Actions from "./store/actions";
 
