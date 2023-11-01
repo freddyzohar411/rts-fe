@@ -50,14 +50,6 @@ const Form = ({
    * Set Form state
    */
   useEffect(() => {
-    // if (view && editData) {
-    //   setFormState("view");
-    //   if (editData) {
-    //     setEditDataValues(editData);
-    //   }
-    //   return;
-    // }
-
     if (view) {
       setFormState("view");
       setEditDataValues(editData);
@@ -68,16 +60,11 @@ const Form = ({
       setFormState("update");
       setEditDataValues(editData);
     } else {
-      console.log("eeeeeeeeeeee");
       setFormState("create");
       setEditDataValues(null);
     }
   }, [editData, view, formState]);
 
-
-  console.log("editDataValues", editDataValues);
-
-  console.log("Form State: ", formState);
 
   /**
    * Set template data

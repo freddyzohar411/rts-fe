@@ -61,11 +61,11 @@ const EditAccount = () => {
    * Get account id from url
    */
   const { accountId } = useParams();
-  console.log("Account Id: ", accountId);
-  console.log("Step: ", step);
-  console.log("Form Submission Data: ", formSubmissionData);
-  console.log("Form: ", form);
-  console.log("Form Template: ", formTemplate);
+  // console.log("Account Id: ", accountId);
+  // console.log("Step: ", step);
+  // console.log("Form Submission Data: ", formSubmissionData);
+  // console.log("Form: ", form);
+  // console.log("Form Template: ", formTemplate);
 
   // Fetch country if country do not exist
   useEffect(() => {
@@ -615,7 +615,7 @@ const EditAccount = () => {
             errorMessage={errorMessage}
             view={view}
           />
-          {/* )} */}
+           {/* )}  */}
         </FormStepper>
       </Container>
     </>
