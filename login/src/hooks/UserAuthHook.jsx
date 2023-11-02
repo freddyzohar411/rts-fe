@@ -19,11 +19,10 @@ const useUserAuth = () => {
   useEffect(() => {
     try {
       if (!userProfile) {
-        console.log("Fetching user profile");
         dispatch(fetchProfile());
       }
     } catch (error) {
-      console.error("Error while parsing user permissions:", error);
+      console.log(error);
     }
   }, []);
 
@@ -105,7 +104,6 @@ const useUserAuth = () => {
   const convertUserProfileToPermissionObj = (userProfile) => {
     const modulePermissions = {};
     if (userProfile?.userGroup) {
-      console.log("INNN");
       userProfile.userGroup.forEach((group) => {
         group.roles.forEach((role) => {
           role.modules.forEach((module) => {

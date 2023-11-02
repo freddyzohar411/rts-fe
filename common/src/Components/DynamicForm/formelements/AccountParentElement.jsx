@@ -37,7 +37,7 @@ const AccountParentElement = ({ formik, field, formStateHook }) => {
       >
         <option value="">{field.placeholder}</option>
         {parentCompanyData?.map((option) => (
-          <option value={option.name}>{option.name}</option>
+          <option key={option.id} value={option.name}>{option.name}</option>
         ))}
       </select>
     </div>

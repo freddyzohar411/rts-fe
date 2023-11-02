@@ -122,7 +122,6 @@ const AccountReducer = (state = initialState, action) => {
 
     // Put an Account
     case PUT_ACCOUNT:
-      console.log("PUT_ACCOUNT");
       return {
         ...state,
         loading: true,
@@ -146,12 +145,10 @@ const AccountReducer = (state = initialState, action) => {
       };
     case DELETE_ACCOUNT_SUCCESS:
       const newAccounts = JSON.parse(JSON.stringify(state.accounts));
-      console.log("newAccounts Before", newAccounts);
       const filteredAccounts = newAccounts.accounts.filter(
         (account) => account.id !== action.payload
       );
       newAccounts.accounts = filteredAccounts;
-      console.log("newAccounts After", filteredAccounts);
       return {
         ...state,
         accounts: newAccounts,
@@ -176,8 +173,6 @@ const AccountReducer = (state = initialState, action) => {
       };
 
     case FETCH_ACCOUNTS_FIELDS_SUCCESS:
-      console.log("FETCH_ACCOUNTS_FIELDS_SUCCESS")
-      console.log("FECTH FIELD PAYLOAD", action.payload)
       return {
         ...state,
         loading: false,

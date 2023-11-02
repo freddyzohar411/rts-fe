@@ -248,8 +248,8 @@ const checkVisibleOnGlobalCountry = (field, country) => {
 const checkAccessible = (field, userDetails) => {
   // if (!userDetails) return true;s
   // Check if field is accessible based on user role
-  console.log("Form Element userDetails", userDetails)
-  console.log("Form Element field usergroup", field.userGroup)
+  // console.log("Form Element userDetails", userDetails)
+  // console.log("Form Element field usergroup", field.userGroup)
   if (!field?.userGroup) return true;
   if (field?.userGroup.length === 0) return true;
 

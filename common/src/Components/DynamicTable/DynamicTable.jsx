@@ -17,8 +17,9 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
         if (option.sort === true) {
           return (
             <th
+              key={option.name}
               scope="col"
-              class="text-uppercase cursor-pointer"
+              className="text-uppercase cursor-pointer"
               onClick={() => pageRequestSet.setSortAndDirection(option)}
             >
               {option.header} <i className="mdi mdi-sort-descending"></i>
@@ -26,7 +27,7 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
           );
         } else {
           return (
-            <th scope="col" class="text-uppercase">
+            <th key={option.name} scope="col" className="text-uppercase">
               {option.header}
             </th>
           );
@@ -39,9 +40,9 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
   const generateBodyJSX = (config, data) => {
     return data.map((rowData) => {
       const rowdata = config.map((option) => {
-        return <td>{option.render(rowData)}</td>;
+        return <td key={option.name}>{option.render(rowData)}</td>;
       });
-      return <tr>{rowdata}</tr>;
+      return <tr key={rowData.id}>{rowdata}</tr>;
     });
   };
 
@@ -79,18 +80,32 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
 
         <Pagination>
           <PaginationItem
-            
             disabled={pageInfo.currentPage === 0}
             onClick={pageRequestSet.setPreviousPage}
           >
-            <PaginationLink className={`${pageInfo.currentPage === 0 ? "bg-secondary border-primary text-muted disabled" : "bg-secondary border-primary text-dark" }`}>Previous</PaginationLink>
+            <PaginationLink
+              className={`${
+                pageInfo.currentPage === 0
+                  ? "bg-secondary border-primary text-muted disabled"
+                  : "bg-secondary border-primary text-dark"
+              }`}
+            >
+              Previous
+            </PaginationLink>
           </PaginationItem>
           <PaginationItem
-            
             disabled={pageInfo.currentPage === pageInfo.totalPages - 1}
             onClick={pageRequestSet.setNextPage}
           >
-            <PaginationLink className={`${pageInfo.currentPage === pageInfo.totalPages - 1 ? "bg-secondary border-primary text-muted disabled" : "bg-secondary border-primary text-dark" }`}>Next</PaginationLink>
+            <PaginationLink
+              className={`${
+                pageInfo.currentPage === pageInfo.totalPages - 1
+                  ? "bg-secondary border-primary text-muted disabled"
+                  : "bg-secondary border-primary text-dark"
+              }`}
+            >
+              Next
+            </PaginationLink>
           </PaginationItem>
         </Pagination>
       </div>

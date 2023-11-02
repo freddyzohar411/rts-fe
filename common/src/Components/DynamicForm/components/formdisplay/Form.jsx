@@ -237,8 +237,8 @@ const Form = ({
             <div>
               <form onSubmit={formik.handleSubmit} className="drag-zone">
                 {/* <div className="lists-container"> */}
-                {formLayoutSchema.map((row) => (
-                  <Row>
+                {formLayoutSchema.map((row, index) => (
+                  <Row key={index}>
                     <FormSectionList
                       key={row.rowId}
                       row={row}

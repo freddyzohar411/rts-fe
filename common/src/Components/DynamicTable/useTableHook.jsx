@@ -16,8 +16,6 @@ const useTableHook = (initialPageRequest = {}, initialConfig = []) => {
     searchFields: initialPageRequest?.searchFields,
   });
 
-  console.log("Page request", pageRequest);
-
   const [pageInfo, setPageInfo] = useState({
     currentPage: 0,
     totalPages: 0,

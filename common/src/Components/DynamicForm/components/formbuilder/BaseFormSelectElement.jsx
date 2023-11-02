@@ -75,7 +75,7 @@ const BaseFormSelectElement = ({
           >
             <option value={0}>Select Base Form</option>
             {baseFormList.map((baseForm) => (
-              <option value={baseForm.formId}>{baseForm.formName}</option>
+              <option key={baseForm.formId} value={baseForm.formId}>{baseForm.formName}</option>
             ))}
           </select>
         </div>
