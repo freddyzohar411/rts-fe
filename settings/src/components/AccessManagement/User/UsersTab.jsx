@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Table,
   Button,
@@ -92,11 +92,11 @@ function UsersTab() {
                       {user.userGroup.length > 0 ? (
                         <>
                           {user.userGroup.map((group, groupIndex) => (
-                            <>
+                            <Fragment key={groupIndex}>
                               {group.roles.map((role, roleIndex) => (
                                 <span key={roleIndex}>{role.roleName}</span>
                               ))}
-                            </>
+                            </Fragment>
                           ))}
                         </>
                       ) : (
