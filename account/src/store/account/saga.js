@@ -77,12 +77,14 @@ function* workPostAccount(action) {
     if (entity === AccountEntityConstant.ACCOUNT_COMMERCIAL) {
       yield put(deleteAccountId());
       yield put(deleteAccountCountry());
+      toast.success("Account created successfully");
       return;
     }
     if (typeof handleNext === "function") {
       handleNext();
     }
   } catch (error) {
+    toast.error(error.message);
     yield put(postAccountFailure(error));
   }
 }
@@ -116,6 +118,7 @@ function* workPutAccount(action) {
       handleNext();
     }
   } catch (error) {
+    toast.error(error.message);
     yield put(putAccountFailure(error));
   }
 }
@@ -125,7 +128,6 @@ function* workFetchAccounts(action) {
   try {
     const response = yield call(getAccounts, action.payload);
     yield put(fetchAccountsSuccess(response.data));
-    console.error("Error !!!")
   } catch (error) {
     toast.error(error.message);
     yield put(fetchAccountsFailure(error));
@@ -139,7 +141,7 @@ function* workDeleteAccount(action) {
     yield put(deleteAccountSuccess(action.payload));
   } catch (error) {
     yield put(deleteAccountFailure(error));
-   toast.error(error.message);
+    toast.error(error.message);
   }
 }
 
@@ -149,6 +151,7 @@ function* workFetchAccountsFields() {
     const response = yield call(getAccountsFields);
     yield put(fetchAccountsFieldsSuccess(response.data));
   } catch (error) {
+    toast.error(error.message);
     yield put(fetchAccountsFieldsFailure(error));
   }
 }
@@ -160,6 +163,7 @@ function* workFetchAccount(action) {
     yield put(fetchAccountSuccess(response.data));
     yield put(setAccountCountry(response.data.accountCountry));
   } catch (error) {
+    toast.error(error.message);
     yield put(fetchAccountFailure(error));
   }
 }
@@ -170,5 +174,5 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(FETCH_ACCOUNTS, workFetchAccounts);
   yield takeEvery(DELETE_ACCOUNT, workDeleteAccount);
   yield takeEvery(FETCH_ACCOUNTS_FIELDS, workFetchAccountsFields);
-  yield takeEvery(FETCH_ACCOUNT, workFetchAccount)
+  yield takeEvery(FETCH_ACCOUNT, workFetchAccount);
 }

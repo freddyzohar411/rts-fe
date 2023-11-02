@@ -9,6 +9,7 @@ import {
   fetchAccountFormSubmissionFailure,
 } from "./action";
 import { getFormByFormName, getAccountById, getAccountInstructionById, getAccountCommercialById } from "../../helpers/backend_helper";
+import { toast } from "react-toastify";
 
 const formURL = {
   "account_account": getAccountById,
@@ -21,6 +22,7 @@ function* workFetchAccountForm(action) {
     const response = yield call(getFormByFormName, action.payload);
     yield put(fetchAccountFormSuccess(response.data));
   } catch (error) {
+    toast.error("Error fetching account form");
     yield put(fetchAccountFormFailure(error));
   }
 }
