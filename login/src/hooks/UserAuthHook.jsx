@@ -1,8 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { profilePermissionSuccess } from "../store/auth/profile/actions";
 import { Permission } from "../constants/permissionConstant";
-import { ModuleConstants } from "../constants/moduleConstant";
 import { fetchProfile } from "../store/auth/profile/actions";
 
 /**
@@ -13,7 +11,7 @@ const useUserAuth = () => {
   const dispatch = useDispatch();
   const userProfile = useSelector((state) => state.Profile.userProfile);
 
-  console.log("User Profile: ", userProfile);
+  // console.log("User Profile: ", userProfile);
 
   /**
    * Get user permissions from session storage when component is mounted
@@ -64,7 +62,6 @@ const useUserAuth = () => {
 
   // console.log("Check All User Group: ", checkAllUserGroup(["Admin", "User"]));
 
-
   // ------------------ Get & Check Role ------------------
   function getAllRoles() {
     const roleList = [];
@@ -97,7 +94,6 @@ const useUserAuth = () => {
     }
     return false;
   }
-
 
   // ------------------ Get & Check permission ------------------
 
@@ -134,8 +130,8 @@ const useUserAuth = () => {
 
   /**
    * Check if user has all permissions
-   * @param {*} modulePermissions 
-   * @returns 
+   * @param {*} modulePermissions
+   * @returns
    */
   function checkAllPermission(modulePermissions = []) {
     const userPermission = convertUserProfileToPermissionObj(userProfile);
@@ -149,9 +145,9 @@ const useUserAuth = () => {
 
   /**
    * Helper function to check if user has a single permission
-   * @param {*} userPermission 
-   * @param {*} modulePermission 
-   * @returns 
+   * @param {*} userPermission
+   * @param {*} modulePermission
+   * @returns
    */
   function checkSinglePermission(userPermission, modulePermission) {
     const [module, permission] = modulePermission.split(":");
@@ -164,37 +160,12 @@ const useUserAuth = () => {
     return false;
   }
 
-    console.log(
-    "Module Permission: ",
-    convertUserProfileToPermissionObj(userProfile)
-  );
+    // console.log("User Profile: ", userProfile);
 
   // console.log(
-  //   "Check Permission: ",
-  //   checkAllPermission([
-  //     Permission.ACCOUNT_READ,
-  //     Permission.ACCOUNT_WRITE,
-  //     // Permission.ACCOUNT_NOACCESS,
-  //   ])
+  //   "Module Permission: ",
+  //   convertUserProfileToPermissionObj(userProfile)
   // );
-
-
-  //   () => (module, action) => {
-  //     if (userPermission) {
-  //       return (
-  //         userPermission[module] &&
-  //         action.some((item) =>
-  //           userPermission[module].includes(item.toLowerCase())
-  //         )
-  //       );
-  //     }
-  //   },
-  //   [userProfile]
-  // );
-
-  // Check user group
-
-  // Check user role
 
   return {
     getAllRoles,

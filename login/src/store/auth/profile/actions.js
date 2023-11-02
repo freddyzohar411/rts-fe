@@ -4,7 +4,7 @@ import {
   PROFILE_SUCCESS,
   EDIT_PROFILE,
   RESET_PROFILE_FLAG,
-  DELETE_PROFILE
+  DELETE_PROFILE,
 } from "./actionTypes";
 
 export const editProfile = (user) => {
@@ -45,4 +45,3 @@ export const resetProfileFlag = (error) => {
     type: RESET_PROFILE_FLAG,
   };
 };
-

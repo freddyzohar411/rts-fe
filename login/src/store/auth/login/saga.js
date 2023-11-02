@@ -5,7 +5,11 @@ import { toast } from "react-toastify";
 import { LOGIN_USER, LOGOUT_USER, SOCIAL_LOGIN } from "./actionTypes";
 import { apiError, loginSuccess, logoutUserSuccess } from "./actions";
 import { deleteProfile } from "../profile/actions";
-import { getLogout, postLogin, getUserProfile } from "../../../helpers/backend_helper";
+import {
+  getLogout,
+  postLogin,
+  getUserProfile,
+} from "../../../helpers/backend_helper";
 
 function* loginUser({ payload: { user, history } }) {
   try {
@@ -34,7 +38,7 @@ function* logoutUser({ payload: { history } }) {
     });
     if (response) {
       sessionStorage.removeItem("authUser");
-      yield put(deleteProfile())
+      yield put(deleteProfile());
       yield put(logoutUserSuccess(LOGOUT_USER, true));
       toast.success("Logout Successfully");
     }

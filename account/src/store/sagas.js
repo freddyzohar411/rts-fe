@@ -1,22 +1,10 @@
-//CountryCurrency
-import CountryCurrencySaga from "./countrycurrency/saga";
-import CitySaga from "./city/saga";
-import IndustrySaga from "./industry/saga";
-// import ParentCompanySaga from "./parentcompany/saga";
+// Account Saga
 import AccountSaga from "./account/saga";
-import BillingCitySaga from "./billingcity/saga";
 import AccountRegistrationSaga from "./accountregistration/saga";
-import DepartmentSaga from "./department/saga";
 import AccountFormSaga from "./accountForm/saga";
 
 export {
-  // CountryCurrencySaga,
-  // CitySaga,
-  // IndustrySaga,
-  // ParentCompanySaga,
   AccountSaga,
-  BillingCitySaga,
   AccountRegistrationSaga,
-  // DepartmentSaga,
   AccountFormSaga
 };

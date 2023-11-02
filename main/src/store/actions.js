@@ -9,10 +9,6 @@ export { Actions as AccountActions } from "@workspace/account";
 
 export { Actions as JobActions } from "@workspace/job";
 
-// export { Actions as FormActions } from "@workspace/settings"
-
-export { Actions as FormActions } from "@workspace/formbuilder"
+export { Actions as FormActions } from "@workspace/formbuilder";
 
 export { Actions as SettingActions } from "@workspace/settings";
-
-

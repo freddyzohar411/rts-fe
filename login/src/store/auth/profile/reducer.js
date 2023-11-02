@@ -4,7 +4,7 @@ import {
   PROFILE_SUCCESS,
   EDIT_PROFILE,
   RESET_PROFILE_FLAG,
-  DELETE_PROFILE
+  DELETE_PROFILE,
 } from "./actionTypes";
 
 const initialState = {

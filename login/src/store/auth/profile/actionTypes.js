@@ -5,4 +5,3 @@ export const PROFILE_ERROR = "PROFILE_ERROR";
 export const DELETE_PROFILE = "DELETE_PROFILE";
 
 export const RESET_PROFILE_FLAG = "RESET_PROFILE_FLAG";
-

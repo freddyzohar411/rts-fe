@@ -19,9 +19,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, deleteUser } from "../../../store/users/action";
 
 function UsersTab() {
+
   const [modal, setModal] = useState(false);
   // Fetch Users
   const users = useSelector((state) => state.UserReducer.users);
+  console.log(users)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUsers());

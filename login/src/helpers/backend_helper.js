@@ -5,7 +5,7 @@ import {
   GET_LOGOUT,
   POST_PASSWORD_FORGET,
   GET_VALIDATE,
-  GET_USER_PROFILE
+  GET_USER_PROFILE,
 } from "./url_helper";
 
 const { APIClient } = Axios;

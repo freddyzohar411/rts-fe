@@ -15,11 +15,8 @@ import { Sagas as AccountSagas } from "@workspace/account";
 //Job
 import { Sagas as JobSagas } from "@workspace/job";
 
-
 //Settings
-// import { Sagas as SettingsSagas } from "@workspace/settings";
 import { Sagas as FormBuilderSagas } from "@workspace/formbuilder";
-
 
 // Settings
 import { Sagas as SettingSagas } from "@workspace/settings";
@@ -34,17 +31,7 @@ const {
 } = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
 const { DashboardEcommerceSaga } = DashboardSaga;
-const {
-  // CountryCurrencySaga,
-  // CitySaga,
-  // IndustrySaga,
-  // ParentCompanySaga,
-  AccountSaga,
-  BillingCitySaga,
-  AccountRegistrationSaga,
-  // DepartmentSaga,
-  AccountFormSaga,
-} = AccountSagas;
+const { AccountSaga, AccountRegistrationSaga, AccountFormSaga } = AccountSagas;
 
 const {
   JobCountryCurrencySaga,
@@ -56,7 +43,6 @@ const {
 const { FormSaga } = FormBuilderSagas;
 
 const { UserSaga, RoleSaga, ModuleSaga, PermissionSaga } = SettingSagas;
-
 
 export default function* rootSaga() {
   yield all([
@@ -75,14 +61,9 @@ export default function* rootSaga() {
     fork(DashboardEcommerceSaga),
 
     //Account
-    // fork(CountryCurrencySaga),
-    // fork(CitySaga),
     fork(IndustrySaga),
-    // fork(ParentCompanySaga),
     fork(AccountSaga),
-    // fork(BillingCitySaga),
     fork(AccountRegistrationSaga),
-    // fork(DepartmentSaga),
     fork(AccountFormSaga),
 
     //Job
@@ -90,7 +71,6 @@ export default function* rootSaga() {
     fork(JobAccountSaga),
     fork(JobAccountContactsSaga),
     fork(JobSaga),
-
 
     //Form
     fork(FormSaga),
@@ -100,6 +80,5 @@ export default function* rootSaga() {
     fork(RoleSaga),
     fork(ModuleSaga),
     fork(PermissionSaga),
-
   ]);
 }

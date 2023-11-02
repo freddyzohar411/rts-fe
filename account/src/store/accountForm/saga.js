@@ -38,12 +38,8 @@ function* workFetchAccountFormSubmission(action) {
   }
 }
 
-// function* workClearAccountFormSubmission() {
-//   yield put(clearAccountFormSubmission());
-// }
 
 export default function* watchFetchAccountFormsSaga() {
   yield takeEvery(FETCH_ACCOUNTFORM, workFetchAccountForm);
   yield takeEvery(FETCH_ACCOUNTFORM_SUBMISSION, workFetchAccountFormSubmission);
-  // yield takeEvery(CLEAR_ACCOUNTFORM_SUBMISSION, workClearAccountFormSubmission);
 }

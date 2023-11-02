@@ -1,10 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-//Constant
-import { AuthConstant } from "@workspace/common";
-
-
 // Dashboard
 import { DashboardEcommerce } from "@workspace/dashboard";
 
@@ -13,19 +9,10 @@ import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 
 // Account
 import {
-  Access,
-  AccountCreation,
-  ClientInstructions,
-  Commercial,
-  Contacts,
-  Documents,
   AccountListing,
-  Stepper,
   EditAccount,
   CreateAccount,
 } from "@workspace/account";
-
-// import { CreateAccount } from "@workspace/account";
 
 // Candidate
 import { CreateCandidate } from "@workspace/candidate";
