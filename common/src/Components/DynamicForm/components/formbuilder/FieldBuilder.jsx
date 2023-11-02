@@ -1855,7 +1855,7 @@ const FieldBuilder = ({
           ifContainsType(type, field.apply)
         ) {
           return (
-            <div>
+            <div className="mb-3">
               <label htmlFor={field.name} className="form-label">
                 {field.label}
               </label>

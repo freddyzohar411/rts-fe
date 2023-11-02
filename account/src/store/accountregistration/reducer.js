@@ -18,6 +18,7 @@ const initialState = {
 };
 
 const AccountRegistrationReducer = (state = initialState, action) => {
+  console.log("AccountRegistrationReducer", state)
   switch (action.type) {
     case SET_ACCOUNT_ID:
       return {
