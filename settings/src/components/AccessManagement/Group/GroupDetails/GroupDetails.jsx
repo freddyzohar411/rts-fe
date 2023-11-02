@@ -17,13 +17,6 @@ import {
   Table,
 } from "reactstrap";
 import { useSelector } from "react-redux";
-import {
-  roleData,
-  roleGroupData,
-  userData,
-  userGroupData,
-  userGroupMembersData,
-} from "../../dataSample";
 import classnames from "classnames";
 
 function GroupDetails() {
@@ -127,7 +120,7 @@ function GroupDetails() {
                               </NavLink>
                             </NavItem>
                           </Nav>
-                          <TabContent activeTab={activeTab}>
+                          <TabContent activeTab={activeTab} className="pt-1">
                             <TabPane tabId="1">
                               <Row>
                                 <Col>
