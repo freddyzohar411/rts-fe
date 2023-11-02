@@ -17,3 +17,6 @@ export const GET_MODULES = "/api/module";
 
 // Permissions
 export const GET_PERMISSIONS = "/api/permission";
+
+// Module
+export const GET_USER_GROUP = "/api/usergroup";

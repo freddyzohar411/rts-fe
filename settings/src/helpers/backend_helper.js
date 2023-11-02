@@ -16,8 +16,9 @@ import {
   GET_MODULES,
   // Permissions
   GET_PERMISSIONS,
+  GET_USER_GROUP,
 } from "./url_helper";
-import { API_URL, ACCESS_URL } from "@workspace/common/src/config";
+import { API_URL, ACCESS_URL, GROUP_URL } from "@workspace/common/src/config";
 
 const { APIClient } = Axios;
 const api = new APIClient();
@@ -60,3 +61,18 @@ export const getModules = () => api.get(`${ACCESS_URL}${GET_MODULES}`);
 // Permission
 // Get Permissions
 export const getPermissions = () => api.get(`${ACCESS_URL}${GET_PERMISSIONS}`);
+
+//Group
+// Get Group
+export const getGroup = (id) => api.get(`${GROUP_URL}${GET_USER_GROUP}/${id}`);
+// Get Groups
+export const getGroups = () => api.get(`${GROUP_URL}${GET_USER_GROUP}`);
+// Create Group
+export const createGroup = (data) =>
+  api.create(`${GROUP_URL}${GET_USER_GROUP}`, data);
+// Update Group
+export const updateGroup = (data) =>
+  api.put(`${GROUP_URL}${GET_USER_GROUP}`, data);
+// Delete Group
+export const deleteGroup = (id) =>
+  api.delete(`${GROUP_URL}${GET_USER_GROUP}/${id}`);

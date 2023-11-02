@@ -39,11 +39,12 @@ const {
   JobReducer,
 } = JobReducers;
 
-const { 
-  UserReducer, 
+const {
+  UserReducer,
   RoleReducer,
   ModuleReducer,
-  PermissionReducer
+  PermissionReducer,
+  GroupReducer,
 } = SettingReducers;
 
 const rootReducer = combineReducers({
@@ -72,10 +73,11 @@ const rootReducer = combineReducers({
   JobReducer,
 
   // Settings
-  UserReducer, 
+  UserReducer,
   RoleReducer,
   ModuleReducer,
-  PermissionReducer
+  PermissionReducer,
+  GroupReducer,
 });
 
 export default rootReducer;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -13,22 +13,32 @@ import {
   TabPane,
 } from "reactstrap";
 import classnames from "classnames";
+import { useDispatch } from "react-redux";
 import RolesTab from "./Roles/RolesTab";
 import UsersTab from "./User/UsersTab";
 import GroupsTab from "./Group/GroupsTab";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import "react-toastify/dist/ReactToastify.css";
+
+import { fetchGroups } from "../../store/group/action";
 
 function AccessManagement() {
   document.title = "Access Management Settings | RTS";
   const toastMsg = useSelector((state) => state.toast);
   const dispatch = useDispatch();
+
   const handleCloseToast = () => {
     dispatch(clearToast());
   };
 
   // Tabs
   const [activeTab, setActiveTab] = useState("1");
+
+  useEffect(() => {
+    dispatch(fetchGroups());
+  }, []);
+
   const toggle = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
@@ -54,7 +64,7 @@ function AccessManagement() {
               </div>
             </Col>
           </Row>
-          
+
           <Row>
             <Col lg={12}>
               <Card>

@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
-  ButtonGroup,
   Col,
   Input,
   Pagination,
@@ -10,17 +9,20 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import { userGroupData } from "../dataSample";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function GroupsTab() {
   const [showDelete, setShowDelete] = useState(false);
   // PAGINATION
+  const groups = useSelector((state) => state?.GroupReducer?.groups) ?? [];
+
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentData = userGroupData.slice(startIndex, endIndex);
+  const currentData = groups?.slice(startIndex, endIndex);
+
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
@@ -28,7 +30,7 @@ function GroupsTab() {
   };
 
   const handleNextPage = () => {
-    const totalPages = Math.ceil(userGroupData.length / itemsPerPage);
+    const totalPages = Math.ceil(groups?.length / itemsPerPage);
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
@@ -63,7 +65,7 @@ function GroupsTab() {
               </tr>
             </thead>
             <tbody>
-              {currentData.map((item, idx) => (
+              {currentData?.map((item, idx) => (
                 <tr key={idx}>
                   <td>
                     <Input
@@ -72,10 +74,10 @@ function GroupsTab() {
                       name="groupCheckbox"
                     />
                   </td>
-                  <td>{item.groupName}</td>
-                  <td className="text-wrap">{item.groupDescription}</td>
+                  <td>{item?.userGroupName}</td>
+                  <td className="text-wrap">{item?.userGroupDescription}</td>
                   <td className="d-flex flex-row justify-between gap-2">
-                    <Link to={`/settings/access/group/${item.groupName}`}>
+                    <Link to={`/settings/access/group/${item?.id}`}>
                       <Button
                         className="btn btn-custom-primary-hover"
                         style={{ pointerEvents: "none" }}
@@ -83,9 +85,7 @@ function GroupsTab() {
                         <i className="ri-eye-line"></i>
                       </Button>
                     </Link>
-                    <Link
-                      to={`/settings/access/group/update/${item.groupName}`}
-                    >
+                    <Link to={`/settings/access/group/update/${item?.id}`}>
                       <Button
                         className="btn btn-custom-primary-hover"
                         style={{ pointerEvents: "none" }}
@@ -119,7 +119,7 @@ function GroupsTab() {
               </PaginationItem>
               <PaginationItem
                 onClick={() => handleNextPage()}
-                disabled={currentPage * itemsPerPage >= userGroupData.length}
+                disabled={currentPage * itemsPerPage >= groups?.length}
               >
                 <PaginationLink>Next &nbsp; →</PaginationLink>
               </PaginationItem>
