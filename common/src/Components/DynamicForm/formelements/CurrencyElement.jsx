@@ -76,15 +76,16 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
     >
       <DropdownToggle
         as="button"
-        className="btn btn-primary arrow-none"
+        className="btn btn-primary arrow-none border border-primary"
         disabled={formState === "view" ? true : false}
+        color="primary"
       >
         <span>{selectedCurrency.currency}</span>
       </DropdownToggle>
 
       <Input
         type="number"
-        className="form-control"
+        className="form-control rounded"
         id={field.name}
         name={field.name}
         placeholder={field.placeholder}

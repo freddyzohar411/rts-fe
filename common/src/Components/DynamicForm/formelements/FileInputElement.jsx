@@ -30,7 +30,7 @@ const FileInputElement = ({ formik, field, formStateHook }) => {
       <div className="d-flex align-items-center w-100 h-100">
         <button
           type="button"
-          className="btn btn-secondary"
+          className="btn btn-primary"
           style={{
             borderTopRightRadius: "0px",
             borderBottomRightRadius: "0px",
@@ -43,7 +43,11 @@ const FileInputElement = ({ formik, field, formStateHook }) => {
           ChooseFile
         </button>
         <div
-          className="w-100 border-secondary border"
+          className={`w-100 border-primary border border-1 ${
+            !formik?.values?.[field.name] && !formik?.values?.[field.name]?.name
+              ? "text-muted"
+              : ""
+          }`}
           style={{
             // border: "1px solid grey",
             padding: "8px 15px",
@@ -52,6 +56,7 @@ const FileInputElement = ({ formik, field, formStateHook }) => {
             borderBottomRightRadius: "5px",
             maxHeight: "38px",
             overflow: "hidden",
+            backgroundColor: formState === "view" ? "#EFF2F7" : "",
           }}
         >
           {formik?.values?.[field.name]?.name
@@ -61,7 +66,8 @@ const FileInputElement = ({ formik, field, formStateHook }) => {
           {!formik?.values?.[field.name] &&
             !formik?.values?.[field.name]?.name &&
             "No file chosen"}
-          {(formik?.values?.[field.name]?.name || formik?.values?.[field.name]) &&
+          {(formik?.values?.[field.name]?.name ||
+            formik?.values?.[field.name]) &&
             formState !== "view" && (
               <span
                 className="cursor-pointer"

@@ -29,7 +29,7 @@ const AccountParentElement = ({ formik, field, formStateHook }) => {
       <select
         id={field.name}
         name={field.name}
-        className={`form-select ${fieldSize[field.fieldSize]}`}
+        className={`form-select ${fieldSize[field.fieldSize]} ${formik?.values?.[field.name] === "" ? "text-muted" : ""}`}
         onChange={formik.handleChange}
         value={formik?.values?.[field.name]}
         placeholder={field.placeholder}

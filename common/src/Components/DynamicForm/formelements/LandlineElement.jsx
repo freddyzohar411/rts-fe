@@ -92,8 +92,9 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
     >
       <DropdownToggle
         as="button"
-        className="btn btn-primary arrow-none"
+        className="btn btn-primary arrow-none border border"
         disabled={formState === "view" ? true : false}
+        color="primary"
       >
         <span>{selectedLandline.landlineCountry}</span>
       </DropdownToggle>
@@ -101,7 +102,7 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
         type="number"
         id={field.name}
         name={field.name}
-        className="form-control"
+        className="form-control rounded"
         placeholder={field.placeholder}
         onChange={formik.handleChange}
         value={formik?.values?.[field.name]}

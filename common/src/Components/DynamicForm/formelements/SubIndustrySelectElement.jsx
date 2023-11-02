@@ -6,7 +6,7 @@ const SubIndustrySelectElement = ({ formik, field, formStateHook }) => {
   useEffect(() => {
     if (formik?.values?.[field.parent]) {
       // Fetch data from API
-      setSubIndustry([])
+      setSubIndustry([]);
       fetch(
         `http://localhost:8200/industries/${parseInt(
           formik?.values?.[field.parent]
@@ -26,7 +26,12 @@ const SubIndustrySelectElement = ({ formik, field, formStateHook }) => {
           onChange={formik.handleChange}
           value={formik?.values?.[field.name]}
           onBlur={formik.handleBlur}
-          className="form-select"
+          className={`form-select ${
+            formik?.values?.[field.name] === "" ||
+            formik?.values?.[field.name] === undefined
+              ? "text-muted"
+              : ""
+          }`}
           disabled={formState === "view" ? true : false}
         >
           <option value="">{field.placeholder}</option>

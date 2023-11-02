@@ -27,9 +27,15 @@ const DepartmentSelectElement = ({ field, formik, formStateHook }) => {
           name={field.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className="form-select"
+          className={`form-select ${
+            formik?.values?.[field.name] === "" ||
+            formik?.values?.[field.name] === undefined
+              ? "text-muted"
+              : ""
+          }`}
           value={formik?.values?.[field.name]}
           disabled={formState === "view" ? true : false}
+          defaultValue=""
         >
           <option value="">{field.placeholder}</option>
           {fetchData.map((item, index) => (

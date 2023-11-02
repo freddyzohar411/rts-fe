@@ -21,7 +21,12 @@ const IndustrySelectElement = ({ formik, field, formStateHook }) => {
           onChange={formik.handleChange}
           value={formik?.values?.[field.name]}
           onBlur={formik.handleBlur}
-          className="form-select"
+          className={`form-select ${
+            formik?.values?.[field.name] === "" ||
+            formik?.values?.[field.name] === undefined
+              ? "text-muted"
+              : ""
+          }`}
           disabled={formState === "view" ? true : false}
         >
           <option value="">{field.placeholder}</option>
