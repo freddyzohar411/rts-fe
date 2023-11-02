@@ -22,7 +22,6 @@ import {
 } from "../../store/accountForm/action";
 import { ObjectHelper } from "@workspace/common";
 import CountryModal from "../../components/CountryModal/CountryModal";
-import { AuthHelper } from "@workspace/common";
 import {
   CONTACT_BASE_URL,
   GET_CONTACT_BY_ENTITY_URL,
@@ -35,8 +34,7 @@ const AccountCreation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { getAllUserGroups } = useUserAuth();
-  const userDetails = AuthHelper.getUserDetails();
-  console.log("User Details: ", userDetails);
+
 
   const form = useSelector((state) => state.AccountFormReducer.form);
   const accountId = useSelector(
@@ -516,6 +514,7 @@ const AccountCreation = () => {
         );
         return;
       }
+      
       if (formSubmissionData === null) {
         console.log("Create instruction");
         const formData = {

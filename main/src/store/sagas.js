@@ -28,6 +28,7 @@ const {
   IndustrySaga,
   DepartmentSaga,
   ParentCompanySaga,
+  UserGroupSaga,
 } = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
 const { DashboardEcommerceSaga } = DashboardSaga;
@@ -53,6 +54,7 @@ export default function* rootSaga() {
     fork(DepartmentSaga),
     fork(LayoutSaga),
     fork(ParentCompanySaga),
+    fork(UserGroupSaga),
 
     //public
     fork(AuthSaga),

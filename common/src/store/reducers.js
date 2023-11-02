@@ -4,6 +4,7 @@ import CountryCurrencyReducer from "./countrycurrency/reducer";
 import DepartmentReducer from "./department/reducer";
 import IndustryReducer from "./industry/reducer";
 import ParentCompanyReducer from "./parentcompany/reducer";
+import UserGroupReducer from "./usergroup/reducer";
 
 export {
   Layout,
@@ -11,5 +12,6 @@ export {
   CountryCurrencyReducer,
   DepartmentReducer,
   IndustryReducer,
-  ParentCompanyReducer
+  ParentCompanyReducer,
+  UserGroupReducer
 };

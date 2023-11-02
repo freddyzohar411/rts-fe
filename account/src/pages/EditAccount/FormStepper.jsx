@@ -2,9 +2,9 @@ import { Button, Card, Container } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import AccountStepper from "../../components/AccountStepper/AccountStepper";
-import { deleteDraftAccount } from "../../store/accountregistration/action";
 import { DeleteCustomModal } from "@Workspace/common";
 import { useState } from "react";
+import { useUserAuth } from "@workspace/login";
 
 const FormStepper = ({
   activeStep,
@@ -19,10 +19,11 @@ const FormStepper = ({
   toggleFormViewState,
   viewState,
 }) => {
+  const { Permission, checkAllPermission } = useUserAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  console.log("Form Stepper View", viewState)
+  console.log("Form Stepper View", viewState);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -66,43 +67,49 @@ const FormStepper = ({
     }
   };
 
-  const resetAndDeleteDraftForm = () => {
-    console.log("Reset and delete draft form");
-    // dispatch(
-    //   deleteDraftAccount({
-    //     accountId: accountId,
-    //     resetStepper: resetStepper,
-    //   })
-    // );
-    setIsDeleteModalOpen(false);
+  // const resetAndDeleteDraftForm = () => {
+  //   console.log("Reset and delete draft form");
+  //   // dispatch(
+  //   //   deleteDraftAccount({
+  //   //     accountId: accountId,
+  //   //     resetStepper: resetStepper,
+  //   //   })
+  //   // );
+  //   setIsDeleteModalOpen(false);
+  // };
+
+  const checkReadEditPermission = () => {
+    return checkAllPermission([
+      Permission.ACCOUNT_EDIT,
+      Permission.ACCOUNT_READ,
+    ]);
   };
 
   return (
     <Card>
-      <DeleteCustomModal
+      {/* <DeleteCustomModal
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={resetAndDeleteDraftForm}
         header="Reset Account Form"
         deleteText={"Are you sure you would like to reset account form?"}
-      />
+      /> */}
       <Container fluid>
         <AccountStepper step={activeStep} />
         <div className="px-3"> {children}</div>
         <div
           className={`d-flex ${
-            accountId ? "justify-content-between" : "justify-content-end"
+            accountId && checkReadEditPermission()
+              ? "justify-content-between"
+              : "justify-content-end"
           } align-items-center mb-2`}
         >
-          {accountId && (
-            <Button
-              onClick={toggleFormViewState}
-              className="btn btn-danger"
-            >
-             {viewState ? "Edit" : "View"}
+          {accountId && checkReadEditPermission() && (
+            <Button onClick={toggleFormViewState} className="btn btn-danger">
+              {viewState ? "Edit" : "View"}
             </Button>
           )}
-        {/* <div className={`d-flex justify-content-end align-items-center mb-2`}> */}
+          {/* <div className={`d-flex justify-content-end align-items-center mb-2`}> */}
           <div className="d-flex gap-2">
             {activeStep > 0 && (
               <Button color="dark" onClick={handleBack}>

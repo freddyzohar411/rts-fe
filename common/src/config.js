@@ -35,3 +35,6 @@ export const FORM_URL = "http://localhost:9400";
 // Role Service
 export const ACCESS_URL = "http://localhost:8091";
 
+//  UserGroup Service
+export const USERGROUP_URL = "http://localhost:8092";
+

@@ -31,5 +31,8 @@ export const getSubIndustries = parentId => api.get(INDUSTRY_SUB_URL(parentId));
 // Department Microservice
 export const getDepartments = () => api.get(DEPARTMENT_BASE_URL);
 
+// UserGroup Microservice
+export const getUserGroup = () => api.get(`${configURL.USERGROUP_URL}/${baseURL.USERGROUP}`);
+
 
 

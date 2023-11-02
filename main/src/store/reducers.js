@@ -28,6 +28,7 @@ const {
   DepartmentReducer,
   IndustryReducer,
   ParentCompanyReducer,
+  UserGroupReducer
 } = Reducers;
 
 const { Login, ForgetPassword, Profile } = LoginReducers;
@@ -55,6 +56,7 @@ const rootReducer = combineReducers({
   DepartmentReducer,
   IndustryReducer,
   ParentCompanyReducer,
+  UserGroupReducer,
 
   // public
   Login,

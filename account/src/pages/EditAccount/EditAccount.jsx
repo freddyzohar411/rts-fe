@@ -22,15 +22,18 @@ import {
 } from "../../store/accountForm/action";
 import { ObjectHelper } from "@workspace/common";
 import { CryptoHelper } from "@workspace/common";
-
 import {
   CONTACT_BASE_URL,
   GET_CONTACT_BY_ENTITY_URL,
   DOCUMENT_BASE_URL,
   GET_DOCUMENT_BY_ENTITY_URL,
 } from "../../helpers/endpoint_helper";
+import { useUserAuth } from "@workspace/login";
 
 const EditAccount = () => {
+  const { getAllUserGroups, checkAllPermission, Permission } = useUserAuth();
+
+  
   const location = useLocation();
   const linkState = location.state;
   const formSubmissionData = useSelector(
@@ -52,7 +55,7 @@ const EditAccount = () => {
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [view, setView] = useState(linkState?.view || false);
+  const [view, setView] = useState(linkState?.view !== null ? linkState?.view : true);
 
   // console.log("HASH 1 Data",formSubmissionData)
   // computeHash(JSON.stringify(formSubmissionData)).then((res) => console.log("HASH 1",res))
@@ -226,11 +229,9 @@ const EditAccount = () => {
     // await computeHash(JSON.stringify(newValues)).then((res) => console.log("HASH 2",res))
     // return
 
-    const sameorNot = await isFormEdited(formSubmissionData, newValues);
-    console.log("Same or not: ", sameorNot);
+    const isFormChanged = await isFormEdited(formSubmissionData, newValues);
 
-    if (!isFormEdited(formSubmissionData, newValues)) {
-      console.log("No Change!");
+    if (!isFormChanged) {
       if (step === 5) {
         navigate("/accounts");
       }
@@ -240,10 +241,10 @@ const EditAccount = () => {
 
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
-    console.log("values", values);
-    console.log("newValues", newValues);
-    console.log("Button Name:", buttonName);
-    console.log("Step: ", step);
+    // console.log("values", values);
+    // console.log("newValues", newValues);
+    // console.log("Button Name:", buttonName);
+    // console.log("Step: ", step);
     // Set a reset form functions
     const resetForm = (arrayFields = []) => {
       formFormik.resetForm();
@@ -547,8 +548,8 @@ const EditAccount = () => {
     const newFormValuesString = await CryptoHelper.computeHash(
       JSON.stringify(newFormValues)
     );
-    // console.log("Old Form Values Hash: ", oldFormValuesString);
-    // console.log("New Form Values Hash: ", newFormValuesString);
+    console.log("Old Form Values Hash: ", oldFormValuesString);
+    console.log("New Form Values Hash: ", newFormValuesString);
     if (oldFormValuesString === newFormValuesString) {
       return false;
     }
@@ -606,7 +607,7 @@ const EditAccount = () => {
           {/* {formSubmissionData && ( */}
           <Form
             template={formTemplate}
-            userDetails={null}
+            userDetails={getAllUserGroups()}
             country={accountCountry}
             editData={formSubmissionData}
             onFormikChange={handleFormikChange}

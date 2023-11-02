@@ -1,6 +1,5 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import {
-  AccountFormConstant,
   AccountEntityConstant,
 } from "../../constants/accountConstant";
 
@@ -139,6 +138,7 @@ function* workDeleteAccount(action) {
   try {
     const response = yield call(deleteAccount, action.payload);
     yield put(deleteAccountSuccess(action.payload));
+    toast.success("Account deleted successfully");
   } catch (error) {
     yield put(deleteAccountFailure(error));
     toast.error(error.message);

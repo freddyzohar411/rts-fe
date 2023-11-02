@@ -116,18 +116,21 @@ function AccountListing() {
                 <i className="ri-eye-line"></i>
               </Button>
             </Link>
-            <Link
-              to={`/accounts/${data.id}/edit`}
-              style={{ color: "black" }}
-              // state={{ form: 3 }}
-            >
-              <Button
-                type="button"
-                className="btn btn-primary d-flex align-items-center column-gap-2"
+            {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+              <Link
+                to={`/accounts/${data.id}/edit`}
+                style={{ color: "black" }}
+                // state={{ form: 3 }}
+                state={{ view: false }}
               >
-                <i className="mdi mdi-pencil"></i>
-              </Button>
-            </Link>
+                <Button
+                  type="button"
+                  className="btn btn-primary d-flex align-items-center column-gap-2"
+                >
+                  <i className="mdi mdi-pencil"></i>
+                </Button>
+              </Link>
+            )}
             {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
               <Button
                 type="button"
