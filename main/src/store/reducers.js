@@ -15,9 +15,12 @@ import { Reducers as AccountReducers } from "@workspace/account";
 // Job
 import { Reducers as JobReducers } from "@workspace/job";
 
-
 // Form
 import { Reducers as FormBuilderReducers } from "@workspace/formbuilder";
+
+// Settings
+import { Reducers as SettingReducers } from "@workspace/settings";
+
 
 const {
   Layout,
@@ -28,8 +31,6 @@ const {
   ParentCompanyReducer,
 } = Reducers;
 
-// Settings
-import { Reducers as SettingReducers } from "@workspace/settings";
 
 // const { Layout } = Reducers;
 

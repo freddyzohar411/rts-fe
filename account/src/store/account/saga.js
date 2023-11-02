@@ -40,6 +40,7 @@ import {
   setAccountCountry,
   deleteAccountCountry,
 } from "../accountregistration/action";
+import { toast } from "react-toastify";
 
 // Post account
 function* workPostAccount(action) {
@@ -124,7 +125,9 @@ function* workFetchAccounts(action) {
   try {
     const response = yield call(getAccounts, action.payload);
     yield put(fetchAccountsSuccess(response.data));
+    console.error("Error !!!")
   } catch (error) {
+    toast.error(error.message);
     yield put(fetchAccountsFailure(error));
   }
 }
@@ -136,12 +139,8 @@ function* workDeleteAccount(action) {
     yield put(deleteAccountSuccess(action.payload));
   } catch (error) {
     yield put(deleteAccountFailure(error));
-    console.log(error)
-    window.alert(error);
+   toast.error(error.message);
   }
-  // const response = yield call(deleteAccount, action.payload);
-  // yield put(deleteAccountSuccess(action.payload));
-
 }
 
 // Fetch accounts fields
