@@ -22,16 +22,20 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 import { fetchRole } from "../../../../store/roles/action";
+import { fetchGroups } from "../../../../store/group/action";
 
 function ViewRole() {
   const { roleId } = useParams();
   const dispatch = useDispatch();
   const role = useSelector((state) => state.RoleReducer.role);
+  const groups = useSelector((state) => state.GroupReducer.groups);
   useEffect(() => {
     if (roleId) {
       dispatch(fetchRole(roleId));
+      dispatch(fetchGroups());
     }
   }, []);
+
 
   // Tabs
   const [activeTab, setActiveTab] = useState("1");
@@ -59,8 +63,8 @@ function ViewRole() {
             <Col>
               <Card>
                 <CardHeader>
-                  <div className="d-flex flex-column gap-1">
-                    <span className="h5 fw-bold">View Role</span>
+                  <div className="d-flex flex-column">
+                    <span className="fs-5 fw-bold">View Role</span>
                     <span>
                       View role details, groups and permissions associated to
                       this role.
@@ -131,65 +135,85 @@ function ViewRole() {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {role && role.modules && role.modules.map((module, idx) => (
-                                    <tr key={idx}>
-                                      <td>{module.moduleName}</td>
-                                      <td>
-                                        {module.permissions.includes("Read") ? (
-                                          <Input
-                                            type="checkbox"
-                                            checked
-                                            disabled
-                                          />
-                                        ) : (
-                                          <Input type="checkbox" disabled />
-                                        )}
-                                      </td>
-                                      <td>
-                                        {module.permissions.includes(
-                                          "Write"
-                                        ) ? (
-                                          <Input
-                                            type="checkbox"
-                                            checked
-                                            disabled
-                                          />
-                                        ) : (
-                                          <Input type="checkbox" disabled />
-                                        )}
-                                      </td>
-                                      <td>
-                                        {module.permissions.includes("Edit") ? (
-                                          <Input
-                                            type="checkbox"
-                                            checked
-                                            disabled
-                                          />
-                                        ) : (
-                                          <Input type="checkbox" disabled />
-                                        )}
-                                      </td>
-                                      <td>
-                                        {module.permissions.includes(
-                                          "Delete"
-                                        ) ? (
-                                          <Input
-                                            type="checkbox"
-                                            checked
-                                            disabled
-                                          />
-                                        ) : (
-                                          <Input type="checkbox" disabled />
-                                        )}
-                                      </td>
-                                    </tr>
-                                  ))}
+                                  {role &&
+                                    role.modules &&
+                                    role.modules.map((module, idx) => (
+                                      <tr key={idx}>
+                                        <td>{module.moduleName}</td>
+                                        <td>
+                                          {module.permissions.includes(
+                                            "Read"
+                                          ) ? (
+                                            <Input
+                                              type="checkbox"
+                                              checked
+                                              disabled
+                                            />
+                                          ) : (
+                                            <Input type="checkbox" disabled />
+                                          )}
+                                        </td>
+                                        <td>
+                                          {module.permissions.includes(
+                                            "Write"
+                                          ) ? (
+                                            <Input
+                                              type="checkbox"
+                                              checked
+                                              disabled
+                                            />
+                                          ) : (
+                                            <Input type="checkbox" disabled />
+                                          )}
+                                        </td>
+                                        <td>
+                                          {module.permissions.includes(
+                                            "Edit"
+                                          ) ? (
+                                            <Input
+                                              type="checkbox"
+                                              checked
+                                              disabled
+                                            />
+                                          ) : (
+                                            <Input type="checkbox" disabled />
+                                          )}
+                                        </td>
+                                        <td>
+                                          {module.permissions.includes(
+                                            "Delete"
+                                          ) ? (
+                                            <Input
+                                              type="checkbox"
+                                              checked
+                                              disabled
+                                            />
+                                          ) : (
+                                            <Input type="checkbox" disabled />
+                                          )}
+                                        </td>
+                                      </tr>
+                                    ))}
                                 </tbody>
                               </Table>
                             </Col>
                           </Row>
                         </TabPane>
-                        <TabPane tabId="2" id="viewRoleGroups"></TabPane>
+                        <TabPane tabId="2" id="viewRoleGroups">
+                          <Row>
+                            <Col>
+                              <Table className="table table-hover table-striped table-bordered align-middle border-secondary">
+                                <thead>
+                                  <tr>
+                                    <th>Group Name</th>
+                                    <th>Group Description</th>
+                                  </tr>
+                                </thead>
+                                <tbody></tbody>
+                              </Table>
+                            </Col>
+                          </Row>
+                        </TabPane>
                       </TabContent>
                     </Col>
                   </Row>

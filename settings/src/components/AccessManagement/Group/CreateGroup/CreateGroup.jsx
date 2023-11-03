@@ -23,16 +23,20 @@ import {
 } from "reactstrap";
 import { initialValues, schema } from "./constants";
 import DualListBox from "react-dual-listbox";
-import { useSelector } from "react-redux";
-import { userGroupData, userGroupMembersData } from "../../dataSample";
+import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames";
+import { createGroup } from "../../../../store/group/action";
 
 function CreateGroup() {
   document.title = "Create User Group | RTS";
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const users = useSelector((state) => state.UserReducer.users);
   const roles = useSelector((state) => state.RoleReducer.users);
+  const loading = useSelector((state) => state.GroupReducer.loading);
+  const success = useSelector((state) => state.GroupReducer.success);
+  const message = useSelector((state) => state.GroupReducer.message);
 
   const [formattedUsers, setFormattedUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -69,20 +73,16 @@ function CreateGroup() {
   }, [roles]);
 
   const handleSubmit = async (values, { resetForm }) => {
-    const groupData = {
-      groupName: values.groupName,
-      groupDescription: values.groupDescription,
+    const input = {
+      userGroupName: values.groupName,
+      description: values.groupDescription,
+      users: selectedUsers,
+      roles: selectedRoles,
     };
 
-    const groupMembers = {
-      groupName: values.groupName,
-      members: selectedUsers,
-    };
-
-    userGroupData.push(groupData);
-    userGroupMembersData.push(groupMembers);
+    dispatch(createGroup(input));
     resetForm();
-    navigate("/settings/access/");
+    navigate("/settings/access");
   };
 
   const handleResetForm = (resetForm) => {
@@ -109,8 +109,8 @@ function CreateGroup() {
             <Col>
               <Card>
                 <CardHeader className="bg-header">
-                  <div className="d-flex flex-column gap-1">
-                    <span className="h6 fw-bold text-dark">
+                  <div className="d-flex flex-column">
+                    <span className="fw-bold fs-5 text-dark">
                       Create User Group
                     </span>
                     <span className="fw-medium fs-6 text-dark">

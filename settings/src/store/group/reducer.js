@@ -20,6 +20,7 @@ const initialState = {
   group: {},
   groups: [],
   message: "",
+  success: false,
   loading: false,
   error: false,
 };
@@ -30,6 +31,7 @@ const GroupReducer = (state = initialState, action) => {
     case CREATE_GROUP:
       return {
         ...state,
+        success: false,
         loading: true,
         error: false,
       };
@@ -37,8 +39,10 @@ const GroupReducer = (state = initialState, action) => {
     case CREATE_GROUP_SUCCESS:
       return {
         ...state,
+        success: true,
         loading: false,
-        user: action.payload,
+        error: false,
+        message: action.payload,
       };
 
     case CREATE_GROUP_FAILURE:

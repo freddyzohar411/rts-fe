@@ -15,6 +15,7 @@ import {
   TabContent,
   TabPane,
   Table,
+  Breadcrumb, BreadcrumbItem
 } from "reactstrap";
 import { useSelector } from "react-redux";
 import classnames from "classnames";
@@ -41,13 +42,25 @@ function GroupDetails() {
   return (
     <React.Fragment>
       <div className="page-content">
-        <Container>
+        <Container fluid>
+          <Row>
+            <Col>
+              <Breadcrumb>
+                <BreadcrumbItem>
+                  <Link to="/settings/access/">Settings</Link>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                  <Link to="/settings/access/groups" active>Groups</Link>
+                </BreadcrumbItem>
+              </Breadcrumb>
+            </Col>
+          </Row>
           <Row>
             <Col>
               <Card>
                 <CardHeader>
-                  <div className="d-flex flex-column gap-1">
-                    <span className="h5 fw-bold">Group Details</span>
+                  <div className="d-flex flex-column">
+                    <span className="fs-5 fw-bold">Group Details</span>
                     <span>
                       View details, members and roles assigned to this group.
                     </span>
@@ -124,7 +137,7 @@ function GroupDetails() {
                             <TabPane tabId="1">
                               <Row>
                                 <Col>
-                                  <Table className="table table-hover table-striped table-bordered border-light align-middle">
+                                  <Table className="table table-hover table-striped table-bordered border-secondary align-middle">
                                     <thead>
                                       <tr>
                                         <th>Employee ID</th>
@@ -150,7 +163,7 @@ function GroupDetails() {
                             <TabPane tabId="2">
                               <Row>
                                 <Col>
-                                  <Table className="table table-striped table-bordered table-hover border-light align-middle">
+                                  <Table className="table table-striped table-bordered table-hover border-secondary align-middle">
                                     <thead>
                                       <tr>
                                         <th>Role Name</th>
