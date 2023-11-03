@@ -86,7 +86,7 @@ function CreateNewRole() {
   return (
     <React.Fragment>
       <div className="page-content">
-        <Container>
+        <Container fluid>
           <Row>
             <Col>
               <Breadcrumb>
@@ -101,9 +101,9 @@ function CreateNewRole() {
             <Col>
               <Card>
                 <CardHeader className="bg-header">
-                  <div className="d-flex flex-column gap-1">
-                    <span className="h5 fw-bold">Create New Role</span>
-                    <span className="text-mute fs-6">
+                  <div className="d-flex flex-column">
+                    <span className="fs-5 fw-bold">Create New Role</span>
+                    <span>
                       Create a new role to begin assigning access permissions to
                       user groups.
                     </span>
@@ -224,7 +224,7 @@ function CreateNewRole() {
                               <TabPane tabId="1" id="permissionTab">
                                 <Row>
                                   <Col>
-                                    <Table className="table table-striped table-bordered table-hover align-middle border-light">
+                                    <Table className="table table-striped table-bordered table-hover align-middle border-secondary">
                                       <thead>
                                         <tr>
                                           <th>Modules</th>

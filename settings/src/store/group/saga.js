@@ -26,6 +26,7 @@ import {
   deleteGroup,
   updateGroup,
 } from "../../helpers/backend_helper";
+import { toast } from "react-toastify";
 
 // Create Group
 function* workCreateGroup(action) {
@@ -65,8 +66,10 @@ function* workUpdateGroup(action) {
     const groupResponse = yield call(updateGroup, updatedGroup);
     yield put(updateGroupSuccess(groupResponse.data));
     navigate("/settings/access");
+    toast.success("Group updated successfully!");
   } catch (error) {
     yield put(updateGroupFailure(error));
+    toast.error("Failed to update group!");
   }
 }
 
@@ -77,8 +80,10 @@ function* workDeleteGroup(action) {
     const fetchGroups = yield call(getGroups);
     yield put(fetchGroupsSuccess(fetchGroups.data));
     yield put(deleteGroupSuccess(response.data));
+    toast.success("Group deleted successfully!");
   } catch (error) {
     yield put(deleteGroupFailure(error));
+    toast.error("Failed to delete group!");
   }
 }
 

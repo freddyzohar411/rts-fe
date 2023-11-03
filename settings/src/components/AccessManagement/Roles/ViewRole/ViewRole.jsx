@@ -59,8 +59,8 @@ function ViewRole() {
             <Col>
               <Card>
                 <CardHeader>
-                  <div className="d-flex flex-column gap-1">
-                    <span className="h5 fw-bold">View Role</span>
+                  <div className="d-flex flex-column">
+                    <span className="fs-5 fw-bold">View Role</span>
                     <span>
                       View role details, groups and permissions associated to
                       this role.

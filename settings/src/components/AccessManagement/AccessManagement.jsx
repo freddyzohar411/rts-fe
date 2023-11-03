@@ -55,7 +55,7 @@ function AccessManagement() {
   return (
     <React.Fragment>
       <div className="page-content">
-        <Container>
+        <Container fluid>
           <Row>
             <Col lg={12}>
               <div className="mb-3">

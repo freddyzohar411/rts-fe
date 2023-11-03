@@ -55,7 +55,7 @@ function UpdateRole() {
       modules: role.modules,
     };
     setRoleInitialValues(populateForm(fetchRoleInitialValues));
-  }, []);
+  }, [role]);
 
   // Document Title
   useEffect(() => {
@@ -94,17 +94,6 @@ function UpdateRole() {
       roleDescription: values.roleDescription,
       modules: updatedModules,
     };
-
-    console.log("Updated Role:", updatedRole);
-
-    // console.log("updatedRole:", updatedRole);
-    // axios
-    //   .put("http://localhost:8091/api/role", updatedRole)
-    //   .then((res) => {
-    //     console.log("Updated role success!", res.data);
-    //     navigate("/settings/access");
-    //   })
-    //   .catch((error) => console.error("Error updating:", error));
     dispatch(updateRole({ updatedRole, navigate: navigate }));
   };
 
@@ -127,7 +116,7 @@ function UpdateRole() {
               <Card>
                 <CardHeader>
                   <div className="d-flex flex-column">
-                    <span className="h5 fw-bold">Update Role</span>
+                    <span className="fs-5 fw-bold">Update Role</span>
                     <span>
                       Make changes to role details, permissions and groups.
                     </span>

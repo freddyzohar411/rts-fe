@@ -33,11 +33,11 @@ export const schema = yup.object().shape({
   lastName: yup.string().required("Please enter a last name."),
   username: yup.string().required("Please enter a username."),
   email: yup.string().required("Please enter an email address."),
-  mobile: yup.string().required("Please enter a contact number."),
+  mobile: yup.string().required("Please enter a contact number.").min(10, "Mobile number must be at least 10 digits long."),
   password: yup
     .string()
     .required("Please enter a password.")
-    .min(6, "Password must be at least 8 characters long"),
+    .min(8, "Password must be at least 8 characters long."),
   confirmPassword: yup
     .string()
     .required("Please confirm your password.")

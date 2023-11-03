@@ -46,7 +46,7 @@ function UserDetails() {
   return (
     <React.Fragment>
       <div className="page-content">
-        <Container>
+        <Container fluid>
           <Row>
             <Col>
               <Breadcrumb>
@@ -61,8 +61,8 @@ function UserDetails() {
             <Col>
               <Card>
                 <CardHeader className="bg-header">
-                  <div className="d-flex flex-column gap-1">
-                    <span className="h5 fw-bold">User Details</span>
+                  <div className="d-flex flex-column">
+                    <span className="fs-5 fw-bold">User Details</span>
                     <span>View user details.</span>
                   </div>
                 </CardHeader>

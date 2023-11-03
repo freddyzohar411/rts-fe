@@ -109,8 +109,8 @@ function CreateGroup() {
             <Col>
               <Card>
                 <CardHeader className="bg-header">
-                  <div className="d-flex flex-column gap-1">
-                    <span className="h6 fw-bold text-dark">
+                  <div className="d-flex flex-column">
+                    <span className="fw-bold fs-5 text-dark">
                       Create User Group
                     </span>
                     <span className="fw-medium fs-6 text-dark">

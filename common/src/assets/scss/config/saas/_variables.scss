@@ -333,6 +333,10 @@ $theme-color-3:   #CCE0F4;
 $theme-color-4:   #7EABE7;
 $theme-color-5:   #BCD4F8;
 $theme-color-6:   #BDD6FB;
+// Next Button
+$theme-color-7:   #83A9E2;
+$theme-color-8:   #5D87C7;
+$theme-color-9:   #BDD6FA;
 
 $primary:       $theme-primary;
 $primary-custom:$theme-primary-custom;
@@ -359,6 +363,9 @@ $theme-colors: (
   "custom-primary":       $theme-color-4,
   "custom-primary-hover": $theme-color-5,
   "header":     $theme-color-6,
+  "next-button": $theme-color-7,
+  "next-button-border": $theme-color-8,
+  "next-button-hover": $theme-color-9
 );
 // scss-docs-end theme-colors-map
 

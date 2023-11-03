@@ -5,7 +5,7 @@ import SimpleBar from "simplebar-react";
 import logoSm from "../assets/images/logo-sm.png";
 import logoDark from "../assets/images/logo-dark.png";
 import logoLight from "../assets/images/logo-light.png";
-
+import logo_big from "../assets/images/logo_big.svg";
 //Import Components
 import VerticalLayout from "./VerticalLayouts/index";
 import TwoColumnLayout from "./TwoColumnLayout";

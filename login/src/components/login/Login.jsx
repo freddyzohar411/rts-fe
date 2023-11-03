@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import { Field, Formik, Form } from "formik";
 import { initialValues, schema } from "./constants";
 import logoLight from "@workspace/common/src/assets/images/logo-light.png";
+import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
+
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../store/actions";
 import { withRouter } from "@workspace/common";
@@ -47,10 +49,10 @@ const Login = (props) => {
                   <div className="text-center mt-sm-5 mb-4 text-white-50">
                     <div>
                       <Link to="/login" className="d-inline-block auth-logo">
-                        <img src={logoLight} alt="" height="50" />
+                        <img src={logo_big} alt="" height="100" />
                       </Link>
                     </div>
-                    <p className="mt-3 fs-15 fw-medium">
+                    <p className="mt-3 fs-4 fw-medium text-white">
                       Talent and Recruitment Services to clients across the
                       world.
                     </p>
@@ -58,12 +60,13 @@ const Login = (props) => {
                 </Col>
               </Row>
               <Row className="justify-content-center">
-                <Col md={8} lg={6} xl={5}>
+                {/* <Col md={8} lg={6} xl={5}> */}
+                <Col lg={8} >
                   <Card className="mt-4">
                     <CardBody className="p-4">
                       <div className="text-center mt-2">
-                        <h5 className="text-primary">Welcome back!</h5>
-                        <p className="text-muted">
+                        <h2 className="text-dark">Welcome back!</h2>
+                        <p className="text-muted size fs-4">
                           Sign in to continue with Avensys.
                         </p>
                       </div>
@@ -148,10 +151,10 @@ const Login = (props) => {
                               Remember me
                             </Label>
                           </div>
-                          <div className="mt-4">
+                          <div className="mt-5">
                             <Button
                               color="success"
-                              className="btn btn-primary w-100"
+                              className="btn btn-next-button border-next-button-border w-100 py-3 fw-semibold fs-4"
                               type="submit"
                             >
                               Sign In

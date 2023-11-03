@@ -19,15 +19,52 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, deleteUser } from "../../../store/users/action";
 
 function UsersTab() {
-
   const [modal, setModal] = useState(false);
   // Fetch Users
   const users = useSelector((state) => state.UserReducer.users);
-  console.log(users)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
+
+  // Pagination
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = users?.slice(startIndex, endIndex);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    const totalPages = Math.ceil(users?.length / itemsPerPage);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Search User
+  const [searchTerm, setSearchTerm] = useState("");
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredUsers = currentData?.filter((user) => {
+    if (searchTerm === "") {
+      return "No results found";
+    } else if (
+      user?.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user?.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user?.employeeId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user?.username.toLowerCase().includes(searchTerm.toLowerCase())
+    ) {
+      return user;
+    }
+  });
 
   // Open Delete User Modal
   const [selectedUser, setSelectedUser] = useState(null);
@@ -51,6 +88,8 @@ function UsersTab() {
               type="text"
               placeholder="Search.."
               className="form-control"
+              value={searchTerm}
+              onChange={handleSearchChange}
             />
             <i className="ri-search-line search-icon"></i>
           </div>
@@ -66,7 +105,6 @@ function UsersTab() {
             >
               <thead>
                 <tr>
-                  <th></th>
                   <th>Name</th>
                   <th scope="col">Employee ID</th>
                   <th scope="col">Roles</th>
@@ -77,26 +115,23 @@ function UsersTab() {
                   <th scope="col" style={{ width: "30px" }}>
                     Status
                   </th>
-                  <th scope="col" style={{ width: "30px" }}></th>
+                  <th scope="col" style={{ width: "30px" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {users?.map((user, index) => (
+                { filteredUsers.length > 0 ? ( filteredUsers?.map((user, index) => (
                   <tr key={index}>
-                    <td>
-                      <Input type="checkbox" />
-                    </td>
                     <td>
                       {user?.firstName} {user?.lastName}
                     </td>
                     <td>{user?.employeeId}</td>
                     <td>
-                      {user.userGroup.length > 0 ? (
+                      {user?.userGroup.length > 0 ? (
                         <>
                           {user.userGroup.map((group, groupIndex) => (
                             <Fragment key={groupIndex}>
                               {group.roles.map((role, roleIndex) => (
-                                <span key={roleIndex}>{role.roleName}</span>
+                                <span key={roleIndex}>{role?.roleName}</span>
                               ))}
                             </Fragment>
                           ))}
@@ -106,10 +141,10 @@ function UsersTab() {
                       )}
                     </td>
                     <td>
-                      {user.userGroup.length > 0 ? (
-                        user.userGroup
+                      {user?.userGroup.length > 0 ? (
+                        user?.userGroup
                           .map((group, index) => (
-                            <span key={index}>{group.groupName}</span>
+                            <span key={index}>{group?.groupName}</span>
                           ))
                           .reduce((prev, curr) => [prev, ", ", curr])
                       ) : (
@@ -148,7 +183,8 @@ function UsersTab() {
                       </div>
                     </td>
                   </tr>
-                ))}
+                ))) : (<tr><td colSpan="8">No users found!</td></tr>)
+               }
               </tbody>
             </Table>
 
@@ -178,7 +214,7 @@ function UsersTab() {
             </Modal>
 
             {/* Pagination */}
-            {/* <Pagination className="d-flex flex-row justify-content-end">
+            <Pagination className="d-flex flex-row justify-content-end">
               <PaginationItem
                 onClick={() => handlePrevPage()}
                 disabled={currentPage === 1}
@@ -192,11 +228,11 @@ function UsersTab() {
               </PaginationItem>
               <PaginationItem
                 onClick={() => handleNextPage()}
-                disabled={currentPage * itemsPerPage >= userData.length}
+                disabled={currentPage * itemsPerPage >= filteredUsers?.length}
               >
                 <PaginationLink>Next &nbsp; →</PaginationLink>
               </PaginationItem>
-            </Pagination> */}
+            </Pagination>
           </div>
         </Col>
       </Row>

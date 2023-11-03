@@ -10,8 +10,8 @@ function MainSettings() {
   return (
     <React.Fragment>
       <div className="page-content">
-        <Row className="align-items-start justify-content-center mt-2">
-          <Col md={4}>
+        <Row className="ms-2 mt-2">
+          <Col md={2}>
             <Card className=" d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
@@ -53,7 +53,7 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={4}>
+          <Col md={2}>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
@@ -85,7 +85,7 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={3} hidden>
+          <Col md={2} hidden>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
@@ -101,7 +101,7 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={3} hidden>
+          <Col md={2} hidden>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
