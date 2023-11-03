@@ -242,7 +242,7 @@ const Navdata = () => {
         },
       ],
     },
-    checkAllRole(["Super Admin"]) && // Settings
+    //checkAllRole(["Super Admin"]) && // Settings
     {
       id: "settings",
       label: "Settings",

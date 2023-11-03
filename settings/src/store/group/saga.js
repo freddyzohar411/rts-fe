@@ -29,13 +29,12 @@ import {
 
 // Create Group
 function* workCreateGroup(action) {
-  const { newGroup, navigate } = action.payload;
+  const { payload } = action;
   try {
-    const groupResponse = yield call(createGroup, newGroup);
-    yield put(createGroupSuccess(groupResponse.data));
-    navigate("/settings/access");
+    const groupResponse = yield call(createGroup, payload);
+    yield put(createGroupSuccess(groupResponse?.data));
   } catch (error) {
-    yield put(createGroupFailure(error));
+    yield put(createGroupFailure(error?.data));
   }
 }
 
