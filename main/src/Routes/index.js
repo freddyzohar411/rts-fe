@@ -16,11 +16,15 @@ import { AuthProtected } from "./AuthProtected";
 import PermissionProtected from "./PermissionProtected";
 
 // Test
-import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Action
+import { usePollingAuthHook } from "@workspace/login";
+
 const Index = () => {
+  // usePollingAuthHook(10000)
+
   return (
     <React.Fragment>
       <Router>

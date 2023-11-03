@@ -23,6 +23,7 @@ const profile = (state = initialState, action) => {
       state = { ...state };
       break;
     case PROFILE_SUCCESS:
+      console.log("Profile SS")
       state = {
         ...state,
         success: !action.payload.error,
