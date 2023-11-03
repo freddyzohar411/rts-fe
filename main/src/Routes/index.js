@@ -23,7 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { usePollingAuthHook } from "@workspace/login";
 
 const Index = () => {
-  // usePollingAuthHook(10000)
+  // usePollingAuthHook(1000)
 
   return (
     <React.Fragment>
