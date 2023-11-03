@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Col,
@@ -8,12 +8,20 @@ import {
   PaginationLink,
   Row,
   Table,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteGroup, fetchGroups } from "../../../store/group/action";
 
 function GroupsTab() {
-  const [showDelete, setShowDelete] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [deletedId, setDeletedId] = useState();
+
+  const dispatch = useDispatch();
   // PAGINATION
   const groups = useSelector((state) => state?.GroupReducer?.groups) ?? [];
 
@@ -34,6 +42,11 @@ function GroupsTab() {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
+  };
+
+  const handleDelete = () => {
+    setModal(false);
+    dispatch(deleteGroup(deletedId));
   };
 
   return (
@@ -93,11 +106,12 @@ function GroupsTab() {
                         <i className="ri-pencil-line"></i>
                       </Button>
                     </Link>
-
                     <Button
                       className="btn btn-custom-primary-hover"
-                      style={{ pointerEvents: "none" }}
-                      onClick={() => setShowDelete(!showDelete)}
+                      onClick={() => {
+                        setModal(true);
+                        setDeletedId(item?.id);
+                      }}
                     >
                       <i className="ri-delete-bin-line"></i>
                     </Button>
@@ -106,6 +120,24 @@ function GroupsTab() {
               ))}
             </tbody>
           </Table>
+          <Modal isOpen={modal} toggle={() => setModal(false)} centered>
+            <ModalHeader>Are you sure?</ModalHeader>
+            <ModalBody>You are deleting this group.</ModalBody>
+            <ModalFooter>
+              <Button
+                className="btn btn-custom-primary"
+                onClick={() => handleDelete()}
+              >
+                Delete
+              </Button>
+              <Button
+                className="btn btn-custom-primary"
+                onClick={() => setModal(false)}
+              >
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
           <div className="d-flex flex-row justify-content-end">
             <Pagination>
               <PaginationItem
