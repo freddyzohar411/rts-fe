@@ -216,7 +216,7 @@ function UpdateRole() {
                               Permissions
                             </NavLink>
                           </NavItem>
-                          <NavItem>
+                          <NavItem hidden>
                             <NavLink
                               style={{ cursor: "pointer" }}
                               className={classnames({
