@@ -90,7 +90,7 @@ const FormbuilderMain = () => {
   console.log("Form 1: ", form)
 
   return (
-    <div className="" style={{marginTop:"70px",marginBottom:"60px"}}>
+    <div className="" style={{marginTop:"60px",marginBottom:"60px"}}>
       <FormBuilder
         initialFormState={form ? "update" : "create"}
         template={form}
