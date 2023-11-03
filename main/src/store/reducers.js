@@ -28,7 +28,7 @@ const {
   DepartmentReducer,
   IndustryReducer,
   ParentCompanyReducer,
-  UserGroupReducer
+  UserGroupReducer,
 } = Reducers;
 
 const { Login, ForgetPassword, Profile } = LoginReducers;
@@ -45,8 +45,13 @@ const {
   JobReducer,
 } = JobReducers;
 
-const { UserReducer, RoleReducer, ModuleReducer, PermissionReducer } =
-  SettingReducers;
+const {
+  UserReducer,
+  RoleReducer,
+  ModuleReducer,
+  PermissionReducer,
+  GroupReducer,
+} = SettingReducers;
 
 const rootReducer = combineReducers({
   // Common
@@ -83,6 +88,7 @@ const rootReducer = combineReducers({
   RoleReducer,
   ModuleReducer,
   PermissionReducer,
+  GroupReducer,
 });
 
 export default rootReducer;

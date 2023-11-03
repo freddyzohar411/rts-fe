@@ -84,15 +84,15 @@ const authProtectedRoutes = [
     component: <UpdateRole />,
   },
   { path: "/settings/access/group/group-creation", component: <CreateGroup /> },
-  { path: "/settings/access/group/:groupName", component: <GroupDetails /> },
+  { path: "/settings/access/group/:id", component: <GroupDetails /> },
   {
-    path: "/settings/access/group/update/:groupName",
+    path: "/settings/access/group/update/:id",
     component: <GroupUpdate />,
   },
 
   { path: "/settings/access/user/:userId", component: <UserDetails /> },
   { path: "/settings/access/user/user-creation", component: <CreateUser /> },
-  { path: "/settings/access/user/update/:userId", component: <UpdateUser/> },
+  { path: "/settings/access/user/update/:userId", component: <UpdateUser /> },
 
 
   // this route should be at the end of all other routes

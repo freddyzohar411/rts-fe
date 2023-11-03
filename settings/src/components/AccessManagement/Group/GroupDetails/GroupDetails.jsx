@@ -16,38 +16,20 @@ import {
   TabPane,
   Table,
 } from "reactstrap";
-import {
-  roleData,
-  roleGroupData,
-  userData,
-  userGroupData,
-  userGroupMembersData,
-} from "../../dataSample";
+import { useSelector } from "react-redux";
 import classnames from "classnames";
 
 function GroupDetails() {
-  const { groupName } = useParams();
-  const groupDetails = userGroupData.find(
-    (group) => group.groupName === groupName
-  );
+  const { id } = useParams();
 
-  document.title = `${groupDetails.groupName} | RTS`;
+  const groups = useSelector((state) => state?.GroupReducer?.groups) ?? [];
+  const groupDetails = groups?.find((group) => group?.id == id);
 
-  const groupMembers = userGroupMembersData.find(
-    (group) => group.groupName === groupName
-  );
-  const groupMember = groupMembers.members;
-  const memberDetails = groupMember.map((username) =>
-    userData.find((user) => user.username === username)
-  );
+  document.title = `${groupDetails?.userGroupName} | RTS`;
 
-  const groupRoles = roleGroupData.filter((role) =>
-    role.groups.includes(groupName)
-  );
-  const roleNames = groupRoles.map((role) => role.roleName);
-  const roleDetails = roleData.filter((role) =>
-    roleNames.includes(role.roleName)
-  );
+  const memberDetails = groupDetails?.users ?? [];
+
+  const roleDetails = groupDetails?.roleEntities ?? [];
 
   // Tab
   const [activeTab, setActiveTab] = useState("1");
@@ -85,7 +67,7 @@ function GroupDetails() {
                         <Col>
                           <div className="d-flex flex-column gap-1">
                             <span className="fw-semibold">Group Name</span>
-                            <span>{groupDetails.groupName}</span>
+                            <span>{groupDetails?.userGroupName}</span>
                           </div>
                         </Col>
                       </Row>
@@ -95,7 +77,7 @@ function GroupDetails() {
                             <span className="fw-semibold">
                               Group Description
                             </span>
-                            <span>{groupDetails.groupDescription}</span>
+                            <span>{groupDetails?.userGroupDescription}</span>
                           </div>
                         </Col>
                       </Row>
@@ -138,7 +120,7 @@ function GroupDetails() {
                               </NavLink>
                             </NavItem>
                           </Nav>
-                          <TabContent activeTab={activeTab}>
+                          <TabContent activeTab={activeTab} className="pt-1">
                             <TabPane tabId="1">
                               <Row>
                                 <Col>
@@ -151,8 +133,8 @@ function GroupDetails() {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {memberDetails.map((member) => (
-                                        <tr>
+                                      {memberDetails.map((member, index) => (
+                                        <tr key={index}>
                                           <td>{member.employeeId}</td>
                                           <td>
                                             {member.firstName} {member.lastName}{" "}
@@ -175,9 +157,9 @@ function GroupDetails() {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {roleDetails.map((role) => (
-                                        <tr>
-                                          <td>{role.roleName}</td>
+                                      {roleDetails?.map((role, index) => (
+                                        <tr key={index}>
+                                          <td>{role?.roleName}</td>
                                         </tr>
                                       ))}
                                     </tbody>

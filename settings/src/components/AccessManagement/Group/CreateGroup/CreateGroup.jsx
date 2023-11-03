@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Breadcrumb,
@@ -23,36 +23,50 @@ import {
 } from "reactstrap";
 import { initialValues, schema } from "./constants";
 import DualListBox from "react-dual-listbox";
-import {
-  roleData,
-  userData,
-  userGroupData,
-  userGroupMembersData,
-} from "../../dataSample";
+import { useSelector } from "react-redux";
+import { userGroupData, userGroupMembersData } from "../../dataSample";
 import classnames from "classnames";
 
 function CreateGroup() {
   document.title = "Create User Group | RTS";
   const navigate = useNavigate();
 
+  const users = useSelector((state) => state.UserReducer.users);
+  const roles = useSelector((state) => state.RoleReducer.users);
+
+  const [formattedUsers, setFormattedUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [formattedRoles, setFormattedRoles] = useState([]);
+  const [selectedRoles, setSelectedRoles] = useState([]);
   const [activeTab, setActiveTab] = useState("1");
+
   const toggle = (tab) => {
     if (activeTab != tab) {
       setActiveTab(tab);
     }
   };
 
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  const formattedUsers = userData.map((user) => ({
-    value: user.username,
-    label: user.firstName,
-  }));
+  useEffect(() => {
+    if (users?.length) {
+      const usersData = users?.map((user) => ({
+        value: user?.id,
+        label: user?.firstName + " " + user?.lastName,
+      }));
+      setFormattedUsers(usersData);
+    } else {
+      navigate("/settings/access");
+    }
+  }, [users]);
 
-  const [selectedRoles, setSelectedRoles] = useState([]);
-  const formattedRoles = roleData.map((role) => ({
-    value: role.roleName,
-    label: role.roleName,
-  }));
+  useEffect(() => {
+    if (roles?.length) {
+      const rolesData = roles?.map((role) => ({
+        value: role?.id,
+        label: role?.roleName,
+      }));
+      setFormattedRoles(rolesData);
+    }
+  }, [roles]);
 
   const handleSubmit = async (values, { resetForm }) => {
     const groupData = {
@@ -69,6 +83,12 @@ function CreateGroup() {
     userGroupMembersData.push(groupMembers);
     resetForm();
     navigate("/settings/access/");
+  };
+
+  const handleResetForm = (resetForm) => {
+    resetForm();
+    setSelectedUsers([]);
+    setSelectedRoles([]);
   };
 
   return (
@@ -369,7 +389,7 @@ function CreateGroup() {
                           <Button
                             type="button"
                             className="btn btn-custom-primary"
-                            onClick={() => resetForm()}
+                            onClick={() => handleResetForm(resetForm)}
                           >
                             Reset
                           </Button>
@@ -378,7 +398,7 @@ function CreateGroup() {
                               <Button
                                 type="button"
                                 className="btn btn-custom-primary"
-                                onClick={() => resetForm()}
+                                onClick={() => handleResetForm(resetForm)}
                               >
                                 Cancel
                               </Button>

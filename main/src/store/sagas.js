@@ -43,7 +43,8 @@ const {
 
 const { FormSaga } = FormBuilderSagas;
 
-const { UserSaga, RoleSaga, ModuleSaga, PermissionSaga } = SettingSagas;
+const { UserSaga, RoleSaga, ModuleSaga, PermissionSaga, GroupSaga } =
+  SettingSagas;
 
 export default function* rootSaga() {
   yield all([
@@ -82,5 +83,6 @@ export default function* rootSaga() {
     fork(RoleSaga),
     fork(ModuleSaga),
     fork(PermissionSaga),
+    fork(GroupSaga),
   ]);
 }

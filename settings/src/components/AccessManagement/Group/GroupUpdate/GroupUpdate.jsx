@@ -22,58 +22,67 @@ import {
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import DualListBox from "react-dual-listbox";
 import classnames from "classnames";
-import {
-  roleData,
-  roleGroupData,
-  userData,
-  userGroupData,
-  userGroupMembersData,
-} from "../../dataSample";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 function GroupUpdate() {
-  const { groupName } = useParams();
-  const groupDetails = userGroupData.find(
-    (group) => group.groupName === groupName
-  );
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-  document.title = `${groupName} Update | RTS`;
+  const users = useSelector((state) => state.UserReducer.users);
+  const roles = useSelector((state) => state.RoleReducer.users);
+  const groups = useSelector((state) => state?.GroupReducer?.groups) ?? [];
 
+  const [formattedUsers, setFormattedUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [formattedRoles, setFormattedRoles] = useState([]);
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [groupDetails, setGroupDetails] = useState();
   const [activeTab, setActiveTab] = useState("1");
+
   const toggle = (tab) => {
     if (activeTab != tab) {
       setActiveTab(tab);
     }
   };
 
-  // GROUP MEMBERS AND ROLES
-  const groupMembers = userGroupMembersData.find(
-    (group) => group.groupName === groupName
-  );
+  useEffect(() => {
+    if (groups?.length > 0) {
+      const groupDetails = groups?.find((group) => group?.id == id);
+      setGroupDetails(groupDetails);
 
-  const memberUsernames = groupMembers.members;
-  const memberDetails = memberUsernames.map((username) =>
-    userData.find((user) => user.username === username)
-  );
+      document.title = `${groupDetails?.userGroupName} | RTS`;
 
-  const groupRoles = roleGroupData.filter((role) =>
-    role.groups.includes(groupName)
-  );
-  const roleNames = groupRoles.map((role) => role.roleName);
-  const roleDetails = roleData.filter((role) =>
-    roleNames.includes(role.roleName)
-  );
+      const existingUsers = groupDetails?.users?.map((user) => user?.id);
+      setSelectedUsers(existingUsers);
 
-  const formattedUsers = userData.map((user) => ({
-    value: user.username,
-    label: user.firstName,
-  }));
-  const existingMembers = memberDetails.map((user) => user.username);
-  const [selectedMembers, setSelectedMembers] = useState(existingMembers);
+      const roleNames = groupDetails?.roleEntities?.map((role) => role?.id);
+      setSelectedRoles(roleNames);
+    } else {
+      navigate("/settings/access");
+    }
+  }, []);
 
-  const formattedRoles = roleData.map((role) => ({
-    value: role.roleName,
-    label: role.roleName,
-  }));
-  const [selectedRoles, setSelectedRoles] = useState(roleNames);
+  useEffect(() => {
+    if (users?.length) {
+      const usersData = users?.map((user) => ({
+        value: user?.id,
+        label: user?.firstName + " " + user?.lastName,
+      }));
+      setFormattedUsers(usersData);
+    }
+  }, [users]);
+
+  useEffect(() => {
+    if (roles?.length) {
+      const rolesData = roles?.map((role) => ({
+        value: role?.id,
+        label: role?.roleName,
+      }));
+      setFormattedRoles(rolesData);
+    }
+  }, [roles]);
 
   return (
     <React.Fragment>
@@ -117,7 +126,7 @@ function GroupUpdate() {
                           <Input
                             type="text"
                             name="groupName"
-                            value={groupDetails.groupName}
+                            value={groupDetails?.userGroupName}
                             className="form-control"
                           />
                         </Col>
@@ -128,7 +137,7 @@ function GroupUpdate() {
                           <Input
                             type="textarea"
                             name="groupDescription"
-                            value={groupDetails.groupDescription}
+                            value={groupDetails?.userGroupDescription}
                             className="form-control"
                           />
                         </Col>
@@ -192,8 +201,8 @@ function GroupUpdate() {
                                   <Col>
                                     <DualListBox
                                       options={formattedUsers}
-                                      selected={selectedMembers}
-                                      onChange={(e) => setSelectedMembers(e)}
+                                      selected={selectedUsers}
+                                      onChange={(e) => setSelectedUsers(e)}
                                       canFilter={true}
                                       icons={{
                                         moveLeft: (
