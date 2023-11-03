@@ -57,10 +57,10 @@ function UsersTab() {
     if (searchTerm === "") {
       return "No results found";
     } else if (
-      user?.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user?.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user?.employeeId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user?.username.toLowerCase().includes(searchTerm.toLowerCase())
+      user?.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user?.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user?.employeeId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user?.username?.toLowerCase().includes(searchTerm.toLowerCase())
     ) {
       return user;
     }
@@ -107,7 +107,7 @@ function UsersTab() {
                 <tr>
                   <th>Name</th>
                   <th scope="col">Employee ID</th>
-                  <th scope="col">Roles</th>
+                  <th scope="col" hidden>Roles</th>
                   <th scope="col">Member of Group(s)</th>
                   <th scope="col">Date Joined</th>
                   <th scope="col">Last Login</th>
@@ -125,7 +125,7 @@ function UsersTab() {
                       {user?.firstName} {user?.lastName}
                     </td>
                     <td>{user?.employeeId}</td>
-                    <td>
+                    <td hidden>
                       {user?.userGroup.length > 0 ? (
                         <>
                           {user.userGroup.map((group, groupIndex) => (

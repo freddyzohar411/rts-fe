@@ -49,10 +49,10 @@ function UpdateRole() {
   // Set Role Initial Values
   useEffect(() => {
     const fetchRoleInitialValues = {
-      id: role.id,
-      roleName: role.roleName,
-      roleDescription: role.roleDescription,
-      modules: role.modules,
+      id: role?.id,
+      roleName: role?.roleName,
+      roleDescription: role?.roleDescription,
+      modules: role?.modules,
     };
     setRoleInitialValues(populateForm(fetchRoleInitialValues));
   }, [role]);
@@ -60,7 +60,7 @@ function UpdateRole() {
   // Document Title
   useEffect(() => {
     if (roleId) {
-      document.title = `${role.roleName} Update | RTS`;
+      document.title = `${role?.roleName} Update | RTS`;
     }
   }, []);
 

@@ -55,7 +55,7 @@ function RolesTab() {
     if (searchTerm === "") {
       return "No results found";
     } else if (
-      role?.roleName.toLowerCase().includes(searchTerm.toLowerCase())
+      role?.roleName?.toLowerCase().includes(searchTerm.toLowerCase())
     ) {
       return role;
     }
@@ -120,7 +120,11 @@ function RolesTab() {
               filteredRoles?.map((role, index) => (
                 <tr key={index}>
                   <td>{role?.roleName}</td>
-                  <td className="text-truncate">{role.roleDescription}</td>
+                  <td className="text-truncate">
+                    {role.roleDescription.length > 100
+                      ? `${role.roleDescription.substring(0, 100)}...`
+                      : role.roleDescription}
+                  </td>
                   <td className="d-flex align-items-center justify-content-center">
                     <div className="d-flex flex-start gap-2">
                       <Link

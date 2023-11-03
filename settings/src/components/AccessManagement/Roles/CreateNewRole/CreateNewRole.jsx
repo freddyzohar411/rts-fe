@@ -35,6 +35,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchModules } from "../../../../store/module/action";
 import { createRole } from "../../../../store/roles/action";
+import { fetchGroups } from "../../../../store/group/action";
 
 function CreateNewRole() {
   document.title = "Create New Role | RTS";
@@ -43,10 +44,14 @@ function CreateNewRole() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const allModules = useSelector((state) => state.ModuleReducer.modules);
+  const allGroups = useSelector((state) => state.GroupReducer.groups);
 
   useEffect(() => {
     dispatch(fetchModules());
+    dispatch(fetchGroups());
   }, []);
+
+  console.log("all groups:", allGroups);
 
   // Tabs
   const [activeTab, setActiveTab] = useState("1");
@@ -58,9 +63,9 @@ function CreateNewRole() {
 
   // Dual List Box
   const [selected, setSelected] = useState([]);
-  const formattedGroups = userGroupData.map((group) => ({
-    value: group.groupName,
-    label: group.groupName,
+  const formattedGroups = allGroups.map((group) => ({
+    value: group.userGroupName,
+    label: group.userGroupName,
   }));
 
   // Handle Submit
@@ -76,10 +81,10 @@ function CreateNewRole() {
         createRole({ newRole, navigate: navigate })
       );
       if (response && response.code === 200) {
-        dispatch(showSuccessToast("Role created successfully!"))
+        dispatch(showSuccessToast("Role created successfully!"));
       }
     } catch (error) {
-      dispatch(showFailureToast("Role creation failed!"))
+      dispatch(showFailureToast("Role creation failed!"));
     }
   };
 
@@ -208,7 +213,7 @@ function CreateNewRole() {
                                   Permissions
                                 </NavLink>
                               </NavItem>
-                              <NavItem>
+                              <NavItem hidden>
                                 <NavLink
                                   style={{ cursor: "pointer" }}
                                   className={classnames({

@@ -24,12 +24,7 @@ import { fetchGroups } from "../../store/group/action";
 
 function AccessManagement() {
   document.title = "Access Management Settings | RTS";
-  const toastMsg = useSelector((state) => state.toast);
   const dispatch = useDispatch();
-
-  const handleCloseToast = () => {
-    dispatch(clearToast());
-  };
 
   // Tabs
   const [activeTab, setActiveTab] = useState("1");

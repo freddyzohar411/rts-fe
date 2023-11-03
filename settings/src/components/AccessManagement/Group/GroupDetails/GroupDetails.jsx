@@ -163,7 +163,7 @@ function GroupDetails() {
                             <TabPane tabId="2">
                               <Row>
                                 <Col>
-                                  <Table className="table table-striped table-bordered table-hover border-light align-middle">
+                                  <Table className="table table-striped table-bordered table-hover border-secondary align-middle">
                                     <thead>
                                       <tr>
                                         <th>Role Name</th>

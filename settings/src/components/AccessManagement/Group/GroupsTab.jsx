@@ -16,6 +16,7 @@ import {
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteGroup, fetchGroups } from "../../../store/group/action";
+import { useEffect } from "react";
 
 function GroupsTab() {
   const [modal, setModal] = useState(false);
@@ -24,6 +25,11 @@ function GroupsTab() {
   const dispatch = useDispatch();
   // PAGINATION
   const groups = useSelector((state) => state?.GroupReducer?.groups) ?? [];
+
+  useEffect(() => {
+    dispatch(fetchGroups());
+  }, []);
+
 
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,7 +60,7 @@ function GroupsTab() {
     if (searchTerm === "") {
       return "No results found";
     } else if (
-      group?.userGroupName.toLowerCase().includes(searchTerm.toLowerCase())
+      group?.userGroupName?.toLowerCase().includes(searchTerm.toLowerCase())
     ) {
       return group;
     }
