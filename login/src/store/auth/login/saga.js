@@ -52,6 +52,7 @@ function* loginUser({ payload: { user, history } }) {
       username: user.username,
       password: user.password,
     });
+    console.log("RR",response)
     if (response) {
       yield put(loginSuccess(response));
       sessionStorage.setItem("authUser", JSON.stringify(response));
@@ -62,7 +63,6 @@ function* loginUser({ payload: { user, history } }) {
       const userProfile = yield select((state) => state.Profile.userProfile);
 
       if (getAllRoles(userProfile).length === 0) {
-        // yield put(logout(true));
         const logOutResponse = yield call(getLogout, {
           token: response.refresh_token,
         });
@@ -81,6 +81,7 @@ function* loginUser({ payload: { user, history } }) {
       yield put(apiError(response));
     }
   } catch (error) {
+    toast.error(error.message);
     yield put(apiError(error));
   }
 }
