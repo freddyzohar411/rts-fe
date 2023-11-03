@@ -119,7 +119,7 @@ function UsersTab() {
                 </tr>
               </thead>
               <tbody>
-                { filteredUsers.length > 0 ? ( filteredUsers?.map((user, index) => (
+                { filteredUsers?.length > 0 ? ( filteredUsers?.map((user, index) => (
                   <tr key={index}>
                     <td>
                       {user?.firstName} {user?.lastName}

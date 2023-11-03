@@ -95,7 +95,7 @@ function GroupsTab() {
               </tr>
             </thead>
             <tbody>
-              {filteredGroups.length > 0 ? (
+              {filteredGroups?.length > 0 ? (
                 filteredGroups?.map((item, idx) => (
                   <tr key={idx}>
                     <td>{item?.userGroupName}</td>

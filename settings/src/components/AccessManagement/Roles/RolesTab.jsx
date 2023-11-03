@@ -116,8 +116,8 @@ function RolesTab() {
             </tr>
           </thead>
           <tbody>
-            {filteredRoles.length > 0 ? (
-              filteredRoles.map((role, index) => (
+            {filteredRoles?.length > 0 ? (
+              filteredRoles?.map((role, index) => (
                 <tr key={index}>
                   <td>{role.roleName}</td>
                   <td className="text-truncate">{role.roleDescription}</td>
