@@ -50,7 +50,7 @@ function UpdateUser() {
       };
       setUserInitialValues(populateForm(fetchInitialValues));
     }
-  }, []);
+  }, [user]);
 
   // Document Title
   useEffect(() => {
