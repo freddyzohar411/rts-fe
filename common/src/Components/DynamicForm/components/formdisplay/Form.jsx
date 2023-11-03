@@ -65,7 +65,6 @@ const Form = ({
     }
   }, [editData, view, formState]);
 
-
   /**
    * Set template data
    */

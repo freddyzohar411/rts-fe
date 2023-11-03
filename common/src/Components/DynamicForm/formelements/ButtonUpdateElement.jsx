@@ -1,9 +1,14 @@
 import React from "react";
 import { fieldLocation } from "./constant";
 
-const ButtonUpdateElement = ({ field, formik, buttonNameHook, formStateHook }) => {
-  const {buttonName, setButtonName} = buttonNameHook;
-  const {formState, setFormState} = formStateHook;
+const ButtonUpdateElement = ({
+  field,
+  formik,
+  buttonNameHook,
+  formStateHook,
+}) => {
+  const { buttonName, setButtonName } = buttonNameHook;
+  const { formState, setFormState } = formStateHook;
 
   const buttonJsx = (
     <button

@@ -15,7 +15,6 @@ const CheckboxElement = ({ formik, field, formStateHook }) => {
             checked={formik?.values?.[field.name]?.includes(option.value)}
             disabled={formState === "view" ? true : false}
             onChange={() => {
-              // Write method in here
               const isChecked = formik.values[field.name]?.includes(
                 option.value
               );

@@ -46,43 +46,103 @@ const generateFormField = (
     type === "password" ||
     type === "date"
   ) {
-    return <InputElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <InputElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "file") {
-    return <FileInputElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <FileInputElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "textarea") {
-    return <TextAreaElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <TextAreaElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "select") {
-    return <SelectElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <SelectElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "radio") {
-    return <RadioElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <RadioElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "checkbox") {
-    return <CheckboxElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <CheckboxElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "selectindustry") {
-    return <IndustrySelectElement formik={formik} field={field} formStateHook={formStateHook}/>;
+    return (
+      <IndustrySelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "selectsubindustry") {
-    return <SubIndustrySelectElement formik={formik} field={field} formStateHook={formStateHook}/>;
+    return (
+      <SubIndustrySelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "selectcountry") {
-    return <CountrySelectElement formik={formik} field={field} formStateHook={formStateHook}/>;
+    return (
+      <CountrySelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "selectstate") {
-    return <StateSelectElement formik={formik} field={field} formStateHook={formStateHook}/>;
+    return (
+      <StateSelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "table") {
@@ -99,41 +159,83 @@ const generateFormField = (
   }
 
   if (type === "selectcurrency") {
-    return <CurrencyElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <CurrencyElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "selectlandline") {
-    return <LandlineElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <LandlineElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "selectcity") {
-    return <CitySelectElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <CitySelectElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "selectdepartment") {
-    return <DepartmentSelectElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <DepartmentSelectElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "editor") {
-    return <EditorElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <EditorElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "parentcompany") {
-    return <AccountParentElement field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <AccountParentElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   if (type === "searchselect") {
-    return <SearchSelect field={field} formik={formik} formStateHook={formStateHook}/>;
+    return (
+      <SearchSelect
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
   }
 
   // text & button
 
   if (type === "word") {
-    return <TextElement field={field}/>;
+    return <TextElement field={field} />;
   }
 
   if (type === "button") {
-    return <ButtonElement field={field} buttonNameHook={buttonNameHook}/>;
+    return <ButtonElement field={field} buttonNameHook={buttonNameHook} />;
   }
 
   if (type === "buttonupdate") {
@@ -223,8 +325,6 @@ const checkVisibleOnCountry = (field, formik) => {
 
 const checkVisibleOnGlobalCountry = (field, country) => {
   if (field?.countryOptions?.countryList.length === 0) return true;
-  // Get country field
-  // If country field is included in country list, then show field
   if (field.countryOptions?.countryList.includes(country)) {
     return true;
   }
@@ -246,16 +346,12 @@ const checkVisibleOnGlobalCountry = (field, country) => {
 // };
 
 const checkAccessible = (field, userDetails) => {
-  // if (!userDetails) return true;s
-  // Check if field is accessible based on user role
-  // console.log("Form Element userDetails", userDetails)
-  // console.log("Form Element field usergroup", field.userGroup)
   if (!field?.userGroup) return true;
   if (field?.userGroup.length === 0) return true;
 
   // As userGroup is an array, check if any of the userGroup is in userDetails
 
-  const userDetailsLowerCase = userDetails?.map((user) => user.toLowerCase()); 
+  const userDetailsLowerCase = userDetails?.map((user) => user.toLowerCase());
   for (const userGroup of field.userGroup) {
     if (userDetailsLowerCase?.includes(userGroup.toLowerCase())) {
       return true;

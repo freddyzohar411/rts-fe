@@ -17,7 +17,7 @@ const BaseFormSelectElement = ({
     }
   }, [initialBaseFormId]);
 
-  console.log("BaseFormId:", baseFormId)
+  console.log("BaseFormId:", baseFormId);
 
   useEffect(() => {
     axios(`http://localhost:9400/forms/base`)
@@ -30,7 +30,7 @@ const BaseFormSelectElement = ({
       });
   }, []);
 
-  console.log("Base Form List: ", baseFormList)
+  console.log("Base Form List: ", baseFormList);
 
   useEffect(() => {
     console.log("Base form Id: ", baseFormId);
@@ -75,7 +75,9 @@ const BaseFormSelectElement = ({
           >
             <option value={0}>Select Base Form</option>
             {baseFormList.map((baseForm) => (
-              <option key={baseForm.formId} value={baseForm.formId}>{baseForm.formName}</option>
+              <option key={baseForm.formId} value={baseForm.formId}>
+                {baseForm.formName}
+              </option>
             ))}
           </select>
         </div>

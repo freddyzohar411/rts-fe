@@ -125,8 +125,10 @@ const Form = ({
 
     // Reset formik values
 
-
-    await onSubmit(event, values, newValues, buttonName , { formState, setFormState });
+    await onSubmit(event, values, newValues, buttonName, {
+      formState,
+      setFormState,
+    });
   };
 
   /**

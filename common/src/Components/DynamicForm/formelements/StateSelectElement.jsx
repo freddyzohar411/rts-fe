@@ -6,7 +6,7 @@ const StateSelectElement = ({ formik, field, formStateHook }) => {
   useEffect(() => {
     if (formik.values[field.parent]) {
       // Fetch data from API
-      setFetchData([])
+      setFetchData([]);
       fetch(
         `http://localhost:8600/geo/states/${parseInt(
           formik.values[field.parent]

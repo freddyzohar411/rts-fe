@@ -12,11 +12,11 @@ const DnDWrapper = ({
   flex,
   direction,
   dropColor,
-  droppableId
+  droppableId,
 }) => {
   return (
     <Droppable
-      droppableId={droppableId ? droppableId :`${droppableType}-${uuid()}`}
+      droppableId={droppableId ? droppableId : `${droppableType}-${uuid()}`}
       type={droppableType}
       direction={direction === "horizontal" ? "horizontal" : "vertical"}
     >
@@ -25,7 +25,7 @@ const DnDWrapper = ({
           ref={provided.innerRef}
           {...provided.droppableProps}
           className={`${flex ? "flex-fill w-100" : ""}`}
-          style={{backgroundColor: snapshot.isDraggingOver ? dropColor : ""}}
+          style={{ backgroundColor: snapshot.isDraggingOver ? dropColor : "" }}
         >
           <Draggable
             draggableId={`${draggablePrefix}${draggableId}`}

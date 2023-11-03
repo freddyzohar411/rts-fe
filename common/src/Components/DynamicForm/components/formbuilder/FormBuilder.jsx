@@ -63,7 +63,6 @@ const FormBuilder = ({
 
   console.log("FormOptions: ", formOptions);
   console.log("Country: ", country);
-  // console.log("User Details: ", userDetails);
   console.log("FormState: ", formState);
   console.log("UnusedField: ", unusedFields);
   console.log("FormFields: ", formFields);
@@ -88,7 +87,6 @@ const FormBuilder = ({
   useEffect(() => {
     if (baseFormTemplate && formState === "create") {
       setFormFields(baseFormTemplate?.formSchema);
-      // setFormName(baseFormTemplate?.formName);
       setFormLayoutSchema(baseFormTemplate?.formLayoutSchema);
       return;
     }

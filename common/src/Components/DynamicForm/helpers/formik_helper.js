@@ -12,7 +12,6 @@ const generateInitialValues = (formFieldData, formik) => {
     if (field.type === "checkbox") {
       return { ...acc, [field.name]: [] };
     }
-    // if (field.name === "") return acc;
 
     // If there is a subname, then add it to the initial values
     if (field.subName && field.subName !== "") {
@@ -44,13 +43,6 @@ const generateValidationSchema = (formFieldData) => {
           fieldValidation = Yup.number();
           break;
         case "file":
-          // fieldValidation = Yup.mixed().test(
-          //   "fileType",
-          //   "Invalid file type",
-          //   (value) => {
-          //     return value && value.type.startsWith("image/");
-          //   }
-          // );
           fieldValidation = Yup.mixed();
           break;
         default:
@@ -89,8 +81,6 @@ const generateValidationSchema2 = (
 ) => {
   const validationSchema = Yup.object(
     formFieldData?.reduce((acc, field) => {
-      // if (field.name === "") return acc;
-      // Check if field is visible and if not, skip
       if (
         (formik &&
           (!checkVisibleConditions(field, formik) ||

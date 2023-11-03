@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
-const TextElement = ({field}) => {
+const TextElement = ({ field }) => {
   return (
-    <pre style={{fontSize:field.wordSize,fontFamily:"inherit"}}>{field.wordText}</pre>
-  )
-}
+    <pre style={{ fontSize: field.wordSize, fontFamily: "inherit" }}>
+      {field.wordText}
+    </pre>
+  );
+};
 
-export default TextElement
+export default TextElement;

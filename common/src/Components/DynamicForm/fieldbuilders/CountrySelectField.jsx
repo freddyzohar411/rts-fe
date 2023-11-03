@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBusinessCountries } from "../../../store/countrycurrency/action";
 
@@ -10,12 +10,6 @@ const CountrySelectField = ({ setData, field }) => {
   );
 
   useEffect(() => {
-    // Fetch data from API
-    // fetch("http://localhost:8600/geo/country-currency").then((res) => {
-    //   res.json().then((data) => {
-    //     setFetchData(data.data);
-    //   });
-    // });
     dispatch(fetchBusinessCountries());
   }, []);
 
@@ -23,7 +17,7 @@ const CountrySelectField = ({ setData, field }) => {
     if (countryData) {
       setFetchData(countryData);
     }
-  },[countryData]);
+  }, [countryData]);
 
   return (
     <div>
@@ -31,8 +25,8 @@ const CountrySelectField = ({ setData, field }) => {
         <select
           name={field.name}
           onChange={(e) => {
-            setData(e.target.value)
-        }}
+            setData(e.target.value);
+          }}
           className="form-select"
         >
           <option value="">{field.placeholder}</option>
