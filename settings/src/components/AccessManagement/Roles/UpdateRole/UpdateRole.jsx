@@ -255,7 +255,7 @@ function UpdateRole() {
                                   </thead>
                                   <tbody>
                                     {roleInitialValues &&
-                                      roleInitialValues.modules.map(
+                                      roleInitialValues?.modules?.map(
                                         (module, index) => {
                                           const matchingModule =
                                             allModules.find(

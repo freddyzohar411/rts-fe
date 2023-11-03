@@ -15,22 +15,28 @@ import { Reducers as AccountReducers } from "@workspace/account";
 // Job
 import { Reducers as JobReducers } from "@workspace/job";
 
+// Form
+import { Reducers as FormBuilderReducers } from "@workspace/formbuilder";
+
 // Settings
 import { Reducers as SettingReducers } from "@workspace/settings";
 
-const { Layout } = Reducers;
-const { Login, ForgetPassword, Profile } = LoginReducers;
-const { DashboardEcommerce } = DashboardReducers;
 const {
-  AccountReducer,
-  AccountRegistrationReducer,
-  BillingCityReducer,
+  Layout,
   CityReducer,
   CountryCurrencyReducer,
   DepartmentReducer,
   IndustryReducer,
   ParentCompanyReducer,
-} = AccountReducers;
+  UserGroupReducer,
+} = Reducers;
+
+const { Login, ForgetPassword, Profile } = LoginReducers;
+const { DashboardEcommerce } = DashboardReducers;
+const { AccountReducer, AccountRegistrationReducer, AccountFormReducer } =
+  AccountReducers;
+
+const { FormReducer } = FormBuilderReducers;
 
 const {
   JobCountryCurrencyReducer,
@@ -48,29 +54,34 @@ const {
 } = SettingReducers;
 
 const rootReducer = combineReducers({
-  
+  // Common
+  Layout,
+  CityReducer,
+  CountryCurrencyReducer,
+  DepartmentReducer,
+  IndustryReducer,
+  ParentCompanyReducer,
+  UserGroupReducer,
+
   // public
   Login,
   ForgetPassword,
-  Layout,
   Profile,
   DashboardEcommerce,
 
   // account
   AccountReducer,
   AccountRegistrationReducer,
-  BillingCityReducer,
-  CityReducer,
-  CountryCurrencyReducer,
-  DepartmentReducer,
-  IndustryReducer,
-  ParentCompanyReducer,
+  AccountFormReducer,
 
   // Job
   JobCountryCurrencyReducer,
   JobAccountReducer,
   JobAccountContactsReducer,
   JobReducer,
+
+  // Form
+  FormReducer,
 
   // Settings
   UserReducer,

@@ -1,2 +1,17 @@
 import Layout from "./layouts/reducer";
-export { Layout };
+import CityReducer from "./city/reducer";
+import CountryCurrencyReducer from "./countrycurrency/reducer";
+import DepartmentReducer from "./department/reducer";
+import IndustryReducer from "./industry/reducer";
+import ParentCompanyReducer from "./parentcompany/reducer";
+import UserGroupReducer from "./usergroup/reducer";
+
+export {
+  Layout,
+  CityReducer,
+  CountryCurrencyReducer,
+  DepartmentReducer,
+  IndustryReducer,
+  ParentCompanyReducer,
+  UserGroupReducer
+};

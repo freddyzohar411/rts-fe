@@ -5,3 +5,6 @@ export const POST_PASSWORD_FORGET = "/api/user/signin";
 
 //VALIDATE
 export const GET_VALIDATE = "/api/user/validate";
+
+// PROFILE
+export const GET_USER_PROFILE = "/api/user/profile";

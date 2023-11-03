@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Modal,
   Row,
@@ -14,19 +15,25 @@ import {
 import SimpleBar from "simplebar-react";
 import { useDispatch, useSelector } from "react-redux";
 import Flag from "react-world-flags";
+import { Actions } from "@Workspace/common";
 import { Axios } from "@workspace/common";
 const { APIClient } = Axios;
 const api = new APIClient();
 
-function CountryModal() {
+function CountryModal({ setCountry }) {
   const dispatch = useDispatch();
   const countryData = useSelector(
-    (state) => state.CountryCurrencyReducer.countryCurrency
+    (state) => state.CountryCurrencyReducer.businessCountries
   );
+
   const [modal, setModal] = useState(true);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredCountries, setFilteredCountries] = useState([]);
+
+  useEffect(() => {
+    dispatch(Actions.fetchBusinessCountries());
+  }, []);
 
   function toggle() {
     setModal(!modal);
@@ -48,7 +55,12 @@ function CountryModal() {
     setSelectedCountry(country);
   };
 
-  // Render the card of each country
+  useEffect(() => {
+    if (selectedCountry) {
+      setCountry(selectedCountry);
+    }
+  }, [selectedCountry]);
+
   const renderCountries = (country, index) => (
     <Col lg={4} md={4} sm={4} xs={4} key={index}>
       <Card
@@ -62,7 +74,6 @@ function CountryModal() {
           value={searchQuery}
           onChange={() => handleCountrySelect(country)}
         />
-
         <Flag code={country.iso3} height="17" width="25.5" />
         <span style={{ fontSize: "15px" }}>{country.name}</span>
       </Card>
@@ -143,77 +154,37 @@ function CountryModal() {
           </div>
         </SimpleBar>
       </ModalBody>
-      <ModalFooter>
-        <Button
-          type="button"
-          disabled={!selectedCountry}
-          onClick={() => {
-            setSelectedCountry(null);
-            document.querySelector(
-              'input[name="country"]:checked'
-            ).checked = false;
-          }}
-        >
-          Clear Selection
-        </Button>
-        <Button
-          className="btn btn-success"
-          type="button"
-          disabled={!selectedCountry}
-          onClick={() => {
-            setModal(!modal);
-          }}
-        >
-          Proceed
-        </Button>
+      <ModalFooter as="div" className="d-flex justify-content-between align-items-center">
+          <Link to="/accounts">
+            <Button className="btn btn-danger">Cancel</Button>
+          </Link>
+          <div className="d-flex gap-3">
+            <Button
+              type="button"
+              disabled={!selectedCountry}
+              onClick={() => {
+                setSelectedCountry(null);
+                document.querySelector(
+                  'input[name="country"]:checked'
+                ).checked = false;
+              }}
+            >
+              Clear Selection
+            </Button>
+            <Button
+              className="btn btn-success"
+              type="button"
+              disabled={!selectedCountry}
+              onClick={() => {
+                setModal(!modal);
+              }}
+            >
+              Proceed
+            </Button>
+          </div>
       </ModalFooter>
     </Modal>
   );
 }
 
 export default CountryModal;
-
-{
-  /* <Row>
-          <Col lg={12}>
-            <h4 className="modal-title my-3 text-center">
-              Select a Country for Account
-            </h4>
-          </Col>
-        </Row>
-        <Row>
-          <Col lg={12}>
-            <div>
-              {selectedCountry ? (
-                <p
-                  className="text-muted text-center"
-                  style={{ fontSize: "15px" }}
-                >
-                  You have selected: {selectedCountry.name}
-                </p>
-              ) : (
-                <p
-                  className="text-muted text-center"
-                  style={{ fontSize: "15px" }}
-                >
-                  You have not chosen a country.
-                </p>
-              )}
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col lg={12}>
-            <div className="search-box">
-              <Input
-                type="text"
-                placeholder="Search for a country.."
-                className="form-control"
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-              />
-              <i className="ri-search-line search-icon"></i>
-            </div>
-          </Col>
-        </Row> */
-}

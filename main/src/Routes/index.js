@@ -13,13 +13,18 @@ import VerticalLayout from "@workspace/common/src/Layouts/index";
 //routes
 import { authProtectedRoutes, publicRoutes } from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";
+import PermissionProtected from "./PermissionProtected";
 
 // Test
-import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Action
+import { usePollingAuthHook } from "@workspace/login";
+
 const Index = () => {
+  // usePollingAuthHook(10000)
+
   return (
     <React.Fragment>
       <Router>
@@ -55,7 +60,12 @@ const Index = () => {
                     path={route?.path}
                     element={
                       <AuthProtected>
-                        <VerticalLayout>{route.component}</VerticalLayout>
+                        <PermissionProtected
+                          moduleName={route.moduleName}
+                          requiredPermissions={route.requiredPermissions}
+                        >
+                          <VerticalLayout>{route.component}</VerticalLayout>
+                        </PermissionProtected>
                       </AuthProtected>
                     }
                     key={idx}
@@ -79,7 +89,12 @@ const Index = () => {
                     path={route.path}
                     element={
                       <AuthProtected>
-                        <VerticalLayout>{route.component}</VerticalLayout>
+                        <PermissionProtected
+                          moduleName={route.moduleName}
+                          requiredPermissions={route.requiredPermissions}
+                        >
+                          <VerticalLayout>{route.component}</VerticalLayout>
+                        </PermissionProtected>
                       </AuthProtected>
                     }
                     key={idx}

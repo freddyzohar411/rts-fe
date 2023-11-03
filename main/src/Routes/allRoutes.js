@@ -9,14 +9,9 @@ import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 
 // Account
 import {
-  Access,
-  AccountCreation,
-  ClientInstructions,
-  Commercial,
-  Contacts,
-  Documents,
   AccountListing,
-  Stepper,
+  EditAccount,
+  CreateAccount,
 } from "@workspace/account";
 
 // Candidate
@@ -41,6 +36,12 @@ import {
   UpdateUser,
 } from "@workspace/settings";
 
+// Form Builder
+import { FormbuilderMain } from "@workspace/formbuilder";
+
+// Import constants for permission and module (Route guard)
+import  { Permission } from "@workspace/login";
+
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
   { path: "/index", component: <DashboardEcommerce /> },
@@ -53,22 +54,11 @@ const authProtectedRoutes = [
 
   // Account
   {
-    path: null,
-    component: <Stepper />,
-    nested: true,
-    subroutes: [
-      { path: "/account/account-creation", component: <AccountCreation /> },
-      { path: "/account/contact-creation", component: <Contacts /> },
-      { path: "/account/document-creation", component: <Documents /> },
-      {
-        path: "/account/client-instructions-creation",
-        component: <ClientInstructions />,
-      },
-      { path: "/account/access-creation", component: <Access /> },
-      { path: "/account/commercial-creation", component: <Commercial /> },
-      { path: "/account/account-listing", component: <AccountListing /> },
-    ],
+    path: "/accounts/create",
+    component: <CreateAccount />,
+    requiredPermissions: [Permission.ACCOUNT_WRITE],
   },
+  { path: "/accounts/:accountId/edit", component: <EditAccount /> },
   { path: "/accounts", component: <AccountListing /> },
 
   // Job
@@ -78,8 +68,16 @@ const authProtectedRoutes = [
   // Settings
   { path: "/settings", component: <MainSettings /> },
   { path: "/settings/customisation", component: <CustomisationSettings /> },
+
+  // Form Builder
+  { path: "/form-builder", component: <FormbuilderMain /> },
+  { path: "/form-builder/:templateId", component: <FormbuilderMain /> },
+
+  // Access Management
   { path: "/settings/access", component: <AccessManagement /> },
   { path: "/settings/access/role/role-creation", component: <CreateNewRole /> },
+
+
   { path: "/settings/access/role/:roleId", component: <ViewRole /> },
   {
     path: "/settings/access/role/update/:roleId",
@@ -95,6 +93,7 @@ const authProtectedRoutes = [
   { path: "/settings/access/user/:userId", component: <UserDetails /> },
   { path: "/settings/access/user/user-creation", component: <CreateUser /> },
   { path: "/settings/access/user/update/:userId", component: <UpdateUser /> },
+
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

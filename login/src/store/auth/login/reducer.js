@@ -4,7 +4,7 @@ import {
   LOGOUT_USER,
   LOGOUT_USER_SUCCESS,
   API_ERROR,
-  RESET_LOGIN_FLAG
+  RESET_LOGIN_FLAG,
 } from "./actionTypes";
 
 const initialState = {

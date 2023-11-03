@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, Row, Col, Nav, NavItem, NavLink, List } from "reactstrap";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -19,7 +20,6 @@ function MainSettings() {
                 ></i>
                 <h6>General</h6>
               </div>
-
               <List
                 type="unstyled"
                 className="d-flex flex-column gap-3 ms-5 mt-4"

@@ -1,3 +1,6 @@
+//Job
+export const GET_FORMS = "/forms";
+
 // User
 export const GET_USER = "/api/user";
 export const GET_USERS = "/api/user";
@@ -20,3 +23,4 @@ export const GET_PERMISSIONS = "/api/permission";
 
 // Module
 export const GET_USER_GROUP = "/api/usergroup";
+

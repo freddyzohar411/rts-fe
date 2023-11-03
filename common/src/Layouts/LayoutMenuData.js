@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as AuthHelper from "../helpers/auth_helper";
+import { useUserAuth } from "@workspace/login";
 
 const Navdata = () => {
+  const { checkAllPermission, Permission, checkAllRole } = useUserAuth();
   const history = useNavigate();
   //state data
   const [isDashboard, setIsDashboard] = useState(false);
@@ -103,13 +106,19 @@ const Navdata = () => {
           link: "/accounts",
           parentId: "account",
         },
-        {
+        checkAllPermission([Permission.ACCOUNT_WRITE]) && {
           id: "newAccount",
           label: "Create New Account",
-          link: "/account/account-creation",
+          link: "/accounts/create",
           parentId: "account",
         },
-      ],
+        // {
+        //   id: "newAccount",
+        //   label: "Create New Account",
+        //   link: "/accounts/create",
+        //   parentId: "account",
+        // },
+      ].filter(Boolean),
     },
 
     // Contacts
@@ -233,8 +242,7 @@ const Navdata = () => {
         },
       ],
     },
-
-    // Settings
+    checkAllRole(["Super Admin"]) && // Settings
     {
       id: "settings",
       label: "Settings",
@@ -272,7 +280,7 @@ const Navdata = () => {
           link: "/settings/resume-management",
           parentId: "settings",
         },
-      ],
+      ].filter(Boolean),
     },
   ];
   return <React.Fragment>{menuItems}</React.Fragment>;

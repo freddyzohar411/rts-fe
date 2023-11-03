@@ -55,6 +55,10 @@ function* workCreateUser(action) {
     toast.success("User created successfully!");
   } catch (error) {
     yield put(createUserFailure(error));
+    if (error.message.includes("409")) {
+      toast.error("User already exists!");
+      return;
+    }
     toast.error("User creation failed!");
   }
 }
