@@ -20,6 +20,7 @@ import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../store/actions";
 import { withRouter } from "@workspace/common";
+import { ParticlesComponent } from "../particles";
 
 const Login = (props) => {
   document.title = "Login | RTS";
@@ -42,6 +43,7 @@ const Login = (props) => {
     >
       {({ errors, touched }) => (
         <ParticlesAuth>
+          {/* <ParticlesComponent /> */}
           <div className="auth-page-content mt-lg-5">
             <Container>
               <Row>

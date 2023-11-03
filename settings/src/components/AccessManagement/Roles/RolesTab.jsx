@@ -119,23 +119,23 @@ function RolesTab() {
             {filteredRoles?.length > 0 ? (
               filteredRoles?.map((role, index) => (
                 <tr key={index}>
-                  <td>{role.roleName}</td>
+                  <td>{role?.roleName}</td>
                   <td className="text-truncate">{role.roleDescription}</td>
                   <td className="d-flex align-items-center justify-content-center">
                     <div className="d-flex flex-start gap-2">
-                      <Link to={`/settings/access/role/${role.id}`}>
+                      <Link to={`/settings/access/role/${role?.id}`}>
                         <Button className="btn btn-custom-primary">
                           <i className="ri-eye-line"></i>
                         </Button>
                       </Link>
-                      <Link to={`/settings/access/role/update/${role.id}`}>
+                      <Link to={`/settings/access/role/update/${role?.id}`}>
                         <Button className="btn btn-custom-primary">
                           <i className="ri-pencil-line"></i>
                         </Button>
                       </Link>
                       <Button
                         className="btn btn-custom-primary"
-                        onClick={() => confirmDelete(role.id)}
+                        onClick={() => confirmDelete(role?.id)}
                       >
                         <i className="ri-delete-bin-2-line"></i>
                       </Button>
@@ -163,7 +163,7 @@ function RolesTab() {
             </PaginationItem>
             <PaginationItem
               onClick={() => handleNextPage()}
-              disabled={currentPage * itemsPerPage >= filteredRoles?.length}
+              disabled={currentPage * itemsPerPage >= currentData?.length}
             >
               <PaginationLink>Next &nbsp; →</PaginationLink>
             </PaginationItem>
