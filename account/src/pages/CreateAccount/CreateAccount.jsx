@@ -10,7 +10,7 @@ import {
   AccountFormConstant,
   AccountEntityConstant,
   AccountTableListConstant,
-} from "../../constants/accountConstant"
+} from "../../constants/accountConstant";
 import {
   fetchDraftAccount,
   deleteAccountId,
@@ -35,12 +35,13 @@ const AccountCreation = () => {
   const navigate = useNavigate();
   const { getAllUserGroups } = useUserAuth();
 
-
   const form = useSelector((state) => state.AccountFormReducer.form);
   const accountId = useSelector(
     (state) => state.AccountRegistrationReducer.accountId
   );
-  const accountCountry = useSelector((state) => state.AccountRegistrationReducer.accountCountry);
+  const accountCountry = useSelector(
+    (state) => state.AccountRegistrationReducer.accountCountry
+  );
 
   const formSubmissionData = useSelector(
     (state) => state.AccountFormReducer.formSubmission
@@ -66,7 +67,9 @@ const AccountCreation = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
 
-  console.log("Selected country: ", country)
+  console.log("Account Id: ", accountId);
+
+  console.log("Selected country: ", country);
 
   console.log("STEP: ", step);
   console.log("Form Submission Data: ", formSubmissionData);
@@ -143,13 +146,14 @@ const AccountCreation = () => {
    * Fetch draft account if there is
    */
   useEffect(() => {
-    dispatch(fetchDraftAccount());
-
+    // if (accountId) {
+      dispatch(fetchDraftAccount());
+    // }
     return () => {
-      dispatch(deleteAccountId());
-      dispatch(deleteAccountCountry());
+      // dispatch(deleteAccountId());
+      // dispatch(deleteAccountCountry());
     };
-  }, [step]);
+  }, []); //[step]
 
   console.log("Draft Account Id: ", accountId);
 
@@ -185,7 +189,7 @@ const AccountCreation = () => {
         );
       }
     }
-  }, [step, accountId]);
+  }, [step]); // i removed account Id. It was causing problem for the next stepper
 
   /**
    * Get Formik hook from Form component
@@ -255,6 +259,7 @@ const AccountCreation = () => {
 
     if (step === 0) {
       console.log("Step 0");
+      console.log("Submit 0");
       if (formSubmissionData === null) {
         // Get file data
         let formValues = { ...newValues };
@@ -514,7 +519,7 @@ const AccountCreation = () => {
         );
         return;
       }
-      
+
       if (formSubmissionData === null) {
         console.log("Create instruction");
         const formData = {
@@ -625,6 +630,7 @@ const AccountCreation = () => {
           resetStepper={resetStepper}
         >
           <Form
+            // key={step}
             template={formTemplate}
             userDetails={getAllUserGroups()}
             country={accountCountry || country?.name}
@@ -633,6 +639,7 @@ const AccountCreation = () => {
             onSubmit={handleFormSubmit}
             onFormFieldsChange={handleFormFieldChange}
             errorMessage={errorMessage}
+            view={false}
           />
         </FormStepper>
       </Container>

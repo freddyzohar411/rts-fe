@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DraggableBox from "./DraggableBox";
 import UnusedFields from "../../unusedfields/UnusedFields";
-import "./FormElementSidebar.scss"
+import "./FormElementSidebar.scss";
 
 const FormElementSidebar = ({ unusedFields }) => {
   const [isListOpen, setIsListOpen] = useState({
@@ -161,7 +161,7 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggablePrefix: "element",
       draggableId: "searchselect",
       type: "field",
-    }
+    },
   ];
 
   // Layout List
@@ -203,7 +203,6 @@ const FormElementSidebar = ({ unusedFields }) => {
 
   return (
     <div className="mt-2">
-
       {/* Unused Fields */}
       <div className="d-flex align-items-center justify-content-center">
         <h3

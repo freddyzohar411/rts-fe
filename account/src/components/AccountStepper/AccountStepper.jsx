@@ -100,7 +100,7 @@ const AccountStepper = ({ step }) => {
                   tag="button"
                 >
                   <div className="d-flex flex-column row-gap-2 justify-content-center align-items-center">
-                  <i className="mdi mdi-file-document-multiple-outline mt-2"></i>
+                    <i className="mdi mdi-file-document-multiple-outline mt-2"></i>
                     <p className="h6 text-nowrap"> Client Instructions</p>
                   </div>
                 </NavLink>
@@ -119,7 +119,7 @@ const AccountStepper = ({ step }) => {
                   tag="button"
                 >
                   <div className="d-flex flex-column row-gap-2 justify-content-center align-items-center">
-                  <i className="mdi mdi-folder-eye-outline mt-2"></i>
+                    <i className="mdi mdi-folder-eye-outline mt-2"></i>
                     <p className="h6">Access</p>
                   </div>
                 </NavLink>
@@ -138,7 +138,7 @@ const AccountStepper = ({ step }) => {
                   tag="button"
                 >
                   <div className="d-flex flex-column row-gap-2 justify-content-center align-items-center">
-                  <i className="mdi mdi-calculator mt-2"></i>
+                    <i className="mdi mdi-calculator mt-2"></i>
                     <p className="h6">Commercial</p>
                   </div>
                 </NavLink>

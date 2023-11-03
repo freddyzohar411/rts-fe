@@ -997,7 +997,7 @@ const FieldBuilder = ({
 
   // User group List
   const [userGroupList, setUserGroupList] = useState(
-     formBuilderUpdateData?.userGroup || [],
+    formBuilderUpdateData?.userGroup || []
   );
 
   // const [userGroupList, setUserGroupList] = useState([]);
@@ -1975,7 +1975,7 @@ const FieldBuilder = ({
                         <AiFillDelete
                           className="cursor-pointer"
                           onClick={() => {
-                            console.log("usergroup", usergroup)
+                            console.log("usergroup", usergroup);
                             setUserGroupList((prev) => {
                               const newUserGroupList = prev.filter(
                                 (item) => item !== usergroup

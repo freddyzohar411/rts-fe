@@ -19,4 +19,3 @@ export const BASE_COMMERCIAL = "/commercials";
 
 //Form
 export const BASE_FORMS = "/forms";
-

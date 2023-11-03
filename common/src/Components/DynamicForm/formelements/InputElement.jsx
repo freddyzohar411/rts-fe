@@ -1,7 +1,7 @@
 import React from "react";
 import { fieldLocation, fieldSize } from "./constant";
 
-const InputElement = ({ formik, field, formStateHook}) => {
+const InputElement = ({ formik, field, formStateHook }) => {
   const { formState } = formStateHook;
   return (
     <div className={fieldLocation[field.fieldLocation]}>

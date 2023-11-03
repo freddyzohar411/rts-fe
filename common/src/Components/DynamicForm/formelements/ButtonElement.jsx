@@ -2,8 +2,8 @@ import React from "react";
 import { fieldLocation } from "./constant";
 
 const ButtonElement = ({ field, buttonNameHook }) => {
-  const {buttonName, setButtonName} = buttonNameHook;
-  
+  const { buttonName, setButtonName } = buttonNameHook;
+
   return (
     <div className={fieldLocation[field.fieldLocation]}>
       <button

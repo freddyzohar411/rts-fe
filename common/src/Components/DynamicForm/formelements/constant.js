@@ -5,9 +5,9 @@ export const fieldLocation = {
 };
 
 export const fieldSize = {
-  "auto": "w-auto",
+  auto: "w-auto",
   "25%": "w-25",
   "50%": "w-50",
   "75%": "w-75",
   "100%": "w-100",
-}
+};

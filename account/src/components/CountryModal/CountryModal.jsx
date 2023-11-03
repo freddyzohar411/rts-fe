@@ -154,34 +154,37 @@ function CountryModal({ setCountry }) {
           </div>
         </SimpleBar>
       </ModalBody>
-      <ModalFooter as="div" className="d-flex justify-content-between align-items-center">
-          <Link to="/accounts">
-            <Button className="btn btn-danger">Cancel</Button>
-          </Link>
-          <div className="d-flex gap-3">
-            <Button
-              type="button"
-              disabled={!selectedCountry}
-              onClick={() => {
-                setSelectedCountry(null);
-                document.querySelector(
-                  'input[name="country"]:checked'
-                ).checked = false;
-              }}
-            >
-              Clear Selection
-            </Button>
-            <Button
-              className="btn btn-success"
-              type="button"
-              disabled={!selectedCountry}
-              onClick={() => {
-                setModal(!modal);
-              }}
-            >
-              Proceed
-            </Button>
-          </div>
+      <ModalFooter
+        as="div"
+        className="d-flex justify-content-between align-items-center"
+      >
+        <Link to="/accounts">
+          <Button className="btn btn-danger">Cancel</Button>
+        </Link>
+        <div className="d-flex gap-3">
+          <Button
+            type="button"
+            disabled={!selectedCountry}
+            onClick={() => {
+              setSelectedCountry(null);
+              document.querySelector(
+                'input[name="country"]:checked'
+              ).checked = false;
+            }}
+          >
+            Clear Selection
+          </Button>
+          <Button
+            className="btn btn-success"
+            type="button"
+            disabled={!selectedCountry}
+            onClick={() => {
+              setModal(!modal);
+            }}
+          >
+            Proceed
+          </Button>
+        </div>
       </ModalFooter>
     </Modal>
   );

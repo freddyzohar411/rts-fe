@@ -46,6 +46,8 @@ const Form = ({
     }
   }, [formFields]);
 
+  console.log('Edit DATA: ', editData)
+
   /**
    * Set Form state
    */
@@ -64,7 +66,6 @@ const Form = ({
       setEditDataValues(null);
     }
   }, [editData, view, formState]);
-
 
   /**
    * Set template data

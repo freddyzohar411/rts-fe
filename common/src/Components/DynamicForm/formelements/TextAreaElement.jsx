@@ -1,6 +1,6 @@
 import React from "react";
 
-const TextAreaElement = ({ formik, field , formStateHook}) => {
+const TextAreaElement = ({ formik, field, formStateHook }) => {
   const { formState } = formStateHook;
   return (
     <textarea

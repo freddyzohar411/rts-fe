@@ -27,7 +27,8 @@ const { APIClient } = Axios;
 const api = new APIClient();
 
 // Get Accounts Fields
-export const getAccountsFields = () => api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields`);
+export const getAccountsFields = () =>
+  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields`);
 
 // Get Accounts
 export const getAccounts = (data) =>
@@ -65,18 +66,14 @@ export const getAccountInstructionById = (id) =>
     `${ACCOUNT_INSTRUCTION_URL}${BASE_CLIENT_INSTRUCTIONS}/entity/account_instruction/${id}`
   );
 
-// Get draft account 
-export const getDraftAccount = () => api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/draft`);
+// Get draft account
+export const getDraftAccount = () =>
+  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/draft`);
 
 // Delete draft account by id
 export const deleteDraftAccountById = (id) =>
   api.delete(`${ACCOUNT_URL}${BASE_ACCOUNTS}/draft/${id}`);
 
-// export const getAccountNamesFromUser = () => api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/names`);
-
-  // Get account Commercial by id
+// Get account Commercial by id
 export const getAccountCommercialById = (id) =>
-api.get(
-  `${ACCOUNT_URL}${BASE_COMMERCIAL}/${id}`
-);
-
+  api.get(`${ACCOUNT_URL}${BASE_COMMERCIAL}/${id}`);

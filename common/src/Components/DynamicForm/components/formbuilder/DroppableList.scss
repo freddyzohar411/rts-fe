@@ -1,14 +1,14 @@
 .droppable-container {
   border: grey 0.6px dotted;
   min-height: 100px;
-  padding:20px;
-  position:relative;
+  padding: 20px;
+  position: relative;
 }
 
-.column-delete{
+.column-delete {
   position: absolute;
-  top:-12px;
-  right:-12px;
+  top: -12px;
+  right: -12px;
   font-size: 1.8rem;
   cursor: pointer;
   background-color: white;
@@ -16,56 +16,55 @@
   display: none;
 }
 
-.column-delete:hover{
+.column-delete:hover {
   color: red;
 }
 
-.droppable-container:hover .column-delete{
+.droppable-container:hover .column-delete {
   display: block;
 }
 
-.row-title{
-  border:none;
+.row-title {
+  border: none;
   background: transparent;
   font-size: 1.2rem;
   font-weight: 600;
 }
 
-.editable{
+.editable {
   display: none !important;
 }
 
-.draggable-item:hover .editable{
-  display:flex !important;
+.draggable-item:hover .editable {
+  display: flex !important;
 }
 
-.droppable-drag-over{
+.droppable-drag-over {
   border: 1px solid #000;
   background: aliceblue;
 }
 
-.setting-container{
+.setting-container {
   position: relative;
-  display:none;
+  display: none;
 }
 
-.droppable-list{
+.droppable-list {
   border: 1px dotted grey;
 }
 
-.setting-menu-item{
+.setting-menu-item {
   padding: 5px;
   cursor: pointer;
   border-bottom: 1px solid #ccc;
   text-align: center;
 }
 
-.setting-menu-item:hover{
+.setting-menu-item:hover {
   background: #b9b9b9;
 }
 
 .droppable-list:hover .setting-container {
-  display:block;
+  display: block;
   transition: all 0.5s ease-in-out;
 }
-

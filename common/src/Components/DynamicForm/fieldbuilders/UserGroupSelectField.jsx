@@ -8,16 +8,7 @@ const UserGroupSelectField = ({ setData, field }) => {
     (state) => state.UserGroupReducer.userGroups
   );
 
-  console.log("Usergroup", userGroupData);
   const [fetchData, setFetchData] = useState([]);
-  // useEffect(() => {
-  //   // Fetch data from API
-  //   fetch("http://localhost:8600/geo/country-currency").then((res) => {
-  //     res.json().then((data) => {
-  //       setFetchData(data.data);
-  //     });
-  //   });
-  // }, []);
 
   useEffect(() => {
     dispatch(fetchUserGroup());
@@ -30,21 +21,6 @@ const UserGroupSelectField = ({ setData, field }) => {
       );
     }
   }, [userGroupData]);
-
-  // const fetchData = [
-  //   {
-  //     id: 1,
-  //     name: "Sales",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Recruiters",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Account Manager",
-  //   },
-  // ];
 
   return (
     <div>

@@ -68,9 +68,9 @@ function* workPostAccount(action) {
     }
 
     if (entity === AccountEntityConstant.ACCOUNT_ACCOUNT) {
+      handleNext();
       yield put(setAccountId(response.data.id));
       yield put(setAccountCountry(response.data.accountCountry));
-      handleNext();
       return;
     }
     if (entity === AccountEntityConstant.ACCOUNT_COMMERCIAL) {
