@@ -67,6 +67,8 @@ const AccountCreation = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
 
+  console.log("Account Id: ", accountId);
+
   console.log("Selected country: ", country);
 
   console.log("STEP: ", step);
@@ -144,14 +146,14 @@ const AccountCreation = () => {
    * Fetch draft account if there is
    */
   useEffect(() => {
-    if (accountId) {
+    // if (accountId) {
       dispatch(fetchDraftAccount());
-    }
+    // }
     return () => {
       // dispatch(deleteAccountId());
       // dispatch(deleteAccountCountry());
     };
-  }, [step]);
+  }, []); //[step]
 
   console.log("Draft Account Id: ", accountId);
 
@@ -257,7 +259,7 @@ const AccountCreation = () => {
 
     if (step === 0) {
       console.log("Step 0");
-      console.log("Submit 0")
+      console.log("Submit 0");
       if (formSubmissionData === null) {
         // Get file data
         let formValues = { ...newValues };
@@ -628,6 +630,7 @@ const AccountCreation = () => {
           resetStepper={resetStepper}
         >
           <Form
+            // key={step}
             template={formTemplate}
             userDetails={getAllUserGroups()}
             country={accountCountry || country?.name}
