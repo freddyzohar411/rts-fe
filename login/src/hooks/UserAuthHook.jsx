@@ -166,6 +166,7 @@ const useUserAuth = () => {
   );
 
   return {
+    userProfile,
     getAllRoles,
     getAllUserGroups,
     checkAllPermission,

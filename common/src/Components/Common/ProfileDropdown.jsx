@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useUserAuth } from "../../../../login/src/hooks/UserAuthHook";
 import { useSelector } from "react-redux";
 import {
   Dropdown,
@@ -6,6 +7,7 @@ import {
   DropdownMenu,
   DropdownToggle,
 } from "reactstrap";
+
 
 //import images
 import avatar1 from "../../assets/images/users/avatar-1.jpg";
@@ -17,27 +19,29 @@ const ProfileDropdown = () => {
     (user) => user
   );
 
+  const { userProfile } = useUserAuth();
+
   // Inside your component
   const user = useSelector(selectDashboardData);
 
   const [userName, setUserName] = useState("Admin");
 
-  useEffect(() => {
-    if (sessionStorage.getItem("authUser")) {
-      const obj = JSON.parse(sessionStorage.getItem("authUser"));
-      setUserName(
-        process.env.REACT_APP_DEFAULTAUTH === "fake"
-          ? obj.username === undefined
-            ? user.first_name
-              ? user.first_name
-              : obj.data.first_name
-            : "Admin" || "Admin"
-          : process.env.REACT_APP_DEFAULTAUTH === "firebase"
-          ? obj.providerData[0].email
-          : "Admin"
-      );
-    }
-  }, [userName, user]);
+  // useEffect(() => {
+  //   if (sessionStorage.getItem("authUser")) {
+  //     const obj = JSON.parse(sessionStorage.getItem("authUser"));
+  //     setUserName(
+  //       process.env.REACT_APP_DEFAULTAUTH === "fake"
+  //         ? obj.username === undefined
+  //           ? user.first_name
+  //             ? user.first_name
+  //             : obj.data.first_name
+  //           : "Admin" || "Admin"
+  //         : process.env.REACT_APP_DEFAULTAUTH === "firebase"
+  //         ? obj.providerData[0].email
+  //         : "Admin"
+  //     );
+  //   }
+  // }, [userName, user]);
 
   //Dropdown Toggle
   const [isProfileDropdown, setIsProfileDropdown] = useState(false);
@@ -60,7 +64,7 @@ const ProfileDropdown = () => {
             />
             <span className="text-start ms-xl-2">
               <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
-                {userName}
+                {userProfile?.firstName} {userProfile?.lastName}
               </span>
             </span>
           </span>
