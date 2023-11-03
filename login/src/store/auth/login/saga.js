@@ -52,28 +52,27 @@ function* loginUser({ payload: { user, history } }) {
       username: user.username,
       password: user.password,
     });
-    console.log("RR",response)
     if (response) {
       yield put(loginSuccess(response));
       sessionStorage.setItem("authUser", JSON.stringify(response));
 
-      // Check if user has any profile
-      yield put(fetchProfile());
-      yield take("PROFILE_SUCCESS");
-      const userProfile = yield select((state) => state.Profile.userProfile);
+      // // Check if user has any profile
+      // yield put(fetchProfile());
+      // yield take("PROFILE_SUCCESS");
+      // const userProfile = yield select((state) => state.Profile.userProfile);
 
-      if (getAllRoles(userProfile).length === 0) {
-        const logOutResponse = yield call(getLogout, {
-          token: response.refresh_token,
-        });
-        if (logOutResponse) {
-          sessionStorage.removeItem("authUser");
-          yield put(deleteProfile());
-          yield put(logoutUserSuccess(LOGOUT_USER, true));
-          toast.error("User has no profile");
-          return;
-        }
-      }
+      // if (getAllRoles(userProfile).length === 0) {
+      //   const logOutResponse = yield call(getLogout, {
+      //     token: response.refresh_token,
+      //   });
+      //   if (logOutResponse) {
+      //     sessionStorage.removeItem("authUser");
+      //     yield put(deleteProfile());
+      //     yield put(logoutUserSuccess(LOGOUT_USER, true));
+      //     toast.error("User has no profile");
+      //     return;
+      //   }
+      // }
 
       history("/dashboard");
       toast.success("Login Successfully");
@@ -81,7 +80,9 @@ function* loginUser({ payload: { user, history } }) {
       yield put(apiError(response));
     }
   } catch (error) {
-    toast.error(error.message);
+    if (error.message.includes("401")) {
+      toast.error("Bad Credentials");
+    }
     yield put(apiError(error));
   }
 }
