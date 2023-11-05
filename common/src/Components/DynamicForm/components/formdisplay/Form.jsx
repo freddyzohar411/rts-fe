@@ -37,8 +37,9 @@ const Form = ({
   const [buttonName, setButtonName] = useState("");
   const [editDataValues, setEditDataValues] = useState(null);
 
-  console.log("country 1", country);
+  // console.log("country 1", country);
   // console.log("Form Fields: ", formFields);
+  console.log("Form State V1: ", formState);
 
   useEffect(() => {
     if (onFormFieldsChange) {
@@ -46,7 +47,7 @@ const Form = ({
     }
   }, [formFields]);
 
-  console.log('Edit DATA: ', editData)
+  console.log("Edit DATA: ", editData);
 
   /**
    * Set Form state
@@ -65,7 +66,8 @@ const Form = ({
       setFormState("create");
       setEditDataValues(null);
     }
-  }, [editData, view, formState]);
+    }, [editData, view]);
+  // }, [editData, view, formState]);
 
   /**
    * Set template data

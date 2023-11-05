@@ -45,6 +45,10 @@ const EditAccount = () => {
   const form = useSelector((state) => state.AccountFormReducer.form);
   const editId = useSelector((state) => state.AccountFormReducer.editId);
 
+  
+  const loading = useSelector((state) => state.AccountReducer.loading);
+  console.log("Account loading: ", loading)
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -253,7 +257,7 @@ const EditAccount = () => {
           formFormik.setFieldValue(fieldName, "")
         );
       }
-      // setFormState("create");
+      setFormState("create");
     };
 
     const resetFormFields = (arrayFields = []) => {

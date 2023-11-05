@@ -23,6 +23,9 @@ const FormStepper = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const loading = useSelector((state) => state.AccountReducer.loading);
+  console.log("Account loading: ", loading);
+
   console.log("Form Stepper View", viewState);
 
   // Delete modal states
@@ -119,6 +122,7 @@ const FormStepper = ({
             <Button color="dark">Skip</Button>
             <Button color="dark" onClick={handleNextStep}>
               Next
+              {/* {loading ? "Loading...": "Next"} */}
             </Button>
           </div>
         </div>

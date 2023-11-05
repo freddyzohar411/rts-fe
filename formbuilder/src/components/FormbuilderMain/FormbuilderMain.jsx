@@ -87,8 +87,6 @@ const FormbuilderMain = () => {
     }
   };
 
-  console.log("Form 1: ", form)
-
   return (
     <div className="" style={{marginTop:"60px",marginBottom:"60px"}}>
       <FormBuilder

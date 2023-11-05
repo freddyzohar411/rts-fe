@@ -29,6 +29,7 @@ import {
   GET_DOCUMENT_BY_ENTITY_URL,
 } from "../../helpers/endpoint_helper";
 import { useUserAuth } from "@workspace/login";
+import { toast } from "react-toastify";
 
 const AccountCreation = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,9 @@ const AccountCreation = () => {
   const formSubmissionDataLoading = useSelector(
     (state) => state.AccountFormReducer.formSubmissionLoading
   );
+
+  const loading = useSelector((state) => state.AccountReducer.loading);
+  console.log("Account loading: ", loading)
 
   const MAX_STEP = 6;
   const [step, setStep] = useState(0);
@@ -260,6 +264,10 @@ const AccountCreation = () => {
     if (step === 0) {
       console.log("Step 0");
       console.log("Submit 0");
+      if (!country?.name){
+        toast.error("Please select a country");
+      }
+
       if (formSubmissionData === null) {
         // Get file data
         let formValues = { ...newValues };
