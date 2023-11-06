@@ -388,7 +388,11 @@ function CreateNewRole() {
                             Reset
                           </Button>
                           <div className="d-flex flex-row gap-3">
-                            <Link to="/settings/access" className="text-dark">
+                            <Link
+                              to="/settings/access"
+                              className="text-dark"
+                              state={{ activeTab: "2" }}
+                            >
                               <Button
                                 className="btn btn-custom-primary"
                                 type="button"

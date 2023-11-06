@@ -46,7 +46,6 @@ const FormStepper = ({
         handleNext();
       } else {
         setErrorMessage("Please add 1 document to proceed");
-        // console.log("Please add 1 document to proceed")
       }
     }
     if (activeStep === 3 && formFormik) {
@@ -61,7 +60,6 @@ const FormStepper = ({
   };
 
   const resetAndDeleteDraftForm = () => {
-    console.log("Reset and delete draft form");
     dispatch(
       deleteDraftAccount({
         accountId: accountId,

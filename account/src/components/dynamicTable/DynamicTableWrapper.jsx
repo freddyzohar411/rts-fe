@@ -29,36 +29,6 @@ const DynamicTableWrapper = ({
   const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [isRefresh, setIsRefresh] = useState(false);
-  const customAvailableRef = useRef();
-
-  useEffect(() => {
-    const handleScrollEnd = (listRef) => {
-      const element = listRef.current;
-      if (
-        element.scrollTop + element.clientHeight >=
-        element.scrollHeight - 1
-      ) {
-        console.log("Reached end of scroll");
-      }
-    };
-
-    console.log("customAvailableRef: ", customAvailableRef);
-    const availableElement = customAvailableRef.current;
-    console.log("availableElement: ", availableElement);
-    console.log("Before Adding");
-    if (availableElement) {
-      console.log("Adding event listener");
-      availableElement.addEventListener("scroll", () =>
-        handleScrollEnd(customAvailableRef)
-      );
-
-      return () => {
-        availableElement.removeEventListener("scroll", () =>
-          handleScrollEnd(customAvailableRef)
-        );
-      };
-    }
-  }, [customAvailableRef, isRefresh]);
 
   const handleChange = (selected) => {
     const selectedObjects = selected.map((value) => {
@@ -82,15 +52,7 @@ const DynamicTableWrapper = ({
                   <p className="text-muted">
                     Select fields to show on account listing table
                   </p>
-                  {/* <div className="d-flex w-100 mb-3">
-                    <div className="w-50">Hello</div>
-                    <div className="w-50" style={{marginLeft:'60px'}}>World</div>
-                  </div> */}
                   <DualListBox
-                    availableRef={(availableRef) => {
-                      customAvailableRef.current = availableRef;
-                      setIsRefresh((prev) => !prev);
-                    }}
                     canFilter
                     filterCallback={(optGroup, filterInput) => {
                       if (filterInput === "") {

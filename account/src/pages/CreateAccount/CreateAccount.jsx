@@ -36,6 +36,13 @@ const AccountCreation = () => {
   const navigate = useNavigate();
   const { getAllUserGroups } = useUserAuth();
 
+  /**
+   * Get some intial data for account creation
+   */
+  // useEffect(() => {
+  //   if ()
+  // }, []);
+
   const form = useSelector((state) => state.AccountFormReducer.form);
   const accountId = useSelector(
     (state) => state.AccountRegistrationReducer.accountId
@@ -59,7 +66,6 @@ const AccountCreation = () => {
   );
 
   const loading = useSelector((state) => state.AccountReducer.loading);
-  console.log("Account loading: ", loading)
 
   const MAX_STEP = 6;
   const [step, setStep] = useState(0);
@@ -71,12 +77,14 @@ const AccountCreation = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
 
-  console.log("Account Id: ", accountId);
-
-  console.log("Selected country: ", country);
-
-  console.log("STEP: ", step);
-  console.log("Form Submission Data: ", formSubmissionData);
+  /**
+   * Set country if is in edit mode
+   */
+  useEffect(() => {
+    if (accountCountry) {
+      setCountry(accountCountry);
+    }
+  }, [accountCountry]);
 
   /**
    * Fetch form template based on step
@@ -150,16 +158,8 @@ const AccountCreation = () => {
    * Fetch draft account if there is
    */
   useEffect(() => {
-    // if (accountId) {
-      dispatch(fetchDraftAccount());
-    // }
-    return () => {
-      // dispatch(deleteAccountId());
-      // dispatch(deleteAccountCountry());
-    };
-  }, []); //[step]
-
-  console.log("Draft Account Id: ", accountId);
+    dispatch(fetchDraftAccount());
+  }, []);
 
   /**
    * Fetch form submission data if there is a draft account
@@ -193,7 +193,7 @@ const AccountCreation = () => {
         );
       }
     }
-  }, [step]); // i removed account Id. It was causing problem for the next stepper
+  }, [step]);
 
   /**
    * Get Formik hook from Form component
@@ -201,7 +201,6 @@ const AccountCreation = () => {
   const handleFormikChange = useCallback((formik) => {
     // Handle formik change here
     setFormFormik(formik);
-    console.log("Formik has changed:", formik);
   }, []);
 
   /**
@@ -237,10 +236,6 @@ const AccountCreation = () => {
   ) => {
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
-    console.log("values", values);
-    console.log("newValues", newValues);
-    console.log("Button Name:", buttonName);
-    console.log("Step: ", step);
     // Set a reset form functions
     const resetForm = (arrayFields = []) => {
       formFormik.resetForm();
@@ -258,17 +253,13 @@ const AccountCreation = () => {
           formFormik.setFieldValue(fieldName, "")
         );
       }
-      // setFormState("create");
     };
 
     if (step === 0) {
-      console.log("Step 0");
-      console.log("Submit 0");
-      if (!country?.name){
-        toast.error("Please select a country");
-      }
-
       if (formSubmissionData === null) {
+        if (!country?.name) {
+          toast.error("Please select a country");
+        }
         // Get file data
         let formValues = { ...newValues };
         const accountData = { ...formValues };
@@ -285,9 +276,6 @@ const AccountCreation = () => {
 
         const formData1 = ObjectHelper.convertObjectToFormData(accountDataOut);
 
-        console.log("Account data Object", accountDataOut);
-        console.log("Account Data FORM: ", formData1);
-
         dispatch(
           postAccount({
             entity: AccountEntityConstant.ACCOUNT_ACCOUNT,
@@ -301,7 +289,6 @@ const AccountCreation = () => {
           })
         );
       } else {
-        console.log("Update Form");
         let formValues = { ...newValues };
         const accountData = { ...formValues };
         const fileData = formValues?.uploadAgreement;
@@ -340,7 +327,6 @@ const AccountCreation = () => {
     }
 
     if (step === 1) {
-      console.log("Step 1");
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
@@ -371,7 +357,6 @@ const AccountCreation = () => {
 
       if (buttonName === "tableUpdate") {
         setButtonName("");
-        console.log("Update Contact");
         const newData = {
           ...newValues,
           entityId: accountId,
@@ -401,7 +386,6 @@ const AccountCreation = () => {
 
     if (step === 2) {
       if (buttonName === "add") {
-        console.log("Add Address");
         setErrorMessage(null);
         setButtonName("");
         let formValues = { ...newValues };
@@ -442,7 +426,6 @@ const AccountCreation = () => {
       }
 
       if (buttonName === "tableUpdate") {
-        console.log("Update Document");
         let formValues = { ...newValues };
         const documentData = { ...formValues };
         const fileData = formValues?.file;
@@ -474,7 +457,6 @@ const AccountCreation = () => {
             field.name === AccountTableListConstant.DOCUMENT_LIST
         );
         const { tableEditId } = table.tableSetting;
-        console.log("Table edit Id: ", tableEditId);
         dispatch(
           putAccount({
             entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
@@ -493,10 +475,8 @@ const AccountCreation = () => {
     }
 
     if (step === 3) {
-      console.log("Step 3");
       if (buttonName === "add") {
         setButtonName("");
-        console.log("Add client instruction");
         let formValues = { file: newValues.file };
         const documentData = { ...formValues };
         const fileData = formValues?.file;
@@ -529,7 +509,6 @@ const AccountCreation = () => {
       }
 
       if (formSubmissionData === null) {
-        console.log("Create instruction");
         const formData = {
           guidelines: newValues.guidelines,
         };
@@ -550,7 +529,6 @@ const AccountCreation = () => {
           })
         );
       } else {
-        console.log("Update instruction");
         const formData = {
           guidelines: newValues.guidelines,
         };
@@ -575,7 +553,6 @@ const AccountCreation = () => {
     }
 
     if (step === 5) {
-      console.log("Create Commercial");
       const formData = {
         ...newValues,
         entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -621,8 +598,6 @@ const AccountCreation = () => {
     setStep(number);
   };
 
-  console.log("Form Submission Data Loading: ", formSubmissionDataLoading);
-
   return (
     <>
       {isModalOpen && !accountId && <CountryModal setCountry={setCountry} />}
@@ -638,7 +613,6 @@ const AccountCreation = () => {
           resetStepper={resetStepper}
         >
           <Form
-            // key={step}
             template={formTemplate}
             userDetails={getAllUserGroups()}
             country={accountCountry || country?.name}

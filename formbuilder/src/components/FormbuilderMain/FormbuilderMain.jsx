@@ -24,8 +24,6 @@ const FormbuilderMain = () => {
     }
   }, [templateId]);
 
-  console.log("Main Form Builder Template ID :", templateId)
-
   /**
    * This useEffect is to load the unused fields json file
    */
@@ -92,7 +90,6 @@ const FormbuilderMain = () => {
       <FormBuilder
         initialFormState={form ? "update" : "create"}
         template={form}
-        // fields={unusedFields}
         userDetails={null}
         onSubmit={(values, formFields, formState) => {
           if (formState === "create") {

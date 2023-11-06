@@ -187,7 +187,7 @@ function GroupDetails() {
                   </Row>
                 </CardBody>
                 <CardFooter>
-                  <Link to="/settings/access">
+                  <Link to="/settings/access" state={{ ugTab: "2"}}>
                     <Button className="btn btn-custom-primary" type="button">
                       Back
                     </Button>
