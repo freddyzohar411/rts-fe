@@ -163,10 +163,10 @@ const useUserAuth = () => {
 
   // console.log("User Profile: ", userProfile);
 
-  // console.log(
-  //   "Module Permission: ",
-  //   convertUserProfileToPermissionObj(userProfile)
-  // );
+  console.log(
+    "Module Permission: ",
+    convertUserProfileToPermissionObj(userProfile)
+  );
 
   return {
     userProfile,
