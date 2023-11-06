@@ -5,6 +5,7 @@ import {
   CREATE_USER,
   DELETE_USER,
   UPDATE_USER,
+  LIST_USERS
 } from "./actionTypes";
 import {
   fetchUserSuccess,
@@ -17,6 +18,8 @@ import {
   deleteUserFailure,
   updateUserSuccess,
   updateUserFailure,
+  listUsersSuccess,
+  listUsersFailure
 } from "./action";
 
 import {
@@ -25,6 +28,7 @@ import {
   getUsers,
   deleteUser,
   updateUser,
+  listUsers
 } from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
@@ -43,6 +47,15 @@ function* workFetchUsers() {
     yield put(fetchUsersSuccess(response.data));
   } catch (error) {
     yield put(fetchUsersFailure(error));
+  }
+}
+
+function* workListUsers(action) {
+  try {
+    const response = yield call(listUsers, action.payload);
+    yield put(listUsersSuccess(response.data));
+  } catch (error) {
+    yield put(listUsersFailure(error));
   }
 }
 
@@ -95,4 +108,5 @@ export default function* watchFetchUserSaga() {
   yield takeEvery(CREATE_USER, workCreateUser);
   yield takeEvery(DELETE_USER, workDeleteUser);
   yield takeEvery(UPDATE_USER, workUpdateUser);
+  yield takeEvery(LIST_USERS, workListUsers);
 }

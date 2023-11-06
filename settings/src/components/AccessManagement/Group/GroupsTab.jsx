@@ -30,7 +30,6 @@ function GroupsTab() {
     dispatch(fetchGroups());
   }, []);
 
-
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -93,11 +92,17 @@ function GroupsTab() {
           <Table className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3">
             <thead>
               <tr>
-                <th scope="col">Group Name</th>
+                <th scope="col">
+                  <span className="me-1">Group Name</span>
+                  <i className="mdi mdi-sort" style={{ cursor: "pointer" }}></i>
+                  
+                </th>
                 <th scope="col" style={{ width: "600px" }}>
                   Description
                 </th>
-                <th scope="col" style={{ width: "10px" }}>Actions</th>
+                <th scope="col" style={{ width: "10px" }}>
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>

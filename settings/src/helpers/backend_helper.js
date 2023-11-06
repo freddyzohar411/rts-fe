@@ -8,6 +8,7 @@ import {
   DELETE_USER,
   UPDATE_USER,
   GET_USERS,
+  LIST_USERS,
   // Roles
   GET_ROLE,
   GET_ROLES,
@@ -50,6 +51,8 @@ export const updateUser = (data) => api.put(`${API_URL}${UPDATE_USER}`, data);
 // Delete User
 export const deleteUser = (data) =>
   api.delete(`${API_URL}${DELETE_USER}/${data}`);
+// List Users
+export const listUsers = (data) => api.create(`${API_URL}${LIST_USERS}`, data);
 
 // Role
 

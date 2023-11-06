@@ -110,7 +110,10 @@ function RolesTab() {
         >
           <thead>
             <tr>
-              <th scope="col">Roles</th>
+              <th scope="col">
+                <span className="me-1">Roles</span>
+                <i className="mdi mdi-sort" style={{ cursor: "pointer" }}></i>
+              </th>
               <th scope="col">Description</th>
               <th scope="col">Actions</th>
             </tr>

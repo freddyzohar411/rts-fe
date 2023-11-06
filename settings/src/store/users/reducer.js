@@ -7,6 +7,10 @@ import {
   FETCH_USERS,
   FETCH_USERS_SUCCESS,
   FETCH_USERS_FAILURE,
+  // List Users
+  LIST_USERS,
+  LIST_USERS_SUCCESS,
+  LIST_USERS_FAILURE,
   // Create
   CREATE_USER,
   CREATE_USER_SUCCESS,
@@ -70,6 +74,29 @@ const UserReducer = (state = initialState, action) => {
       };
 
     case FETCH_USERS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        message: action.payload,
+      };
+
+    // List Users
+    case LIST_USERS:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+
+    case LIST_USERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        users: action.payload,
+      };
+
+    case LIST_USERS_FAILURE:
       return {
         ...state,
         loading: false,
