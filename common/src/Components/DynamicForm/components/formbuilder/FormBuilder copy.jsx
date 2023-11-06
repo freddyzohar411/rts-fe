@@ -57,15 +57,6 @@ const FormBuilder = ({
   const [jsonData, setJsonData] = useState(null);
   const [showJsonModal, setShowJsonModal] = useState(false);
 
-  console.log("FormOptions: ", formOptions);
-  console.log("Country: ", country);
-  // console.log("User Details: ", userDetails);
-  console.log("FormState: ", formState);
-  console.log("UnusedField: ", unusedFields);
-  console.log("FormFields: ", formFields);
-  console.log("Form Layout Schema: ", formLayoutSchema);
-  console.log("Base form template:", baseFormTemplate);
-
   /**
    * Set form state
    */
@@ -85,7 +76,6 @@ const FormBuilder = ({
 
     if (baseFormTemplate && formState === "create") {
       setFormFields(baseFormTemplate?.formSchema);
-      // setFormName(baseFormTemplate?.formName);
       setFormLayoutSchema(baseFormTemplate?.formLayoutSchema);
       return;
     }
@@ -128,7 +118,6 @@ const FormBuilder = ({
   useEffect(() => {
     if (baseFormTemplate) {
       setFormFields(baseFormTemplate?.formSchema);
-      // setFormName(baseFormTemplate?.formName);?
       setFormLayoutSchema(baseFormTemplate?.formLayoutSchema);
     }
   },[formOptions.baseFormId])

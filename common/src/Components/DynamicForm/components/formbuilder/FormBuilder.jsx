@@ -61,14 +61,6 @@ const FormBuilder = ({
   const [jsonData, setJsonData] = useState(null);
   const [showJsonModal, setShowJsonModal] = useState(false);
 
-  console.log("FormOptions: ", formOptions);
-  console.log("Country: ", country);
-  console.log("FormState: ", formState);
-  console.log("UnusedField: ", unusedFields);
-  console.log("FormFields: ", formFields);
-  console.log("Form Layout Schema: ", formLayoutSchema);
-  console.log("Base form template:", baseFormTemplate);
-
   /**
    * Set form state
    */
@@ -168,8 +160,6 @@ const FormBuilder = ({
       setUnusedFields([]);
     }
   }, [formFields]);
-
-  console.log("Unused Fields: ", unusedFields);
 
   // =====================================================
   /**

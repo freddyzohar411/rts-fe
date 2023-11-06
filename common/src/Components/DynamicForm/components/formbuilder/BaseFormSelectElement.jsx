@@ -17,26 +17,17 @@ const BaseFormSelectElement = ({
     }
   }, [initialBaseFormId]);
 
-  console.log("BaseFormId:", baseFormId);
-
   useEffect(() => {
     axios(`http://localhost:9400/forms/base`)
       .then((data) => {
-        console.log("BASE FORMS: ", data);
         setBaseFormList(data.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
-  console.log("Base Form List: ", baseFormList);
-
   useEffect(() => {
-    console.log("Base form Id: ", baseFormId);
     if (baseFormId && baseFormId !== 0) {
       axios(`http://localhost:9400/forms/${baseFormId}`).then((data) => {
-        console.log(data);
         const newTemplate = {
           formName: data.data?.formName,
           formType: data.data?.formType,
@@ -58,8 +49,6 @@ const BaseFormSelectElement = ({
       setBaseFormTemplate(null);
     }
   }, [baseFormId]);
-
-  console.log("base form List: ", baseFormList);
 
   return (
     <>

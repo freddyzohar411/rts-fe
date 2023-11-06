@@ -1000,11 +1000,7 @@ const FieldBuilder = ({
     formBuilderUpdateData?.userGroup || []
   );
 
-  // const [userGroupList, setUserGroupList] = useState([]);
-
-  console.log("User Group List", userGroupList);
-
-  // COuntry
+  // Country
   const [country, setCountry] = useState("");
 
   // Country Key value pair
@@ -1060,10 +1056,8 @@ const FieldBuilder = ({
   // Handle Submit
   const handleFormSchemaSubmit = (values) => {
     let validationSchema = { ...values };
-    console.log("Validation Schema", validationSchema);
     if (formBuilderUpdateData) {
       validationSchema = { ...formBuilderUpdateData, ...values };
-      console.log("Update Data", formBuilderUpdateData);
       validationSchema.type = formBuilderUpdateData.type;
       if (
         type === "radio" ||
@@ -1108,7 +1102,6 @@ const FieldBuilder = ({
       validationSchema.visible = conditionList;
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
-      console.log("ValidationSchema", validationSchema);
       addFormField(validationSchema);
       // Set Form Schema
       setFormFieldId(validationSchema.fieldId);
@@ -1907,7 +1900,6 @@ const FieldBuilder = ({
                           className="cursor-pointer"
                           onClick={() => {
                             setCountryList((prev) => {
-                              console.log("prev", prev);
                               const newCountryList = prev.countryList.filter(
                                 (item) => item !== country
                               );
@@ -1975,7 +1967,6 @@ const FieldBuilder = ({
                         <AiFillDelete
                           className="cursor-pointer"
                           onClick={() => {
-                            console.log("usergroup", usergroup);
                             setUserGroupList((prev) => {
                               const newUserGroupList = prev.filter(
                                 (item) => item !== usergroup

@@ -6,9 +6,6 @@ const EditorElement = ({ field, formik, formStateHook }) => {
   const { formState } = formStateHook;
   return (
     <div className="">
-      {/* <Label htmlFor="editor">
-      {field.label}
-    </Label> */}
       <CKEditor
         id="editor"
         editor={ClassicEditor}
@@ -20,7 +17,7 @@ const EditorElement = ({ field, formik, formStateHook }) => {
             try {
               formik?.setFieldValue(field?.name, data);
             } catch (error) {
-              console.log("Error: ", error);
+              // console.log("Error: ", error);
             }
           }
         }}

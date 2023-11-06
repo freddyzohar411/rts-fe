@@ -35,7 +35,9 @@ function* workCreateRole(action) {
   try {
     const roleResponse = yield call(createRole, newRole);
     yield put(createRoleSuccess(roleResponse.data));
-    navigate("/settings/access");
+    navigate("/settings/access", { state: {
+      activeTab: "2"
+    } });
     toast.success("Role creation success!");
   } catch (error) {
     yield put(createRoleFailure(error));
@@ -69,7 +71,9 @@ function* workUpdateRole(action) {
   try {
     const roleResponse = yield call(updateRole, updatedRole);
     yield put(updateRoleSuccess(roleResponse.data));
-    navigate("/settings/access");
+    navigate("/settings/access", { state: {
+      activeTab: "2"
+    } });
     toast.success("Role update success!");
   } catch (error) {
     yield put(updateRoleFailure(error));

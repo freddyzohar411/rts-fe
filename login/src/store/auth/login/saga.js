@@ -57,8 +57,9 @@ function* loginUser({ payload: { user, history } }) {
       sessionStorage.setItem("authUser", JSON.stringify(response));
 
       // // Check if user has any profile
-      // yield put(fetchProfile());
-      // yield take("PROFILE_SUCCESS");
+      yield put(fetchProfile());
+      yield take("PROFILE_SUCCESS");
+      
       // const userProfile = yield select((state) => state.Profile.userProfile);
 
       // if (getAllRoles(userProfile).length === 0) {

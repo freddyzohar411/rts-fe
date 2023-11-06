@@ -350,7 +350,10 @@ function UpdateRole() {
                       </CardBody>
                       <CardFooter>
                         <div className="d-flex flex-row justify-content-end gap-3">
-                          <Link to="/settings/access">
+                          <Link
+                            to="/settings/access"
+                            state={{ activeTab: "2" }}
+                          >
                             <Button
                               className="btn btn-custom-primary"
                               type="button"

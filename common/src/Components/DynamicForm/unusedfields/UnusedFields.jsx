@@ -2,7 +2,6 @@ import React from "react";
 import DraggableBox from "../components/formbuilder/DraggableBox";
 
 const UnusedFields = ({ unusedFields }) => {
-  console.log("unusedFields", unusedFields)
   return (
     <div>
       {unusedFields.map((field) => {
