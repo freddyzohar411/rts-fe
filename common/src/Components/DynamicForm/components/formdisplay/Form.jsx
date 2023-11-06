@@ -37,16 +37,11 @@ const Form = ({
   const [buttonName, setButtonName] = useState("");
   const [editDataValues, setEditDataValues] = useState(null);
 
-  console.log("country 1", country);
-  // console.log("Form Fields: ", formFields);
-
   useEffect(() => {
     if (onFormFieldsChange) {
       onFormFieldsChange(formFields);
     }
   }, [formFields]);
-
-  console.log('Edit DATA: ', editData)
 
   /**
    * Set Form state
@@ -65,7 +60,7 @@ const Form = ({
       setFormState("create");
       setEditDataValues(null);
     }
-  }, [editData, view, formState]);
+  }, [editData, view]);
 
   /**
    * Set template data
@@ -81,8 +76,6 @@ const Form = ({
       setFormLayoutSchema([]);
     }
   }, [template]);
-
-  // console.log("Form State: ", formState);
 
   useEffect(() => {
     if (formState === "create" || formState === "tableUpdate") {
@@ -111,7 +104,6 @@ const Form = ({
 
   const rerenderTable = () => {
     let newFormFields = JSON.parse(JSON.stringify(formFields));
-    // newFormFields = setTableData(newFormFields, newValues);
     newFormFields.forEach((field) => {
       if (field.type === "table") {
         field.tableSetting = {
@@ -169,13 +161,11 @@ const Form = ({
    * Check which field with tableData and  add it to the array
    */
   const setTableData = (formFields, values) => {
-    // const newFormFields = JSON.parse(JSON.stringify(formFields));
     formFields.forEach((field) => {
       if (field.type === "table") {
         field.tableData = [...field.tableData, values];
       }
     });
-    // setFormFields(newFormFields);
     return formFields;
   };
 
@@ -237,7 +227,6 @@ const Form = ({
             )}
             <div>
               <form onSubmit={formik.handleSubmit} className="drag-zone">
-                {/* <div className="lists-container"> */}
                 {formLayoutSchema.map((row, index) => (
                   <Row key={index}>
                     <FormSectionList
@@ -255,27 +244,6 @@ const Form = ({
                     />
                   </Row>
                 ))}
-                {/* </div> */}
-
-                {/* {formFields.length > 0 && (
-              <button type="submit" className="btn btn-primary mt-3">
-                {formState === "create" ? "Create" : "Update"}
-              </button>
-            )} */}
-
-                {/* {formState === "update" && (
-              <button
-                type="button"
-                className="btn btn-danger mt-3 ms-3"
-                onClick={() => {
-                  setFormState("create");
-                  // Reset formik values
-                  formik.resetForm();
-                }}
-              >
-                Cancel
-              </button>
-            )} */}
               </form>
             </div>
           </FormikProvider>

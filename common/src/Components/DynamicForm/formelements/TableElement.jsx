@@ -54,7 +54,7 @@ const TableElement = ({
         // setFormFieldTableData(mapTableData(formDataList));
       })
       .catch((error) => {
-        console.log("Error: ", error);
+        // console.log("Error: ", error);
       });
   };
 
@@ -99,18 +99,6 @@ const TableElement = ({
     return tableData;
   };
 
-  // const handleEdit = (row) => {
-  //   // Set formik values based on row value and config
-  //   console.log("row", row);
-  //   tableConfig.forEach((item, index) => {
-  //     // console.log(index)
-  //     // console.log("Item Name: ", item.name)
-  //     // console.log("Item Value: ", row.data[item.name])
-  //     formik.setFieldValue(item.name, row.data[item.name]);
-  //   });
-  //   setFormState("tableUpdate");
-  // };
-
   const handleEdit = (row) => {
     // Set formik values based on row value and config
     // Set all the formik values in this table based on the API
@@ -139,21 +127,13 @@ const TableElement = ({
       tableSetting.tableUseAPI === true
     ) {
       // Delete from API
-      console.log("Deleteing from table");
-      console.log(`${tableSetting.tableDeleteAPI}/${id}`);
       axios.delete(`${tableSetting.tableDeleteAPI}/${id}`).then((data) => {
         getTableData();
       });
     }
-
-    // } else {
-    //   deleteTableData(rowIndex);
-    // }
   };
 
   return (
-    // <div>
-    //   <table className="table">
     <div className="table-responsive mb-3" style={{ maxHeight: "200px" }}>
       <Table className="table-bordered align-middle table-nowrap mb-0">
         <thead className="table-secondary">
@@ -172,7 +152,6 @@ const TableElement = ({
               ))}
           </tr>
         </thead>
-        {/* {table && table.length > 0 && ( */}
         <tbody>
           {table?.length === 0 ? (
             <tr>
@@ -218,11 +197,8 @@ const TableElement = ({
             })
           )}
         </tbody>
-        {/* )} */}
       </Table>
     </div>
-    //   </table>
-    // </div>
   );
 };
 

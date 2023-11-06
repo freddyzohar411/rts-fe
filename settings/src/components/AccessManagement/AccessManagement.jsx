@@ -16,18 +16,21 @@ import classnames from "classnames";
 import RolesTab from "./Roles/RolesTab";
 import UsersTab from "./User/UsersTab";
 import GroupsTab from "./Group/GroupsTab";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 
 import { fetchGroups } from "../../store/group/action";
 
 function AccessManagement() {
+  const location = useLocation();
+  const navState = location.state;
+
   document.title = "Access Management Settings | RTS";
   const dispatch = useDispatch();
 
   // Tabs
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState(navState?.activeTab || "1");
 
   useEffect(() => {
     dispatch(fetchGroups());
@@ -40,7 +43,7 @@ function AccessManagement() {
   };
 
   // User Group Tab
-  const [ugTab, setUgTab] = useState("1");
+  const [ugTab, setUgTab] = useState(navState?.ugTab || "1");
   const toggleUg = (tab) => {
     if (ugTab !== tab) {
       setUgTab(tab);

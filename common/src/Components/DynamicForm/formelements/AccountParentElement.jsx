@@ -23,7 +23,6 @@ const AccountParentElement = ({ formik, field, formStateHook }) => {
     }
   }, [parentCompany]);
 
-  console.log("parentCompany", parentCompanyData);
   return (
     <div className={fieldLocation[field.fieldLocation]}>
       <select

@@ -33,7 +33,6 @@ import { useUserAuth } from "@workspace/login";
 const EditAccount = () => {
   const { getAllUserGroups, checkAllPermission, Permission } = useUserAuth();
 
-  
   const location = useLocation();
   const linkState = location.state;
   const formSubmissionData = useSelector(
@@ -55,20 +54,14 @@ const EditAccount = () => {
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [view, setView] = useState(linkState?.view !== null ? linkState?.view : true);
-
-  // console.log("HASH 1 Data",formSubmissionData)
-  // computeHash(JSON.stringify(formSubmissionData)).then((res) => console.log("HASH 1",res))
+  const [view, setView] = useState(
+    linkState?.view !== null ? linkState?.view : true
+  );
 
   /**
    * Get account id from url
    */
   const { accountId } = useParams();
-  // console.log("Account Id: ", accountId);
-  // console.log("Step: ", step);
-  // console.log("Form Submission Data: ", formSubmissionData);
-  // console.log("Form: ", form);
-  // console.log("Form Template: ", formTemplate);
 
   // Fetch country if country do not exist
   useEffect(() => {
@@ -191,7 +184,6 @@ const EditAccount = () => {
   const handleFormikChange = useCallback((formik) => {
     // Handle formik change here
     setFormFormik(formik);
-    console.log("Formik has changed:", formik);
   }, []);
 
   /**
@@ -225,10 +217,6 @@ const EditAccount = () => {
     formStateHook,
     rerenderTable
   ) => {
-    // console.log("HASH 2 Data",newValues)
-    // await computeHash(JSON.stringify(newValues)).then((res) => console.log("HASH 2",res))
-    // return
-
     const isFormChanged = await isFormEdited(formSubmissionData, newValues);
 
     if (!isFormChanged) {
@@ -241,10 +229,6 @@ const EditAccount = () => {
 
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
-    // console.log("values", values);
-    // console.log("newValues", newValues);
-    // console.log("Button Name:", buttonName);
-    // console.log("Step: ", step);
     // Set a reset form functions
     const resetForm = (arrayFields = []) => {
       formFormik.resetForm();
@@ -253,7 +237,7 @@ const EditAccount = () => {
           formFormik.setFieldValue(fieldName, "")
         );
       }
-      // setFormState("create");
+      setFormState("create");
     };
 
     const resetFormFields = (arrayFields = []) => {
@@ -266,7 +250,6 @@ const EditAccount = () => {
     };
 
     if (step === 0) {
-      console.log("Step 0");
       if (formSubmissionData != null) {
         let formValues = { ...newValues };
         const accountData = { ...formValues };
@@ -306,7 +289,6 @@ const EditAccount = () => {
     }
 
     if (step === 1) {
-      console.log("Step 1");
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
@@ -337,7 +319,6 @@ const EditAccount = () => {
 
       if (buttonName === "tableUpdate") {
         setButtonName("");
-        console.log("Update Contact");
         const newData = {
           ...newValues,
           entityId: accountId,
@@ -367,7 +348,6 @@ const EditAccount = () => {
 
     if (step === 2) {
       if (buttonName === "add") {
-        console.log("Add Address");
         setErrorMessage(null);
         setButtonName("");
         let formValues = { ...newValues };
@@ -407,7 +387,6 @@ const EditAccount = () => {
       }
 
       if (buttonName === "tableUpdate") {
-        console.log("Update Document");
         let formValues = { ...newValues };
         const documentData = { ...formValues };
         const fileData = formValues?.file;
@@ -439,7 +418,6 @@ const EditAccount = () => {
             field.name === AccountTableListConstant.DOCUMENT_LIST
         );
         const { tableEditId } = table.tableSetting;
-        console.log("Table edit Id: ", tableEditId);
         dispatch(
           putAccount({
             entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
@@ -458,10 +436,8 @@ const EditAccount = () => {
     }
 
     if (step === 3) {
-      console.log("Step 3");
       if (buttonName === "add") {
         setButtonName("");
-        console.log("Add client instruction");
         let formValues = { file: newValues.file };
         const documentData = { ...formValues };
         const fileData = formValues?.file;
@@ -493,7 +469,6 @@ const EditAccount = () => {
         return;
       }
       if (formSubmissionData != null) {
-        console.log("Update instruction");
         const formData = {
           guidelines: newValues.guidelines,
         };
@@ -518,7 +493,6 @@ const EditAccount = () => {
     }
 
     if (step === 5) {
-      console.log("Create Commercial");
       const formData = {
         ...newValues,
         entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -548,8 +522,6 @@ const EditAccount = () => {
     const newFormValuesString = await CryptoHelper.computeHash(
       JSON.stringify(newFormValues)
     );
-    console.log("Old Form Values Hash: ", oldFormValuesString);
-    console.log("New Form Values Hash: ", newFormValuesString);
     if (oldFormValuesString === newFormValuesString) {
       return false;
     }
@@ -587,7 +559,7 @@ const EditAccount = () => {
    */
   const toggleFormViewState = () => {
     setView((prevState) => !prevState);
-  }
+  };
 
   return (
     <>
@@ -604,7 +576,6 @@ const EditAccount = () => {
           toggleFormViewState={toggleFormViewState}
           viewState={view}
         >
-          {/* {formSubmissionData && ( */}
           <Form
             template={formTemplate}
             userDetails={getAllUserGroups()}
@@ -616,7 +587,6 @@ const EditAccount = () => {
             errorMessage={errorMessage}
             view={view}
           />
-           {/* )}  */}
         </FormStepper>
       </Container>
     </>

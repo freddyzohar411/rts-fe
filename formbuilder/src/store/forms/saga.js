@@ -14,7 +14,7 @@ import {
   updateFormSuccess,
 } from "./action";
 import { getForms , createForm, deleteFormById, updateFormById, getFormById } from "../../helpers/backend_helper";
-
+import { toast } from "react-toastify";
 
 function* workFetchForms(action) {
   try {
@@ -40,6 +40,7 @@ function* workCreateForm(action) {
   try {
     const response = yield call(createForm, newForm);
     yield put(createFormSuccess(response.data));
+    toast.success("Form created successfully!");
     navigate(path);
   } catch (error) {
     yield put(createFormFailure(error));
@@ -51,6 +52,7 @@ function* workUpdateForm(action) {
   try {
     const response = yield call(updateFormById, updatedForm, formId);
     yield put(updateFormSuccess(response.data));
+    toast.success("Form updated successfully!");
     navigate(path);
   } catch (error) {
     yield put(updateFormFailure(error));

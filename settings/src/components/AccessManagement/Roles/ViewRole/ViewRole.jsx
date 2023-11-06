@@ -36,7 +36,6 @@ function ViewRole() {
     }
   }, []);
 
-
   // Tabs
   const [activeTab, setActiveTab] = useState("1");
   const toggle = (tab) => {
@@ -219,7 +218,7 @@ function ViewRole() {
                   </Row>
                 </CardBody>
                 <CardFooter>
-                  <Link to="/settings/access">
+                  <Link to="/settings/access" state={{ activeTab: "2" }}>
                     <Button className="btn btn-custom-primary">Back</Button>
                   </Link>
                 </CardFooter>

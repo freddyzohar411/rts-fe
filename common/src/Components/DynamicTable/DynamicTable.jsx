@@ -9,7 +9,6 @@ import {
 
 const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
   // ========================================= Table Configuration ===========================
-  console.log("pageInfo PAGE: ", pageInfo);
   // Generate Header
   const generateHeaderJSX = (config) => (
     <>

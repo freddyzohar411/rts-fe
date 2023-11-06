@@ -56,17 +56,20 @@ const useUserAuth = () => {
   }
 
   // ------------------ Get & Check Role ------------------
-  function getAllRoles() {
-    const roleList = [];
-    if (userProfile?.userGroup) {
-      userProfile.userGroup.forEach((group) => {
-        group.roles.forEach((role) => {
-          roleList.push(role.roleName);
-        });
-      });
-    }
-    return roleList;
-  }
+ const getAllRoles = () => useMemo(
+    () =>{
+        const roleList = [];
+        if (userProfile?.userGroup) {
+          userProfile.userGroup.forEach((group) => {
+            group.roles.forEach((role) => {
+              roleList.push(role.roleName);
+            });
+          });
+        }
+        return roleList;
+      },
+    [userProfile]
+  );
 
   function checkAllRole(roleList = []) {
     const roles = getAllRoles();
