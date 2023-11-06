@@ -28,17 +28,6 @@ import {
 } from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
-// Create Group
-function* workCreateGroup(action) {
-  const { payload } = action;
-  try {
-    const groupResponse = yield call(createGroup, payload);
-    yield put(createGroupSuccess(groupResponse?.data));
-  } catch (error) {
-    yield put(createGroupFailure(error?.data));
-  }
-}
-
 // Fetch Groups
 function* workFetchGroups() {
   try {
@@ -59,13 +48,23 @@ function* workFetchGroup(action) {
   }
 }
 
+// Create Group
+function* workCreateGroup(action) {
+  const { payload } = action;
+  try {
+    const groupResponse = yield call(createGroup, payload);
+    yield put(createGroupSuccess(groupResponse?.data));
+  } catch (error) {
+    yield put(createGroupFailure(error?.data));
+  }
+}
+
 // Update Group
 function* workUpdateGroup(action) {
-  const { updatedGroup, navigate } = action.payload;
+  const { payload } = action;
   try {
-    const groupResponse = yield call(updateGroup, updatedGroup);
+    const groupResponse = yield call(updateGroup, payload);
     yield put(updateGroupSuccess(groupResponse.data));
-    navigate("/settings/access");
     toast.success("Group updated successfully!");
   } catch (error) {
     yield put(updateGroupFailure(error));
