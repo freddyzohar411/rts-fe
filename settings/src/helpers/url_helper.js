@@ -15,6 +15,7 @@ export const GET_ROLES = "/api/role";
 export const CREATE_ROLE = "/api/role";
 export const UPDATE_ROLE = "/api/role";
 export const DELETE_ROLE = "/api/role";
+export const LIST_ROLES = "/api/role/listing";
 
 // Module
 export const GET_MODULES = "/api/module";
@@ -22,6 +23,7 @@ export const GET_MODULES = "/api/module";
 // Permissions
 export const GET_PERMISSIONS = "/api/permission";
 
-// Module
+// Group
 export const GET_USER_GROUP = "/api/usergroup";
+export const LIST_GROUPS = "/api/usergroup/listing";
 

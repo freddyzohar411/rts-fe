@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   CREATE_GROUP,
+  LIST_GROUPS,
   FETCH_GROUPS,
   FETCH_GROUP,
   UPDATE_GROUP,
@@ -9,6 +10,8 @@ import {
 import {
   createGroupSuccess,
   createGroupFailure,
+  listGroupsSuccess,
+  listGroupsFailure,
   fetchGroupsSuccess,
   fetchGroupsFailure,
   fetchGroupSuccess,
@@ -25,6 +28,7 @@ import {
   getGroup,
   deleteGroup,
   updateGroup,
+  listGroups,
 } from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
@@ -35,6 +39,16 @@ function* workFetchGroups() {
     yield put(fetchGroupsSuccess(response.data));
   } catch (error) {
     yield put(fetchGroupsFailure(error));
+  }
+}
+
+// List Groups
+function* workListGroups(action) {
+  try {
+    const response = yield call(listGroups, action.payload);
+    yield put(listGroupsSuccess(response?.data));
+  } catch (error) {
+    yield put(listGroupsFailure(error?.data));
   }
 }
 
@@ -92,4 +106,5 @@ export default function* watchFetchGroupSaga() {
   yield takeEvery(FETCH_GROUP, workFetchGroup);
   yield takeEvery(UPDATE_GROUP, workUpdateGroup);
   yield takeEvery(DELETE_GROUP, workDeleteGroup);
+  yield takeEvery(LIST_GROUPS, workListGroups);
 }

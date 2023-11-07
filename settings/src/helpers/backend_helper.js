@@ -15,11 +15,13 @@ import {
   CREATE_ROLE,
   DELETE_ROLE,
   UPDATE_ROLE,
+  LIST_ROLES,
   // Modules
   GET_MODULES,
   // Permissions
   GET_PERMISSIONS,
   GET_USER_GROUP,
+  LIST_GROUPS,
 } from "./url_helper";
 import { API_URL, ACCESS_URL, GROUP_URL } from "@workspace/common/src/config";
 
@@ -69,6 +71,9 @@ export const updateRole = (data) =>
 // Delete Role
 export const deleteRole = (data) =>
   api.delete(`${ACCESS_URL}${DELETE_ROLE}/${data}`);
+// List Roles
+export const listRoles = (data) =>
+  api.create(`${ACCESS_URL}${LIST_ROLES}`, data);
 
 // Module
 // Get Modules
@@ -92,3 +97,6 @@ export const updateGroup = (data) =>
 // Delete Group
 export const deleteGroup = (id) =>
   api.delete(`${GROUP_URL}${GET_USER_GROUP}/${id}`);
+  // List Groups
+export const listGroups = (data) =>
+  api.create(`${GROUP_URL}${LIST_GROUPS}`, data);

@@ -2,6 +2,9 @@ import {
   CREATE_ROLE,
   CREATE_ROLE_SUCCESS,
   CREATE_ROLE_FAILURE,
+  LIST_ROLES,
+  LIST_ROLES_SUCCESS,
+  LIST_ROLES_FAILURE,
   FETCH_ROLES,
   FETCH_ROLES_SUCCESS,
   FETCH_ROLES_FAILURE,
@@ -42,6 +45,29 @@ const RoleReducer = (state = initialState, action) => {
       };
 
     case CREATE_ROLE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        message: action.payload,
+      };
+
+    // List Roles
+    case LIST_ROLES:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+
+    case LIST_ROLES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        roles: action.payload,
+      };
+
+    case LIST_ROLES_FAILURE:
       return {
         ...state,
         loading: false,

@@ -5,6 +5,9 @@ import {
   FETCH_GROUPS,
   FETCH_GROUPS_SUCCESS,
   FETCH_GROUPS_FAILURE,
+  LIST_GROUPS,
+  LIST_GROUPS_SUCCESS,
+  LIST_GROUPS_FAILURE,
   FETCH_GROUP,
   FETCH_GROUP_SUCCESS,
   FETCH_GROUP_FAILURE,
@@ -44,6 +47,22 @@ export const fetchGroupsSuccess = (groups) => ({
 
 export const fetchGroupsFailure = (error) => ({
   type: FETCH_GROUPS_FAILURE,
+  payload: error,
+});
+
+// List Groups
+export const listGroups = (groupRequest) => ({
+  type: LIST_GROUPS,
+  payload: groupRequest,
+});
+
+export const listGroupsSuccess = (groups) => ({
+  type: LIST_GROUPS_SUCCESS,
+  payload: groups,
+});
+
+export const listGroupsFailure = (error) => ({
+  type: LIST_GROUPS_FAILURE,
   payload: error,
 });
 
