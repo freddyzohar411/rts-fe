@@ -7,6 +7,7 @@ export const GET_USERS = "/api/user";
 export const CREATE_USER = "/api/user";
 export const DELETE_USER = "/api/user";
 export const UPDATE_USER = "/api/user";
+export const LIST_USERS = "/api/user/listing";
 
 // Role
 export const GET_ROLE = "/api/role";

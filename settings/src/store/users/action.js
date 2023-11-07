@@ -5,6 +5,9 @@ import {
   FETCH_USERS,
   FETCH_USERS_SUCCESS,
   FETCH_USERS_FAILURE,
+  LIST_USERS,
+  LIST_USERS_SUCCESS,
+  LIST_USERS_FAILURE,
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAILURE,
@@ -44,6 +47,22 @@ export const fetchUsersSuccess = (users) => ({
 
 export const fetchUsersFailure = (error) => ({
   type: FETCH_USERS_FAILURE,
+  payload: error,
+});
+
+// List Users
+export const listUsers = (userRequest) => ({
+  type: LIST_USERS,
+  payload: userRequest,
+});
+
+export const listUsersSuccess = (users) => ({
+  type: LIST_USERS_SUCCESS,
+  payload: users,
+});
+
+export const listUsersFailure = (error) => ({
+  type: LIST_USERS_FAILURE,
   payload: error,
 });
 

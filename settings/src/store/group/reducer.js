@@ -16,112 +16,65 @@ import {
   DELETE_GROUP_FAILURE,
 } from "./actionTypes";
 
+import {
+  errorMetaData,
+  pendingMetaData,
+  successMetaData,
+} from "@workspace/common";
+
 const initialState = {
   group: {},
   groups: [],
-  message: "",
-  success: false,
-  loading: false,
-  error: false,
+  meta: {},
+  createMeta: {},
+  updateMeta: {},
+  deleteMeta: {},
 };
 
 const GroupReducer = (state = initialState, action) => {
   switch (action.type) {
     // Create Group
     case CREATE_GROUP:
-      return {
-        ...state,
-        success: false,
-        loading: true,
-        error: false,
-      };
-
+      state.createMeta = pendingMetaData();
+      return state;
     case CREATE_GROUP_SUCCESS:
-      return {
-        ...state,
-        success: true,
-        loading: false,
-        error: false,
-        message: action.payload,
-      };
-
+      state.createMeta = successMetaData(action.payload);
+      return state;
     case CREATE_GROUP_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
-      };
-
+      state.createMeta = errorMetaData(action.payload);
+      return state;
     // Fetch Groups
     case FETCH_GROUPS:
-      return {
-        ...state,
-        loading: true,
-        error: false,
-      };
-
+      state.meta = pendingMetaData();
+      return state;
     case FETCH_GROUPS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        groups: action.payload,
-      };
-
+      state.meta = successMetaData();
+      state.groups = action.payload;
+      return state;
     case FETCH_GROUPS_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
-      };
-
+      state.meta = errorMetaData(action.payload);
+      return state;
     // Fetch Group
     case FETCH_GROUP:
-      return {
-        ...state,
-        loading: true,
-        error: false,
-      };
-
+      state.meta = pendingMetaData();
+      return state;
     case FETCH_GROUP_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        group: action.payload,
-      };
-
+      state.meta = successMetaData();
+      state.group = action.payload;
+      return state;
     case FETCH_GROUP_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
-      };
-
+      state.meta = errorMetaData(action.payload);
+      return state;
     // Update Group
     case UPDATE_GROUP:
-      return {
-        ...state,
-        loading: true,
-        error: false,
-      };
-
+      state.updateMeta = pendingMetaData();
+      return state;
     case UPDATE_GROUP_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        group: action.payload,
-      };
-
+      state.updateMeta = successMetaData();
+      return state;
     case UPDATE_GROUP_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
-      };
-
+      state.updateMeta = errorMetaData(action.payload);
+      return state;
     // Delete Group
     case DELETE_GROUP:
       return {
@@ -129,14 +82,12 @@ const GroupReducer = (state = initialState, action) => {
         loading: true,
         error: false,
       };
-
     case DELETE_GROUP_SUCCESS:
       return {
         ...state,
         loading: false,
         group: action.payload,
       };
-
     case DELETE_GROUP_FAILURE:
       return {
         ...state,
@@ -144,7 +95,6 @@ const GroupReducer = (state = initialState, action) => {
         error: true,
         message: action.payload,
       };
-
     default:
       return state;
   }
