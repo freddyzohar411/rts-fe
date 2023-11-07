@@ -23,6 +23,7 @@ function* workFetchAccountForm(action) {
     yield put(fetchAccountFormSuccess(response.data));
   } catch (error) {
     toast.error("Error fetching account form");
+    console.log(error.message)
     yield put(fetchAccountFormFailure(error));
   }
 }

@@ -1,7 +1,5 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
-import {
-  AccountEntityConstant,
-} from "../../constants/accountConstant";
+import { AccountEntityConstant } from "../../constants/accountConstant";
 
 import {
   FETCH_ACCOUNT,
@@ -83,7 +81,8 @@ function* workPostAccount(action) {
       handleNext();
     }
   } catch (error) {
-    toast.error(error.message);
+    toast.error("Error creating account");
+    console.log(error.message);
     yield put(postAccountFailure(error));
   }
 }
@@ -117,7 +116,8 @@ function* workPutAccount(action) {
       handleNext();
     }
   } catch (error) {
-    toast.error(error.message);
+    toast.error("Error updating account");
+    console.log(error.message);
     yield put(putAccountFailure(error));
   }
 }
@@ -128,7 +128,8 @@ function* workFetchAccounts(action) {
     const response = yield call(getAccounts, action.payload);
     yield put(fetchAccountsSuccess(response.data));
   } catch (error) {
-    toast.error(error.message);
+    toast.error("Error fetching accounts");
+    console.log(error.message);
     yield put(fetchAccountsFailure(error));
   }
 }
@@ -141,7 +142,8 @@ function* workDeleteAccount(action) {
     toast.success("Account deleted successfully");
   } catch (error) {
     yield put(deleteAccountFailure(error));
-    toast.error(error.message);
+    toast.error("Error deleting account");
+    console.log(error.message);
   }
 }
 
@@ -151,19 +153,21 @@ function* workFetchAccountsFields() {
     const response = yield call(getAccountsFields);
     yield put(fetchAccountsFieldsSuccess(response.data));
   } catch (error) {
-    toast.error(error.message);
+    toast.error("Error fetching accounts fields");
+    console.log(error.message);
     yield put(fetchAccountsFieldsFailure(error));
   }
 }
 
-// Fet account by id
+// Fetch account by id
 function* workFetchAccount(action) {
   try {
     const response = yield call(getAccountById, action.payload);
     yield put(fetchAccountSuccess(response.data));
     yield put(setAccountCountry(response.data.accountCountry));
   } catch (error) {
-    toast.error(error.message);
+    toast.error("Error fetching account");
+    console.log(error.message);
     yield put(fetchAccountFailure(error));
   }
 }
