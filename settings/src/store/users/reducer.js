@@ -28,6 +28,7 @@ import {
 const initialState = {
   user: {},
   users: [],
+  usersListing: [],
   message: "",
   loading: false,
   error: false,
@@ -93,7 +94,7 @@ const UserReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        users: action.payload,
+        usersListing: action.payload,
       };
 
     case LIST_USERS_FAILURE:

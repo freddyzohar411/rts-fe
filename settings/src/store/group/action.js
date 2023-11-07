@@ -56,9 +56,9 @@ export const listGroups = (groupRequest) => ({
   payload: groupRequest,
 });
 
-export const listGroupsSuccess = (groups) => ({
+export const listGroupsSuccess = (groupListing) => ({
   type: LIST_GROUPS_SUCCESS,
-  payload: groups,
+  payload: groupListing,
 });
 
 export const listGroupsFailure = (error) => ({

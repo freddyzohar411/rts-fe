@@ -18,9 +18,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchRoles, deleteRole, listRoles } from "../../../store/roles/action";
 
 function RolesTab() {
-  const rolesListing = useSelector((state) => state.RoleReducer);
-  const roles = rolesListing.roles.roles;
-  const totalPages = rolesListing.roles.totalPages;
+  const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
+  const roles = rolesListing.roles;
+  const totalPages = rolesListing.totalPages;
   const dispatch = useDispatch();
 
   // Pagination

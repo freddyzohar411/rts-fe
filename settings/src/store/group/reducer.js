@@ -28,6 +28,7 @@ import {
 const initialState = {
   group: {},
   groups: [],
+  groupListing: [],
   meta: {},
   createMeta: {},
   updateMeta: {},
@@ -109,7 +110,7 @@ const GroupReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        groups: action.payload,
+        groupListing: action.payload,
       };
     case LIST_GROUPS_FAILURE:
       return {

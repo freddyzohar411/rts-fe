@@ -22,6 +22,7 @@ import {
 const initialState = {
   role: {},
   roles: [],
+  rolesListing: [],
   message: "",
   loading: false,
   error: false,
@@ -64,7 +65,7 @@ const RoleReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        roles: action.payload,
+        rolesListing: action.payload,
       };
 
     case LIST_ROLES_FAILURE:

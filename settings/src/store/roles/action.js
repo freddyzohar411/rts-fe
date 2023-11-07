@@ -39,9 +39,9 @@ export const listRoles = (roleRequest) => ({
   payload: roleRequest,
 });
 
-export const listRolesSuccess = (roles) => ({ 
+export const listRolesSuccess = (roleListing) => ({ 
   type: LIST_ROLES_SUCCESS,
-  payload: roles,
+  payload: roleListing,
 });
 
 export const listRolesFailure = (error) => ({
