@@ -3,6 +3,11 @@ export const CREATE_ROLE = "CREATE_ROLE";
 export const CREATE_ROLE_SUCCESS = "CREATE_ROLE_SUCCESS";
 export const CREATE_ROLE_FAILURE = "CREATE_ROLE_FAILURE";
 
+// List Roles
+export const LIST_ROLES = "LIST_ROLES";
+export const LIST_ROLES_SUCCESS = "LIST_ROLES_SUCCESS";
+export const LIST_ROLES_FAILURE = "LIST_ROLES_FAILURE";
+
 // Fetch All Roles
 export const FETCH_ROLES = "FETCH_ROLES";
 export const FETCH_ROLES_SUCCESS = "FETCH_ROLES_SUCCESS";

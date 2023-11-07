@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   CREATE_ROLE,
+  LIST_ROLES,
   FETCH_ROLES,
   FETCH_ROLE,
   UPDATE_ROLE,
@@ -9,6 +10,8 @@ import {
 import {
   createRoleSuccess,
   createRoleFailure,
+  listRolesSuccess,
+  listRolesFailure,
   fetchRolesSuccess,
   fetchRolesFailure,
   fetchRoleSuccess,
@@ -25,6 +28,7 @@ import {
   getRole,
   deleteRole,
   updateRole,
+  listRoles
 } from "../../helpers/backend_helper";
 
 import { toast } from "react-toastify";
@@ -35,13 +39,25 @@ function* workCreateRole(action) {
   try {
     const roleResponse = yield call(createRole, newRole);
     yield put(createRoleSuccess(roleResponse.data));
-    navigate("/settings/access", { state: {
-      activeTab: "2"
-    } });
+    navigate("/settings/access", {
+      state: {
+        activeTab: "2",
+      },
+    });
     toast.success("Role creation success!");
   } catch (error) {
     yield put(createRoleFailure(error));
     toast.error("Role creation failed!");
+  }
+}
+
+// List Roles
+function* workListRoles(action) {
+  try {
+    const response = yield call(listRoles, action.payload);
+    yield put(listRolesSuccess(response.data));
+  } catch (error) {
+    yield put(listRolesFailure(error));
   }
 }
 
@@ -71,9 +87,11 @@ function* workUpdateRole(action) {
   try {
     const roleResponse = yield call(updateRole, updatedRole);
     yield put(updateRoleSuccess(roleResponse.data));
-    navigate("/settings/access", { state: {
-      activeTab: "2"
-    } });
+    navigate("/settings/access", {
+      state: {
+        activeTab: "2",
+      },
+    });
     toast.success("Role update success!");
   } catch (error) {
     yield put(updateRoleFailure(error));
@@ -101,4 +119,5 @@ export default function* watchFetchRoleSaga() {
   yield takeEvery(FETCH_ROLE, workFetchRole);
   yield takeEvery(UPDATE_ROLE, workUpdateRole);
   yield takeEvery(DELETE_ROLE, workDeleteRole);
+  yield takeEvery(LIST_ROLES, workListRoles);
 }

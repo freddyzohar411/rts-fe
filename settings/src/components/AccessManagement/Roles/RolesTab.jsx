@@ -15,51 +15,45 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchRoles, deleteRole } from "../../../store/roles/action";
+import { fetchRoles, deleteRole, listRoles } from "../../../store/roles/action";
 
 function RolesTab() {
-  const roles = useSelector((state) => state.RoleReducer.users);
+  const rolesListing = useSelector((state) => state.RoleReducer);
+  const roles = rolesListing.roles.roles;
+  const totalPages = rolesListing.roles.totalPages;
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchRoles());
-  }, []);
-
   // Pagination
-  const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = roles?.slice(startIndex, endIndex);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const [sortBy, setSortBy] = useState(null);
+  const [sortDirection, setSortDirection] = useState("asc");
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+  const handleSortAndDirection = (column) => {
+    setSortBy(column);
+    if (sortDirection === "asc") {
+      setSortDirection("desc");
+    } else {
+      setSortDirection("asc");
     }
   };
 
-  const handleNextPage = () => {
-    const totalPages = Math.ceil(roles?.length / itemsPerPage);
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+  const handlePageSize = (e) => {
+    setPageSize(e.target.value);
+    setPage(0);
   };
 
-  // Search Roles
-  const [searchTerm, setSearchTerm] = useState("");
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredRoles = currentData?.filter((role) => {
-    if (searchTerm === "") {
-      return "No results found";
-    } else if (
-      role?.roleName?.toLowerCase().includes(searchTerm.toLowerCase())
-    ) {
-      return role;
-    }
-  });
+  useEffect(() => {
+    const pageRequest = {
+      page,
+      pageSize,
+      sortBy,
+      sortDirection,
+      searchTerm: search,
+    };
+    dispatch(listRoles(pageRequest));
+  }, [page, pageSize, sortBy, sortDirection, search]);
 
   // Delete
   const [modal, setModal] = useState(false);
@@ -76,18 +70,29 @@ function RolesTab() {
 
   return (
     <div>
-      <h5 className="fw-bolder">Manage Roles and Permission</h5>
-      <p className="text-muted">
-        Configure roles to define the different groups of authorities.
-      </p>
-      <div className="d-flex flex-row gap-2 mb-4">
-        <Link to="/settings/access/role/role-creation">
-          <Button className="btn btn-custom-primary btn-sm d-flex flex-row align-items-center">
-            <i className="ri-contacts-line me-2"></i>
-            <span>ADD NEW ROLE</span>
-          </Button>
-        </Link>
-      </div>
+      <Row>
+        <Col>
+          <div className="d-flex flex-column gap-2">
+            <h5 className="fw-bolder">Manage Roles and Permission</h5>
+            <p className="text-muted">
+              Configure roles to define the different groups of authorities.
+            </p>
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <div className="d-flex flex-row gap-2 mb-4">
+            <Link to="/settings/access/role/role-creation">
+              <Button className="btn btn-custom-primary btn-sm d-flex flex-row align-items-center">
+                <i className="ri-contacts-line me-2"></i>
+                <span>ADD NEW ROLE</span>
+              </Button>
+            </Link>
+          </div>
+        </Col>
+      </Row>
+
       <Row className="d-flex flex-row align-items-center">
         <Col>
           <div className="search-box my-2">
@@ -95,113 +100,147 @@ function RolesTab() {
               type="text"
               placeholder="Search.."
               className="form-control"
-              value={searchTerm}
-              onChange={handleSearchChange}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
             <i className="ri-search-line search-icon"></i>
           </div>
           <div className="table-responsive"></div>
         </Col>
       </Row>
-      <div className="table-responsive">
-        <Table
-          className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3"
-          id="rolesTable"
-        >
-          <thead>
-            <tr>
-              <th scope="col">
-                <span className="me-1">Roles</span>
-                <i className="mdi mdi-sort" style={{ cursor: "pointer" }}></i>
-              </th>
-              <th scope="col">Description</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRoles?.length > 0 ? (
-              filteredRoles?.map((role, index) => (
-                <tr key={index}>
-                  <td>{role?.roleName}</td>
-                  <td className="text-truncate">
-                    {role.roleDescription.length > 100
-                      ? `${role.roleDescription.substring(0, 100)}...`
-                      : role.roleDescription}
-                  </td>
-                  <td className="d-flex align-items-center justify-content-center">
-                    <div className="d-flex flex-start gap-2">
-                      <Link
-                        to={role ? `/settings/access/role/${role.id}` : "#"}
-                      >
-                        <Button className="btn btn-custom-primary">
-                          <i className="ri-eye-line"></i>
-                        </Button>
-                      </Link>
-                      <Link
-                        to={
-                          role ? `/settings/access/role/update/${role.id}` : "#"
-                        }
-                      >
-                        {" "}
-                        <Button className="btn btn-custom-primary">
-                          <i className="ri-pencil-line"></i>
-                        </Button>
-                      </Link>
-                      <Button
-                        className="btn btn-custom-primary"
-                        onClick={() => confirmDelete(role?.id)}
-                      >
-                        <i className="ri-delete-bin-2-line"></i>
-                      </Button>
-                    </div>
-                  </td>
+      <Row className="mb-1">
+        <Col>
+          <div className="table-responsive">
+            <Table
+              className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3"
+              id="rolesTable"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <span className="me-1">Roles</span>
+                    <i
+                      className="mdi mdi-sort"
+                      onClick={() => {
+                        handleSortAndDirection("roleName");
+                      }}
+                      style={{ cursor: "pointer" }}
+                    ></i>
+                  </th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Actions</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={3}>No roles found!</td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
-        <div className="d-flex flex-row justify-content-end">
-          <Pagination>
-            <PaginationItem
-              onClick={() => handlePrevPage()}
-              disabled={currentPage === 1}
-            >
-              <PaginationLink>← &nbsp; Previous</PaginationLink>
-            </PaginationItem>
-            <PaginationItem active>
-              <PaginationLink>Page {currentPage}</PaginationLink>
-            </PaginationItem>
-            <PaginationItem
-              onClick={() => handleNextPage()}
-              disabled={currentPage * itemsPerPage >= currentData?.length}
-            >
-              <PaginationLink>Next &nbsp; →</PaginationLink>
-            </PaginationItem>
-          </Pagination>
-        </div>
-        <Modal isOpen={modal} toggle={() => setModal(!modal)} centered>
-          <ModalHeader>Are you sure?</ModalHeader>
-          <ModalBody>You are deleting this role.</ModalBody>
-          <ModalFooter>
-            <Button
-              className="btn btn-custom-primary"
-              onClick={() => handleDelete(selectedRole)}
-            >
-              Delete
-            </Button>
-            <Button
-              className="btn btn-custom-primary"
-              onClick={() => setModal(!modal)}
-            >
-              Cancel
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+              </thead>
+              <tbody>
+                {roles?.length > 0 ? (
+                  roles?.map((role, index) => (
+                    <tr key={index}>
+                      <td>{role?.roleName}</td>
+                      <td className="text-truncate">
+                        {role.roleDescription.length > 100
+                          ? `${role.roleDescription.substring(0, 100)}...`
+                          : role.roleDescription}
+                      </td>
+                      <td className="d-flex align-items-center justify-content-center">
+                        <div className="d-flex flex-start gap-2">
+                          <Link
+                            to={role ? `/settings/access/role/${role.id}` : "#"}
+                          >
+                            <Button className="btn btn-custom-primary">
+                              <i className="ri-eye-line"></i>
+                            </Button>
+                          </Link>
+                          <Link
+                            to={
+                              role
+                                ? `/settings/access/role/update/${role.id}`
+                                : "#"
+                            }
+                          >
+                            {" "}
+                            <Button className="btn btn-custom-primary">
+                              <i className="ri-pencil-line"></i>
+                            </Button>
+                          </Link>
+                          <Button
+                            className="btn btn-custom-primary"
+                            onClick={() => confirmDelete(role?.id)}
+                          >
+                            <i className="ri-delete-bin-2-line"></i>
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={3}>No roles found!</td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+
+            <Modal isOpen={modal} toggle={() => setModal(!modal)} centered>
+              <ModalHeader>Are you sure?</ModalHeader>
+              <ModalBody>You are deleting this role.</ModalBody>
+              <ModalFooter>
+                <Button
+                  className="btn btn-custom-primary"
+                  onClick={() => handleDelete(selectedRole)}
+                >
+                  Delete
+                </Button>
+                <Button
+                  className="btn btn-custom-primary"
+                  onClick={() => setModal(!modal)}
+                >
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <div className="d-flex flex-row justify-content-between align-items-baseline">
+            <div>
+              <Input
+                type="select"
+                className="form-select form-select-md"
+                onChange={handlePageSize}
+                value={pageSize}
+                
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="20">30</option>
+              </Input>
+            </div>
+            <div>
+              <Pagination>
+                <PaginationItem>
+                  <PaginationLink
+                    disabled={page === 0}
+                    onClick={() => setPage(page - 1)}
+                  >
+                    Previous
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    disabled={page + 1 === totalPages}
+                    onClick={() => setPage(page + 1)}
+                  >
+                    Next
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            </div>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 }

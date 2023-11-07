@@ -2,6 +2,9 @@ import {
   CREATE_GROUP,
   CREATE_GROUP_SUCCESS,
   CREATE_GROUP_FAILURE,
+  LIST_GROUPS,
+  LIST_GROUPS_SUCCESS,
+  LIST_GROUPS_FAILURE,
   FETCH_GROUPS,
   FETCH_GROUPS_SUCCESS,
   FETCH_GROUPS_FAILURE,
@@ -95,6 +98,27 @@ const GroupReducer = (state = initialState, action) => {
         error: true,
         message: action.payload,
       };
+    // List Groups
+    case LIST_GROUPS:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case LIST_GROUPS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        groups: action.payload,
+      };
+    case LIST_GROUPS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        message: action.payload,
+      };
+
     default:
       return state;
   }

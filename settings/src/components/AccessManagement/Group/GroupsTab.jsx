@@ -15,56 +15,54 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteGroup, fetchGroups } from "../../../store/group/action";
+import { deleteGroup, listGroups } from "../../../store/group/action";
 import { useEffect } from "react";
 
 function GroupsTab() {
-  const [modal, setModal] = useState(false);
-  const [deletedId, setDeletedId] = useState();
-
+  const groupsListing = useSelector((state) => state?.GroupReducer.groups) ?? [];
+  const groups = groupsListing?.userGroups;
+  console.log(groupsListing)
   const dispatch = useDispatch();
-  // PAGINATION
-  const groups = useSelector((state) => state?.GroupReducer?.groups) ?? [];
+
+  // Pagination
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const [sortBy, setSortBy] = useState(null);
+  const [sortDirection, setSortDirection] = useState("asc");
+  const totalPages = groupsListing.totalPages;
+
+  const handleSortAndDirection = (column) => {
+    // Get the name of the column
+    setSortBy(column);
+    // If the sort direction is ascending, set it to descending and vice versa
+    if (sortDirection === "asc") {
+      setSortDirection("desc");
+    } else {
+      setSortDirection("asc");
+    }
+  };
+
+  // Handle Page Size
+  const handleChangePageSize = (e) => {
+    setPageSize(e.target.value);
+    setPage(0);
+  };
 
   useEffect(() => {
-    dispatch(fetchGroups());
-  }, []);
+    const pageRequest = {
+      page,
+      pageSize,
+      sortBy,
+      sortDirection,
+      searchTerm: search,
+    };
+    dispatch(listGroups(pageRequest));
+  }, [page, pageSize, sortBy, sortDirection, search]);
 
-  const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = groups?.slice(startIndex, endIndex);
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    const totalPages = Math.ceil(groups?.length / itemsPerPage);
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  // Search Group
-  const [searchTerm, setSearchTerm] = useState("");
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredGroups = currentData?.filter((group) => {
-    if (searchTerm === "") {
-      return "No results found";
-    } else if (
-      group?.userGroupName?.toLowerCase().includes(searchTerm.toLowerCase())
-    ) {
-      return group;
-    }
-  });
-
+  // Handle Delete
+  const [modal, setModal] = useState(false);
+  const [deletedId, setDeletedId] = useState();
   const handleDelete = () => {
     setModal(false);
     dispatch(deleteGroup(deletedId));
@@ -79,14 +77,15 @@ function GroupsTab() {
               type="text"
               placeholder="Search.."
               className="form-control"
-              value={searchTerm}
-              onChange={handleSearchChange}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
             <i className="ri-search-line search-icon"></i>
           </div>
           <div className="table-responsive"></div>
         </Col>
       </Row>
+
       <Row>
         <Col lg={12}>
           <Table className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3">
@@ -94,8 +93,11 @@ function GroupsTab() {
               <tr>
                 <th scope="col">
                   <span className="me-1">Group Name</span>
-                  <i className="mdi mdi-sort" style={{ cursor: "pointer" }}></i>
-                  
+                  <i
+                    className="mdi mdi-sort"
+                    onClick={() => handleSortAndDirection("userGroupName")}
+                    style={{ cursor: "pointer" }}
+                  ></i>
                 </th>
                 <th scope="col" style={{ width: "600px" }}>
                   Description
@@ -106,8 +108,8 @@ function GroupsTab() {
               </tr>
             </thead>
             <tbody>
-              {filteredGroups?.length > 0 ? (
-                filteredGroups?.map((item, idx) => (
+              {groups?.length > 0 ? (
+                groups?.map((item, idx) => (
                   <tr key={idx}>
                     <td>{item?.userGroupName}</td>
                     <td className="text-wrap">{item?.userGroupDescription}</td>
@@ -147,6 +149,7 @@ function GroupsTab() {
               )}
             </tbody>
           </Table>
+
           <Modal isOpen={modal} toggle={() => setModal(false)} centered>
             <ModalHeader>Are you sure?</ModalHeader>
             <ModalBody>You are deleting this group.</ModalBody>
@@ -165,24 +168,45 @@ function GroupsTab() {
               </Button>
             </ModalFooter>
           </Modal>
-          <div className="d-flex flex-row justify-content-end">
-            <Pagination>
-              <PaginationItem
-                onClick={() => handlePrevPage()}
-                disabled={currentPage === 1}
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <div className="d-flex flex-row justify-content-between align-items-baseline">
+            <div>
+              <Input
+                type="select"
+                className="form-select form-select-md"
+                onChange={handleChangePageSize}
+                value={pageSize}
               >
-                <PaginationLink>← &nbsp; Previous</PaginationLink>
-              </PaginationItem>
-              <PaginationItem active>
-                <PaginationLink>Page {currentPage}</PaginationLink>
-              </PaginationItem>
-              <PaginationItem
-                onClick={() => handleNextPage()}
-                disabled={currentPage * itemsPerPage >= filteredGroups?.length}
-              >
-                <PaginationLink>Next &nbsp; →</PaginationLink>
-              </PaginationItem>
-            </Pagination>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+              </Input>
+            </div>
+            <div>
+              <Pagination>
+                <PaginationItem>
+                  <PaginationLink
+                    disabled={page === 0}
+                    onClick={() => setPage(page - 1)}
+                  >
+                    Previous
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    disabled={page + 1 === totalPages}
+                    onClick={() => setPage(page + 1)}
+                  >
+                    Next
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            </div>
           </div>
         </Col>
       </Row>

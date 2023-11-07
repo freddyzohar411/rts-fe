@@ -2,6 +2,7 @@ import {
   CREATE_ROLE,
   CREATE_ROLE_SUCCESS,
   CREATE_ROLE_FAILURE,
+  LIST_ROLES, LIST_ROLES_SUCCESS, LIST_ROLES_FAILURE,
   FETCH_ROLES,
   FETCH_ROLES_SUCCESS,
   FETCH_ROLES_FAILURE,
@@ -29,6 +30,22 @@ export const createRoleSuccess = (role) => ({
 
 export const createRoleFailure = (error) => ({
   type: CREATE_ROLE_FAILURE,
+  payload: error,
+});
+
+// List Roles
+export const listRoles = (roleRequest) => ({
+  type: LIST_ROLES,
+  payload: roleRequest,
+});
+
+export const listRolesSuccess = (roles) => ({ 
+  type: LIST_ROLES_SUCCESS,
+  payload: roles,
+});
+
+export const listRolesFailure = (error) => ({
+  type: LIST_ROLES_FAILURE,
   payload: error,
 });
 

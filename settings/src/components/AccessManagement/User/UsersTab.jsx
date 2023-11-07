@@ -245,7 +245,6 @@ function UsersTab() {
                 className="form-select form-select-md"
                 onChange={handleChangePageSize}
                 value={pageSize}
-                style={{ width: "100px" }}
               >
                 <option value="5">5</option>
                 <option value="10">10</option>
