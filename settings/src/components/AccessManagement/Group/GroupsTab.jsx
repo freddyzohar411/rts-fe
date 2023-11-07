@@ -19,8 +19,8 @@ import { deleteGroup, listGroups } from "../../../store/group/action";
 import { useEffect } from "react";
 
 function GroupsTab() {
-  const groupsListing = useSelector((state) => state?.GroupReducer.groups) ?? [];
-  const groups = groupsListing?.userGroups;
+  const groupListing = useSelector((state) => state?.GroupReducer.groupListing) ?? [];
+  const groups = groupListing?.userGroups ?? [];
   const dispatch = useDispatch();
 
   // Pagination
@@ -29,7 +29,8 @@ function GroupsTab() {
   const [pageSize, setPageSize] = useState(5);
   const [sortBy, setSortBy] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
-  const totalPages = groupsListing.totalPages;
+  // const totalPages = groupListing.totalPages;
+  const totalPages = groupListing.totalPages;
 
   const handleSortAndDirection = (column) => {
     // Get the name of the column

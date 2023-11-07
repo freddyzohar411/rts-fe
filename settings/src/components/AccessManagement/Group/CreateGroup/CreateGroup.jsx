@@ -31,10 +31,8 @@ function CreateGroup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const userData = useSelector((state) => state.UserReducer.users);
-  const users = userData?.users;
-  const rolesData = useSelector((state) => state.RoleReducer.roles);
-  const roles = rolesData?.roles;
+  const users = useSelector((state) => state.UserReducer.users);
+  const roles = useSelector((state) => state.RoleReducer.users);
   const loading = useSelector((state) => state.GroupReducer.loading);
   const success = useSelector((state) => state.GroupReducer.success);
   const message = useSelector((state) => state.GroupReducer.message);

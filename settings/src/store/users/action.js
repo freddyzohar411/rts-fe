@@ -56,9 +56,9 @@ export const listUsers = (userRequest) => ({
   payload: userRequest,
 });
 
-export const listUsersSuccess = (users) => ({
+export const listUsersSuccess = (usersListing) => ({
   type: LIST_USERS_SUCCESS,
-  payload: users,
+  payload: usersListing,
 });
 
 export const listUsersFailure = (error) => ({
