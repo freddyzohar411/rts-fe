@@ -63,10 +63,11 @@ function CreateNewRole() {
 
   // Dual List Box
   const [selected, setSelected] = useState([]);
-  const formattedGroups = allGroups.map((group) => ({
-    value: group.userGroupName,
-    label: group.userGroupName,
-  }));
+    const formattedGroups = allGroups?.map((group) => ({
+      value: group.userGroupName,
+      label: group.userGroupName,
+    }));
+
 
   // Handle Submit
   const handleSubmit = async (values) => {
