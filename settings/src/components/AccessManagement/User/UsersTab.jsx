@@ -20,8 +20,9 @@ import { fetchUsers, deleteUser, listUsers } from "../../../store/users/action";
 
 function UsersTab() {
   const [modal, setModal] = useState(false);
-  const usersListing = useSelector((state) => state.UserReducer.users);
-  const users = usersListing?.users;
+  const usersListing = useSelector((state) => state.UserReducer);
+  const users = usersListing.users.users;
+  const totalPages = usersListing.users.totalPages;
   const dispatch = useDispatch();
 
   // Pagination
@@ -89,7 +90,7 @@ function UsersTab() {
           <div className="table-responsive"></div>
         </Col>
       </Row>
-      <Row className="mb-3">
+      <Row className="mb-1">
         <Col lg={12}>
           <div className="table-responsive mb-1">
             <Table
@@ -264,7 +265,7 @@ function UsersTab() {
                 </PaginationItem>
                 <PaginationItem>
                   <PaginationLink
-                    disabled={page * pageSize >= users?.length}
+                    disabled={page + 1 === totalPages}
                     onClick={() => setPage(page + 1)}
                   >
                     Next
