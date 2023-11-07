@@ -21,7 +21,6 @@ import { useEffect } from "react";
 function GroupsTab() {
   const groupsListing = useSelector((state) => state?.GroupReducer.groups) ?? [];
   const groups = groupsListing?.userGroups;
-  console.log(groupsListing)
   const dispatch = useDispatch();
 
   // Pagination

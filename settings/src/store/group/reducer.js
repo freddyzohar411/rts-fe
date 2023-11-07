@@ -118,7 +118,6 @@ const GroupReducer = (state = initialState, action) => {
         error: true,
         message: action.payload,
       };
-
     default:
       return state;
   }
