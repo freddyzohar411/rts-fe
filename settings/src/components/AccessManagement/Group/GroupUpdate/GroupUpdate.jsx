@@ -25,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import { schema } from "./constants";
-import { updateGroup } from "../../../../store/group/action";
+import { fetchGroup, updateGroup } from "../../../../store/group/action";
 import { useRef } from "react";
 
 function GroupUpdate() {
@@ -34,7 +34,7 @@ function GroupUpdate() {
   const { id } = useParams();
   const form = useRef();
 
-  const groups = useSelector((state) => state?.GroupReducer?.groups) ?? [];
+  const groupDetails = useSelector((state) => state?.GroupReducer?.group);
   const usersListing = useSelector((state) => state.UserReducer.usersListing);
   const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
   const users = usersListing?.users ?? [];
@@ -46,7 +46,6 @@ function GroupUpdate() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [formattedRoles, setFormattedRoles] = useState([]);
   const [selectedRoles, setSelectedRoles] = useState([]);
-  const [groupDetails, setGroupDetails] = useState();
   const [activeTab, setActiveTab] = useState("1");
 
   const toggle = (tab) => {
@@ -56,10 +55,11 @@ function GroupUpdate() {
   };
 
   useEffect(() => {
-    if (groups?.length > 0) {
-      const groupDetails = groups?.find((group) => group?.id == id);
-      setGroupDetails(groupDetails);
+    dispatch(fetchGroup(id));
+  }, [id]);
 
+  useEffect(() => {
+    if (groupDetails) {
       document.title = `${groupDetails?.userGroupName} | RTS`;
 
       if (form.current) {
@@ -77,7 +77,7 @@ function GroupUpdate() {
     } else {
       navigate("/settings/access");
     }
-  }, []);
+  }, [groupDetails]);
 
   useEffect(() => {
     if (users?.length) {
