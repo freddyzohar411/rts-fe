@@ -34,9 +34,11 @@ function GroupUpdate() {
   const { id } = useParams();
   const form = useRef();
 
-  const users = useSelector((state) => state.UserReducer.users);
-  const roles = useSelector((state) => state.RoleReducer.users);
   const groups = useSelector((state) => state?.GroupReducer?.groups) ?? [];
+  const usersListing = useSelector((state) => state.UserReducer.usersListing);
+  const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
+  const users = usersListing?.users ?? [];
+  const roles = rolesListing?.roles ?? [];
 
   const initialValues = { groupName: "", groupDescription: "", members: [] };
 
