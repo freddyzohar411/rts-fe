@@ -19,6 +19,7 @@ import { deleteGroup, listGroups } from "../../../store/group/action";
 import { useEffect } from "react";
 
 function GroupsTab() {
+  const deleteMeta = useSelector((state) => state.GroupReducer.deleteMeta);
   const groupListing =
     useSelector((state) => state?.GroupReducer.groupListing) ?? [];
   const groups = groupListing?.userGroups ?? [];
@@ -30,8 +31,28 @@ function GroupsTab() {
   const [pageSize, setPageSize] = useState(5);
   const [sortBy, setSortBy] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
-  // const totalPages = groupListing.totalPages;
   const totalPages = groupListing.totalPages;
+
+  useEffect(() => {
+    _getData();
+  }, [page, pageSize, sortBy, sortDirection, search]);
+
+  useEffect(() => {
+    if (deleteMeta?.isSuccess) {
+      _getData();
+    }
+  }, [deleteMeta]);
+
+  const _getData = () => {
+    const pageRequest = {
+      page,
+      pageSize,
+      sortBy,
+      sortDirection,
+      searchTerm: search,
+    };
+    dispatch(listGroups(pageRequest));
+  };
 
   const handleSortAndDirection = (column) => {
     // Get the name of the column
@@ -50,20 +71,10 @@ function GroupsTab() {
     setPage(0);
   };
 
-  useEffect(() => {
-    const pageRequest = {
-      page,
-      pageSize,
-      sortBy,
-      sortDirection,
-      searchTerm: search,
-    };
-    dispatch(listGroups(pageRequest));
-  }, [page, pageSize, sortBy, sortDirection, search]);
-
   // Handle Delete
   const [modal, setModal] = useState(false);
   const [deletedId, setDeletedId] = useState();
+
   const handleDelete = () => {
     setModal(false);
     dispatch(deleteGroup(deletedId));

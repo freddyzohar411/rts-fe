@@ -90,10 +90,8 @@ function* workUpdateGroup(action) {
 // Delete Group
 function* workDeleteGroup(action) {
   try {
-    const response = yield call(deleteGroup, action.payload);
-    const fetchGroups = yield call(getGroups);
-    yield put(fetchGroupsSuccess(fetchGroups.data));
-    yield put(deleteGroupSuccess(response.data));
+    const groupResponse = yield call(deleteGroup, action.payload);
+    yield put(deleteGroupSuccess(groupResponse));
     toast.success(groupResponse?.message);
   } catch (error) {
     yield put(deleteGroupFailure(error));
