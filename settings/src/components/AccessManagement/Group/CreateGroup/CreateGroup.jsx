@@ -35,6 +35,7 @@ function CreateGroup() {
   const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
   const users = usersListing?.users ?? [];
   const roles = rolesListing?.roles ?? [];
+  const createMeta = useSelector((state) => state.GroupReducer.createMeta);
 
   const [formattedUsers, setFormattedUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -52,7 +53,7 @@ function CreateGroup() {
     if (users?.length) {
       const usersData = users?.map((user) => ({
         value: user?.id,
-        label: user?.firstName + " " + user?.lastName,
+        label: user?.firstName + " " + user?.lastName + " (" + user.email + ")",
       }));
       setFormattedUsers(usersData);
     } else {
@@ -70,17 +71,20 @@ function CreateGroup() {
     }
   }, [roles]);
 
-  const handleSubmit = async (values, { resetForm }) => {
+  useEffect(() => {
+    if (createMeta?.isSuccess) {
+      navigate("/settings/access");
+    }
+  }, [createMeta]);
+
+  const handleSubmit = async (values) => {
     const input = {
       userGroupName: values.groupName,
       description: values.groupDescription,
       users: selectedUsers,
       roles: selectedRoles,
     };
-
     dispatch(createGroup(input));
-    resetForm();
-    navigate("/settings/access");
   };
 
   const handleResetForm = (resetForm) => {
@@ -139,7 +143,9 @@ function CreateGroup() {
                               </Row>
                               <Row className="mb-3">
                                 <Col>
-                                  <Label htmlFor="groupName">Group Name</Label>
+                                  <Label htmlFor="groupName">
+                                    Group Name *
+                                  </Label>
                                   <Field
                                     name="groupName"
                                     type="text"
@@ -241,6 +247,7 @@ function CreateGroup() {
                                               onChange={(e) =>
                                                 setSelectedUsers(e)
                                               }
+                                              required
                                               canFilter={true}
                                               icons={{
                                                 moveLeft: (
@@ -320,6 +327,7 @@ function CreateGroup() {
                                                 setSelectedRoles(e)
                                               }
                                               canFilter={true}
+                                              required
                                               icons={{
                                                 moveLeft: (
                                                   <span

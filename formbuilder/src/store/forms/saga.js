@@ -1,6 +1,12 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
-import { FETCH_FORMS, DELETE_FORM, CREATE_FORM, UPDATE_FORM, FETCH_FORM } from "./actionTypes";
+import {
+  FETCH_FORMS,
+  DELETE_FORM,
+  CREATE_FORM,
+  UPDATE_FORM,
+  FETCH_FORM,
+} from "./actionTypes";
 import {
   fetchFormsSuccess,
   fetchFormsFailure,
@@ -13,7 +19,13 @@ import {
   updateFormFailure,
   updateFormSuccess,
 } from "./action";
-import { getForms , createForm, deleteFormById, updateFormById, getFormById } from "../../helpers/backend_helper";
+import {
+  getForms,
+  createForm,
+  deleteFormById,
+  updateFormById,
+  getFormById,
+} from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
 function* workFetchForms(action) {
@@ -28,7 +40,6 @@ function* workFetchForms(action) {
 function* workDeleteForm(action) {
   try {
     const response = yield call(deleteFormById, action.payload);
-    console.log("Deleting... This: ", action.payload)
     yield put(deleteFormSuccess(action.payload));
   } catch (error) {
     yield put(deleteFormFailure(error));

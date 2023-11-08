@@ -36,7 +36,6 @@ const FormReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_FORMS_SUCCESS:
-      console.log("action.payload", action.payload);
       return {
         ...state,
         loading: false,
@@ -58,14 +57,7 @@ const FormReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_FORM_SUCCESS:
-      console.log("FETCH FORM SUCCESS: ", action.payload);
       const data = action.payload;
-      // console.log("Before Parsing: ", data.formFieldsList);
-      // console.log(JsonHelper.parseArrayObjectValues);
-      // console.log(
-      //   "FORMDD",
-      //   JsonHelper.parseArrayObjectValues(data.formFieldsList)
-      // );
       const newForm = {
         formName: data?.formName,
         formType: data?.formType,
@@ -76,7 +68,6 @@ const FormReducer = (state = initialState, action) => {
         formSchema: JsonHelper.parseArrayObjectValues(data.formFieldsList),
         formLayoutSchema: data.formSchemaList,
       };
-      console.log("newForm", newForm);
       return {
         ...state,
         loading: false,
@@ -102,7 +93,7 @@ const FormReducer = (state = initialState, action) => {
       const newForms = JSON.parse(JSON.stringify(state.forms));
       const formsData = newForms.forms.filter(
         (form) => parseInt(form.formId) !== action.payload
-      );  
+      );
       newForms.forms = formsData;
       return {
         ...state,

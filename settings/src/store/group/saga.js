@@ -67,7 +67,8 @@ function* workCreateGroup(action) {
   const { payload } = action;
   try {
     const groupResponse = yield call(createGroup, payload);
-    yield put(createGroupSuccess(groupResponse?.data));
+    yield put(createGroupSuccess(groupResponse));
+    toast.success(groupResponse?.message);
   } catch (error) {
     yield put(createGroupFailure(error?.data));
   }
@@ -78,8 +79,8 @@ function* workUpdateGroup(action) {
   const { payload } = action;
   try {
     const groupResponse = yield call(updateGroup, payload);
-    yield put(updateGroupSuccess(groupResponse.data));
-    toast.success("Group updated successfully!");
+    yield put(updateGroupSuccess(groupResponse));
+    toast.success(groupResponse?.message);
   } catch (error) {
     yield put(updateGroupFailure(error));
     toast.error("Failed to update group!");
@@ -93,7 +94,7 @@ function* workDeleteGroup(action) {
     const fetchGroups = yield call(getGroups);
     yield put(fetchGroupsSuccess(fetchGroups.data));
     yield put(deleteGroupSuccess(response.data));
-    toast.success("Group deleted successfully!");
+    toast.success(groupResponse?.message);
   } catch (error) {
     yield put(deleteGroupFailure(error));
     toast.error("Failed to delete group!");
