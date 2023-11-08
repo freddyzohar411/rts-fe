@@ -25,6 +25,7 @@ import DualListBox from "react-dual-listbox";
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames";
 import { createGroup } from "../../../../store/group/action";
+import { listUsers } from "../../../../store/users/action";
 
 function CreateGroup() {
   document.title = "Create User Group | RTS";
@@ -33,6 +34,10 @@ function CreateGroup() {
 
   const usersListing = useSelector((state) => state.UserReducer.usersListing);
   const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
+  useEffect(() => {
+    dispatch(listUsers({ pageSize: usersListing.totalElements }));
+  }, []);
+
   const users = usersListing?.users ?? [];
   const roles = rolesListing?.roles ?? [];
   const createMeta = useSelector((state) => state.GroupReducer.createMeta);

@@ -27,6 +27,7 @@ import { Formik, Form, Field } from "formik";
 import { schema } from "./constants";
 import { fetchGroup, updateGroup } from "../../../../store/group/action";
 import { useRef } from "react";
+import { listUsers } from "../../../../store/users/action";
 
 function GroupUpdate() {
   const navigate = useNavigate();
@@ -40,6 +41,10 @@ function GroupUpdate() {
   const users = usersListing?.users ?? [];
   const roles = rolesListing?.roles ?? [];
   const updateMeta = useSelector((state) => state.GroupReducer.updateMeta);
+
+  useEffect(() => {
+    dispatch(listUsers({ pageSize: usersListing.totalElements }));
+  }, []);
 
   const initialValues = { groupName: "", groupDescription: "", members: [] };
 
