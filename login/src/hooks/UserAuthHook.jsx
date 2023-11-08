@@ -155,6 +155,8 @@ const useUserAuth = () => {
     return false;
   }
 
+  console.log("userProfile", userProfile)
+
   return {
     userProfile,
     getAllRoles,

@@ -309,7 +309,7 @@ function CreateNewRole() {
                                                       <Field
                                                         type="checkbox"
                                                         name={`modules.${index}.permissions`}
-                                                        value={(idx + 1).toString()}
+                                                        value={permission.id.toString()}
                                                         className="form-check-input"
                                                       />
                                                     </td>

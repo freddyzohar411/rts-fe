@@ -25,7 +25,11 @@ import classnames from "classnames";
 import { initialValues, populateForm, schema } from "../constants";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchRole, updateRole } from "../../../../store/roles/action";
+import {
+  fetchRole,
+  updateRole,
+  removeRole,
+} from "../../../../store/roles/action";
 import { fetchModules } from "../../../../store/module/action";
 import axios from "axios";
 function UpdateRole() {
@@ -38,14 +42,22 @@ function UpdateRole() {
     populateForm(initialValues)
   );
 
-  console.log("All Module Initial State: ", allModules)
+  const modulesData = useSelector((state) => state.ModuleReducer.modules);
+  const permissionData = useSelector(
+    (state) => state.PermissionReducer.permissions
+  );
+
+  console.log("All Module Initial State Z: ", modulesData);
 
   // Get Role and Module Data
   useEffect(() => {
     if (roleId) {
       dispatch(fetchRole(roleId));
-      dispatch(fetchModules());
+      // dispatch(fetchModules());
     }
+    return () => {
+      dispatch(removeRole());
+    };
   }, []);
 
   // Set Role Initial Values
@@ -56,7 +68,9 @@ function UpdateRole() {
       roleDescription: role?.roleDescription,
       modules: role?.modules,
     };
-    setRoleInitialValues(populateForm(fetchRoleInitialValues));
+    setRoleInitialValues(
+      populateForm(fetchRoleInitialValues, permissionData, modulesData)
+    );
   }, [role]);
 
   // Document Title
@@ -83,20 +97,35 @@ function UpdateRole() {
       Delete: "4",
     };
 
-    const updatedModules = values.modules.map((module) => ({
-      id: module.id,
-      permissions: module.permissions.map(
-        (permission) => permissionMap[permission]
-      ),
-    }));
+    console.log("Values...", values);
 
-    const updatedRole = {
-      id: values.id,
-      roleName: values.roleName,
-      roleDescription: values.roleDescription,
-      modules: updatedModules,
-    };
-    dispatch(updateRole({ updatedRole, navigate: navigate }));
+    // const updatedModules = values.modules.map((module) => ({
+    //   id: module.id,
+    //   permissions: module.permissions.map(
+    //     (permission) => permissionMap[permission]
+    //   ),
+    // }));
+
+    // const updatedRole = {
+    //   id: values.id,
+    //   roleName: values.roleName,
+    //   roleDescription: values.roleDescription,
+    //   modules: updatedModules,
+    // };
+    // console.log("Updated Role", updatedRole)
+    dispatch(updateRole({ updatedRole: values, navigate: navigate }));
+  };
+
+  const checkPermission = (role, module, permission) => {
+    if (role?.modules) {
+      const moduleData = role.modules.find(
+        (m) => m.moduleName === module.moduleName
+      );
+      if (moduleData) {
+        return moduleData.permissions.includes(permission.permissionName);
+      }
+    }
+    return false;
   };
 
   return (
@@ -132,7 +161,7 @@ function UpdateRole() {
                   enableReinitialize={true}
                   onSubmit={handleSubmit}
                 >
-                  {({ errors, touched }) => (
+                  {({ errors, touched, ...props }) => (
                     <Form>
                       <CardBody>
                         <Row className="mb-3">
@@ -238,121 +267,91 @@ function UpdateRole() {
                                   <thead>
                                     <tr>
                                       <th>Modules</th>
-                                      <th>Read</th>
-                                      <th>Write</th>
-                                      <th>Edit</th>
-                                      <th>Delete</th>
+                                      {permissionData?.map((permission) => (
+                                        <th key={permission.id}>
+                                          {permission.permissionName}
+                                        </th>
+                                      ))}
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {roleInitialValues &&
-                                      roleInitialValues?.modules?.map(
-                                        (module, index) => {
-                                          console.log(
-                                            "Role Initial values: ",
-                                            roleInitialValues
-                                          );
-                                          console.log("Module: ", module);
-                                          console.log("All Modules: ", allModules)
-                                          const matchingModule =
-                                            allModules?.find(
-                                              (m) => m.id === module.id
-                                            );
-                                          console.log(
-                                            "Matching Module: ",
-                                            matchingModule
-                                          );
-                                          const moduleName =
-                                            matchingModule?.moduleName
-                                              ? matchingModule.moduleName
-                                              : "Unknown Module";
-                                          return (
-                                            <tr key={module.id}>
-                                              <td>{moduleName}</td>
-                                              <td>
-                                                {module.permissions.includes(
-                                                  "Read"
-                                                ) ? (
+                                    {modulesData?.map((module, index) => {
+                                      return (
+                                        <tr key={module.id}>
+                                          <td>{module.moduleName}</td>
+                                          {permissionData?.map(
+                                            (permission, idx) => {
+                                              return (
+                                                <td>
+                                                  {/* {checkPermission(
+                                                    role,
+                                                    module,
+                                                    permission
+                                                  ) ? ( */}
                                                   <Field
                                                     type="checkbox"
                                                     name={`modules.${index}.permissions`}
-                                                    value="1"
+                                                    value={permission?.id.toString()}
                                                     className="form-check-input"
-                                                    checked
+                                                    checked={
+                                                      // Check if formik value matches
+                                                      // Find the module
+                                                      props?.values?.modules
+                                                        ?.find(
+                                                          (m) =>
+                                                            m?.id === module?.id
+                                                        )
+                                                        ?.permissions?.includes(
+                                                          permission?.id
+                                                        )
+                                                    }
+                                                    onChange={(e) => {
+                                                      const checked =
+                                                        e.target.checked;
+                                                      const permissionId =
+                                                        permission?.id;
+
+                                                      let updatedPermissions;
+
+                                                      let updateIndex =
+                                                        props?.values?.modules.findIndex(
+                                                          (m) =>
+                                                            m?.id === module?.id
+                                                        );
+
+                                                      if (checked) {                         
+                                                        // Find index in array
+                                                        updatedPermissions = [
+                                                          ...props.values
+                                                            .modules[
+                                                            updateIndex
+                                                          ].permissions,
+                                                          permissionId,
+                                                        ];
+                                                      } else {                                        
+                                                        updatedPermissions =
+                                                          props.values.modules[
+                                                            updateIndex
+                                                          ].permissions.filter(
+                                                            (id) =>
+                                                              id !==
+                                                              permissionId
+                                                          );
+                                                      }
+
+                                                      props.setFieldValue(
+                                                        `modules.${updateIndex}.permissions`,
+                                                        updatedPermissions
+                                                      );
+                                                    }}
                                                   />
-                                                ) : (
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="1"
-                                                    className="form-check-input"
-                                                  />
-                                                )}
-                                              </td>
-                                              <td>
-                                                {module.permissions.includes(
-                                                  "Write"
-                                                ) ? (
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="2"
-                                                    className="form-check-input"
-                                                    checked
-                                                  />
-                                                ) : (
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="2"
-                                                    className="form-check-input"
-                                                  />
-                                                )}
-                                              </td>
-                                              <td>
-                                                {module.permissions.includes(
-                                                  "Edit"
-                                                ) ? (
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="3"
-                                                    className="form-check-input"
-                                                    checked
-                                                  />
-                                                ) : (
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="3"
-                                                    className="form-check-input"
-                                                  />
-                                                )}
-                                              </td>
-                                              <td>
-                                                {module.permissions.includes(
-                                                  "Delete"
-                                                ) ? (
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="4"
-                                                    className="form-check-input"
-                                                    checked
-                                                  />
-                                                ) : (
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="4"
-                                                    className="form-check-input"
-                                                  />
-                                                )}
-                                              </td>
-                                            </tr>
-                                          );
-                                        }
-                                      )}
+                                                </td>
+                                              );
+                                            }
+                                          )}
+                                        </tr>
+                                      );
+                                    })}
                                   </tbody>
                                 </Table>
                               </Col>
