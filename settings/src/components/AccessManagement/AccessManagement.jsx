@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Card,
@@ -17,24 +17,18 @@ import RolesTab from "./Roles/RolesTab";
 import UsersTab from "./User/UsersTab";
 import GroupsTab from "./Group/GroupsTab";
 import { Link, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 
-import { fetchGroups } from "../../store/group/action";
+import { fetchGroups, listGroups } from "../../store/group/action";
 
 function AccessManagement() {
   const location = useLocation();
   const navState = location.state;
 
   document.title = "Access Management Settings | RTS";
-  const dispatch = useDispatch();
 
   // Tabs
   const [activeTab, setActiveTab] = useState(navState?.activeTab || "1");
-
-  useEffect(() => {
-    dispatch(fetchGroups());
-  }, []);
 
   const toggle = (tab) => {
     if (activeTab !== tab) {

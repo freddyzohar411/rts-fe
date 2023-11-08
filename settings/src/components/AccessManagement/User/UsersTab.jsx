@@ -21,7 +21,7 @@ import { fetchUsers, deleteUser, listUsers } from "../../../store/users/action";
 function UsersTab() {
   const [modal, setModal] = useState(false);
   const usersListing = useSelector((state) => state.UserReducer.usersListing);
-  console.log(usersListing)
+
   const users = usersListing.users;
   const totalPages = usersListing.totalPages;
   const dispatch = useDispatch();

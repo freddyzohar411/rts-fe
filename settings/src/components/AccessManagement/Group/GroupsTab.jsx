@@ -19,7 +19,8 @@ import { deleteGroup, listGroups } from "../../../store/group/action";
 import { useEffect } from "react";
 
 function GroupsTab() {
-  const groupListing = useSelector((state) => state?.GroupReducer.groupListing) ?? [];
+  const groupListing =
+    useSelector((state) => state?.GroupReducer.groupListing) ?? [];
   const groups = groupListing?.userGroups ?? [];
   const dispatch = useDispatch();
 

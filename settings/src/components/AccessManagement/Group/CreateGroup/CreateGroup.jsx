@@ -31,11 +31,10 @@ function CreateGroup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const users = useSelector((state) => state.UserReducer.users);
-  const roles = useSelector((state) => state.RoleReducer.users);
-  const loading = useSelector((state) => state.GroupReducer.loading);
-  const success = useSelector((state) => state.GroupReducer.success);
-  const message = useSelector((state) => state.GroupReducer.message);
+  const usersListing = useSelector((state) => state.UserReducer.usersListing);
+  const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
+  const users = usersListing?.users ?? [];
+  const roles = rolesListing?.roles ?? [];
 
   const [formattedUsers, setFormattedUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);

@@ -88,7 +88,7 @@ const RoleReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        users: action.payload,
+        roles: action.payload,
       };
 
     case FETCH_ROLES_FAILURE:

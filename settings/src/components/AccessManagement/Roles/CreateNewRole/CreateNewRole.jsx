@@ -51,8 +51,6 @@ function CreateNewRole() {
     dispatch(fetchGroups());
   }, []);
 
-  console.log("all groups:", allGroups);
-
   // Tabs
   const [activeTab, setActiveTab] = useState("1");
   const toggle = (tab) => {

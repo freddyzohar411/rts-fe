@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Button,
@@ -15,22 +15,33 @@ import {
   TabContent,
   TabPane,
   Table,
-  Breadcrumb, BreadcrumbItem
+  Breadcrumb,
+  BreadcrumbItem,
 } from "reactstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames";
+import { fetchGroup } from "../../../../store/group/action";
 
 function GroupDetails() {
   const { id } = useParams();
+  const dispatch = useDispatch();
 
-  const groups = useSelector((state) => state?.GroupReducer?.groups) ?? [];
-  const groupDetails = groups?.find((group) => group?.id == id);
+  const [memberDetails, setMemberDetails] = useState([]);
+  const [roleDetails, setRoleDetails] = useState([]);
+  const group = useSelector((state) => state?.GroupReducer?.group);
 
-  document.title = `${groupDetails?.userGroupName} | RTS`;
+  useEffect(() => {
+    dispatch(fetchGroup(id));
+  }, [id]);
 
-  const memberDetails = groupDetails?.users ?? [];
+  useEffect(() => {
+    if (group) {
+      document.title = `${group?.userGroupName} | RTS`;
 
-  const roleDetails = groupDetails?.roleEntities ?? [];
+      setMemberDetails(group?.users ?? []);
+      setRoleDetails(group?.roleEntities ?? []);
+    }
+  }, [group]);
 
   // Tab
   const [activeTab, setActiveTab] = useState("1");
@@ -39,6 +50,7 @@ function GroupDetails() {
       setActiveTab(tab);
     }
   };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -50,7 +62,9 @@ function GroupDetails() {
                   <Link to="/settings/access/">Settings</Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
-                  <Link to="/settings/access/groups" active>Groups</Link>
+                  <Link to="/settings/access/groups" active>
+                    Groups
+                  </Link>
                 </BreadcrumbItem>
               </Breadcrumb>
             </Col>
@@ -80,7 +94,7 @@ function GroupDetails() {
                         <Col>
                           <div className="d-flex flex-column gap-1">
                             <span className="fw-semibold">Group Name</span>
-                            <span>{groupDetails?.userGroupName}</span>
+                            <span>{group?.userGroupName}</span>
                           </div>
                         </Col>
                       </Row>
@@ -90,7 +104,7 @@ function GroupDetails() {
                             <span className="fw-semibold">
                               Group Description
                             </span>
-                            <span>{groupDetails?.userGroupDescription}</span>
+                            <span>{group?.userGroupDescription}</span>
                           </div>
                         </Col>
                       </Row>
@@ -187,7 +201,7 @@ function GroupDetails() {
                   </Row>
                 </CardBody>
                 <CardFooter>
-                  <Link to="/settings/access" state={{ ugTab: "2"}}>
+                  <Link to="/settings/access" state={{ ugTab: "2" }}>
                     <Button className="btn btn-custom-primary" type="button">
                       Back
                     </Button>

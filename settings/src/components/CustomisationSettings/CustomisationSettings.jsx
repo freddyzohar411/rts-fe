@@ -60,7 +60,6 @@ function CustomisationSettings() {
               type="button"
               className="btn btn-danger"
               onClick={() => {
-                console.log("Delete id: ", data.formId);
                 setDeleteId(data.formId);
                 setIsDeleteModalOpen(true);
               }}
@@ -76,7 +75,9 @@ function CustomisationSettings() {
 
   // Fetch the forms data
   useEffect(() => {
-    dispatch(formActions.fetchForms(DynamicTableHelper.cleanPageRequest(pageRequest)));
+    dispatch(
+      formActions.fetchForms(DynamicTableHelper.cleanPageRequest(pageRequest))
+    );
     return () => {
       dispatch(formActions.clearForm());
     };
