@@ -16,12 +16,11 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, deleteUser, listUsers } from "../../../store/users/action";
+import {  deleteUser, listUsers } from "../../../store/users/action";
 
 function UsersTab() {
   const [modal, setModal] = useState(false);
-  const usersListing = useSelector((state) => state.UserReducer.usersListing);
-
+  const usersListing = useSelector((state) => state?.UserReducer?.usersListing) || [];
   const users = usersListing.users;
   const totalPages = usersListing.totalPages;
   const dispatch = useDispatch();
