@@ -5,7 +5,7 @@ import {
 } from "./actionTypes";
 
 const initialState = {
-  modules: [],
+  modules: null,
   message: "",
   error: false,
   loading: false,
@@ -22,6 +22,7 @@ const ModuleReducer = (state = initialState, action) => {
       };
 
     case FETCH_MODULES_SUCCESS:
+      console.log("modules", action.payload)
       return {
         ...state,
         loading: false,

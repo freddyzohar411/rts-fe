@@ -45,9 +45,16 @@ function CreateNewRole() {
   const navigate = useNavigate();
   const allModules = useSelector((state) => state.ModuleReducer.modules);
   const allGroups = useSelector((state) => state.GroupReducer.groups);
+  const modulesData = useSelector((state) => state.ModuleReducer.modules);
+  const permissionData = useSelector(
+    (state) => state.PermissionReducer.permissions
+  );
+
+  console.log("Module Data X: ", modulesData);
+  console.log("Permission Data X: ", permissionData);
 
   useEffect(() => {
-    dispatch(fetchModules());
+    // dispatch(fetchModules());
     dispatch(fetchGroups());
   }, []);
 
@@ -63,11 +70,10 @@ function CreateNewRole() {
 
   // Dual List Box
   const [selected, setSelected] = useState([]);
-    const formattedGroups = allGroups?.map((group) => ({
-      value: group.userGroupName,
-      label: group.userGroupName,
-    }));
-
+  const formattedGroups = allGroups?.map((group) => ({
+    value: group.userGroupName,
+    label: group.userGroupName,
+  }));
 
   // Handle Submit
   const handleSubmit = async (values) => {
@@ -234,14 +240,19 @@ function CreateNewRole() {
                                       <thead>
                                         <tr>
                                           <th>Modules</th>
-                                          <th>Read</th>
+                                          {permissionData?.map((permission) => (
+                                            <th key={permission.id}>
+                                              {permission.permissionName}
+                                            </th>
+                                          ))}
+                                          {/* <th>Read</th>
                                           <th>Write</th>
                                           <th>Edit</th>
-                                          <th>Delete</th>
+                                          <th>Delete</th> */}
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        {initialValues.modules.map(
+                                        {/* {initialValues.modules.map(
                                           (module, index) => {
                                             const matchingModule =
                                               allModules.find(
@@ -288,7 +299,28 @@ function CreateNewRole() {
                                               </tr>
                                             );
                                           }
-                                        )}
+                                        )} */}
+                                        {modulesData?.map((module, index) => {
+                                          return (
+                                            <tr key={module.id}>
+                                              <td>{module.moduleName}</td>
+                                              {permissionData?.map(
+                                                (permission, idx) => {
+                                                  return (
+                                                    <td>
+                                                      <Field
+                                                        type="checkbox"
+                                                        name={`modules.${index}.permissions`}
+                                                        value={(idx + 1).toString()}
+                                                        className="form-check-input"
+                                                      />
+                                                    </td>
+                                                  );
+                                                }
+                                              )}
+                                            </tr>
+                                          );
+                                        })}
                                       </tbody>
                                     </Table>
                                   </Col>

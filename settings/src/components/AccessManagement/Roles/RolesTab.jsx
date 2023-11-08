@@ -16,12 +16,29 @@ import {
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRoles, deleteRole, listRoles } from "../../../store/roles/action";
+import { fetchModules } from "../../../store/module/action";
+import { fetchPermissions } from "../../../store/permissions/action";
 
 function RolesTab() {
   const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
   const roles = rolesListing.roles;
   const totalPages = rolesListing.totalPages;
+  const modulesData = useSelector((state) => state.ModuleReducer.modules);
+  const permissionData = useSelector( state => state.PermissionReducer.permissions);
   const dispatch = useDispatch();
+
+  console.log('Module Data X: ', modulesData);
+  console.log('Permission Data X: ', permissionData);
+
+  useEffect(() => {
+    // Fetch modules if not available
+    if (!modulesData) {
+      dispatch(fetchModules());
+    }
+    if (!permissionData) {
+      dispatch(fetchPermissions());
+    }
+  }, []);
 
   // Pagination
   const [search, setSearch] = useState("");
@@ -210,7 +227,6 @@ function RolesTab() {
                 className="form-select form-select-md"
                 onChange={handlePageSize}
                 value={pageSize}
-                
               >
                 <option value="5">5</option>
                 <option value="10">10</option>

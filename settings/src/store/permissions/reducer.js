@@ -5,7 +5,7 @@ import {
 } from "./actionTypes";
 
 const initialState = {
-  permissions: [],
+  permissions: null,
   message: "",
   error: false,
   loading: false,

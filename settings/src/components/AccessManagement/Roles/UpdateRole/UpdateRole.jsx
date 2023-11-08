@@ -38,6 +38,8 @@ function UpdateRole() {
     populateForm(initialValues)
   );
 
+  console.log("All Module Initial State: ", allModules)
+
   // Get Role and Module Data
   useEffect(() => {
     if (roleId) {
@@ -246,13 +248,24 @@ function UpdateRole() {
                                     {roleInitialValues &&
                                       roleInitialValues?.modules?.map(
                                         (module, index) => {
+                                          console.log(
+                                            "Role Initial values: ",
+                                            roleInitialValues
+                                          );
+                                          console.log("Module: ", module);
+                                          console.log("All Modules: ", allModules)
                                           const matchingModule =
-                                            allModules.find(
+                                            allModules?.find(
                                               (m) => m.id === module.id
                                             );
-                                          const moduleName = matchingModule
-                                            ? matchingModule.moduleName
-                                            : "Unknown Module";
+                                          console.log(
+                                            "Matching Module: ",
+                                            matchingModule
+                                          );
+                                          const moduleName =
+                                            matchingModule?.moduleName
+                                              ? matchingModule.moduleName
+                                              : "Unknown Module";
                                           return (
                                             <tr key={module.id}>
                                               <td>{moduleName}</td>
