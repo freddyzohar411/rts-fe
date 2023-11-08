@@ -68,8 +68,10 @@ function* workCreateGroup(action) {
   try {
     const groupResponse = yield call(createGroup, payload);
     yield put(createGroupSuccess(groupResponse?.data));
+    toast.success("Group created successfully!");
   } catch (error) {
     yield put(createGroupFailure(error?.data));
+    toast.error("Failed to create group!");
   }
 }
 
