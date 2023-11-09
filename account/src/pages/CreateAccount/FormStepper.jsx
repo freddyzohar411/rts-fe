@@ -1,6 +1,5 @@
 import { Button, Card, Container } from "reactstrap";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import AccountStepper from "../../components/AccountStepper/AccountStepper";
 import { deleteDraftAccount } from "../../store/accountregistration/action";
 import { DeleteCustomModal } from "@Workspace/common";
@@ -88,7 +87,6 @@ const FormStepper = ({
         >
           {accountId && (
             <Button
-              // onClick={resetAndDeleteDraftForm}
               onClick={() => setIsDeleteModalOpen(true)}
               className="btn btn-danger"
             >

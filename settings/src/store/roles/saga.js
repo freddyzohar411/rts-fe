@@ -95,7 +95,7 @@ function* workUpdateRole(action) {
     toast.success("Role update success!");
   } catch (error) {
     yield put(updateRoleFailure(error));
-    toast.error("Role deletion failed!");
+    toast.error("Role update failed!");
   }
 }
 
@@ -103,9 +103,12 @@ function* workUpdateRole(action) {
 function* workDeleteRole(action) {
   try {
     const response = yield call(deleteRole, action.payload);
-    const fetchRoles = yield call(getRoles);
+    const fetchRoles = yield call(listRoles, {
+      page: 0,
+      size: 5,
+    });
     yield put(deleteRoleSuccess(response.data));
-    yield put(fetchRolesSuccess(fetchRoles.data));
+    yield put(listRolesSuccess(fetchRoles.data));
     toast.success("Role deletion success!");
   } catch (error) {
     yield put(deleteRoleFailure(error));

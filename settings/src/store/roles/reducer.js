@@ -17,6 +17,7 @@ import {
   DELETE_ROLE,
   DELETE_ROLE_SUCCESS,
   DELETE_ROLE_FAILURE,
+  REMOVE_ROLE,
 } from "./actionTypes";
 
 const initialState = {
@@ -166,6 +167,11 @@ const RoleReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         message: action.payload,
+      };
+    case REMOVE_ROLE:
+      return {
+        ...state,
+        role: null,
       };
 
     default:

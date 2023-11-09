@@ -78,7 +78,7 @@ function CreateGroup() {
 
   useEffect(() => {
     if (createMeta?.isSuccess) {
-      navigate("/settings/access");
+      navigate("/settings/access", { state: { ugTab: "2" } });
     }
   }, [createMeta]);
 
@@ -405,7 +405,7 @@ function CreateGroup() {
                             Reset
                           </Button>
                           <div className="d-flex flex-row gap-2">
-                            <Link to="/settings/access">
+                            <Link to="/settings/access" state={{ ugTab: "2" }}>
                               <Button
                                 type="button"
                                 className="btn btn-custom-primary"

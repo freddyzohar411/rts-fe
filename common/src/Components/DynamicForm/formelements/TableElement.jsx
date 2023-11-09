@@ -36,7 +36,6 @@ const TableElement = ({
   useEffect(() => {
     setTableConfig(field.tableConfig);
     setTableSetting(field.tableSetting);
-    // setFormFieldTableData(table);
   }, [
     field.tableConfig,
     field.tableSettings,

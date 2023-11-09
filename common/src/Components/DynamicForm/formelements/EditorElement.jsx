@@ -17,7 +17,6 @@ const EditorElement = ({ field, formik, formStateHook }) => {
             try {
               formik?.setFieldValue(field?.name, data);
             } catch (error) {
-              // console.log("Error: ", error);
             }
           }
         }}

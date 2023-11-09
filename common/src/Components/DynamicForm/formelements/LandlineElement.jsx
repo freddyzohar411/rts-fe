@@ -124,6 +124,7 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
         {filteredLandlines &&
           filteredLandlines.map((country) => (
             <DropdownItem
+              key={country.id}
               as="li"
               onClick={() =>
                 setSelectedLandline((prev) => ({

@@ -71,6 +71,7 @@ function* workCreateGroup(action) {
     toast.success(groupResponse?.message);
   } catch (error) {
     yield put(createGroupFailure(error?.data));
+    toast.error("Failed to create group!");
   }
 }
 

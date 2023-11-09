@@ -20,8 +20,8 @@ const SelectElement = ({ formik, field, formStateHook }) => {
         disabled={formState === "view" ? true : false}
       >
         <option value="">{field.placeholder}</option>
-        {field?.options?.map((option) => (
-          <option value={option.value}>{option.label}</option>
+        {field?.options?.map((option, index) => (
+          <option key={index} value={option.value}>{option.label}</option>
         ))}
       </select>
     </div>

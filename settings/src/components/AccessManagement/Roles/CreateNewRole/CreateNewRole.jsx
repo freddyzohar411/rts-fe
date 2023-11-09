@@ -9,7 +9,6 @@ import {
   CardHeader,
   Col,
   Container,
-  Input,
   Label,
   Nav,
   NavItem,
@@ -36,6 +35,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchModules } from "../../../../store/module/action";
 import { createRole } from "../../../../store/roles/action";
 import { fetchGroups } from "../../../../store/group/action";
+import { fetchPermissions } from "../../../../store/actions";
 
 function CreateNewRole() {
   document.title = "Create New Role | RTS";
@@ -43,11 +43,43 @@ function CreateNewRole() {
   // Redux
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const allModules = useSelector((state) => state.ModuleReducer.modules);
   const allGroups = useSelector((state) => state.GroupReducer.groups);
+  const modulesData = useSelector((state) => state.ModuleReducer.modules);
+  const permissionData = useSelector(
+    (state) => state.PermissionReducer.permissions
+  );
+
+  const [initialValues, setInitialValues] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchModules());
+    if (!modulesData) {
+      dispatch(fetchModules());
+    }
+    if (!permissionData) {
+      dispatch(fetchPermissions());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (modulesData && permissionData) {
+      const newModule = modulesData?.map((module) => {
+        return {
+          id: module.id,
+          permissions: [],
+        };
+      });
+
+      const initialValuesNew = {
+        id: "",
+        roleName: "",
+        roleDescription: "",
+        modules: newModule,
+      };
+      setInitialValues(initialValuesNew);
+    }
+  }, [modulesData, permissionData]);
+
+  useEffect(() => {
     dispatch(fetchGroups());
   }, []);
 
@@ -61,7 +93,7 @@ function CreateNewRole() {
 
   // Dual List Box
   const [selected, setSelected] = useState([]);
-  const formattedGroups = allGroups.map((group) => ({
+  const formattedGroups = allGroups?.map((group) => ({
     value: group.userGroupName,
     label: group.userGroupName,
   }));
@@ -116,6 +148,7 @@ function CreateNewRole() {
                   validateOnBlur
                   validateOnChange={false}
                   validationSchema={schema}
+                  enableReinitialize={true}
                   initialValues={initialValues}
                   onSubmit={handleSubmit}
                 >
@@ -231,61 +264,35 @@ function CreateNewRole() {
                                       <thead>
                                         <tr>
                                           <th>Modules</th>
-                                          <th>Read</th>
-                                          <th>Write</th>
-                                          <th>Edit</th>
-                                          <th>Delete</th>
+                                          {permissionData?.map((permission) => (
+                                            <th key={permission.id}>
+                                              {permission.permissionName}
+                                            </th>
+                                          ))}
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        {initialValues.modules.map(
-                                          (module, index) => {
-                                            const matchingModule =
-                                              allModules.find(
-                                                (m) => m.id === module.id
-                                              );
-                                            const moduleName = matchingModule
-                                              ? matchingModule.moduleName
-                                              : "Unknown Module";
-                                            return (
-                                              <tr key={module.id}>
-                                                <td>{moduleName}</td>
-                                                <td>
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="1"
-                                                    className="form-check-input"
-                                                  />
-                                                </td>
-                                                <td>
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="2"
-                                                    className="form-check-input"
-                                                  />
-                                                </td>
-                                                <td>
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="3"
-                                                    className="form-check-input"
-                                                  />
-                                                </td>
-                                                <td>
-                                                  <Field
-                                                    type="checkbox"
-                                                    name={`modules.${index}.permissions`}
-                                                    value="4"
-                                                    className="form-check-input"
-                                                  />
-                                                </td>
-                                              </tr>
-                                            );
-                                          }
-                                        )}
+                                        {modulesData?.map((module, index) => {
+                                          return (
+                                            <tr key={module.id}>
+                                              <td>{module.moduleName}</td>
+                                              {permissionData?.map(
+                                                (permission, idx) => {
+                                                  return (
+                                                    <td>
+                                                      <Field
+                                                        type="checkbox"
+                                                        name={`modules.${index}.permissions`}
+                                                        value={permission.id.toString()}
+                                                        className="form-check-input"
+                                                      />
+                                                    </td>
+                                                  );
+                                                }
+                                              )}
+                                            </tr>
+                                          );
+                                        })}
                                       </tbody>
                                     </Table>
                                   </Col>

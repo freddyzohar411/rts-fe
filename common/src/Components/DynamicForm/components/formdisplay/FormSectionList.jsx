@@ -7,17 +7,7 @@ import {
   checkAccessible,
 } from "../../formelements/formElements_helper";
 import {
-  Label,
-  Row,
   Col,
-  Input,
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
-  FormFeedback,
-  Button,
-  Alert,
 } from "reactstrap";
 
 const FormSectionList = ({
@@ -40,8 +30,7 @@ const FormSectionList = ({
   let lists = [];
   for (let i = 0; i < col; i++) {
     lists.push(
-      <Col lg={colSize}>
-        {/* <div className={`flex-fill w-100`}> */}
+      <Col key={i} lg={colSize}>
         {row.droppableZones[i].fieldIds.map((fieldId, index) => {
           const field = formFields.find((field) => field.fieldId === fieldId);
           if (
@@ -77,7 +66,6 @@ const FormSectionList = ({
             );
           }
         })}
-        {/* </div> */}
       </Col>
     );
   }

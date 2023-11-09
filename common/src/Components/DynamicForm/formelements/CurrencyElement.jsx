@@ -110,6 +110,7 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
         {filteredCurrencies &&
           filteredCurrencies.map((country) => (
             <DropdownItem
+              key={country.id}
               as="li"
               onClick={() =>
                 setSelectedCurrency((prev) => ({

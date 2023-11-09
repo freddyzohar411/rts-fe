@@ -9,10 +9,10 @@ const InputElement = ({ formik, field, formStateHook }) => {
         id={field.name}
         name={field.name}
         type={field.type}
-        className={`form-control ${fieldSize[field.fieldSize]}`}
-        onChange={formik.handleChange}
+        className={`form-control ${fieldSize[field?.fieldSize]}`}
+        onChange={formik?.handleChange}
         value={formik?.values?.[field.name]}
-        placeholder={field.placeholder}
+        placeholder={field?.placeholder}
         disabled={formState === "view" ? true : false}
       />
     </div>

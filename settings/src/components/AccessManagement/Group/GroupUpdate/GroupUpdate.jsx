@@ -107,7 +107,7 @@ function GroupUpdate() {
 
   useEffect(() => {
     if (updateMeta?.isSuccess) {
-      navigate("/settings/access");
+      navigate("/settings/access", { state: { ugTab: "2" } });
     }
   }, [updateMeta]);
 
@@ -419,7 +419,7 @@ function GroupUpdate() {
                       </CardBody>
                       <CardFooter>
                         <div className="d-flex flex-row justify-content-end gap-2">
-                          <Link to="/settings/access/">
+                          <Link to="/settings/access/" state={{ ugTab: "2" }}>
                             <Button className="btn btn-custom-primary">
                               Cancel
                             </Button>

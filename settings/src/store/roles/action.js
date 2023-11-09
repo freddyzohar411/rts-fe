@@ -15,6 +15,7 @@ import {
   DELETE_ROLE,
   DELETE_ROLE_SUCCESS,
   DELETE_ROLE_FAILURE,
+  REMOVE_ROLE
 } from "./actionTypes";
 
 // Create Role
@@ -110,3 +111,10 @@ export const deleteRoleFailure = (error) => ({
   type: DELETE_ROLE_FAILURE,
   payload: error,
 });
+
+// Remove Role
+export const removeRole = () => ({
+  type: REMOVE_ROLE,
+});
+
+

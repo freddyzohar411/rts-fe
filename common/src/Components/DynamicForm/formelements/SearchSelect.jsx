@@ -81,11 +81,6 @@ const SearchSelect = ({ formik, field, ...props }) => {
         placeholder="Search..."
         options={options}
         noOptionsMessage={noOptionsMessage}
-        //   styles={{
-        //     dropdownIndicator: (provided, state) => ({
-        //       cursor: "pointer",
-        //     }),
-        //   }}
       />
 
       {props?.error && (
