@@ -40,6 +40,7 @@ function GroupUpdate() {
   const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
   const users = usersListing?.users ?? [];
   const roles = rolesListing?.roles ?? [];
+  const updateMeta = useSelector((state) => state.GroupReducer.updateMeta);
 
   useEffect(() => {
     dispatch(listUsers({ pageSize: usersListing.totalElements }));
@@ -88,7 +89,7 @@ function GroupUpdate() {
     if (users?.length) {
       const usersData = users?.map((user) => ({
         value: user?.id,
-        label: user?.firstName + " " + user?.lastName,
+        label: user?.firstName + " " + user?.lastName + " (" + user.email + ")",
       }));
       setFormattedUsers(usersData);
     }
@@ -104,6 +105,12 @@ function GroupUpdate() {
     }
   }, [roles]);
 
+  useEffect(() => {
+    if (updateMeta?.isSuccess) {
+      navigate("/settings/access");
+    }
+  }, [updateMeta]);
+
   const handleSubmit = async (values, { resetForm }) => {
     const input = {
       id: id,
@@ -113,8 +120,6 @@ function GroupUpdate() {
       roles: selectedRoles,
     };
     dispatch(updateGroup(input));
-    resetForm();
-    navigate("/settings/access");
   };
 
   return (
@@ -165,7 +170,7 @@ function GroupUpdate() {
                             </Row>
                             <Row className="mb-3">
                               <Col>
-                                <Label>Group Name</Label>
+                                <Label>Group Name *</Label>
                                 <Field
                                   name="groupName"
                                   type="text"
@@ -271,6 +276,7 @@ function GroupUpdate() {
                                               setSelectedUsers(e)
                                             }
                                             canFilter={true}
+                                            required
                                             icons={{
                                               moveLeft: (
                                                 <span
@@ -349,6 +355,7 @@ function GroupUpdate() {
                                               setSelectedRoles(e)
                                             }
                                             canFilter={true}
+                                            required
                                             icons={{
                                               moveLeft: (
                                                 <span

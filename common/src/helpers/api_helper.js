@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as api from "../config";
+import { toast } from "react-toastify";
 
 // default
 axios.defaults.baseURL = api.API_URL;
@@ -19,10 +20,15 @@ axios.interceptors.response.use(
   },
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-    if (error.response.data){
-      return Promise.reject(error.response.data)
+    if (error?.response?.status === 403) {
+      toast.error("JWT token got expired.");
+      window.location.replace("/login");
     }
-    
+
+    if (error?.response?.data) {
+      return Promise.reject(error.response.data);
+    }
+
     let message;
     switch (error.status) {
       case 500:
@@ -103,7 +109,7 @@ class APIClient {
     return sessionStorage.getItem("authUser")
       ? JSON.parse(sessionStorage.getItem("authUser")).access_token
       : null;
-  }
+  };
 }
 
 const getLoggedinUser = () => {

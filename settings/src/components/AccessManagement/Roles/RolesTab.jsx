@@ -27,8 +27,6 @@ function RolesTab() {
   const permissionData = useSelector( state => state.PermissionReducer.permissions);
   const dispatch = useDispatch();
 
-  console.log('Module Data X: ', modulesData);
-  console.log('Permission Data X: ', permissionData);
 
   useEffect(() => {
     // Fetch modules if not available

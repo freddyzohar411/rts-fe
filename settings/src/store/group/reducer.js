@@ -22,6 +22,7 @@ import {
 import {
   errorMetaData,
   pendingMetaData,
+  resetMetaData,
   successMetaData,
 } from "@workspace/common";
 
@@ -81,44 +82,28 @@ const GroupReducer = (state = initialState, action) => {
       return state;
     // Delete Group
     case DELETE_GROUP:
-      return {
-        ...state,
-        loading: true,
-        error: false,
-      };
+      state.deleteMeta = pendingMetaData();
+      return state;
     case DELETE_GROUP_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        group: action.payload,
-      };
+      state.deleteMeta = successMetaData();
+      return state;
     case DELETE_GROUP_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
-      };
+      state.deleteMeta = errorMetaData(action.payload);
+      return state;
     // List Groups
     case LIST_GROUPS:
-      return {
-        ...state,
-        loading: true,
-        error: false,
-      };
+      state.meta = pendingMetaData();
+      state.createMeta = resetMetaData();
+      state.updateMeta = resetMetaData();
+      state.deleteMeta = resetMetaData();
+      return state;
     case LIST_GROUPS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        groupListing: action.payload,
-      };
+      state.meta = successMetaData();
+      state.groupListing = action.payload;
+      return state;
     case LIST_GROUPS_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
-      };
+      state.meta = errorMetaData(action.payload);
+      return state;
     default:
       return state;
   }
