@@ -3,21 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchIndustry } from "../../../store/industry/action";
 
 const IndustrySelectElement = ({ formik, field, formStateHook }) => {
+  const dispatch = useDispatch();
   const { formState } = formStateHook;
   const [industry, setIndustry] = useState([]);
-
+  const industryParentData = useSelector(
+    (state) => state.IndustryReducer.industry
+  );
 
   useEffect(() => {
-    fetch("http://localhost:8200/industries/parent").then((res) => {
-      res.json().then((data) => {
-        setIndustry(data.data);
-      });
-    });
-    if (formState === "create") {
-      formik.setFieldValue(field.name, "");
-    }
-    // dispatch(fetchIndustry());
+    dispatch(fetchIndustry());
   }, []);
+
+  useEffect(() => {
+    if (industryParentData) {
+      setIndustry(industryParentData);
+    }
+  }, [industryParentData]);
 
   return (
     <div>

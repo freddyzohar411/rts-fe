@@ -45,15 +45,15 @@ const TableElement = ({
   // API Services
   // Get
   const getTableData = () => {
-    axios
-      .get(tableSetting.tableGetAPI)
-      .then((data) => {
-        const formDataList = data.data;
-        setTable(mapTableData(formDataList));
-        // setFormFieldTableData(mapTableData(formDataList));
-      })
-      .catch((error) => {
-      });
+    if (tableSetting.tableGetAPI) {
+      axios
+        .get(tableSetting.tableGetAPI)
+        .then((data) => {
+          const formDataList = data.data;
+          setTable(mapTableData(formDataList));
+        })
+        .catch((error) => {});
+    }
   };
 
   const setFormFieldTableData = (data) => {
@@ -75,9 +75,6 @@ const TableElement = ({
       ) {
         getTableData();
       }
-      // } else {
-      //   setTable([...field.tableData]);
-      // }
       setTableConfig([...field.tableConfig]);
     }
   }, [
