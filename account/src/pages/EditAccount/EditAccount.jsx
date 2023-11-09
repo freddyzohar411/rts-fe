@@ -57,7 +57,7 @@ const EditAccount = () => {
   const [view, setView] = useState(
     linkState?.view !== null ? linkState?.view : true
   );
-console.log("Form SUb: ", formSubmissionData);
+  console.log("Form SUb: ", formSubmissionData);
   /**
    * Get account id from url
    */
@@ -123,7 +123,7 @@ console.log("Form SUb: ", formSubmissionData);
       }
       setFormTemplate(form);
     }
-  }, [step, form]);
+  }, [step, form, view]);
 
   /**
    * Set table API method
@@ -557,6 +557,11 @@ console.log("Form SUb: ", formSubmissionData);
    * Toggle view
    */
   const toggleFormViewState = () => {
+    if (step === 1 || step === 2) {
+      if (view === false) {
+        formFormik.resetForm();
+      }
+    }
     setView((prevState) => !prevState);
   };
 
