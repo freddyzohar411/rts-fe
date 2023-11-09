@@ -54,7 +54,6 @@ const TableElement = ({
         // setFormFieldTableData(mapTableData(formDataList));
       })
       .catch((error) => {
-        // console.log("Error: ", error);
       });
   };
 
