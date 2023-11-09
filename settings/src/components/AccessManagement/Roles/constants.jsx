@@ -4,8 +4,6 @@ import * as yup from "yup";
 export const populateForm = (values, permissionData, moduleData) => {
   if (permissionData) {
     // For modules with permissions
-    // Map permission to permission.id based on permission Data
-    // return back the modules
     values?.modules?.forEach((module) => {
       const newPermissions = module?.permissions?.map((permission) => {
         const permissionId = permissionData?.find(
@@ -18,9 +16,7 @@ export const populateForm = (values, permissionData, moduleData) => {
 
     moduleData.forEach((module) => {
       // if values does now have the module then add it in
-      const moduleFound = values?.modules?.find(
-        (m) => m?.id === module?.id
-      );
+      const moduleFound = values?.modules?.find((m) => m?.id === module?.id);
       if (!moduleFound) {
         values?.modules?.push({
           id: module.id,
@@ -30,20 +26,29 @@ export const populateForm = (values, permissionData, moduleData) => {
       }
     });
 
-    // console.log("permissionMap", newModules);
-    // console.log("Values Initial", values)
   }
-  console.log("KJK", {
-    id: values.id,
-    roleName: values.roleName,
-    roleDescription: values.roleDescription,
-    modules: values.modules,
-  });
   return {
     id: values.id,
     roleName: values.roleName,
     roleDescription: values.roleDescription,
     modules: values.modules,
+  };
+};
+
+// Generate initial values
+export const generateInitialValues = (role, permissionData, moduleData) => {
+  const newModule = moduleData?.map((module) => {
+    return {
+      id: module.id,
+      permissions: [],
+    };
+  });
+
+  return {
+    id: "",
+    roleName: "",
+    roleDescription: "",
+    modules: newModule,
   };
 };
 

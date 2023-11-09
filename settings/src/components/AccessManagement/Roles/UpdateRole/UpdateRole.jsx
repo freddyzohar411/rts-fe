@@ -31,13 +31,13 @@ import {
   removeRole,
 } from "../../../../store/roles/action";
 import { fetchModules } from "../../../../store/module/action";
-import axios from "axios";
+import { fetchPermissions } from "../../../../store/permissions/action";
+
 function UpdateRole() {
   const { roleId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const role = useSelector((state) => state.RoleReducer.role);
-  const allModules = useSelector((state) => state.ModuleReducer.modules);
   const [roleInitialValues, setRoleInitialValues] = useState(
     populateForm(initialValues)
   );
@@ -47,13 +47,20 @@ function UpdateRole() {
     (state) => state.PermissionReducer.permissions
   );
 
-  console.log("All Module Initial State Z: ", modulesData);
+  // Fetch Modules and Permissions if dont exist
+  useEffect(() => {
+    if (!modulesData) {
+      dispatch(fetchModules());
+    }
+    if (!permissionData) {
+      dispatch(fetchPermissions());
+    }
+  }, []);
 
   // Get Role and Module Data
   useEffect(() => {
     if (roleId) {
       dispatch(fetchRole(roleId));
-      // dispatch(fetchModules());
     }
     return () => {
       dispatch(removeRole());
@@ -90,42 +97,7 @@ function UpdateRole() {
 
   // Handle Submit Button
   const handleSubmit = async (values) => {
-    const permissionMap = {
-      Read: "1",
-      Write: "2",
-      Edit: "3",
-      Delete: "4",
-    };
-
-    console.log("Values...", values);
-
-    // const updatedModules = values.modules.map((module) => ({
-    //   id: module.id,
-    //   permissions: module.permissions.map(
-    //     (permission) => permissionMap[permission]
-    //   ),
-    // }));
-
-    // const updatedRole = {
-    //   id: values.id,
-    //   roleName: values.roleName,
-    //   roleDescription: values.roleDescription,
-    //   modules: updatedModules,
-    // };
-    // console.log("Updated Role", updatedRole)
     dispatch(updateRole({ updatedRole: values, navigate: navigate }));
-  };
-
-  const checkPermission = (role, module, permission) => {
-    if (role?.modules) {
-      const moduleData = role.modules.find(
-        (m) => m.moduleName === module.moduleName
-      );
-      if (moduleData) {
-        return moduleData.permissions.includes(permission.permissionName);
-      }
-    }
-    return false;
   };
 
   return (
@@ -283,28 +255,19 @@ function UpdateRole() {
                                             (permission, idx) => {
                                               return (
                                                 <td>
-                                                  {/* {checkPermission(
-                                                    role,
-                                                    module,
-                                                    permission
-                                                  ) ? ( */}
                                                   <Field
                                                     type="checkbox"
                                                     name={`modules.${index}.permissions`}
                                                     value={permission?.id.toString()}
                                                     className="form-check-input"
-                                                    checked={
-                                                      // Check if formik value matches
-                                                      // Find the module
-                                                      props?.values?.modules
-                                                        ?.find(
-                                                          (m) =>
-                                                            m?.id === module?.id
-                                                        )
-                                                        ?.permissions?.includes(
-                                                          permission?.id
-                                                        )
-                                                    }
+                                                    checked={props?.values?.modules
+                                                      ?.find(
+                                                        (m) =>
+                                                          m?.id === module?.id
+                                                      )
+                                                      ?.permissions?.includes(
+                                                        permission?.id
+                                                      )}
                                                     onChange={(e) => {
                                                       const checked =
                                                         e.target.checked;
@@ -319,7 +282,7 @@ function UpdateRole() {
                                                             m?.id === module?.id
                                                         );
 
-                                                      if (checked) {                         
+                                                      if (checked) {
                                                         // Find index in array
                                                         updatedPermissions = [
                                                           ...props.values
@@ -328,7 +291,7 @@ function UpdateRole() {
                                                           ].permissions,
                                                           permissionId,
                                                         ];
-                                                      } else {                                        
+                                                      } else {
                                                         updatedPermissions =
                                                           props.values.modules[
                                                             updateIndex

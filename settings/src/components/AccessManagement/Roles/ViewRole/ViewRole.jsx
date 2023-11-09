@@ -23,6 +23,8 @@ import {
 import classnames from "classnames";
 import { fetchRole, removeRole } from "../../../../store/roles/action";
 import { fetchGroups } from "../../../../store/group/action";
+import { fetchModules } from "../../../../store/module/action";
+import { fetchPermissions } from "../../../../store/permissions/action";
 
 function ViewRole() {
   const { roleId } = useParams();
@@ -34,7 +36,14 @@ function ViewRole() {
     (state) => state.PermissionReducer.permissions
   );
 
-  console.log("role", role);
+  useEffect(() => {
+    if (!modulesData) {
+      dispatch(fetchModules());
+    }
+    if (!permissionData) {
+      dispatch(fetchPermissions());
+    }
+  }, []);
 
   useEffect(() => {
     if (roleId) {
@@ -44,7 +53,7 @@ function ViewRole() {
 
     return () => {
       dispatch(removeRole());
-    }
+    };
   }, []);
 
   // Tabs
@@ -61,9 +70,7 @@ function ViewRole() {
         (m) => m.moduleName === module.moduleName
       );
       if (moduleData) {
-        return moduleData.permissions.includes(
-          permission.permissionName
-        );
+        return moduleData.permissions.includes(permission.permissionName);
       }
     }
     return false;
@@ -159,7 +166,7 @@ function ViewRole() {
                                     ))}
                                   </tr>
                                 </thead>
-                                <tbody>             
+                                <tbody>
                                   {modulesData?.map((module, index) => {
                                     return (
                                       <tr key={module.id}>

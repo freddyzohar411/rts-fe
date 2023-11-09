@@ -22,7 +22,6 @@ const ModuleReducer = (state = initialState, action) => {
       };
 
     case FETCH_MODULES_SUCCESS:
-      console.log("modules", action.payload);
       // Sort in alphabetical order
       const modulesData = action.payload.sort((a, b) =>
         a.moduleName > b.moduleName ? 1 : -1
