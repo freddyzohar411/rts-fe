@@ -79,8 +79,11 @@ function* workCreateUser(action) {
 function* workDeleteUser(action) {
   try {
     const response = yield call(deleteUser, action.payload);
-    const fetchUsers = yield call(getUsers);
-    yield put(fetchUsersSuccess(fetchUsers.data));
+    const fetchUsers = yield call(listUsers, {
+      page: 0,
+      size: 5,
+    });
+    yield put(listUsersSuccess(fetchUsers.data));
     yield put(deleteUserSuccess(response.data));
     toast.success("User deleted successfully!");
   } catch (error) {
