@@ -78,7 +78,7 @@ const Form = ({
   }, [template]);
 
   useEffect(() => {
-    if (formState === "create" || formState === "tableUpdate") {
+    if (formState === "create" || formState === "tableUpdate" || !editData || view) {
       setFormikInitialValues(generateInitialValues(formFields));
       setFormikValidationSchema(generateValidationSchema2(formFields));
     } else {

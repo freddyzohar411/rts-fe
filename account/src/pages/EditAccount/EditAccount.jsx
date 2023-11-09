@@ -57,7 +57,7 @@ const EditAccount = () => {
   const [view, setView] = useState(
     linkState?.view !== null ? linkState?.view : true
   );
-
+console.log("Form SUb: ", formSubmissionData);
   /**
    * Get account id from url
    */
