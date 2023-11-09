@@ -37,16 +37,16 @@ function UpdateUser() {
 
   // Set User Initial Values
   useEffect(() => {
-    if (userId) {
+    if (userId && user) {
       const fetchInitialValues = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username,
-        employeeId: user.employeeId,
-        mobile: user.mobile,
-        email: user.email,
-        keycloackId: user.keycloackId,
-        id: user.id,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        username: user?.username,
+        employeeId: user?.employeeId,
+        mobile: user?.mobile,
+        email: user?.email,
+        keycloackId: user?.keycloackId,
+        id: user?.id,
       };
       setUserInitialValues(populateForm(fetchInitialValues));
     }
@@ -55,7 +55,7 @@ function UpdateUser() {
   // Document Title
   useEffect(() => {
     if (userId) {
-      document.title = `${user.firstName} ${user.lastName} Update | RTS`;
+      document.title = `${user?.firstName} ${user?.lastName} Update | RTS`;
     }
   }, []);
 
