@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-
 import { FormBuilder } from "@workspace/common";
 import { useDispatch, useSelector } from "react-redux";
 import { createForm, updateForm, fetchForm } from "../../store/forms/action";
@@ -33,7 +32,6 @@ const FormbuilderMain = () => {
     ).then((data) => {
       const newData = JSON.parse(JSON.stringify(data.default));
       setUnusedFields(newData);
-      console.log("UnusedFields ASYNC", data.default);
     });
   }, [form]);
 
@@ -64,7 +62,6 @@ const FormbuilderMain = () => {
     };
 
     if (formState === "create") {
-      console.log("Create a new Form");
       dispatch(
         createForm({
           newForm: JSONData,
@@ -73,7 +70,6 @@ const FormbuilderMain = () => {
         })
       );
     } else {
-      console.log("Update existing form: " + templateId);
       dispatch(
         updateForm({
           formId: templateId,
@@ -86,16 +82,14 @@ const FormbuilderMain = () => {
   };
 
   return (
-    <div className="" style={{marginTop:"60px",marginBottom:"60px"}}>
+    <div className="" style={{ marginTop: "60px", marginBottom: "60px" }}>
       <FormBuilder
         initialFormState={form ? "update" : "create"}
         template={form}
         userDetails={null}
         onSubmit={(values, formFields, formState) => {
           if (formState === "create") {
-            console.log("Create a new Form");
           } else {
-            console.log("Update existing form: " + templateId);
           }
         }}
         onSave={handleSave}

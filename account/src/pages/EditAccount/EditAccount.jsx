@@ -182,7 +182,6 @@ const EditAccount = () => {
    * Get Formik hook from Form component
    */
   const handleFormikChange = useCallback((formik) => {
-    // Handle formik change here
     setFormFormik(formik);
   }, []);
 

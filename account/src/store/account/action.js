@@ -131,7 +131,3 @@ export const fetchAccountsFieldsFailure = (error) => ({
   type: FETCH_ACCOUNTS_FIELDS_FAILURE,
   payload: error,
 });
-
-
-
-

@@ -49,16 +49,16 @@ const GroupReducer = (state = initialState, action) => {
       state.createMeta = errorMetaData(action.payload);
       return state;
     // Fetch Groups
-    // case FETCH_GROUPS:
-    //   state.meta = pendingMetaData();
-    //   return state;
-    // case FETCH_GROUPS_SUCCESS:
-    //   state.meta = successMetaData();
-    //   state.groups = action.payload;
-    //   return state;
-    // case FETCH_GROUPS_FAILURE:
-    //   state.meta = errorMetaData(action.payload);
-    //   return state;
+    case FETCH_GROUPS:
+      state.meta = pendingMetaData();
+      return state;
+    case FETCH_GROUPS_SUCCESS:
+      state.meta = successMetaData();
+      state.groups = action.payload;
+      return state;
+    case FETCH_GROUPS_FAILURE:
+      state.meta = errorMetaData(action.payload);
+      return state;
     // Fetch Group
     case FETCH_GROUP:
       state.meta = pendingMetaData();

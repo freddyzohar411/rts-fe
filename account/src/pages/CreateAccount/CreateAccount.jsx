@@ -36,13 +36,6 @@ const AccountCreation = () => {
   const navigate = useNavigate();
   const { getAllUserGroups } = useUserAuth();
 
-  /**
-   * Get some intial data for account creation
-   */
-  // useEffect(() => {
-  //   if ()
-  // }, []);
-
   const form = useSelector((state) => state.AccountFormReducer.form);
   const accountId = useSelector(
     (state) => state.AccountRegistrationReducer.accountId

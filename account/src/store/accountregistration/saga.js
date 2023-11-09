@@ -1,11 +1,20 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { FETCH_DRAFT_ACCOUNT, DELETE_DRAFT_ACCOUNT } from "./actionTypes";
-import { setAccountId, setAccountCountry, deleteAccountId, deleteAccountCountry, deleteDraftAccount } from "./action";
-import { deleteDraftAccountById, getDraftAccount } from "../../helpers/backend_helper";
+import {
+  setAccountId,
+  setAccountCountry,
+  deleteAccountId,
+  deleteAccountCountry,
+  deleteDraftAccount,
+} from "./action";
+import {
+  deleteDraftAccountById,
+  getDraftAccount,
+} from "../../helpers/backend_helper";
 
 function* workFetchDraftAccount(action) {
   try {
-    const response  = yield call(getDraftAccount);
+    const response = yield call(getDraftAccount);
     if (response.data === null) {
       yield put(deleteAccountId());
       yield put(deleteAccountCountry());

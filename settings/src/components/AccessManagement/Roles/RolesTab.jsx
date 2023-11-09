@@ -24,9 +24,10 @@ function RolesTab() {
   const roles = rolesListing.roles;
   const totalPages = rolesListing.totalPages;
   const modulesData = useSelector((state) => state.ModuleReducer.modules);
-  const permissionData = useSelector( state => state.PermissionReducer.permissions);
+  const permissionData = useSelector(
+    (state) => state.PermissionReducer.permissions
+  );
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     // Fetch modules if not available

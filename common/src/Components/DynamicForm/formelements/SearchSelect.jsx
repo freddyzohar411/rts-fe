@@ -8,8 +8,6 @@ const SearchSelect = ({ formik, field, ...props }) => {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // console.log("options: ", options);
-
   useEffect(() => {
     if (search === "") {
       setOptions([]);
@@ -25,7 +23,6 @@ const SearchSelect = ({ formik, field, ...props }) => {
         })
         .catch((err) => {
           setLoading(false);
-          // console.log(err);
         });
     }
   }, [search]);
@@ -84,11 +81,6 @@ const SearchSelect = ({ formik, field, ...props }) => {
         placeholder="Search..."
         options={options}
         noOptionsMessage={noOptionsMessage}
-        //   styles={{
-        //     dropdownIndicator: (provided, state) => ({
-        //       cursor: "pointer",
-        //     }),
-        //   }}
       />
 
       {props?.error && (

@@ -82,7 +82,6 @@ function* workPostAccount(action) {
     }
   } catch (error) {
     toast.error("Error creating account");
-    console.log(error.message);
     yield put(postAccountFailure(error));
   }
 }
@@ -117,7 +116,6 @@ function* workPutAccount(action) {
     }
   } catch (error) {
     toast.error("Error updating account");
-    console.log(error.message);
     yield put(putAccountFailure(error));
   }
 }
@@ -129,7 +127,6 @@ function* workFetchAccounts(action) {
     yield put(fetchAccountsSuccess(response.data));
   } catch (error) {
     toast.error("Error fetching accounts");
-    console.log(error.message);
     yield put(fetchAccountsFailure(error));
   }
 }
@@ -143,7 +140,6 @@ function* workDeleteAccount(action) {
   } catch (error) {
     yield put(deleteAccountFailure(error));
     toast.error("Error deleting account");
-    console.log(error.message);
   }
 }
 
@@ -154,7 +150,6 @@ function* workFetchAccountsFields() {
     yield put(fetchAccountsFieldsSuccess(response.data));
   } catch (error) {
     toast.error("Error fetching accounts fields");
-    console.log(error.message);
     yield put(fetchAccountsFieldsFailure(error));
   }
 }
@@ -167,7 +162,6 @@ function* workFetchAccount(action) {
     yield put(setAccountCountry(response.data.accountCountry));
   } catch (error) {
     toast.error("Error fetching account");
-    console.log(error.message);
     yield put(fetchAccountFailure(error));
   }
 }

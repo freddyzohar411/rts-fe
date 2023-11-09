@@ -120,7 +120,6 @@ function AccountListing() {
               <Link
                 to={`/accounts/${data.id}/edit`}
                 style={{ color: "black" }}
-                // state={{ form: 3 }}
                 state={{ view: false }}
               >
                 <Button

@@ -25,7 +25,6 @@ export const populateForm = (values, permissionData, moduleData) => {
         });
       }
     });
-
   }
   return {
     id: values.id,

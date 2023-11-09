@@ -30,7 +30,6 @@ function ViewRole() {
   const { roleId } = useParams();
   const dispatch = useDispatch();
   const role = useSelector((state) => state.RoleReducer.role);
-  const groups = useSelector((state) => state.GroupReducer.groups);
   const modulesData = useSelector((state) => state.ModuleReducer.modules);
   const permissionData = useSelector(
     (state) => state.PermissionReducer.permissions
