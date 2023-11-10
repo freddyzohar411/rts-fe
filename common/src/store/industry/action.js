@@ -5,6 +5,7 @@ import {
   FETCH_SUBINDUSTRY,
   FETCH_SUBINDUSTRY_SUCCESS,
   FETCH_SUBINDUSTRY_FAILURE,
+  RESET_META_DATA
 } from "./actionTypes";
 
 // Fetch Industry (Parent)
@@ -37,3 +38,8 @@ export const fetchSubIndustryFailure = (error) => ({
   type: FETCH_SUBINDUSTRY_FAILURE,
   payload: error,
 });
+
+export const resetMetaData = () => ({
+  type: RESET_META_DATA,
+});
+
