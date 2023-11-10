@@ -58,17 +58,11 @@ const FormStepper = ({
     }
   };
 
-  const clearForm = () => { 
-    formFormik.setValues({});
-  }
-
   const resetAndDeleteDraftForm = () => {
-  
     dispatch(
       deleteDraftAccount({
         accountId: accountId,
         resetStepper: resetStepper,
-        clearForm: clearForm,
       })
     );
     setIsDeleteModalOpen(false);

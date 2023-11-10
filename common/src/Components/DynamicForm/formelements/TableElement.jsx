@@ -29,8 +29,6 @@ const TableElement = ({
   );
   const [table, setTable] = useState(field.tableData || []);
 
-  console.log("table", table);
-
   useEffect(() => {
     setFormFieldTableData(table);
   }, [table]);
@@ -100,11 +98,7 @@ const TableElement = ({
     // Set formik values based on row value and config
     // Set all the formik values in this table based on the API
     for (const [key, value] of Object.entries(row.data)) {
-      try {
-        formik?.setFieldValue(key, value);
-      } catch {
-        console.log("error");
-      }
+      formik?.setFieldValue(key, value);  
     }
     // Set tabled edit id in form field
     // const newFormFields = [...formFields];

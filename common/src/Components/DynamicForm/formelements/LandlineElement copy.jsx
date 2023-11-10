@@ -17,6 +17,9 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
   );
   const [countryCurrency, setCountryCurrency] = useState([]);
 
+  // console.log("sub name", field.subName);
+  // console.log("sub name2", formik?.values?.[field.subName]);
+
   // Fetch country currency
   useEffect(() => {
     if (!countryData) {
@@ -30,46 +33,6 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
     }
   }, [countryData]);
 
-  /**
-   * Get Initial Landline State
-   * @returns
-   */
-  const getInitialLandline = () => {
-    if (countryData) {
-      if (
-        formik?.values?.[field?.subName] === "" ||
-        formik?.values?.[field?.subName] === null ||
-        formik?.values?.[field?.subName] === undefined
-      ) {
-        setSelectedLandline((prev) => ({
-          ...prev,
-          landlineCountry: "Phone Code",
-          landlineCountryId: null,
-        }));
-      }
-
-      if (
-        formik?.values?.[field?.subName] === "" ||
-        formik?.values?.[field?.subName] === null ||
-        formik?.values?.[field?.subName] === undefined
-      ) {
-        return;
-      }
-
-      const country = countryData.find(
-        (country) => country.id === formik?.values?.[field?.subName]
-      );
-
-      setSelectedLandline((prev) => ({
-        ...prev,
-        landlineCountry: `${country?.phoneCode.charAt(0) == "+" ? "" : "+"} ${
-          country?.phoneCode
-        }`,
-        landlineCountryId: formik?.values?.[field?.subName],
-      }));
-    }
-  };
-
   // Landline and Filter
   const [landlineDropdown, setLandlineDropdown] = useState(false);
   const [selectedLandline, setSelectedLandline] = useState({
@@ -77,26 +40,44 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
     landlineCountryId: null,
   });
 
-  /**
-   * Set Landline Country state
-   */
   useEffect(() => {
+    console.log("In Effect");
     if (countryData) {
-      getInitialLandline();
+      if (formik?.values?.[field?.subName] === "" || null || undefined) {
+        setSelectedLandline({
+          landlineCountry: "Phone Code",
+          landlineCountryId: null,
+        });
+        return;
+      }
+
+      const country = countryData.find(
+        (country) => country.id === formik?.values?.[field?.subName]
+      );
+      if (formik?.values?.[field?.subName] !== "") {
+        console.log("IIN");
+        setSelectedLandline({
+          landlineCountry: `${country?.phoneCode.charAt(0) == "+" ? "" : "+"} ${
+            country?.phoneCode || "Phone Code"
+          }`,
+          landlineCountryId: formik?.values?.[field?.subName] || null,
+        });
+      }
     }
   }, [formik?.values?.[field?.subName]]);
 
-  /**
-   * Set Landline Country to formik
-   */
   useEffect(() => {
-    if (selectedLandline.landlineCountryId && formik) {
-      try {
-        formik?.setFieldValue?.(
-          field.subName,
-          selectedLandline.landlineCountryId
-        );
-      } catch {}
+    if (selectedLandline.landlineCountryId) {
+      if (formik) {
+        try {
+          formik?.setFieldValue?.(
+            field.subName,
+            selectedLandline.landlineCountryId
+          );
+        } catch {
+          console.log("error");
+        }
+      }
     }
   }, [selectedLandline]);
 

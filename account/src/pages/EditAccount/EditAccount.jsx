@@ -57,7 +57,7 @@ const EditAccount = () => {
   const [view, setView] = useState(
     linkState?.view !== null ? linkState?.view : true
   );
-  console.log("Form SUb: ", formSubmissionData);
+
   /**
    * Get account id from url
    */
@@ -200,6 +200,18 @@ const EditAccount = () => {
   }, [step]);
 
   /**
+   * Clear form
+   */
+
+  const clearForm = () => {
+    const newValues = {};
+    Object.keys(formFormik.initialValues).forEach((field) => {
+      newValues[field] = "";
+    });
+    formFormik.setValues(newValues);
+  };
+
+  /**
    * Handle form submit based on step
    * @param {*} event
    * @param {*} values
@@ -245,7 +257,6 @@ const EditAccount = () => {
           formFormik.setFieldValue(fieldName, "")
         );
       }
-      // setFormState("create");
     };
 
     if (step === 0) {
