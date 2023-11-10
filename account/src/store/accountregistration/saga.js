@@ -23,12 +23,7 @@ function* workFetchDraftAccount(action) {
     } else {
       yield put(setAccountId(response.data.id));
       yield put(setAccountCountry(response.data.accountCountry));
-      // yield call(fetchAccountFormSubmission(
-      //   AccountEntityConstant.ACCOUNT_ENTITY
-      //   , response.data.id
-      // ))
       yield put(setFormSubmission(response.data.accountSubmissionData))
-      yield 
     }
   } catch (error) {
     throw error;
@@ -36,12 +31,11 @@ function* workFetchDraftAccount(action) {
 }
 
 function* workDeleteDraftAccount(action) {
-  const { accountId, resetStepper, clearForm } = action.payload;
+  const { accountId, resetStepper } = action.payload;
   try {
     yield call(deleteDraftAccountById, accountId);
     yield put(deleteAccountId());
     yield put(deleteAccountCountry());
-    clearForm();
     resetStepper(0);
   } catch (error) {
     throw error;

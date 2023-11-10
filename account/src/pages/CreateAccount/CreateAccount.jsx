@@ -4,7 +4,11 @@ import { Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
-import { postAccount, putAccount } from "../../store/account/action";
+import {
+  postAccount,
+  putAccount,
+  resetMetaData,
+} from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
 import {
   AccountFormConstant,
@@ -56,6 +60,10 @@ const AccountCreation = () => {
 
   const formSubmissionDataLoading = useSelector(
     (state) => state.AccountFormReducer.formSubmissionLoading
+  );
+
+  const createMetaData = useSelector(
+    (state) => state.AccountReducer.createMeta
   );
 
   const loading = useSelector((state) => state.AccountReducer.loading);
@@ -169,7 +177,7 @@ const AccountCreation = () => {
           )
         );
       }
-      if (step === 2){
+      if (step === 2) {
         dispatch(clearAccountFormSubmission());
       }
       if (step === 3) {
@@ -191,8 +199,7 @@ const AccountCreation = () => {
     }
   }, [step]);
 
-
-  //clear form submission if 
+  //clear form submission if
   useEffect(() => {
     if (accountId === null) {
       dispatch(clearAccountFormSubmission());
@@ -289,10 +296,9 @@ const AccountCreation = () => {
                 "Content-Type": "multipart/form-data",
               },
             },
-            handleNext: handleNext,
+            // handleNext: handleNext,
           })
         );
-        
       } else {
         let formValues = { ...newValues };
         const accountData = { ...formValues };
@@ -602,6 +608,19 @@ const AccountCreation = () => {
   const resetStepper = (number) => {
     setStep(number);
   };
+
+  /**
+   * handle next
+   */
+  console.log("createMetaData", createMetaData);
+  if (createMetaData?.isSuccess) {
+    dispatch(resetMetaData());
+    if (step === 5) {
+      navigate("/accounts");
+      return
+    }
+    handleNext();
+  }
 
   return (
     <>

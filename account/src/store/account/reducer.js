@@ -20,15 +20,27 @@ import {
   FETCH_ACCOUNTS_FIELDS,
   FETCH_ACCOUNTS_FIELDS_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_FAILURE,
+  RESET_META_DATA,
 } from "./actionTypes";
+
+import {
+  errorMetaData,
+  pendingMetaData,
+  resetAllMetaData,
+  successMetaData,
+} from "@workspace/common";
 
 const initialState = {
   account: {},
   accounts: [],
   accountsFields: [],
-  errorMsg: "",
+  meta: {},
+  createMeta: {},
+  updateMeta: {},
+  deleteMeta: {},
   loading: false,
   error: false,
+  errorMsg: "",
   success: false,
 };
 
@@ -84,40 +96,34 @@ const AccountReducer = (state = initialState, action) => {
         error: false,
       };
     case CREATE_ACCOUNT_SUCCESS:
+
       return {
         ...state,
-        loading: false,
+        createMeta: successMetaData(action.payload),
         account: action.payload,
       };
     case CREATE_ACCOUNT_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        createMeta: errorMetaData(action.payload),
       };
 
     // Post an Account
     case POST_ACCOUNT:
       return {
         ...state,
-        loading: true,
-        error: false,
+        createMeta: pendingMetaData(),
       };
     case POST_ACCOUNT_SUCCESS:
       return {
         ...state,
-        loading: false,
+        createMeta: successMetaData(action.payload),
         account: action.payload,
-        success: true,
       };
     case POST_ACCOUNT_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
-        success: true,
+        createMeta: errorMetaData(action.payload),
       };
 
     // Put an Account
@@ -185,6 +191,14 @@ const AccountReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case RESET_META_DATA:
+      return {
+        ...state,
+        meta: resetAllMetaData(),
+        createMeta: resetAllMetaData(),
+        updateMeta: resetAllMetaData(),
+        deleteMeta: resetAllMetaData(),
       };
 
     default:
