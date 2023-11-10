@@ -34,7 +34,8 @@
     "tsparticles-slim": "^2.12.0",
     "url-loader": "^4.1.1",
     "web-vitals": "^2.1.4",
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "bcryptjs-react": "^2.4.6"
   },
   "scripts": {
     "start": "react-scripts start",
