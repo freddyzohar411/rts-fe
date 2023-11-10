@@ -23,12 +23,7 @@ function* workFetchDraftAccount(action) {
     } else {
       yield put(setAccountId(response.data.id));
       yield put(setAccountCountry(response.data.accountCountry));
-      // yield call(fetchAccountFormSubmission(
-      //   AccountEntityConstant.ACCOUNT_ENTITY
-      //   , response.data.id
-      // ))
       yield put(setFormSubmission(response.data.accountSubmissionData))
-      yield 
     }
   } catch (error) {
     throw error;
