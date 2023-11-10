@@ -123,7 +123,7 @@ const EditAccount = () => {
       }
       setFormTemplate(form);
     }
-  }, [step, form]);
+  }, [step, form, view]);
 
   /**
    * Set table API method
@@ -200,6 +200,18 @@ const EditAccount = () => {
   }, [step]);
 
   /**
+   * Clear form
+   */
+
+  const clearForm = () => {
+    const newValues = {};
+    Object.keys(formFormik.initialValues).forEach((field) => {
+      newValues[field] = "";
+    });
+    formFormik.setValues(newValues);
+  };
+
+  /**
    * Handle form submit based on step
    * @param {*} event
    * @param {*} values
@@ -245,7 +257,6 @@ const EditAccount = () => {
           formFormik.setFieldValue(fieldName, "")
         );
       }
-      // setFormState("create");
     };
 
     if (step === 0) {
@@ -557,6 +568,11 @@ const EditAccount = () => {
    * Toggle view
    */
   const toggleFormViewState = () => {
+    if (step === 1 || step === 2) {
+      if (view === false) {
+        formFormik.resetForm();
+      }
+    }
     setView((prevState) => !prevState);
   };
 

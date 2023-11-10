@@ -6,6 +6,7 @@ import {
   FETCH_ACCOUNTFORM_SUBMISSION_SUCCESS,
   FETCH_ACCOUNTFORM_SUBMISSION_FAILURE,
   CLEAR_ACCOUNTFORM_SUBMISSION,
+  SET_FORM_SUBMISSION
 } from "./actionTypes";
 
 // Fetch form by id
@@ -43,6 +44,12 @@ export const fetchAccountFormSubmissionFailure = (error) => ({
 export const clearAccountFormSubmission = () => ({
   type: CLEAR_ACCOUNTFORM_SUBMISSION,
 });
+
+export const setFormSubmission = (form) => ({
+  type: SET_FORM_SUBMISSION,
+  payload: form,
+});
+
 
 
 

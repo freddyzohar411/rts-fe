@@ -6,6 +6,7 @@ import {
   FETCH_ACCOUNTFORM_SUBMISSION_SUCCESS,
   FETCH_ACCOUNTFORM_SUBMISSION_FAILURE,
   CLEAR_ACCOUNTFORM_SUBMISSION,
+  SET_FORM_SUBMISSION,
 } from "./actionTypes";
 import { JsonHelper } from "@workspace/common";
 
@@ -80,6 +81,11 @@ const AccountFormReducer = (state = initialState, action) => {
         formSubmissionLoading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case SET_FORM_SUBMISSION:
+      return {
+        ...state,
+        formSubmission: action.payload,
       };
 
     default:

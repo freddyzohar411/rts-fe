@@ -98,7 +98,7 @@ const TableElement = ({
     // Set formik values based on row value and config
     // Set all the formik values in this table based on the API
     for (const [key, value] of Object.entries(row.data)) {
-      formik.setFieldValue(key, value);
+      formik?.setFieldValue(key, value);  
     }
     // Set tabled edit id in form field
     // const newFormFields = [...formFields];

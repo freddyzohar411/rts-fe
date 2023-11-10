@@ -169,6 +169,9 @@ const AccountCreation = () => {
           )
         );
       }
+      if (step === 2){
+        dispatch(clearAccountFormSubmission());
+      }
       if (step === 3) {
         dispatch(
           fetchAccountFormSubmission(
@@ -187,6 +190,14 @@ const AccountCreation = () => {
       }
     }
   }, [step]);
+
+
+  //clear form submission if 
+  useEffect(() => {
+    if (accountId === null) {
+      dispatch(clearAccountFormSubmission());
+    }
+  }, [accountId]);
 
   /**
    * Get Formik hook from Form component
@@ -281,6 +292,7 @@ const AccountCreation = () => {
             handleNext: handleNext,
           })
         );
+        
       } else {
         let formValues = { ...newValues };
         const accountData = { ...formValues };
