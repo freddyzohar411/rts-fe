@@ -93,14 +93,22 @@ function* workPutAccount(action) {
       entity === AccountEntityConstant.ACCOUNT_INSTRUCTION ||
       entity === AccountEntityConstant.ACCOUNT_COMMERCIAL
     ) {
-      yield put(postAccountSuccess(response.data));
+      yield put(putAccountSuccess(response.data));
+    }
+
+    if (entity === AccountEntityConstant.ACCOUNT_COMMERCIAL) {
+      yield put(deleteAccountId());
+      yield put(deleteAccountCountry());
+      toast.success("Account updated successfully");
+      return;
+    }
+    
+    if (typeof resetForm === "function") {
+      resetForm();
     }
 
     if (typeof rerenderTable === "function") {
       rerenderTable();
-    }
-    if (typeof resetForm === "function") {
-      resetForm();
     }
   } catch (error) {
     toast.error("Error updating account");

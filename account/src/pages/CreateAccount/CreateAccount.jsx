@@ -8,7 +8,6 @@ import {
   postAccount,
   putAccount,
   resetMetaData,
-  setTableReset,
 } from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
 import {
@@ -81,8 +80,6 @@ const AccountCreation = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
-
-  // console.log("FormikRef", formikRef);
 
   /**
    * Set country if is in edit mode
@@ -237,10 +234,11 @@ const AccountCreation = () => {
   /**
    * Handle form submit based on step
    * @param {*} event
-   * @param {*} values
-   * @param {*} newValues
-   * @param {*} buttonName
-   * @param {*} formStateHook
+   * @param {*} values - formik values
+   * @param {*} newValues - form values (After processing)
+   * @param {*} buttonNameHook - button name (To determine if it is add or update)
+   * @param {*} formStateHook - form state hook (To determine if it is create or update)
+   * @param {*} rerenderTable - rerender table 
    * @returns
    */
   const handleFormSubmit = async (
@@ -255,7 +253,7 @@ const AccountCreation = () => {
     const { buttonName, setButtonName } = buttonNameHook;
 
     // Set a reset form functions
-    const resetForm = (arrayFields = []) => {
+    const resetForm = (arrayFields = [], formState = "") => {
       if (arrayFields.length > 0) {
         arrayFields.forEach((field) => {
           formikRef.current.formik.setFieldValue(field, "");
@@ -263,10 +261,13 @@ const AccountCreation = () => {
       } else {
         formikRef.current.clearForm();
       }
-      setFormState("create");
+      if (formState !== "") {
+        setFormState(formState);
+      }
     };
 
     if (step === 0) {
+      // Create Account
       if (formSubmissionData === null) {
         if (!country?.name) {
           toast.error("Please select a country");
@@ -296,10 +297,10 @@ const AccountCreation = () => {
                 "Content-Type": "multipart/form-data",
               },
             },
-            // handleNext: handleNext,
           })
         );
       } else {
+        // Update Account 
         let formValues = { ...newValues };
         const accountData = { ...formValues };
         const fileData = formValues?.uploadAgreement;
@@ -337,6 +338,7 @@ const AccountCreation = () => {
     }
 
     if (step === 1) {
+      // Add contact
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
@@ -359,12 +361,14 @@ const AccountCreation = () => {
         return;
       }
 
+      // Cancel add contact and reset form
       if (buttonName === "cancel" && !editData) {
         setButtonName("");
         resetForm();
         return;
       }
 
+      // Update contact
       if (buttonName === "tableUpdate") {
         setButtonName("");
         const newData = {
@@ -395,6 +399,7 @@ const AccountCreation = () => {
     }
 
     if (step === 2) {
+      // Add document
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
@@ -425,16 +430,18 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm,
+            resetForm: resetForm([], "create"),
           })
         );
       }
 
+      // Cancel add document and reset form
       if (buttonName === "cancel" && !editData) {
-        resetForm();
+        resetForm([], "create");
         return;
       }
 
+      // Update document
       if (buttonName === "tableUpdate") {
         setButtonName("");
         let formValues = { ...newValues };
@@ -479,13 +486,14 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm,
+            resetForm: resetForm([], "create"),
           })
         );
       }
     }
 
     if (step === 3) {
+      // Add instruction document
       if (buttonName === "add") {
         setButtonName("");
         let formValues = { file: newValues.file };
@@ -519,6 +527,7 @@ const AccountCreation = () => {
         return;
       }
 
+      //Create instruction
       if (formSubmissionData === null) {
         const formData = {
           guidelines: newValues.guidelines,
@@ -539,6 +548,7 @@ const AccountCreation = () => {
           })
         );
       } else {
+        // Update instruction
         const formData = {
           guidelines: newValues.guidelines,
         };
@@ -562,6 +572,7 @@ const AccountCreation = () => {
     }
 
     if (step === 5) {
+      // Create commercial
       const formData = {
         ...newValues,
         entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -648,7 +659,6 @@ const AccountCreation = () => {
             userDetails={getAllUserGroups()}
             country={accountCountry || country?.name}
             editData={formSubmissionData}
-            // onFormikChange={handleFormikChange}
             onSubmit={handleFormSubmit}
             onFormFieldsChange={handleFormFieldChange}
             errorMessage={errorMessage}
@@ -656,8 +666,6 @@ const AccountCreation = () => {
             ref={formikRef}
           />
         </FormStepper>
-        {/* <button onClick={() => formikRef.current.formik.resetForm()}> */}
-        <button onClick={() => formikRef.current.clearForm()}>Resetttt</button>
       </Container>
     </>
   );

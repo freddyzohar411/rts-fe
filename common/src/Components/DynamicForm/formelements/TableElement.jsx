@@ -100,6 +100,11 @@ const TableElement = ({
     for (const [key, value] of Object.entries(row.data)) {
       formik?.setFieldValue(key, value);  
     }
+
+    // Set the form to untounched and no validation
+    formik?.setTouched({});
+    formik?.setErrors({});
+    
     // Set tabled edit id in form field
     // const newFormFields = [...formFields];
     const newFormFields = JSON.parse(JSON.stringify(formFields));
