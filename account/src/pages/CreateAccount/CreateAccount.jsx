@@ -8,6 +8,7 @@ import {
   postAccount,
   putAccount,
   resetMetaData,
+  setTableReset,
 } from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
 import {
@@ -66,7 +67,9 @@ const AccountCreation = () => {
     (state) => state.AccountReducer.createMeta
   );
 
-  const loading = useSelector((state) => state.AccountReducer.loading);
+  const updateMetaData = useSelector(
+    (state) => state.AccountReducer.updateMeta
+  );
 
   const MAX_STEP = 6;
   const [step, setStep] = useState(0);
@@ -228,6 +231,7 @@ const AccountCreation = () => {
     dispatch(fetchAccountForm(AccountFormConstant[step]));
   }, [step]);
 
+
   /**
    * Handle form submit based on step
    * @param {*} event
@@ -247,6 +251,7 @@ const AccountCreation = () => {
   ) => {
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
+
     // Set a reset form functions
     const resetForm = (arrayFields = []) => {
       formFormik.resetForm();
@@ -331,7 +336,6 @@ const AccountCreation = () => {
                 "Content-Type": "multipart/form-data",
               },
             },
-            handleNext: handleNext,
           })
         );
       }
@@ -389,7 +393,7 @@ const AccountCreation = () => {
             id: tableEditId,
             newData,
             rerenderTable: rerenderTable,
-            resetForm: resetForm(),
+            resetForm: resetForm,
           })
         );
       }
@@ -437,6 +441,7 @@ const AccountCreation = () => {
       }
 
       if (buttonName === "tableUpdate") {
+        setButtonName("");
         let formValues = { ...newValues };
         const documentData = { ...formValues };
         const fileData = formValues?.file;
@@ -536,7 +541,7 @@ const AccountCreation = () => {
             entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
             newData,
             rerenderTable: rerenderTable,
-            handleNext: handleNext,
+            // handleNext: handleNext,
           })
         );
       } else {
@@ -557,7 +562,6 @@ const AccountCreation = () => {
             id: editId,
             newData,
             rerenderTable: rerenderTable,
-            handleNext: handleNext,
           })
         );
       }
@@ -576,8 +580,6 @@ const AccountCreation = () => {
           entity: AccountEntityConstant.ACCOUNT_COMMERCIAL,
           id: accountId,
           newData: formData,
-          navigate: navigate,
-          link: "/accounts",
         })
       );
     }
@@ -610,14 +612,25 @@ const AccountCreation = () => {
   };
 
   /**
-   * handle next
+   * Handle Account Success
    */
-  console.log("createMetaData", createMetaData);
   if (createMetaData?.isSuccess) {
     dispatch(resetMetaData());
     if (step === 5) {
       navigate("/accounts");
-      return
+      return;
+    }
+    handleNext();
+  }
+
+  /**
+   * Handle Account success (Update)
+   */
+  if (updateMetaData?.isSuccess) {
+    dispatch(resetMetaData());
+    if (step === 5) {
+      navigate("/accounts");
+      return;
     }
     handleNext();
   }

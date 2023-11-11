@@ -22,6 +22,9 @@ import {
   fetchAccountsFailure,
   fetchAccountsFieldsSuccess,
   fetchAccountsFieldsFailure,
+  setTableSuccess,
+  setTableFailure,
+  setTableReset,
 } from "./action";
 import {
   getAccounts,
@@ -41,22 +44,24 @@ import { toast } from "react-toastify";
 
 // Post account
 function* workPostAccount(action) {
-  const { entity, newData, config, rerenderTable, resetForm, id } =
+  const { entity, newData, config, rerenderTable, id, resetForm } =
     action.payload;
   try {
     const response = yield call(createAccount, entity, id, newData, config);
     if (
       entity === AccountEntityConstant.ACCOUNT_ACCOUNT ||
       entity === AccountEntityConstant.ACCOUNT_INSTRUCTION ||
-      entity === AccountEntityConstant.ACCOUNT_COMMERCIAL) {
+      entity === AccountEntityConstant.ACCOUNT_COMMERCIAL
+    ) {
       yield put(postAccountSuccess(response.data));
+    }
+
+    if (typeof resetForm === "function") {
+      resetForm();
     }
 
     if (typeof rerenderTable === "function") {
       rerenderTable();
-    }
-    if (typeof resetForm === "function") {
-      resetForm();
     }
 
     if (entity === AccountEntityConstant.ACCOUNT_ACCOUNT) {
@@ -79,31 +84,23 @@ function* workPostAccount(action) {
 
 // Put Account
 function* workPutAccount(action) {
-  const {
-    entity,
-    id,
-    newData,
-    config,
-    rerenderTable,
-    resetForm,
-    navigate,
-    link,
-    handleNext,
-  } = action.payload;
+  const { entity, id, newData, config, rerenderTable, resetForm } =
+    action.payload;
   try {
     const response = yield call(updateAccount, entity, id, newData, config);
-    yield put(putAccountSuccess(response.data));
+    if (
+      entity === AccountEntityConstant.ACCOUNT_ACCOUNT ||
+      entity === AccountEntityConstant.ACCOUNT_INSTRUCTION ||
+      entity === AccountEntityConstant.ACCOUNT_COMMERCIAL
+    ) {
+      yield put(postAccountSuccess(response.data));
+    }
+
     if (typeof rerenderTable === "function") {
       rerenderTable();
     }
     if (typeof resetForm === "function") {
       resetForm();
-    }
-    if (typeof navigate === "function") {
-      navigate(link);
-    }
-    if (typeof handleNext === "function") {
-      handleNext();
     }
   } catch (error) {
     toast.error("Error updating account");

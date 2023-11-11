@@ -38,10 +38,11 @@ const initialState = {
   createMeta: {},
   updateMeta: {},
   deleteMeta: {},
-  loading: false,
-  error: false,
-  errorMsg: "",
-  success: false,
+  tableMeta: {},
+  // loading: false,
+  // error: false,
+  // errorMsg: "",
+  // success: false,
 };
 
 const AccountReducer = (state = initialState, action) => {
@@ -96,7 +97,6 @@ const AccountReducer = (state = initialState, action) => {
         error: false,
       };
     case CREATE_ACCOUNT_SUCCESS:
-
       return {
         ...state,
         createMeta: successMetaData(action.payload),
@@ -130,17 +130,19 @@ const AccountReducer = (state = initialState, action) => {
     case PUT_ACCOUNT:
       return {
         ...state,
-        loading: true,
-        error: false,
+        updateMeta: pendingMetaData(),
       };
     case PUT_ACCOUNT_SUCCESS:
       return {
         ...state,
-        loading: false,
+        updateMeta: successMetaData(action.payload),
         account: action.payload,
-        success: true,
       };
     case PUT_ACCOUNT_FAILURE:
+      return {
+        ...state,
+        updateMeta: errorMetaData(action.payload),
+      };
 
     // Delete an Account
     case DELETE_ACCOUNT:
@@ -200,7 +202,6 @@ const AccountReducer = (state = initialState, action) => {
         updateMeta: resetAllMetaData(),
         deleteMeta: resetAllMetaData(),
       };
-
     default:
       return state;
   }

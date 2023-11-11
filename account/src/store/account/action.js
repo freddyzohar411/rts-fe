@@ -136,5 +136,3 @@ export const fetchAccountsFieldsFailure = (error) => ({
 export const resetMetaData = () => ({
   type: RESET_META_DATA,
 });
-
-
