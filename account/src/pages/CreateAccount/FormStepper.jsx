@@ -10,7 +10,7 @@ const FormStepper = ({
   handleBack,
   handleNext,
   children,
-  formFormik,
+  formikRef,
   formFieldsData,
   setErrorMessage,
   accountId,
@@ -22,8 +22,8 @@ const FormStepper = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleNextStep = () => {
-    if (activeStep === 0 && formFormik) {
-      formFormik.submitForm();
+    if (activeStep === 0 && formikRef?.current?.formik) {
+      formikRef.current.formik.submitForm();
     }
     if (activeStep === 1) {
       const table = formFieldsData.filter(
@@ -47,14 +47,14 @@ const FormStepper = ({
         setErrorMessage("Please add 1 document to proceed");
       }
     }
-    if (activeStep === 3 && formFormik) {
-      formFormik.submitForm();
+    if (activeStep === 3 && formikRef?.current?.formik) {
+      formikRef.current.formik.submitForm();
     }
     if (activeStep === 4) {
       handleNext();
     }
-    if (activeStep === 5 && formFormik) {
-      formFormik.submitForm();
+    if (activeStep === 5 && formikRef?.current?.formik) {
+      formikRef.current.formik.submitForm();
     }
   };
 

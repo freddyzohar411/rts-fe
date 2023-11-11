@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "reactstrap";
 import FormStepper from "./FormStepper";
@@ -73,13 +73,16 @@ const AccountCreation = () => {
 
   const MAX_STEP = 6;
   const [step, setStep] = useState(0);
-  const [formFormik, setFormFormik] = useState(null);
+  // const [formFormik, setFormFormik] = useState(null);
+  const formikRef = useRef(null);
   const [editData, setEditData] = useState(formSubmissionData || null);
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
+
+  // console.log("FormikRef", formikRef);
 
   /**
    * Set country if is in edit mode
@@ -212,10 +215,10 @@ const AccountCreation = () => {
   /**
    * Get Formik hook from Form component
    */
-  const handleFormikChange = useCallback((formik) => {
-    // Handle formik change here
-    setFormFormik(formik);
-  }, []);
+  // const handleFormikChange = useCallback((formik) => {
+  //   // Handle formik change here
+  //   setFormFormik(formik);
+  // }, []);
 
   /**
    * Get Form field data from Form component
@@ -230,7 +233,6 @@ const AccountCreation = () => {
   useEffect(() => {
     dispatch(fetchAccountForm(AccountFormConstant[step]));
   }, [step]);
-
 
   /**
    * Handle form submit based on step
@@ -254,21 +256,14 @@ const AccountCreation = () => {
 
     // Set a reset form functions
     const resetForm = (arrayFields = []) => {
-      formFormik.resetForm();
       if (arrayFields.length > 0) {
-        arrayFields.forEach((fieldName) =>
-          formFormik.setFieldValue(fieldName, "")
-        );
+        arrayFields.forEach((field) => {
+          formikRef.current.formik.setFieldValue(field, "");
+        });
+      } else {
+        formikRef.current.clearForm();
       }
       setFormState("create");
-    };
-
-    const resetFormFields = (arrayFields = []) => {
-      if (arrayFields.length > 0) {
-        arrayFields.forEach((fieldName) =>
-          formFormik.setFieldValue(fieldName, "")
-        );
-      }
     };
 
     if (step === 0) {
@@ -430,7 +425,7 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm(["file"]),
+            resetForm: resetForm,
           })
         );
       }
@@ -484,7 +479,7 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm(["file"]),
+            resetForm: resetForm,
           })
         );
       }
@@ -518,7 +513,7 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetFormFields(["file"]),
+            resetForm: resetForm(["file"]),
           })
         );
         return;
@@ -541,7 +536,6 @@ const AccountCreation = () => {
             entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
             newData,
             rerenderTable: rerenderTable,
-            // handleNext: handleNext,
           })
         );
       } else {
@@ -643,7 +637,7 @@ const AccountCreation = () => {
           activeStep={step}
           handleBack={handleBack}
           handleNext={handleNext}
-          formFormik={formFormik}
+          formikRef={formikRef}
           formFieldsData={formFieldsData}
           setErrorMessage={setErrorMessage}
           accountId={accountId}
@@ -654,13 +648,16 @@ const AccountCreation = () => {
             userDetails={getAllUserGroups()}
             country={accountCountry || country?.name}
             editData={formSubmissionData}
-            onFormikChange={handleFormikChange}
+            // onFormikChange={handleFormikChange}
             onSubmit={handleFormSubmit}
             onFormFieldsChange={handleFormFieldChange}
             errorMessage={errorMessage}
             view={false}
+            ref={formikRef}
           />
         </FormStepper>
+        {/* <button onClick={() => formikRef.current.formik.resetForm()}> */}
+        <button onClick={() => formikRef.current.clearForm()}>Resetttt</button>
       </Container>
     </>
   );
