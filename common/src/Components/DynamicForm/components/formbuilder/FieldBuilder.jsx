@@ -52,6 +52,7 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     {
@@ -93,6 +94,7 @@ const FieldBuilder = ({
         "table",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
       validation: [
         {
@@ -127,6 +129,7 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     {
@@ -163,6 +166,7 @@ const FieldBuilder = ({
         "buttonupdate",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     {
@@ -201,6 +205,7 @@ const FieldBuilder = ({
         // "buttonupdate"
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     {
@@ -228,6 +233,28 @@ const FieldBuilder = ({
       type: "text",
       name: "queryKey",
       apply: ["searchselect"],
+    },
+    {
+      label: "Select List",
+      type: "select",
+      name: "list",
+      options: [
+        {
+          label: "Primary Skills",
+          value: "primarySkills",
+        },
+        {
+          label: "Secondary Skills",
+          value: "secondarySkills",
+        },
+      ],
+      apply: ["multiselect"],
+    },
+    {
+      label: "Options",
+      type: "keyvalue",
+      name: "options",
+      apply: ["radio", "select", "multiselect", "checkbox"],
     },
     {
       label: "Required",
@@ -274,6 +301,7 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     {
@@ -302,6 +330,7 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     {
@@ -560,12 +589,7 @@ const FieldBuilder = ({
       },
       apply: ["file"],
     },
-    {
-      label: "Options",
-      type: "keyvalue",
-      name: "options",
-      apply: ["radio", "select", "multiselect", "checkbox"],
-    },
+
     {
       label: "Parent",
       type: "select",
@@ -616,6 +640,7 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     {
@@ -716,6 +741,7 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     // Which include key value pair for table
@@ -758,6 +784,7 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "parentcompany",
+        "multiselect",
       ],
     },
     {
@@ -797,6 +824,7 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     {
@@ -832,6 +860,7 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
       ],
     },
     {
@@ -967,6 +996,8 @@ const FieldBuilder = ({
     case "searchselect":
       header = "Search Select Field";
       break;
+    case "multiselect":
+      header = "Multi Select Field";
     default:
   }
 
@@ -1102,6 +1133,7 @@ const FieldBuilder = ({
       validationSchema.visible = conditionList;
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
+      console.log("Final validationSchema", validationSchema);
       addFormField(validationSchema);
       // Set Form Schema
       setFormFieldId(validationSchema.fieldId);

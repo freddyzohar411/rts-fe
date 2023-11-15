@@ -19,6 +19,7 @@ import DepartmentSelectElement from "./DepartmentSelectElement";
 import EditorElement from "./EditorElement";
 import AccountParentElement from "./AccountParentElement";
 import SearchSelect from "./SearchSelect";
+import MultiSelectElement from "./MultiSelectElement";
 import {
   moduleConstant,
   permissionConstant,
@@ -221,6 +222,16 @@ const generateFormField = (
   if (type === "searchselect") {
     return (
       <SearchSelect
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "multiselect") {
+    return (
+      <MultiSelectElement
         field={field}
         formik={formik}
         formStateHook={formStateHook}

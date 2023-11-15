@@ -1,0 +1,31 @@
+const primarySkills = [
+    { label: "Alabama", value: "AL" },
+    { label: "Madrid", value: "MA" },
+    { label: "Toronto", value: "TO" },
+    { label: "London", value: "LO" },
+    { label: "Wyoming", value: "WY" },
+    { label: "New York", value: "NY" },
+    { label: "Paris", value: "PA" },
+    { label: "Berlin", value: "BE" },
+    { label: "Tokyo", value: "TK" },
+    { label: "Sydney", value: "SY" },
+    { label: "Rio de Janeiro", value: "RJ" },
+    { label: "Dubai", value: "DU" },
+    { label: "Cairo", value: "CAI" },
+    { label: "Mumbai", value: "MU" },
+    { label: "Seoul", value: "SE" },
+    { label: "Barcelona", value: "BCN" },
+    { label: "Amsterdam", value: "AMS" },
+    { label: "Singapore", value: "SG" },
+    { label: "Rome", value: "RM" },
+    { label: "San Francisco", value: "SF" },
+    { label: "Istanbul", value: "IST" },
+    { label: "Montreal", value: "MTL" },
+    { label: "Buenos Aires", value: "BA" },
+    { label: "Cape Town", value: "CT" },
+    { label: "Helsinki", value: "HEL" },
+  ];
+
+  export const Lists =  {
+      primarySkills,  
+  }
