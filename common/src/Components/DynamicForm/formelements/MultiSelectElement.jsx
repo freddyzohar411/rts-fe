@@ -76,13 +76,13 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
     formik.setFieldValue(field.name, labelsArray.join(","));
   };
 
-  console.log("formik?.values[field.name]: ", formik?.values[field.name]);
+  // console.log("formik?.values[field.name]: ", formik?.values[field.name]);
   useEffect(() => {
-    console.log("formik?.values[field.name]:OUT ", formik?.values[field.name]);
+    // console.log("formik?.values[field.name]:OUT ", formik?.values[field.name]);
     if (formik?.values[field.name]) {
       //   console.log("updateData: ", getExistingDataOptions(updateData));
       setSelectedOptions(getExistingDataOptions(formik?.values[field.name]));
-      console.log("formik?.values[field.name]:IN ", formik?.values[field.name]);
+      // console.log("formik?.values[field.name]:IN ", formik?.values[field.name]);
     }
   }, [formik?.values[field.name]]);
 

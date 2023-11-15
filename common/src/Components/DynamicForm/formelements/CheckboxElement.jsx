@@ -2,6 +2,19 @@ import React from "react";
 
 const CheckboxElement = ({ formik, field, formStateHook }) => {
   const { formState } = formStateHook;
+
+  const arrayToString = (array) => {
+    if (!array) return "";
+    if (typeof array === "string") return array;
+    return array.join(", ");
+  };
+
+  const stringToArray = (string) => {
+    if (!string) return [];
+    if (typeof string === "object") return string;
+    return string.split(", ");
+  };
+
   return (
     <>
       <div className="d-flex gap-3">
@@ -13,24 +26,34 @@ const CheckboxElement = ({ formik, field, formStateHook }) => {
               name={field.name}
               id={option.value}
               value={option.value}
-              checked={formik?.values?.[field.name]?.includes(option.value)}
+              checked={stringToArray(formik?.values?.[field.name])?.includes(option.value)}
               disabled={formState === "view" ? true : false}
               onChange={() => {
-                const isChecked = formik.values[field.name]?.includes(
-                  option.value
-                );
+                const isChecked = stringToArray(
+                  formik.values[field.name]
+                )?.includes(option.value);
                 if (isChecked) {
                   formik.setFieldValue(
                     field.name,
-                    formik.values[field.name]?.filter(
-                      (item) => item !== option.value
+                    arrayToString(
+                      stringToArray(formik.values[field.name])?.filter(
+                        (item) => item !== option.value
+                      )
                     )
                   );
                 } else {
-                  formik.setFieldValue(field.name, [
-                    ...formik.values[field.name],
-                    option.value,
-                  ]);
+                  // formik.setFieldValue(field.name, [
+                  //   ...formik.values[field.name],
+                  //   arrayToString(option.value),
+                  // ]);
+
+                  formik.setFieldValue(
+                    field.name,
+                    arrayToString([
+                      ...stringToArray(formik.values[field.name]),
+                      option.value,
+                    ])
+                  );
                 }
               }}
             />

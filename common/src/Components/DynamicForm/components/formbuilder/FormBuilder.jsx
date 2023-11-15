@@ -257,7 +257,8 @@ const FormBuilder = ({
     // const newFormFields = JSON.parse(JSON.stringify(formFields));
     formFields.forEach((field) => {
       if (field.type === "table") {
-        field.tableData = [...field.tableData, values];
+        if (!field.tableData) field.tableData = [];
+        field.tableData = [...field?.tableData, values];
       }
     });
     // setFormFields(newFormFields);
