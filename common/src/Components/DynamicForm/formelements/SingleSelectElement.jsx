@@ -4,11 +4,16 @@ import Select from "react-select";
 import { Lists } from "./listOptions";
 
 const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
+
   const getInitialOptions = (field) => {
     if (!field) return [];
     if (field.list) {
       return Lists[field.list];
-    } else {
+    } else if (field.options) {
+        console.log("field Options", field.options)
+      return field.options;
+    }
+    else {
       return [];
     }
   };
@@ -83,7 +88,7 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
         menuShouldScrollIntoView={false}
         isClearable
         isSearchable
-        placeholder={props?.placeholder ?? "Search..."}
+        placeholder={field.placeholder ?? "Search..."}
         options={options}
         noOptionsMessage={noOptionsMessage}
       />

@@ -27,11 +27,11 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
     });
   }
 
-  useEffect(() => {
-    const updateData =
-      "London,Toronto,Paris,Berlin,Sydney,Rio de Janeiro,Dubai,Cairo,Wyoming,Tokyo,New York,Mumbai,Seoul,Barcelona,Amsterdam,Singapore,Rome,San Francisco,Madrid,Istanbul,Montreal,Buenos Aires,Alabama,Cape Town,Helsinki";
-    formik.setFieldValue(field.name, updateData);
-  }, []);
+  // useEffect(() => {
+  //   const updateData =
+  //     "London,Toronto,Paris,Berlin,Sydney,Rio de Janeiro,Dubai,Cairo,Wyoming,Tokyo,New York,Mumbai,Seoul,Barcelona,Amsterdam,Singapore,Rome,San Francisco,Madrid,Istanbul,Montreal,Buenos Aires,Alabama,Cape Town,Helsinki";
+  //   formik.setFieldValue(field.name, updateData);
+  // }, []);
 
   //   console.log("selectedOptions: ", selectedOptions);
   //   console.log("Field List Type: ", field.list);
@@ -72,7 +72,7 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
     setSelectedOptions(selectedOptions);
     const labelsArray = selectedOptions.map((option) => option.label);
     // console.log("labelsArray: ", labelsArray.join(","));
-    setSelectedFormikOptions(labelsArray.join(","));
+    // setSelectedFormikOptions(labelsArray.join(","));
     formik.setFieldValue(field.name, labelsArray.join(","));
   };
 
@@ -145,7 +145,7 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
         closeMenuOnSelect={false}
         isClearable
         isSearchable
-        placeholder={props?.placeholder ?? "Search..."}
+        placeholder={field.placeholder?? "Search..."}
         options={options}
         noOptionsMessage={noOptionsMessage}
         // components={{

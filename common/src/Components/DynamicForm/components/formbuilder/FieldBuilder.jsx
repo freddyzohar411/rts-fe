@@ -252,6 +252,10 @@ const FieldBuilder = ({
           label: "Secondary Skills",
           value: "secondarySkills",
         },
+        {
+          label: "Spoken languages",
+          value: "spokenLanguages",
+        }
       ],
       apply: ["multiselect", "singleselect"],
     },
@@ -259,7 +263,7 @@ const FieldBuilder = ({
       label: "Options",
       type: "keyvalue",
       name: "options",
-      apply: ["radio", "select", "multiselect", "checkbox"],
+      apply: ["radio", "select", "multiselect", "checkbox", "singleselect"],
     },
     {
       label: "Required",
@@ -1107,7 +1111,8 @@ const FieldBuilder = ({
         type === "radio" ||
         type === "select" ||
         type === "multiselect" ||
-        type === "checkbox"
+        type === "checkbox" ||
+        type === "singleselect"
       ) {
         validationSchema.options = keyValueList;
       }
@@ -1132,7 +1137,8 @@ const FieldBuilder = ({
         type === "radio" ||
         type === "select" ||
         type === "multiselect" ||
-        type === "checkbox"
+        type === "checkbox" ||
+        type === "singleselect"
       ) {
         validationSchema.options = keyValueList;
       }
