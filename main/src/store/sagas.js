@@ -21,6 +21,9 @@ import { Sagas as FormBuilderSagas } from "@workspace/formbuilder";
 // Settings
 import { Sagas as SettingSagas } from "@workspace/settings";
 
+// Candidate
+import { Sagas as CandidateSagas } from "@workspace/candidate";
+
 const {
   LayoutSaga,
   CountryCurrencySaga,
@@ -45,6 +48,8 @@ const { FormSaga } = FormBuilderSagas;
 
 const { UserSaga, RoleSaga, ModuleSaga, PermissionSaga, GroupSaga } =
   SettingSagas;
+
+const { CandidateFormSaga } = CandidateSagas;
 
 export default function* rootSaga() {
   yield all([
@@ -84,5 +89,8 @@ export default function* rootSaga() {
     fork(ModuleSaga),
     fork(PermissionSaga),
     fork(GroupSaga),
+
+    // Candidate 
+    fork(CandidateFormSaga),
   ]);
 }

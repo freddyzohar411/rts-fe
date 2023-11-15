@@ -1,33 +1,114 @@
 import { Button, Card, Container } from "reactstrap";
-import { Field, useFormikContext } from "formik";
-import Stepper from "../../components/Stepper/Stepper";
+import { useDispatch } from "react-redux";
+import CandidateStepper from "../../components/CandidateStepper/CandidateStepper";
+// import { deleteDraftAccount } from "../../store/accountregistration/action";
+import { DeleteCustomModal } from "@Workspace/common";
+import { useState } from "react";
 
-const FormStepper = ({ activeStep, handleBack, handleNext, children }) => {
-  const { handleSubmit, validateForm } = useFormikContext();
+const FormStepper = ({
+  activeStep,
+  handleBack,
+  handleNext,
+  children,
+  formikRef,
+  formFieldsData,
+  setErrorMessage,
+  accountId,
+  resetStepper,
+}) => {
+  const dispatch = useDispatch();
 
-  const onClickNextHandler = async () => {
-    const form = await validateForm();
-    if (form && Object.keys(form).length === 0) {
+  // Delete modal states
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleNextStep = () => {
+    // if (activeStep === 0 && formikRef?.current?.formik) {
+    //   formikRef.current.formik.submitForm();
+    // }
+    // if (activeStep === 1) {
+    //   const table = formFieldsData.filter(
+    //     (field) => field.name === "contactList"
+    //   );
+    //   if (table.length === 1 && table[0]?.tableData?.length > 0) {
+    //     setErrorMessage(null);
+    //     handleNext();
+    //   } else {
+    //     setErrorMessage("Please add 1 contact to proceed");
+    //   }
+    // }
+    // if (activeStep === 2) {
+    //   const table = formFieldsData.filter(
+    //     (field) => field.name === "documentList"
+    //   );
+    //   if (table.length === 1 && table[0]?.tableData?.length > 0) {
+    //     setErrorMessage(null);
+    //     handleNext();
+    //   } else {
+    //     setErrorMessage("Please add 1 document to proceed");
+    //   }
+    // }
+    // if (activeStep === 3 && formikRef?.current?.formik) {
+    //   formikRef.current.formik.submitForm();
+    // }
+    // if (activeStep === 4) {
+    //   handleNext();
+    // }
+    // if (activeStep === 5 && formikRef?.current?.formik) {
+    //   formikRef.current.formik.submitForm();
+    // }
+
+    if (activeStep <= 5) {
       handleNext();
     }
   };
 
+  const resetAndDeleteDraftForm = () => {
+    dispatch(
+      deleteDraftAccount({
+        accountId: accountId,
+        resetStepper: resetStepper,
+      })
+    );
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <Card>
-      <Container>
-        <Stepper step={activeStep} />
-        <form onSubmit={handleSubmit}>
-          {children}
-          <div className="d-flex justify-content-end gap-2 mb-2">
-            <Button color="dark" onClick={handleBack}>
-              Cancel
+      <DeleteCustomModal
+        isOpen={isDeleteModalOpen}
+        setIsOpen={setIsDeleteModalOpen}
+        confirmDelete={resetAndDeleteDraftForm}
+        header="Reset Account Form"
+        deleteText={"Are you sure you would like to reset candidate form?"}
+      />
+      <Container fluid>
+        <CandidateStepper step={activeStep} />
+        <div className="px-3"> {children}</div>
+        <div
+          className={`d-flex ${
+            accountId ? "justify-content-between" : "justify-content-end"
+          } align-items-center mb-2`}
+        >
+          {accountId && (
+            <Button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="btn btn-danger"
+            >
+              Reset
             </Button>
+          )}
+          <div className="d-flex gap-2">
+            {activeStep > 0 && (
+              <Button color="dark" onClick={handleBack}>
+                Back
+              </Button>
+            )}
             <Button color="dark">Skip</Button>
-            <Button color="dark" onClick={onClickNextHandler}>
+            <Button color="dark" onClick={handleNextStep}>
               Next
             </Button>
           </div>
-        </form>
+        </div>
       </Container>
     </Card>
   );
