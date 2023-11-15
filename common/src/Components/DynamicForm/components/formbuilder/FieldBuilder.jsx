@@ -53,6 +53,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     {
@@ -95,6 +96,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
       validation: [
         {
@@ -130,6 +132,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     {
@@ -167,6 +170,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     {
@@ -206,6 +210,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     {
@@ -248,7 +253,7 @@ const FieldBuilder = ({
           value: "secondarySkills",
         },
       ],
-      apply: ["multiselect"],
+      apply: ["multiselect", "singleselect"],
     },
     {
       label: "Options",
@@ -641,6 +646,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     {
@@ -742,6 +748,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     // Which include key value pair for table
@@ -785,6 +792,7 @@ const FieldBuilder = ({
         "selectdepartment",
         "parentcompany",
         "multiselect",
+        "singleselect",
       ],
     },
     {
@@ -825,6 +833,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     {
@@ -861,6 +870,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     {
@@ -995,6 +1005,9 @@ const FieldBuilder = ({
       break;
     case "searchselect":
       header = "Search Select Field";
+      break;
+    case "singleselect":
+      header = "Single Select Field";
       break;
     case "multiselect":
       header = "Multi Select Field";

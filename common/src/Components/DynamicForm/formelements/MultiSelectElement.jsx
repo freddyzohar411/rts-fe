@@ -18,9 +18,6 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState(getInitialOptions(field));
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [selectedFormikOptions, setSelectedFormikOptions] = useState([]);
-  const [toggleExpansion, setToggleExpansion] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   function getExistingDataOptions(uData) {
     const existingData = uData.split(",");
@@ -86,9 +83,6 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
       //   console.log("updateData: ", getExistingDataOptions(updateData));
       setSelectedOptions(getExistingDataOptions(formik?.values[field.name]));
       console.log("formik?.values[field.name]:IN ", formik?.values[field.name]);
-      setSelectedFormikOptions(
-        getExistingDataOptions(formik?.values[field.name])
-      );
     }
   }, [formik?.values[field.name]]);
 
