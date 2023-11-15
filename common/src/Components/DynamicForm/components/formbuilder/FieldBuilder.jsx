@@ -255,6 +255,14 @@ const FieldBuilder = ({
         {
           label: "Spoken languages",
           value: "spokenLanguages",
+        },
+        {
+          label: "Employment Type",
+          value: "employmentType",
+        },
+        {
+          label: "Location Type",
+          value: "locationType",
         }
       ],
       apply: ["multiselect", "singleselect"],
@@ -311,6 +319,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     {
@@ -340,6 +349,7 @@ const FieldBuilder = ({
         "parentcompany",
         "searchselect",
         "multiselect",
+        "singleselect",
       ],
     },
     {
