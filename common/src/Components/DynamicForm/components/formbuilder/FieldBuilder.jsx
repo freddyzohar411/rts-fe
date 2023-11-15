@@ -263,6 +263,10 @@ const FieldBuilder = ({
         {
           label: "Location Type",
           value: "locationType",
+        },
+        {
+          label: "Qualifications",
+          value: "qualifications",
         }
       ],
       apply: ["multiselect", "singleselect"],

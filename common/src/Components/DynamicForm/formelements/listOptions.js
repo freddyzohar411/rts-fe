@@ -123,10 +123,24 @@ const locationType = [
   { label: "Hybrid", value: "Hybrid" },
 ];
 
+const qualifications = [
+    { label: "Primary/Secondary School/'O' level", value: "Primary/Secondary School/'O' level" },
+    { label: "Higher Secondary/Pre-U/'A' level", value: "Higher Secondary/Pre-U/'A' level" },
+    { label: "Professional Certificate/NiTEC", value: "Professional Certificate/NiTEC" },
+    { label: "Diploma", value: "Diploma" },
+    { label: "Advanced/Higher/Graduate Diploma", value: "Advanced/Higher/Graduate Diploma" },
+    { label: "Bachelor's Degree", value: "Bachelor's Degree" },
+    { label: "Post Graduate Diploma", value: "Post Graduate Diploma" },
+    { label: "Professional Degree", value: "Professional Degree" },
+    { label: "Master's Degree", value: "Master's Degree" },
+    { label: "Doctorate (PhD)", value: "Doctorate (PhD)" },
+]
+
 export const Lists = {
   primarySkills,
   secondarySkills,
   spokenLanguages,
   employmentType,
   locationType,
+  qualifications
 };
