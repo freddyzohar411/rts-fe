@@ -196,6 +196,62 @@ const generateValidationSchema2 = (
         }
       }
 
+      // Perform custom condition validation
+      // console.log("field?.conditionValidation", field)
+      if (field?.conditionValidation?.length > 0) {
+        fieldValidation = fieldValidation.test(
+          "conditionValidation",
+          field.conditionValidationErrorMessage,
+          (value) => {
+            console.log("value!!!", value)
+            if (!value) return true; // allow empty values
+            let isValid = true;
+            field?.conditionValidation.forEach((condition) => {
+              if (condition.field === "" && condition.value === "") return true; 
+              const valueToCompare = condition?.value || formik?.values[condition?.field];
+              console.log("valueToCompare", valueToCompare)
+              console.log("value", value)
+              console.log("condition", condition)
+              if (valueToCompare === undefined) return true;
+              
+              if (condition?.condition === "equals") {
+                if (value === valueToCompare) {
+                  isValid = false;
+
+                }
+              }
+              if (condition?.condition === "notEqual") {
+                if (value !== valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "greaterThan") {
+                if (value > valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "lessThan") {
+                if (value < valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "greaterThanOrEqual") {
+                if (value >= valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "lessThanOrEqual") {
+                if (value <= valueToCompare) {
+                  isValid = false;
+                }
+              }
+            });
+            console.log("isValid", isValid)
+            return isValid;
+          }
+        );
+      }
+
       return { ...acc, [field.name]: fieldValidation };
     }, {})
   );

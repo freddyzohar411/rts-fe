@@ -21,6 +21,13 @@ const FieldBuilder = ({
   setShowModalSchema,
   formOptions,
 }) => {
+  //========================= States ================================
+    // Condition validation state
+    const [validationConditionList, setValidationConditionList] = useState(
+      formBuilderUpdateData?.conditionValidation
+        ? formBuilderUpdateData.conditionValidation
+        : []
+    );
   // ========================= Field Setting =========================
   // Overall Form schema config (For all types of fields)
   const config = [
@@ -270,8 +277,8 @@ const FieldBuilder = ({
         },
         {
           label: "Visa Status",
-          value: "visaStatus"
-        }
+          value: "visaStatus",
+        },
       ],
       apply: ["multiselect", "singleselect"],
     },
@@ -670,6 +677,81 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
       ],
+    },
+    {
+      label: "Conditional Validation",
+      type: "conditionalValidation",
+      name: "conditionalValidation",
+      conditionTypes: [
+        "equals",
+        "notEquals",
+        "contains",
+        "notContains",
+        "greaterThan",
+        "lessThan",
+        "greaterThanOrEqual",
+        "lessThanOrEqual",
+        "startsWith",
+        "endsWith",
+        "isEmpty",
+        "isNotEmpty",
+      ],
+      apply: [
+        "text",
+        "email",
+        "number",
+        "textarea",
+        "file",
+        "select",
+        "radio",
+        "checkbox",
+        "password",
+        "date",
+        "selectindustry",
+        "selectsubindustry",
+        "selectcity",
+        "selectcountry",
+        "selectcurrency",
+        "selectlandline",
+        "selectstate",
+        "selectdepartment",
+        "editor",
+        "parentcompany",
+        "searchselect",
+        "multiselect",
+        "singleselect",
+      ],
+    },
+    {
+      label: "Condition Validation Error Message",
+      type: "text",
+      name: "conditionValidationErrorMessage",
+      apply: [
+        "text",
+        "email",
+        "number",
+        "textarea",
+        "file",
+        "select",
+        "radio",
+        "checkbox",
+        "password",
+        "date",
+        "selectindustry",
+        "selectsubindustry",
+        "selectcountry",
+        "selectcity",
+        "selectcurrency",
+        "selectstate",
+        "selectlandline",
+        "selectdepartment",
+        "editor",
+        "parentcompany",
+        "searchselect",
+        "multiselect",
+        "singleselect",
+      ],
+      renderCondition: validationConditionList.length > 0,
     },
     {
       label: "Copy Fields",
@@ -1089,6 +1171,13 @@ const FieldBuilder = ({
     formBuilderUpdateData?.visible ? formBuilderUpdateData.visible : []
   );
 
+  // // Condition validation state
+  // const [validationConditionList, setValidationConditionList] = useState(
+  //   formBuilderUpdateData?.conditionValidation
+  //     ? formBuilderUpdateData.conditionValidation
+  //     : []
+  // );
+
   // Key copy condition state
   const [copyConditionList, setCopyConditionList] = useState(
     formBuilderUpdateData?.copyFields
@@ -1145,6 +1234,8 @@ const FieldBuilder = ({
       validationSchema.visible = conditionList;
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
+      validationSchema.conditionValidation = validationConditionList;
+      console.log("Final validationSchema", validationSchema);
       updateFormField(validationSchema, formBuilderUpdateData.index);
       setFormBuilderType(null);
       setFormBuilderUpdateData(null);
@@ -1170,6 +1261,7 @@ const FieldBuilder = ({
       validationSchema.visible = conditionList;
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
+      validationSchema.conditionValidation = validationConditionList;
       console.log("Final validationSchema", validationSchema);
       addFormField(validationSchema);
       // Set Form Schema
@@ -1199,7 +1291,7 @@ const FieldBuilder = ({
     <form onSubmit={formik.handleSubmit}>
       <h1 className="mb-4">{header}</h1>
       {schema?.map((field, index) => {
-        if (field.type === "text" && ifContainsType(type, field.apply)) {
+        if (field.type === "text" && ifContainsType(type, field.apply) && (field.renderCondition ?? true)) {
           return (
             <div className="mb-3">
               <label htmlFor={field.name} className="form-label">
@@ -1527,6 +1619,104 @@ const FieldBuilder = ({
                         onClick={() => {
                           setConditionList(
                             conditionList.filter((item, i) => i !== index)
+                          );
+                        }}
+                      />
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        } else if (
+          field.type === "conditionalValidation" &&
+          ifContainsType(type, field.apply)
+        ) {
+          return (
+            <div className="mb-3">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <label htmlFor={field.name} className="form-label">
+                  {field.label}
+                </label>
+                <button
+                  type="button"
+                  className="btn btn-success btn-sm"
+                  onClick={() => {
+                    setValidationConditionList([
+                      ...validationConditionList,
+                      { field: "", condition: "", value: "" },
+                    ]);
+                  }}
+                >
+                  +add
+                </button>
+              </div>
+              {validationConditionList.map((condition, index) => {
+                return (
+                  <div className="d-flex gap-2 mb-2 align-items-center">
+                    <span>{index + 1}) </span>
+                    <select
+                      className="form-select"
+                      value={condition.condition}
+                      onChange={(e) =>
+                        setValidationConditionList((prev) =>
+                          prev.map((item, i) =>
+                            i === index
+                              ? { ...item, condition: e.target.value }
+                              : item
+                          )
+                        )
+                      }
+                    >
+                      <option value="">Select a condition</option>
+                      {field.conditionTypes.map((conditionType) => (
+                        <option value={conditionType}>{conditionType}</option>
+                      ))}
+                    </select>
+                    <select
+                      className="form-select"
+                      value={condition.field}
+                      onChange={(e) => {
+                        setValidationConditionList((prev) =>
+                          prev.map((item, i) =>
+                            i === index
+                              ? { ...item, field: e.target.value, value: e.target.value ? "" : item.value }
+                              : item
+                          )
+                        );
+                      }}
+                    >
+                      <option value="">Select a field</option>
+                      {formFields.map((field) => {
+                        return <option value={field.name}>{field.name}</option>;
+                      })}
+                    </select>
+                    <span>OR</span>
+                    <input
+                      id="conditionValue"
+                      name="conditionValue"
+                      type="text"
+                      className="form-control"
+                      onChange={(e) =>
+                        setValidationConditionList((prev) =>
+                          prev.map((item, i) =>
+                            i === index
+                              ? { ...item, value: e.target.value, field: e.target.value ? "" : item.field }
+                              : item
+                          )
+                        )
+                      }
+                      value={condition.value}
+                      placeholder="Value"
+                    />
+                    <span>
+                      <AiFillDelete
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setValidationConditionList(
+                            validationConditionList.filter(
+                              (item, i) => i !== index
+                            )
                           );
                         }}
                       />
