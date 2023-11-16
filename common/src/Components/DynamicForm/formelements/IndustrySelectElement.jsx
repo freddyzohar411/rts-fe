@@ -44,7 +44,7 @@ const IndustrySelectElement = ({ formik, field, formStateHook }) => {
         >
           <option value="">{field.placeholder}</option>
           {industry.map((item, index) => (
-            <option key={index} value={item.id}>
+            <option key={index} value={item.name}>
               {item.name}
             </option>
           ))}

@@ -1,23 +1,42 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSubIndustry } from "../../../store/industry/action";
 
 const SubIndustrySelectElement = ({ formik, field, formStateHook }) => {
+  const dispatch = useDispatch();
   const { formState } = formStateHook;
   const [subIndustry, setSubIndustry] = useState([]);
+  const industryParentData = useSelector(
+    (state) => state.IndustryReducer.industry
+  );
+  const subIndustryData = useSelector(
+    (state) => state.IndustryReducer.subIndustry
+  );
+
+  function getIdFromParentIndustries(parentName) {
+    if (!industryParentData) return undefined;
+    const industry = industryParentData.find(
+      (item) => item.name === parentName
+    );
+    if (!industry) return undefined;
+    return parseInt(industry.id);
+  }
+
   useEffect(() => {
     if (formik?.values?.[field.parent]) {
-      // Fetch data from API
       setSubIndustry([]);
-      fetch(
-        `http://localhost:8200/industries/${parseInt(
-          formik?.values?.[field.parent]
-        )}/sub`
-      ).then((res) => {
-        res.json().then((data) => {
-          setSubIndustry(data.data);
-        });
-      });
+      dispatch(
+        fetchSubIndustry(
+          getIdFromParentIndustries(formik?.values?.[field.parent])
+        )
+      );
     }
   }, [formik?.values?.[field.parent]]);
+
+  useEffect(() => {
+    setSubIndustry(subIndustryData);
+  }, [subIndustryData]);
+
   return (
     <div>
       {subIndustry && (
@@ -36,7 +55,7 @@ const SubIndustrySelectElement = ({ formik, field, formStateHook }) => {
         >
           <option value="">{field.placeholder}</option>
           {subIndustry.map((item, index) => (
-            <option key={index} value={item.id}>
+            <option key={index} value={item.name}>
               {item.name}
             </option>
           ))}
