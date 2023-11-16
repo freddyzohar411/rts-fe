@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Button, Card, Container } from "reactstrap";
 import { useDispatch } from "react-redux";
 import CandidateStepper from "../../components/CandidateStepper/CandidateStepper";
 // import { deleteDraftAccount } from "../../store/accountregistration/action";
 import { DeleteCustomModal } from "@Workspace/common";
-import { useState } from "react";
+import {
+  CandidateTableListConstant,
+} from "../../constants/candidateConstant";
 
 const FormStepper = ({
   activeStep,
@@ -24,6 +27,17 @@ const FormStepper = ({
   const handleNextStep = () => {
     if (activeStep === 0 && formikRef?.current?.formik) {
       formikRef.current.formik.submitForm();
+    }
+    if (activeStep === 1 && formikRef?.current?.formik) {
+      const table = formFieldsData.filter(
+        (field) => field.name === CandidateTableListConstant.DOCUMENTS_LIST
+      );
+      if (table.length === 1 && table[0]?.tableData?.length > 0) {
+        setErrorMessage(null);
+        handleNext();
+      } else {
+        setErrorMessage("Please add 1 document to proceed");
+      }
     }
     // if (activeStep === 1) {
     //   const table = formFieldsData.filter(

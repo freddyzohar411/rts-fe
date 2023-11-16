@@ -13,7 +13,7 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
       return field.options;
     }
     else {
-      return [];
+      return null;
     }
   };
   const [search, setSearch] = useState("");
@@ -48,10 +48,12 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
   };
 
   useEffect(() => {
-    if (formik?.values?.[field.name]) {
+    if (formik?.values?.[field.name] && formik?.values?.[field.name] !== "") {
       setSelectedOptions(
         getSingleExistingDataOptions(formik?.values?.[field.name])
       );
+    } else {
+      setSelectedOptions(null);
     }
   }, [formik?.values?.[field.name]]);
 

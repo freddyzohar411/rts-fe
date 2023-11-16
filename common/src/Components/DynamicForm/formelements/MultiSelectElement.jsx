@@ -20,6 +20,9 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   function getExistingDataOptions(uData) {
+    console.log("Udata: ", uData);
+    if (!uData) return [];
+
     const existingData = uData.split(",");
     if (existingData.length === 0) return [];
     return existingData.map((itemLabel) => {
@@ -79,9 +82,13 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
   // console.log("formik?.values[field.name]: ", formik?.values[field.name]);
   useEffect(() => {
     // console.log("formik?.values[field.name]:OUT ", formik?.values[field.name]);
-    if (formik?.values?.[field?.name]) {
+    if (
+      formik?.values?.[field?.name] 
+    ) {
+      // console.log("formik?.values[field.name]: IN ", formik?.values[field.name]);
+      const updateData = formik?.values[field.name];
       //   console.log("updateData: ", getExistingDataOptions(updateData));
-      setSelectedOptions(getExistingDataOptions(formik?.value?.[field?.name]));
+      setSelectedOptions(getExistingDataOptions(updateData));
       // console.log("formik?.values[field.name]:IN ", formik?.values[field.name]);
     }
   }, [formik?.values?.[field?.name]]);
@@ -145,7 +152,7 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
         closeMenuOnSelect={false}
         isClearable
         isSearchable
-        placeholder={field.placeholder?? "Search..."}
+        placeholder={field.placeholder ?? "Search..."}
         options={options}
         noOptionsMessage={noOptionsMessage}
         // components={{

@@ -24,12 +24,16 @@ import {
   clearCandidateFormSubmission,
 } from "../../store/candidateForm/action";
 import { ObjectHelper } from "@workspace/common";
+// import {
+//   CONTACT_BASE_URL,
+//   GET_CONTACT_BY_ENTITY_URL,
+//   DOCUMENT_BASE_URL,
+//   GET_DOCUMENT_BY_ENTITY_URL,
+// } from "../../helpers/endpoint_helper";
 import {
-  CONTACT_BASE_URL,
-  GET_CONTACT_BY_ENTITY_URL,
   DOCUMENT_BASE_URL,
-  GET_DOCUMENT_BY_ENTITY_URL,
-} from "../../helpers/endpoint_helper";
+  GET_DOCUMENT_BY_ENTITY_URL
+} from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
 import CountryModal from "../../components/CountryModal/CountryModal";
@@ -82,7 +86,7 @@ const CreateCandidate = () => {
 
   console.log("Step", step);
   console.log("Form submission data: ", formSubmissionData);
-  console.log("candidate ID", candidateId)
+  console.log("candidate ID", candidateId);
 
   //====================================
 
@@ -101,6 +105,19 @@ const CreateCandidate = () => {
    */
   useEffect(() => {
     if (form) {
+      if (step === 1) {
+        const formEdited = setTableAPI(
+          form,
+          CandidateTableListConstant.DOCUMENTS_LIST,
+          GET_DOCUMENT_BY_ENTITY_URL(
+            CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+            candidateId
+          ),
+          DOCUMENT_BASE_URL
+        );
+        setFormTemplate(formEdited);
+        return;
+      }
       // if (step === 1) {
       //   const formEdited = setTableAPI(
       //     form,
@@ -178,7 +195,7 @@ const CreateCandidate = () => {
     setEditData(null);
     if (candidateId) {
       if (step === 0) {
-        console.log("INNN LEH")
+        console.log("INNN LEH");
         dispatch(
           fetchCandidateFormSubmission(
             CandidateEntityConstant.CANDIDATE_BASIC_INFO,
@@ -269,9 +286,6 @@ const CreateCandidate = () => {
       if (formSubmissionData === null) {
         // Get file data
         const candidateData = { ...newValues };
-        // const fileData = formValues?.uploadAgreement;
-        // const fileName = fileData?.name;
-        // formValues = { ...formValues, uploadAgreement: fileName };
 
         const candidateDataOut = {
           ...candidateData,
@@ -297,16 +311,6 @@ const CreateCandidate = () => {
       } else {
         // Update Account
         let candidateData = { ...newValues };
-        // const accountData = { ...formValues };
-        // const fileData = formValues?.uploadAgreement;
-        // if (typeof fileData === "string") {
-        //   // Remove upload agreement from object
-        //   formValues = { ...formValues, uploadAgreement: fileData };
-        //   delete accountData.uploadAgreement;
-        // } else {
-        //   const fileName = fileData?.name;
-        //   formValues = { ...formValues, uploadAgreement: fileName };
-        // }
 
         const candidateDataOut = {
           ...candidateData,
@@ -327,6 +331,100 @@ const CreateCandidate = () => {
                 "Content-Type": "multipart/form-data",
               },
             },
+          })
+        );
+      }
+    }
+
+    if (step === 1) {
+      // Add document
+      if (buttonName === "add") {
+        setErrorMessage(null);
+        setButtonName("");
+        let formValues = { ...newValues };
+        const documentData = { ...formValues };
+        const fileData = formValues?.file;
+        const fileName = fileData?.name;
+        formValues = { ...formValues, file: fileName };
+        const documentDataOut = {
+          ...documentData,
+          entityType: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+          entityId: parseInt(candidateId),
+          formData: JSON.stringify(formValues),
+          formId: parseInt(form.formId),
+        };
+        delete documentDataOut.documentList;
+
+        const documentFormData =
+          ObjectHelper.convertObjectToFormData(documentDataOut);
+
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+            newData: documentFormData,
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+      }
+
+      // Cancel add document and reset form
+      if (buttonName === "cancel" && !editData) {
+        resetForm([], "create");
+        return;
+      }
+
+      // Update document
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        let formValues = { ...newValues };
+        const documentData = { ...formValues };
+        const fileData = formValues?.file;
+        if (typeof fileData === "string") {
+          // Remove upload agreement from object
+          formValues = { ...formValues, file: fileData };
+          delete documentData.file;
+        } else {
+          const fileName = fileData?.name;
+          formValues = { ...formValues, file: fileName };
+        }
+
+        const documentDataOut = {
+          ...documentData,
+          entityType: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+          entityId: parseInt(candidateId),
+          formData: JSON.stringify(formValues),
+          formId: parseInt(form.formId),
+        };
+        delete documentDataOut.documentList;
+
+        const documentFormData =
+          ObjectHelper.convertObjectToFormData(documentDataOut);
+
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.DOCUMENTS_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+            id: tableEditId,
+            newData: documentFormData,
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
           })
         );
       }

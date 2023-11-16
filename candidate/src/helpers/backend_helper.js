@@ -3,6 +3,7 @@ import { Axios } from "@workspace/common";
 import {
   BASE_FORMS,
   BASE_CANDIDATES,
+  BASE_DOCUMENTS,
 } from "./url_helper";
 
 import {
@@ -64,4 +65,9 @@ export const getDraftCandidate = () =>
 // Delete draft account by id
 export const deleteDraftCandidateById = (id) =>
   api.delete(`${CANDIDATE_URL}${BASE_CANDIDATES}/draft/${id}`);
+
+  // Document API
+export const DOCUMENT_BASE_URL = `${DOCUMENT_URL}${BASE_DOCUMENTS}`;
+export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
+  `${DOCUMENT_BASE_URL}/entity/${entityType}/${entityId}`;
 

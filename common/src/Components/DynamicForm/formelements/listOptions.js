@@ -136,11 +136,22 @@ const qualifications = [
     { label: "Doctorate (PhD)", value: "Doctorate (PhD)" },
 ]
 
+const visaStatus = [
+    { label: "Citizen", value: "Citizen" },
+    { label: "Permanent Resident", value: "Permanent Resident" },
+    { label: "Work Visa", value: "Work Visa" },
+    { label: "Student Visa", value: "Student Visa" },
+    { label: "Dependent Visa", value: "Dependent Visa" },
+    { label: "Sponsored/Sponsored Work Visa", value: "Sponsored/Sponsored Work Visa" },
+    { label: "Temporary Protected Status (TPS)", value: "Temporary Protected Status (TPS)" },
+  ];
+
 export const Lists = {
   primarySkills,
   secondarySkills,
   spokenLanguages,
   employmentType,
   locationType,
-  qualifications
+  qualifications,
+  visaStatus
 };

@@ -267,6 +267,10 @@ const FieldBuilder = ({
         {
           label: "Qualifications",
           value: "qualifications",
+        },
+        {
+          label: "Visa Status",
+          value: "visaStatus"
         }
       ],
       apply: ["multiselect", "singleselect"],
