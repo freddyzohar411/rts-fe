@@ -1,4 +1,4 @@
-// export * from "./account/actionTypes";
-// export * from "./accountregistration/actionTypes";
+export * from "./candidate/actionTypes";
+export * from "./candidateregistration/actionTypes";
 export * from "./candidateForm/actionTypes";
 

@@ -9,17 +9,20 @@ export const CandidateFormConstant = {
 };
 
 export const CandidateEntityConstant = {
-  ACCOUNT_ACCOUNT: "account_account",
-  ACCOUNT_CONTACT: "account_contact",
-  ACCOUNT_DOCUMENT: "account_document",
-  ACCOUNT_INSTRUCTION: "account_instruction",
-  ACCOUNT_INSTRUCTION_DOCUMENT: "account_instruction_document",
-  ACCOUNT_ACCESS: "account_access",
-  ACCOUNT_COMMERCIAL: "account_commercial",
+  CANDIDATE_BASIC_INFO: "candidate_basic_info",
+  CANDIDATE_DOCUMENTS: "candidate_documents",
+  CANDIDATE_WORK_EXPERIENCE: "candidate_work_experience",
+  CANDIDATE_EDUCATION_DETAILS: "candidate_education_details",
+  CANDIDATE_CERTIFICATION: "candidate_certification",
+  CANDIDATE_LANGUAGES: "candidate_languages",
+  CANDIDATE_EMPLOYER_DETAILS: "candidate_employer_details",
 };
 
 export const CandidateTableListConstant = {
-  CONTACT_LIST: "contactList",
-  DOCUMENT_LIST: "documentList",
-  INSTRUCTION_DOCUMENT_LIST: "instructionDocumentList",
+  DOCUMENTS_LIST: "documentsList",
+  WORK_EXPERIENCE_LIST: "workExperienceList",
+  EDUCATION_DETAILS_LIST: "educationDetailsList",
+  CERTIFICATION_LIST: "certificationList",
+  LANGUAGES_LIST: "languagesList",
+  EMPLOYER_DETAILS_LIST: "employerDetailsList",
 };

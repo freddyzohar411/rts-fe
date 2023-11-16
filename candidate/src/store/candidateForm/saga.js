@@ -11,11 +11,9 @@ import {
 import { getFormByFormName, getCandidateById, getCandidateInstructionById, getCandidateCommercialById } from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
-// const formURL = {
-//   "account_account": getCandidateById,
-//   "account_instruction": getCandidateInstructionById,
-//   "account_commercial": getCandidateCommercialById
-// }
+const formURL = {
+  "candidate_basic_info": getCandidateById,
+}
 
 function* workFetchCandidateForm(action) {
   try {
@@ -28,11 +26,11 @@ function* workFetchCandidateForm(action) {
 }
 
 function* workFetchCandidateFormSubmission(action) {
-  const { formName, accountId } = action.payload;
+  const { formName, candidateId } = action.payload;
   try {
     const response = yield call(
       formURL[formName],
-      accountId
+      candidateId
     );
     yield put(fetchCandidateFormSubmissionSuccess(response.data));
   } catch (error) {

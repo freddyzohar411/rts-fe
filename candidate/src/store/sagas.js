@@ -1,10 +1,10 @@
 // Candidate Saga
-// import AccountSaga from "./account/saga";
-// import AccountRegistrationSaga from "./accountregistration/saga";
+import CandidateSaga from "./candidate/saga";
+import CandidateRegistrationSaga from "./candidateregistration/saga";
 import CandidateFormSaga from "./candidateForm/saga";
 
 export {
-  // AccountSaga,
-  // AccountRegistrationSaga,
+  CandidateSaga,
+  CandidateRegistrationSaga,
   CandidateFormSaga
 };

@@ -1,38 +1,29 @@
 import { Axios } from "@workspace/common";
-// import axios from "axios";
 
 import {
-  GET_ACCOUNTS,
   BASE_FORMS,
-  BASE_ACCOUNTS,
-  BASE_CONTACTS,
-  BASE_DOCUMENTS,
-  BASE_CLIENT_INSTRUCTIONS,
-  BASE_ACCOUNT_ACCESS,
-  BASE_COMMERCIAL,
+  BASE_CANDIDATES,
 } from "./url_helper";
 
 import {
-  ACCOUNT_URL,
-  CONTACT_URL,
+  CANDIDATE_URL,
   DOCUMENT_URL,
-  ACCOUNT_INSTRUCTION_URL,
   FORM_URL,
 } from "@workspace/common/src/config";
 
-import { generateAccountModuleURL, accountModuleURL } from "./constant";
+import { generateCandidateModuleURL, candidateModuleURL } from "./constant";
 
 const { APIClient } = Axios;
 
 const api = new APIClient();
 
 // Get Accounts Fields
-export const getAccountsFields = () =>
-  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields`);
+export const getCandidatesFields = () =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/fields`);
 
 // Get Accounts
-export const getAccounts = (data) =>
-  api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing`, data);
+export const getCandidates = (data) =>
+  api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing`, data);
 
 // Get Form by id
 export const getFormById = (id) => api.get(`${FORM_URL}${BASE_FORMS}/${id}`);
@@ -45,35 +36,32 @@ export const getFormByFormName = (formName) =>
  * Account_account
  */
 // Create a new account
-export const createAccount = (entity, id, data, config) =>
-  api.create(generateAccountModuleURL(entity, id), data, config);
+export const createCandidate = (entity, id, data, config) =>
+  api.create(generateCandidateModuleURL(entity, id), data, config);
 
 // Update an account
-export const updateAccount = (entity, id, data, config) =>
-  api.put(`${accountModuleURL[entity]}/${id}`, data, config);
+export const updateCandidate = (entity, id, data, config) =>
+  api.put(`${candidateModuleURL[entity]}/${id}`, data, config);
 
 // Get account by id
-export const getAccountById = (id) =>
-  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/${id}`);
+export const getCandidateById = (id) =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/${id}`);
 
 // Delete an account
-export const deleteAccount = (id) =>
-  api.delete(`${ACCOUNT_URL}${BASE_ACCOUNTS}/${id}`);
+export const deleteCandidate = (id) =>
+  api.delete(`${CANDIDATE_URL}${BASE_CANDIDATES}/${id}`);
 
 // Get account Instruction by id
-export const getAccountInstructionById = (id) =>
-  api.get(
-    `${ACCOUNT_INSTRUCTION_URL}${BASE_CLIENT_INSTRUCTIONS}/entity/account_instruction/${id}`
-  );
+// export const getAccountInstructionById = (id) =>
+//   api.get(
+//     `${ACCOUNT_INSTRUCTION_URL}${BASE_CLIENT_INSTRUCTIONS}/entity/account_instruction/${id}`
+//   );
 
 // Get draft account
-export const getDraftAccount = () =>
-  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/draft`);
+export const getDraftCandidate = () =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/draft`);
 
 // Delete draft account by id
-export const deleteDraftAccountById = (id) =>
-  api.delete(`${ACCOUNT_URL}${BASE_ACCOUNTS}/draft/${id}`);
+export const deleteDraftCandidateById = (id) =>
+  api.delete(`${CANDIDATE_URL}${BASE_CANDIDATES}/draft/${id}`);
 
-// Get account Commercial by id
-export const getAccountCommercialById = (id) =>
-  api.get(`${ACCOUNT_URL}${BASE_COMMERCIAL}/${id}`);

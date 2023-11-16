@@ -1,25 +1,25 @@
 import {
-  FETCH_ACCOUNT,
-  FETCH_ACCOUNT_SUCCESS,
-  FETCH_ACCOUNT_FAILURE,
-  FETCH_ACCOUNTS,
-  FETCH_ACCOUNTS_SUCCESS,
-  FETCH_ACCOUNTS_FAILURE,
-  CREATE_ACCOUNT,
-  CREATE_ACCOUNT_SUCCESS,
-  CREATE_ACCOUNT_FAILURE,
-  POST_ACCOUNT,
-  POST_ACCOUNT_SUCCESS,
-  POST_ACCOUNT_FAILURE,
-  PUT_ACCOUNT,
-  PUT_ACCOUNT_SUCCESS,
-  PUT_ACCOUNT_FAILURE,
-  DELETE_ACCOUNT,
-  DELETE_ACCOUNT_SUCCESS,
-  DELETE_ACCOUNT_FAILURE,
-  FETCH_ACCOUNTS_FIELDS,
-  FETCH_ACCOUNTS_FIELDS_SUCCESS,
-  FETCH_ACCOUNTS_FIELDS_FAILURE,
+  FETCH_CANDIDATE,
+  FETCH_CANDIDATE_SUCCESS,
+  FETCH_CANDIDATE_FAILURE,
+  FETCH_CANDIDATES,
+  FETCH_CANDIDATES_SUCCESS,
+  FETCH_CANDIDATES_FAILURE,
+  CREATE_CANDIDATE,
+  CREATE_CANDIDATE_SUCCESS,
+  CREATE_CANDIDATE_FAILURE,
+  POST_CANDIDATE,
+  POST_CANDIDATE_SUCCESS,
+  POST_CANDIDATE_FAILURE,
+  PUT_CANDIDATE,
+  PUT_CANDIDATE_SUCCESS,
+  PUT_CANDIDATE_FAILURE,
+  DELETE_CANDIDATE,
+  DELETE_CANDIDATE_SUCCESS,
+  DELETE_CANDIDATE_FAILURE,
+  FETCH_CANDIDATES_FIELDS,
+  FETCH_CANDIDATES_FIELDS_SUCCESS,
+  FETCH_CANDIDATES_FIELDS_FAILURE,
   RESET_META_DATA,
 } from "./actionTypes";
 
@@ -31,9 +31,9 @@ import {
 } from "@workspace/common";
 
 const initialState = {
-  account: {},
-  accounts: [],
-  accountsFields: [],
+  candidate: {},
+  candidates: [],
+  candidatesFields: [],
   meta: {},
   createMeta: {},
   updateMeta: {},
@@ -45,22 +45,22 @@ const initialState = {
   // success: false,
 };
 
-const AccountReducer = (state = initialState, action) => {
+const CandidateReducer = (state = initialState, action) => {
   switch (action.type) {
     // Fetch Account
-    case FETCH_ACCOUNT:
+    case FETCH_CANDIDATE:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case FETCH_ACCOUNT_SUCCESS:
+    case FETCH_CANDIDATE_SUCCESS:
       return {
         ...state,
         loading: false,
-        account: action.payload,
+        candidate: action.payload,
       };
-    case FETCH_ACCOUNT_FAILURE:
+    case FETCH_CANDIDATE_FAILURE:
       return {
         ...state,
         loading: false,
@@ -69,19 +69,19 @@ const AccountReducer = (state = initialState, action) => {
       };
 
     // Fetch all accounts
-    case FETCH_ACCOUNTS:
+    case FETCH_CANDIDATES:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case FETCH_ACCOUNTS_SUCCESS:
+    case FETCH_CANDIDATES_SUCCESS:
       return {
         ...state,
         loading: false,
-        accounts: action.payload,
+        candidates: action.payload,
       };
-    case FETCH_ACCOUNTS_FAILURE:
+    case FETCH_CANDIDATES_FAILURE:
       return {
         ...state,
         loading: false,
@@ -90,80 +90,80 @@ const AccountReducer = (state = initialState, action) => {
       };
 
     // Create an Account
-    case CREATE_ACCOUNT:
+    case CREATE_CANDIDATE:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case CREATE_ACCOUNT_SUCCESS:
+    case CREATE_CANDIDATE_SUCCESS:
       return {
         ...state,
         createMeta: successMetaData(action.payload),
-        account: action.payload,
+        candidate: action.payload,
       };
-    case CREATE_ACCOUNT_FAILURE:
+    case CREATE_CANDIDATE_FAILURE:
       return {
         ...state,
         createMeta: errorMetaData(action.payload),
       };
 
     // Post an Account
-    case POST_ACCOUNT:
+    case POST_CANDIDATE:
       return {
         ...state,
         createMeta: pendingMetaData(),
       };
-    case POST_ACCOUNT_SUCCESS:
+    case POST_CANDIDATE_SUCCESS:
       return {
         ...state,
         createMeta: successMetaData(action.payload),
-        account: action.payload,
+        candidate: action.payload,
       };
-    case POST_ACCOUNT_FAILURE:
+    case POST_CANDIDATE_FAILURE:
       return {
         ...state,
         createMeta: errorMetaData(action.payload),
       };
 
     // Put an Account
-    case PUT_ACCOUNT:
+    case PUT_CANDIDATE:
       return {
         ...state,
         updateMeta: pendingMetaData(),
       };
-    case PUT_ACCOUNT_SUCCESS:
+    case PUT_CANDIDATE_SUCCESS:
       return {
         ...state,
         updateMeta: successMetaData(action.payload),
-        account: action.payload,
+        candidate: action.payload,
       };
-    case PUT_ACCOUNT_FAILURE:
+    case PUT_CANDIDATE_FAILURE:
       return {
         ...state,
         updateMeta: errorMetaData(action.payload),
       };
 
     // Delete an Account
-    case DELETE_ACCOUNT:
+    case DELETE_CANDIDATE:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case DELETE_ACCOUNT_SUCCESS:
-      const newAccounts = JSON.parse(JSON.stringify(state.accounts));
-      const filteredAccounts = newAccounts.accounts.filter(
-        (account) => account.id !== action.payload
+    case DELETE_CANDIDATE_SUCCESS:
+      const newCandidates = JSON.parse(JSON.stringify(state.candidates));
+      const filteredCandidates = newCandidates.accounts.filter(
+        (candidate) => candidate.id !== action.payload
       );
-      newAccounts.accounts = filteredAccounts;
+      newCandidates.candidates= filteredCandidates;
       return {
         ...state,
-        accounts: newAccounts,
+        candidates: newCandidates,
         loading: false,
         success: true,
       };
-    case DELETE_ACCOUNT_FAILURE:
+    case DELETE_CANDIDATE_FAILURE:
       return {
         ...state,
         loading: false,
@@ -173,21 +173,21 @@ const AccountReducer = (state = initialState, action) => {
       };
 
     // Fetch all accounts fields
-    case FETCH_ACCOUNTS_FIELDS:
+    case FETCH_CANDIDATES_FIELDS:
       return {
         ...state,
         loading: true,
         error: false,
       };
 
-    case FETCH_ACCOUNTS_FIELDS_SUCCESS:
+    case FETCH_CANDIDATES_FIELDS_SUCCESS:
       return {
         ...state,
         loading: false,
-        accountsFields: action.payload,
+        candidatesFields: action.payload,
       };
 
-    case FETCH_ACCOUNTS_FIELDS_FAILURE:
+    case FETCH_CANDIDATES_FIELDS_FAILURE:
       return {
         ...state,
         loading: false,
@@ -207,4 +207,4 @@ const AccountReducer = (state = initialState, action) => {
   }
 };
 
-export default AccountReducer;
+export default CandidateReducer;

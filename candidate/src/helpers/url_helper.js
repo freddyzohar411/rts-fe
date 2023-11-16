@@ -1,21 +1,24 @@
-//ACCOUNT_account
-export const GET_ACCOUNTS = "/accounts";
-export const BASE_ACCOUNTS = "/accounts";
+// Candidate_basic_info
+export const BASE_CANDIDATES = "/candidates";
 
-// Account_contact
-export const BASE_CONTACTS = "/contacts";
-
-// Account_document
+// Candidate documents
 export const BASE_DOCUMENTS = "/documents";
 
-//Account_client_instruction
-export const BASE_CLIENT_INSTRUCTIONS = "/instructions";
+// Candidate work experience
+export const BASE_WORK_EXPERIENCE = "/work-experience";
 
-//Account access
-export const BASE_ACCOUNT_ACCESS = "/account_access";
+// Candidate education details
+export const BASE_EDUCATION_DETAILS = "/education-details";
 
-//Account_commerical
-export const BASE_COMMERCIAL = "/commercials";
+// Candidate certificate
+export const BASE_CERTIFICATE = "/certificate";
 
-//Form
+// Candidate languages
+export const BASE_LANGUAGES = "/languages";
+
+// Candidate employer details
+export const BASE_EMPLOYER_DETAILS = "/employer-details";
+
+// Candidate forms
 export const BASE_FORMS = "/forms";
+

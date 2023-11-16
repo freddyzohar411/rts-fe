@@ -13,7 +13,7 @@ const FormStepper = ({
   formikRef,
   formFieldsData,
   setErrorMessage,
-  accountId,
+  candidateId,
   resetStepper,
 }) => {
   const dispatch = useDispatch();
@@ -22,9 +22,9 @@ const FormStepper = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleNextStep = () => {
-    // if (activeStep === 0 && formikRef?.current?.formik) {
-    //   formikRef.current.formik.submitForm();
-    // }
+    if (activeStep === 0 && formikRef?.current?.formik) {
+      formikRef.current.formik.submitForm();
+    }
     // if (activeStep === 1) {
     //   const table = formFieldsData.filter(
     //     (field) => field.name === "contactList"
@@ -57,15 +57,15 @@ const FormStepper = ({
     //   formikRef.current.formik.submitForm();
     // }
 
-    if (activeStep <= 5) {
-      handleNext();
-    }
+    // if (activeStep <= 5) {
+    //   handleNext();
+    // }
   };
 
   const resetAndDeleteDraftForm = () => {
     dispatch(
       deleteDraftAccount({
-        accountId: accountId,
+        candidateId: candidateId,
         resetStepper: resetStepper,
       })
     );
@@ -86,10 +86,10 @@ const FormStepper = ({
         <div className="px-3"> {children}</div>
         <div
           className={`d-flex ${
-            accountId ? "justify-content-between" : "justify-content-end"
+            candidateId ? "justify-content-between" : "justify-content-end"
           } align-items-center mb-2`}
         >
-          {accountId && (
+          {candidateId && (
             <Button
               onClick={() => setIsDeleteModalOpen(true)}
               className="btn btn-danger"

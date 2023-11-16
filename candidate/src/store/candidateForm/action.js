@@ -26,9 +26,9 @@ export const fetchCandidateFormFailure = (error) => ({
 });
 
 // Fetch form submission
-export const fetchCandidateFormSubmission = (formName, accountId) => ({
+export const fetchCandidateFormSubmission = (formName, candidateId) => ({
   type: FETCH_CANDIDATEFORM_SUBMISSION,
-  payload: { formName, accountId },
+  payload: { formName, candidateId },
 });
 
 export const fetchCandidateFormSubmissionSuccess = (form) => ({

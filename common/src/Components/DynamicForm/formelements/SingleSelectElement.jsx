@@ -10,7 +10,6 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
     if (field.list) {
       return Lists[field.list];
     } else if (field.options) {
-        console.log("field Options", field.options)
       return field.options;
     }
     else {
@@ -49,12 +48,12 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
   };
 
   useEffect(() => {
-    if (formik?.values[field.name]) {
+    if (formik?.values?.[field.name]) {
       setSelectedOptions(
-        getSingleExistingDataOptions(formik?.values[field.name])
+        getSingleExistingDataOptions(formik?.values?.[field.name])
       );
     }
-  }, [formik?.values[field.name]]);
+  }, [formik?.values?.[field.name]]);
 
   const isValid = !props?.error;
 

@@ -38,3 +38,8 @@ export const ACCESS_URL = "http://localhost:8091";
 // Group Service
 export const GROUP_URL = "http://localhost:8092";
 
+// Candidate Service
+export const CANDIDATE_URL = "http://localhost:8050";
+
+
+

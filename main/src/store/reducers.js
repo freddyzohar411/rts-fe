@@ -56,7 +56,10 @@ const {
   GroupReducer,
 } = SettingReducers;
 
-const { CandidateFormReducer } = CandidateReducers;
+const { CandidateFormReducer,
+  CandidateReducer,
+  CandidateRegistrationReducer
+} = CandidateReducers;
 
 const rootReducer = combineReducers({
   // Common
@@ -97,6 +100,8 @@ const rootReducer = combineReducers({
 
   //Candidate
   CandidateFormReducer,
+  CandidateReducer,
+  CandidateRegistrationReducer
 });
 
 export default rootReducer;

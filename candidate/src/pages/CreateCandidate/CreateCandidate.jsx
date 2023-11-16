@@ -4,22 +4,21 @@ import { Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
-// import {
-//   postCandidate,
-//   putCandidate,
-//   resetMetaData,
-// } from "../../store/candidate/action";
-// import { fetchCandidateForm } from "../../store/candiateForm/action";
+import {
+  postCandidate,
+  putCandidate,
+  resetMetaData,
+} from "../../store/candidate/action";
 import {
   CandidateFormConstant,
   CandidateEntityConstant,
   CandidateTableListConstant,
 } from "../../constants/candidateConstant";
-// import {
-//   fetchDraftCandidate,
-//   deleteCandidateId,
-//   deleteCandidateCountry,
-// } from "../../store/candidateregistration/action";
+import {
+  fetchDraftCandidate,
+  deleteCandidateId,
+  deleteCandidateCountry,
+} from "../../store/candidateregistration/action";
 import {
   fetchCandidateFormSubmission,
   clearCandidateFormSubmission,
@@ -44,33 +43,29 @@ const CreateCandidate = () => {
   const form = useSelector((state) => state.CandidateFormReducer.form);
   console.log("form", form);
 
-  const accountId = useSelector(
-    (state) => state.AccountRegistrationReducer.accountId
+  const candidateId = useSelector(
+    (state) => state.CandidateRegistrationReducer.candidateId
   );
   const accountCountry = useSelector(
-    (state) => state.AccountRegistrationReducer.accountCountry
+    (state) => state.CandidateRegistrationReducer.candidateCountry
   );
 
   const formSubmissionData = useSelector(
-    (state) => state.AccountFormReducer.formSubmission
+    (state) => state.CandidateFormReducer.formSubmission
   );
 
-  // const editId = useSelector((state) => state.AccountFormReducer.editId);
+  const editId = useSelector((state) => state.CandidateFormReducer.editId);
 
-  // const updateData = useSelector(
-  //   (state) => state.AccountFormReducer.formSubmission
-  // );
-
-  // const formSubmissionDataLoading = useSelector(
-  //   (state) => state.AccountFormReducer.formSubmissionLoading
-  // );
+  const updateData = useSelector(
+    (state) => state.CandidateFormReducer.formSubmission
+  );
 
   const createMetaData = useSelector(
-    (state) => state.AccountReducer.createMeta
+    (state) => state.CandidateReducer.createMeta
   );
 
   const updateMetaData = useSelector(
-    (state) => state.AccountReducer.updateMeta
+    (state) => state.CandidateReducer.updateMeta
   );
 
   const MAX_STEP = 6;
@@ -85,8 +80,9 @@ const CreateCandidate = () => {
 
   // ============Console.log============
 
-    console.log("Step", step);
-
+  console.log("Step", step);
+  console.log("Form submission data: ", formSubmissionData);
+  console.log("candidate ID", candidateId)
 
   //====================================
 
@@ -111,7 +107,7 @@ const CreateCandidate = () => {
       //     AccountTableListConstant.CONTACT_LIST,
       //     GET_CONTACT_BY_ENTITY_URL(
       //       AccountEntityConstant.ACCOUNT_CONTACT,
-      //       accountId
+      //       candidateId
       //     ),
       //     CONTACT_BASE_URL
       //   );
@@ -124,7 +120,7 @@ const CreateCandidate = () => {
       //     AccountTableListConstant.DOCUMENT_LIST,
       //     GET_DOCUMENT_BY_ENTITY_URL(
       //       AccountEntityConstant.ACCOUNT_DOCUMENT,
-      //       accountId
+      //       candidateId
       //     ),
       //     DOCUMENT_BASE_URL
       //   );
@@ -137,7 +133,7 @@ const CreateCandidate = () => {
       //     AccountTableListConstant.INSTRUCTION_DOCUMENT_LIST,
       //     GET_DOCUMENT_BY_ENTITY_URL(
       //       AccountEntityConstant.ACCOUNT_INSTRUCTION_DOCUMENT,
-      //       accountId
+      //       candidateId
       //     ),
       //     DOCUMENT_BASE_URL
       //   );
@@ -170,53 +166,54 @@ const CreateCandidate = () => {
   /**
    * Fetch draft account if there is
    */
-  // useEffect(() => {
-  //   dispatch(fetchDraftAccount());
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchDraftCandidate());
+  }, []);
 
   /**
    * Fetch form submission data if there is a draft account
    */
-  // useEffect(() => {
-  //   dispatch(clearAccountFormSubmission());
-  //   setEditData(null);
-  //   if (accountId) {
-  //     if (step === 0) {
-  //       dispatch(
-  //         fetchAccountFormSubmission(
-  //           AccountEntityConstant.ACCOUNT_ACCOUNT,
-  //           accountId
-  //         )
-  //       );
-  //     }
-  //     if (step === 2) {
-  //       dispatch(clearAccountFormSubmission());
-  //     }
-  //     if (step === 3) {
-  //       dispatch(
-  //         fetchAccountFormSubmission(
-  //           AccountEntityConstant.ACCOUNT_INSTRUCTION,
-  //           accountId
-  //         )
-  //       );
-  //     }
-  //     if (step === 5) {
-  //       dispatch(
-  //         fetchAccountFormSubmission(
-  //           AccountEntityConstant.ACCOUNT_COMMERCIAL,
-  //           accountId
-  //         )
-  //       );
-  //     }
-  //   }
-  // }, [step]);
+  useEffect(() => {
+    dispatch(clearCandidateFormSubmission());
+    setEditData(null);
+    if (candidateId) {
+      if (step === 0) {
+        console.log("INNN LEH")
+        dispatch(
+          fetchCandidateFormSubmission(
+            CandidateEntityConstant.CANDIDATE_BASIC_INFO,
+            candidateId
+          )
+        );
+      }
+      // if (step === 2) {
+      //   dispatch(clearAccountFormSubmission());
+      // }
+      // if (step === 3) {
+      //   dispatch(
+      //     fetchAccountFormSubmission(
+      //       AccountEntityConstant.ACCOUNT_INSTRUCTION,
+      //       candidateId
+      //     )
+      //   );
+      // }
+      // if (step === 5) {
+      //   dispatch(
+      //     fetchAccountFormSubmission(
+      //       AccountEntityConstant.ACCOUNT_COMMERCIAL,
+      //       candidateId
+      //     )
+      //   );
+      // }
+    }
+  }, [step]);
 
-  //clear form submission if
-  // useEffect(() => {
-  //   if (accountId === null) {
-  //     dispatch(clearAccountFormSubmission());
-  //   }
-  // }, [accountId]);
+  // clear form submission if
+  useEffect(() => {
+    if (candidateId === null) {
+      dispatch(clearCandidateFormSubmission());
+    }
+  }, [candidateId]);
 
   /**
    * Get Form field data from Form component
@@ -239,7 +236,7 @@ const CreateCandidate = () => {
    * @param {*} newValues - form values (After processing)
    * @param {*} buttonNameHook - button name (To determine if it is add or update)
    * @param {*} formStateHook - form state hook (To determine if it is create or update)
-   * @param {*} rerenderTable - rerender table 
+   * @param {*} rerenderTable - rerender table
    * @returns
    */
   const handleFormSubmit = async (
@@ -270,28 +267,25 @@ const CreateCandidate = () => {
     if (step === 0) {
       // Create Account
       if (formSubmissionData === null) {
-        if (!country?.name) {
-          toast.error("Please select a country");
-        }
         // Get file data
-        let formValues = { ...newValues };
-        const accountData = { ...formValues };
-        const fileData = formValues?.uploadAgreement;
-        const fileName = fileData?.name;
-        formValues = { ...formValues, uploadAgreement: fileName };
+        const candidateData = { ...newValues };
+        // const fileData = formValues?.uploadAgreement;
+        // const fileName = fileData?.name;
+        // formValues = { ...formValues, uploadAgreement: fileName };
 
-        const accountDataOut = {
-          ...accountData,
-          accountCountry: country.name,
-          formData: JSON.stringify(formValues),
+        const candidateDataOut = {
+          ...candidateData,
+          formData: JSON.stringify(candidateData),
           formId: parseInt(form.formId),
         };
-
-        const formData1 = ObjectHelper.convertObjectToFormData(accountDataOut);
+        // console.log("Form Id", form.formId)
+        // return;
+        const formData1 =
+          ObjectHelper.convertObjectToFormData(candidateDataOut);
 
         dispatch(
-          postAccount({
-            entity: AccountEntityConstant.ACCOUNT_ACCOUNT,
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_BASIC_INFO,
             newData: formData1,
             config: {
               headers: {
@@ -301,32 +295,32 @@ const CreateCandidate = () => {
           })
         );
       } else {
-        // Update Account 
-        let formValues = { ...newValues };
-        const accountData = { ...formValues };
-        const fileData = formValues?.uploadAgreement;
-        if (typeof fileData === "string") {
-          // Remove upload agreement from object
-          formValues = { ...formValues, uploadAgreement: fileData };
-          delete accountData.uploadAgreement;
-        } else {
-          const fileName = fileData?.name;
-          formValues = { ...formValues, uploadAgreement: fileName };
-        }
+        // Update Account
+        let candidateData = { ...newValues };
+        // const accountData = { ...formValues };
+        // const fileData = formValues?.uploadAgreement;
+        // if (typeof fileData === "string") {
+        //   // Remove upload agreement from object
+        //   formValues = { ...formValues, uploadAgreement: fileData };
+        //   delete accountData.uploadAgreement;
+        // } else {
+        //   const fileName = fileData?.name;
+        //   formValues = { ...formValues, uploadAgreement: fileName };
+        // }
 
-        const accountDataOut = {
-          ...accountData,
-          formData: JSON.stringify(formValues),
+        const candidateDataOut = {
+          ...candidateData,
+          formData: JSON.stringify(candidateData),
           formId: parseInt(form.formId),
         };
 
         const formDataUpdate =
-          ObjectHelper.convertObjectToFormData(accountDataOut);
+          ObjectHelper.convertObjectToFormData(candidateDataOut);
 
         dispatch(
-          putAccount({
-            entity: AccountEntityConstant.ACCOUNT_ACCOUNT,
-            id: accountId,
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_BASIC_INFO,
+            id: candidateId,
             newData: formDataUpdate,
             config: {
               headers: {
@@ -338,257 +332,257 @@ const CreateCandidate = () => {
       }
     }
 
-    if (step === 1) {
-      // Add contact
-      if (buttonName === "add") {
-        setErrorMessage(null);
-        setButtonName("");
-        const newData = {
-          ...newValues,
-          entityId: accountId,
-          entityType: AccountEntityConstant.ACCOUNT_CONTACT,
-          formData: JSON.stringify(newValues),
-          formId: parseInt(form.formId),
-        };
+    // if (step === 1) {
+    //   // Add contact
+    //   if (buttonName === "add") {
+    //     setErrorMessage(null);
+    //     setButtonName("");
+    //     const newData = {
+    //       ...newValues,
+    //       entityId: accountId,
+    //       entityType: AccountEntityConstant.ACCOUNT_CONTACT,
+    //       formData: JSON.stringify(newValues),
+    //       formId: parseInt(form.formId),
+    //     };
 
-        dispatch(
-          postAccount({
-            entity: AccountEntityConstant.ACCOUNT_CONTACT,
-            newData,
-            rerenderTable: rerenderTable,
-            resetForm: resetForm,
-          })
-        );
-        return;
-      }
+    //     dispatch(
+    //       postAccount({
+    //         entity: AccountEntityConstant.ACCOUNT_CONTACT,
+    //         newData,
+    //         rerenderTable: rerenderTable,
+    //         resetForm: resetForm,
+    //       })
+    //     );
+    //     return;
+    //   }
 
-      // Cancel add contact and reset form
-      if (buttonName === "cancel" && !editData) {
-        setButtonName("");
-        resetForm();
-        return;
-      }
+    //   // Cancel add contact and reset form
+    //   if (buttonName === "cancel" && !editData) {
+    //     setButtonName("");
+    //     resetForm();
+    //     return;
+    //   }
 
-      // Update contact
-      if (buttonName === "tableUpdate") {
-        setButtonName("");
-        const newData = {
-          ...newValues,
-          entityId: accountId,
-          entityType: AccountEntityConstant.ACCOUNT_CONTACT,
-          formData: JSON.stringify(newValues),
-          formId: parseInt(form.formId),
-        };
+    //   // Update contact
+    //   if (buttonName === "tableUpdate") {
+    //     setButtonName("");
+    //     const newData = {
+    //       ...newValues,
+    //       entityId: accountId,
+    //       entityType: AccountEntityConstant.ACCOUNT_CONTACT,
+    //       formData: JSON.stringify(newValues),
+    //       formId: parseInt(form.formId),
+    //     };
 
-        // Get update id
-        const table = formFieldsData.find(
-          (field) =>
-            field.type === "table" &&
-            field.name === AccountTableListConstant.CONTACT_LIST
-        );
-        const { tableEditId } = table.tableSetting;
-        dispatch(
-          putAccount({
-            entity: AccountEntityConstant.ACCOUNT_CONTACT,
-            id: tableEditId,
-            newData,
-            rerenderTable: rerenderTable,
-            resetForm: resetForm,
-          })
-        );
-      }
-    }
+    //     // Get update id
+    //     const table = formFieldsData.find(
+    //       (field) =>
+    //         field.type === "table" &&
+    //         field.name === AccountTableListConstant.CONTACT_LIST
+    //     );
+    //     const { tableEditId } = table.tableSetting;
+    //     dispatch(
+    //       putAccount({
+    //         entity: AccountEntityConstant.ACCOUNT_CONTACT,
+    //         id: tableEditId,
+    //         newData,
+    //         rerenderTable: rerenderTable,
+    //         resetForm: resetForm,
+    //       })
+    //     );
+    //   }
+    // }
 
-    if (step === 2) {
-      // Add document
-      if (buttonName === "add") {
-        setErrorMessage(null);
-        setButtonName("");
-        let formValues = { ...newValues };
-        const documentData = { ...formValues };
-        const fileData = formValues?.file;
-        const fileName = fileData?.name;
-        formValues = { ...formValues, file: fileName };
-        const documentDataOut = {
-          ...documentData,
-          entityType: AccountEntityConstant.ACCOUNT_DOCUMENT,
-          entityId: parseInt(accountId),
-          formData: JSON.stringify(formValues),
-          formId: parseInt(form.formId),
-        };
-        delete documentDataOut.documentList;
+    // if (step === 2) {
+    //   // Add document
+    //   if (buttonName === "add") {
+    //     setErrorMessage(null);
+    //     setButtonName("");
+    //     let formValues = { ...newValues };
+    //     const documentData = { ...formValues };
+    //     const fileData = formValues?.file;
+    //     const fileName = fileData?.name;
+    //     formValues = { ...formValues, file: fileName };
+    //     const documentDataOut = {
+    //       ...documentData,
+    //       entityType: AccountEntityConstant.ACCOUNT_DOCUMENT,
+    //       entityId: parseInt(accountId),
+    //       formData: JSON.stringify(formValues),
+    //       formId: parseInt(form.formId),
+    //     };
+    //     delete documentDataOut.documentList;
 
-        const documentFormData =
-          ObjectHelper.convertObjectToFormData(documentDataOut);
+    //     const documentFormData =
+    //       ObjectHelper.convertObjectToFormData(documentDataOut);
 
-        dispatch(
-          postAccount({
-            entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
-            newData: documentFormData,
-            config: {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            },
-            rerenderTable: rerenderTable,
-            resetForm: resetForm([], "create"),
-          })
-        );
-      }
+    //     dispatch(
+    //       postAccount({
+    //         entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
+    //         newData: documentFormData,
+    //         config: {
+    //           headers: {
+    //             "Content-Type": "multipart/form-data",
+    //           },
+    //         },
+    //         rerenderTable: rerenderTable,
+    //         resetForm: resetForm([], "create"),
+    //       })
+    //     );
+    //   }
 
-      // Cancel add document and reset form
-      if (buttonName === "cancel" && !editData) {
-        resetForm([], "create");
-        return;
-      }
+    //   // Cancel add document and reset form
+    //   if (buttonName === "cancel" && !editData) {
+    //     resetForm([], "create");
+    //     return;
+    //   }
 
-      // Update document
-      if (buttonName === "tableUpdate") {
-        setButtonName("");
-        let formValues = { ...newValues };
-        const documentData = { ...formValues };
-        const fileData = formValues?.file;
-        if (typeof fileData === "string") {
-          // Remove upload agreement from object
-          formValues = { ...formValues, file: fileData };
-          delete documentData.file;
-        } else {
-          const fileName = fileData?.name;
-          formValues = { ...formValues, file: fileName };
-        }
+    //   // Update document
+    //   if (buttonName === "tableUpdate") {
+    //     setButtonName("");
+    //     let formValues = { ...newValues };
+    //     const documentData = { ...formValues };
+    //     const fileData = formValues?.file;
+    //     if (typeof fileData === "string") {
+    //       // Remove upload agreement from object
+    //       formValues = { ...formValues, file: fileData };
+    //       delete documentData.file;
+    //     } else {
+    //       const fileName = fileData?.name;
+    //       formValues = { ...formValues, file: fileName };
+    //     }
 
-        const documentDataOut = {
-          ...documentData,
-          entityType: AccountEntityConstant.ACCOUNT_DOCUMENT,
-          entityId: parseInt(accountId),
-          formData: JSON.stringify(formValues),
-          formId: parseInt(form.formId),
-        };
-        delete documentDataOut.documentList;
+    //     const documentDataOut = {
+    //       ...documentData,
+    //       entityType: AccountEntityConstant.ACCOUNT_DOCUMENT,
+    //       entityId: parseInt(accountId),
+    //       formData: JSON.stringify(formValues),
+    //       formId: parseInt(form.formId),
+    //     };
+    //     delete documentDataOut.documentList;
 
-        const documentFormData =
-          ObjectHelper.convertObjectToFormData(documentDataOut);
+    //     const documentFormData =
+    //       ObjectHelper.convertObjectToFormData(documentDataOut);
 
-        // Get update id
-        const table = formFieldsData.find(
-          (field) =>
-            field.type === "table" &&
-            field.name === AccountTableListConstant.DOCUMENT_LIST
-        );
-        const { tableEditId } = table.tableSetting;
-        dispatch(
-          putAccount({
-            entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
-            id: tableEditId,
-            newData: documentFormData,
-            config: {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            },
-            rerenderTable: rerenderTable,
-            resetForm: resetForm([], "create"),
-          })
-        );
-      }
-    }
+    //     // Get update id
+    //     const table = formFieldsData.find(
+    //       (field) =>
+    //         field.type === "table" &&
+    //         field.name === AccountTableListConstant.DOCUMENT_LIST
+    //     );
+    //     const { tableEditId } = table.tableSetting;
+    //     dispatch(
+    //       putAccount({
+    //         entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
+    //         id: tableEditId,
+    //         newData: documentFormData,
+    //         config: {
+    //           headers: {
+    //             "Content-Type": "multipart/form-data",
+    //           },
+    //         },
+    //         rerenderTable: rerenderTable,
+    //         resetForm: resetForm([], "create"),
+    //       })
+    //     );
+    //   }
+    // }
 
-    if (step === 3) {
-      // Add instruction document
-      if (buttonName === "add") {
-        setButtonName("");
-        let formValues = { file: newValues.file };
-        const documentData = { ...formValues };
-        const fileData = formValues?.file;
-        const fileName = fileData?.name;
-        formValues = { ...formValues, file: fileName };
-        const documentDataOut = {
-          ...documentData,
-          entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION_DOCUMENT,
-          entityId: parseInt(accountId),
-          formData: JSON.stringify(formValues),
-          formId: parseInt(form.formId),
-        };
+    // if (step === 3) {
+    //   // Add instruction document
+    //   if (buttonName === "add") {
+    //     setButtonName("");
+    //     let formValues = { file: newValues.file };
+    //     const documentData = { ...formValues };
+    //     const fileData = formValues?.file;
+    //     const fileName = fileData?.name;
+    //     formValues = { ...formValues, file: fileName };
+    //     const documentDataOut = {
+    //       ...documentData,
+    //       entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION_DOCUMENT,
+    //       entityId: parseInt(accountId),
+    //       formData: JSON.stringify(formValues),
+    //       formId: parseInt(form.formId),
+    //     };
 
-        const documentFormData =
-          ObjectHelper.convertObjectToFormData(documentDataOut);
-        dispatch(
-          postAccount({
-            entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
-            newData: documentFormData,
-            config: {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            },
-            rerenderTable: rerenderTable,
-            resetForm: resetForm(["file"]),
-          })
-        );
-        return;
-      }
+    //     const documentFormData =
+    //       ObjectHelper.convertObjectToFormData(documentDataOut);
+    //     dispatch(
+    //       postAccount({
+    //         entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
+    //         newData: documentFormData,
+    //         config: {
+    //           headers: {
+    //             "Content-Type": "multipart/form-data",
+    //           },
+    //         },
+    //         rerenderTable: rerenderTable,
+    //         resetForm: resetForm(["file"]),
+    //       })
+    //     );
+    //     return;
+    //   }
 
-      //Create instruction
-      if (formSubmissionData === null) {
-        const formData = {
-          guidelines: newValues.guidelines,
-        };
-        const newData = {
-          ...formData,
-          entityId: accountId,
-          entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION,
-          formData: JSON.stringify(formData),
-          formId: parseInt(form.formId),
-        };
+    //   //Create instruction
+    //   if (formSubmissionData === null) {
+    //     const formData = {
+    //       guidelines: newValues.guidelines,
+    //     };
+    //     const newData = {
+    //       ...formData,
+    //       entityId: accountId,
+    //       entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION,
+    //       formData: JSON.stringify(formData),
+    //       formId: parseInt(form.formId),
+    //     };
 
-        dispatch(
-          postAccount({
-            entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
-            newData,
-            rerenderTable: rerenderTable,
-          })
-        );
-      } else {
-        // Update instruction
-        const formData = {
-          guidelines: newValues.guidelines,
-        };
-        const newData = {
-          ...formData,
-          entityId: accountId,
-          entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION,
-          formData: JSON.stringify(formData),
-          formId: parseInt(form.formId),
-        };
+    //     dispatch(
+    //       postAccount({
+    //         entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
+    //         newData,
+    //         rerenderTable: rerenderTable,
+    //       })
+    //     );
+    //   } else {
+    //     // Update instruction
+    //     const formData = {
+    //       guidelines: newValues.guidelines,
+    //     };
+    //     const newData = {
+    //       ...formData,
+    //       entityId: accountId,
+    //       entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION,
+    //       formData: JSON.stringify(formData),
+    //       formId: parseInt(form.formId),
+    //     };
 
-        dispatch(
-          putAccount({
-            entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
-            id: editId,
-            newData,
-            rerenderTable: rerenderTable,
-          })
-        );
-      }
-    }
+    //     dispatch(
+    //       putAccount({
+    //         entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
+    //         id: editId,
+    //         newData,
+    //         rerenderTable: rerenderTable,
+    //       })
+    //     );
+    //   }
+    // }
 
-    if (step === 5) {
-      // Create commercial
-      const formData = {
-        ...newValues,
-        entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
-        entityId: parseInt(accountId),
-        formData: JSON.stringify(newValues),
-        formId: parseInt(form.formId),
-      };
-      dispatch(
-        postAccount({
-          entity: AccountEntityConstant.ACCOUNT_COMMERCIAL,
-          id: accountId,
-          newData: formData,
-        })
-      );
-    }
+    // if (step === 5) {
+    //   // Create commercial
+    //   const formData = {
+    //     ...newValues,
+    //     entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
+    //     entityId: parseInt(accountId),
+    //     formData: JSON.stringify(newValues),
+    //     formId: parseInt(form.formId),
+    //   };
+    //   dispatch(
+    //     postAccount({
+    //       entity: AccountEntityConstant.ACCOUNT_COMMERCIAL,
+    //       id: accountId,
+    //       newData: formData,
+    //     })
+    //   );
+    // }
   };
 
   /**
@@ -652,7 +646,7 @@ const CreateCandidate = () => {
           formikRef={formikRef}
           formFieldsData={formFieldsData}
           setErrorMessage={setErrorMessage}
-          accountId={accountId}
+          candidateId={candidateId}
           resetStepper={resetStepper}
         >
           <Form
