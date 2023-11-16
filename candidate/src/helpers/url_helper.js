@@ -22,3 +22,6 @@ export const BASE_EMPLOYER_DETAILS = "/employer-details";
 // Candidate forms
 export const BASE_FORMS = "/forms";
 
+// Candidate work experience
+export const BASE_CANDIDATE_WORK_EXPERIENCE = "/work-experience";
+

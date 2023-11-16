@@ -4,12 +4,14 @@ import {
   BASE_FORMS,
   BASE_CANDIDATES,
   BASE_DOCUMENTS,
+  BASE_CANDIDATE_WORK_EXPERIENCE,
 } from "./url_helper";
 
 import {
   CANDIDATE_URL,
   DOCUMENT_URL,
   FORM_URL,
+  CANDIDATE_WORK_EXPERIENCE_URL,
 } from "@workspace/common/src/config";
 
 import { generateCandidateModuleURL, candidateModuleURL } from "./constant";
@@ -66,8 +68,12 @@ export const getDraftCandidate = () =>
 export const deleteDraftCandidateById = (id) =>
   api.delete(`${CANDIDATE_URL}${BASE_CANDIDATES}/draft/${id}`);
 
-  // Document API
+// Document API
 export const DOCUMENT_BASE_URL = `${DOCUMENT_URL}${BASE_DOCUMENTS}`;
 export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
   `${DOCUMENT_BASE_URL}/entity/${entityType}/${entityId}`;
 
+// Candidate work experience
+export const CANDIDATE_WORK_EXPERIENCE_BASE_URL = `${CANDIDATE_WORK_EXPERIENCE_URL}${BASE_CANDIDATE_WORK_EXPERIENCE}`;
+export const GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL = (entityType, entityId) =>
+  `${CANDIDATE_WORK_EXPERIENCE_BASE_URL}/entity/${entityType}/${entityId}`;

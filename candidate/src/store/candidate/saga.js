@@ -92,7 +92,7 @@ function* workPutCandidate(action) {
       yield put(putCandidateSuccess(response.data));
     }
 
-    if (entity === CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE) {
+    if (entity === CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS) {
       yield put(deleteCandidateId());
       // yield put(deleteCandidateCountry());
       toast.success("Candidate updated successfully");

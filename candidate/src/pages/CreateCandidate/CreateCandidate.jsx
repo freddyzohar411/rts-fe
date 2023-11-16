@@ -32,7 +32,9 @@ import { ObjectHelper } from "@workspace/common";
 // } from "../../helpers/endpoint_helper";
 import {
   DOCUMENT_BASE_URL,
-  GET_DOCUMENT_BY_ENTITY_URL
+  GET_DOCUMENT_BY_ENTITY_URL,
+  CANDIDATE_WORK_EXPERIENCE_BASE_URL,
+  GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL,
 } from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
@@ -118,6 +120,19 @@ const CreateCandidate = () => {
         setFormTemplate(formEdited);
         return;
       }
+      if (step === 2) {
+        const formEdited = setTableAPI(
+          form,
+          CandidateTableListConstant.WORK_EXPERIENCE_LIST,
+          GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL(
+            CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+            candidateId
+          ),
+          CANDIDATE_WORK_EXPERIENCE_BASE_URL
+        );
+        setFormTemplate(formEdited);
+        return;
+      }
       // if (step === 1) {
       //   const formEdited = setTableAPI(
       //     form,
@@ -195,7 +210,6 @@ const CreateCandidate = () => {
     setEditData(null);
     if (candidateId) {
       if (step === 0) {
-        console.log("INNN LEH");
         dispatch(
           fetchCandidateFormSubmission(
             CandidateEntityConstant.CANDIDATE_BASIC_INFO,
@@ -203,9 +217,6 @@ const CreateCandidate = () => {
           )
         );
       }
-      // if (step === 2) {
-      //   dispatch(clearAccountFormSubmission());
-      // }
       // if (step === 3) {
       //   dispatch(
       //     fetchAccountFormSubmission(
@@ -423,6 +434,67 @@ const CreateCandidate = () => {
                 "Content-Type": "multipart/form-data",
               },
             },
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+      }
+    }
+
+    if (step === 2) {
+      // Add contact
+      if (buttonName === "add") {
+        setErrorMessage(null);
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
+
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
+
+      // Cancel add contact and reset form
+      if (buttonName === "cancel" && !editData) {
+        setButtonName("");
+        resetForm([], "create");
+        return;
+      }
+
+      // Update contact
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
+
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.WORK_EXPERIENCE_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+            id: tableEditId,
+            newData,
             rerenderTable: rerenderTable,
             resetForm: resetForm([], "create"),
           })
@@ -714,7 +786,7 @@ const CreateCandidate = () => {
    */
   if (createMetaData?.isSuccess) {
     dispatch(resetMetaData());
-    if (step === 5) {
+    if (step === 6) {
       navigate("/accounts");
       return;
     }
@@ -726,7 +798,7 @@ const CreateCandidate = () => {
    */
   if (updateMetaData?.isSuccess) {
     dispatch(resetMetaData());
-    if (step === 5) {
+    if (step === 6) {
       navigate("/accounts");
       return;
     }

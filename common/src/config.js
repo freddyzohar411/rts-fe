@@ -26,12 +26,6 @@ export const ACCOUNT_INSTRUCTION_URL = "http://localhost:8800";
 // Department Service
 export const DEPARTMENT_URL = "http://localhost:8900";
 
-// Job Service
-export const JOB_URL = "http://localhost:9200";
-
-// Form Service
-export const FORM_URL = "http://localhost:9400";
-
 // Role Service
 export const ACCESS_URL = "http://localhost:8091";
 
@@ -40,6 +34,15 @@ export const GROUP_URL = "http://localhost:8092";
 
 // Candidate Service
 export const CANDIDATE_URL = "http://localhost:8050";
+
+// Job Service
+export const JOB_URL = "http://localhost:9200";
+
+// Form Service
+export const FORM_URL = "http://localhost:9400";
+
+// Candidate/Work experience service
+export const CANDIDATE_WORK_EXPERIENCE_URL = "http://localhost:9500";
 
 
 

@@ -4,9 +4,7 @@ import { useDispatch } from "react-redux";
 import CandidateStepper from "../../components/CandidateStepper/CandidateStepper";
 // import { deleteDraftAccount } from "../../store/accountregistration/action";
 import { DeleteCustomModal } from "@Workspace/common";
-import {
-  CandidateTableListConstant,
-} from "../../constants/candidateConstant";
+import { CandidateTableListConstant } from "../../constants/candidateConstant";
 
 const FormStepper = ({
   activeStep,
@@ -28,6 +26,7 @@ const FormStepper = ({
     if (activeStep === 0 && formikRef?.current?.formik) {
       formikRef.current.formik.submitForm();
     }
+
     if (activeStep === 1 && formikRef?.current?.formik) {
       const table = formFieldsData.filter(
         (field) => field.name === CandidateTableListConstant.DOCUMENTS_LIST
@@ -39,6 +38,11 @@ const FormStepper = ({
         setErrorMessage("Please add 1 document to proceed");
       }
     }
+
+    if (activeStep === 2) {
+      handleNext();
+    }
+
     // if (activeStep === 1) {
     //   const table = formFieldsData.filter(
     //     (field) => field.name === "contactList"
