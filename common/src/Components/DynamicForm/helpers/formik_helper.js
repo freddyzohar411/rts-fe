@@ -203,21 +203,21 @@ const generateValidationSchema2 = (
           "conditionValidation",
           field.conditionValidationErrorMessage,
           (value) => {
-            console.log("value!!!", value)
+            console.log("value!!!", value);
             if (!value) return true; // allow empty values
             let isValid = true;
             field?.conditionValidation.forEach((condition) => {
-              if (condition.field === "" && condition.value === "") return true; 
-              const valueToCompare = condition?.value || formik?.values[condition?.field];
-              console.log("valueToCompare", valueToCompare)
-              console.log("value", value)
-              console.log("condition", condition)
+              if (condition.field === "" && condition.value === "") return true;
+              const valueToCompare =
+                condition?.value || formik?.values[condition?.field];
+              console.log("valueToCompare", valueToCompare);
+              console.log("value", value);
+              console.log("condition", condition);
               if (valueToCompare === undefined) return true;
-              
+
               if (condition?.condition === "equals") {
                 if (value === valueToCompare) {
                   isValid = false;
-
                 }
               }
               if (condition?.condition === "notEqual") {
@@ -245,8 +245,32 @@ const generateValidationSchema2 = (
                   isValid = false;
                 }
               }
+              if (condition?.condition === "before") {
+                // Compare dates
+                if (new Date(value) < new Date(valueToCompare)) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "after") {
+                // Compare dates
+                if (new Date(value) > new Date(valueToCompare)) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "beforeOrEqual") {
+                // Compare dates
+                if (new Date(value) <= new Date(valueToCompare)) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "afterOrEqual") {
+                // Compare dates
+                if (new Date(value) >= new Date(valueToCompare)) {
+                  isValid = false;
+                }
+              }
             });
-            console.log("isValid", isValid)
+            console.log("isValid", isValid);
             return isValid;
           }
         );

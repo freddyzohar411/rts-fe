@@ -695,6 +695,11 @@ const FieldBuilder = ({
         "endsWith",
         "isEmpty",
         "isNotEmpty",
+        "before",
+        "beforeOrEqual",
+        "after",
+        "afterOrEqual",
+
       ],
       apply: [
         "text",
