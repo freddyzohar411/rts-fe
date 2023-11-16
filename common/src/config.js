@@ -44,5 +44,8 @@ export const FORM_URL = "http://localhost:9400";
 // Candidate/Work experience service
 export const CANDIDATE_WORK_EXPERIENCE_URL = "http://localhost:9500";
 
+// Candidate/Education service
+export const CANDIDATE_EDUCATION_DETAILS_URL = "http://localhost:9600";
+
 
 

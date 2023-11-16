@@ -5,6 +5,7 @@ import {
   BASE_CANDIDATES,
   BASE_DOCUMENTS,
   BASE_CANDIDATE_WORK_EXPERIENCE,
+  BASE_CANDIDATE_EDUCATION_DETAILS,
 } from "./url_helper";
 
 import {
@@ -12,6 +13,7 @@ import {
   DOCUMENT_URL,
   FORM_URL,
   CANDIDATE_WORK_EXPERIENCE_URL,
+  CANDIDATE_EDUCATION_DETAILS_URL,
 } from "@workspace/common/src/config";
 
 import { generateCandidateModuleURL, candidateModuleURL } from "./constant";
@@ -54,12 +56,6 @@ export const getCandidateById = (id) =>
 export const deleteCandidate = (id) =>
   api.delete(`${CANDIDATE_URL}${BASE_CANDIDATES}/${id}`);
 
-// Get account Instruction by id
-// export const getAccountInstructionById = (id) =>
-//   api.get(
-//     `${ACCOUNT_INSTRUCTION_URL}${BASE_CLIENT_INSTRUCTIONS}/entity/account_instruction/${id}`
-//   );
-
 // Get draft account
 export const getDraftCandidate = () =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/draft`);
@@ -68,7 +64,7 @@ export const getDraftCandidate = () =>
 export const deleteDraftCandidateById = (id) =>
   api.delete(`${CANDIDATE_URL}${BASE_CANDIDATES}/draft/${id}`);
 
-// Document API
+// Candidate Documents
 export const DOCUMENT_BASE_URL = `${DOCUMENT_URL}${BASE_DOCUMENTS}`;
 export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
   `${DOCUMENT_BASE_URL}/entity/${entityType}/${entityId}`;
@@ -77,3 +73,8 @@ export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
 export const CANDIDATE_WORK_EXPERIENCE_BASE_URL = `${CANDIDATE_WORK_EXPERIENCE_URL}${BASE_CANDIDATE_WORK_EXPERIENCE}`;
 export const GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL = (entityType, entityId) =>
   `${CANDIDATE_WORK_EXPERIENCE_BASE_URL}/entity/${entityType}/${entityId}`;
+
+// Candidate education details
+export const CANDIDATE_EDUCATION_DETAILS_BASE_URL = `${CANDIDATE_EDUCATION_DETAILS_URL}${BASE_CANDIDATE_EDUCATION_DETAILS}`;
+export const GET_CANDIDATE_EDUCATION_DETAILS_BY_ENTITY_URL = (entityType, entityId) =>
+  `${CANDIDATE_EDUCATION_DETAILS_BASE_URL}/entity/${entityType}/${entityId}`;

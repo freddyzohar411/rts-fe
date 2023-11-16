@@ -24,17 +24,13 @@ import {
   clearCandidateFormSubmission,
 } from "../../store/candidateForm/action";
 import { ObjectHelper } from "@workspace/common";
-// import {
-//   CONTACT_BASE_URL,
-//   GET_CONTACT_BY_ENTITY_URL,
-//   DOCUMENT_BASE_URL,
-//   GET_DOCUMENT_BY_ENTITY_URL,
-// } from "../../helpers/endpoint_helper";
 import {
   DOCUMENT_BASE_URL,
   GET_DOCUMENT_BY_ENTITY_URL,
   CANDIDATE_WORK_EXPERIENCE_BASE_URL,
   GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL,
+  CANDIDATE_EDUCATION_DETAILS_BASE_URL,
+  GET_CANDIDATE_EDUCATION_DETAILS_BY_ENTITY_URL,
 } from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
@@ -133,6 +129,19 @@ const CreateCandidate = () => {
         setFormTemplate(formEdited);
         return;
       }
+      if (step === 3) {
+        const formEdited = setTableAPI(
+          form,
+          CandidateTableListConstant.EDUCATION_DETAILS_LIST,
+          GET_CANDIDATE_EDUCATION_DETAILS_BY_ENTITY_URL(
+            CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+            candidateId
+          ),
+          CANDIDATE_EDUCATION_DETAILS_BASE_URL
+        );
+        setFormTemplate(formEdited);
+        return;
+      }
       // if (step === 1) {
       //   const formEdited = setTableAPI(
       //     form,
@@ -217,14 +226,7 @@ const CreateCandidate = () => {
           )
         );
       }
-      // if (step === 3) {
-      //   dispatch(
-      //     fetchAccountFormSubmission(
-      //       AccountEntityConstant.ACCOUNT_INSTRUCTION,
-      //       candidateId
-      //     )
-      //   );
-      // }
+
       // if (step === 5) {
       //   dispatch(
       //     fetchAccountFormSubmission(
@@ -493,6 +495,67 @@ const CreateCandidate = () => {
         dispatch(
           putCandidate({
             entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+            id: tableEditId,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+      }
+    }
+
+    if (step === 3) {
+      // Add contact
+      if (buttonName === "add") {
+        setErrorMessage(null);
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
+
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
+
+      // Cancel add contact and reset form
+      if (buttonName === "cancel" && !editData) {
+        setButtonName("");
+        resetForm([], "create");
+        return;
+      }
+
+      // Update contact
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
+
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.EDUCATION_DETAILS_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
             id: tableEditId,
             newData,
             rerenderTable: rerenderTable,

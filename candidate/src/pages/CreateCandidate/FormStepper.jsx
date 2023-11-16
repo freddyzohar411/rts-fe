@@ -43,6 +43,10 @@ const FormStepper = ({
       handleNext();
     }
 
+    if (activeStep === 3) {
+      handleNext();
+    }
+
     // if (activeStep === 1) {
     //   const table = formFieldsData.filter(
     //     (field) => field.name === "contactList"

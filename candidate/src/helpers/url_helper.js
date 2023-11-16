@@ -25,3 +25,6 @@ export const BASE_FORMS = "/forms";
 // Candidate work experience
 export const BASE_CANDIDATE_WORK_EXPERIENCE = "/work-experience";
 
+// Candidate education details
+export const BASE_CANDIDATE_EDUCATION_DETAILS = "/education-details";
+

@@ -5,6 +5,7 @@ export const candidateModuleURL = {
   candidate_basic_info: `${PortURL.CANDIDATE_URL}${BaseURL.BASE_CANDIDATES}`,
   candidate_documents: `${PortURL.DOCUMENT_URL}${BaseURL.BASE_DOCUMENTS}`,
   candidate_work_experience: `${PortURL.CANDIDATE_WORK_EXPERIENCE_URL}${BaseURL.BASE_CANDIDATE_WORK_EXPERIENCE}`,
+  candidate_education_details: `${PortURL.CANDIDATE_EDUCATION_DETAILS_URL}${BaseURL.BASE_CANDIDATE_EDUCATION_DETAILS}`,
 };
 
 export const generateCandidateModuleURL = (entity, id = undefined) => {
