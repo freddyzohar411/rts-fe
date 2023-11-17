@@ -28,41 +28,51 @@ function getDynamicNestedResult(data, value) {
   return result;
 }
 
-function generateConfig(selectedOptGroup) {
+
+
+function generateConfig(selectedOptGroup, customRender = []) {
   const config = [];
   selectedOptGroup.forEach((opt) => {
+    let render = null;
+    if (customRender.length > 0) {
+      console.log("OPT Value", opt.value)
+      render = customRender.find((item) => item.names.includes(opt.value))?.render || null;
+    }
+
     config.push({
       header: opt.label,
       name: opt.value,
       sort: opt.sort,
       sortValue: opt.sortValue,
       render: (data) => {
-        if (opt.value === "createdAt" || opt.value === "updatedAt") {
-          return formatDateStandard(
-            getDynamicNestedResult(data, opt.value) || "-"
-          );
-        }
-        if (opt.label?.toLowerCase().includes("status")) {
-          return <Badge
-            color={
-              getDynamicNestedResult(data, opt.value)?.toLowerCase() === "active"
-                ? "success"
-                : "warning"
+            // if (opt.value === "createdAt" || opt.value === "updatedAt") {
+            //   return formatDateStandard(
+            //     getDynamicNestedResult(data, opt.value) || "-"
+            //   );
+            // }
+            // if (opt.label?.toLowerCase().includes("status")) {
+            //   return (
+            //     <Badge
+            //       color={
+            //         getDynamicNestedResult(data, opt.value)?.toLowerCase() ===
+            //         "active"
+            //           ? "success"
+            //           : "warning"
+            //       }
+            //       className="text-uppercase"
+            //     >
+            //       {getDynamicNestedResult(data, opt.value) || "-"}
+            //     </Badge>
+            //   );
+            // }
+            if (render) {
+              return render(data, opt);
             }
-            className="text-uppercase"
-          >
-            {getDynamicNestedResult(data, opt.value) || "-"}
-          </Badge>;
-        }
-        return getDynamicNestedResult(data, opt.value) || "-";
-      },
+            return getDynamicNestedResult(data, opt.value) || "-";
+          },
     });
   });
   return config;
 }
 
-export {
-    cleanPageRequest,
-    generateSeachFieldArray,
-    generateConfig,
-}
+export { cleanPageRequest, generateSeachFieldArray, generateConfig, getDynamicNestedResult };

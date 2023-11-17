@@ -8,14 +8,10 @@ import { DashboardEcommerce } from "@workspace/dashboard";
 import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 
 // Account
-import {
-  AccountListing,
-  EditAccount,
-  CreateAccount,
-} from "@workspace/account";
+import { AccountListing, EditAccount, CreateAccount } from "@workspace/account";
 
 // Candidate
-import { CreateCandidate } from "@workspace/candidate";
+import { CreateCandidate, CandidateListing } from "@workspace/candidate";
 
 // Job
 import { JobCreation, JobListing } from "@workspace/job";
@@ -40,7 +36,7 @@ import {
 import { FormbuilderMain } from "@workspace/formbuilder";
 
 // Import constants for permission and module (Route guard)
-import  { Permission } from "@workspace/login";
+import { Permission } from "@workspace/login";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
@@ -49,8 +45,13 @@ const authProtectedRoutes = [
   // User Profile
   { path: "/profile", component: <UserProfile /> },
 
-  // Create Candidate
-  { path: "/create-candidate", component: <CreateCandidate /> },
+  // Candidate
+  {
+    path: "/candidates/create",
+    component: <CreateCandidate />,
+    requiredPermissions: [Permission.CANDIDATE_WRITE],
+  },
+  { path: "/candidates", component: <CandidateListing /> },
 
   // Account
   {
@@ -77,7 +78,6 @@ const authProtectedRoutes = [
   { path: "/settings/access", component: <AccessManagement /> },
   { path: "/settings/access/role/role-creation", component: <CreateNewRole /> },
 
-
   { path: "/settings/access/role/:roleId", component: <ViewRole /> },
   {
     path: "/settings/access/role/update/:roleId",
@@ -94,7 +94,6 @@ const authProtectedRoutes = [
   { path: "/settings/access/user/user-creation", component: <CreateUser /> },
   { path: "/settings/access/user/update/:userId", component: <UpdateUser /> },
 
- 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
   {

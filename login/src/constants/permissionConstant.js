@@ -6,6 +6,13 @@ export const Permission = {
   ACCOUNT_EDIT: "Accounts:Edit",
   ACCOUNT_NOACCESS: "Accounts:NoAccess",
 
+  // Candidate Permissions
+  CANDIDATE_READ: "Candidates:Read",
+  CANDIDATE_WRITE: "Candidates:Write",
+  CANDIDATE_DELETE: "Candidates:Delete",
+  CANDIDATE_EDIT: "Candidates:Edit",
+  CANDIDATE_NOACCESS: "Candidates:NoAccess",
+
   //Other module permissions
   SETTING_READ: "Settings:Read",
   SETTING_WRITE: "Settings:Write",

@@ -6,26 +6,40 @@ import "react-dual-listbox/lib/react-dual-listbox.css";
 import { useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
-import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
+import { CANDIDATE_INITIAL_OPTIONS } from "./candidateListingConstants";
 import { DeleteCustomModal } from "@Workspace/common";
 import {
-  deleteAccount,
-  fetchAccounts,
-  fetchAccountsFields,
-} from "../../store/account/action";
+  deleteCandidate,
+  fetchCandidates,
+  fetchCandidatesFields,
+} from "../../store/candidate/action";
+import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
 
-function AccountListing() {
+function CandidateListing() {
   const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
-  const accountsData = useSelector((state) => state.AccountReducer.accounts);
-  const accountsFields = useSelector(
-    (state) => state.AccountReducer.accountsFields
+  const candidatesData = useSelector(
+    (state) => state.CandidateReducer.candidates
+  );
+  const candidatesFields = useSelector(
+    (state) => state.CandidateReducer.candidatesFields
   );
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+
+  // Custom renders
+  const customRenderList = [
+    {
+      names: ["createdAt", "UpdatedAt"],
+      render: (data, opt) =>
+        DateHelper.formatDateStandard(
+          DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
+        ),
+    },
+  ];
 
   // Table Hooks
   const {
@@ -45,23 +59,17 @@ function AccountListing() {
       sortDirection: "asc",
       searchTerm: null,
       searchFields: DynamicTableHelper.generateSeachFieldArray(
-        ACCOUNT_INITIAL_OPTIONS
+        CANDIDATE_INITIAL_OPTIONS
       ),
     },
-    DynamicTableHelper.generateConfig(ACCOUNT_INITIAL_OPTIONS,[
-      {
-        names: ["createdAt", "UpdatedAt"],
-        render: (data, opt) =>
-          DateHelper.formatDateStandard(
-            DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
-          ),
-      },
-    ])
+    // Overwrite the render for these fields
+    DynamicTableHelper.generateConfig(CANDIDATE_INITIAL_OPTIONS, customRenderList),
+    customRenderList
   );
 
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
-  const generateAccountConfig = (customConfig) => {
+  const generateCandidateConfig = (customConfig) => {
     return [
       {
         header: (
@@ -112,7 +120,7 @@ function AccountListing() {
         render: (data) => (
           <div className="d-flex column-gap-2">
             <Link
-              to={`/accounts/${data.id}/edit`}
+              to={`/candidates/${data.id}/edit`}
               style={{ color: "black" }}
               // state={{ form: 3 }}
               state={{ view: true }}
@@ -124,9 +132,9 @@ function AccountListing() {
                 <i className="ri-eye-line"></i>
               </Button>
             </Link>
-            {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+            {checkAllPermission([Permission.CANDIDATE_EDIT]) && (
               <Link
-                to={`/accounts/${data.id}/edit`}
+                to={`/candidates/${data.id}/edit`}
                 style={{ color: "black" }}
                 state={{ view: false }}
               >
@@ -138,7 +146,7 @@ function AccountListing() {
                 </Button>
               </Link>
             )}
-            {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+            {checkAllPermission([Permission.CANDIDATE_DELETE]) && (
               <Button
                 type="button"
                 className="btn btn-danger d-flex align-items-center column-gap-2"
@@ -161,26 +169,26 @@ function AccountListing() {
 
   // Modal Delete
   const confirmDelete = () => {
-    dispatch(deleteAccount(deleteId));
+    dispatch(deleteCandidate(deleteId));
     setIsDeleteModalOpen(false);
   };
 
   // Get all the option groups
   useEffect(() => {
-    dispatch(fetchAccountsFields());
+    dispatch(fetchCandidatesFields());
   }, []);
 
-  // Fetch the account when the pageRequest changes
+  // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
+    dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
   }, [pageRequest]);
 
-  // Update the page info when account Data changes
+  // Update the page info when candidate Data changes
   useEffect(() => {
-    if (accountsData) {
-      setPageInfoData(accountsData);
+    if (candidatesData) {
+      setPageInfoData(candidatesData);
     }
-  }, [accountsData]);
+  }, [candidatesData]);
 
   return (
     <>
@@ -188,22 +196,22 @@ function AccountListing() {
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
-        header="Delete Account"
-        deleteText={"Are you sure you would like to delete this account?"}
+        header="Delete Candidate"
+        deleteText={"Are you sure you would like to delete this candidate?"}
       />
       <DynamicTableWrapper
-        data={accountsData.accounts}
-        config={generateAccountConfig(customConfig)}
+        data={candidatesData.candidates}
+        config={generateCandidateConfig(customConfig)}
         pageInfo={pageInfo}
         pageRequest={pageRequest}
         pageRequestSet={pageRequestSet}
         search={search}
         setSearch={setSearch}
-        optGroup={accountsFields}
+        optGroup={candidatesFields}
         setCustomConfigData={setCustomConfigData}
       />
     </>
   );
 }
 
-export default AccountListing;
+export default CandidateListing;
