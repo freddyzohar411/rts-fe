@@ -276,7 +276,7 @@ const CreateCandidate = () => {
   ) => {
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
-
+    setErrorMessage(null);
     // Set a reset form functions
     const resetForm = (arrayFields = [], formState = "") => {
       if (arrayFields.length > 0) {
@@ -628,67 +628,80 @@ const CreateCandidate = () => {
       }
     }
 
-    // // Languages
-    // if (step === 5) {
-    //   // Add contact
-    //   if (buttonName === "add") {
-    //     setErrorMessage(null);
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+    // Languages
+    if (step === 5) {
+      // Add contact
+      if (buttonName === "add") {
+        // Check if exist alr in table
+        const table = formFieldsData.filter(
+          (field) => field.name === CandidateTableListConstant.LANGUAGES_LIST
+        );
+   
+        const languageExist = table[0].tableData.find(
+          (item) => item.data.language === newValues.language
+        );
+        console.log("languageExist", table[0].tableData)
+        if (languageExist) {
+          setErrorMessage("Language already selected!");
+          return
+        }
 
-    //     dispatch(
-    //       postCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //     return;
-    //   }
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
 
-    //   // Cancel add contact and reset form
-    //   if (buttonName === "cancel" && !editData) {
-    //     setButtonName("");
-    //     resetForm([], "create");
-    //     return;
-    //   }
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
 
-    //   // Update contact
-    //   if (buttonName === "tableUpdate") {
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+      // Cancel add contact and reset form
+      if (buttonName === "cancel" && !editData) {
+        setButtonName("");
+        resetForm([], "create");
+        return;
+      }
 
-    //     // Get update id
-    //     const table = formFieldsData.find(
-    //       (field) =>
-    //         field.type === "table" &&
-    //         field.name === CandidateTableListConstant.LANGUAGES_LIST
-    //     );
-    //     const { tableEditId } = table.tableSetting;
-    //     dispatch(
-    //       putCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-    //         id: tableEditId,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //   }
-    // }
+      // Update contact
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
+
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.LANGUAGES_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+            id: tableEditId,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+      }
+    }
 
     // Employer Details
     // if (step === 6) {

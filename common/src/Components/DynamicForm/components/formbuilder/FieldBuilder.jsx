@@ -1260,8 +1260,13 @@ const FieldBuilder = ({
     initialValues = formBuilderUpdateData;
   }
 
+  console.log("initialValues - Update", formBuilderUpdateData);
+  console.log("ValidatSchema - Update", validationSchema);
+
+
   // Handle Submit
   const handleFormSchemaSubmit = (values) => {
+    console.log("Clicked")
     let validationSchema = { ...values };
     if (formBuilderUpdateData) {
       validationSchema = { ...formBuilderUpdateData, ...values };
@@ -1329,6 +1334,8 @@ const FieldBuilder = ({
     validationSchema: validationSchema,
     onSubmit: handleFormSchemaSubmit,
   });
+
+  console.log("formik - Update", formik);
 
   //Set default radio value
   useEffect(() => {
@@ -2309,7 +2316,7 @@ const FieldBuilder = ({
 
       <div className="d-flex gap-3 mt-4">
         {formBuilderUpdateData ? (
-          <button type="submit" className="btn btn-secondary">
+          <button type="submit" className="btn btn-secondary" onClick={() => console.log('CLICK')}>
             Update Field
           </button>
         ) : (
