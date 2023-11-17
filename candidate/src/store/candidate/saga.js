@@ -68,7 +68,7 @@ function* workPostCandidate(action) {
       return;
     }
 
-    if (entity === CandidateEntityConstant.CANDIDATE_COMMERCIAL) {
+    if (entity === CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS) {
       yield put(deleteCandidateId());
       // yield put(deleteCandidateCountry());
       toast.success("Candidate created successfully");

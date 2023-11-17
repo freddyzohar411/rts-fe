@@ -47,41 +47,14 @@ const FormStepper = ({
       handleNext();
     }
 
-    // if (activeStep === 1) {
-    //   const table = formFieldsData.filter(
-    //     (field) => field.name === "contactList"
-    //   );
-    //   if (table.length === 1 && table[0]?.tableData?.length > 0) {
-    //     setErrorMessage(null);
-    //     handleNext();
-    //   } else {
-    //     setErrorMessage("Please add 1 contact to proceed");
-    //   }
-    // }
-    // if (activeStep === 2) {
-    //   const table = formFieldsData.filter(
-    //     (field) => field.name === "documentList"
-    //   );
-    //   if (table.length === 1 && table[0]?.tableData?.length > 0) {
-    //     setErrorMessage(null);
-    //     handleNext();
-    //   } else {
-    //     setErrorMessage("Please add 1 document to proceed");
-    //   }
-    // }
-    // if (activeStep === 3 && formikRef?.current?.formik) {
-    //   formikRef.current.formik.submitForm();
-    // }
-    // if (activeStep === 4) {
-    //   handleNext();
-    // }
-    // if (activeStep === 5 && formikRef?.current?.formik) {
-    //   formikRef.current.formik.submitForm();
-    // }
+    if (activeStep === 4) {
+      handleNext();
+    }
 
-    // if (activeStep <= 5) {
-    //   handleNext();
-    // }
+    if (activeStep === 5) {
+      handleNext();
+    }
+
   };
 
   const resetAndDeleteDraftForm = () => {

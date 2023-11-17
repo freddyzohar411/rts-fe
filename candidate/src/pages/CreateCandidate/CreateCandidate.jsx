@@ -294,6 +294,7 @@ const CreateCandidate = () => {
       }
     };
 
+    // Basic Info
     if (step === 0) {
       // Create Account
       if (formSubmissionData === null) {
@@ -349,6 +350,7 @@ const CreateCandidate = () => {
       }
     }
 
+    // Documents
     if (step === 1) {
       // Add document
       if (buttonName === "add") {
@@ -443,6 +445,7 @@ const CreateCandidate = () => {
       }
     }
 
+    // Work Experience
     if (step === 2) {
       // Add contact
       if (buttonName === "add") {
@@ -504,6 +507,7 @@ const CreateCandidate = () => {
       }
     }
 
+    // Education Details
     if (step === 3) {
       // Add contact
       if (buttonName === "add") {
@@ -565,25 +569,26 @@ const CreateCandidate = () => {
       }
     }
 
-    // if (step === 1) {
+    // // Certificates
+    // if (step === 4) {
     //   // Add contact
     //   if (buttonName === "add") {
     //     setErrorMessage(null);
     //     setButtonName("");
     //     const newData = {
     //       ...newValues,
-    //       entityId: accountId,
-    //       entityType: AccountEntityConstant.ACCOUNT_CONTACT,
+    //       entityId: candidateId,
+    //       entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
     //       formData: JSON.stringify(newValues),
     //       formId: parseInt(form.formId),
     //     };
 
     //     dispatch(
-    //       postAccount({
-    //         entity: AccountEntityConstant.ACCOUNT_CONTACT,
+    //       postCandidate({
+    //         entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
     //         newData,
     //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm,
+    //         resetForm: resetForm([], "create"),
     //       })
     //     );
     //     return;
@@ -592,7 +597,7 @@ const CreateCandidate = () => {
     //   // Cancel add contact and reset form
     //   if (buttonName === "cancel" && !editData) {
     //     setButtonName("");
-    //     resetForm();
+    //     resetForm([], "create");
     //     return;
     //   }
 
@@ -601,8 +606,8 @@ const CreateCandidate = () => {
     //     setButtonName("");
     //     const newData = {
     //       ...newValues,
-    //       entityId: accountId,
-    //       entityType: AccountEntityConstant.ACCOUNT_CONTACT,
+    //       entityId: candidateId,
+    //       entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
     //       formData: JSON.stringify(newValues),
     //       formId: parseInt(form.formId),
     //     };
@@ -611,108 +616,76 @@ const CreateCandidate = () => {
     //     const table = formFieldsData.find(
     //       (field) =>
     //         field.type === "table" &&
-    //         field.name === AccountTableListConstant.CONTACT_LIST
+    //         field.name === CandidateTableListConstant.CERTIFICATION_LIST
     //     );
     //     const { tableEditId } = table.tableSetting;
     //     dispatch(
-    //       putAccount({
-    //         entity: AccountEntityConstant.ACCOUNT_CONTACT,
+    //       putCandidate({
+    //         entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
     //         id: tableEditId,
     //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm,
-    //       })
-    //     );
-    //   }
-    // }
-
-    // if (step === 2) {
-    //   // Add document
-    //   if (buttonName === "add") {
-    //     setErrorMessage(null);
-    //     setButtonName("");
-    //     let formValues = { ...newValues };
-    //     const documentData = { ...formValues };
-    //     const fileData = formValues?.file;
-    //     const fileName = fileData?.name;
-    //     formValues = { ...formValues, file: fileName };
-    //     const documentDataOut = {
-    //       ...documentData,
-    //       entityType: AccountEntityConstant.ACCOUNT_DOCUMENT,
-    //       entityId: parseInt(accountId),
-    //       formData: JSON.stringify(formValues),
-    //       formId: parseInt(form.formId),
-    //     };
-    //     delete documentDataOut.documentList;
-
-    //     const documentFormData =
-    //       ObjectHelper.convertObjectToFormData(documentDataOut);
-
-    //     dispatch(
-    //       postAccount({
-    //         entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
-    //         newData: documentFormData,
-    //         config: {
-    //           headers: {
-    //             "Content-Type": "multipart/form-data",
-    //           },
-    //         },
     //         rerenderTable: rerenderTable,
     //         resetForm: resetForm([], "create"),
     //       })
     //     );
     //   }
+    // }
 
-    //   // Cancel add document and reset form
+    // // Languages
+    // if (step === 5) {
+    //   // Add contact
+    //   if (buttonName === "add") {
+    //     setErrorMessage(null);
+    //     setButtonName("");
+    //     const newData = {
+    //       ...newValues,
+    //       entityId: candidateId,
+    //       entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+    //       formData: JSON.stringify(newValues),
+    //       formId: parseInt(form.formId),
+    //     };
+
+    //     dispatch(
+    //       postCandidate({
+    //         entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+    //         newData,
+    //         rerenderTable: rerenderTable,
+    //         resetForm: resetForm([], "create"),
+    //       })
+    //     );
+    //     return;
+    //   }
+
+    //   // Cancel add contact and reset form
     //   if (buttonName === "cancel" && !editData) {
+    //     setButtonName("");
     //     resetForm([], "create");
     //     return;
     //   }
 
-    //   // Update document
+    //   // Update contact
     //   if (buttonName === "tableUpdate") {
     //     setButtonName("");
-    //     let formValues = { ...newValues };
-    //     const documentData = { ...formValues };
-    //     const fileData = formValues?.file;
-    //     if (typeof fileData === "string") {
-    //       // Remove upload agreement from object
-    //       formValues = { ...formValues, file: fileData };
-    //       delete documentData.file;
-    //     } else {
-    //       const fileName = fileData?.name;
-    //       formValues = { ...formValues, file: fileName };
-    //     }
-
-    //     const documentDataOut = {
-    //       ...documentData,
-    //       entityType: AccountEntityConstant.ACCOUNT_DOCUMENT,
-    //       entityId: parseInt(accountId),
-    //       formData: JSON.stringify(formValues),
+    //     const newData = {
+    //       ...newValues,
+    //       entityId: candidateId,
+    //       entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+    //       formData: JSON.stringify(newValues),
     //       formId: parseInt(form.formId),
     //     };
-    //     delete documentDataOut.documentList;
-
-    //     const documentFormData =
-    //       ObjectHelper.convertObjectToFormData(documentDataOut);
 
     //     // Get update id
     //     const table = formFieldsData.find(
     //       (field) =>
     //         field.type === "table" &&
-    //         field.name === AccountTableListConstant.DOCUMENT_LIST
+    //         field.name === CandidateTableListConstant.LANGUAGES_LIST
     //     );
     //     const { tableEditId } = table.tableSetting;
     //     dispatch(
-    //       putAccount({
-    //         entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
+    //       putCandidate({
+    //         entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
     //         id: tableEditId,
-    //         newData: documentFormData,
-    //         config: {
-    //           headers: {
-    //             "Content-Type": "multipart/form-data",
-    //           },
-    //         },
+    //         newData,
     //         rerenderTable: rerenderTable,
     //         resetForm: resetForm([], "create"),
     //       })
@@ -720,102 +693,73 @@ const CreateCandidate = () => {
     //   }
     // }
 
-    // if (step === 3) {
-    //   // Add instruction document
+    // Employer Details
+    // if (step === 6) {
+    //   // Add contact
     //   if (buttonName === "add") {
+    //     setErrorMessage(null);
     //     setButtonName("");
-    //     let formValues = { file: newValues.file };
-    //     const documentData = { ...formValues };
-    //     const fileData = formValues?.file;
-    //     const fileName = fileData?.name;
-    //     formValues = { ...formValues, file: fileName };
-    //     const documentDataOut = {
-    //       ...documentData,
-    //       entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION_DOCUMENT,
-    //       entityId: parseInt(accountId),
-    //       formData: JSON.stringify(formValues),
+    //     const newData = {
+    //       ...newValues,
+    //       entityId: candidateId,
+    //       entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+    //       formData: JSON.stringify(newValues),
     //       formId: parseInt(form.formId),
     //     };
 
-    //     const documentFormData =
-    //       ObjectHelper.convertObjectToFormData(documentDataOut);
     //     dispatch(
-    //       postAccount({
-    //         entity: AccountEntityConstant.ACCOUNT_DOCUMENT,
-    //         newData: documentFormData,
-    //         config: {
-    //           headers: {
-    //             "Content-Type": "multipart/form-data",
-    //           },
-    //         },
+    //       postCandidate({
+    //         entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+    //         newData,
     //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm(["file"]),
+    //         resetForm: resetForm([], "create"),
     //       })
     //     );
     //     return;
     //   }
 
-    //   //Create instruction
-    //   if (formSubmissionData === null) {
-    //     const formData = {
-    //       guidelines: newValues.guidelines,
-    //     };
+    //   // Cancel add contact and reset form
+    //   if (buttonName === "cancel" && !editData) {
+    //     setButtonName("");
+    //     resetForm([], "create");
+    //     return;
+    //   }
+
+    //   // Update contact
+    //   if (buttonName === "tableUpdate") {
+    //     setButtonName("");
     //     const newData = {
-    //       ...formData,
-    //       entityId: accountId,
-    //       entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION,
-    //       formData: JSON.stringify(formData),
+    //       ...newValues,
+    //       entityId: candidateId,
+    //       entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+    //       formData: JSON.stringify(newValues),
     //       formId: parseInt(form.formId),
     //     };
 
-    //     dispatch(
-    //       postAccount({
-    //         entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //       })
+    //     // Get update id
+    //     const table = formFieldsData.find(
+    //       (field) =>
+    //         field.type === "table" &&
+    //         field.name === CandidateTableListConstant.EMPLOYER_DETAILS_LIST
     //     );
-    //   } else {
-    //     // Update instruction
-    //     const formData = {
-    //       guidelines: newValues.guidelines,
-    //     };
-    //     const newData = {
-    //       ...formData,
-    //       entityId: accountId,
-    //       entityType: AccountEntityConstant.ACCOUNT_INSTRUCTION,
-    //       formData: JSON.stringify(formData),
-    //       formId: parseInt(form.formId),
-    //     };
-
+    //     const { tableEditId } = table.tableSetting;
     //     dispatch(
-    //       putAccount({
-    //         entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
-    //         id: editId,
+    //       putCandidate({
+    //         entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+    //         id: tableEditId,
     //         newData,
     //         rerenderTable: rerenderTable,
+    //         resetForm: resetForm([], "create"),
     //       })
     //     );
     //   }
+
+    //   // Patch draft status to false
+    //   if (buttonName === "submit") {
+    //    // Fetch to patch draft status to false
+    //   }
     // }
 
-    // if (step === 5) {
-    //   // Create commercial
-    //   const formData = {
-    //     ...newValues,
-    //     entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
-    //     entityId: parseInt(accountId),
-    //     formData: JSON.stringify(newValues),
-    //     formId: parseInt(form.formId),
-    //   };
-    //   dispatch(
-    //     postAccount({
-    //       entity: AccountEntityConstant.ACCOUNT_COMMERCIAL,
-    //       id: accountId,
-    //       newData: formData,
-    //     })
-    //   );
-    // }
   };
 
   /**
