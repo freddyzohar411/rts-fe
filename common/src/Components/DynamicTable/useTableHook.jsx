@@ -5,7 +5,11 @@ import {
   generateConfig,
 } from "../../helpers/dynamicTable_helper";
 
-const useTableHook = (initialPageRequest = {}, initialConfig = [], customConfigList) => {
+const useTableHook = (
+  initialPageRequest = {},
+  initialConfig = [],
+  customConfigList = []
+) => {
   // Set state for page request
   const [pageRequest, setPageRequest] = useState({
     page: initialPageRequest?.page || 0,
@@ -24,18 +28,18 @@ const useTableHook = (initialPageRequest = {}, initialConfig = [], customConfigL
 
   const [search, setSearch] = useState("");
 
-  const [customConfig, setCustomConfig] = useState(initialConfig);
+  const [customConfig, setCustomConfig] = useState(
+    generateConfig(initialConfig, customConfigList)
+  );
 
-  const [customConfigListState, setCustomConfigListState] = useState(customConfigList ||[]);
+  const [customConfigListState, setCustomConfigListState] = useState(
+    customConfigList || []
+  );
 
   // const [customRenderList, setCustomRenderList] = useState([]);
 
-
-
   const setCustomConfigData = (selectedOptGroup) => {
-    console.log("selectedOptGroup", selectedOptGroup);
-    console.log("customConfigListState", customConfigListState);
-    setCustomConfig(generateConfig(selectedOptGroup, customConfigListState));
+    setCustomConfig(generateConfig(selectedOptGroup, customConfigList));
     setPageRequest((prev) => ({
       ...prev,
       searchFields: generateSeachFieldArray(selectedOptGroup),

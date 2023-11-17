@@ -33,7 +33,7 @@ function CandidateListing() {
   // Custom renders
   const customRenderList = [
     {
-      names: ["createdAt", "UpdatedAt"],
+      names: ["updatedAt","createdAt"],
       render: (data, opt) =>
         DateHelper.formatDateStandard(
           DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
@@ -62,8 +62,7 @@ function CandidateListing() {
         CANDIDATE_INITIAL_OPTIONS
       ),
     },
-    // Overwrite the render for these fields
-    DynamicTableHelper.generateConfig(CANDIDATE_INITIAL_OPTIONS, customRenderList),
+    CANDIDATE_INITIAL_OPTIONS,
     customRenderList
   );
 

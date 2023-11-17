@@ -36,7 +36,7 @@ function CustomisationSettings() {
       searchTerm: null,
       searchFields: generateSeachFieldArray(CUSTOMISATION_INITIAL_OPTION),
     },
-    generateConfig(CUSTOMISATION_INITIAL_OPTION)
+    CUSTOMISATION_INITIAL_OPTION
   );
 
   //========================== User Setup ============================
