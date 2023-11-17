@@ -22,13 +22,65 @@ const FieldBuilder = ({
   formOptions,
 }) => {
   //========================= States ================================
-    // Condition validation state
-    const [validationConditionList, setValidationConditionList] = useState(
-      formBuilderUpdateData?.conditionValidation
-        ? formBuilderUpdateData.conditionValidation
-        : []
-    );
+  // Condition validation state
+  const [validationConditionList, setValidationConditionList] = useState(
+    formBuilderUpdateData?.conditionValidation
+      ? formBuilderUpdateData.conditionValidation
+      : []
+  );
   // ========================= Field Setting =========================
+  const generateList = (type) => {
+    if (type === "singleselectapi" || type === "multiselectapi") {
+      return [
+        {
+          label: "Industry",
+          value: "industry",
+        },
+        {
+          label: "Country",
+          value: "country",
+        },
+        {
+          label: "Department",
+          value: "department",
+        },
+        {
+          label: "Sub Industry",
+          value: "subIndustry",
+        },
+      ];
+    }
+    return [
+      {
+        label: "Primary Skills",
+        value: "primarySkills",
+      },
+      {
+        label: "Secondary Skills",
+        value: "secondarySkills",
+      },
+      {
+        label: "Spoken languages",
+        value: "spokenLanguages",
+      },
+      {
+        label: "Employment Type",
+        value: "employmentType",
+      },
+      {
+        label: "Location Type",
+        value: "locationType",
+      },
+      {
+        label: "Qualifications",
+        value: "qualifications",
+      },
+      {
+        label: "Visa Status",
+        value: "visaStatus",
+      },
+    ];
+  };
   // Overall Form schema config (For all types of fields)
   const config = [
     {
@@ -61,6 +113,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -104,6 +157,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
       validation: [
         {
@@ -112,7 +166,6 @@ const FieldBuilder = ({
         },
       ],
     },
-
     {
       label: "PlaceHolder",
       type: "text",
@@ -140,6 +193,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -178,6 +232,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -218,6 +273,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -250,37 +306,13 @@ const FieldBuilder = ({
       label: "Select List",
       type: "select",
       name: "list",
-      options: [
-        {
-          label: "Primary Skills",
-          value: "primarySkills",
-        },
-        {
-          label: "Secondary Skills",
-          value: "secondarySkills",
-        },
-        {
-          label: "Spoken languages",
-          value: "spokenLanguages",
-        },
-        {
-          label: "Employment Type",
-          value: "employmentType",
-        },
-        {
-          label: "Location Type",
-          value: "locationType",
-        },
-        {
-          label: "Qualifications",
-          value: "qualifications",
-        },
-        {
-          label: "Visa Status",
-          value: "visaStatus",
-        },
+      options: generateList(type),
+      apply: [
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
       ],
-      apply: ["multiselect", "singleselect"],
     },
     {
       label: "Options",
@@ -335,6 +367,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -365,6 +398,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -632,7 +666,7 @@ const FieldBuilder = ({
         label: field.name,
         value: field.name,
       })),
-      apply: ["selectsubindustry", "selectstate", "selectcity"],
+      apply: ["selectsubindustry", "selectstate", "selectcity", "singleselectapi", "multiselectapi"],
     },
     {
       label: "Visible Off (Conditions)",
@@ -676,6 +710,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -699,7 +734,6 @@ const FieldBuilder = ({
         "beforeOrEqual",
         "after",
         "afterOrEqual",
-
       ],
       apply: [
         "text",
@@ -725,6 +759,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -755,6 +790,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
       renderCondition: validationConditionList.length > 0,
     },
@@ -858,6 +894,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     // Which include key value pair for table
@@ -902,6 +939,7 @@ const FieldBuilder = ({
         "parentcompany",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -943,6 +981,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -980,6 +1019,7 @@ const FieldBuilder = ({
         "searchselect",
         "multiselect",
         "singleselect",
+        "singleselectapi",
       ],
     },
     {
@@ -1120,6 +1160,13 @@ const FieldBuilder = ({
       break;
     case "multiselect":
       header = "Multi Select Field";
+      break;
+    case "singleselectapi":
+      header = "Single Select API Field";
+      break;
+    case "multiselectapi":
+      header = "Multi Select API Field";
+      break;
     default:
   }
 
@@ -1296,7 +1343,11 @@ const FieldBuilder = ({
     <form onSubmit={formik.handleSubmit}>
       <h1 className="mb-4">{header}</h1>
       {schema?.map((field, index) => {
-        if (field.type === "text" && ifContainsType(type, field.apply) && (field.renderCondition ?? true)) {
+        if (
+          field.type === "text" &&
+          ifContainsType(type, field.apply) &&
+          (field.renderCondition ?? true)
+        ) {
           return (
             <div className="mb-3">
               <label htmlFor={field.name} className="form-label">
@@ -1685,7 +1736,11 @@ const FieldBuilder = ({
                         setValidationConditionList((prev) =>
                           prev.map((item, i) =>
                             i === index
-                              ? { ...item, field: e.target.value, value: e.target.value ? "" : item.value }
+                              ? {
+                                  ...item,
+                                  field: e.target.value,
+                                  value: e.target.value ? "" : item.value,
+                                }
                               : item
                           )
                         );
@@ -1706,7 +1761,11 @@ const FieldBuilder = ({
                         setValidationConditionList((prev) =>
                           prev.map((item, i) =>
                             i === index
-                              ? { ...item, value: e.target.value, field: e.target.value ? "" : item.field }
+                              ? {
+                                  ...item,
+                                  value: e.target.value,
+                                  field: e.target.value ? "" : item.field,
+                                }
                               : item
                           )
                         )
