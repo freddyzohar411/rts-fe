@@ -11,7 +11,7 @@ import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 import { AccountListing, EditAccount, CreateAccount } from "@workspace/account";
 
 // Candidate
-import { CreateCandidate, CandidateListing } from "@workspace/candidate";
+import { CreateCandidate, CandidateListing, EditCandidate } from "@workspace/candidate";
 
 // Job
 import { JobCreation, JobListing } from "@workspace/job";
@@ -51,6 +51,7 @@ const authProtectedRoutes = [
     component: <CreateCandidate />,
     requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
+  { path: "/candidates/:candidateId/edit", component: <EditCandidate /> },
   { path: "/candidates", component: <CandidateListing /> },
 
   // Account
