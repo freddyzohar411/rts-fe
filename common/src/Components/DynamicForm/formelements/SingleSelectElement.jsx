@@ -4,7 +4,7 @@ import Select from "react-select";
 import { Lists } from "./listOptions";
 
 const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
-
+  const { formState } = formStateHook;
   const getInitialOptions = (field) => {
     if (!field) return [];
     if (field.list) {
@@ -63,10 +63,10 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
     control: (base, state) => ({
       ...base,
       // state.isFocused can display different borderColor if you need it
-      borderColor: state.isFocused ? "#ddd" : isValid ? "#ddd" : "red",
+      borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       // overwrittes hover style
       "&:hover": {
-        borderColor: state.isFocused ? "#ddd" : isValid ? "#ddd" : "red",
+        borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       },
     }),
   };
@@ -92,6 +92,7 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
         placeholder={field.placeholder ?? "Search..."}
         options={options}
         noOptionsMessage={noOptionsMessage}
+        isDisabled={formState === "view" ? true : false}
       />
       {props?.error && (
         <FormFeedback type="invalid">{props?.error}</FormFeedback>

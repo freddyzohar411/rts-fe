@@ -5,8 +5,7 @@ import { Lists } from "./listOptions";
 import axios from "axios";
 
 const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
-  //   console.log("Lists: ", Lists[field.list]);
-  //   console.log("field: ", field.list);
+  const { formState } = formStateHook;
   const getInitialOptions = (field) => {
     if (!field) return [];
     if (field.list) {
@@ -99,10 +98,10 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
     control: (base, state) => ({
       ...base,
       // state.isFocused can display different borderColor if you need it
-      borderColor: state.isFocused ? "#ddd" : isValid ? "#ddd" : "red",
+      borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       // overwrittes hover style
       "&:hover": {
-        borderColor: state.isFocused ? "#ddd" : isValid ? "#ddd" : "red",
+        borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       },
     }),
     // valueContainer: (provided) => ({
@@ -155,6 +154,7 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
         placeholder={field.placeholder ?? "Search..."}
         options={options}
         noOptionsMessage={noOptionsMessage}
+        isDisabled={formState === "view" ? true : false}
         // components={{
         //   ValueContainer: CustomValueContainer,
         // }}
