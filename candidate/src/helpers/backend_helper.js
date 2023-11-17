@@ -6,6 +6,9 @@ import {
   BASE_DOCUMENTS,
   BASE_CANDIDATE_WORK_EXPERIENCE,
   BASE_CANDIDATE_EDUCATION_DETAILS,
+  BASE_CERTIFICATE,
+  BASE_LANGUAGES,
+  BASE_EMPLOYER_DETAILS
 } from "./url_helper";
 
 import {
@@ -14,6 +17,9 @@ import {
   FORM_URL,
   CANDIDATE_WORK_EXPERIENCE_URL,
   CANDIDATE_EDUCATION_DETAILS_URL,
+  CANDIDATE_CERTIFICATE_URL,
+  CANDIDATE_LANGUAGES_URL,
+  CANDIDATE_EMPLOYER_DETAILS_URL
 } from "@workspace/common/src/config";
 
 import { generateCandidateModuleURL, candidateModuleURL } from "./constant";
@@ -78,3 +84,18 @@ export const GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL = (entityType, entityId
 export const CANDIDATE_EDUCATION_DETAILS_BASE_URL = `${CANDIDATE_EDUCATION_DETAILS_URL}${BASE_CANDIDATE_EDUCATION_DETAILS}`;
 export const GET_CANDIDATE_EDUCATION_DETAILS_BY_ENTITY_URL = (entityType, entityId) =>
   `${CANDIDATE_EDUCATION_DETAILS_BASE_URL}/entity/${entityType}/${entityId}`;
+
+// Candidate certificate
+export const CANDIDATE_CERTIFICATE_BASE_URL = `${CANDIDATE_CERTIFICATE_URL}${BASE_CERTIFICATE}`;
+export const GET_CANDIDATE_CERTIFICATE_BY_ENTITY_URL = (entityType, entityId) =>
+  `${CANDIDATE_CERTIFICATE_BASE_URL}/entity/${entityType}/${entityId}`;
+
+// Candidate languages
+export const CANDIDATE_LANGUAGES_BASE_URL = `${CANDIDATE_LANGUAGES_URL}${BASE_LANGUAGES}`;
+export const GET_CANDIDATE_LANGUAGES_BY_ENTITY_URL = (entityType, entityId) =>
+  `${CANDIDATE_LANGUAGES_BASE_URL}/entity/${entityType}/${entityId}`;
+
+// Candidate employer details
+export const CANDIDATE_EMPLOYER_DETAILS_BASE_URL = `${CANDIDATE_EMPLOYER_DETAILS_URL}${BASE_EMPLOYER_DETAILS}`;
+export const GET_CANDIDATE_EMPLOYER_DETAILS_BY_ENTITY_URL = (entityType, entityId) =>
+  `${CANDIDATE_EMPLOYER_DETAILS_BASE_URL}/entity/${entityType}/${entityId}`;

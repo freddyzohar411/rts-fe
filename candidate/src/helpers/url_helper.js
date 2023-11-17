@@ -11,7 +11,7 @@ export const BASE_WORK_EXPERIENCE = "/work-experience";
 export const BASE_EDUCATION_DETAILS = "/education-details";
 
 // Candidate certificate
-export const BASE_CERTIFICATE = "/certificate";
+export const BASE_CERTIFICATE = "/certifications";
 
 // Candidate languages
 export const BASE_LANGUAGES = "/languages";

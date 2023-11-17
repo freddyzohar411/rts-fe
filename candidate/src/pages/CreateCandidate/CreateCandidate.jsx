@@ -31,6 +31,8 @@ import {
   GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL,
   CANDIDATE_EDUCATION_DETAILS_BASE_URL,
   GET_CANDIDATE_EDUCATION_DETAILS_BY_ENTITY_URL,
+  CANDIDATE_CERTIFICATE_BASE_URL,
+  GET_CANDIDATE_CERTIFICATE_BY_ENTITY_URL,
 } from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
@@ -138,6 +140,19 @@ const CreateCandidate = () => {
             candidateId
           ),
           CANDIDATE_EDUCATION_DETAILS_BASE_URL
+        );
+        setFormTemplate(formEdited);
+        return;
+      }
+      if (step === 4) {
+        const formEdited = setTableAPI(
+          form,
+          CandidateTableListConstant.CERTIFICATION_LIST,
+          GET_CANDIDATE_CERTIFICATE_BY_ENTITY_URL(
+            CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+            candidateId
+          ),
+          CANDIDATE_CERTIFICATE_BASE_URL
         );
         setFormTemplate(formEdited);
         return;
@@ -569,67 +584,67 @@ const CreateCandidate = () => {
       }
     }
 
-    // // Certificates
-    // if (step === 4) {
-    //   // Add contact
-    //   if (buttonName === "add") {
-    //     setErrorMessage(null);
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+    // Certificates
+    if (step === 4) {
+      // Add contact
+      if (buttonName === "add") {
+        setErrorMessage(null);
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
 
-    //     dispatch(
-    //       postCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //     return;
-    //   }
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
 
-    //   // Cancel add contact and reset form
-    //   if (buttonName === "cancel" && !editData) {
-    //     setButtonName("");
-    //     resetForm([], "create");
-    //     return;
-    //   }
+      // Cancel add contact and reset form
+      if (buttonName === "cancel" && !editData) {
+        setButtonName("");
+        resetForm([], "create");
+        return;
+      }
 
-    //   // Update contact
-    //   if (buttonName === "tableUpdate") {
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+      // Update contact
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
 
-    //     // Get update id
-    //     const table = formFieldsData.find(
-    //       (field) =>
-    //         field.type === "table" &&
-    //         field.name === CandidateTableListConstant.CERTIFICATION_LIST
-    //     );
-    //     const { tableEditId } = table.tableSetting;
-    //     dispatch(
-    //       putCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
-    //         id: tableEditId,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //   }
-    // }
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.CERTIFICATION_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+            id: tableEditId,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+      }
+    }
 
     // // Languages
     // if (step === 5) {
@@ -759,7 +774,6 @@ const CreateCandidate = () => {
     //    // Fetch to patch draft status to false
     //   }
     // }
-
   };
 
   /**

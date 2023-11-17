@@ -51,7 +51,7 @@ export const CANDIDATE_EDUCATION_DETAILS_URL = "http://localhost:9600";
 export const CANDIDATE_CERTIFICATE_URL = "http://localhost:9700";
 
 // Candidate/Language service
-export const CANDIDATE_LANGUAGE_URL = "http://localhost:9800";
+export const CANDIDATE_LANGUAGES_URL = "http://localhost:9800";
 
 // Candidate/Employer details service
 export const CANDIDATE_EMPLOYER_DETAILS_URL = "http://localhost:9900";

@@ -32,12 +32,6 @@ const useTableHook = (
     generateConfig(initialConfig, customConfigList)
   );
 
-  const [customConfigListState, setCustomConfigListState] = useState(
-    customConfigList || []
-  );
-
-  // const [customRenderList, setCustomRenderList] = useState([]);
-
   const setCustomConfigData = (selectedOptGroup) => {
     setCustomConfig(generateConfig(selectedOptGroup, customConfigList));
     setPageRequest((prev) => ({
