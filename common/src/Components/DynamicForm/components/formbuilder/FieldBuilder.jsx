@@ -48,6 +48,10 @@ const FieldBuilder = ({
           label: "Sub Industry",
           value: "subIndustry",
         },
+        {
+          label: "City",
+          value: "city",
+        },
       ];
     }
     return [

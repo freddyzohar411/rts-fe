@@ -34,7 +34,7 @@ const SubIndustrySelectElement = ({ formik, field, formStateHook }) => {
   }, [formik?.values?.[field.parent]]);
 
   useEffect(() => {
-    setSubIndustry(subIndustryData);
+    setSubIndustry(subIndustryData || []);
   }, [subIndustryData]);
 
   return (

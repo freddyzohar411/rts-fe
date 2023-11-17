@@ -576,67 +576,67 @@ const EditCandidate = () => {
       }
     }
 
-    // // Languages
-    // if (step === 5) {
-    //   // Add contact
-    //   if (buttonName === "add") {
-    //     setErrorMessage(null);
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+    // Languages
+    if (step === 5) {
+      // Add contact
+      if (buttonName === "add") {
+        setErrorMessage(null);
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
 
-    //     dispatch(
-    //       postCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //     return;
-    //   }
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
 
-    //   // Cancel add contact and reset form
-    //   if (buttonName === "cancel" && !editData) {
-    //     setButtonName("");
-    //     resetForm([], "create");
-    //     return;
-    //   }
+      // Cancel add contact and reset form
+      if (buttonName === "cancel" && !editData) {
+        setButtonName("");
+        resetForm([], "create");
+        return;
+      }
 
-    //   // Update contact
-    //   if (buttonName === "tableUpdate") {
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+      // Update contact
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
 
-    //     // Get update id
-    //     const table = formFieldsData.find(
-    //       (field) =>
-    //         field.type === "table" &&
-    //         field.name === CandidateTableListConstant.LANGUAGES_LIST
-    //     );
-    //     const { tableEditId } = table.tableSetting;
-    //     dispatch(
-    //       putCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-    //         id: tableEditId,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //   }
-    // }
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.LANGUAGES_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+            id: tableEditId,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+      }
+    }
 
     // Employer Details
     // if (step === 6) {
