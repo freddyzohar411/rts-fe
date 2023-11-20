@@ -5,7 +5,6 @@ import Select from "react-select";
 import { fetchIndustry } from "../../../store/industry/action";
 import { fetchDepartment } from "../../../store/actions";
 import { fetchCountryCurrency } from "../../../store/countrycurrency/action";
-import { fetchSubIndustry } from "../../../store/industry/action";
 import { getSubIndustries, getCities } from "../../../helpers/backend_helper";
 
 const MultiSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {

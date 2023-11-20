@@ -552,24 +552,11 @@ const EditAccount = () => {
   const toggleFormViewState = () => {
     if (step === 1 || step === 2) {
       if (view === false) {
-        // formFormik.resetForm();
         formikRef.current.clearForm();
       }
     }
     setView((prevState) => !prevState);
   };
-
-  // /**
-  //  * Handle Account Success
-  //  */
-  // if (createMetaData?.isSuccess) {
-  //   dispatch(resetMetaData());
-  //   if (step === 5) {
-  //     navigate("/accounts");
-  //     return;
-  //   }
-  //   handleNext();
-  // }
 
   /**
    * Handle Account Success
@@ -586,8 +573,6 @@ const EditAccount = () => {
   /**
    * Handle Account success (Update)
    */
-  console.log("Step", step);
-  console.log("Step UpdateMeta: ", updateMetaData);
   if (updateMetaData?.isSuccess) {
     dispatch(resetMetaData());
     if (step === 5) {

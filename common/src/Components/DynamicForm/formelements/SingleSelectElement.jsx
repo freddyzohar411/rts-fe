@@ -11,8 +11,7 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
       return Lists[field.list];
     } else if (field.options) {
       return field.options;
-    }
-    else {
+    } else {
       return null;
     }
   };

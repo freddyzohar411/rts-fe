@@ -73,8 +73,6 @@ const EditCandidate = () => {
     linkState?.view !== null ? linkState?.view : true
   );
 
-  console.log("Step: ", step);
-
   /**
    * Get candidate id from url
    */

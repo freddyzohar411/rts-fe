@@ -24,10 +24,10 @@ const CANDIDATE_INITIAL_OPTIONS = [
     sortValue: "candidate_submission_data.candidateStatus",
   },
   {
-    label:"Visa Status",
-    value:"candidateSubmissionData.visaStatus",
-    sort:true,
-    sortValue:"candidate_submission_data.visaStatus"
+    label: "Visa Status",
+    value: "candidateSubmissionData.visaStatus",
+    sort: true,
+    sortValue: "candidate_submission_data.visaStatus",
   },
   {
     label: "Created By",
@@ -42,7 +42,7 @@ const CANDIDATE_INITIAL_OPTIONS = [
     sortValue: "created_at",
   },
   {
-   label: "Email",
+    label: "Email",
     value: "candidateSubmissionData.email",
     sort: true,
     sortValue: "candidate_submission_data.email",

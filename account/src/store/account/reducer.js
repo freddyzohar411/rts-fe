@@ -39,10 +39,6 @@ const initialState = {
   updateMeta: {},
   deleteMeta: {},
   tableMeta: {},
-  // loading: false,
-  // error: false,
-  // errorMsg: "",
-  // success: false,
 };
 
 const AccountReducer = (state = initialState, action) => {

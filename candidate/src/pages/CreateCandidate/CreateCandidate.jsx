@@ -49,12 +49,11 @@ const CreateCandidate = () => {
   const { getAllUserGroups } = useUserAuth();
 
   const form = useSelector((state) => state.CandidateFormReducer.form);
-  console.log("form", form);
 
   const candidateId = useSelector(
     (state) => state.CandidateRegistrationReducer.candidateId
   );
-  const accountCountry = useSelector(
+  const candidateCountry = useSelector(
     (state) => state.CandidateRegistrationReducer.candidateCountry
   );
 
@@ -86,22 +85,14 @@ const CreateCandidate = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
 
-  // ============Console.log============
-
-  console.log("Step", step);
-  console.log("Form submission data: ", formSubmissionData);
-  console.log("candidate ID", candidateId);
-
-  //====================================
-
   /**
    * Set country if is in edit mode
    */
   useEffect(() => {
-    if (accountCountry) {
-      setCountry(accountCountry);
+    if (candidateCountry) {
+      setCountry(candidateCountry);
     }
-  }, [accountCountry]);
+  }, [candidateCountry]);
 
   /**
    * Fetch form template based on step
@@ -303,8 +294,6 @@ const CreateCandidate = () => {
           formData: JSON.stringify(candidateData),
           formId: parseInt(form.formId),
         };
-        // console.log("Form Id", form.formId)
-        // return;
         const formData1 =
           ObjectHelper.convertObjectToFormData(candidateDataOut);
 
@@ -636,14 +625,12 @@ const CreateCandidate = () => {
         const table = formFieldsData.filter(
           (field) => field.name === CandidateTableListConstant.LANGUAGES_LIST
         );
-   
         const languageExist = table[0].tableData.find(
           (item) => item.data.language === newValues.language
         );
-        console.log("languageExist", table[0].tableData)
         if (languageExist) {
           setErrorMessage("Language already selected!");
-          return
+          return;
         }
 
         setButtonName("");
@@ -803,7 +790,7 @@ const CreateCandidate = () => {
   if (createMetaData?.isSuccess) {
     dispatch(resetMetaData());
     if (step === 6) {
-      navigate("/accounts");
+      navigate("/candidates");
       return;
     }
     handleNext();
@@ -815,7 +802,7 @@ const CreateCandidate = () => {
   if (updateMetaData?.isSuccess) {
     dispatch(resetMetaData());
     if (step === 6) {
-      navigate("/accounts");
+      navigate("/candidates");
       return;
     }
     handleNext();
@@ -838,7 +825,7 @@ const CreateCandidate = () => {
           <Form
             template={formTemplate}
             userDetails={getAllUserGroups()}
-            country={accountCountry || country?.name || null}
+            country={candidateCountry || country?.name || null}
             editData={formSubmissionData}
             onSubmit={handleFormSubmit}
             onFormFieldsChange={handleFormFieldChange}

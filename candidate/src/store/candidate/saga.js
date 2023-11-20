@@ -48,9 +48,7 @@ function* workPostCandidate(action) {
     action.payload;
   try {
     const response = yield call(createCandidate, entity, id, newData, config);
-    if (
-      entity === CandidateEntityConstant.CANDIDATE_BASIC_INFO
-    ) {
+    if (entity === CandidateEntityConstant.CANDIDATE_BASIC_INFO) {
       yield put(postCandidateSuccess(response.data));
     }
 
@@ -64,7 +62,7 @@ function* workPostCandidate(action) {
 
     if (entity === CandidateEntityConstant.CANDIDATE_BASIC_INFO) {
       yield put(setCandidateId(response.data.id));
-      // yield put(setCandidateCountry(response.data.accountCountry));
+      // yield put(setCandidateCountry(response.data.candidateCountry));
       return;
     }
 
@@ -86,9 +84,7 @@ function* workPutCandidate(action) {
     action.payload;
   try {
     const response = yield call(updateCandidate, entity, id, newData, config);
-    if (
-      entity === CandidateEntityConstant.CANDIDATE_BASIC_INFO
-    ) {
+    if (entity === CandidateEntityConstant.CANDIDATE_BASIC_INFO) {
       yield put(putCandidateSuccess(response.data));
     }
 
@@ -98,7 +94,7 @@ function* workPutCandidate(action) {
       toast.success("Candidate updated successfully");
       return;
     }
-    
+
     if (typeof resetForm === "function") {
       resetForm();
     }

@@ -677,7 +677,12 @@ const FieldBuilder = ({
         label: field.name,
         value: field.name,
       })),
-      apply: ["selectsubindustry", "selectstate", "selectcity", "singleselectapi"],
+      apply: [
+        "selectsubindustry",
+        "selectstate",
+        "selectcity",
+        "singleselectapi",
+      ],
     },
     {
       label: "Visible Off (Conditions)",
@@ -1278,13 +1283,8 @@ const FieldBuilder = ({
     initialValues = formBuilderUpdateData;
   }
 
-  console.log("initialValues - Update", formBuilderUpdateData);
-  console.log("ValidatSchema - Update", validationSchema);
-
-
   // Handle Submit
   const handleFormSchemaSubmit = (values) => {
-    console.log("Clicked")
     let validationSchema = { ...values };
     if (formBuilderUpdateData) {
       validationSchema = { ...formBuilderUpdateData, ...values };
@@ -1310,7 +1310,6 @@ const FieldBuilder = ({
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
       validationSchema.conditionValidation = validationConditionList;
-      console.log("Final validationSchema", validationSchema);
       updateFormField(validationSchema, formBuilderUpdateData.index);
       setFormBuilderType(null);
       setFormBuilderUpdateData(null);
@@ -1337,7 +1336,6 @@ const FieldBuilder = ({
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
       validationSchema.conditionValidation = validationConditionList;
-      console.log("Final validationSchema", validationSchema);
       addFormField(validationSchema);
       // Set Form Schema
       setFormFieldId(validationSchema.fieldId);
@@ -1352,8 +1350,6 @@ const FieldBuilder = ({
     validationSchema: validationSchema,
     onSubmit: handleFormSchemaSubmit,
   });
-
-  console.log("formik - Update", formik);
 
   //Set default radio value
   useEffect(() => {
@@ -2334,7 +2330,7 @@ const FieldBuilder = ({
 
       <div className="d-flex gap-3 mt-4">
         {formBuilderUpdateData ? (
-          <button type="submit" className="btn btn-secondary" onClick={() => console.log('CLICK')}>
+          <button type="submit" className="btn btn-secondary">
             Update Field
           </button>
         ) : (
