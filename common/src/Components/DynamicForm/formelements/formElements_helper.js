@@ -22,6 +22,7 @@ import SearchSelect from "./SearchSelect";
 import MultiSelectElement from "./MultiSelectElement";
 import SingleSelectElement from "./SingleSelectElement";
 import SingleSelectAPIElement from "./SingleSelectAPIElement";
+import MultiSelectAPIElement from "./MultiSelectAPIElement";
 import {
   moduleConstant,
   permissionConstant,
@@ -254,6 +255,16 @@ const generateFormField = (
   if (type === "singleselectapi") {
     return (
       <SingleSelectAPIElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "multiselectapi") {
+    return (
+      <MultiSelectAPIElement
         field={field}
         formik={formik}
         formStateHook={formStateHook}

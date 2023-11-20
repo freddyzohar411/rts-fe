@@ -175,6 +175,12 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabel: "Multi Select API",
+      draggablePrefix: "element",
+      draggableId: "multiselectapi",
+      type: "field",
+    },
+    {
       draggableLabel: "Search Select",
       draggablePrefix: "element",
       draggableId: "searchselect",

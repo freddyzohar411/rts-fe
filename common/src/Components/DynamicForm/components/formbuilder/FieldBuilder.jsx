@@ -118,6 +118,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -162,6 +163,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
       validation: [
         {
@@ -198,6 +200,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -237,6 +240,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -278,6 +282,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -372,6 +377,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -403,6 +409,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -715,6 +722,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -764,6 +772,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -795,6 +804,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
       renderCondition: validationConditionList.length > 0,
     },
@@ -899,6 +909,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     // Which include key value pair for table
@@ -944,6 +955,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -986,6 +998,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
@@ -1024,6 +1037,7 @@ const FieldBuilder = ({
         "multiselect",
         "singleselect",
         "singleselectapi",
+        "multiselectapi",
       ],
     },
     {
