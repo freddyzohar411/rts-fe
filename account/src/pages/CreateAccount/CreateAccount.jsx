@@ -364,7 +364,7 @@ const AccountCreation = () => {
       // Cancel add contact and reset form
       if (buttonName === "cancel" && !editData) {
         setButtonName("");
-        resetForm();
+        resetForm([],"create");
         return;
       }
 
@@ -392,7 +392,7 @@ const AccountCreation = () => {
             id: tableEditId,
             newData,
             rerenderTable: rerenderTable,
-            resetForm: resetForm,
+            resetForm: resetForm([], "create"),
           })
         );
       }

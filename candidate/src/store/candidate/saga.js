@@ -25,6 +25,7 @@ import {
   fetchCandidatesFieldsFailure,
   putCandidateDraftStatusSuccess,
   putCandidateDraftStatusFailure,
+  putCandidateDraftStatus,
 } from "./action";
 import {
   getCandidates,
@@ -33,6 +34,7 @@ import {
   deleteCandidate,
   getCandidatesFields,
   getCandidateById,
+  completeCandidateRegistration
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -66,12 +68,6 @@ function* workPostCandidate(action) {
       return;
     }
 
-    if (entity === CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS) {
-      yield put(deleteCandidateId());
-      // yield put(deleteCandidateCountry());
-      toast.success("Candidate created successfully");
-      return;
-    }
   } catch (error) {
     toast.error("Error creating candidate");
     yield put(postCandidateFailure(error));
@@ -86,13 +82,6 @@ function* workPutCandidate(action) {
     const response = yield call(updateCandidate, entity, id, newData, config);
     if (entity === CandidateEntityConstant.CANDIDATE_BASIC_INFO) {
       yield put(putCandidateSuccess(response.data));
-    }
-
-    if (entity === CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS) {
-      yield put(deleteCandidateId());
-      // yield put(deleteCandidateCountry());
-      toast.success("Candidate updated successfully");
-      return;
     }
 
     if (typeof resetForm === "function") {
@@ -127,7 +116,7 @@ function* workDeleteCandidate(action) {
     toast.success("Candidate deleted successfully");
   } catch (error) {
     yield put(deleteCandidateFailure(error));
-    toast.error("Error deleting account");
+    toast.error("Error deleting candidate");
   }
 }
 
@@ -154,6 +143,21 @@ function* workFetchCandidate(action) {
   }
 }
 
+// Put candidate draft status
+function* workPutCandidateDraftStatus(action) {
+  try {
+    const response = yield call(completeCandidateRegistration, action.payload);
+    yield put(putCandidateDraftStatusSuccess(response.data));
+    yield put(deleteCandidateId());
+    // yield put(deleteCandidateCountry());
+    toast.success("Candidate created successfully");
+  } catch (error) {
+    yield put(putCandidateDraftStatusFailure(error));
+    toast.error("Error updating candidate draft status");
+  }
+}
+
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -161,4 +165,5 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(DELETE_CANDIDATE, workDeleteCandidate);
   yield takeEvery(FETCH_CANDIDATES_FIELDS, workFetchCandidatesFields);
   yield takeEvery(FETCH_CANDIDATE, workFetchCandidate);
+  yield takeEvery(PUT_CANDIDATE_DRAFT_STATUS, workPutCandidateDraftStatus);
 }

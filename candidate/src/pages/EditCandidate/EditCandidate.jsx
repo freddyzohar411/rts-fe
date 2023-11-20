@@ -239,9 +239,9 @@ const EditCandidate = () => {
     const isFormChanged = await isFormEdited(formSubmissionData, newValues);
 
     if (!isFormChanged) {
-      // if (step === 6) {
-      //   navigate("/candidates");
-      // }
+      if (step === 6) {
+        navigate("/candidates");
+      }
       handleNext();
       return;
     }
@@ -637,291 +637,69 @@ const EditCandidate = () => {
     }
 
     // Employer Details
-    // if (step === 6) {
-    //   // Add contact
-    //   if (buttonName === "add") {
-    //     setErrorMessage(null);
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+    if (step === 6) {
+      // Add contact
+      if (buttonName === "add") {
+        setErrorMessage(null);
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
 
-    //     dispatch(
-    //       postCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //     return;
-    //   }
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
 
-    //   // Cancel add contact and reset form
-    //   if (buttonName === "cancel" && !editData) {
-    //     setButtonName("");
-    //     resetForm([], "create");
-    //     return;
-    //   }
+      // Cancel add contact and reset form
+      if (buttonName === "cancel" && !editData) {
+        setButtonName("");
+        resetForm([], "create");
+        return;
+      }
 
-    //   // Update contact
-    //   if (buttonName === "tableUpdate") {
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+      // Update contact
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
 
-    //     // Get update id
-    //     const table = formFieldsData.find(
-    //       (field) =>
-    //         field.type === "table" &&
-    //         field.name === CandidateTableListConstant.EMPLOYER_DETAILS_LIST
-    //     );
-    //     const { tableEditId } = table.tableSetting;
-    //     dispatch(
-    //       putCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
-    //         id: tableEditId,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //   }
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.EMPLOYER_DETAILS_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+            id: tableEditId,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
 
-    //   // Patch draft status to false
-    //   if (buttonName === "submit") {
-    //    // Fetch to patch draft status to false
-    //   }
-    // }
-
-    // if (step === 1) {
-    //   if (buttonName === "add") {
-    //     setErrorMessage(null);
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.ACCOUNT_CONTACT,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
-
-    //     dispatch(
-    //       postCandidate({
-    //         entity: CandidateEntityConstant.ACCOUNT_CONTACT,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //     return;
-    //   }
-
-    //   if (buttonName === "cancel" && !editData) {
-    //     setButtonName("");
-    //     resetForm([], "create");
-    //     return;
-    //   }
-
-    //   if (buttonName === "tableUpdate") {
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.ACCOUNT_CONTACT,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
-
-    //     // Get update id
-    //     const table = formFieldsData.find(
-    //       (field) =>
-    //         field.type === "table" &&
-    //         field.name === CandidateTableListConstant.CONTACT_LIST
-    //     );
-    //     const { tableEditId } = table.tableSetting;
-    //     dispatch(
-    //       putCandidate({
-    //         entity: CandidateEntityConstant.ACCOUNT_CONTACT,
-    //         id: tableEditId,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //   }
-    // }
-
-    // if (step === 2) {
-    //   if (buttonName === "add") {
-    //     setErrorMessage(null);
-    //     setButtonName("");
-    //     let formValues = { ...newValues };
-    //     const documentData = { ...formValues };
-    //     const fileData = formValues?.file;
-    //     const fileName = fileData?.name;
-    //     formValues = { ...formValues, file: fileName };
-    //     const documentDataOut = {
-    //       ...documentData,
-    //       entityType: CandidateEntityConstant.ACCOUNT_DOCUMENT,
-    //       entityId: parseInt(candidateId),
-    //       formData: JSON.stringify(formValues),
-    //       formId: parseInt(form.formId),
-    //     };
-    //     delete documentDataOut.documentList;
-
-    //     const documentFormData =
-    //       ObjectHelper.convertObjectToFormData(documentDataOut);
-    //     dispatch(
-    //       postCandidate({
-    //         entity: CandidateEntityConstant.ACCOUNT_DOCUMENT,
-    //         newData: documentFormData,
-    //         config: {
-    //           headers: {
-    //             "Content-Type": "multipart/form-data",
-    //           },
-    //         },
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm,
-    //       })
-    //     );
-    //   }
-
-    //   if (buttonName === "cancel" && !editData) {
-    //     resetForm();
-    //     return;
-    //   }
-
-    //   if (buttonName === "tableUpdate") {
-    //     let formValues = { ...newValues };
-    //     const documentData = { ...formValues };
-    //     const fileData = formValues?.file;
-    //     if (typeof fileData === "string") {
-    //       // Remove upload agreement from object
-    //       formValues = { ...formValues, file: fileData };
-    //       delete documentData.file;
-    //     } else {
-    //       const fileName = fileData?.name;
-    //       formValues = { ...formValues, file: fileName };
-    //     }
-
-    //     const documentDataOut = {
-    //       ...documentData,
-    //       entityType: CandidateEntityConstant.ACCOUNT_DOCUMENT,
-    //       entityId: parseInt(candidateId),
-    //       formData: JSON.stringify(formValues),
-    //       formId: parseInt(form.formId),
-    //     };
-    //     delete documentDataOut.documentList;
-
-    //     const documentFormData =
-    //       ObjectHelper.convertObjectToFormData(documentDataOut);
-
-    //     // Get update id
-    //     const table = formFieldsData.find(
-    //       (field) =>
-    //         field.type === "table" &&
-    //         field.name === CandidateTableListConstant.DOCUMENT_LIST
-    //     );
-    //     const { tableEditId } = table.tableSetting;
-    //     dispatch(
-    //       putCandidate({
-    //         entity: CandidateEntityConstant.ACCOUNT_DOCUMENT,
-    //         id: tableEditId,
-    //         newData: documentFormData,
-    //         config: {
-    //           headers: {
-    //             "Content-Type": "multipart/form-data",
-    //           },
-    //         },
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //   }
-    // }
-
-    // if (step === 3) {
-    //   if (buttonName === "add") {
-    //     setButtonName("");
-    //     let formValues = { file: newValues.file };
-    //     const documentData = { ...formValues };
-    //     const fileData = formValues?.file;
-    //     const fileName = fileData?.name;
-    //     formValues = { ...formValues, file: fileName };
-    //     const documentDataOut = {
-    //       ...documentData,
-    //       entityType: CandidateEntityConstant.ACCOUNT_INSTRUCTION_DOCUMENT,
-    //       entityId: parseInt(candidateId),
-    //       formData: JSON.stringify(formValues),
-    //       formId: parseInt(form.formId),
-    //     };
-
-    //     const documentFormData =
-    //       ObjectHelper.convertObjectToFormData(documentDataOut);
-    //     dispatch(
-    //       postCandidate({
-    //         entity: CandidateEntityConstant.ACCOUNT_DOCUMENT,
-    //         newData: documentFormData,
-    //         config: {
-    //           headers: {
-    //             "Content-Type": "multipart/form-data",
-    //           },
-    //         },
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm(["file"]),
-    //       })
-    //     );
-    //     return;
-    //   }
-    //   if (formSubmissionData != null) {
-    //     const formData = {
-    //       guidelines: newValues.guidelines,
-    //     };
-    //     const newData = {
-    //       ...formData,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.ACCOUNT_INSTRUCTION,
-    //       formData: JSON.stringify(formData),
-    //       formId: parseInt(form.formId),
-    //     };
-
-    //     dispatch(
-    //       putCandidate({
-    //         entity: CandidateEntityConstant.ACCOUNT_INSTRUCTION,
-    //         id: editId,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //       })
-    //     );
-    //   }
-    // }
-
-    // if (step === 5) {
-    //   const formData = {
-    //     ...newValues,
-    //     entityType: CandidateEntityConstant.ACCOUNT_COMMERCIAL,
-    //     entityId: parseInt(candidateId),
-    //     formData: JSON.stringify(newValues),
-    //     formId: parseInt(form.formId),
-    //   };
-    //   dispatch(
-    //     putCandidate({
-    //       entity: CandidateEntityConstant.ACCOUNT_COMMERCIAL,
-    //       id: candidateId,
-    //       newData: formData,
-    //     })
-    //   );
-    // }
+      navigate("/candidates");
+    }
   };
 
   /**

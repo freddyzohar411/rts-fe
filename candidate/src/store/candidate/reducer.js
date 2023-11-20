@@ -150,12 +150,13 @@ const CandidateReducer = (state = initialState, action) => {
         loading: true,
         error: false,
       };
+
     case DELETE_CANDIDATE_SUCCESS:
       const newCandidates = JSON.parse(JSON.stringify(state.candidates));
-      const filteredCandidates = newCandidates.accounts.filter(
+      const filteredCandidates = newCandidates.candidates.filter(
         (candidate) => candidate.id !== action.payload
       );
-      newCandidates.candidates= filteredCandidates;
+      newCandidates.candidates = filteredCandidates;
       return {
         ...state,
         candidates: newCandidates,
@@ -196,21 +197,18 @@ const CandidateReducer = (state = initialState, action) => {
     case PUT_CANDIDATE_DRAFT_STATUS:
       return {
         ...state,
-        loading: true,
-        error: false,
+        updateMeta: pendingMetaData(),
       };
     case PUT_CANDIDATE_DRAFT_STATUS_SUCCESS:
       return {
         ...state,
-        loading: false,
+        updateMeta: successMetaData(action.payload),
         candidate: action.payload,
       };
     case PUT_CANDIDATE_DRAFT_STATUS_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        updateMeta: errorMetaData(action.payload),
       };
     case RESET_META_DATA:
       return {

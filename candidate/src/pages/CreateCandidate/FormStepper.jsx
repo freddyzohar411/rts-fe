@@ -55,7 +55,12 @@ const FormStepper = ({
       handleNext();
     }
 
+    if (activeStep === 6 && formikRef?.current?.formik) {
+      formikRef.current.formik.submitForm();
+    }
   };
+
+  console.log("activeStep", activeStep);
 
   const resetAndDeleteDraftForm = () => {
     dispatch(

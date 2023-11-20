@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   postCandidate,
   putCandidate,
+  putCandidateDraftStatus,
   resetMetaData,
 } from "../../store/candidate/action";
 import {
@@ -61,11 +62,11 @@ const CreateCandidate = () => {
     (state) => state.CandidateFormReducer.formSubmission
   );
 
-  const editId = useSelector((state) => state.CandidateFormReducer.editId);
+  // const editId = useSelector((state) => state.CandidateFormReducer.editId);
 
-  const updateData = useSelector(
-    (state) => state.CandidateFormReducer.formSubmission
-  );
+  // const updateData = useSelector(
+  //   (state) => state.CandidateFormReducer.formSubmission
+  // );
 
   const createMetaData = useSelector(
     (state) => state.CandidateReducer.createMeta
@@ -88,15 +89,23 @@ const CreateCandidate = () => {
   /**
    * Set country if is in edit mode
    */
+  // useEffect(() => {
+  //   if (candidateCountry) {
+  //     setCountry(candidateCountry);
+  //   }
+  // }, [candidateCountry]);
+
+  /**
+   * Fetch form template based on step
+   */
   useEffect(() => {
-    if (candidateCountry) {
-      setCountry(candidateCountry);
-    }
-  }, [candidateCountry]);
+    dispatch(fetchCandidateForm(CandidateFormConstant[step]));
+  }, [step]);
 
   /**
    * Fetch form template based on step
    * Can make changes to form template here before loading to form
+   * E.g. Setting the GET API and DELETE API for table
    */
   useEffect(() => {
     if (form) {
@@ -239,13 +248,6 @@ const CreateCandidate = () => {
   const handleFormFieldChange = useCallback((formFields) => {
     setFormFieldsData(formFields);
   }, []);
-
-  /**
-   * Fetch form template based on step
-   */
-  useEffect(() => {
-    dispatch(fetchCandidateForm(CandidateFormConstant[step]));
-  }, [step]);
 
   /**
    * Handle form submit based on step
@@ -691,71 +693,70 @@ const CreateCandidate = () => {
     }
 
     // Employer Details
-    // if (step === 6) {
-    //   // Add contact
-    //   if (buttonName === "add") {
-    //     setErrorMessage(null);
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+    if (step === 6) {
+      // Add contact
+      if (buttonName === "add") {
+        setErrorMessage(null);
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
 
-    //     dispatch(
-    //       postCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //     return;
-    //   }
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
 
-    //   // Cancel add contact and reset form
-    //   if (buttonName === "cancel" && !editData) {
-    //     setButtonName("");
-    //     resetForm([], "create");
-    //     return;
-    //   }
+      // Cancel add contact and reset form
+      if (buttonName === "cancel" && !editData) {
+        setButtonName("");
+        resetForm([], "create");
+        return;
+      }
 
-    //   // Update contact
-    //   if (buttonName === "tableUpdate") {
-    //     setButtonName("");
-    //     const newData = {
-    //       ...newValues,
-    //       entityId: candidateId,
-    //       entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
-    //       formData: JSON.stringify(newValues),
-    //       formId: parseInt(form.formId),
-    //     };
+      // Update contact
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
 
-    //     // Get update id
-    //     const table = formFieldsData.find(
-    //       (field) =>
-    //         field.type === "table" &&
-    //         field.name === CandidateTableListConstant.EMPLOYER_DETAILS_LIST
-    //     );
-    //     const { tableEditId } = table.tableSetting;
-    //     dispatch(
-    //       putCandidate({
-    //         entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
-    //         id: tableEditId,
-    //         newData,
-    //         rerenderTable: rerenderTable,
-    //         resetForm: resetForm([], "create"),
-    //       })
-    //     );
-    //   }
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.EMPLOYER_DETAILS_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_EMPLOYER_DETAILS,
+            id: tableEditId,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
 
-    //   // Patch draft status to false
-    //   if (buttonName === "submit") {
-    //    // Fetch to patch draft status to false
-    //   }
-    // }
+      // Patch draft status to false
+      dispatch(putCandidateDraftStatus(candidateId));
+    }
   };
 
   /**

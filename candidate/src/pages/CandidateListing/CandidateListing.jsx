@@ -33,7 +33,7 @@ function CandidateListing() {
   // Custom renders
   const customRenderList = [
     {
-      names: ["updatedAt","createdAt"],
+      names: ["updatedAt", "createdAt"],
       render: (data, opt) =>
         DateHelper.formatDateStandard(
           DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
@@ -121,7 +121,6 @@ function CandidateListing() {
             <Link
               to={`/candidates/${data.id}/edit`}
               style={{ color: "black" }}
-              // state={{ form: 3 }}
               state={{ view: true }}
             >
               <Button
