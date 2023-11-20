@@ -677,7 +677,7 @@ const FieldBuilder = ({
         label: field.name,
         value: field.name,
       })),
-      apply: ["selectsubindustry", "selectstate", "selectcity", "singleselectapi", "multiselectapi"],
+      apply: ["selectsubindustry", "selectstate", "selectcity", "singleselectapi"],
     },
     {
       label: "Visible Off (Conditions)",
