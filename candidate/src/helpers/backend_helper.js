@@ -44,31 +44,35 @@ export const getFormByFormName = (formName) =>
   api.get(`${FORM_URL}${BASE_FORMS}/name/${formName}`);
 
 /**
- * Account_account
+ * Candidate
  */
-// Create a new account
+// Create a new candidate 
 export const createCandidate = (entity, id, data, config) =>
   api.create(generateCandidateModuleURL(entity, id), data, config);
 
-// Update an account
+// Update an candidate
 export const updateCandidate = (entity, id, data, config) =>
   api.put(`${candidateModuleURL[entity]}/${id}`, data, config);
 
-// Get account by id
+// Get candidate by id
 export const getCandidateById = (id) =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/${id}`);
 
-// Delete an account
+// Delete an candidate
 export const deleteCandidate = (id) =>
   api.delete(`${CANDIDATE_URL}${BASE_CANDIDATES}/${id}`);
 
-// Get draft account
+// Get draft candidate
 export const getDraftCandidate = () =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/draft`);
 
-// Delete draft account by id
+// Delete draft candidate by id
 export const deleteDraftCandidateById = (id) =>
   api.delete(`${CANDIDATE_URL}${BASE_CANDIDATES}/draft/${id}`);
+
+// Complete candidate registration (Set draft status to false)
+export const completeCandidateRegistration = (id) =>
+  api.put(`${CANDIDATE_URL}${BASE_CANDIDATES}/${id}/complete`);
 
 // Candidate Documents
 export const DOCUMENT_BASE_URL = `${DOCUMENT_URL}${BASE_DOCUMENTS}`;

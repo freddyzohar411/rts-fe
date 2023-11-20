@@ -20,6 +20,9 @@ import {
   FETCH_CANDIDATES_FIELDS,
   FETCH_CANDIDATES_FIELDS_SUCCESS,
   FETCH_CANDIDATES_FIELDS_FAILURE,
+  PUT_CANDIDATE_DRAFT_STATUS,
+  PUT_CANDIDATE_DRAFT_STATUS_SUCCESS,
+  PUT_CANDIDATE_DRAFT_STATUS_FAILURE,
   RESET_META_DATA,
 } from "./actionTypes";
 
@@ -39,10 +42,6 @@ const initialState = {
   updateMeta: {},
   deleteMeta: {},
   tableMeta: {},
-  // loading: false,
-  // error: false,
-  // errorMsg: "",
-  // success: false,
 };
 
 const CandidateReducer = (state = initialState, action) => {
@@ -188,6 +187,25 @@ const CandidateReducer = (state = initialState, action) => {
       };
 
     case FETCH_CANDIDATES_FIELDS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case PUT_CANDIDATE_DRAFT_STATUS:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case PUT_CANDIDATE_DRAFT_STATUS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidate: action.payload,
+      };
+    case PUT_CANDIDATE_DRAFT_STATUS_FAILURE:
       return {
         ...state,
         loading: false,

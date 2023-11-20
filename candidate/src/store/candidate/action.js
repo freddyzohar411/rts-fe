@@ -20,6 +20,9 @@ import {
   FETCH_CANDIDATES_FIELDS,
   FETCH_CANDIDATES_FIELDS_SUCCESS,
   FETCH_CANDIDATES_FIELDS_FAILURE,
+  PUT_CANDIDATE_DRAFT_STATUS,
+  PUT_CANDIDATE_DRAFT_STATUS_SUCCESS,
+  PUT_CANDIDATE_DRAFT_STATUS_FAILURE,
   RESET_META_DATA,
 } from "./actionTypes";
 
@@ -130,6 +133,22 @@ export const fetchCandidatesFieldsSuccess = (candidatesFields) => ({
 
 export const fetchCandidatesFieldsFailure = (error) => ({
   type: FETCH_CANDIDATES_FIELDS_FAILURE,
+  payload: error,
+});
+
+// Put Candidate Draft Status
+export const putCandidateDraftStatus = (candidateId) => ({
+  type: PUT_CANDIDATE_DRAFT_STATUS,
+  payload: candidateId,
+});
+
+export const putCandidateDraftStatusSuccess = (candidate) => ({
+  type: PUT_CANDIDATE_DRAFT_STATUS_SUCCESS,
+  payload: candidate,
+});
+
+export const putCandidateDraftStatusFailure = (error) => ({
+  type: PUT_CANDIDATE_DRAFT_STATUS_FAILURE,
   payload: error,
 });
 

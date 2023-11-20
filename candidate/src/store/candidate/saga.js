@@ -8,6 +8,7 @@ import {
   DELETE_CANDIDATE,
   FETCH_CANDIDATES,
   FETCH_CANDIDATES_FIELDS,
+  PUT_CANDIDATE_DRAFT_STATUS,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -22,9 +23,8 @@ import {
   fetchCandidatesFailure,
   fetchCandidatesFieldsSuccess,
   fetchCandidatesFieldsFailure,
-  setTableSuccess,
-  setTableFailure,
-  setTableReset,
+  putCandidateDraftStatusSuccess,
+  putCandidateDraftStatusFailure,
 } from "./action";
 import {
   getCandidates,
