@@ -6,6 +6,8 @@ import {
   deleteCandidateId,
   deleteCandidateCountry,
   deleteDraftCandidate,
+  deleteDraftCandidateSuccess,
+  deleteDraftCandidateFailure,
 } from "./action";
 import {
   deleteDraftCandidateById,
@@ -13,6 +15,7 @@ import {
 } from "../../helpers/backend_helper";
 import { CandidateEntityConstant } from "../../constants/candidateConstant"
 import { fetchCandidateFormSubmission, setFormSubmission } from "../candidateForm/action";
+import { toast } from "react-toastify";
 
 function* workFetchDraftCandidate(action) {
   try {
@@ -34,11 +37,10 @@ function* workDeleteDraftCandidate(action) {
   const { candidateId , resetStepper } = action.payload;
   try {
     yield call(deleteDraftCandidateById, candidateId);
-    yield put(deleteCandidateId());
-    yield put(deleteCandidateCountry());
-    resetStepper(0);
+    yield put(deleteDraftCandidateSuccess());
   } catch (error) {
-    throw error;
+    yield put(deleteDraftCandidateFailure(error));
+    toast.error("Error in deleting draft candidate");
   }
 }
 

@@ -76,6 +76,7 @@ const CreateCandidate = () => {
     (state) => state.CandidateReducer.updateMeta
   );
 
+
   const MAX_STEP = 6;
   const [step, setStep] = useState(0);
   const formikRef = useRef(null);
@@ -809,6 +810,8 @@ const CreateCandidate = () => {
     }
     handleNext();
   }
+
+
 
   return (
     <>

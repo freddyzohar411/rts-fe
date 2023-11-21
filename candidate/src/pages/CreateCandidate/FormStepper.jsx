@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { Button, Card, Container } from "reactstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CandidateStepper from "../../components/CandidateStepper/CandidateStepper";
 import { DeleteCustomModal } from "@Workspace/common";
 import { CandidateTableListConstant } from "../../constants/candidateConstant";
+import {
+  deleteDraftCandidate,
+  resetMetaDataCandidateRegistration,
+} from "../../store/candidateregistration/action";
+import { toast } from "react-toastify";
 
 const FormStepper = ({
   activeStep,
@@ -20,6 +25,10 @@ const FormStepper = ({
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const deleteDraftCandidateMetaData = useSelector(
+    (state) => state.CandidateRegistrationReducer.deleteMeta
+  );
 
   const handleNextStep = () => {
     if (activeStep === 0 && formikRef?.current?.formik) {
@@ -61,13 +70,22 @@ const FormStepper = ({
 
   const resetAndDeleteDraftForm = () => {
     dispatch(
-      deleteDraftAccount({
+      deleteDraftCandidate({
         candidateId: candidateId,
         resetStepper: resetStepper,
       })
     );
-    setIsDeleteModalOpen(false);
   };
+
+  /**
+   * Handle delete draft candidate success
+   */
+  if (deleteDraftCandidateMetaData?.isSuccess) {
+    setIsDeleteModalOpen(false);
+    resetStepper(0);
+    toast.success("Candidate form reset successfully");
+    dispatch(resetMetaDataCandidateRegistration());
+  }
 
   return (
     <Card>
@@ -77,6 +95,7 @@ const FormStepper = ({
         confirmDelete={resetAndDeleteDraftForm}
         header="Reset Account Form"
         deleteText={"Are you sure you would like to reset candidate form?"}
+        isLoading={deleteDraftCandidateMetaData?.isLoading}
       />
       <Container fluid>
         <CandidateStepper step={activeStep} />

@@ -7,14 +7,26 @@ import {
   DELETE_DRAFT_CANDIDATE,
   DELETE_DRAFT_CANDIDATE_SUCCESS,
   DELETE_DRAFT_CANDIDATE_FAILURE,
+  CANDIDATE_REGISTRAION_RESET_META_DATA,
 } from "./actionTypes";
+
+import {
+  errorMetaData,
+  pendingMetaData,
+  resetAllMetaData,
+  successMetaData,
+} from "@workspace/common";
 
 const initialState = {
   candidateId: null,
   candidateCountry:null,
-  loading: false,
-  error: false,
-  success: false,
+  // loading: false,
+  // error: false,
+  // success: false,
+  meta: {},
+  createMeta: {},
+  updateMeta: {},
+  deleteMeta: {},
 };
 
 const CandidateRegistrationReducer = (state = initialState, action) => {
@@ -42,23 +54,45 @@ const CandidateRegistrationReducer = (state = initialState, action) => {
     case FETCH_DRAFT_CANDIDATE:
       return {
         ...state,
+        loading: true,
       };
     case DELETE_DRAFT_CANDIDATE:
       return {
         ...state,
-        loading: true,
+        // loading: true,
+        deleteMeta: pendingMetaData(),
       };
     case DELETE_DRAFT_CANDIDATE_SUCCESS:
+      // return {
+      //   ...state,
+      //   // loading: false,
+      //   // success: true,
+      //   deleteMeta: successMetaData(),
+      // };
+      // state.deleteMeta = successMetaData();
+      // state.candidateId = null;
+      // state.candidateCountry = null;
+      // return state;
       return {
         ...state,
-        loading: false,
-        success: true,
-      };
+        candidateId: null,
+        candidateCountry: null,
+        deleteMeta: successMetaData(),
+      }
     case DELETE_DRAFT_CANDIDATE_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
+        // loading: false,
+        // error: true,
+        deleteMeta: errorMetaData(action.payload),
+      };
+    case CANDIDATE_REGISTRAION_RESET_META_DATA:
+      return {
+        ...state,
+        meta: resetAllMetaData(),
+        createMeta: resetAllMetaData(),
+        updateMeta: resetAllMetaData(),
+        deleteMeta: resetAllMetaData(),
       };
     default:
       return state;

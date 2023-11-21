@@ -9,7 +9,10 @@ const DeleteCustomModal = ({
   header,
   deleteText,
   confirmButtonText = "Confirm",
+  isLoading,
 }) => {
+
+  console.log("IsLoading", isLoading)
   return (
     <Modal isOpen={isOpen} centered backdropClassName="modal">
       <ModalHeader className="modal-title">{header}</ModalHeader>
@@ -23,7 +26,7 @@ const DeleteCustomModal = ({
               className="btn btn-danger"
               onClick={confirmDelete}
             >
-              {confirmButtonText}
+              {isLoading ? "loading..." : confirmButtonText}
             </Button>
 
             <Button
