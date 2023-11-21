@@ -260,6 +260,7 @@ const AccountCreation = () => {
         });
       } else {
         formikRef.current.clearForm();
+        formikRef.current.formik.setTouched({});
       }
       if (formState !== "") {
         setFormState(formState);
@@ -364,6 +365,7 @@ const AccountCreation = () => {
       // Cancel add contact and reset form
       if (buttonName === "cancel" && !editData) {
         setButtonName("");
+        // Clear error
         resetForm([],"create");
         return;
       }

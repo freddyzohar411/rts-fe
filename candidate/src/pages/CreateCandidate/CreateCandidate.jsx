@@ -278,6 +278,7 @@ const CreateCandidate = () => {
         });
       } else {
         formikRef.current.clearForm();
+        formikRef.current.formik.setTouched({});
       }
       if (formState !== "") {
         setFormState(formState);

@@ -32,24 +32,26 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
 
   // Currency & Filter
   const [currencyDropdown, setCurrencyDropdown] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState("Currency");
+  const [selectedCurrency, setSelectedCurrency] = useState({
+    currency: "Currency",
+    currencyId: formik?.values?.[field.subName],
+  });
 
   useEffect(() => {
     if (formik?.values?.[field.subName] && countryData) {
       const country = countryData.find(
-        (country) =>
-          `${country?.currency} ${country?.currencySymbol}` ===
-          formik?.values?.[field.subName]
+        (country) => country.id === formik?.values?.[field.subName]
       );
-      if (country) {
-        setSelectedCurrency(`${country?.currency} ${country?.currencySymbol}`);
-      }
+      setSelectedCurrency({
+        currency: `${country?.currency} ${country?.currencySymbol}`,
+        currencyId: formik?.values?.[field.subName],
+      });
     }
   }, [formik?.values?.[field.subName]]);
 
   useEffect(() => {
-    if (selectedCurrency) {
-      formik.setFieldValue(field.subName, selectedCurrency);
+    if (selectedCurrency.currencyId) {
+      formik.setFieldValue(field.subName, selectedCurrency.currencyId);
     }
   }, [selectedCurrency]);
 
@@ -78,7 +80,7 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
         disabled={formState === "view" ? true : false}
         color="primary"
       >
-        <span>{selectedCurrency}</span>
+        <span>{selectedCurrency.currency}</span>
       </DropdownToggle>
 
       <Input
@@ -111,9 +113,11 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
               key={country.id}
               as="li"
               onClick={() =>
-                setSelectedCurrency(
-                  (prev) => `${country.currency} ${country.currencySymbol}`
-                )
+                setSelectedCurrency((prev) => ({
+                  ...prev,
+                  currency: `${country.currency} ${country.currencySymbol}`,
+                  currencyId: country.id,
+                }))
               }
               className="dropdown-item d-flex"
             >

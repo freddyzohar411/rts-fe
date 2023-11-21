@@ -41,31 +41,41 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
         formik?.values?.[field?.subName] === null ||
         formik?.values?.[field?.subName] === undefined
       ) {
-        setSelectedLandline((prev) => "Phone Code");
+        setSelectedLandline((prev) => ({
+          ...prev,
+          landlineCountry: "Phone Code",
+          landlineCountryId: null,
+        }));
+      }
+
+      if (
+        formik?.values?.[field?.subName] === "" ||
+        formik?.values?.[field?.subName] === null ||
+        formik?.values?.[field?.subName] === undefined
+      ) {
         return;
       }
 
       const country = countryData.find(
-        (country) =>
-          `${country?.phoneCode.charAt(0) == "+" ? "" : "+"} ${
-            country?.phoneCode
-          }` === formik?.values?.[field?.subName]
+        (country) => country.id === formik?.values?.[field?.subName]
       );
 
-      if (country) {
-        setSelectedLandline(
-          (prev) =>
-            `${country?.phoneCode.charAt(0) == "+" ? "" : "+"} ${
-              country?.phoneCode
-            }`
-        );
-      }
+      setSelectedLandline((prev) => ({
+        ...prev,
+        landlineCountry: `${country?.phoneCode.charAt(0) == "+" ? "" : "+"} ${
+          country?.phoneCode
+        }`,
+        landlineCountryId: formik?.values?.[field?.subName],
+      }));
     }
   };
 
   // Landline and Filter
   const [landlineDropdown, setLandlineDropdown] = useState(false);
-  const [selectedLandline, setSelectedLandline] = useState("Phone Code");
+  const [selectedLandline, setSelectedLandline] = useState({
+    landlineCountry: "Phone Code",
+    landlineCountryId: null,
+  });
 
   /**
    * Set Landline Country state
@@ -80,10 +90,12 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
    * Set Landline Country to formik
    */
   useEffect(() => {
-    if (selectedLandline && formik) {
-      console.log("selectedLandline", selectedLandline);
+    if (selectedLandline.landlineCountryId && formik) {
       try {
-        formik?.setFieldValue?.(field.subName, selectedLandline);
+        formik?.setFieldValue?.(
+          field.subName,
+          selectedLandline.landlineCountryId
+        );
       } catch {}
     }
   }, [selectedLandline]);
@@ -115,7 +127,7 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
         disabled={formState === "view" ? true : false}
         color="primary"
       >
-        <span>{selectedLandline}</span>
+        <span>{selectedLandline.landlineCountry}</span>
       </DropdownToggle>
       <Input
         type="number"
@@ -146,12 +158,13 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
               key={country.id}
               as="li"
               onClick={() =>
-                setSelectedLandline(
-                  (prev) =>
-                    `${country.phoneCode.charAt(0) == "+" ? "" : "+"} ${
-                      country.phoneCode
-                    }`
-                )
+                setSelectedLandline((prev) => ({
+                  ...prev,
+                  landlineCountry: `${
+                    country.phoneCode.charAt(0) == "+" ? "" : "+"
+                  } ${country.phoneCode}`,
+                  landlineCountryId: country.id,
+                }))
               }
               className="dropdown-item d-flex"
             >
