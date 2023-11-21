@@ -119,6 +119,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -164,6 +165,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
       validation: [
         {
@@ -201,6 +203,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -241,6 +244,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -283,6 +287,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -378,6 +383,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -410,6 +416,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -625,7 +632,7 @@ const FieldBuilder = ({
           }
         },
       },
-      apply: ["file"],
+      apply: ["file", "multifile"],
     },
     {
       label: "File Type Validation Error Message",
@@ -657,7 +664,7 @@ const FieldBuilder = ({
           }
         },
       },
-      apply: ["file"],
+      apply: ["file", "multifile"],
     },
     {
       label: "File Size Validation Error Message",
@@ -666,7 +673,7 @@ const FieldBuilder = ({
       events: {
         disabled: true,
       },
-      apply: ["file"],
+      apply: ["file", "multifile"],
     },
 
     {
@@ -810,6 +817,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
       renderCondition: validationConditionList.length > 0,
     },
@@ -915,6 +923,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     // Which include key value pair for table
@@ -961,6 +970,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -1004,6 +1014,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -1043,6 +1054,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -1189,6 +1201,9 @@ const FieldBuilder = ({
       break;
     case "multiselectapi":
       header = "Multi Select API Field";
+      break;
+    case "multifile":
+      header = "Multi File Field";
       break;
     default:
   }

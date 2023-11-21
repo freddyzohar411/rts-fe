@@ -50,6 +50,7 @@ const TableElement = ({
         .get(tableSetting.tableGetAPI)
         .then((data) => {
           const formDataList = data.data;
+          console.log("FORM DATA LIST", formDataList);
           setTable(mapTableData(formDataList));
         })
         .catch((error) => {});
@@ -86,10 +87,17 @@ const TableElement = ({
 
   const mapTableData = (dataList) => {
     const tableData = dataList?.map((data) => {
-      return {
+      const dataObj = {
         id: data.id,
         data: JSON.parse(data.submissionData),
       };
+      if (data.entityType) {
+        dataObj.entityType = data.entityType;
+      }
+      if (data.entityId) {
+        dataObj.entityId = data.entityId;
+      }
+      return dataObj;
     });
     return tableData;
   };
@@ -97,14 +105,15 @@ const TableElement = ({
   const handleEdit = (row) => {
     // Set formik values based on row value and config
     // Set all the formik values in this table based on the API
+    console.log("ROW", row);
     for (const [key, value] of Object.entries(row.data)) {
-      formik?.setFieldValue(key, value);  
+      formik?.setFieldValue(key, value);
     }
 
     // Set the form to untounched and no validation
     formik?.setTouched({});
     formik?.setErrors({});
-    
+
     // Set tabled edit id in form field
     // const newFormFields = [...formFields];
     const newFormFields = JSON.parse(JSON.stringify(formFields));

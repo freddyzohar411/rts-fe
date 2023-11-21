@@ -23,6 +23,7 @@ import MultiSelectElement from "./MultiSelectElement";
 import SingleSelectElement from "./SingleSelectElement";
 import SingleSelectAPIElement from "./SingleSelectAPIElement";
 import MultiSelectAPIElement from "./MultiSelectAPIElement";
+import MultiFileInputElement from "./MultiFileInputElement";
 import {
   moduleConstant,
   permissionConstant,
@@ -265,6 +266,16 @@ const generateFormField = (
   if (type === "multiselectapi") {
     return (
       <MultiSelectAPIElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "multifile") {
+    return (
+      <MultiFileInputElement
         field={field}
         formik={formik}
         formStateHook={formStateHook}

@@ -186,6 +186,12 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableId: "searchselect",
       type: "field",
     },
+    {
+      draggableLabel: "Multi File Input",
+      draggablePrefix: "element",
+      draggableId: "multifile",
+      type: "field",
+    }
   ];
 
   // Layout List

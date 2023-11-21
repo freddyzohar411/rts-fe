@@ -34,7 +34,6 @@ const generateValidationSchema = (formFieldData) => {
     formFieldData?.reduce((acc, field) => {
       if (!field.validation) return acc;
       let fieldValidation;
-
       switch (field.type) {
         case "string":
           fieldValidation = Yup.string();
@@ -44,6 +43,9 @@ const generateValidationSchema = (formFieldData) => {
           break;
         case "file":
           fieldValidation = Yup.mixed();
+          break;
+        case "multifile":
+          fieldValidation = Yup.array();
           break;
         default:
           fieldValidation = Yup.string();
@@ -109,6 +111,7 @@ const generateValidationSchema2 = (
         case "checkbox":
         case "radio":
         case "select":
+        case "multifile":
           fieldValidation = Yup.mixed();
           break;
         case "date":
