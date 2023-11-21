@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Button, Card, Container } from "reactstrap";
 import { useDispatch } from "react-redux";
 import CandidateStepper from "../../components/CandidateStepper/CandidateStepper";
-// import { deleteDraftAccount } from "../../store/accountregistration/action";
 import { DeleteCustomModal } from "@Workspace/common";
 import { CandidateTableListConstant } from "../../constants/candidateConstant";
 
@@ -59,8 +58,6 @@ const FormStepper = ({
       formikRef.current.formik.submitForm();
     }
   };
-
-  console.log("activeStep", activeStep);
 
   const resetAndDeleteDraftForm = () => {
     dispatch(

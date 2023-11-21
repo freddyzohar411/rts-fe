@@ -238,7 +238,7 @@ const AccountCreation = () => {
    * @param {*} newValues - form values (After processing)
    * @param {*} buttonNameHook - button name (To determine if it is add or update)
    * @param {*} formStateHook - form state hook (To determine if it is create or update)
-   * @param {*} rerenderTable - rerender table 
+   * @param {*} rerenderTable - rerender table
    * @returns
    */
   const handleFormSubmit = async (
@@ -301,7 +301,7 @@ const AccountCreation = () => {
           })
         );
       } else {
-        // Update Account 
+        // Update Account
         let formValues = { ...newValues };
         const accountData = { ...formValues };
         const fileData = formValues?.uploadAgreement;
@@ -366,7 +366,7 @@ const AccountCreation = () => {
       if (buttonName === "cancel" && !editData) {
         setButtonName("");
         // Clear error
-        resetForm([],"create");
+        resetForm([], "create");
         return;
       }
 

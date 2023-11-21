@@ -81,7 +81,6 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
    */
   useEffect(() => {
     if (selectedLandline && formik) {
-      console.log("selectedLandline", selectedLandline);
       try {
         formik?.setFieldValue?.(field.subName, selectedLandline);
       } catch {}
