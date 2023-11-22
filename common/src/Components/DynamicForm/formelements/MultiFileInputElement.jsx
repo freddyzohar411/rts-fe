@@ -261,6 +261,7 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
                     </span>
                     <span
                       style={{ fontWeight: "bold" }}
+                      className="cursor-pointer"
                       onClick={() =>
                         handleDeleteSingleExistingFile(file, index)
                       }

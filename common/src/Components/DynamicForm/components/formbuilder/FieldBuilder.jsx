@@ -641,7 +641,7 @@ const FieldBuilder = ({
       events: {
         disabled: true,
       },
-      apply: ["file"],
+      apply: ["file", "multifile"],
     },
     {
       label: "File Size Validation (MB)",

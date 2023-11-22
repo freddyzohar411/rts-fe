@@ -413,7 +413,6 @@ const EditCandidate = () => {
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
-        console.log("newValues11", newValues);
         const newValuesOut = { ...newValues };
         if (newValues?.multiFiles?.length > 0) {
           newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
@@ -468,7 +467,6 @@ const EditCandidate = () => {
       // Cancel add contact and reset form
       if (buttonName === "cancel" && !editData) {
         setButtonName("");
-        // resetForm([], "create");
         resetForm([], "create");
         return;
       }

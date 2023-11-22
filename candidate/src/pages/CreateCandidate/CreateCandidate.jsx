@@ -76,7 +76,6 @@ const CreateCandidate = () => {
     (state) => state.CandidateReducer.updateMeta
   );
 
-
   const MAX_STEP = 6;
   const [step, setStep] = useState(0);
   const formikRef = useRef(null);
@@ -255,6 +254,16 @@ const CreateCandidate = () => {
   }, []);
 
   /**
+   * Get all the names in comma seperated string from array of files
+   */
+  const getFileNames = (files) => {
+    if (files.length === 0) {
+      return "";
+    }
+    return files.map((file) => file.name).join(",");
+  };
+
+  /**
    * Handle form submit based on step
    * @param {*} event
    * @param {*} values - formik values
@@ -284,6 +293,13 @@ const CreateCandidate = () => {
       } else {
         formikRef.current.clearForm();
         formikRef.current.formik.setTouched({});
+        // Clear for fields with multi file + delete
+        const newFormFields = [...formFieldsData];
+        newFormFields.forEach((field) => {
+          if (field.type === "multifile") {
+            delete field.multiFileEnity;
+          }
+        });
       }
       if (formState !== "") {
         setFormState(formState);
@@ -445,21 +461,48 @@ const CreateCandidate = () => {
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
-        console.log("newValues11", newValues)
+        // const newData = {
+        //   ...newValues,
+        //   entityId: candidateId,
+        //   entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+        //   formData: JSON.stringify(newValues),
+        //   formId: parseInt(form.formId),
+        // };
+
+        // dispatch(
+        //   postCandidate({
+        //     entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+        //     newData,
+        //     rerenderTable: rerenderTable,
+        //     resetForm: resetForm([], "create"),
+        //   })
+        // );
+
+        const newValuesOut = { ...newValues };
+        if (newValues?.multiFiles?.length > 0) {
+          newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
+        }
+
         const newData = {
           ...newValues,
           entityId: candidateId,
           entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-          formData: JSON.stringify(newValues),
+          formData: JSON.stringify(newValuesOut),
           formId: parseInt(form.formId),
         };
 
+        const formData = ObjectHelper.convertObjectToFormDataWithFiles(newData);
         dispatch(
           postCandidate({
             entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-            newData,
+            newData: formData,
             rerenderTable: rerenderTable,
             resetForm: resetForm([], "create"),
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
           })
         );
         return;
@@ -475,28 +518,65 @@ const CreateCandidate = () => {
       // Update contact
       if (buttonName === "tableUpdate") {
         setButtonName("");
+        // const newData = {
+        //   ...newValues,
+        //   entityId: candidateId,
+        //   entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+        //   formData: JSON.stringify(newValues),
+        //   formId: parseInt(form.formId),
+        // };
+
+        // Get update id
+        // const table = formFieldsData.find(
+        //   (field) =>
+        //     field.type === "table" &&
+        //     field.name === CandidateTableListConstant.WORK_EXPERIENCE_LIST
+        getFileNames; // );
+        // const { tableEditId } = table.tableSetting;
+        // dispatch(
+        //   putCandidate({
+        //     entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+        //     id: tableEditId,
+        //     newData,
+        //     rerenderTable: rerenderTable,
+        //     resetForm: resetForm([], "create"),
+        //   })
+        // );
+
+        const newValuesOut = { ...newValues };
+        if (newValues?.multiFiles?.length > 0) {
+          newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
+        }
+
         const newData = {
           ...newValues,
           entityId: candidateId,
           entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-          formData: JSON.stringify(newValues),
+          formData: JSON.stringify(newValuesOut),
           formId: parseInt(form.formId),
         };
 
-        // Get update id
+        const formData = ObjectHelper.convertObjectToFormDataWithFiles(newData);
+
         const table = formFieldsData.find(
           (field) =>
             field.type === "table" &&
             field.name === CandidateTableListConstant.WORK_EXPERIENCE_LIST
         );
         const { tableEditId } = table.tableSetting;
+
         dispatch(
           putCandidate({
             entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
             id: tableEditId,
-            newData,
+            newData: formData,
             rerenderTable: rerenderTable,
             resetForm: resetForm([], "create"),
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
           })
         );
       }
@@ -815,8 +895,6 @@ const CreateCandidate = () => {
     }
     handleNext();
   }
-
-
 
   return (
     <>
