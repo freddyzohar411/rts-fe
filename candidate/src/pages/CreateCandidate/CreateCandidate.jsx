@@ -87,6 +87,10 @@ const CreateCandidate = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
 
+  // ============= Console.log=====
+  console.log("Form Fields", formFieldsData);
+  // ===================================
+
   /**
    * Set country if is in edit mode
    */
@@ -441,6 +445,7 @@ const CreateCandidate = () => {
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
+        console.log("newValues11", newValues)
         const newData = {
           ...newValues,
           entityId: candidateId,

@@ -218,6 +218,18 @@ const EditCandidate = () => {
   }, [step]);
 
   /**
+   * Get all the names in comma seperated string from array of files
+   */
+
+  const getFileNames = (files) => {
+    if (files.length === 0) {
+      return "";
+    }
+    return files.map((file) => file.name).join(",");
+  }
+
+
+  /**
    * Handle form submit based on step
    * @param {*} event
    * @param {*} values - formik values
@@ -395,13 +407,31 @@ const EditCandidate = () => {
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
+        console.log("newValues11", newValues)
+        const newValuesOut = { ...newValues };
+        if (newValues?.multiFiles?.length > 0) {
+          newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
+        }
+
         const newData = {
           ...newValues,
           entityId: candidateId,
           entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-          formData: JSON.stringify(newValues),
+          formData: JSON.stringify(newValuesOut),
           formId: parseInt(form.formId),
         };
+
+        console.log("newData", newData)
+
+        return
+
+        // const newData = {
+        //   ...newValues,
+        //   entityId: candidateId,
+        //   entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+        //   formData: JSON.stringify(newValues),
+        //   formId: parseInt(form.formId),
+        // };
 
         dispatch(
           postCandidate({
@@ -417,6 +447,7 @@ const EditCandidate = () => {
       // Cancel add contact and reset form
       if (buttonName === "cancel" && !editData) {
         setButtonName("");
+        // resetForm([], "create");
         resetForm([], "create");
         return;
       }

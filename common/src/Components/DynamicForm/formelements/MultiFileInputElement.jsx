@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
+import axios from "axios";
 
 const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   const { formState } = formStateHook;
@@ -10,19 +11,55 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   const [deletedFiles, setDeletedFiles] = useState([]); // formik?.values?.[field.name
   const fileInputRef = useRef();
 
-  console.log(files);
-  console.log("MULTI FILE INPUT values: ", formik?.values?.[field.name]);
+  console.log("Files: ", files);
+    console.log("Existing Files: ", existingFiles);
 
-//   useEffect(() => {
-//     if (
-//       formik?.values?.[field.name] &&
-//       typeof formik?.values?.[field.name] === "string"
-//     ) {
-//       setExistingFiles([formik?.values?.[field.name].split(",")]);
-//     }
-//   }, [formik?.values?.[field.name]]);
+  useEffect(() => {
+    // if (formik?.values?.[field.name] ) {
+    formik.setFieldValue(field.name, "a,b,c");
+    // }
+  }, []);
 
+//   console.log("MULTI FILE INPUT values: ", formik?.values?.[field.name]);
+  useEffect(() => {
+    if (
+      formik?.values?.[field.name] === "" ||
+      formik?.values?.[field.name] === null ||
+      formik?.values?.[field.name] === undefined ||
+      typeof formik?.values?.[field.name] !== "object"
+    ) {
+      setFiles([]);
+    }
 
+    // if (
+    //   formik?.values?.[field.name] &&
+    //   typeof formik?.values?.[field.name] === "string"
+    // ) {
+    //   setExistingFiles([formik?.values?.[field.name].split(",")]);
+    // }
+  }, [formik?.values?.[field.name]]);
+
+  useEffect(() => {
+    if (field?.multiFileEnity) {
+      const { entityType, entityId } = field.multiFileEnity;
+      console.log(
+        "MULTI FILE INPUT field.multiFileEnity: ",
+        field.multiFileEnity
+      );
+      axios
+        .get(`http://localhost:8500/documents/entity/${entityType}/${entityId}`)
+        .then((data) => {
+          console.log("MULTI FILE INPUT data: ", data);
+          setExistingFiles(data.data);
+          setFiles([]);
+        })
+        .catch((error) => {
+          console.log("MULTI FILE INPUT error: ", error);
+        });
+    }
+  }, [field?.multiFileEnity]);
+
+  console.log("MULTI FILE INPUT existingFiles: ", existingFiles);
 
   const truncateString = (str, num) => {
     if (str?.length <= num) {
@@ -43,9 +80,16 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
     formik.setFieldValue(field.name, files);
   }, [files]);
 
-  useEffect(() => {
-    formik.setFieldValue("deletedFiles", [...deletedFiles]);
-  },[deletedFiles])
+  //   useEffect(() => {
+  //     formik.setFieldValue("deletedFiles", [...deletedFiles]);
+  //   }, [deletedFiles]);
+  const checkifFileExists = () => {
+    return files.length > 0 || existingFiles.length > 0;
+  };
+
+  const checkFileLength = () => {
+    return files?.length + existingFiles?.length;
+  };
 
   return (
     <>
@@ -122,8 +166,10 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
               />
             )}
 
-            {files?.length > 0 && `Files: ${files?.length}`}
-            {formik?.values?.[field.name]?.length === 0 && "No file chosen"}
+            {/* {files?.length > 0 && `Files: ${files?.length}`} */}
+            {checkifFileExists() && `${checkFileLength()} files selected`}
+
+            {!checkifFileExists() && "No file chosen"}
             {formik?.values?.[field.name]?.length !== 0 &&
               formState !== "view" && (
                 <span
@@ -155,7 +201,7 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
                     className="cursor-pointer"
                     onClick={() => {
                       const newFiles = files.filter((f, i) => i !== index);
-                      setDeletedFiles(prev => [...prev, file.name]);
+                      setDeletedFiles((prev) => [...prev, file.name]);
                       setFiles(newFiles);
                       if (newFiles.length === 0) {
                         setShowFiles(false);
