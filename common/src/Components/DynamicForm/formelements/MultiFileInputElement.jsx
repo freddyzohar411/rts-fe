@@ -1,14 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
+import { DOCUMENT_BY_ID_URL, DOCUMENTS_BY_ENTITY_URL } from "../../../endpoint";
 import axios from "axios";
 
 const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   const { formState } = formStateHook;
   const [files, setFiles] = useState([]); //
-  const [existingFiles, setExistingFiles] = useState([]); // formik?.values?.[field.name
-  const [showFiles, setShowFiles] = useState(false); // formik?.values?.[field.name
-  const [deletedFiles, setDeletedFiles] = useState([]); // formik?.values?.[field.name
+  const [existingFiles, setExistingFiles] = useState([]);
+  const [showFiles, setShowFiles] = useState(false);
   const fileInputRef = useRef();
 
   useEffect(() => {
@@ -16,7 +16,6 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
       formik?.values?.[field.name] === "" ||
       formik?.values?.[field.name] === null ||
       formik?.values?.[field.name] === undefined
-      // typeof formik?.values?.[field.name] !== "object"
     ) {
       setFiles([]);
       setExistingFiles([]);
@@ -27,13 +26,13 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
     if (field?.multiFileEnity) {
       const { entityType, entityId } = field?.multiFileEnity;
       axios
-        .get(`http://localhost:8500/documents/entity/${entityType}/${entityId}`)
+        .get(DOCUMENTS_BY_ENTITY_URL(entityType, entityId))
         .then((data) => {
           setExistingFiles(data.data);
           setFiles([]);
         })
         .catch((error) => {
-          console.log("MULTI FILE INPUT error: ", error);
+          console.log(error);
         });
     }
   }, [field?.multiFileEnity]);
@@ -108,7 +107,7 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
 
   // Delete a single file
   const deleteFile = async (id) => {
-    await axios.delete(`http://localhost:8500/documents/${id}`);
+    await axios.delete(DOCUMENT_BY_ID_URL(id));
   };
 
   return (
@@ -186,7 +185,6 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
             {checkifFileExists() && (
               <span style={{ position: "absolute", right: "28px" }}>|</span>
             )}
-            {/* {files?.length > 0 && `Files: ${files?.length}`} */}
             {checkifFileExists() && `${checkFileLength()} files selected`}
             {!checkifFileExists() && "No file chosen"}
             {checkifFileExists() && formState !== "view" && (
@@ -225,7 +223,6 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
                       className="cursor-pointer"
                       onClick={() => {
                         const newFiles = files.filter((f, i) => i !== index);
-                        setDeletedFiles((prev) => [...prev, file.name]);
                         setFiles(newFiles);
                         if (!checkifFileExists()) {
                           setShowFiles(false);

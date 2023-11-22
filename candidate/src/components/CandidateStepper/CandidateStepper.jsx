@@ -30,7 +30,7 @@ const CandidateStepper = ({ step, setStep }) => {
             >
               <NavItem>
                 <NavLink
-                  onClick={() => setStep(0)}
+                  onClick={() => setStep && setStep(0)}
                   id="pills-gen-info-tab"
                   className={classnames(
                     {
@@ -50,7 +50,7 @@ const CandidateStepper = ({ step, setStep }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                  onClick={() => setStep(1)}
+                  onClick={() => setStep && setStep(1)}
                   href="/contact-creation"
                   id="pills-gen-info-tab"
                   className={classnames(
@@ -70,7 +70,7 @@ const CandidateStepper = ({ step, setStep }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                 onClick={() => setStep(2)}
+                  onClick={() => setStep && setStep(2)}
                   to="#"
                   id="pills-gen-info-tab"
                   className={classnames(
@@ -90,7 +90,7 @@ const CandidateStepper = ({ step, setStep }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                 onClick={() => setStep(3)}
+                  onClick={() => setStep && setStep(3)}
                   to="#"
                   id="pills-gen-info-tab"
                   className={classnames(
@@ -110,7 +110,7 @@ const CandidateStepper = ({ step, setStep }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                 onClick={() => setStep(4)}
+                  onClick={() => setStep && setStep(4)}
                   to="#"
                   id="pills-gen-info-tab"
                   className={classnames(
@@ -130,7 +130,7 @@ const CandidateStepper = ({ step, setStep }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                 onClick={() => setStep(5)}
+                  onClick={() => setStep && setStep(5)}
                   to="#"
                   id="pills-gen-info-tab"
                   className={classnames(
@@ -150,7 +150,7 @@ const CandidateStepper = ({ step, setStep }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                 onClick={() => setStep(6)}
+                  onClick={() => setStep && setStep(6)}
                   to="#"
                   id="pills-gen-info-tab"
                   className={classnames(

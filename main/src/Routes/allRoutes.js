@@ -57,9 +57,7 @@ const authProtectedRoutes = [
     component: <CreateCandidate />,
     requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
-  // { path: "/candidates/:candidateId/edit", component: <EditCandidate /> },
   { path: "/candidates/:candidateId/:slug", component: <CandidateManage />},
-  // { path: "/candidates/:candidateId", component: <CandidateManage /> },
 
   // Account
   {

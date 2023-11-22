@@ -40,7 +40,6 @@ import {
   GET_CANDIDATE_EMPLOYER_DETAILS_BY_ENTITY_URL,
 } from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
-import { toast } from "react-toastify";
 import CountryModal from "../../components/CountryModal/CountryModal";
 import { fetchCandidateForm } from "../../store/candidateForm/action";
 
