@@ -226,8 +226,7 @@ const EditCandidate = () => {
       return "";
     }
     return files.map((file) => file.name).join(",");
-  }
-
+  };
 
   /**
    * Handle form submit based on step
@@ -407,7 +406,7 @@ const EditCandidate = () => {
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
-        console.log("newValues11", newValues)
+        console.log("newValues11", newValues);
         const newValuesOut = { ...newValues };
         if (newValues?.multiFiles?.length > 0) {
           newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
@@ -421,9 +420,10 @@ const EditCandidate = () => {
           formId: parseInt(form.formId),
         };
 
-        console.log("newData", newData)
-
-        return
+        console.log("newData", newData);
+        const formData = ObjectHelper.convertObjectToFormDataWithFiles(newData);
+        console.log("FormData", formData);
+        // return;
 
         // const newData = {
         //   ...newValues,
@@ -433,12 +433,26 @@ const EditCandidate = () => {
         //   formId: parseInt(form.formId),
         // };
 
+        // dispatch(
+        //   postCandidate({
+        //     entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+        //     newData,
+        //     rerenderTable: rerenderTable,
+        //     resetForm: resetForm([], "create"),
+        //   })
+        // );
+
         dispatch(
           postCandidate({
             entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-            newData,
+            newData: formData,
             rerenderTable: rerenderTable,
             resetForm: resetForm([], "create"),
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
           })
         );
         return;

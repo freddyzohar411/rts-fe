@@ -6,4 +6,21 @@ export const convertObjectToFormData = (object) => {
     }
     return formData;
   }
+
+  export const convertObjectToFormDataWithFiles = (object) => {
+    const formData = new FormData();
+    for (const key in object) {
+      // Check if it is an array of files
+      if (Array.isArray(object[key])) {
+        for (const file of object[key]) {
+          formData.append(key, file);
+        }
+        continue;
+      }
+      formData.append(key, object[key]);
+    }
+    return formData;
+  }
+
+
   

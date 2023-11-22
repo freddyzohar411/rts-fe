@@ -12,7 +12,7 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   const fileInputRef = useRef();
 
   console.log("Files: ", files);
-    console.log("Existing Files: ", existingFiles);
+  console.log("Existing Files: ", existingFiles);
 
   useEffect(() => {
     // if (formik?.values?.[field.name] ) {
@@ -20,7 +20,7 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
     // }
   }, []);
 
-//   console.log("MULTI FILE INPUT values: ", formik?.values?.[field.name]);
+  //   console.log("MULTI FILE INPUT values: ", formik?.values?.[field.name]);
   useEffect(() => {
     if (
       formik?.values?.[field.name] === "" ||
@@ -62,6 +62,9 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   console.log("MULTI FILE INPUT existingFiles: ", existingFiles);
 
   const truncateString = (str, num) => {
+    if (str === undefined || str === null || str === "") {
+      return "";
+    }
     if (str?.length <= num) {
       return str;
     }
@@ -80,15 +83,40 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
     formik.setFieldValue(field.name, files);
   }, [files]);
 
-  //   useEffect(() => {
-  //     formik.setFieldValue("deletedFiles", [...deletedFiles]);
-  //   }, [deletedFiles]);
+  const handleDeleteAllFiles = async () => {
+    setFiles([]);
+    // Loop Through all the existing files and delete them
+    await existingFiles.forEach((file) => {
+      deleteFile(file.id);
+    });
+    // Set Existing files to empty array
+    setExistingFiles([]);
+    setShowFiles(false);
+  };
+
   const checkifFileExists = () => {
     return files.length > 0 || existingFiles.length > 0;
   };
 
   const checkFileLength = () => {
     return files?.length + existingFiles?.length;
+  };
+
+  const handleDeleteSingleExistingFile = async (file, index) => {
+    try {
+      await deleteFile(file.id);
+      const newFiles = existingFiles.filter((f, i) => i !== index);
+      setExistingFiles(newFiles);
+      if (!checkifFileExists()) {
+        setShowFiles(false);
+      }
+    } catch (error) {
+      console.log("Error deleting file: ", error);
+    }
+  };
+
+  const deleteFile = async (id) => {
+    await axios.delete(`http://localhost:8500/documents/${id}`);
   };
 
   return (
@@ -141,7 +169,7 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
               backgroundColor: formState === "view" ? "#EFF2F7" : "",
             }}
           >
-            {!showFiles && files.length > 0 && (
+            {!showFiles && checkifFileExists() && (
               <IoIosArrowBack
                 style={{
                   position: "absolute",
@@ -153,7 +181,7 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
                 onClick={() => setShowFiles(!showFiles)}
               />
             )}
-            {showFiles && files.length > 0 && (
+            {showFiles && checkifFileExists() && (
               <IoIosArrowDown
                 style={{
                   position: "absolute",
@@ -170,20 +198,15 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
             {checkifFileExists() && `${checkFileLength()} files selected`}
 
             {!checkifFileExists() && "No file chosen"}
-            {formik?.values?.[field.name]?.length !== 0 &&
-              formState !== "view" && (
-                <span
-                  className="cursor-pointer"
-                  style={{ position: "absolute", right: "30px" }}
-                  onClick={() => {
-                    setFiles([]);
-                    setShowFiles(false);
-                    //   formik.setFieldValue(field.name, null);
-                  }}
-                >
-                  x
-                </span>
-              )}
+            {checkifFileExists() && formState !== "view" && (
+              <span
+                className="cursor-pointer"
+                style={{ position: "absolute", right: "30px" }}
+                onClick={handleDeleteAllFiles}
+              >
+                x
+              </span>
+            )}
           </div>
         </div>
         <div className="w-100" style={{ position: "absolute", right: "0px" }}>
@@ -207,6 +230,27 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
                         setShowFiles(false);
                       }
                     }}
+                  >
+                    x
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {existingFiles.length > 0 && showFiles && (
+            <div className="d-flex flex-column border">
+              {existingFiles.map((file, index) => (
+                <div
+                  className="d-flex flex-row gap-2  border-2 p-2 bg-white"
+                  key={index}
+                >
+                  <span className="flex-grow-1">
+                    {truncateString(file?.title, 10)}
+                  </span>
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => handleDeleteSingleExistingFile(file, index)}
                   >
                     x
                   </span>
