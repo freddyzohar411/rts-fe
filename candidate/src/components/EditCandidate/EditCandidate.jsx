@@ -70,9 +70,9 @@ const EditCandidate = () => {
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [view, setView] = useState(
-    linkState?.view !== null ? linkState?.view : true
+    linkState?.view !== null && linkState?.view !== undefined ? linkState?.view : true
   );
-
+console.log("View", view)
   /**
    * Get candidate id from url
    */
@@ -505,7 +505,7 @@ const EditCandidate = () => {
             field.name === CandidateTableListConstant.WORK_EXPERIENCE_LIST
         );
         const { tableEditId } = table.tableSetting;
-        
+
         dispatch(
           putCandidate({
             entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
@@ -865,7 +865,7 @@ const EditCandidate = () => {
 
   return (
     <>
-      <Container className="page-content">
+      {/* <Container className="page-content"> */}
         <FormStepper
           activeStep={step}
           handleBack={handleBack}
@@ -877,6 +877,7 @@ const EditCandidate = () => {
           resetStepper={resetStepper}
           toggleFormViewState={toggleFormViewState}
           viewState={view}
+          setStep={setStep}
         >
           <Form
             template={formTemplate}
@@ -890,7 +891,7 @@ const EditCandidate = () => {
             ref={formikRef}
           />
         </FormStepper>
-      </Container>
+      {/* </Container> */}
     </>
   );
 };

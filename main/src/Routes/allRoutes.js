@@ -11,7 +11,12 @@ import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 import { AccountListing, EditAccount, CreateAccount } from "@workspace/account";
 
 // Candidate
-import { CreateCandidate, CandidateListing, EditCandidate } from "@workspace/candidate";
+import {
+  CreateCandidate,
+  CandidateListing,
+  EditCandidate,
+  CandidateManage,
+} from "@workspace/candidate";
 
 // Job
 import { JobCreation, JobListing } from "@workspace/job";
@@ -46,13 +51,15 @@ const authProtectedRoutes = [
   { path: "/profile", component: <UserProfile /> },
 
   // Candidate
+  { path: "/candidates", component: <CandidateListing /> },
   {
     path: "/candidates/create",
     component: <CreateCandidate />,
     requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
-  { path: "/candidates/:candidateId/edit", component: <EditCandidate /> },
-  { path: "/candidates", component: <CandidateListing /> },
+  // { path: "/candidates/:candidateId/edit", component: <EditCandidate /> },
+  { path: "/candidates/:candidateId/:slug", component: <CandidateManage />},
+  // { path: "/candidates/:candidateId", component: <CandidateManage /> },
 
   // Account
   {

@@ -1,3 +1,4 @@
 export * from "./CreateCandidate";
 export * from "./CandidateListing";
-export * from "./EditCandidate"
+export * from "../components/EditCandidate"
+export * from "./CandidateManage"

@@ -1,5 +1,5 @@
 import { Button, Card, Container } from "reactstrap";
-import CandidateStepper from "../../components/CandidateStepper/CandidateStepper";
+import CandidateStepper from "../CandidateStepper/CandidateStepper";
 import { useUserAuth } from "@workspace/login";
 import { CandidateTableListConstant } from "../../constants/candidateConstant";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,7 @@ const FormStepper = ({
   resetStepper,
   toggleFormViewState,
   viewState,
+  setStep
 }) => {
   const { Permission, checkAllPermission } = useUserAuth();
   const navigate = useNavigate();
@@ -68,36 +69,34 @@ const FormStepper = ({
   };
 
   return (
-    <Card>
-      <Container fluid>
-        <CandidateStepper step={activeStep} />
-        <div className="px-3"> {children}</div>
-        <div
-          className={`d-flex ${
-            candidateId && checkReadEditPermission()
-              ? "justify-content-between"
-              : "justify-content-end"
-          } align-items-center mb-2`}
-        >
-          {candidateId && checkReadEditPermission() && (
-            <Button onClick={toggleFormViewState} className="btn btn-danger">
-              {viewState ? "Edit" : "View"}
+    <>
+      <CandidateStepper step={activeStep} setStep={setStep}/>
+      <div className="px-3"> {children}</div>
+      <div
+        className={`d-flex ${
+          candidateId && checkReadEditPermission()
+            ? "justify-content-between"
+            : "justify-content-end"
+        } align-items-center mb-2`}
+      >
+        {candidateId && checkReadEditPermission() && (
+          <Button onClick={toggleFormViewState} className="btn btn-danger">
+            {viewState ? "Edit" : "View"}
+          </Button>
+        )}
+        <div className="d-flex gap-2">
+          {activeStep > 0 && (
+            <Button color="dark" onClick={handleBack}>
+              Back
             </Button>
           )}
-          <div className="d-flex gap-2">
-            {activeStep > 0 && (
-              <Button color="dark" onClick={handleBack}>
-                Back
-              </Button>
-            )}
-            <Button color="dark">Skip</Button>
-            <Button color="dark" onClick={handleNextStep}>
-              Next
-            </Button>
-          </div>
+          <Button color="dark">Skip</Button>
+          <Button color="dark" onClick={handleNextStep}>
+            Next
+          </Button>
         </div>
-      </Container>
-    </Card>
+      </div>
+    </>
   );
 };
 export default FormStepper;

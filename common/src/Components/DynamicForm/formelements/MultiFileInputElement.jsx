@@ -11,13 +11,11 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   const [deletedFiles, setDeletedFiles] = useState([]); // formik?.values?.[field.name
   const fileInputRef = useRef();
 
-  console.log("Formik values (Multi files): ", formik?.values?.[field.name]);
-
   useEffect(() => {
     if (
       formik?.values?.[field.name] === "" ||
       formik?.values?.[field.name] === null ||
-      formik?.values?.[field.name] === undefined 
+      formik?.values?.[field.name] === undefined
       // typeof formik?.values?.[field.name] !== "object"
     ) {
       setFiles([]);
@@ -27,7 +25,7 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
 
   useEffect(() => {
     if (field?.multiFileEnity) {
-      const { entityType, entityId } = field.multiFileEnity;
+      const { entityType, entityId } = field?.multiFileEnity;
       axios
         .get(`http://localhost:8500/documents/entity/${entityType}/${entityId}`)
         .then((data) => {
@@ -59,14 +57,16 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   };
 
   useEffect(() => {
-    formik.setFieldValue(field.name, files);
+    if (formik?.values?.[field.name]) {
+      formik.setFieldValue(field?.name, files);
+    }
   }, [files]);
 
   useEffect(() => {
     if (existingFiles.length > 0 && files.length === 0) {
       formik.setFieldValue(field.name, existingFiles?.join(","));
     }
-  }, [existingFiles])
+  }, [existingFiles]);
 
   const handleDeleteAllFiles = async () => {
     setFiles([]);
@@ -88,10 +88,10 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   };
 
   useEffect(() => {
-    if (!checkifFileExists()){
-      setShowFiles(false)
+    if (!checkifFileExists()) {
+      setShowFiles(false);
     }
-  },[files, existingFiles])
+  }, [files, existingFiles]);
 
   const handleDeleteSingleExistingFile = async (file, index) => {
     try {
@@ -183,7 +183,9 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
                 onClick={() => setShowFiles(!showFiles)}
               />
             )}
-            {checkifFileExists() && <span style={{ position: "absolute", right: "28px" }}>|</span>}
+            {checkifFileExists() && (
+              <span style={{ position: "absolute", right: "28px" }}>|</span>
+            )}
             {/* {files?.length > 0 && `Files: ${files?.length}`} */}
             {checkifFileExists() && `${checkFileLength()} files selected`}
             {!checkifFileExists() && "No file chosen"}

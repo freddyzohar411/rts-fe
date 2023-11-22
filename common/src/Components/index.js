@@ -74,6 +74,9 @@ import DeleteCustomModal from "./DeleteModal/DeleteCustomModal";
 // Import general Modal
 import GeneralModal from "./GeneralModal/GeneralModal";
 
+// Import Custom Nav
+import CustomNav from "./CustomNav/CustomNav";
+
 export {
   BreadCrumb,
   getChartColorsArray,
@@ -139,4 +142,7 @@ export {
 
   // Export general Modal
   GeneralModal,
+
+  // Export Custom Nav
+  CustomNav
 };

@@ -119,7 +119,7 @@ function CandidateListing() {
         render: (data) => (
           <div className="d-flex column-gap-2">
             <Link
-              to={`/candidates/${data.id}/edit`}
+              to={`/candidates/${data.id}/snapshot`}
               style={{ color: "black" }}
               state={{ view: true }}
             >
@@ -132,7 +132,7 @@ function CandidateListing() {
             </Link>
             {checkAllPermission([Permission.CANDIDATE_EDIT]) && (
               <Link
-                to={`/candidates/${data.id}/edit`}
+                to={`/candidates/${data.id}/snapshot`}
                 style={{ color: "black" }}
                 state={{ view: false }}
               >
