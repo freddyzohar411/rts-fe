@@ -206,15 +206,23 @@ const generateValidationSchema2 = (
             field.fileTypeValidationErrorMessage,
             (value) => {
               console.log("Formik Multi File Values", value)
-              // if (!value) return true; // allow empty values
-              // const validExtensions = field.fileTypeValidation; // List of valid extensions
-              // let extension = null;
-              // if (value?.name) {
-              //   extension = value.name.split(".").pop(); // Extract extension
-              // } else {
-              //   extension = value.split(".").pop(); // Extract extension
-              // }
-              // return validExtensions.includes(extension);
+               if (!value) return true; // allow empty values
+              if (value?.length > 0) {
+                let isValid = true;
+                value?.forEach((file) => {
+                  const validExtensions = field.fileTypeValidation; // List of valid extensions
+                  let extension = null;
+                  if (file?.name) {
+                    extension = file.name.split(".").pop(); // Extract extension
+                  } else {
+                    extension = file.split(".").pop(); // Extract extension
+                  }
+                  if (!validExtensions.includes(extension)) {
+                    isValid = false;
+                  }
+                });
+                return isValid;
+              }
             }
           );
         }
@@ -225,14 +233,20 @@ const generateValidationSchema2 = (
             field.fileSizeValidationErrorMessage,
             (value) => {
               if (!value || value === undefined) return true; // allow empty values
-              if (typeof value === "string") return true; // allow empty values
-              const maxFileSize =
-                parseInt(field.fileSizeValidation) * 1024 * 1024; // Maximum file size (in bytes)
-              return value.size <= maxFileSize;
+              if (value?.length > 0) {
+                let isValid = true;
+                value?.forEach((file) => {
+                  const maxFileSize =
+                    parseInt(field.fileSizeValidation) * 1024 * 1024; // Maximum file size (in bytes)
+                  if (file.size > maxFileSize) {
+                    isValid = false;
+                  }
+                });
+                return isValid;
+              }
             }
           );
         }
-
       }
 
       // Perform custom condition validation
