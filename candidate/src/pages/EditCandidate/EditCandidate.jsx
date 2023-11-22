@@ -268,6 +268,13 @@ const EditCandidate = () => {
       } else {
         formikRef.current.clearForm();
         formikRef.current.formik.setTouched({});
+        // Clear for fields with multi file + delete
+        const newFormFields = [...formFieldsData];
+        newFormFields.forEach((field) => {
+          if (field.type === "multifile") {
+            delete field.multiFileEnity;
+          }
+        });
       }
       if (formState !== "") {
         setFormState(formState);
@@ -469,13 +476,30 @@ const EditCandidate = () => {
       // Update contact
       if (buttonName === "tableUpdate") {
         setButtonName("");
+
+        const newValuesOut = { ...newValues };
+        if (newValues?.multiFiles?.length > 0) {
+          newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
+        }
+
         const newData = {
           ...newValues,
           entityId: candidateId,
           entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-          formData: JSON.stringify(newValues),
+          formData: JSON.stringify(newValuesOut),
           formId: parseInt(form.formId),
         };
+
+        console.log("newData", newData);
+        const formData = ObjectHelper.convertObjectToFormDataWithFiles(newData);
+
+        // const newData = {
+        //   ...newValues,
+        //   entityId: candidateId,
+        //   entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+        //   formData: JSON.stringify(newValues),
+        //   formId: parseInt(form.formId),
+        // };
 
         // Get update id
         const table = formFieldsData.find(
@@ -488,9 +512,14 @@ const EditCandidate = () => {
           putCandidate({
             entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
             id: tableEditId,
-            newData,
+            newData: formData,
             rerenderTable: rerenderTable,
             resetForm: resetForm([], "create"),
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
           })
         );
       }

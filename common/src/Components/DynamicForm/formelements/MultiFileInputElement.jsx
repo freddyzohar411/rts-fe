@@ -29,14 +29,8 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
       typeof formik?.values?.[field.name] !== "object"
     ) {
       setFiles([]);
+      setExistingFiles([]);
     }
-
-    // if (
-    //   formik?.values?.[field.name] &&
-    //   typeof formik?.values?.[field.name] === "string"
-    // ) {
-    //   setExistingFiles([formik?.values?.[field.name].split(",")]);
-    // }
   }, [formik?.values?.[field.name]]);
 
   useEffect(() => {
@@ -102,6 +96,12 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
     return files?.length + existingFiles?.length;
   };
 
+  useEffect(() => {
+    if (!checkifFileExists()){
+      setShowFiles(false)
+    }
+  },[files, existingFiles])
+
   const handleDeleteSingleExistingFile = async (file, index) => {
     try {
       await deleteFile(file.id);
@@ -115,6 +115,8 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
     }
   };
 
+  console.log("Show File: ", showFiles)
+  // Delete a single file
   const deleteFile = async (id) => {
     await axios.delete(`http://localhost:8500/documents/${id}`);
   };
@@ -193,15 +195,14 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
                 onClick={() => setShowFiles(!showFiles)}
               />
             )}
-
+            {checkifFileExists() && <span style={{ position: "absolute", right: "28px" }}>|</span>}
             {/* {files?.length > 0 && `Files: ${files?.length}`} */}
             {checkifFileExists() && `${checkFileLength()} files selected`}
-
             {!checkifFileExists() && "No file chosen"}
             {checkifFileExists() && formState !== "view" && (
               <span
                 className="cursor-pointer"
-                style={{ position: "absolute", right: "30px" }}
+                style={{ position: "absolute", right: "40px" }}
                 onClick={handleDeleteAllFiles}
               >
                 x
@@ -209,56 +210,69 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
             )}
           </div>
         </div>
-        <div className="w-100" style={{ position: "absolute", right: "0px" }}>
-          {files.length > 0 && showFiles && (
-            <div className="d-flex flex-column border">
-              {files.map((file, index) => (
-                <div
-                  className="d-flex flex-row gap-2  border-2 p-2 bg-white"
-                  key={index}
-                >
-                  <span className="flex-grow-1">
-                    {truncateString(file.name, 10)}
-                  </span>
-                  <span
-                    className="cursor-pointer"
-                    onClick={() => {
-                      const newFiles = files.filter((f, i) => i !== index);
-                      setDeletedFiles((prev) => [...prev, file.name]);
-                      setFiles(newFiles);
-                      if (newFiles.length === 0) {
-                        setShowFiles(false);
-                      }
-                    }}
+        {showFiles && (
+          <div
+            className="w-100 border"
+            style={{
+              position: "absolute",
+              right: "0px",
+              borderRadius: "3px",
+              zIndex: 9999,
+            }}
+          >
+            {files.length > 0 && showFiles && (
+              <div className="">
+                {files.map((file, index) => (
+                  <div
+                    className="d-flex flex-row gap-2  border-2 p-2 bg-white"
+                    key={index}
                   >
-                    x
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+                    <span className="flex-grow-1">
+                      {truncateString(file.name, 45)}
+                    </span>
+                    <span
+                      style={{ fontWeight: "bold" }}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        const newFiles = files.filter((f, i) => i !== index);
+                        setDeletedFiles((prev) => [...prev, file.name]);
+                        setFiles(newFiles);
+                        if (!checkifFileExists()) {
+                          setShowFiles(false);
+                        }
+                      }}
+                    >
+                      x
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
 
-          {existingFiles.length > 0 && showFiles && (
-            <div className="d-flex flex-column border">
-              {existingFiles.map((file, index) => (
-                <div
-                  className="d-flex flex-row gap-2  border-2 p-2 bg-white"
-                  key={index}
-                >
-                  <span className="flex-grow-1">
-                    {truncateString(file?.title, 10)}
-                  </span>
-                  <span
-                    className="cursor-pointer"
-                    onClick={() => handleDeleteSingleExistingFile(file, index)}
+            {existingFiles.length > 0 && showFiles && (
+              <div className="">
+                {existingFiles.map((file, index) => (
+                  <div
+                    className="d-flex flex-row gap-2  border-2 p-2 bg-white"
+                    key={index}
                   >
-                    x
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                    <span className="flex-grow-1">
+                      {truncateString(file?.title, 45)}
+                    </span>
+                    <span
+                      style={{ fontWeight: "bold" }}
+                      onClick={() =>
+                        handleDeleteSingleExistingFile(file, index)
+                      }
+                    >
+                      x
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );
