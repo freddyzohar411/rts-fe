@@ -488,7 +488,6 @@ const EditCandidate = () => {
           formId: parseInt(form.formId),
         };
 
-        console.log("newData", newData);
         const formData = ObjectHelper.convertObjectToFormDataWithFiles(newData);
 
         // const newData = {
@@ -506,6 +505,7 @@ const EditCandidate = () => {
             field.name === CandidateTableListConstant.WORK_EXPERIENCE_LIST
         );
         const { tableEditId } = table.tableSetting;
+        
         dispatch(
           putCandidate({
             entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,

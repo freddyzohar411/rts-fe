@@ -46,10 +46,6 @@ const Form = forwardRef(
     const [buttonName, setButtonName] = useState("");
     const [editDataValues, setEditDataValues] = useState(null);
 
-        // ============= Console.log=====
-        console.log("Form Fields", formFields);
-        // ===================================
-
     useEffect(() => {
       if (onFormFieldsChange) {
         onFormFieldsChange(formFields);

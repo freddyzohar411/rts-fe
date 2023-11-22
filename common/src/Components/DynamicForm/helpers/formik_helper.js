@@ -199,6 +199,42 @@ const generateValidationSchema2 = (
         }
       }
 
+      if (field.type === "multifile") {
+        if (field.fileTypeValidation) {
+          fieldValidation = fieldValidation.test(
+            "fileType",
+            field.fileTypeValidationErrorMessage,
+            (value) => {
+              console.log("Formik Multi File Values", value)
+              // if (!value) return true; // allow empty values
+              // const validExtensions = field.fileTypeValidation; // List of valid extensions
+              // let extension = null;
+              // if (value?.name) {
+              //   extension = value.name.split(".").pop(); // Extract extension
+              // } else {
+              //   extension = value.split(".").pop(); // Extract extension
+              // }
+              // return validExtensions.includes(extension);
+            }
+          );
+        }
+
+        if (field.fileSizeValidation) {
+          fieldValidation = fieldValidation.test(
+            "fileSize",
+            field.fileSizeValidationErrorMessage,
+            (value) => {
+              if (!value || value === undefined) return true; // allow empty values
+              if (typeof value === "string") return true; // allow empty values
+              const maxFileSize =
+                parseInt(field.fileSizeValidation) * 1024 * 1024; // Maximum file size (in bytes)
+              return value.size <= maxFileSize;
+            }
+          );
+        }
+
+      }
+
       // Perform custom condition validation
       if (field?.conditionValidation?.length > 0) {
         fieldValidation = fieldValidation.test(

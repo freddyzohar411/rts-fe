@@ -11,16 +11,6 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   const [deletedFiles, setDeletedFiles] = useState([]); // formik?.values?.[field.name
   const fileInputRef = useRef();
 
-  console.log("Files: ", files);
-  console.log("Existing Files: ", existingFiles);
-
-  useEffect(() => {
-    // if (formik?.values?.[field.name] ) {
-    formik.setFieldValue(field.name, "a,b,c");
-    // }
-  }, []);
-
-  //   console.log("MULTI FILE INPUT values: ", formik?.values?.[field.name]);
   useEffect(() => {
     if (
       formik?.values?.[field.name] === "" ||
@@ -36,14 +26,9 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   useEffect(() => {
     if (field?.multiFileEnity) {
       const { entityType, entityId } = field.multiFileEnity;
-      console.log(
-        "MULTI FILE INPUT field.multiFileEnity: ",
-        field.multiFileEnity
-      );
       axios
         .get(`http://localhost:8500/documents/entity/${entityType}/${entityId}`)
         .then((data) => {
-          console.log("MULTI FILE INPUT data: ", data);
           setExistingFiles(data.data);
           setFiles([]);
         })
@@ -52,8 +37,6 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
         });
     }
   }, [field?.multiFileEnity]);
-
-  console.log("MULTI FILE INPUT existingFiles: ", existingFiles);
 
   const truncateString = (str, num) => {
     if (str === undefined || str === null || str === "") {
@@ -115,7 +98,6 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
     }
   };
 
-  console.log("Show File: ", showFiles)
   // Delete a single file
   const deleteFile = async (id) => {
     await axios.delete(`http://localhost:8500/documents/${id}`);
@@ -145,8 +127,6 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
               minWidth: "90px",
             }}
             onClick={() => {
-              console.log("Clicked");
-              console.log(fileInputRef.current);
               fileInputRef.current.click();
             }}
             disabled={formState === "view" ? true : false}

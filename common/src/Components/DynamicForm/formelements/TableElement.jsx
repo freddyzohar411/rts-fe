@@ -124,10 +124,8 @@ const TableElement = ({
   // };
 
   const handleEdit = (row) => {
-    // find
     // Set formik values based on row value and config
     // Set all the formik values in this table based on the API
-    console.log("ROW", row);
     for (const [key, value] of Object.entries(row.data)) {
       formik?.setFieldValue(key, value);
     }
