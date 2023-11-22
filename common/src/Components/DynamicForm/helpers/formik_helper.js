@@ -114,6 +114,9 @@ const generateValidationSchema2 = (
         case "multifile":
           fieldValidation = Yup.mixed();
           break;
+        // case "multifile":
+        //   fieldValidation = Yup.array();
+        //   break;
         case "date":
           fieldValidation = Yup.date();
           break;
@@ -122,8 +125,25 @@ const generateValidationSchema2 = (
           break;
       }
 
-      if (field.required === "true" || field.required === true) {
+      if (
+        (field.required === "true" || field.required === true) &&
+        field.type !== "multifile"
+      ) {
         fieldValidation = fieldValidation.required(field.requiredErrorMessage);
+      }
+
+      if (
+        (field.required === "true" || field.required === true) &&
+        field.type === "multifile"
+      ) {
+        fieldValidation = fieldValidation.test(
+          "fileRequired",
+          field.requiredErrorMessage,
+          (value) => {
+            if (value?.length === 0 || value === "") return false;
+            return true;
+          }
+        );
       }
 
       // String
@@ -205,8 +225,9 @@ const generateValidationSchema2 = (
             "fileType",
             field.fileTypeValidationErrorMessage,
             (value) => {
-              console.log("Formik Multi File Values", value)
-               if (!value) return true; // allow empty values
+              console.log("Formik Multi File Values", value);
+              if (value?.length === 0 || typeof value === "string") return true; // allow empty values
+              if (!value) return true; // allow empty values
               if (value?.length > 0) {
                 let isValid = true;
                 value?.forEach((file) => {
@@ -232,6 +253,7 @@ const generateValidationSchema2 = (
             "fileSize",
             field.fileSizeValidationErrorMessage,
             (value) => {
+              if (value?.length === 0 || typeof value === "string") return true;
               if (!value || value === undefined) return true; // allow empty values
               if (value?.length > 0) {
                 let isValid = true;

@@ -260,6 +260,9 @@ const CreateCandidate = () => {
     if (files.length === 0) {
       return "";
     }
+    if (typeof files === "string") {
+      return files;
+    }
     return files.map((file) => file.name).join(",");
   };
 
@@ -483,6 +486,11 @@ const CreateCandidate = () => {
           newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
         }
 
+        // Check if it is a array of files
+        if (!Array.isArray(newValues?.multiFiles)) {
+          newValues.multiFiles = [];
+        }
+
         const newData = {
           ...newValues,
           entityId: candidateId,
@@ -531,7 +539,7 @@ const CreateCandidate = () => {
         //   (field) =>
         //     field.type === "table" &&
         //     field.name === CandidateTableListConstant.WORK_EXPERIENCE_LIST
-        getFileNames; // );
+        // getFileNames; // );
         // const { tableEditId } = table.tableSetting;
         // dispatch(
         //   putCandidate({
@@ -546,6 +554,9 @@ const CreateCandidate = () => {
         const newValuesOut = { ...newValues };
         if (newValues?.multiFiles?.length > 0) {
           newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
+        }
+        if (!Array.isArray(newValues?.multiFiles)) {
+          newValues.multiFiles = [];
         }
 
         const newData = {

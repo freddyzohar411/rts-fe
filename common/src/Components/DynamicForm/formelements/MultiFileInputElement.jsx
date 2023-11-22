@@ -11,12 +11,14 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   const [deletedFiles, setDeletedFiles] = useState([]); // formik?.values?.[field.name
   const fileInputRef = useRef();
 
+  console.log("Formik values (Multi files): ", formik?.values?.[field.name]);
+
   useEffect(() => {
     if (
       formik?.values?.[field.name] === "" ||
       formik?.values?.[field.name] === null ||
-      formik?.values?.[field.name] === undefined ||
-      typeof formik?.values?.[field.name] !== "object"
+      formik?.values?.[field.name] === undefined 
+      // typeof formik?.values?.[field.name] !== "object"
     ) {
       setFiles([]);
       setExistingFiles([]);
@@ -59,6 +61,12 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   useEffect(() => {
     formik.setFieldValue(field.name, files);
   }, [files]);
+
+  useEffect(() => {
+    if (existingFiles.length > 0 && files.length === 0) {
+      formik.setFieldValue(field.name, existingFiles?.join(","));
+    }
+  }, [existingFiles])
 
   const handleDeleteAllFiles = async () => {
     setFiles([]);
