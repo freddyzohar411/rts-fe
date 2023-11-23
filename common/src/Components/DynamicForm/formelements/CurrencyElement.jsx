@@ -35,7 +35,7 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
   const [selectedCurrency, setSelectedCurrency] = useState("Currency");
 
   useEffect(() => {
-    if (formik?.values?.[field.subName] && countryData) {
+    if (formik?.values?.[field?.subName] && countryData) {
       const country = countryData.find(
         (country) =>
           `${country?.currency} ${country?.currencySymbol}` ===
@@ -48,7 +48,7 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
   }, [formik?.values?.[field.subName]]);
 
   useEffect(() => {
-    if (selectedCurrency) {
+    if (selectedCurrency && formik?.values?.[field.subName]) {
       formik.setFieldValue(field.subName, selectedCurrency);
     }
   }, [selectedCurrency]);

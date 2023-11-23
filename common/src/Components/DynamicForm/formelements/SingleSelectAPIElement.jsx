@@ -125,7 +125,6 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
       if (setOption) {
         setSelectedOptions(setOption);
       } else {
-        // formik?.setFieldValue(field.name, "");
         setSelectedOptions(null);
       }
     } else {

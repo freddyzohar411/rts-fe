@@ -131,14 +131,14 @@ const MultiFileInputElement = ({ formik, field, formStateHook }) => {
             style={{
               borderTopRightRadius: "0px",
               borderBottomRightRadius: "0px",
-              minWidth: "90px",
+              whiteSpace: "nowrap",
             }}
             onClick={() => {
               fileInputRef.current.click();
             }}
             disabled={formState === "view" ? true : false}
           >
-            <span>Add Files</span>
+            Add Files
           </button>
           <div
             className={`w-100 border-primary border border-1 ${
