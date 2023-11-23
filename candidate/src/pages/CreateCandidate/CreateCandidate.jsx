@@ -38,10 +38,12 @@ import {
   GET_CANDIDATE_LANGUAGES_BY_ENTITY_URL,
   CANDIDATE_EMPLOYER_DETAILS_BASE_URL,
   GET_CANDIDATE_EMPLOYER_DETAILS_BY_ENTITY_URL,
+  DOCUMENT_BY_ID_URL
 } from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
 import CountryModal from "../../components/CountryModal/CountryModal";
 import { fetchCandidateForm } from "../../store/candidateForm/action";
+import axios from "axios";
 
 const CreateCandidate = () => {
   const dispatch = useDispatch();
@@ -266,6 +268,28 @@ const CreateCandidate = () => {
   };
 
   /**
+   * Delete files from microservice
+   */
+  const deleteDocument = async (id) => {
+    await axios.delete(DOCUMENT_BY_ID_URL(id))
+  }
+
+  /**
+   * Find multi file entity and delete file from microservice
+   */
+
+  const deleteMultiFilesInField = async (name) => {
+    const field = formFieldsData.find((field) => field.name === name);
+    if (!field ) return;
+    if (!field?.multiFileDelete) return;
+    if (field?.multiFileDelete?.length === 0) return;
+    const files = field.multiFileDelete;
+     files.forEach(async (file) => {
+      await deleteDocument(file);
+    });
+  }
+
+  /**
    * Handle form submit based on step
    * @param {*} event
    * @param {*} values - formik values
@@ -459,7 +483,7 @@ const CreateCandidate = () => {
 
     // Work Experience
     if (step === 2) {
-      // Add contact
+      console.log("newValues", newValues)
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
@@ -489,6 +513,12 @@ const CreateCandidate = () => {
         if (!Array.isArray(newValues?.multiFiles)) {
           newValues.multiFiles = [];
         }
+
+        if (newValues?.multiFiles?.length === 0) {
+          delete newValues.multiFiles
+        }
+
+        console.log("MY NEW VALUES", newValues)
 
         const newData = {
           ...newValues,
@@ -524,7 +554,9 @@ const CreateCandidate = () => {
 
       // Update contact
       if (buttonName === "tableUpdate") {
+        console.log("FFF", formFieldsData)
         setButtonName("");
+        await deleteMultiFilesInField("multiFiles");
         // const newData = {
         //   ...newValues,
         //   entityId: candidateId,
@@ -557,6 +589,8 @@ const CreateCandidate = () => {
         if (!Array.isArray(newValues?.multiFiles)) {
           newValues.multiFiles = [];
         }
+
+        console.log("MY NEW VALUES22", newValues)
 
         const newData = {
           ...newValues,

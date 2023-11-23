@@ -13,6 +13,10 @@ const generateInitialValues = (formFieldData, formik) => {
       return { ...acc, [field.name]: [] };
     }
 
+    // if (field.type === "multifile") {
+    //   return { ...acc, [field.name]: [] };
+    // }
+
     // If there is a subname, then add it to the initial values
     if (field.subName && field.subName !== "") {
       return {

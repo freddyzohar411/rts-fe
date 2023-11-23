@@ -279,6 +279,7 @@ const generateFormField = (
         field={field}
         formik={formik}
         formStateHook={formStateHook}
+        formFieldsHook={formFieldsHook}
       />
     );
   }

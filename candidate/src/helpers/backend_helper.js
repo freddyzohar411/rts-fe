@@ -76,6 +76,7 @@ export const completeCandidateRegistration = (id) =>
 
 // Candidate Documents
 export const DOCUMENT_BASE_URL = `${DOCUMENT_URL}${BASE_DOCUMENTS}`;
+export const DOCUMENT_BY_ID_URL = (id) => `${DOCUMENT_BASE_URL}/${id}`;
 export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
   `${DOCUMENT_BASE_URL}/entity/${entityType}/${entityId}`;
 

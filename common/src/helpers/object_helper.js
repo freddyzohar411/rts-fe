@@ -13,6 +13,9 @@ export const convertObjectToFormData = (object) => {
       // Check if it is an array of files
       if (Array.isArray(object[key])) {
         for (const file of object[key]) {
+          if (file === null || file === undefined) {
+            continue;
+          }
           formData.append(key, file);
         }
         continue;

@@ -4,18 +4,12 @@ import { IoIosArrowDown } from "react-icons/io";
 import { DOCUMENT_BY_ID_URL, DOCUMENTS_BY_ENTITY_URL } from "../../../endpoint";
 import axios from "axios";
 
-const MultiFileInputElement = ({
-  formik,
-  field,
-  formStateHook,
-  formFieldsHook,
-}) => {
-  const { formFields, setFormFields } = formFieldsHook;
+const MultiFileInputElement = ({ formik, field, formStateHook }) => {
   const { formState } = formStateHook;
   const [files, setFiles] = useState([]); //
   const [existingFiles, setExistingFiles] = useState([]);
   const [showFiles, setShowFiles] = useState(false);
-  const [deletedIds, setDeletedIds] = useState([]);
+  const [deletedIds, setDeletedIds] = useState([]); 
   const fileInputRef = useRef();
 
   useEffect(() => {
@@ -65,12 +59,7 @@ const MultiFileInputElement = ({
   };
 
   useEffect(() => {
-    console.log("formik?.values?", formik?.values)
-    console.log("field.name: ", field.name)
-    console.log("formik?.values?.[field.name]: ", formik?.values?.[field.name])
-    console.log(formik?.values?.[field.name] === "")
     if (formik?.values?.[field.name]) {
-      console.log("Setting")
       formik.setFieldValue(field?.name, files);
     }
   }, [files]);
@@ -123,24 +112,12 @@ const MultiFileInputElement = ({
 
   // Delete a single file
   const deleteFile = async (id) => {
-    // await axios.delete(DOCUMENT_BY_ID_URL(id));
+    await axios.delete(DOCUMENT_BY_ID_URL(id));
   };
 
-  // useEffect(() => {
-  //   console.log("Deleted Ids: ", deletedIds);
-  //   if (deletedIds.length > 0) {
-  //     const newFormFields = [...formFields];
-  //     newFormFields?.forEach((formField) => {
-  //       if (formField.name === field.name) {
-  //         formField.multiFileDelete = [...deletedIds]
-  //       }
-  //     });
-  //     setFormFields(newFormFields);
-  //   } 
-  // }, [deletedIds]);
-
-  console.log("Selected Files: ", files);
-  console.log(field);
+  useEffect(() => {
+    console.log("Deleted Ids: ", deletedIds);
+  }, [deletedIds])
 
   return (
     <>
