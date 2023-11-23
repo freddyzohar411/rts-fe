@@ -859,6 +859,10 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "editor",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
       ],
     },
     // {

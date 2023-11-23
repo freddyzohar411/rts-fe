@@ -59,6 +59,10 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
   const isValid = !props?.error;
 
   const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999, 
+    }),
     control: (base, state) => ({
       ...base,
       // state.isFocused can display different borderColor if you need it

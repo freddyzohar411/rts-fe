@@ -5,7 +5,6 @@ import Select from "react-select";
 import { fetchIndustry } from "../../../store/industry/action";
 import { fetchDepartment } from "../../../store/actions";
 import { fetchCountryCurrency } from "../../../store/countrycurrency/action";
-import { fetchSubIndustry } from "../../../store/industry/action";
 import { getSubIndustries, getCities } from "../../../helpers/backend_helper";
 
 const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
@@ -14,7 +13,6 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [optionsNew, setOptionsNew] = useState([]);
 
   // Helper Functions
   function mapToOptionFormat(apiData) {
@@ -101,7 +99,11 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
         });
       }
     }
-  }, [formik?.values?.[field.parent], parentAPIData]);
+  }, [
+    formik?.values?.[field.parent],
+    parentAPIData,
+    formik?.values?.[field.name],
+  ]);
 
   const handleInputChange = (inputValue) => {
     setSearch(inputValue);
@@ -117,18 +119,27 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
   };
 
   useEffect(() => {
-    if (formik?.values?.[field.name] && formik?.values?.[field.name] !== "") {
-      setSelectedOptions(
-        getSingleExistingDataOptions(formik?.values?.[field.name])
-      );
+    setSelectedOptions(null);
+    if (formik?.values?.[field.name] && formik?.values?.[field.name] !== "" && options) {
+      const setOption = getSingleExistingDataOptions(formik?.values?.[field.name]);
+      if (setOption) {
+        setSelectedOptions(setOption);
+      } else {
+        formik?.setFieldValue(field.name, "");
+        setSelectedOptions(null);
+      }
     } else {
       setSelectedOptions(null);
     }
-  }, [formik?.values?.[field.name]]);
+  }, [formik?.values?.[field.name], options]);
 
   const isValid = !props?.error;
 
   const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+    }),
     control: (base, state) => ({
       ...base,
       // state.isFocused can display different borderColor if you need it
