@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container } from "reactstrap";
+import { Container, Row, Col, Card, CardBody } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
@@ -907,9 +907,9 @@ const CreateCandidate = () => {
   }
 
   return (
-    <>
+    <div className="page-content">
       {/* {isModalOpen && !accountId && <CountryModal setCountry={setCountry} />} */}
-      <Container className="page-content">
+      <Container fluid>
         <FormStepper
           activeStep={step}
           handleBack={handleBack}
@@ -933,7 +933,7 @@ const CreateCandidate = () => {
           />
         </FormStepper>
       </Container>
-    </>
+    </div>
   );
 };
 

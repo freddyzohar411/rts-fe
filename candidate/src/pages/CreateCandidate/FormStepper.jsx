@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Card, Container } from "reactstrap";
+import { Button, Card, CardBody, Container } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CandidateStepper from "../../components/CandidateStepper/CandidateStepper";
 import { DeleteCustomModal } from "@Workspace/common";
@@ -89,6 +89,38 @@ const FormStepper = ({
 
   return (
     <Card>
+      <CardBody>
+        {" "}
+        <Container fluid>
+          <CandidateStepper step={activeStep} />
+          <div className="px-3"> {children}</div>
+          <div
+            className={`d-flex ${
+              candidateId ? "justify-content-between" : "justify-content-end"
+            } align-items-center mb-2`}
+          >
+            {candidateId && (
+              <Button
+                onClick={() => setIsDeleteModalOpen(true)}
+                className="btn btn-danger"
+              >
+                Reset
+              </Button>
+            )}
+            <div className="d-flex gap-2">
+              {activeStep > 0 && (
+                <Button color="dark" onClick={handleBack}>
+                  Back
+                </Button>
+              )}
+              <Button color="dark">Skip</Button>
+              <Button color="dark" onClick={handleNextStep}>
+                Next
+              </Button>
+            </div>
+          </div>
+        </Container>
+      </CardBody>
       <DeleteCustomModal
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
@@ -97,35 +129,6 @@ const FormStepper = ({
         deleteText={"Are you sure you would like to reset candidate form?"}
         isLoading={deleteDraftCandidateMetaData?.isLoading}
       />
-      <Container fluid>
-        <CandidateStepper step={activeStep} />
-        <div className="px-3"> {children}</div>
-        <div
-          className={`d-flex ${
-            candidateId ? "justify-content-between" : "justify-content-end"
-          } align-items-center mb-2`}
-        >
-          {candidateId && (
-            <Button
-              onClick={() => setIsDeleteModalOpen(true)}
-              className="btn btn-danger"
-            >
-              Reset
-            </Button>
-          )}
-          <div className="d-flex gap-2">
-            {activeStep > 0 && (
-              <Button color="dark" onClick={handleBack}>
-                Back
-              </Button>
-            )}
-            <Button color="dark">Skip</Button>
-            <Button color="dark" onClick={handleNextStep}>
-              Next
-            </Button>
-          </div>
-        </div>
-      </Container>
     </Card>
   );
 };
