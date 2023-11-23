@@ -23,6 +23,7 @@ const MultiFileInputElement = ({
       formik?.values?.[field.name] === "" ||
       formik?.values?.[field.name] === null ||
       formik?.values?.[field.name] === undefined
+      // typeof formik?.values?.[field.name] !== "object"
     ) {
       setFiles([]);
       setExistingFiles([]);
@@ -65,14 +66,18 @@ const MultiFileInputElement = ({
   };
 
   useEffect(() => {
-    console.log("formik?.values?", formik?.values)
-    console.log("field.name: ", field.name)
-    console.log("formik?.values?.[field.name]: ", formik?.values?.[field.name])
-    console.log(formik?.values?.[field.name] === "")
-    if (formik?.values?.[field.name]) {
-      console.log("Setting")
-      formik.setFieldValue(field?.name, files);
-    }
+    console.log("formik?.values?", formik?.values);
+    console.log("field.name: ", field.name);
+    console.log("formik?.values?.[field.name]: ", formik?.values?.[field.name]);
+    console.log(formik?.values?.[field.name] === "");
+    // if (formik?.values?.[field.name]) {
+    // if (formik?.values?.[field.name] ?? null) {
+    console.log("Setting");
+    try {
+      formik.setFieldValue(field.name, files);
+    } catch (error) {}
+    // }
+    // }
   }, [files]);
 
   useEffect(() => {
@@ -126,21 +131,42 @@ const MultiFileInputElement = ({
     // await axios.delete(DOCUMENT_BY_ID_URL(id));
   };
 
-  // useEffect(() => {
-  //   console.log("Deleted Ids: ", deletedIds);
-  //   if (deletedIds.length > 0) {
-  //     const newFormFields = [...formFields];
-  //     newFormFields?.forEach((formField) => {
-  //       if (formField.name === field.name) {
-  //         formField.multiFileDelete = [...deletedIds]
-  //       }
-  //     });
-  //     setFormFields(newFormFields);
-  //   } 
-  // }, [deletedIds]);
+  /**
+   * Set the deleted ids in the form fields
+   */
+  useEffect(() => {
+    console.log("Deleted Ids: ", deletedIds);
+    if (deletedIds.length > 0) {
+      const newFormFields = [...formFields];
+      newFormFields?.forEach((formField) => {
+        if (formField.name === field.name) {
+          formField.multiFileDelete = [...deletedIds];
+        }
+      });
+      setFormFields(newFormFields);
+    }
+  }, [deletedIds]);
 
-  console.log("Selected Files: ", files);
-  console.log(field);
+  /**
+   * Generate comma seperated names of files for both existing and files
+   */
+  useEffect(() => {
+    const newFormFields = [...formFields];
+    newFormFields?.forEach((formField) => {
+      if (formField.name === field.name) {
+        const names = [
+          ...existingFiles.map((file) => file.title),
+          ...files.map((file) => file.name),
+        ].join(",");
+        console.log("names: ", names);
+        formField.multiFileNames = names;
+      }
+    });
+    setFormFields(newFormFields);
+  }, [files, existingFiles]);
+
+  console.log("files: ", files);
+  console.log("existingFiles: ", existingFiles);
 
   return (
     <>

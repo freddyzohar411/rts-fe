@@ -38,7 +38,7 @@ import {
   GET_CANDIDATE_LANGUAGES_BY_ENTITY_URL,
   CANDIDATE_EMPLOYER_DETAILS_BASE_URL,
   GET_CANDIDATE_EMPLOYER_DETAILS_BY_ENTITY_URL,
-  DOCUMENT_BY_ID_URL
+  DOCUMENT_BY_ID_URL,
 } from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
 import CountryModal from "../../components/CountryModal/CountryModal";
@@ -271,8 +271,8 @@ const CreateCandidate = () => {
    * Delete files from microservice
    */
   const deleteDocument = async (id) => {
-    await axios.delete(DOCUMENT_BY_ID_URL(id))
-  }
+    await axios.delete(DOCUMENT_BY_ID_URL(id));
+  };
 
   /**
    * Find multi file entity and delete file from microservice
@@ -280,14 +280,22 @@ const CreateCandidate = () => {
 
   const deleteMultiFilesInField = async (name) => {
     const field = formFieldsData.find((field) => field.name === name);
-    if (!field ) return;
+    console.log("Fieldssss", field);
+    if (!field) return;
     if (!field?.multiFileDelete) return;
     if (field?.multiFileDelete?.length === 0) return;
     const files = field.multiFileDelete;
-     files.forEach(async (file) => {
-      await deleteDocument(file);
+    await files.forEach((file) => {
+      deleteDocument(file);
     });
-  }
+  };
+
+  const getMultiFilesNames = (name) => {
+    const field = formFieldsData.find((field) => field.name === name);
+    if (!field) return;
+    if (!field?.multiFileNames) return "";
+    return field.multiFileNames;
+  };
 
   /**
    * Handle form submit based on step
@@ -324,6 +332,7 @@ const CreateCandidate = () => {
         newFormFields.forEach((field) => {
           if (field.type === "multifile") {
             delete field.multiFileEnity;
+            delete field.multiFileDelete;
           }
         });
       }
@@ -483,42 +492,20 @@ const CreateCandidate = () => {
 
     // Work Experience
     if (step === 2) {
-      console.log("newValues", newValues)
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
-        // const newData = {
-        //   ...newValues,
-        //   entityId: candidateId,
-        //   entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-        //   formData: JSON.stringify(newValues),
-        //   formId: parseInt(form.formId),
-        // };
-
-        // dispatch(
-        //   postCandidate({
-        //     entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-        //     newData,
-        //     rerenderTable: rerenderTable,
-        //     resetForm: resetForm([], "create"),
-        //   })
-        // );
-
         const newValuesOut = { ...newValues };
-        if (newValues?.multiFiles?.length > 0) {
-          newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
-        }
+        newValuesOut.multiFiles = getMultiFilesNames("multiFiles");
 
         // Check if it is a array of files
         if (!Array.isArray(newValues?.multiFiles)) {
           newValues.multiFiles = [];
         }
 
-        if (newValues?.multiFiles?.length === 0) {
-          delete newValues.multiFiles
-        }
-
-        console.log("MY NEW VALUES", newValues)
+        // if (newValues?.multiFiles?.length === 0) {
+        //   delete newValues.multiFiles;
+        // }
 
         const newData = {
           ...newValues,
@@ -554,43 +541,14 @@ const CreateCandidate = () => {
 
       // Update contact
       if (buttonName === "tableUpdate") {
-        console.log("FFF", formFieldsData)
         setButtonName("");
         await deleteMultiFilesInField("multiFiles");
-        // const newData = {
-        //   ...newValues,
-        //   entityId: candidateId,
-        //   entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-        //   formData: JSON.stringify(newValues),
-        //   formId: parseInt(form.formId),
-        // };
-
-        // Get update id
-        // const table = formFieldsData.find(
-        //   (field) =>
-        //     field.type === "table" &&
-        //     field.name === CandidateTableListConstant.WORK_EXPERIENCE_LIST
-        // getFileNames; // );
-        // const { tableEditId } = table.tableSetting;
-        // dispatch(
-        //   putCandidate({
-        //     entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-        //     id: tableEditId,
-        //     newData,
-        //     rerenderTable: rerenderTable,
-        //     resetForm: resetForm([], "create"),
-        //   })
-        // );
-
         const newValuesOut = { ...newValues };
-        if (newValues?.multiFiles?.length > 0) {
-          newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
-        }
+        newValuesOut.multiFiles = getMultiFilesNames("multiFiles");
+
         if (!Array.isArray(newValues?.multiFiles)) {
           newValues.multiFiles = [];
         }
-
-        console.log("MY NEW VALUES22", newValues)
 
         const newData = {
           ...newValues,
