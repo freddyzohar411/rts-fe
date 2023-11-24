@@ -66,18 +66,9 @@ const MultiFileInputElement = ({
   };
 
   useEffect(() => {
-    console.log("formik?.values?", formik?.values);
-    console.log("field.name: ", field.name);
-    console.log("formik?.values?.[field.name]: ", formik?.values?.[field.name]);
-    console.log(formik?.values?.[field.name] === "");
-    // if (formik?.values?.[field.name]) {
-    // if (formik?.values?.[field.name] ?? null) {
-    console.log("Setting");
     try {
       formik.setFieldValue(field.name, files);
     } catch (error) {}
-    // }
-    // }
   }, [files]);
 
   useEffect(() => {
@@ -89,9 +80,6 @@ const MultiFileInputElement = ({
   const handleDeleteAllFiles = async () => {
     setFiles([]);
     // Loop Through all the existing files and delete them
-    await existingFiles.forEach((file) => {
-      deleteFile(file.id);
-    });
     setDeletedIds([...deletedIds, ...existingFiles.map((file) => file.id)]);
     // Set Existing files to empty array
     setExistingFiles([]);
@@ -114,7 +102,6 @@ const MultiFileInputElement = ({
 
   const handleDeleteSingleExistingFile = async (file, index) => {
     try {
-      await deleteFile(file.id);
       const newFiles = existingFiles.filter((f, i) => i !== index);
       setDeletedIds([...deletedIds, file.id]);
       setExistingFiles(newFiles);
@@ -126,16 +113,10 @@ const MultiFileInputElement = ({
     }
   };
 
-  // Delete a single file
-  const deleteFile = async (id) => {
-    // await axios.delete(DOCUMENT_BY_ID_URL(id));
-  };
-
   /**
    * Set the deleted ids in the form fields
    */
   useEffect(() => {
-    console.log("Deleted Ids: ", deletedIds);
     if (deletedIds.length > 0) {
       const newFormFields = [...formFields];
       newFormFields?.forEach((formField) => {
@@ -158,15 +139,11 @@ const MultiFileInputElement = ({
           ...existingFiles.map((file) => file.title),
           ...files.map((file) => file.name),
         ].join(",");
-        console.log("names: ", names);
         formField.multiFileNames = names;
       }
     });
     setFormFields(newFormFields);
   }, [files, existingFiles]);
-
-  console.log("files: ", files);
-  console.log("existingFiles: ", existingFiles);
 
   return (
     <>

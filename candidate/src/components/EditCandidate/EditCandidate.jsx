@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { Container } from "reactstrap";
+import axios from "axios";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
 import {
   postCandidate,
   putCandidate,
-  fetchCandidate,
   resetMetaData,
 } from "../../store/candidate/action";
 import { deleteCandidateCountry } from "../../store/candidateregistration/action";
@@ -36,6 +35,7 @@ import {
   GET_CANDIDATE_LANGUAGES_BY_ENTITY_URL,
   CANDIDATE_EMPLOYER_DETAILS_BASE_URL,
   GET_CANDIDATE_EMPLOYER_DETAILS_BY_ENTITY_URL,
+  DOCUMENT_BY_ID_URL,
 } from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
 
@@ -74,7 +74,7 @@ const EditCandidate = () => {
       ? linkState?.view
       : true
   );
-  console.log("View", view);
+
   /**
    * Get candidate id from url
    */
@@ -220,13 +220,15 @@ const EditCandidate = () => {
   }, [step]);
 
   /**
-   * Get all the names in comma seperated string from array of files
+   * Delete files from microservice
    */
+  const deleteDocument = async (id) => {
+    await axios.delete(DOCUMENT_BY_ID_URL(id));
+  };
 
   /**
    * Find multi file entity and delete file from microservice
    */
-
   const deleteMultiFilesInField = async (name) => {
     const field = formFieldsData.find((field) => field.name === name);
     if (!field) return;
@@ -238,6 +240,11 @@ const EditCandidate = () => {
     });
   };
 
+  /**
+   * Get multi file names in comma seperated string
+   * @param {*} name
+   * @returns
+   */
   const getMultiFilesNames = (name) => {
     const field = formFieldsData.find((field) => field.name === name);
     if (!field) return;
@@ -447,27 +454,7 @@ const EditCandidate = () => {
           formId: parseInt(form.formId),
         };
 
-        console.log("newData", newData);
         const formData = ObjectHelper.convertObjectToFormDataWithFiles(newData);
-        console.log("FormData", formData);
-        // return;
-
-        // const newData = {
-        //   ...newValues,
-        //   entityId: candidateId,
-        //   entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-        //   formData: JSON.stringify(newValues),
-        //   formId: parseInt(form.formId),
-        // };
-
-        // dispatch(
-        //   postCandidate({
-        //     entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-        //     newData,
-        //     rerenderTable: rerenderTable,
-        //     resetForm: resetForm([], "create"),
-        //   })
-        // );
 
         dispatch(
           postCandidate({

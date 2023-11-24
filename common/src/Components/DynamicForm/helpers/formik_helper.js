@@ -229,7 +229,6 @@ const generateValidationSchema2 = (
             "fileType",
             field.fileTypeValidationErrorMessage,
             (value) => {
-              console.log("Formik Multi File Values", value);
               if (value?.length === 0 || typeof value === "string") return true; // allow empty values
               if (!value) return true; // allow empty values
               if (value?.length > 0) {

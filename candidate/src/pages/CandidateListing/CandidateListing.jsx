@@ -22,7 +22,7 @@ function CandidateListing() {
   const candidatesData = useSelector(
     (state) => state.CandidateReducer.candidates
   );
-  console.log("candidatesData", candidatesData);
+
   const candidatesFields = useSelector(
     (state) => state.CandidateReducer.candidatesFields
   );
@@ -132,7 +132,7 @@ function CandidateListing() {
               </Button>
             </Link>
             {/* {checkAllPermission([Permission.CANDIDATE_EDIT]) && data.createdByName === getName() && ( */}
-            {checkAllPermission([Permission.CANDIDATE_EDIT]) && ( 
+            {checkAllPermission([Permission.CANDIDATE_EDIT]) && (
               <Link
                 to={`/candidates/${data.id}/snapshot`}
                 style={{ color: "black" }}

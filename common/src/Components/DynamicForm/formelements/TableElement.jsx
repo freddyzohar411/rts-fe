@@ -50,7 +50,6 @@ const TableElement = ({
         .get(tableSetting.tableGetAPI)
         .then((data) => {
           const formDataList = data.data;
-          console.log("FORM DATA LIST", formDataList);
           setTable(mapTableData(formDataList));
         })
         .catch((error) => {});
@@ -102,27 +101,6 @@ const TableElement = ({
     return tableData;
   };
 
-  // const getMultiFileInput = (formFields, row) => {
-  //   // Get the field from formFields and find for multifile
-  //   const newFormFields = JSON.parse(JSON.stringify(formFields));
-  //   // const field = newFormFields.find((field) => field.name === "multifile");
-  //   // field.multiFileEnity = {
-  //   //   entityId: row.id,
-  //   //   entityType: row.entityType,
-  //   // }
-  //   // Find all the multifile type and set
-  //   newFormFields.forEach((field) => {
-  //     if (field.type === "multifile") {
-  //       field.multiFileEnity = {
-  //         entityId: row.id,
-  //         entityType: row.entityType,
-  //       };
-  //     }
-  //   });
-  //   console.log("IMMediate", newFormFields);
-  //   setFormFields(newFormFields);
-  // };
-
   const handleEdit = (row) => {
     // Set formik values based on row value and config
     // Set all the formik values in this table based on the API
@@ -134,9 +112,7 @@ const TableElement = ({
     formik?.setTouched({});
     formik?.setErrors({});
 
-    // Set multi file
-    // getMultiFileInput(formFields, row);
-
+ 
     // Set tabled edit id in form field
     // const newFormFields = [...formFields];
     const newFormFields = JSON.parse(JSON.stringify(formFields));
