@@ -270,7 +270,6 @@ const CreateCandidate = () => {
 
   const deleteMultiFilesInField = async (name) => {
     const field = formFieldsData.find((field) => field.name === name);
-    console.log("Fieldssss", field);
     if (!field) return;
     if (!field?.multiFileDelete) return;
     if (field?.multiFileDelete?.length === 0) return;

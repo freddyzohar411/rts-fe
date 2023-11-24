@@ -162,7 +162,7 @@ const DynamicTableWrapper = ({
                             </span>
                             Custom View
                           </Button>
-                          {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
+                          {checkAllPermission([Permission.CANDIDATE_WRITE]) && (
                             <Button type="button" className="btn btn-primary">
                               <Link
                                 to="/accounts/create"

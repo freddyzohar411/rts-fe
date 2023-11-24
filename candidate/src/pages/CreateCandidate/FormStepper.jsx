@@ -90,7 +90,6 @@ const FormStepper = ({
   return (
     <Card>
       <CardBody>
-        {" "}
         <Container fluid>
           <CandidateStepper step={activeStep} />
           <div className="px-3"> {children}</div>

@@ -236,7 +236,6 @@ const Navdata = () => {
         },
       ],
     },
-    //checkAllRole(["Super Admin"]) && // Settings
     checkAllPermission([...Permission.SETTING_ALL]) &&
     {
       id: "settings",

@@ -70,9 +70,11 @@ const EditCandidate = () => {
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [view, setView] = useState(
-    linkState?.view !== null && linkState?.view !== undefined ? linkState?.view : true
+    linkState?.view !== null && linkState?.view !== undefined
+      ? linkState?.view
+      : true
   );
-console.log("View", view)
+  console.log("View", view);
   /**
    * Get candidate id from url
    */
@@ -229,6 +231,28 @@ console.log("View", view)
   };
 
   /**
+   * Find multi file entity and delete file from microservice
+   */
+
+  const deleteMultiFilesInField = async (name) => {
+    const field = formFieldsData.find((field) => field.name === name);
+    if (!field) return;
+    if (!field?.multiFileDelete) return;
+    if (field?.multiFileDelete?.length === 0) return;
+    const files = field.multiFileDelete;
+    await files.forEach((file) => {
+      deleteDocument(file);
+    });
+  };
+
+  const getMultiFilesNames = (name) => {
+    const field = formFieldsData.find((field) => field.name === name);
+    if (!field) return;
+    if (!field?.multiFileNames) return "";
+    return field.multiFileNames;
+  };
+
+  /**
    * Handle form submit based on step
    * @param {*} event
    * @param {*} values - formik values
@@ -273,6 +297,7 @@ console.log("View", view)
         newFormFields.forEach((field) => {
           if (field.type === "multifile") {
             delete field.multiFileEnity;
+            delete field.multiFileDelete;
           }
         });
       }
@@ -414,8 +439,11 @@ console.log("View", view)
         setErrorMessage(null);
         setButtonName("");
         const newValuesOut = { ...newValues };
-        if (newValues?.multiFiles?.length > 0) {
-          newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
+        newValuesOut.multiFiles = getMultiFilesNames("multiFiles");
+
+        // Check if it is a array of files
+        if (!Array.isArray(newValues?.multiFiles)) {
+          newValues.multiFiles = [];
         }
 
         const newData = {
@@ -474,10 +502,12 @@ console.log("View", view)
       // Update contact
       if (buttonName === "tableUpdate") {
         setButtonName("");
-
+        await deleteMultiFilesInField("multiFiles");
         const newValuesOut = { ...newValues };
-        if (newValues?.multiFiles?.length > 0) {
-          newValuesOut.multiFiles = getFileNames(newValues?.multiFiles);
+        newValuesOut.multiFiles = getMultiFilesNames("multiFiles");
+
+        if (!Array.isArray(newValues?.multiFiles)) {
+          newValues.multiFiles = [];
         }
 
         const newData = {
@@ -866,31 +896,31 @@ console.log("View", view)
   return (
     <>
       {/* <Container className="page-content"> */}
-        <FormStepper
-          activeStep={step}
-          handleBack={handleBack}
-          handleNext={handleNext}
-          formikRef={formikRef}
-          formFieldsData={formFieldsData}
-          setErrorMessage={setErrorMessage}
-          candidateId={candidateId}
-          resetStepper={resetStepper}
-          toggleFormViewState={toggleFormViewState}
-          viewState={view}
-          setStep={setStep}
-        >
-          <Form
-            template={formTemplate}
-            userDetails={getAllUserGroups()}
-            country={candidateCountry}
-            editData={formSubmissionData}
-            onSubmit={handleFormSubmit}
-            onFormFieldsChange={handleFormFieldChange}
-            errorMessage={errorMessage}
-            view={view}
-            ref={formikRef}
-          />
-        </FormStepper>
+      <FormStepper
+        activeStep={step}
+        handleBack={handleBack}
+        handleNext={handleNext}
+        formikRef={formikRef}
+        formFieldsData={formFieldsData}
+        setErrorMessage={setErrorMessage}
+        candidateId={candidateId}
+        resetStepper={resetStepper}
+        toggleFormViewState={toggleFormViewState}
+        viewState={view}
+        setStep={setStep}
+      >
+        <Form
+          template={formTemplate}
+          userDetails={getAllUserGroups()}
+          country={candidateCountry}
+          editData={formSubmissionData}
+          onSubmit={handleFormSubmit}
+          onFormFieldsChange={handleFormFieldChange}
+          errorMessage={errorMessage}
+          view={view}
+          ref={formikRef}
+        />
+      </FormStepper>
       {/* </Container> */}
     </>
   );
