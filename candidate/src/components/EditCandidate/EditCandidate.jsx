@@ -223,13 +223,6 @@ const EditCandidate = () => {
    * Get all the names in comma seperated string from array of files
    */
 
-  const getFileNames = (files) => {
-    if (files.length === 0) {
-      return "";
-    }
-    return files.map((file) => file.name).join(",");
-  };
-
   /**
    * Find multi file entity and delete file from microservice
    */

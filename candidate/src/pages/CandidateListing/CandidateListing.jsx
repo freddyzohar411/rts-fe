@@ -17,11 +17,12 @@ import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
 
 function CandidateListing() {
-  const { Permission, checkAllPermission } = useUserAuth();
+  const { Permission, checkAllPermission, getName } = useUserAuth();
   const dispatch = useDispatch();
   const candidatesData = useSelector(
     (state) => state.CandidateReducer.candidates
   );
+  console.log("candidatesData", candidatesData);
   const candidatesFields = useSelector(
     (state) => state.CandidateReducer.candidatesFields
   );
@@ -130,7 +131,8 @@ function CandidateListing() {
                 <i className="ri-eye-line"></i>
               </Button>
             </Link>
-            {checkAllPermission([Permission.CANDIDATE_EDIT]) && (
+            {/* {checkAllPermission([Permission.CANDIDATE_EDIT]) && data.createdByName === getName() && ( */}
+            {checkAllPermission([Permission.CANDIDATE_EDIT]) && ( 
               <Link
                 to={`/candidates/${data.id}/snapshot`}
                 style={{ color: "black" }}
