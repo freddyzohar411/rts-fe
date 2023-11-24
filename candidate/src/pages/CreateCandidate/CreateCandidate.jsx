@@ -63,12 +63,6 @@ const CreateCandidate = () => {
     (state) => state.CandidateFormReducer.formSubmission
   );
 
-  // const editId = useSelector((state) => state.CandidateFormReducer.editId);
-
-  // const updateData = useSelector(
-  //   (state) => state.CandidateFormReducer.formSubmission
-  // );
-
   const createMetaData = useSelector(
     (state) => state.CandidateReducer.createMeta
   );
@@ -86,10 +80,6 @@ const CreateCandidate = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
-
-  // ============= Console.log=====
-  console.log("Form Fields", formFieldsData);
-  // ===================================
 
   /**
    * Set country if is in edit mode
@@ -502,10 +492,6 @@ const CreateCandidate = () => {
         if (!Array.isArray(newValues?.multiFiles)) {
           newValues.multiFiles = [];
         }
-
-        // if (newValues?.multiFiles?.length === 0) {
-        //   delete newValues.multiFiles;
-        // }
 
         const newData = {
           ...newValues,
