@@ -19,10 +19,8 @@ import DepartmentSelectElement from "./DepartmentSelectElement";
 import EditorElement from "./EditorElement";
 import AccountParentElement from "./AccountParentElement";
 import SearchSelect from "./SearchSelect";
-import {
-  moduleConstant,
-  permissionConstant,
-} from "../../../constants/authConstant";
+import AccountNameSelectElement from "./AccountNameSelectElement";
+import AccountContactSelectElement from "./AccountContactSelectElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -108,6 +106,26 @@ const generateFormField = (
   if (type === "selectindustry") {
     return (
       <IndustrySelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "selectaccountname") {
+    return (
+      <AccountNameSelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "selectaccountcontact") {
+    return (
+      <AccountContactSelectElement
         formik={formik}
         field={field}
         formStateHook={formStateHook}

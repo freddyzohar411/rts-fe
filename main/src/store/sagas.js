@@ -29,17 +29,14 @@ const {
   DepartmentSaga,
   ParentCompanySaga,
   UserGroupSaga,
+  AccountNamesSaga,
+  AccountContactSaga,
 } = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
 const { DashboardEcommerceSaga } = DashboardSaga;
 const { AccountSaga, AccountRegistrationSaga, AccountFormSaga } = AccountSagas;
 
-const {
-  JobCountryCurrencySaga,
-  JobAccountSaga,
-  JobAccountContactsSaga,
-  JobSaga,
-} = JobSagas;
+const { JobSaga, JobFormSaga } = JobSagas;
 
 const { FormSaga } = FormBuilderSagas;
 
@@ -56,6 +53,8 @@ export default function* rootSaga() {
     fork(LayoutSaga),
     fork(ParentCompanySaga),
     fork(UserGroupSaga),
+    fork(AccountNamesSaga),
+    fork(AccountContactSaga),
 
     //public
     fork(AuthSaga),
@@ -70,10 +69,8 @@ export default function* rootSaga() {
     fork(AccountFormSaga),
 
     //Job
-    fork(JobCountryCurrencySaga),
-    fork(JobAccountSaga),
-    fork(JobAccountContactsSaga),
     fork(JobSaga),
+    fork(JobFormSaga),
 
     //Form
     fork(FormSaga),

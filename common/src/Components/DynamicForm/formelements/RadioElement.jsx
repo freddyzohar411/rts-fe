@@ -4,8 +4,8 @@ const RadioElement = ({ formik, field, formStateHook }) => {
   const { formState } = formStateHook;
   return (
     <div className="d-flex gap-3">
-      {field?.options?.map((option) => (
-        <div className="form-check">
+      {field?.options?.map((option, index) => (
+        <div className="form-check" key={index}>
           <input
             className="form-check-input"
             type="radio"

@@ -121,6 +121,18 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabel: "Account Name Select",
+      draggablePrefix: "element",
+      draggableId: "selectaccountname",
+      type: "field",
+    },
+    {
+      draggableLabel: "Account Contact Select",
+      draggablePrefix: "element",
+      draggableId: "selectaccountcontact",
+      type: "field",
+    },
+    {
       draggableLabel: "Table",
       draggablePrefix: "element",
       draggableId: "table",

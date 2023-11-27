@@ -1,0 +1,51 @@
+import {
+  FETCH_JOB_FORM,
+  FETCH_JOB_FORM_SUCCESS,
+  FETCH_JOB_FORM_FAILURE,
+  FETCH_JOB_FORM_SUBMISSION,
+  FETCH_JOB_FORM_SUBMISSION_SUCCESS,
+  FETCH_JOB_FORM_SUBMISSION_FAILURE,
+  CLEAR_JOB_FORM_SUBMISSION,
+  SET_FORM_SUBMISSION,
+} from "./actionTypes";
+
+// Fetch form by id
+export const fetchJobForm = (formName) => ({
+  type: FETCH_JOB_FORM,
+  payload: formName,
+});
+
+export const fetchJobFormSuccess = (form) => ({
+  type: FETCH_JOB_FORM_SUCCESS,
+  payload: form,
+});
+
+export const fetchJobFormFailure = (error) => ({
+  type: FETCH_JOB_FORM_FAILURE,
+  payload: error,
+});
+
+// Fetch form submission
+export const fetchJobFormSubmission = (formName, jobId) => ({
+  type: FETCH_JOB_FORM_SUBMISSION,
+  payload: { formName, jobId },
+});
+
+export const fetchJobFormSubmissionSuccess = (form) => ({
+  type: FETCH_JOB_FORM_SUBMISSION_SUCCESS,
+  payload: form,
+});
+
+export const fetchJobFormSubmissionFailure = (error) => ({
+  type: FETCH_JOB_FORM_SUBMISSION_FAILURE,
+  payload: error,
+});
+
+export const clearJobFormSubmission = () => ({
+  type: CLEAR_JOB_FORM_SUBMISSION,
+});
+
+export const setFormSubmission = (form) => ({
+  type: SET_FORM_SUBMISSION,
+  payload: form,
+});

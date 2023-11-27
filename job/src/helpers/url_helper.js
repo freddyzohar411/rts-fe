@@ -1,6 +1,8 @@
 //Job
-export const GET_JOBS = "/api/job";
-export const CREATE_JOB = "/api/job";
+export const BASE_JOBS = "/api/job";
+
+//Form
+export const BASE_FORMS = "/forms";
 
 //Document
 export const CREATE_DOCUMENT = "/documents";
