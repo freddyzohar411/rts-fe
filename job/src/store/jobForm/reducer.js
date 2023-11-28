@@ -104,7 +104,7 @@ const JobFormReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_JOB_FORM_SUBMISSION_SUCCESS:
-      const submissionData = JSON.parse(action.payload.submissionData);
+      const submissionData = action?.payload?.jobSubmissionData;
       return {
         ...state,
         formSubmissionLoading: false,

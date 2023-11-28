@@ -99,9 +99,8 @@ const JobListing = () => {
         render: (data) => (
           <div className="d-flex column-gap-2">
             <Link
-              to={`/jobs/${data.id}/edit`}
+              to={`/jobs/${data.id}/view`}
               style={{ color: "black" }}
-              // state={{ form: 3 }}
               state={{ view: true }}
             >
               <Button

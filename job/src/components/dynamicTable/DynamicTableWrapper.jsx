@@ -162,7 +162,7 @@ const DynamicTableWrapper = ({
                           {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
                             <Button type="button" className="btn btn-primary">
                               <Link
-                                to="/job/job-creation"
+                                to="/jobs/job-creation"
                                 style={{ color: "black" }}
                               >
                                 Create Job Openings

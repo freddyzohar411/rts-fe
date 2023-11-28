@@ -44,9 +44,9 @@ export const fetchJobDocumentFormFailure = (error) => ({
 });
 
 // Fetch form submission
-export const fetchJobFormSubmission = (formName, jobId) => ({
+export const fetchJobFormSubmission = (jobId) => ({
   type: FETCH_JOB_FORM_SUBMISSION,
-  payload: { formName, jobId },
+  payload: { jobId },
 });
 
 export const fetchJobFormSubmissionSuccess = (form) => ({

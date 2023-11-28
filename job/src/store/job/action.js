@@ -5,7 +5,31 @@ import {
   CREATE_JOB,
   CREATE_JOB_SUCCESS,
   CREATE_JOB_FAILURE,
+  FETCH_JOB,
+  FETCH_JOB_SUCCESS,
+  FETCH_JOB_FAILURE,
+  CLEAR_JOB,
 } from "./actionTypes";
+
+// Fetch Account
+export const clearJob = () => ({
+  type: CLEAR_JOB,
+});
+
+export const fetchJob = (params) => ({
+  type: FETCH_JOB,
+  payload: params,
+});
+
+export const fetchJobSuccess = (job) => ({
+  type: FETCH_JOB_SUCCESS,
+  payload: job,
+});
+
+export const fetchJobFailure = (error) => ({
+  type: FETCH_JOB_FAILURE,
+  payload: error,
+});
 
 // Fetch Accounts
 export const fetchJobs = (params) => ({

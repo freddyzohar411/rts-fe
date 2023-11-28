@@ -40,7 +40,7 @@ function* workFetchJobFormSubmission(action) {
   const { jobId } = action.payload;
   try {
     const response = yield call(getJobById, jobId);
-    yield put(fetchJobFormSubmissionSuccess(response.data));
+    yield put(fetchJobFormSubmissionSuccess(response?.data));
   } catch (error) {
     yield put(fetchJobFormSubmissionFailure(error));
   }

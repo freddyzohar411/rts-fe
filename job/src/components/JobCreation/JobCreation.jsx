@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Container, Button } from "reactstrap";
 import { Form } from "@workspace/common";
 import { JOB_FORM_NAME } from "./constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  clearJob,
   clearJobFormSubmission,
   createJob,
   fetchJobForm,
+  fetchJobFormSubmission,
 } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import JobDocument from "./JobDocument";
@@ -16,18 +18,16 @@ function JobCreation() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
-  const jobId = null;
+  const { jobId, type } = useParams();
+  const isView = type === "view";
 
   const form = useSelector((state) => state.JobFormReducer.form);
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
-
   const [formFormik, setFormFormik] = useState(null);
   const [formFieldsData, setFormFieldsData] = useState([]);
-  const [editData, setEditData] = useState(formSubmissionData || null);
   const [formTemplate, setFormTemplate] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
 
   // Fetch all the countries and account names
   useEffect(() => {
@@ -46,14 +46,8 @@ function JobCreation() {
 
   useEffect(() => {
     dispatch(clearJobFormSubmission());
-    setEditData(null);
     if (jobId) {
-      dispatch(
-        fetchAccountFormSubmission(
-          AccountEntityConstant.ACCOUNT_ACCOUNT,
-          accountId
-        )
-      );
+      dispatch(fetchJobFormSubmission(jobId));
     }
   }, [jobId]);
 
@@ -102,21 +96,22 @@ function JobCreation() {
         onFormikChange={handleFormikChange}
         onSubmit={handleFormSubmit}
         onFormFieldsChange={handleFormFieldChange}
-        errorMessage={errorMessage}
-        view={false}
+        errorMessage={null}
+        view={isView}
       />
       {/* <JobDocument /> */}
       <div className="d-flex flex-row-reverse gap-3 mb-2">
         <Button
           className="btn btn-success"
           type="button"
+          disabled={isView}
           onClick={() => {
             formFormik.submitForm();
           }}
         >
           Submit
         </Button>
-        <Button type="button" onClick={() => {}}>
+        <Button type="button" onClick={() => navigate("/jobs")}>
           Cancel
         </Button>
       </div>

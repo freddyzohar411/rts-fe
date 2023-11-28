@@ -173,7 +173,7 @@ const Navdata = () => {
         {
           id: "newJob",
           label: "Create Job Openings",
-          link: "/job/job-creation",
+          link: "/jobs/job-creation",
           parentId: "job",
         },
         {
@@ -243,8 +243,7 @@ const Navdata = () => {
       ],
     },
     //checkAllRole(["Super Admin"]) && // Settings
-    checkAllPermission([...Permission.SETTING_ALL]) &&
-    {
+    checkAllPermission([...Permission.SETTING_ALL]) && {
       id: "settings",
       label: "Settings",
       icon: "ri-settings-4-fill",

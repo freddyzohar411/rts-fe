@@ -58,8 +58,8 @@ const authProtectedRoutes = [
   { path: "/accounts", component: <AccountListing /> },
 
   // Job
-  { path: "/job/job-creation", component: <JobCreation /> },
-  { path: "/job/:jobId/edit", component: <EditAccount /> },
+  { path: "/jobs/job-creation", component: <JobCreation /> },
+  { path: "/jobs/:jobId/:type", component: <JobCreation /> },
   { path: "/jobs", component: <JobListing /> },
 
   // Settings
