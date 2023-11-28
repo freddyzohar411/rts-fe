@@ -14,8 +14,6 @@ import {
   createDocument,
 } from "../../helpers/backend_helper";
 
-const JOB_ENTITY_TYPE = "job";
-
 // Fetch Accounts
 function* workFetchJobs(action) {
   try {
@@ -26,38 +24,13 @@ function* workFetchJobs(action) {
   }
 }
 
-function* workCreateJob(action) {
-  try {
-    const response = yield call();
-    yield put(createJobSuccess(response.data));
-  } catch (error) {
-    yield put(createJobFailure(error));
-  }
-}
-
 function* workCreateJobAndDocuments(action) {
-  const { newJob, newDocuments, navigate } = action.payload;
+  const { payload } = action;
   try {
     // Create a job
-    const jobResponse = yield call(createJob, newJob);
+    const jobResponse = yield call(createJob, payload);
     yield put(createJobSuccess(jobResponse.data));
-
-    // Create documents
-    const jobId = jobResponse.data.id;
-    for (let i = 0; i < newDocuments.length; i++) {
-      const document = newDocuments[i];
-      // Create a document
-      const documentData = new FormData();
-      documentData.append("file", document.file);
-      documentData.append("entityType", JOB_ENTITY_TYPE);
-      documentData.append("entityId", +jobId);
-      yield call(createDocument, documentData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-    }
-    navigate("/jobs");
+    // navigate("/jobs");
   } catch (error) {
     yield put(createJobFailure(error));
   }

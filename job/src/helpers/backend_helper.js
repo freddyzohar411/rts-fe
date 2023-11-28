@@ -13,9 +13,18 @@ export const getFormByFormName = (formName) =>
 // Get Jobs
 export const getJobById = (id) => api.get(`${JOB_URL}${BASE_JOBS}/${id}`);
 
-export const getJobs = (data) => api.get(`${JOB_URL}${BASE_JOBS}`, data);
+// Get Accounts
+export const getJobs = (data) =>
+  api.create(`${JOB_URL}${BASE_JOBS}/listing`, data);
 
 export const createJob = (data) => api.create(`${JOB_URL}${BASE_JOBS}`, data);
+
+export const updateJob = (entity, id, data, config) =>
+  api.put(`${JOB_URL}${BASE_JOBS}`, data, config);
+
+export const deleteJob = (id) => api.delete(`${JOB_URL}${BASE_JOBS}/${id}`);
+
+export const getJobFields = () => api.get(`${JOB_URL}${BASE_JOBS}/fields`);
 
 // Create Document
 export const createDocument = (data, config) =>

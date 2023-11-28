@@ -40,7 +40,7 @@ const { AccountReducer, AccountRegistrationReducer, AccountFormReducer } =
 
 const { FormReducer } = FormBuilderReducers;
 
-const { JobReducer, JobFormReducer } = JobReducers;
+const { JobReducer, JobFormReducer, JobListReducer } = JobReducers;
 
 const {
   UserReducer,
@@ -76,6 +76,7 @@ const rootReducer = combineReducers({
   // Job
   JobReducer,
   JobFormReducer,
+  JobListReducer,
 
   // Form
   FormReducer,

@@ -36,7 +36,7 @@ const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
 const { DashboardEcommerceSaga } = DashboardSaga;
 const { AccountSaga, AccountRegistrationSaga, AccountFormSaga } = AccountSagas;
 
-const { JobSaga, JobFormSaga } = JobSagas;
+const { JobSaga, JobFormSaga, JobListSaga } = JobSagas;
 
 const { FormSaga } = FormBuilderSagas;
 
@@ -71,6 +71,7 @@ export default function* rootSaga() {
     //Job
     fork(JobSaga),
     fork(JobFormSaga),
+    fork(JobListSaga),
 
     //Form
     fork(FormSaga),

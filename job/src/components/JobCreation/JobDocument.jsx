@@ -1,27 +1,34 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Container, Button } from "reactstrap";
 import { Form } from "@workspace/common";
-import { JOB_FORM_NAME } from "./constants";
+import {
+  JOB_DOCUMENT_NAME,
+  JOB_FORM_NAME,
+  initialValues,
+  schema,
+} from "./constants";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearJobFormSubmission,
-  createJob,
+  fetchJobDocumentForm,
   fetchJobForm,
 } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
-import JobDocument from "./JobDocument";
 
-function JobCreation() {
+const JobDocument = () => {
+  const ENTITY_TYPE = "job";
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
   const jobId = null;
 
-  const form = useSelector((state) => state.JobFormReducer.form);
+  const form = useSelector((state) => state.JobFormReducer.documentForm);
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
+
+  const docForm = useSelector((state) => state.JobFormReducer.documentForm);
 
   const [formFormik, setFormFormik] = useState(null);
   const [formFieldsData, setFormFieldsData] = useState([]);
@@ -31,7 +38,7 @@ function JobCreation() {
 
   // Fetch all the countries and account names
   useEffect(() => {
-    dispatch(fetchJobForm(JOB_FORM_NAME));
+    dispatch(fetchJobDocumentForm(JOB_DOCUMENT_NAME));
   }, []);
 
   /**
@@ -82,12 +89,6 @@ function JobCreation() {
     rerenderTable
   ) => {
     // Check files array is empty or not
-    const payload = {
-      title: values?.jobTitle,
-      formData: JSON.stringify(values),
-      formId: parseInt(form.formId),
-    };
-    dispatch(createJob(payload));
   };
 
   document.title = "Job Creation | RTS";
@@ -105,23 +106,8 @@ function JobCreation() {
         errorMessage={errorMessage}
         view={false}
       />
-      {/* <JobDocument /> */}
-      <div className="d-flex flex-row-reverse gap-3 mb-2">
-        <Button
-          className="btn btn-success"
-          type="button"
-          onClick={() => {
-            formFormik.submitForm();
-          }}
-        >
-          Submit
-        </Button>
-        <Button type="button" onClick={() => {}}>
-          Cancel
-        </Button>
-      </div>
     </Container>
   );
-}
+};
 
-export default JobCreation;
+export default JobDocument;

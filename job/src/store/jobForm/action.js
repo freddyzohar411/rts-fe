@@ -7,6 +7,8 @@ import {
   FETCH_JOB_FORM_SUBMISSION_FAILURE,
   CLEAR_JOB_FORM_SUBMISSION,
   SET_FORM_SUBMISSION,
+  FETCH_JOB_DOCUMENT_FORM,
+  FETCH_JOB_DOCUMENT_FORM_SUCCESS,
 } from "./actionTypes";
 
 // Fetch form by id
@@ -21,6 +23,22 @@ export const fetchJobFormSuccess = (form) => ({
 });
 
 export const fetchJobFormFailure = (error) => ({
+  type: FETCH_JOB_FORM_FAILURE,
+  payload: error,
+});
+
+// Fetch form by id
+export const fetchJobDocumentForm = (formName) => ({
+  type: FETCH_JOB_DOCUMENT_FORM,
+  payload: formName,
+});
+
+export const fetchJobDocumentFormSuccess = (form) => ({
+  type: FETCH_JOB_DOCUMENT_FORM_SUCCESS,
+  payload: form,
+});
+
+export const fetchJobDocumentFormFailure = (error) => ({
   type: FETCH_JOB_FORM_FAILURE,
   payload: error,
 });
