@@ -32,7 +32,7 @@ const AccountContactSelectElement = ({ formik, field, formStateHook }) => {
         >
           <option value="">{field.placeholder}</option>
           {fetchData?.map((item, index) => (
-            <option key={index} value={item?.id}>
+            <option key={index} value={item?.fullName}>
               {item?.fullName}
             </option>
           ))}

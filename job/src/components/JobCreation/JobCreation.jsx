@@ -81,7 +81,7 @@ function JobCreation() {
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),
     };
-    dispatch(createJob(payload));
+    dispatch(createJob({ payload, navigate }));
   };
 
   document.title = "Job Creation | RTS";

@@ -1,5 +1,5 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
-import axios from "axios";
+import { toast } from "react-toastify";
 
 import { FETCH_JOBS, CREATE_JOB, FETCH_JOB } from "./actionTypes";
 import {
@@ -31,13 +31,14 @@ function* workFetchJobs(action) {
   }
 }
 
-function* workCreateJobAndDocuments(action) {
-  const { payload } = action;
+function* workCreateJob(action) {
+  const { payload, navigate } = action.payload;
   try {
     // Create a job
     const jobResponse = yield call(createJob, payload);
     yield put(createJobSuccess(jobResponse.data));
-    // navigate("/jobs");
+    toast.success(jobResponse?.message);
+    navigate("/jobs");
   } catch (error) {
     yield put(createJobFailure(error));
   }
@@ -46,5 +47,5 @@ function* workCreateJobAndDocuments(action) {
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
-  yield takeEvery(CREATE_JOB, workCreateJobAndDocuments);
+  yield takeEvery(CREATE_JOB, workCreateJob);
 }

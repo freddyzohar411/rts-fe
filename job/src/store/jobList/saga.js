@@ -129,7 +129,7 @@ function* workDeleteJobList(action) {
   try {
     const response = yield call(deleteJob, action.payload);
     yield put(deleteJobListSuccess(action.payload));
-    toast.success("JobList deleted successfully");
+    toast.success(response?.message);
   } catch (error) {
     yield put(deleteJobListFailure(error));
     toast.error("Error deleting account");
