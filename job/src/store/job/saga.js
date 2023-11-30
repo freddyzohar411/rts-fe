@@ -1,22 +1,27 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
-import axios from "axios";
+import { toast } from "react-toastify";
 
-import { FETCH_JOBS, CREATE_JOB } from "./actionTypes";
+import { FETCH_JOBS, CREATE_JOB, FETCH_JOB } from "./actionTypes";
 import {
   fetchJobsSuccess,
   fetchJobsFailure,
   createJobSuccess,
   createJobFailure,
+  fetchJobSuccess,
+  fetchJobFailure,
 } from "./action";
-import {
-  getJobs,
-  createJob,
-  createDocument,
-} from "../../helpers/backend_helper";
-
-const JOB_ENTITY_TYPE = "job";
+import { getJobs, createJob, getJobById } from "../../helpers/backend_helper";
 
 // Fetch Accounts
+function* workFetchJob(action) {
+  try {
+    const response = yield call(getJobById, action.payload);
+    yield put(fetchJobSuccess(response.data));
+  } catch (error) {
+    yield put(fetchJobFailure(error));
+  }
+}
+
 function* workFetchJobs(action) {
   try {
     const response = yield call(getJobs, action.payload);
@@ -27,43 +32,21 @@ function* workFetchJobs(action) {
 }
 
 function* workCreateJob(action) {
-  try {
-    const response = yield call();
-    yield put(createJobSuccess(response.data));
-  } catch (error) {
-    yield put(createJobFailure(error));
-  }
-}
-
-function* workCreateJobAndDocuments(action) {
-  const { newJob, newDocuments, navigate } = action.payload;
+  const { payload, navigate } = action.payload;
   try {
     // Create a job
-    const jobResponse = yield call(createJob, newJob);
+    const jobResponse = yield call(createJob, payload);
     yield put(createJobSuccess(jobResponse.data));
-
-    // Create documents
-    const jobId = jobResponse.data.id;
-    for (let i = 0; i < newDocuments.length; i++) {
-      const document = newDocuments[i];
-      // Create a document
-      const documentData = new FormData();
-      documentData.append("file", document.file);
-      documentData.append("entityType", JOB_ENTITY_TYPE);
-      documentData.append("entityId", +jobId);
-      yield call(createDocument, documentData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-    }
+    toast.success(jobResponse?.message);
     navigate("/jobs");
   } catch (error) {
+    toast.error(error?.message);
     yield put(createJobFailure(error));
   }
 }
 
 export default function* watchFetchJobSaga() {
+  yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
-  yield takeEvery(CREATE_JOB, workCreateJobAndDocuments);
+  yield takeEvery(CREATE_JOB, workCreateJob);
 }

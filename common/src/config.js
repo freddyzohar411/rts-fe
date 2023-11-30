@@ -55,6 +55,3 @@ export const CANDIDATE_LANGUAGES_URL = "http://localhost:9800";
 
 // Candidate/Employer details service
 export const CANDIDATE_EMPLOYER_DETAILS_URL = "http://localhost:9900";
-
-
-

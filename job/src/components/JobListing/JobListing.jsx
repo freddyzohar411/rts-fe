@@ -1,186 +1,73 @@
 import React, { useState, useEffect } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  CardBody,
-  Col,
-  Container,
-  Input,
-  Row,
-  Table,
-} from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchJobs } from "../../store/job/action";
+import { Link } from "react-router-dom";
+import { Badge, Button, Input } from "reactstrap";
+import "react-dual-listbox/lib/react-dual-listbox.css";
+import { useTableHook } from "@workspace/common";
+import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
+import { DynamicTableHelper } from "@workspace/common";
+import { JOB_INITIAL_OPTIONS } from "./jobListingConstants";
+import { DeleteCustomModal } from "@Workspace/common";
+import {
+  deleteJobList,
+  fetchJobLists,
+  fetchJobListsFields,
+} from "../../store/jobList/action";
+import { useUserAuth } from "@workspace/login";
 
-// Import the job listing options
-import { jobsListingOptions } from "./jobsListingOptions";
-
-function JobListing() {
+const JobListing = () => {
+  const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
-  const jobsData = useSelector((state) => state.JobReducer.jobs);
-  const jobsListing = jobsData.jobs;
+  const jobsData = useSelector((state) => state.JobListReducer.jobs);
+  const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
 
-  const [searchInput, setSearchInput] = useState("");
-  const [pageRequest, setPageRequest] = useState({
-    page: 0,
-    pageSize: 10,
-    sortBy: null,
-    sortDirection: "asc",
-    searchTerm: null,
-  });
+  // Delete modal states
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
-  const [pageInfo, setPageInfo] = useState({
-    currentPage: 0,
-    totalPages: 0,
-    totalElements: 0,
-  });
-
-  // Clean Page Request, remove null values
-  function cleanPageRequest(pageRequest) {
-    const cleanPage = { ...pageRequest };
-    Object.keys(cleanPage).forEach((key) => {
-      if (cleanPage[key] === null) {
-        delete cleanPage[key];
-      }
-    });
-    return cleanPage;
-  }
-
-  // Get all data on first render
-  useEffect(() => {
-    dispatch(fetchJobs(cleanPageRequest(pageRequest)));
-  }, [pageRequest]);
-
-  // Update the page info
-  useEffect(() => {
-    setPageInfo({
-      currentPage: jobsData.page,
-      totalPages: jobsData.totalPages,
-      totalElements: jobsData.totalElements,
-    });
-  }, [jobsData]);
-
-  // Handle Next Page
-  const handleNextPage = () => {
-    if (pageInfo.currentPage < pageInfo.totalPages - 1) {
-      setPageRequest({
-        ...pageRequest,
-        page: pageInfo.currentPage + 1,
-      });
-    }
-  };
-
-  // Handle Previous Page
-  const handlePreviousPage = () => {
-    if (pageInfo.currentPage > 0) {
-      setPageRequest({
-        ...pageRequest,
-        page: pageInfo.currentPage - 1,
-      });
-    }
-  };
-
-  // Handle Sort
-  const handleSort = (option) => {
-    let sortDir = "asc";
-    if (pageRequest.sortBy === option.name) {
-      sortDir = pageRequest.sortDirection === "asc" ? "desc" : "asc";
-    }
-    setPageRequest((prev) => ({
-      ...prev,
-      sortBy: option.name,
-      sortDirection: sortDir,
-    }));
-  };
-
-  // Handle Search
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const search = e.target.value;
-    setPageRequest((prev) => ({
-      ...prev,
-      searchTerm: searchInput === "" ? null : searchInput,
-    }));
-  };
-
-  //Handle Page size change
-  const handlePageSizeChange = (e) => {
-    const pageSize = e.target.value;
-    setPageRequest((prev) => ({
-      ...prev,
-      pageSize: pageSize,
-    }));
-  };
-
-  document.title = "Jobs | RTS";
-
-  // ========================================= Table Configuration ===========================
-  // Set Custom view
-  const customView =
-    "Entry Date,Sales Person,Clients,Project Manager,Job Id,Job Title,Job Type,Location,Head Count,Salary Budget,Visa Status";
-
-  // Get the custom config
-  const getCustomConfig = (customView) => {
-    const customViewArray = customView.split(",");
-    // Get the array of options from the jobsListingOptions based on the custom view array
-    const customConfig = [];
-    customViewArray.forEach((element) => {
-      customConfig.push(jobsListingOptions[element]);
-    });
-    return customConfig;
-  };
-
-  const customConfig = getCustomConfig(customView);
-
-  // Generate Header
-  const generateHeaderJSX = (
-    <>
-      <th scope="col" style={{ width: "50px" }}>
-        <div className="form-check">
-          <Input
-            className="form-check-input"
-            type="checkbox"
-            id="checkbox"
-            value="option"
-          />
-        </div>
-      </th>
-      <th scope="col" class="text-uppercase"></th>
-      {customConfig.map((option) => {
-        if (option?.sort === true) {
-          return (
-            <th
-              scope="col"
-              class="text-uppercase cursor-pointer"
-              onClick={() => handleSort(option)}
-            >
-              {option?.header} <i className="mdi mdi-sort-descending"></i>
-            </th>
-          );
-        } else {
-          return (
-            <th scope="col" class="text-uppercase">
-              {option?.header}
-            </th>
-          );
-        }
-      })}
-      <th scope="col" class="text-uppercase">
-        Action
-      </th>
-    </>
+  // Table Hooks
+  const {
+    pageRequest,
+    pageRequestSet,
+    pageInfo,
+    setPageInfoData,
+    search,
+    setSearch,
+    customConfig,
+    setCustomConfigData,
+  } = useTableHook(
+    {
+      page: 0,
+      pageSize: 5,
+      sortBy: null,
+      sortDirection: "asc",
+      searchTerm: null,
+      searchFields:
+        DynamicTableHelper.generateSeachFieldArray(JOB_INITIAL_OPTIONS),
+    },
+    DynamicTableHelper.generateConfig(JOB_INITIAL_OPTIONS)
   );
 
-  // Generate Body
-  const generateBodyJSX = (jobsListing) => {
-    return jobsListing.map((job) => {
-      const rowdata = customConfig.map((option) => {
-        return <td>{option.render(job)}</td>;
-      });
-      return (
-        <tr>
-          <th scope="row">
+  //========================== User Setup ============================
+  // This will vary with the table main page. Each table have it own config with additional columns
+  const generateJobListConfig = (customConfig) => {
+    return [
+      {
+        header: (
+          <div className="form-check">
+            <Input
+              className="form-check-input"
+              type="checkbox"
+              id="checkbox"
+              value="option"
+            />
+          </div>
+        ),
+        name: "checkbox",
+        sort: false,
+        sortValue: "checkbox",
+        render: () => {
+          return (
             <div className="form-check">
               <Input
                 className="form-check-input"
@@ -189,165 +76,120 @@ function JobListing() {
                 value="option1"
               />
             </div>
-          </th>
-          <td>
-            <div className="d-flex column-gap-2">
-              <Badge color="dark">+1</Badge>
-              <Badge color="dark">+2</Badge>
-              <Badge color="dark">+10</Badge>
-            </div>
-          </td>
-          {rowdata}
-          <td>
-            <div className="d-flex gap-2">
-              <div className="edit">
-                <Button className="custom-button btn-sm" type="button">
-                  Edit
+          );
+        },
+      },
+      {
+        header: "ASSIGNED",
+        name: "badges",
+        sort: false,
+        sortValue: "badges",
+        render: () => (
+          <div className="d-flex column-gap-2">
+            <Badge color="dark">10</Badge>
+          </div>
+        ),
+      },
+      ...customConfig,
+      {
+        header: "Action",
+        name: "action",
+        sort: false,
+        sortValue: "action",
+        render: (data) => (
+          <div className="d-flex column-gap-2">
+            <Link
+              to={`/jobs/${data.id}/view`}
+              style={{ color: "black" }}
+              state={{ view: true }}
+            >
+              <Button
+                type="button"
+                className="btn btn-primary d-flex align-items-center column-gap-2"
+              >
+                <i className="ri-eye-line"></i>
+              </Button>
+            </Link>
+            {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+              <Link
+                to={`/jobs/${data.id}/edit`}
+                style={{ color: "black" }}
+                state={{ view: false }}
+              >
+                <Button
+                  type="button"
+                  className="btn btn-primary d-flex align-items-center column-gap-2"
+                >
+                  <i className="mdi mdi-pencil"></i>
                 </Button>
-              </div>
-            </div>
-          </td>
-        </tr>
-      );
-    });
+              </Link>
+            )}
+            {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+              <Button
+                type="button"
+                className="btn btn-danger d-flex align-items-center column-gap-2"
+                onClick={() => {
+                  setDeleteId(data.id);
+                  setIsDeleteModalOpen(true);
+                }}
+              >
+                <span>
+                  <i className="mdi mdi-delete"></i>
+                </span>
+              </Button>
+            )}
+          </div>
+        ),
+      },
+    ];
+  };
+  // ==================================================================
+
+  // Modal Delete
+  const confirmDelete = () => {
+    dispatch(deleteJobList(deleteId));
+    setIsDeleteModalOpen(false);
   };
 
-  // ================================================================================================
+  // Get all the option groups
+  useEffect(() => {
+    dispatch(fetchJobListsFields());
+  }, []);
+
+  // Fetch the job when the pageRequest changes
+  useEffect(() => {
+    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(pageRequest)));
+  }, [pageRequest]);
+
+  // Update the page info when job Data changes
+  useEffect(() => {
+    if (jobsData) {
+      setPageInfoData(jobsData);
+    }
+  }, [jobsData]);
+
   return (
-    <React.Fragment>
-      <div className="page-content">
-        <Container fluid>
-          <Row>
-            <Col lg={12}>
-              <Card className="m-3">
-                <CardBody>
-                  <div className="listjs-table">
-                    <Row className="d-flex column-gap-1 mb-3">
-                      <Col>
-                        <div className="d-flex column-gap-4">
-                          <div className="search-box">
-                            <form onSubmit={handleSearch}>
-                              <Input
-                                type="text"
-                                placeholder="Search"
-                                className="form-control search bg-light border-light"
-                                value={searchInput}
-                                style={{ width: "350px" }}
-                                onChange={(e) => setSearchInput(e.target.value)}
-                              />
-                            </form>
-
-                            <i className="ri-search-line search-icon"></i>
-                          </div>
-                          <div>
-                            <Input type="select" placeholder="form-select">
-                              <option value="New Job Openings">
-                                New Job Openings
-                              </option>
-                              <option value="Active Job Openings">
-                                Active Job Openings
-                              </option>
-                              <option value="Inactive Job Openings">
-                                Inactive Job Openings
-                              </option>
-                              <option value="Closed Job Openings">
-                                Closed Job Openings
-                              </option>
-                              <option value="Focus of the Day">
-                                Focus of the Day
-                              </option>
-                              <option value="Assigned Job Openings">
-                                Assigned Job Openings
-                              </option>
-                            </Input>
-                          </div>
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="d-flex column-gap-2 justify-content-end">
-                          <Button
-                            type="button"
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
-                          >
-                            <span>
-                              <i className="mdi mdi-download"></i>
-                            </span>{" "}
-                            Imports
-                          </Button>
-                          <Button
-                            type="button"
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
-                          >
-                            <span>
-                              <i className="ri-settings-3-fill"></i>
-                            </span>
-                            Custom View
-                          </Button>
-                          <Button type="button" className="btn btn-primary">
-                            Create New Account
-                          </Button>
-                          <Button type="button" className="btn btn-primary">
-                            <i className="ri-filter-line"></i>
-                          </Button>
-                        </div>
-                      </Col>
-                    </Row>
-
-                    <div className="table-responsive table-hover table-card mt-3 mb-1">
-                      <Table
-                        className="table align-middle table-nowrap"
-                        id="jobsListingTable"
-                      >
-                        <thead className="table-light">
-                          <tr>{jobsListing && generateHeaderJSX}</tr>
-                        </thead>
-                        <tbody className="list form-check-all">
-                          {jobsListing && generateBodyJSX(jobsListing)}
-                        </tbody>
-                      </Table>
-                    </div>
-
-                    <div className="d-flex justify-content-end">
-                      <div className="pagination-wrap hstack gap-2">
-                        <Input
-                          onChange={handlePageSizeChange}
-                          type="select"
-                          className="form-select"
-                          style={{ height: "34px", marginRight: "10px" }}
-                        >
-                          <option value="10">10</option>
-                          <option value="20">20</option>
-                          <option value="30">30</option>
-                        </Input>
-                        <btn
-                          className={`cursor-pointer page-item pagination-prev ${
-                            pageInfo.currentPage == 0 && "disabled"
-                          }`}
-                          onClick={handlePreviousPage}
-                        >
-                          Previous
-                        </btn>
-                        <ul className="pagination listjs-pagination mb-0"></ul>
-                        <btn
-                          className={`cursor-pointer page-item pagination-next ${
-                            pageInfo.currentPage == pageInfo.totalPages - 1 &&
-                            "disabled"
-                          }`}
-                          onClick={handleNextPage}
-                        >
-                          Next
-                        </btn>
-                      </div>
-                    </div>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    </React.Fragment>
+    <>
+      <DeleteCustomModal
+        isOpen={isDeleteModalOpen}
+        setIsOpen={setIsDeleteModalOpen}
+        confirmDelete={confirmDelete}
+        header="Delete JobList"
+        deleteText={"Are you sure you would like to delete this job?"}
+      />
+      <DynamicTableWrapper
+        data={jobsData?.jobs ?? []}
+        config={generateJobListConfig(customConfig)}
+        pageInfo={pageInfo}
+        pageRequest={pageRequest}
+        pageRequestSet={pageRequestSet}
+        search={search}
+        setSearch={setSearch}
+        optGroup={jobsFields}
+        setCustomConfigData={setCustomConfigData}
+      />
+    </>
   );
-}
+};
 
 export default JobListing;

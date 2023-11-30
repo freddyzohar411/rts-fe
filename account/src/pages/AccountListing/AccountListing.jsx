@@ -16,7 +16,7 @@ import {
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
 
-function AccountListing() {
+const AccountListing = () => {
   const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const accountsData = useSelector((state) => state.AccountReducer.accounts);
@@ -227,6 +227,6 @@ function AccountListing() {
       />
     </>
   );
-}
+};
 
 export default AccountListing;

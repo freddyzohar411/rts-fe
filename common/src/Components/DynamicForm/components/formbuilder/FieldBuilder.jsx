@@ -109,6 +109,8 @@ const FieldBuilder = ({
         "selectcity",
         "selectcurrency",
         "selectlandline",
+        "selectaccountname",
+        "selectaccountcontact",
         "submit",
         "table",
         "selectdepartment",
@@ -157,6 +159,8 @@ const FieldBuilder = ({
         "selectstate",
         "selectlandline",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "editor",
         "table",
         "parentcompany",
@@ -196,6 +200,8 @@ const FieldBuilder = ({
         "selectstate",
         "selectlandline",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "editor",
         "parentcompany",
         "searchselect",
@@ -235,6 +241,8 @@ const FieldBuilder = ({
         "selectstate",
         "selectlandline",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "editor",
         "button",
         "buttonupdate",
@@ -278,6 +286,8 @@ const FieldBuilder = ({
         "selectstate",
         "selectlandline",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "editor",
         // "button",
         // "buttonupdate"
@@ -376,6 +386,8 @@ const FieldBuilder = ({
         "selectstate",
         "selectlandline",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "editor",
         "parentcompany",
         "searchselect",
@@ -409,6 +421,8 @@ const FieldBuilder = ({
         "selectstate",
         "selectlandline",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "editor",
         "parentcompany",
         "searchselect",
@@ -728,6 +742,8 @@ const FieldBuilder = ({
         "selectlandline",
         "selectstate",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "editor",
         "parentcompany",
         "searchselect",
@@ -856,6 +872,8 @@ const FieldBuilder = ({
         "selectcity",
         "selectcurrency",
         "selectlandline",
+        "selectaccountname",
+        "selectaccountcontact",
         "selectstate",
         "selectdepartment",
         "editor",
@@ -920,6 +938,8 @@ const FieldBuilder = ({
         "selectlandline",
         "selectstate",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "editor",
         "parentcompany",
         "searchselect",
@@ -969,6 +989,8 @@ const FieldBuilder = ({
         "selectcountry",
         "selectstate",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "parentcompany",
         "multiselect",
         "singleselect",
@@ -1011,6 +1033,8 @@ const FieldBuilder = ({
         "submit",
         "table",
         "selectdepartment",
+        "selectaccountname",
+        "selectaccountcontact",
         "editor",
         "parentcompany",
         "searchselect",
@@ -1048,6 +1072,8 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectlandline",
         "selectstate",
+        "selectaccountname",
+        "selectaccountcontact",
         "submit",
         "table",
         "selectdepartment",
@@ -1153,6 +1179,12 @@ const FieldBuilder = ({
     case "selectsubindustry":
       header = "Select Sub Industry Field";
       break;
+    case "selectaccountname":
+      header = "Select Account Name";
+      break;
+    case "selectaccountcontact":
+      header = "Select Account Contact";
+      break;
     case "date":
       header = "Date Field";
       break;
@@ -1184,6 +1216,12 @@ const FieldBuilder = ({
       break;
     case "selectdepartment":
       header = "Select Department Field";
+      break;
+    case "selectindustry":
+      header = "Select Industry Field";
+      break;
+    case "selectindustry":
+      header = "Select Industry Field";
       break;
     case "editor":
       header = "Editor Field";

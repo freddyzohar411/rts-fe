@@ -167,7 +167,7 @@ const Navdata = () => {
         {
           id: "newJob",
           label: "Create Job Openings",
-          link: "/job/job-creation",
+          link: "/jobs/job-creation",
           parentId: "job",
         },
         {
