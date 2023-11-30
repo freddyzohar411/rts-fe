@@ -1,7 +1,12 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { toast } from "react-toastify";
 
-import { FETCH_JOBS, CREATE_JOB, FETCH_JOB } from "./actionTypes";
+import {
+  FETCH_JOBS,
+  CREATE_JOB,
+  FETCH_JOB,
+  CREATE_JOB_DOCUMENTS,
+} from "./actionTypes";
 import {
   fetchJobsSuccess,
   fetchJobsFailure,
@@ -9,8 +14,16 @@ import {
   createJobFailure,
   fetchJobSuccess,
   fetchJobFailure,
+  createJobDocumentsSuccess,
+  createJobDocumentsFailure,
 } from "./action";
-import { getJobs, createJob, getJobById } from "../../helpers/backend_helper";
+import {
+  getJobs,
+  createJob,
+  getJobById,
+  createJobDocument,
+  updateJobDocument,
+} from "../../helpers/backend_helper";
 
 // Fetch Accounts
 function* workFetchJob(action) {
@@ -45,8 +58,34 @@ function* workCreateJob(action) {
   }
 }
 
+function* workCreateJobDocuments(action) {
+  const { entity, newData, config, rerenderTable, id, resetForm } =
+    action.payload;
+  try {
+    // Create a job
+    if (id) {
+      const jobResponse = yield call(updateJobDocument, id, newData, config);
+      yield put(createJobDocumentsSuccess(jobResponse.data));
+    } else {
+      const jobResponse = yield call(createJobDocument, newData, config);
+      yield put(createJobDocumentsSuccess(jobResponse.data));
+    }
+    if (typeof resetForm === "function") {
+      resetForm();
+    }
+
+    if (typeof rerenderTable === "function") {
+      rerenderTable();
+    }
+  } catch (error) {
+    toast.error(error?.message);
+    yield put(createJobDocumentsFailure(error));
+  }
+}
+
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
   yield takeEvery(CREATE_JOB, workCreateJob);
+  yield takeEvery(CREATE_JOB_DOCUMENTS, workCreateJobDocuments);
 }

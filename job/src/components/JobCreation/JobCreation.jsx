@@ -12,6 +12,7 @@ import {
 } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import JobDocument from "./JobDocument";
+import { useRef } from "react";
 
 const JobCreation = () => {
   const navigate = useNavigate();
@@ -20,13 +21,14 @@ const JobCreation = () => {
   const { jobId, type } = useParams();
   const isView = type === "view";
 
+  const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
-  const [formFormik, setFormFormik] = useState(null);
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
+  const randomId = -99;
 
   // Fetch all the countries and account names
   useEffect(() => {
@@ -51,14 +53,6 @@ const JobCreation = () => {
   }, [jobId]);
 
   /**
-   * Get Formik hook from Form component
-   */
-  const handleFormikChange = useCallback((formik) => {
-    // Handle formik change here
-    setFormFormik(formik);
-  }, []);
-
-  /**
    * Get Form field data from Form component
    */
   const handleFormFieldChange = useCallback((formFields) => {
@@ -79,6 +73,7 @@ const JobCreation = () => {
       title: values?.jobTitle,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),
+      tempDocId: randomId,
     };
     dispatch(createJob({ payload, navigate }));
   };
@@ -92,20 +87,20 @@ const JobCreation = () => {
         userDetails={getAllUserGroups()}
         country={"India"}
         editData={formSubmissionData}
-        onFormikChange={handleFormikChange}
         onSubmit={handleFormSubmit}
         onFormFieldsChange={handleFormFieldChange}
         errorMessage={null}
         view={isView}
+        ref={formikRef}
       />
-      <JobDocument />
+      <JobDocument jobId={randomId} />
       <div className="d-flex flex-row-reverse gap-3 mb-2">
         <Button
           className="btn btn-success"
           type="button"
           disabled={isView}
           onClick={() => {
-            formFormik.submitForm();
+            formikRef.current.formik.submitForm();
           }}
         >
           Submit

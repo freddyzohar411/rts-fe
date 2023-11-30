@@ -1,5 +1,5 @@
 import { Axios } from "@workspace/common";
-import { BASE_FORMS, BASE_JOBS, CREATE_DOCUMENT } from "./url_helper";
+import { BASE_DOCUMENTS, BASE_FORMS, BASE_JOBS } from "./url_helper";
 import { JOB_URL, DOCUMENT_URL, FORM_URL } from "@workspace/common/src/config";
 
 const { APIClient } = Axios;
@@ -26,6 +26,14 @@ export const deleteJob = (id) => api.delete(`${JOB_URL}${BASE_JOBS}/${id}`);
 
 export const getJobFields = () => api.get(`${JOB_URL}${BASE_JOBS}/fields`);
 
-// Create Document
-export const createDocument = (data, config) =>
-  api.create(`${DOCUMENT_URL}${CREATE_DOCUMENT}`, data, config);
+// Create Job Document
+
+export const DOCUMENT_BASE_URL = `${DOCUMENT_URL}${BASE_DOCUMENTS}`;
+export const createJobDocument = (data, config) =>
+  api.create(`${DOCUMENT_BASE_URL}`, data, config);
+
+export const updateJobDocument = (id, data, config) =>
+  api.put(`${DOCUMENT_BASE_URL}/${id}`, data, config);
+
+export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
+  `${DOCUMENT_BASE_URL}/entity/user/${entityType}/${entityId}`;
