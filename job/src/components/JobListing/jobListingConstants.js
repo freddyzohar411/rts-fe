@@ -1,7 +1,7 @@
 const JOB_INITIAL_OPTIONS = [
   {
     sortValue: "job_submission_data.dateOpen",
-    label: "Entry Date",
+    label: "Date Open",
     value: "jobSubmissionData.dateOpen",
     sort: true,
   },

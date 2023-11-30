@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Badge, Button, Input } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
-import { useTableHook } from "@workspace/common";
+import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
 import { JOB_INITIAL_OPTIONS } from "./jobListingConstants";
@@ -25,6 +25,25 @@ const JobListing = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
+  // Custom renders
+  const customRenderList = [
+    {
+      names: ["updatedAt", "createdAt"],
+      render: (data, opt) =>
+        DateHelper.formatDateStandard(
+          DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
+        ),
+    },
+    {
+      names: ["jobSubmissionData.visaStatus"],
+      render: (data, opt) => (
+        <Badge color={"success"} className="text-uppercase">
+          {DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"}
+        </Badge>
+      ),
+    },
+  ];
+
   // Table Hooks
   const {
     pageRequest,
@@ -45,7 +64,8 @@ const JobListing = () => {
       searchFields:
         DynamicTableHelper.generateSeachFieldArray(JOB_INITIAL_OPTIONS),
     },
-    DynamicTableHelper.generateConfig(JOB_INITIAL_OPTIONS)
+    JOB_INITIAL_OPTIONS,
+    customRenderList
   );
 
   //========================== User Setup ============================
