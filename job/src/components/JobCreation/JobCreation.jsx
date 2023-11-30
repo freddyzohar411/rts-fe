@@ -5,7 +5,6 @@ import { JOB_FORM_NAME } from "./constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearJob,
   clearJobFormSubmission,
   createJob,
   fetchJobForm,
@@ -14,7 +13,7 @@ import {
 import { useUserAuth } from "@workspace/login";
 import JobDocument from "./JobDocument";
 
-function JobCreation() {
+const JobCreation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
@@ -99,7 +98,7 @@ function JobCreation() {
         errorMessage={null}
         view={isView}
       />
-      {/* <JobDocument /> */}
+      <JobDocument />
       <div className="d-flex flex-row-reverse gap-3 mb-2">
         <Button
           className="btn btn-success"
@@ -117,6 +116,6 @@ function JobCreation() {
       </div>
     </Container>
   );
-}
+};
 
 export default JobCreation;

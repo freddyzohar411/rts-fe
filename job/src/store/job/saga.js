@@ -40,6 +40,7 @@ function* workCreateJob(action) {
     toast.success(jobResponse?.message);
     navigate("/jobs");
   } catch (error) {
+    toast.error(error?.message);
     yield put(createJobFailure(error));
   }
 }

@@ -86,7 +86,7 @@ const JobFormReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        docForm: docForm,
+        documentForm: docForm,
       };
     case FETCH_JOB_DOCUMENT_FORM_FAILURE:
       return {
