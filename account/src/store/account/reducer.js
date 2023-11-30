@@ -20,16 +20,25 @@ import {
   FETCH_ACCOUNTS_FIELDS,
   FETCH_ACCOUNTS_FIELDS_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_FAILURE,
+  RESET_META_DATA,
 } from "./actionTypes";
+
+import {
+  errorMetaData,
+  pendingMetaData,
+  resetAllMetaData,
+  successMetaData,
+} from "@workspace/common";
 
 const initialState = {
   account: {},
   accounts: [],
   accountsFields: [],
-  errorMsg: "",
-  loading: false,
-  error: false,
-  success: false,
+  meta: {},
+  createMeta: {},
+  updateMeta: {},
+  deleteMeta: {},
+  tableMeta: {},
 };
 
 const AccountReducer = (state = initialState, action) => {
@@ -86,55 +95,50 @@ const AccountReducer = (state = initialState, action) => {
     case CREATE_ACCOUNT_SUCCESS:
       return {
         ...state,
-        loading: false,
+        createMeta: successMetaData(action.payload),
         account: action.payload,
       };
     case CREATE_ACCOUNT_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        createMeta: errorMetaData(action.payload),
       };
 
     // Post an Account
     case POST_ACCOUNT:
       return {
         ...state,
-        loading: true,
-        error: false,
+        createMeta: pendingMetaData(),
       };
     case POST_ACCOUNT_SUCCESS:
       return {
         ...state,
-        loading: false,
+        createMeta: successMetaData(action.payload),
         account: action.payload,
-        success: true,
       };
     case POST_ACCOUNT_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
-        success: true,
+        createMeta: errorMetaData(action.payload),
       };
 
     // Put an Account
     case PUT_ACCOUNT:
       return {
         ...state,
-        loading: true,
-        error: false,
+        updateMeta: pendingMetaData(),
       };
     case PUT_ACCOUNT_SUCCESS:
       return {
         ...state,
-        loading: false,
+        updateMeta: successMetaData(action.payload),
         account: action.payload,
-        success: true,
       };
     case PUT_ACCOUNT_FAILURE:
+      return {
+        ...state,
+        updateMeta: errorMetaData(action.payload),
+      };
 
     // Delete an Account
     case DELETE_ACCOUNT:
@@ -186,7 +190,14 @@ const AccountReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
-
+    case RESET_META_DATA:
+      return {
+        ...state,
+        meta: resetAllMetaData(),
+        createMeta: resetAllMetaData(),
+        updateMeta: resetAllMetaData(),
+        deleteMeta: resetAllMetaData(),
+      };
     default:
       return state;
   }

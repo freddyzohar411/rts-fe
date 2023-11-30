@@ -19,6 +19,15 @@ import DepartmentSelectElement from "./DepartmentSelectElement";
 import EditorElement from "./EditorElement";
 import AccountParentElement from "./AccountParentElement";
 import SearchSelect from "./SearchSelect";
+import MultiSelectElement from "./MultiSelectElement";
+import SingleSelectElement from "./SingleSelectElement";
+import SingleSelectAPIElement from "./SingleSelectAPIElement";
+import MultiSelectAPIElement from "./MultiSelectAPIElement";
+import MultiFileInputElement from "./MultiFileInputElement";
+import {
+  moduleConstant,
+  permissionConstant,
+} from "../../../constants/authConstant";
 import AccountNameSelectElement from "./AccountNameSelectElement";
 import AccountContactSelectElement from "./AccountContactSelectElement";
 
@@ -242,6 +251,57 @@ const generateFormField = (
         field={field}
         formik={formik}
         formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "singleselect") {
+    return (
+      <SingleSelectElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "multiselect") {
+    return (
+      <MultiSelectElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "singleselectapi") {
+    return (
+      <SingleSelectAPIElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "multiselectapi") {
+    return (
+      <MultiSelectAPIElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "multifile") {
+    return (
+      <MultiFileInputElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+        formFieldsHook={formFieldsHook}
       />
     );
   }

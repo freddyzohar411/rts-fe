@@ -9,8 +9,9 @@ import {
   GEO_CITIES_URL,
 } from "../endpoint";
 
-import { Axios } from "@workspace/common";
-const { APIClient } = Axios;
+// import { Axios } from "@workspace/common";
+// const { APIClient } = Axios;
+import { APIClient } from "../helpers/api_helper";
 
 const api = new APIClient();
 

@@ -26,14 +26,32 @@ export const ACCOUNT_INSTRUCTION_URL = "http://localhost:8800";
 // Department Service
 export const DEPARTMENT_URL = "http://localhost:8900";
 
+// Role Service
+export const ACCESS_URL = "http://localhost:8091";
+
+// Group Service
+export const GROUP_URL = "http://localhost:8092";
+
+// Candidate Service
+export const CANDIDATE_URL = "http://localhost:8050";
+
 // Job Service
 export const JOB_URL = "http://localhost:9200";
 
 // Form Service
 export const FORM_URL = "http://localhost:9400";
 
-// Role Service
-export const ACCESS_URL = "http://localhost:8091";
+// Candidate/Work experience service
+export const CANDIDATE_WORK_EXPERIENCE_URL = "http://localhost:9500";
 
-// Group Service
-export const GROUP_URL = "http://localhost:8092";
+// Candidate/Education service
+export const CANDIDATE_EDUCATION_DETAILS_URL = "http://localhost:9600";
+
+// Candidate/Certificate service
+export const CANDIDATE_CERTIFICATE_URL = "http://localhost:9700";
+
+// Candidate/Language service
+export const CANDIDATE_LANGUAGES_URL = "http://localhost:9800";
+
+// Candidate/Employer details service
+export const CANDIDATE_EMPLOYER_DETAILS_URL = "http://localhost:9900";

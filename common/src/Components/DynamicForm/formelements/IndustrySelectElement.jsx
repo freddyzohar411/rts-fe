@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchIndustry } from "../../../store/industry/action";
-
+import { fetchIndustry, resetMetaData } from "../../../store/industry/action";
+import { useNavigate } from "react-router-dom";
 const IndustrySelectElement = ({ formik, field, formStateHook }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { formState } = formStateHook;
   const [industry, setIndustry] = useState([]);
@@ -11,7 +12,12 @@ const IndustrySelectElement = ({ formik, field, formStateHook }) => {
   );
 
   useEffect(() => {
-    dispatch(fetchIndustry());
+    if (!industryParentData || industryParentData.length === 0) {
+      dispatch(fetchIndustry());
+    }
+    return () => {
+      dispatch(resetMetaData());
+    }
   }, []);
 
   useEffect(() => {
@@ -38,7 +44,7 @@ const IndustrySelectElement = ({ formik, field, formStateHook }) => {
         >
           <option value="">{field.placeholder}</option>
           {industry.map((item, index) => (
-            <option key={index} value={item.id}>
+            <option key={index} value={item.name}>
               {item.name}
             </option>
           ))}

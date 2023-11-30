@@ -22,7 +22,7 @@ axios.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     if (error?.response?.status === 403) {
       toast.error("JWT token got expired.");
-      window.location.replace("/login");
+      // window.location.replace("/login");
     }
 
     if (error?.response?.data) {

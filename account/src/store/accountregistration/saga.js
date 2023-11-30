@@ -31,12 +31,11 @@ function* workFetchDraftAccount(action) {
 }
 
 function* workDeleteDraftAccount(action) {
-  const { accountId, resetStepper, clearForm } = action.payload;
+  const { accountId, resetStepper } = action.payload;
   try {
     yield call(deleteDraftAccountById, accountId);
     yield put(deleteAccountId());
     yield put(deleteAccountCountry());
-    clearForm();
     resetStepper(0);
   } catch (error) {
     throw error;

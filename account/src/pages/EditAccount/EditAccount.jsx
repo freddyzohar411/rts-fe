@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Container } from "reactstrap";
 import FormStepper from "./FormStepper";
@@ -8,6 +8,7 @@ import {
   postAccount,
   putAccount,
   fetchAccount,
+  resetMetaData,
 } from "../../store/account/action";
 import { deleteAccountCountry } from "../../store/accountregistration/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
@@ -31,7 +32,9 @@ import {
 import { useUserAuth } from "@workspace/login";
 
 const EditAccount = () => {
-  const { getAllUserGroups, checkAllPermission, Permission } = useUserAuth();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { getAllUserGroups } = useUserAuth();
 
   const location = useLocation();
   const linkState = location.state;
@@ -43,13 +46,17 @@ const EditAccount = () => {
   );
   const form = useSelector((state) => state.AccountFormReducer.form);
   const editId = useSelector((state) => state.AccountFormReducer.editId);
+  const createMetaData = useSelector(
+    (state) => state.AccountReducer.createMeta
+  );
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const updateMetaData = useSelector(
+    (state) => state.AccountReducer.updateMeta
+  );
 
   const MAX_STEP = 6;
   const [step, setStep] = useState(linkState?.stepNo || 0);
-  const [formFormik, setFormFormik] = useState(null);
+  const formikRef = useRef(null);
   const [editData, setEditData] = useState(formSubmissionData || null);
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
@@ -179,13 +186,6 @@ const EditAccount = () => {
   }, [step, accountId]);
 
   /**
-   * Get Formik hook from Form component
-   */
-  const handleFormikChange = useCallback((formik) => {
-    setFormFormik(formik);
-  }, []);
-
-  /**
    * Get Form field data from Form component
    */
   const handleFormFieldChange = useCallback((formFields) => {
@@ -200,24 +200,13 @@ const EditAccount = () => {
   }, [step]);
 
   /**
-   * Clear form
-   */
-
-  const clearForm = () => {
-    const newValues = {};
-    Object.keys(formFormik.initialValues).forEach((field) => {
-      newValues[field] = "";
-    });
-    formFormik.setValues(newValues);
-  };
-
-  /**
    * Handle form submit based on step
    * @param {*} event
-   * @param {*} values
-   * @param {*} newValues
-   * @param {*} buttonName
-   * @param {*} formStateHook
+   * @param {*} values - formik values
+   * @param {*} newValues - form values (After processing)
+   * @param {*} buttonNameHook - button name (To determine if it is add or update)
+   * @param {*} formStateHook - form state hook (To determine if it is create or update)
+   * @param {*} rerenderTable - rerender table
    * @returns
    */
   const handleFormSubmit = async (
@@ -228,6 +217,7 @@ const EditAccount = () => {
     formStateHook,
     rerenderTable
   ) => {
+    // Check if form is edited. If updated, update in db
     const isFormChanged = await isFormEdited(formSubmissionData, newValues);
 
     if (!isFormChanged) {
@@ -241,25 +231,22 @@ const EditAccount = () => {
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
     // Set a reset form functions
-    const resetForm = (arrayFields = []) => {
-      formFormik.resetForm();
+    const resetForm = (arrayFields = [], formState = "") => {
       if (arrayFields.length > 0) {
-        arrayFields.forEach((fieldName) =>
-          formFormik.setFieldValue(fieldName, "")
-        );
+        arrayFields.forEach((field) => {
+          formikRef.current.formik.setFieldValue(field, "");
+        });
+      } else {
+        formikRef.current.clearForm();
+        formikRef.current.formik.setTouched({});
       }
-      setFormState("create");
-    };
-
-    const resetFormFields = (arrayFields = []) => {
-      if (arrayFields.length > 0) {
-        arrayFields.forEach((fieldName) =>
-          formFormik.setFieldValue(fieldName, "")
-        );
+      if (formState !== "") {
+        setFormState(formState);
       }
     };
 
     if (step === 0) {
+      // Update Account
       if (formSubmissionData != null) {
         let formValues = { ...newValues };
         const accountData = { ...formValues };
@@ -292,7 +279,6 @@ const EditAccount = () => {
                 "Content-Type": "multipart/form-data",
               },
             },
-            handleNext: handleNext,
           })
         );
       }
@@ -315,7 +301,7 @@ const EditAccount = () => {
             entity: AccountEntityConstant.ACCOUNT_CONTACT,
             newData,
             rerenderTable: rerenderTable,
-            resetForm: resetForm,
+            resetForm: resetForm([], "create"),
           })
         );
         return;
@@ -323,7 +309,7 @@ const EditAccount = () => {
 
       if (buttonName === "cancel" && !editData) {
         setButtonName("");
-        resetForm();
+        resetForm([], "create");
         return;
       }
 
@@ -350,7 +336,7 @@ const EditAccount = () => {
             id: tableEditId,
             newData,
             rerenderTable: rerenderTable,
-            resetForm: resetForm(),
+            resetForm: resetForm([], "create"),
           })
         );
       }
@@ -386,7 +372,7 @@ const EditAccount = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm(["file"]),
+            resetForm: resetForm,
           })
         );
       }
@@ -439,7 +425,7 @@ const EditAccount = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm(["file"]),
+            resetForm: resetForm([], "create"),
           })
         );
       }
@@ -473,7 +459,7 @@ const EditAccount = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetFormFields(["file"]),
+            resetForm: resetForm(["file"]),
           })
         );
         return;
@@ -496,7 +482,6 @@ const EditAccount = () => {
             id: editId,
             newData,
             rerenderTable: rerenderTable,
-            handleNext: handleNext,
           })
         );
       }
@@ -511,12 +496,10 @@ const EditAccount = () => {
         formId: parseInt(form.formId),
       };
       dispatch(
-        postAccount({
+        putAccount({
           entity: AccountEntityConstant.ACCOUNT_COMMERCIAL,
           id: accountId,
           newData: formData,
-          navigate: navigate,
-          link: "/accounts",
         })
       );
     }
@@ -570,11 +553,35 @@ const EditAccount = () => {
   const toggleFormViewState = () => {
     if (step === 1 || step === 2) {
       if (view === false) {
-        formFormik.resetForm();
+        formikRef.current.clearForm();
       }
     }
     setView((prevState) => !prevState);
   };
+
+  /**
+   * Handle Account Success
+   */
+  if (createMetaData?.isSuccess) {
+    dispatch(resetMetaData());
+    if (step === 5) {
+      navigate("/accounts");
+      return;
+    }
+    handleNext();
+  }
+
+  /**
+   * Handle Account success (Update)
+   */
+  if (updateMetaData?.isSuccess) {
+    dispatch(resetMetaData());
+    if (step === 5) {
+      navigate("/accounts");
+      return;
+    }
+    handleNext();
+  }
 
   return (
     <>
@@ -583,7 +590,7 @@ const EditAccount = () => {
           activeStep={step}
           handleBack={handleBack}
           handleNext={handleNext}
-          formFormik={formFormik}
+          formikRef={formikRef}
           formFieldsData={formFieldsData}
           setErrorMessage={setErrorMessage}
           accountId={accountId}
@@ -596,11 +603,11 @@ const EditAccount = () => {
             userDetails={getAllUserGroups()}
             country={accountCountry}
             editData={formSubmissionData}
-            onFormikChange={handleFormikChange}
             onSubmit={handleFormSubmit}
             onFormFieldsChange={handleFormFieldChange}
             errorMessage={errorMessage}
             view={view}
+            ref={formikRef}
           />
         </FormStepper>
       </Container>

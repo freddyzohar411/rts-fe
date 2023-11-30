@@ -1,10 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
-import { postAccount, putAccount } from "../../store/account/action";
+import {
+  postAccount,
+  putAccount,
+  resetMetaData,
+} from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
 import {
   AccountFormConstant,
@@ -58,11 +62,18 @@ const AccountCreation = () => {
     (state) => state.AccountFormReducer.formSubmissionLoading
   );
 
-  const loading = useSelector((state) => state.AccountReducer.loading);
+  const createMetaData = useSelector(
+    (state) => state.AccountReducer.createMeta
+  );
+
+  const updateMetaData = useSelector(
+    (state) => state.AccountReducer.updateMeta
+  );
 
   const MAX_STEP = 6;
   const [step, setStep] = useState(0);
-  const [formFormik, setFormFormik] = useState(null);
+  // const [formFormik, setFormFormik] = useState(null);
+  const formikRef = useRef(null);
   const [editData, setEditData] = useState(formSubmissionData || null);
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
@@ -169,7 +180,7 @@ const AccountCreation = () => {
           )
         );
       }
-      if (step === 2){
+      if (step === 2) {
         dispatch(clearAccountFormSubmission());
       }
       if (step === 3) {
@@ -191,8 +202,7 @@ const AccountCreation = () => {
     }
   }, [step]);
 
-
-  //clear form submission if 
+  //clear form submission if
   useEffect(() => {
     if (accountId === null) {
       dispatch(clearAccountFormSubmission());
@@ -202,10 +212,10 @@ const AccountCreation = () => {
   /**
    * Get Formik hook from Form component
    */
-  const handleFormikChange = useCallback((formik) => {
-    // Handle formik change here
-    setFormFormik(formik);
-  }, []);
+  // const handleFormikChange = useCallback((formik) => {
+  //   // Handle formik change here
+  //   setFormFormik(formik);
+  // }, []);
 
   /**
    * Get Form field data from Form component
@@ -224,10 +234,11 @@ const AccountCreation = () => {
   /**
    * Handle form submit based on step
    * @param {*} event
-   * @param {*} values
-   * @param {*} newValues
-   * @param {*} buttonName
-   * @param {*} formStateHook
+   * @param {*} values - formik values
+   * @param {*} newValues - form values (After processing)
+   * @param {*} buttonNameHook - button name (To determine if it is add or update)
+   * @param {*} formStateHook - form state hook (To determine if it is create or update)
+   * @param {*} rerenderTable - rerender table
    * @returns
    */
   const handleFormSubmit = async (
@@ -240,26 +251,24 @@ const AccountCreation = () => {
   ) => {
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
-    // Set a reset form functions
-    const resetForm = (arrayFields = []) => {
-      formFormik.resetForm();
-      if (arrayFields.length > 0) {
-        arrayFields.forEach((fieldName) =>
-          formFormik.setFieldValue(fieldName, "")
-        );
-      }
-      setFormState("create");
-    };
 
-    const resetFormFields = (arrayFields = []) => {
+    // Set a reset form functions
+    const resetForm = (arrayFields = [], formState = "") => {
       if (arrayFields.length > 0) {
-        arrayFields.forEach((fieldName) =>
-          formFormik.setFieldValue(fieldName, "")
-        );
+        arrayFields.forEach((field) => {
+          formikRef.current.formik.setFieldValue(field, "");
+        });
+      } else {
+        formikRef.current.clearForm();
+        formikRef.current.formik.setTouched({});
+      }
+      if (formState !== "") {
+        setFormState(formState);
       }
     };
 
     if (step === 0) {
+      // Create Account
       if (formSubmissionData === null) {
         if (!country?.name) {
           toast.error("Please select a country");
@@ -289,11 +298,10 @@ const AccountCreation = () => {
                 "Content-Type": "multipart/form-data",
               },
             },
-            handleNext: handleNext,
           })
         );
-        
       } else {
+        // Update Account
         let formValues = { ...newValues };
         const accountData = { ...formValues };
         const fileData = formValues?.uploadAgreement;
@@ -325,13 +333,13 @@ const AccountCreation = () => {
                 "Content-Type": "multipart/form-data",
               },
             },
-            handleNext: handleNext,
           })
         );
       }
     }
 
     if (step === 1) {
+      // Add contact
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
@@ -354,12 +362,15 @@ const AccountCreation = () => {
         return;
       }
 
+      // Cancel add contact and reset form
       if (buttonName === "cancel" && !editData) {
         setButtonName("");
-        resetForm();
+        // Clear error
+        resetForm([], "create");
         return;
       }
 
+      // Update contact
       if (buttonName === "tableUpdate") {
         setButtonName("");
         const newData = {
@@ -383,13 +394,14 @@ const AccountCreation = () => {
             id: tableEditId,
             newData,
             rerenderTable: rerenderTable,
-            resetForm: resetForm(),
+            resetForm: resetForm([], "create"),
           })
         );
       }
     }
 
     if (step === 2) {
+      // Add document
       if (buttonName === "add") {
         setErrorMessage(null);
         setButtonName("");
@@ -420,17 +432,20 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm(["file"]),
+            resetForm: resetForm([], "create"),
           })
         );
       }
 
+      // Cancel add document and reset form
       if (buttonName === "cancel" && !editData) {
-        resetForm();
+        resetForm([], "create");
         return;
       }
 
+      // Update document
       if (buttonName === "tableUpdate") {
+        setButtonName("");
         let formValues = { ...newValues };
         const documentData = { ...formValues };
         const fileData = formValues?.file;
@@ -473,13 +488,14 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetForm(["file"]),
+            resetForm: resetForm([], "create"),
           })
         );
       }
     }
 
     if (step === 3) {
+      // Add instruction document
       if (buttonName === "add") {
         setButtonName("");
         let formValues = { file: newValues.file };
@@ -507,12 +523,13 @@ const AccountCreation = () => {
               },
             },
             rerenderTable: rerenderTable,
-            resetForm: resetFormFields(["file"]),
+            resetForm: resetForm(["file"]),
           })
         );
         return;
       }
 
+      //Create instruction
       if (formSubmissionData === null) {
         const formData = {
           guidelines: newValues.guidelines,
@@ -530,10 +547,10 @@ const AccountCreation = () => {
             entity: AccountEntityConstant.ACCOUNT_INSTRUCTION,
             newData,
             rerenderTable: rerenderTable,
-            handleNext: handleNext,
           })
         );
       } else {
+        // Update instruction
         const formData = {
           guidelines: newValues.guidelines,
         };
@@ -551,13 +568,13 @@ const AccountCreation = () => {
             id: editId,
             newData,
             rerenderTable: rerenderTable,
-            handleNext: handleNext,
           })
         );
       }
     }
 
     if (step === 5) {
+      // Create commercial
       const formData = {
         ...newValues,
         entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -570,8 +587,6 @@ const AccountCreation = () => {
           entity: AccountEntityConstant.ACCOUNT_COMMERCIAL,
           id: accountId,
           newData: formData,
-          navigate: navigate,
-          link: "/accounts",
         })
       );
     }
@@ -603,6 +618,30 @@ const AccountCreation = () => {
     setStep(number);
   };
 
+  /**
+   * Handle Account Success
+   */
+  if (createMetaData?.isSuccess) {
+    dispatch(resetMetaData());
+    if (step === 5) {
+      navigate("/accounts");
+      return;
+    }
+    handleNext();
+  }
+
+  /**
+   * Handle Account success (Update)
+   */
+  if (updateMetaData?.isSuccess) {
+    dispatch(resetMetaData());
+    if (step === 5) {
+      navigate("/accounts");
+      return;
+    }
+    handleNext();
+  }
+
   return (
     <>
       {isModalOpen && !accountId && <CountryModal setCountry={setCountry} />}
@@ -611,7 +650,7 @@ const AccountCreation = () => {
           activeStep={step}
           handleBack={handleBack}
           handleNext={handleNext}
-          formFormik={formFormik}
+          formikRef={formikRef}
           formFieldsData={formFieldsData}
           setErrorMessage={setErrorMessage}
           accountId={accountId}
@@ -622,11 +661,11 @@ const AccountCreation = () => {
             userDetails={getAllUserGroups()}
             country={accountCountry || country?.name}
             editData={formSubmissionData}
-            onFormikChange={handleFormikChange}
             onSubmit={handleFormSubmit}
             onFormFieldsChange={handleFormFieldChange}
             errorMessage={errorMessage}
             view={false}
+            ref={formikRef}
           />
         </FormStepper>
       </Container>

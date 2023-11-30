@@ -16,3 +16,9 @@ export const INDUSTRY_SUB_URL = (parentId) => `${INDUSTRY_BASE_URL}/${parentId}/
 // Department Service endpoints
 export const DEPARTMENT_BASE_URL = `${configURL.DEPARTMENT_URL}/${baseURL.DEPARTMENT}`;
 
+// Document Service endpoints
+export const DOCUMENT_BY_ID_URL = (documentId) => `${configURL.DOCUMENT_URL}/${baseURL.DOCUMENTS}/${documentId}`;
+export const DOCUMENTS_BY_ENTITY_URL = (entityId, entityType) => `${configURL.DOCUMENT_URL}/${baseURL.DOCUMENTS}/entity/${entityId}/${entityType}`;
+
+
+

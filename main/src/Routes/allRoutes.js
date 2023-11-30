@@ -8,10 +8,15 @@ import { DashboardEcommerce } from "@workspace/dashboard";
 import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
 
 // Account
-import { EditAccount, CreateAccount, AccountListing } from "@workspace/account";
+import { AccountListing, EditAccount, CreateAccount } from "@workspace/account";
 
 // Candidate
-import { CreateCandidate } from "@workspace/candidate";
+import {
+  CreateCandidate,
+  CandidateListing,
+  EditCandidate,
+  CandidateManage,
+} from "@workspace/candidate";
 
 // Job
 import { JobCreation, JobListing } from "@workspace/job";
@@ -45,8 +50,14 @@ const authProtectedRoutes = [
   // User Profile
   { path: "/profile", component: <UserProfile /> },
 
-  // Create Candidate
-  { path: "/create-candidate", component: <CreateCandidate /> },
+  // Candidate
+  { path: "/candidates", component: <CandidateListing /> },
+  {
+    path: "/candidates/create",
+    component: <CreateCandidate />,
+    requiredPermissions: [Permission.CANDIDATE_WRITE],
+  },
+  { path: "/candidates/:candidateId/:slug", component: <CandidateManage />},
 
   // Account
   {

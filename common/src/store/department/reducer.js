@@ -6,31 +6,36 @@ import {
 
 const initialState = {
   department: [],
-  errorMsg: "",
-  loading: false,
-  error: false,
+  meta: {},
+  createMeta: {},
+  updateMeta: {},
+  deleteMeta: {},
 };
+
+import {
+  errorMetaData,
+  pendingMetaData,
+  resetMetaData,
+  successMetaData,
+} from "../../metadata/utilities";
 
 const DepartmentReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_DEPARTMENT:
       return {
         ...state,
-        loading: true,
-        error: false,
+        meta: pendingMetaData(),
       };
     case FETCH_DEPARTMENT_SUCCESS:
       return {
         ...state,
-        loading: false,
+        meta: successMetaData(),
         department: action.payload,
       };
     case FETCH_DEPARTMENT_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        meta: errorMetaData(action.payload),
       };
     default:
       return state;

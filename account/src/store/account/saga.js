@@ -22,6 +22,9 @@ import {
   fetchAccountsFailure,
   fetchAccountsFieldsSuccess,
   fetchAccountsFieldsFailure,
+  setTableSuccess,
+  setTableFailure,
+  setTableReset,
 } from "./action";
 import {
   getAccounts,
@@ -41,44 +44,37 @@ import { toast } from "react-toastify";
 
 // Post account
 function* workPostAccount(action) {
-  const {
-    entity,
-    newData,
-    config,
-    rerenderTable,
-    resetForm,
-    id,
-    navigate,
-    link,
-    handleNext,
-  } = action.payload;
+  const { entity, newData, config, rerenderTable, id, resetForm } =
+    action.payload;
   try {
     const response = yield call(createAccount, entity, id, newData, config);
-    yield put(postAccountSuccess(response.data));
-    if (typeof rerenderTable === "function") {
-      rerenderTable();
+    if (
+      entity === AccountEntityConstant.ACCOUNT_ACCOUNT ||
+      entity === AccountEntityConstant.ACCOUNT_INSTRUCTION ||
+      entity === AccountEntityConstant.ACCOUNT_COMMERCIAL
+    ) {
+      yield put(postAccountSuccess(response.data));
     }
+
     if (typeof resetForm === "function") {
       resetForm();
     }
-    if (typeof navigate === "function") {
-      navigate(link);
+
+    if (typeof rerenderTable === "function") {
+      rerenderTable();
     }
 
     if (entity === AccountEntityConstant.ACCOUNT_ACCOUNT) {
-      handleNext();
       yield put(setAccountId(response.data.id));
       yield put(setAccountCountry(response.data.accountCountry));
       return;
     }
+
     if (entity === AccountEntityConstant.ACCOUNT_COMMERCIAL) {
       yield put(deleteAccountId());
       yield put(deleteAccountCountry());
       toast.success("Account created successfully");
       return;
-    }
-    if (typeof handleNext === "function") {
-      handleNext();
     }
   } catch (error) {
     toast.error("Error creating account");
@@ -88,31 +84,31 @@ function* workPostAccount(action) {
 
 // Put Account
 function* workPutAccount(action) {
-  const {
-    entity,
-    id,
-    newData,
-    config,
-    rerenderTable,
-    resetForm,
-    navigate,
-    link,
-    handleNext,
-  } = action.payload;
+  const { entity, id, newData, config, rerenderTable, resetForm } =
+    action.payload;
   try {
     const response = yield call(updateAccount, entity, id, newData, config);
-    yield put(putAccountSuccess(response.data));
-    if (typeof rerenderTable === "function") {
-      rerenderTable();
+    if (
+      entity === AccountEntityConstant.ACCOUNT_ACCOUNT ||
+      entity === AccountEntityConstant.ACCOUNT_INSTRUCTION ||
+      entity === AccountEntityConstant.ACCOUNT_COMMERCIAL
+    ) {
+      yield put(putAccountSuccess(response.data));
     }
+
+    if (entity === AccountEntityConstant.ACCOUNT_COMMERCIAL) {
+      yield put(deleteAccountId());
+      yield put(deleteAccountCountry());
+      toast.success("Account updated successfully");
+      return;
+    }
+    
     if (typeof resetForm === "function") {
       resetForm();
     }
-    if (typeof navigate === "function") {
-      navigate(link);
-    }
-    if (typeof handleNext === "function") {
-      handleNext();
+
+    if (typeof rerenderTable === "function") {
+      rerenderTable();
     }
   } catch (error) {
     toast.error("Error updating account");

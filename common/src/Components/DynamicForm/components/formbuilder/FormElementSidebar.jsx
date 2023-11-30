@@ -169,11 +169,41 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabel: "Single Select",
+      draggablePrefix: "element",
+      draggableId: "singleselect",
+      type: "field",
+    },
+    {
+      draggableLabel: "Single Select API",
+      draggablePrefix: "element",
+      draggableId: "singleselectapi",
+      type: "field",
+    },
+    {
+      draggableLabel: "Multi Select",
+      draggablePrefix: "element",
+      draggableId: "multiselect",
+      type: "field",
+    },
+    {
+      draggableLabel: "Multi Select API",
+      draggablePrefix: "element",
+      draggableId: "multiselectapi",
+      type: "field",
+    },
+    {
       draggableLabel: "Search Select",
       draggablePrefix: "element",
       draggableId: "searchselect",
       type: "field",
     },
+    {
+      draggableLabel: "Multi File Input",
+      draggablePrefix: "element",
+      draggableId: "multifile",
+      type: "field",
+    }
   ];
 
   // Layout List

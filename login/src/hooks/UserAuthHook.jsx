@@ -22,6 +22,12 @@ const useUserAuth = () => {
     } catch (error) {}
   }, []);
 
+  // ------------------ Get Name: firstName lastName-----------------
+  const getName = () => {
+    return userProfile?.firstName + " " + userProfile?.lastName;
+  };
+
+
   // ------------------ Get & Check UserGroup ------------------
   function getAllUserGroups() {
     const userGroupList = [];
@@ -160,6 +166,7 @@ const useUserAuth = () => {
     checkAnyUserGroup,
     checkAllRole,
     checkAnyRole,
+    getName,
     Permission,
   };
 };

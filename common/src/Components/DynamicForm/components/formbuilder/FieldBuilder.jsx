@@ -21,7 +21,70 @@ const FieldBuilder = ({
   setShowModalSchema,
   formOptions,
 }) => {
+  //========================= States ================================
+  // Condition validation state
+  const [validationConditionList, setValidationConditionList] = useState(
+    formBuilderUpdateData?.conditionValidation
+      ? formBuilderUpdateData.conditionValidation
+      : []
+  );
   // ========================= Field Setting =========================
+  const generateList = (type) => {
+    if (type === "singleselectapi" || type === "multiselectapi") {
+      return [
+        {
+          label: "Industry",
+          value: "industry",
+        },
+        {
+          label: "Country",
+          value: "country",
+        },
+        {
+          label: "Department",
+          value: "department",
+        },
+        {
+          label: "Sub Industry",
+          value: "subIndustry",
+        },
+        {
+          label: "City",
+          value: "city",
+        },
+      ];
+    }
+    return [
+      {
+        label: "Primary Skills",
+        value: "primarySkills",
+      },
+      {
+        label: "Secondary Skills",
+        value: "secondarySkills",
+      },
+      {
+        label: "Spoken languages",
+        value: "spokenLanguages",
+      },
+      {
+        label: "Employment Type",
+        value: "employmentType",
+      },
+      {
+        label: "Location Type",
+        value: "locationType",
+      },
+      {
+        label: "Qualifications",
+        value: "qualifications",
+      },
+      {
+        label: "Visa Status",
+        value: "visaStatus",
+      },
+    ];
+  };
   // Overall Form schema config (For all types of fields)
   const config = [
     {
@@ -54,6 +117,11 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -97,6 +165,11 @@ const FieldBuilder = ({
         "table",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
       validation: [
         {
@@ -105,7 +178,6 @@ const FieldBuilder = ({
         },
       ],
     },
-
     {
       label: "PlaceHolder",
       type: "text",
@@ -133,6 +205,11 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -171,6 +248,11 @@ const FieldBuilder = ({
         "buttonupdate",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -211,6 +293,11 @@ const FieldBuilder = ({
         // "buttonupdate"
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -238,6 +325,24 @@ const FieldBuilder = ({
       type: "text",
       name: "queryKey",
       apply: ["searchselect"],
+    },
+    {
+      label: "Select List",
+      type: "select",
+      name: "list",
+      options: generateList(type),
+      apply: [
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+      ],
+    },
+    {
+      label: "Options",
+      type: "keyvalue",
+      name: "options",
+      apply: ["radio", "select", "multiselect", "checkbox", "singleselect"],
     },
     {
       label: "Required",
@@ -286,6 +391,11 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -316,6 +426,11 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -531,7 +646,7 @@ const FieldBuilder = ({
           }
         },
       },
-      apply: ["file"],
+      apply: ["file", "multifile"],
     },
     {
       label: "File Type Validation Error Message",
@@ -540,7 +655,7 @@ const FieldBuilder = ({
       events: {
         disabled: true,
       },
-      apply: ["file"],
+      apply: ["file", "multifile"],
     },
     {
       label: "File Size Validation (MB)",
@@ -563,7 +678,7 @@ const FieldBuilder = ({
           }
         },
       },
-      apply: ["file"],
+      apply: ["file", "multifile"],
     },
     {
       label: "File Size Validation Error Message",
@@ -572,14 +687,9 @@ const FieldBuilder = ({
       events: {
         disabled: true,
       },
-      apply: ["file"],
+      apply: ["file", "multifile"],
     },
-    {
-      label: "Options",
-      type: "keyvalue",
-      name: "options",
-      apply: ["radio", "select", "multiselect", "checkbox"],
-    },
+
     {
       label: "Parent",
       type: "select",
@@ -588,7 +698,12 @@ const FieldBuilder = ({
         label: field.name,
         value: field.name,
       })),
-      apply: ["selectsubindustry", "selectstate", "selectcity"],
+      apply: [
+        "selectsubindustry",
+        "selectstate",
+        "selectcity",
+        "singleselectapi",
+      ],
     },
     {
       label: "Visible Off (Conditions)",
@@ -632,7 +747,95 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
       ],
+    },
+    {
+      label: "Conditional Validation",
+      type: "conditionalValidation",
+      name: "conditionalValidation",
+      conditionTypes: [
+        "equals",
+        "notEquals",
+        "contains",
+        "notContains",
+        "greaterThan",
+        "lessThan",
+        "greaterThanOrEqual",
+        "lessThanOrEqual",
+        "startsWith",
+        "endsWith",
+        "isEmpty",
+        "isNotEmpty",
+        "before",
+        "beforeOrEqual",
+        "after",
+        "afterOrEqual",
+      ],
+      apply: [
+        "text",
+        "email",
+        "number",
+        "textarea",
+        "file",
+        "select",
+        "radio",
+        "checkbox",
+        "password",
+        "date",
+        "selectindustry",
+        "selectsubindustry",
+        "selectcity",
+        "selectcountry",
+        "selectcurrency",
+        "selectlandline",
+        "selectstate",
+        "selectdepartment",
+        "editor",
+        "parentcompany",
+        "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+      ],
+    },
+    {
+      label: "Condition Validation Error Message",
+      type: "text",
+      name: "conditionValidationErrorMessage",
+      apply: [
+        "text",
+        "email",
+        "number",
+        "textarea",
+        "file",
+        "select",
+        "radio",
+        "checkbox",
+        "password",
+        "date",
+        "selectindustry",
+        "selectsubindustry",
+        "selectcountry",
+        "selectcity",
+        "selectcurrency",
+        "selectstate",
+        "selectlandline",
+        "selectdepartment",
+        "editor",
+        "parentcompany",
+        "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
+      ],
+      renderCondition: validationConditionList.length > 0,
     },
     {
       label: "Copy Fields",
@@ -674,6 +877,10 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "editor",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
       ],
     },
     // {
@@ -736,6 +943,11 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     // Which include key value pair for table
@@ -780,6 +992,11 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountcontact",
         "parentcompany",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -821,6 +1038,11 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -858,6 +1080,11 @@ const FieldBuilder = ({
         "editor",
         "parentcompany",
         "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
       ],
     },
     {
@@ -1005,6 +1232,21 @@ const FieldBuilder = ({
     case "searchselect":
       header = "Search Select Field";
       break;
+    case "singleselect":
+      header = "Single Select Field";
+      break;
+    case "multiselect":
+      header = "Multi Select Field";
+      break;
+    case "singleselectapi":
+      header = "Single Select API Field";
+      break;
+    case "multiselectapi":
+      header = "Multi Select API Field";
+      break;
+    case "multifile":
+      header = "Multi File Field";
+      break;
     default:
   }
 
@@ -1061,6 +1303,13 @@ const FieldBuilder = ({
     formBuilderUpdateData?.visible ? formBuilderUpdateData.visible : []
   );
 
+  // // Condition validation state
+  // const [validationConditionList, setValidationConditionList] = useState(
+  //   formBuilderUpdateData?.conditionValidation
+  //     ? formBuilderUpdateData.conditionValidation
+  //     : []
+  // );
+
   // Key copy condition state
   const [copyConditionList, setCopyConditionList] = useState(
     formBuilderUpdateData?.copyFields
@@ -1101,7 +1350,8 @@ const FieldBuilder = ({
         type === "radio" ||
         type === "select" ||
         type === "multiselect" ||
-        type === "checkbox"
+        type === "checkbox" ||
+        type === "singleselect"
       ) {
         validationSchema.options = keyValueList;
       }
@@ -1116,6 +1366,7 @@ const FieldBuilder = ({
       validationSchema.visible = conditionList;
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
+      validationSchema.conditionValidation = validationConditionList;
       updateFormField(validationSchema, formBuilderUpdateData.index);
       setFormBuilderType(null);
       setFormBuilderUpdateData(null);
@@ -1126,7 +1377,8 @@ const FieldBuilder = ({
         type === "radio" ||
         type === "select" ||
         type === "multiselect" ||
-        type === "checkbox"
+        type === "checkbox" ||
+        type === "singleselect"
       ) {
         validationSchema.options = keyValueList;
       }
@@ -1140,6 +1392,7 @@ const FieldBuilder = ({
       validationSchema.visible = conditionList;
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
+      validationSchema.conditionValidation = validationConditionList;
       addFormField(validationSchema);
       // Set Form Schema
       setFormFieldId(validationSchema.fieldId);
@@ -1168,7 +1421,11 @@ const FieldBuilder = ({
     <form onSubmit={formik.handleSubmit}>
       <h1 className="mb-4">{header}</h1>
       {schema?.map((field, index) => {
-        if (field.type === "text" && ifContainsType(type, field.apply)) {
+        if (
+          field.type === "text" &&
+          ifContainsType(type, field.apply) &&
+          (field.renderCondition ?? true)
+        ) {
           return (
             <div className="mb-3">
               <label htmlFor={field.name} className="form-label">
@@ -1496,6 +1753,112 @@ const FieldBuilder = ({
                         onClick={() => {
                           setConditionList(
                             conditionList.filter((item, i) => i !== index)
+                          );
+                        }}
+                      />
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        } else if (
+          field.type === "conditionalValidation" &&
+          ifContainsType(type, field.apply)
+        ) {
+          return (
+            <div className="mb-3">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <label htmlFor={field.name} className="form-label">
+                  {field.label}
+                </label>
+                <button
+                  type="button"
+                  className="btn btn-success btn-sm"
+                  onClick={() => {
+                    setValidationConditionList([
+                      ...validationConditionList,
+                      { field: "", condition: "", value: "" },
+                    ]);
+                  }}
+                >
+                  +add
+                </button>
+              </div>
+              {validationConditionList.map((condition, index) => {
+                return (
+                  <div className="d-flex gap-2 mb-2 align-items-center">
+                    <span>{index + 1}) </span>
+                    <select
+                      className="form-select"
+                      value={condition.condition}
+                      onChange={(e) =>
+                        setValidationConditionList((prev) =>
+                          prev.map((item, i) =>
+                            i === index
+                              ? { ...item, condition: e.target.value }
+                              : item
+                          )
+                        )
+                      }
+                    >
+                      <option value="">Select a condition</option>
+                      {field.conditionTypes.map((conditionType) => (
+                        <option value={conditionType}>{conditionType}</option>
+                      ))}
+                    </select>
+                    <select
+                      className="form-select"
+                      value={condition.field}
+                      onChange={(e) => {
+                        setValidationConditionList((prev) =>
+                          prev.map((item, i) =>
+                            i === index
+                              ? {
+                                  ...item,
+                                  field: e.target.value,
+                                  value: e.target.value ? "" : item.value,
+                                }
+                              : item
+                          )
+                        );
+                      }}
+                    >
+                      <option value="">Select a field</option>
+                      {formFields.map((field) => {
+                        return <option value={field.name}>{field.name}</option>;
+                      })}
+                    </select>
+                    <span>OR</span>
+                    <input
+                      id="conditionValue"
+                      name="conditionValue"
+                      type="text"
+                      className="form-control"
+                      onChange={(e) =>
+                        setValidationConditionList((prev) =>
+                          prev.map((item, i) =>
+                            i === index
+                              ? {
+                                  ...item,
+                                  value: e.target.value,
+                                  field: e.target.value ? "" : item.field,
+                                }
+                              : item
+                          )
+                        )
+                      }
+                      value={condition.value}
+                      placeholder="Value"
+                    />
+                    <span>
+                      <AiFillDelete
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setValidationConditionList(
+                            validationConditionList.filter(
+                              (item, i) => i !== index
+                            )
                           );
                         }}
                       />

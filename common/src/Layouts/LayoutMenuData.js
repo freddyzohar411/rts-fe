@@ -112,12 +112,6 @@ const Navdata = () => {
           link: "/accounts/create",
           parentId: "account",
         },
-        // {
-        //   id: "newAccount",
-        //   label: "Create New Account",
-        //   link: "/accounts/create",
-        //   parentId: "account",
-        // },
       ].filter(Boolean),
     },
 
@@ -205,13 +199,13 @@ const Navdata = () => {
           link: "/candidates",
           parentId: "candidates",
         },
-        {
+        checkAllPermission([Permission.CANDIDATE_WRITE]) && {
           id: "newCandidate",
           label: "Create New Candidate",
-          link: "/create-candidate",
+          link: "/candidates/create",
           parentId: "candidates",
         },
-      ],
+      ].filter(Boolean),
     },
 
     // Reports
@@ -242,8 +236,8 @@ const Navdata = () => {
         },
       ],
     },
-    //checkAllRole(["Super Admin"]) && // Settings
-    checkAllPermission([...Permission.SETTING_ALL]) && {
+    checkAllPermission([...Permission.SETTING_ALL]) &&
+    {
       id: "settings",
       label: "Settings",
       icon: "ri-settings-4-fill",

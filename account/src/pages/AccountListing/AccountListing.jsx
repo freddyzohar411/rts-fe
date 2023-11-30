@@ -13,6 +13,7 @@ import {
   fetchAccounts,
   fetchAccountsFields,
 } from "../../store/account/action";
+import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
 
 const AccountListing = () => {
@@ -26,6 +27,35 @@ const AccountListing = () => {
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+
+  // Custom renders
+  const customRenderList = [
+    {
+      names: ["updatedAt", "createdAt"],
+      render: (data, opt) =>
+        DateHelper.formatDateStandard(
+          DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
+        ),
+    },
+    {
+      names: ["accountSubmissionData.accountStatus"],
+      render: (data, opt) => (
+        <Badge
+          color={
+            DynamicTableHelper.getDynamicNestedResult(
+              data,
+              opt.value
+            )?.toLowerCase() === "active"
+              ? "success"
+              : "warning"
+          }
+          className="text-uppercase"
+        >
+          {DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"}
+        </Badge>
+      ),
+    },
+  ];
 
   // Table Hooks
   const {
@@ -48,7 +78,8 @@ const AccountListing = () => {
         ACCOUNT_INITIAL_OPTIONS
       ),
     },
-    DynamicTableHelper.generateConfig(ACCOUNT_INITIAL_OPTIONS)
+    ACCOUNT_INITIAL_OPTIONS,
+    customRenderList
   );
 
   //========================== User Setup ============================

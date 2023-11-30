@@ -13,6 +13,10 @@ const generateInitialValues = (formFieldData, formik) => {
       return { ...acc, [field.name]: [] };
     }
 
+    // if (field.type === "multifile") {
+    //   return { ...acc, [field.name]: [] };
+    // }
+
     // If there is a subname, then add it to the initial values
     if (field.subName && field.subName !== "") {
       return {
@@ -34,7 +38,6 @@ const generateValidationSchema = (formFieldData) => {
     formFieldData?.reduce((acc, field) => {
       if (!field.validation) return acc;
       let fieldValidation;
-
       switch (field.type) {
         case "string":
           fieldValidation = Yup.string();
@@ -44,6 +47,9 @@ const generateValidationSchema = (formFieldData) => {
           break;
         case "file":
           fieldValidation = Yup.mixed();
+          break;
+        case "multifile":
+          fieldValidation = Yup.array();
           break;
         default:
           fieldValidation = Yup.string();
@@ -109,8 +115,12 @@ const generateValidationSchema2 = (
         case "checkbox":
         case "radio":
         case "select":
+        case "multifile":
           fieldValidation = Yup.mixed();
           break;
+        // case "multifile":
+        //   fieldValidation = Yup.array();
+        //   break;
         case "date":
           fieldValidation = Yup.date();
           break;
@@ -119,8 +129,25 @@ const generateValidationSchema2 = (
           break;
       }
 
-      if (field.required === "true" || field.required === true) {
+      if (
+        (field.required === "true" || field.required === true) &&
+        field.type !== "multifile"
+      ) {
         fieldValidation = fieldValidation.required(field.requiredErrorMessage);
+      }
+
+      if (
+        (field.required === "true" || field.required === true) &&
+        field.type === "multifile"
+      ) {
+        fieldValidation = fieldValidation.test(
+          "fileRequired",
+          field.requiredErrorMessage,
+          (value) => {
+            if (value?.length === 0 || value === "") return false;
+            return true;
+          }
+        );
       }
 
       // String
@@ -194,6 +221,131 @@ const generateValidationSchema2 = (
             }
           );
         }
+      }
+
+      if (field.type === "multifile") {
+        if (field.fileTypeValidation) {
+          fieldValidation = fieldValidation.test(
+            "fileType",
+            field.fileTypeValidationErrorMessage,
+            (value) => {
+              if (value?.length === 0 || typeof value === "string") return true; // allow empty values
+              if (!value) return true; // allow empty values
+              if (value?.length > 0) {
+                let isValid = true;
+                value?.forEach((file) => {
+                  const validExtensions = field.fileTypeValidation; // List of valid extensions
+                  let extension = null;
+                  if (file?.name) {
+                    extension = file.name.split(".").pop(); // Extract extension
+                  } else {
+                    extension = file.split(".").pop(); // Extract extension
+                  }
+                  if (!validExtensions.includes(extension)) {
+                    isValid = false;
+                  }
+                });
+                return isValid;
+              }
+            }
+          );
+        }
+
+        if (field.fileSizeValidation) {
+          fieldValidation = fieldValidation.test(
+            "fileSize",
+            field.fileSizeValidationErrorMessage,
+            (value) => {
+              if (value?.length === 0 || typeof value === "string") return true;
+              if (!value || value === undefined) return true; // allow empty values
+              if (value?.length > 0) {
+                let isValid = true;
+                value?.forEach((file) => {
+                  const maxFileSize =
+                    parseInt(field.fileSizeValidation) * 1024 * 1024; // Maximum file size (in bytes)
+                  if (file.size > maxFileSize) {
+                    isValid = false;
+                  }
+                });
+                return isValid;
+              }
+            }
+          );
+        }
+      }
+
+      // Perform custom condition validation
+      if (field?.conditionValidation?.length > 0) {
+        fieldValidation = fieldValidation.test(
+          "conditionValidation",
+          field.conditionValidationErrorMessage,
+          (value) => {
+            if (!value) return true; // allow empty values
+            let isValid = true;
+            field?.conditionValidation.forEach((condition) => {
+              if (condition.field === "" && condition.value === "") return true;
+              const valueToCompare =
+                condition?.value || formik?.values[condition?.field];
+              if (valueToCompare === undefined) return true;
+
+              if (condition?.condition === "equals") {
+                if (value === valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "notEqual") {
+                if (value !== valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "greaterThan") {
+                if (value > valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "lessThan") {
+                if (value < valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "greaterThanOrEqual") {
+                if (value >= valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "lessThanOrEqual") {
+                if (value <= valueToCompare) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "before") {
+                // Compare dates
+                if (new Date(value) < new Date(valueToCompare)) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "after") {
+                // Compare dates
+                if (new Date(value) > new Date(valueToCompare)) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "beforeOrEqual") {
+                // Compare dates
+                if (new Date(value) <= new Date(valueToCompare)) {
+                  isValid = false;
+                }
+              }
+              if (condition?.condition === "afterOrEqual") {
+                // Compare dates
+                if (new Date(value) >= new Date(valueToCompare)) {
+                  isValid = false;
+                }
+              }
+            });
+            return isValid;
+          }
+        );
       }
 
       return { ...acc, [field.name]: fieldValidation };

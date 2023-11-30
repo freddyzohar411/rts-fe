@@ -6,6 +6,15 @@ export const resetMetaData = () => {
   successMessage: "";
 };
 
+export const resetAllMetaData = () => ({
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
+  isAbort: false,
+  successMessage: "",
+  errorMessage: "",
+})
+
 export const pendingMetaData = (successMessage = "", errorMessage = "") => ({
   isLoading: true,
   isSuccess: false,

@@ -1,6 +1,3 @@
-import { formatDateStandard } from "./date_helper";
-import { Badge } from "reactstrap";
-
 function cleanPageRequest(pageRequest) {
   const cleanPage = { ...pageRequest };
   Object.keys(cleanPage).forEach((key) => {
@@ -22,37 +19,31 @@ function generateSeachFieldArray(selectedOptGroup) {
 }
 
 function getDynamicNestedResult(data, value) {
-  const result = value.split(".").reduce((acc, part) => {
+  const result = value?.split(".").reduce((acc, part) => {
     return acc ? acc[part] : undefined;
   }, data);
   return result;
 }
 
-function generateConfig(selectedOptGroup) {
+function generateConfig(selectedOptGroup, customRender = []) {
   const config = [];
   selectedOptGroup.forEach((opt) => {
+    let renderMethod = null;
+    if (customRender.length > 0) {
+      renderMethod =
+        customRender.find((item) => {
+          return item.names.includes(opt.value);
+        })?.render || null;
+    }
+
     config.push({
       header: opt.label,
       name: opt.value,
       sort: opt.sort,
       sortValue: opt.sortValue,
       render: (data) => {
-        if (opt.value === "createdAt" || opt.value === "updatedAt") {
-          return formatDateStandard(
-            getDynamicNestedResult(data, opt.value) || "-"
-          );
-        }
-        if (opt.label?.toLowerCase().includes("status")) {
-          return <Badge
-            color={
-              getDynamicNestedResult(data, opt.value)?.toLowerCase() === "active"
-                ? "success"
-                : "warning"
-            }
-            className="text-uppercase"
-          >
-            {getDynamicNestedResult(data, opt.value) || "-"}
-          </Badge>;
+        if (renderMethod) {
+          return renderMethod(data, opt);
         }
         return getDynamicNestedResult(data, opt.value) || "-";
       },
@@ -62,7 +53,8 @@ function generateConfig(selectedOptGroup) {
 }
 
 export {
-    cleanPageRequest,
-    generateSeachFieldArray,
-    generateConfig,
-}
+  cleanPageRequest,
+  generateSeachFieldArray,
+  generateConfig,
+  getDynamicNestedResult,
+};

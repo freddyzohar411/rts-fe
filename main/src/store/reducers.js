@@ -21,6 +21,9 @@ import { Reducers as FormBuilderReducers } from "@workspace/formbuilder";
 // Settings
 import { Reducers as SettingReducers } from "@workspace/settings";
 
+// Candidate
+import { Reducers as CandidateReducers } from "@workspace/candidate";
+
 const {
   Layout,
   CityReducer,
@@ -49,6 +52,11 @@ const {
   PermissionReducer,
   GroupReducer,
 } = SettingReducers;
+
+const { CandidateFormReducer,
+  CandidateReducer,
+  CandidateRegistrationReducer
+} = CandidateReducers;
 
 const rootReducer = combineReducers({
   // Common
@@ -87,6 +95,11 @@ const rootReducer = combineReducers({
   ModuleReducer,
   PermissionReducer,
   GroupReducer,
+
+  //Candidate
+  CandidateFormReducer,
+  CandidateReducer,
+  CandidateRegistrationReducer
 });
 
 export default rootReducer;

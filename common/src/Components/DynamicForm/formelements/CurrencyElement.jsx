@@ -32,26 +32,24 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
 
   // Currency & Filter
   const [currencyDropdown, setCurrencyDropdown] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState({
-    currency: "Currency",
-    currencyId: formik?.values?.[field.subName],
-  });
+  const [selectedCurrency, setSelectedCurrency] = useState("Currency");
 
   useEffect(() => {
-    if (formik?.values?.[field.subName] && countryData) {
+    if (formik?.values?.[field?.subName] && countryData) {
       const country = countryData.find(
-        (country) => country.id === formik?.values?.[field.subName]
+        (country) =>
+          `${country?.currency} ${country?.currencySymbol}` ===
+          formik?.values?.[field.subName]
       );
-      setSelectedCurrency({
-        currency: `${country?.currency} ${country?.currencySymbol}`,
-        currencyId: formik?.values?.[field.subName],
-      });
+      if (country) {
+        setSelectedCurrency(`${country?.currency} ${country?.currencySymbol}`);
+      }
     }
   }, [formik?.values?.[field.subName]]);
 
   useEffect(() => {
-    if (selectedCurrency.currencyId) {
-      formik.setFieldValue(field.subName, selectedCurrency.currencyId);
+    if (selectedCurrency && formik?.values?.[field.subName]) {
+      formik.setFieldValue(field.subName, selectedCurrency);
     }
   }, [selectedCurrency]);
 
@@ -80,7 +78,7 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
         disabled={formState === "view" ? true : false}
         color="primary"
       >
-        <span>{selectedCurrency.currency}</span>
+        <span>{selectedCurrency}</span>
       </DropdownToggle>
 
       <Input
@@ -113,11 +111,9 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
               key={country.id}
               as="li"
               onClick={() =>
-                setSelectedCurrency((prev) => ({
-                  ...prev,
-                  currency: `${country.currency} ${country.currencySymbol}`,
-                  currencyId: country.id,
-                }))
+                setSelectedCurrency(
+                  (prev) => `${country.currency} ${country.currencySymbol}`
+                )
               }
               className="dropdown-item d-flex"
             >

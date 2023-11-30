@@ -12,15 +12,14 @@ const CitySelectElement = ({ formik, field, formStateHook }) => {
 
   const [fetchedData, setFetchData] = useState([]);
 
-  const countryToCountryId = (countryName) => {
+  const getIdfromCountry = (countryName) => {
     const country = countryData.find((country) => country.name === countryName);
     return parseInt(country.id);
   };
 
   useEffect(() => {
     if (formik?.values?.[field.parent]) {
-      // setFetchData([]);
-      dispatch(fetchCity(countryToCountryId(formik?.values?.[field.parent])));
+      dispatch(fetchCity(getIdfromCountry(formik?.values?.[field.parent])));
     }
   }, [formik?.values?.[field.parent]]);
 
@@ -50,7 +49,7 @@ const CitySelectElement = ({ formik, field, formStateHook }) => {
         >
           <option value="">{field.placeholder}</option>
           {fetchedData.map((item, index) => (
-            <option key={index} value={item.id}>
+            <option key={index} value={item.name}>
               {item.name}
             </option>
           ))}

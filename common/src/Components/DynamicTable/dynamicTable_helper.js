@@ -19,7 +19,7 @@ function generateSeachFieldArray(selectedOptGroup) {
 }
 
 function getDynamicNestedResult(data, value) {
-  const result = value.split(".").reduce((acc, part) => {
+  const result = value?.split(".")?.reduce((acc, part) => {
     return acc ? acc[part] : undefined;
   }, data);
   return result;
