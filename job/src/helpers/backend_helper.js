@@ -19,8 +19,8 @@ export const getJobs = (data) =>
 
 export const createJob = (data) => api.create(`${JOB_URL}${BASE_JOBS}`, data);
 
-export const updateJob = (entity, id, data, config) =>
-  api.put(`${JOB_URL}${BASE_JOBS}`, data, config);
+export const updateJob = (id, data) =>
+  api.put(`${JOB_URL}${BASE_JOBS}/${id}`, data);
 
 export const deleteJob = (id) => api.delete(`${JOB_URL}${BASE_JOBS}/${id}`);
 

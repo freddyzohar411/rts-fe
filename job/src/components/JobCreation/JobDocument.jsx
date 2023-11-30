@@ -19,6 +19,7 @@ const JobDocument = ({ jobId }) => {
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
   const { type } = useParams();
+  const isView = type === "view";
 
   const documentForm = useSelector(
     (state) => state.JobFormReducer.documentForm
@@ -57,7 +58,6 @@ const JobDocument = ({ jobId }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(clearJobFormSubmission());
     setEditData(null);
     if (documentForm) {
       const formEdited = setTableAPI(
@@ -183,7 +183,7 @@ const JobDocument = ({ jobId }) => {
       onSubmit={handleFormSubmit}
       onFormFieldsChange={handleFormFieldChange}
       errorMessage={errorMessage}
-      view={false}
+      view={isView}
     />
   );
 };

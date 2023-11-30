@@ -28,7 +28,7 @@ const JobCreation = () => {
   );
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
-  const randomId = -99;
+  const [randomId, setRandomId] = useState(jobId ? jobId : -99);
 
   // Fetch all the countries and account names
   useEffect(() => {
@@ -70,6 +70,7 @@ const JobCreation = () => {
   ) => {
     // Check files array is empty or not
     const payload = {
+      id: jobId,
       title: values?.jobTitle,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),
@@ -79,7 +80,6 @@ const JobCreation = () => {
   };
 
   document.title = "Job Creation | RTS";
-
   return (
     <Container className="page-content">
       <Form

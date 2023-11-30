@@ -23,6 +23,7 @@ import {
   getJobById,
   createJobDocument,
   updateJobDocument,
+  updateJob,
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
@@ -48,7 +49,12 @@ function* workCreateJob(action) {
   const { payload, navigate } = action.payload;
   try {
     // Create a job
-    const jobResponse = yield call(createJob, payload);
+    let jobResponse = null;
+    if (payload?.id) {
+      jobResponse = yield call(updateJob, payload?.id, payload);
+    } else {
+      jobResponse = yield call(createJob, payload);
+    }
     yield put(createJobSuccess(jobResponse.data));
     toast.success(jobResponse?.message);
     navigate("/jobs");
