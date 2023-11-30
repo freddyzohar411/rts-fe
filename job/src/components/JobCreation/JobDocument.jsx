@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Form } from "@workspace/common";
 import { JOB_DOCUMENT_NAME } from "./constants";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearJobFormSubmission,
