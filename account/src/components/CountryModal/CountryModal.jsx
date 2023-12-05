@@ -10,6 +10,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Label,
 } from "reactstrap";
 // import { countries } from "./countries";
 import SimpleBar from "simplebar-react";
@@ -63,20 +64,25 @@ function CountryModal({ setCountry }) {
 
   const renderCountries = (country, index) => (
     <Col lg={4} md={4} sm={4} xs={4} key={index}>
-      <Card
-        className="p-3 my-2 d-flex flex-row gap-2 align-items-center"
-        style={{ height: "70px" }}
+      <Label
+        className="w-100"
+        style={{ cursor: "pointer" }}
+        onClick={() => handleCountrySelect(country)}
       >
-        <Input
-          type="radio"
-          name="country"
-          className="form-check-input"
-          value={searchQuery}
-          onChange={() => handleCountrySelect(country)}
-        />
-        <Flag code={country.iso3} height="17" width="25.5" />
-        <span style={{ fontSize: "15px" }}>{country.name}</span>
-      </Card>
+        <Card
+          className="p-3 my-2 d-flex flex-row gap-2 align-items-center"
+          style={{ height: "70px" }}
+        >
+          <Input
+            type="radio"
+            name="country"
+            className="form-check-input"
+            onChange={() => handleCountrySelect(country)}
+          />
+          <Flag code={country.iso3} height="17" width="25.5" />
+          <span style={{ fontSize: "15px" }}>{country.name}</span>
+        </Card>
+      </Label>
     </Col>
   );
 

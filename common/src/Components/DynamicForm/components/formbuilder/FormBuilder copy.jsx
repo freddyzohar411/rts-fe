@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormikProvider, useFormik } from "formik";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DroppableList from "./DroppableList";
-import "./FormBuilder.scss";
+// import "./FormBuilder.scss";
 import Modal from "../modal/Modal";
 import {
   generateInitialValues,

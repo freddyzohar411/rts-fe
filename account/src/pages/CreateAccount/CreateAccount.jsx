@@ -645,7 +645,7 @@ const AccountCreation = () => {
   return (
     <>
       {isModalOpen && !accountId && <CountryModal setCountry={setCountry} />}
-      <Container className="page-content">
+      <Container fluid className="page-content">
         <FormStepper
           activeStep={step}
           handleBack={handleBack}

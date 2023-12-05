@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
+import { Card, CardBody } from "reactstrap";
 import {
   generateInitialValues,
   generateValidationSchemaForFieldBuilder,
@@ -175,7 +176,7 @@ const FieldBuilder = ({
       ],
     },
     {
-      label: "PlaceHolder",
+      label: "Placeholder",
       type: "text",
       name: "placeholder",
       apply: [
@@ -1380,997 +1381,1038 @@ const FieldBuilder = ({
   }, []);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <h1 className="mb-4">{header}</h1>
-      {schema?.map((field, index) => {
-        if (
-          field.type === "text" &&
-          ifContainsType(type, field.apply) &&
-          (field.renderCondition ?? true)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-              <input
-                id={field.name}
-                name={field.name}
-                type={field.type}
-                className="form-control"
-                onChange={formik.handleChange}
-                value={formik.values[field.name]}
-                {...field.events}
-              />
-              {formik.errors[field.name] && formik.touched[field.name] ? (
-                <div style={{ color: "red" }}>{formik.errors[field.name]}</div>
-              ) : null}
-            </div>
-          );
-        } else if (
-          field.type === "textarea" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-              <textarea
-                id={field.name}
-                name={field.name}
-                type={field.type}
-                className="form-control"
-                onChange={formik.handleChange}
-                value={formik.values[field.name]}
-                {...field.events}
-              />
-              {formik.errors[field.name] && formik.touched[field.name] ? (
-                <div>{formik.errors[field.name]}</div>
-              ) : null}
-            </div>
-          );
-        } else if (
-          field.type === "select" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-              <select
-                id={field.name}
-                name={field.name}
-                type={field.type}
-                className="form-control"
-                onChange={formik.handleChange}
-                value={formik.values[field.name]}
-              >
-                <option value="">{`Select a ${field.name}`}</option>
-                {field.options.map((option) => {
-                  return <option value={option.value}>{option.label}</option>;
-                })}
-              </select>
-              {formik.errors[field.name] && formik.touched[field.name] ? (
-                <div>{formik.errors[field.name]}</div>
-              ) : null}
-            </div>
-          );
-        } else if (
-          field.type === "radio" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-              <div className="d-flex gap-3">
-                {field.options.map((option) => {
-                  // if (field?.defaultValue === option.value){
-                  //   formik.setFieldValue(field.name, option.value);
-                  // }
-                  return (
-                    <div className="form-check" key={option.value}>
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name={field.name}
-                        id={option.label}
-                        // checked={formik.values[field.name] === option.value || field.defaultValue === option.value}
-                        value={option.value} // Use option.value here
-                        onChange={formik.handleChange}
-                        checked={formik.values[field.name] === option.value}
-                        {...field.events}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor={option.label}
-                        id={option.label}
-                      >
-                        {option.label}
-                      </label>
+    <div className="bg-light">
+      <Card>
+        <CardBody>
+          <form onSubmit={formik.handleSubmit}>
+            <span className="h5">{header}</span>
+            {schema?.map((field, index) => {
+              if (
+                field.type === "text" &&
+                ifContainsType(type, field.apply) &&
+                (field.renderCondition ?? true)
+              ) {
+                return (
+                  <div className="my-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <input
+                      id={field.name}
+                      name={field.name}
+                      type={field.type}
+                      placeholder={`Enter ${field.label}`}
+                      className="form-control"
+                      onChange={formik.handleChange}
+                      value={formik.values[field.name]}
+                      {...field.events}
+                    />
+                    {formik.errors[field.name] && formik.touched[field.name] ? (
+                      <div style={{ color: "red" }}>
+                        {formik.errors[field.name]}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              } else if (
+                field.type === "textarea" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <textarea
+                      id={field.name}
+                      name={field.name}
+                      type={field.type}
+                      className="form-control"
+                      onChange={formik.handleChange}
+                      value={formik.values[field.name]}
+                      {...field.events}
+                    />
+                    {formik.errors[field.name] && formik.touched[field.name] ? (
+                      <div>{formik.errors[field.name]}</div>
+                    ) : null}
+                  </div>
+                );
+              } else if (
+                field.type === "select" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <select
+                      id={field.name}
+                      name={field.name}
+                      type={field.type}
+                      className="form-control"
+                      onChange={formik.handleChange}
+                      value={formik.values[field.name]}
+                    >
+                      <option value="">{`Select a ${field.name}`}</option>
+                      {field.options.map((option) => {
+                        return (
+                          <option value={option.value}>{option.label}</option>
+                        );
+                      })}
+                    </select>
+                    {formik.errors[field.name] && formik.touched[field.name] ? (
+                      <div>{formik.errors[field.name]}</div>
+                    ) : null}
+                  </div>
+                );
+              } else if (
+                field.type === "radio" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <div className="d-flex gap-3">
+                      {field.options.map((option) => {
+                        // if (field?.defaultValue === option.value){
+                        //   formik.setFieldValue(field.name, option.value);
+                        // }
+                        return (
+                          <div className="form-check" key={option.value}>
+                            <input
+                              className="form-check-input"
+                              type="radio"
+                              name={field.name}
+                              id={option.label}
+                              // checked={formik.values[field.name] === option.value || field.defaultValue === option.value}
+                              value={option.value} // Use option.value here
+                              onChange={formik.handleChange}
+                              checked={
+                                formik.values[field.name] === option.value
+                              }
+                              {...field.events}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor={option.label}
+                              id={option.label}
+                            >
+                              {option.label}
+                            </label>
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-              </div>
-              {formik.errors[field.name] && formik.touched[field.name] ? (
-                <div>{formik.errors[field.name]}</div>
-              ) : null}
-            </div>
-          );
-        } else if (
-          field.type === "number" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
+                    {formik.errors[field.name] && formik.touched[field.name] ? (
+                      <div>{formik.errors[field.name]}</div>
+                    ) : null}
+                  </div>
+                );
+              } else if (
+                field.type === "number" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
 
-              <input
-                id={field.name}
-                name={field.name}
-                type={field.type}
-                className="form-control"
-                onChange={formik.handleChange}
-                value={formik.values[field.name]}
-                {...field.events}
-              />
-              {formik.errors[field.name] && formik.touched[field.name] ? (
-                <div>{formik.errors[field.name]}</div>
-              ) : null}
-            </div>
-          );
-        } else if (
-          field.type === "multiselect" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-              <select
-                id={field.name}
-                name={field.name}
-                type={field.type}
-                className="form-control"
-                onChange={formik.handleChange}
-                value={formik.values[field.name]}
-                multiple
-                {...field.events}
-              >
-                {field.options.map((option) => {
-                  return <option value={option.value}>{option.label}</option>;
-                })}
-              </select>
-              {formik.errors[field.name] && formik.touched[field.name] ? (
-                <div>{formik.errors[field.name]}</div>
-              ) : null}
-            </div>
-          );
-        } else if (
-          field.type === "keyvalue" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <label htmlFor={field.name} className="form-label">
-                  {field.label}
-                </label>
-                <button
-                  type="button"
-                  className="btn btn-success btn-sm"
-                  onClick={() => {
-                    setKeyValueList([
-                      ...keyValueList,
-                      { label: "", value: "" },
-                    ]);
-                  }}
-                >
-                  +add
-                </button>
-              </div>
+                    <input
+                      id={field.name}
+                      name={field.name}
+                      type={field.type}
+                      className="form-control"
+                      onChange={formik.handleChange}
+                      value={formik.values[field.name]}
+                      {...field.events}
+                    />
+                    {formik.errors[field.name] && formik.touched[field.name] ? (
+                      <div>{formik.errors[field.name]}</div>
+                    ) : null}
+                  </div>
+                );
+              } else if (
+                field.type === "multiselect" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <select
+                      id={field.name}
+                      name={field.name}
+                      type={field.type}
+                      className="form-control"
+                      onChange={formik.handleChange}
+                      value={formik.values[field.name]}
+                      multiple
+                      {...field.events}
+                    >
+                      {field.options.map((option) => {
+                        return (
+                          <option value={option.value}>{option.label}</option>
+                        );
+                      })}
+                    </select>
+                    {formik.errors[field.name] && formik.touched[field.name] ? (
+                      <div>{formik.errors[field.name]}</div>
+                    ) : null}
+                  </div>
+                );
+              } else if (
+                field.type === "keyvalue" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <label htmlFor={field.name} className="form-label">
+                        {field.label}
+                      </label>
+                      <button
+                        type="button"
+                        className="btn btn-success btn-sm"
+                        onClick={() => {
+                          setKeyValueList([
+                            ...keyValueList,
+                            { label: "", value: "" },
+                          ]);
+                        }}
+                      >
+                        Add
+                      </button>
+                    </div>
 
-              {keyValueList.map((keyValue, index) => {
-                return (
-                  <div className="d-flex gap-2 mb-2 align-items-center">
-                    <span>{index + 1}) </span>
-                    <input
-                      id="optionLabel"
-                      name="optionLabel"
-                      type="text"
-                      className="form-control"
-                      onChange={(e) => {
-                        setKeyValueList(
-                          keyValueList.map((item, i) =>
-                            i === index
-                              ? { ...item, label: e.target.value }
-                              : item
-                          )
-                        );
-                      }}
-                      value={keyValue.label}
-                      placeholder="label"
-                    />
-                    <input
-                      id="optionValue"
-                      name="optionValue"
-                      type="text"
-                      className="form-control"
-                      onChange={(e) =>
-                        setKeyValueList(
-                          keyValueList.map((item, i) =>
-                            i === index
-                              ? { ...item, value: e.target.value }
-                              : item
-                          )
-                        )
-                      }
-                      value={keyValue.value}
-                      placeholder="Value"
-                    />
-                    <span>
-                      <AiFillDelete
-                        className="cursor-pointer"
-                        onClick={() => {
-                          setKeyValueList(
-                            keyValueList.filter((item, i) => i !== index)
-                          );
-                        }}
-                      />
-                    </span>
+                    {keyValueList.map((keyValue, index) => {
+                      return (
+                        <div className="d-flex gap-2 mb-2 align-items-center">
+                          <span>{index + 1}) </span>
+                          <input
+                            id="optionLabel"
+                            name="optionLabel"
+                            type="text"
+                            className="form-control"
+                            onChange={(e) => {
+                              setKeyValueList(
+                                keyValueList.map((item, i) =>
+                                  i === index
+                                    ? { ...item, label: e.target.value }
+                                    : item
+                                )
+                              );
+                            }}
+                            value={keyValue.label}
+                            placeholder="label"
+                          />
+                          <input
+                            id="optionValue"
+                            name="optionValue"
+                            type="text"
+                            className="form-control"
+                            onChange={(e) =>
+                              setKeyValueList(
+                                keyValueList.map((item, i) =>
+                                  i === index
+                                    ? { ...item, value: e.target.value }
+                                    : item
+                                )
+                              )
+                            }
+                            value={keyValue.value}
+                            placeholder="Value"
+                          />
+                          <span>
+                            <AiFillDelete
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setKeyValueList(
+                                  keyValueList.filter((item, i) => i !== index)
+                                );
+                              }}
+                            />
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
-              })}
-            </div>
-          );
-        } else if (
-          field.type === "visible" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <label htmlFor={field.name} className="form-label">
-                  {field.label}
-                </label>
-                <button
-                  type="button"
-                  className="btn btn-success btn-sm"
-                  onClick={() => {
-                    setConditionList([
-                      ...conditionList,
-                      { field: "", condition: "", value: "" },
-                    ]);
-                  }}
-                >
-                  +add
-                </button>
-              </div>
-              {conditionList.map((condition, index) => {
+              } else if (
+                field.type === "visible" &&
+                ifContainsType(type, field.apply)
+              ) {
                 return (
-                  <div className="d-flex gap-2 mb-2 align-items-center">
-                    <span>{index + 1}) </span>
-                    <select
-                      className="form-select"
-                      value={condition.field}
-                      onChange={(e) =>
-                        setConditionList((prev) =>
-                          prev.map((item, i) =>
-                            i === index
-                              ? { ...item, field: e.target.value }
-                              : item
-                          )
-                        )
-                      }
-                    >
-                      <option value="">Select a field</option>
-                      {formFields.map((field) => {
-                        return <option value={field.name}>{field.name}</option>;
-                      })}
-                    </select>
-                    <select
-                      className="form-select"
-                      value={condition.condition}
-                      onChange={(e) =>
-                        setConditionList((prev) =>
-                          prev.map((item, i) =>
-                            i === index
-                              ? { ...item, condition: e.target.value }
-                              : item
-                          )
-                        )
-                      }
-                    >
-                      <option value="">Select a condition</option>
-                      {field.conditionTypes.map((conditionType) => (
-                        <option value={conditionType}>{conditionType}</option>
-                      ))}
-                    </select>
-                    <input
-                      id="conditionValue"
-                      name="conditionValue"
-                      type="text"
-                      className="form-control"
-                      onChange={(e) =>
-                        setConditionList((prev) =>
-                          prev.map((item, i) =>
-                            i === index
-                              ? { ...item, value: e.target.value }
-                              : item
-                          )
-                        )
-                      }
-                      value={condition.value}
-                      placeholder="Value"
-                    />
-                    <span>
-                      <AiFillDelete
-                        className="cursor-pointer"
+                  <div className="mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <label htmlFor={field.name} className="form-label">
+                        {field.label}
+                      </label>
+                      <button
+                        type="button"
+                        className="btn btn-custom-primary px-3 btn-sm"
                         onClick={() => {
-                          setConditionList(
-                            conditionList.filter((item, i) => i !== index)
-                          );
+                          setConditionList([
+                            ...conditionList,
+                            { field: "", condition: "", value: "" },
+                          ]);
                         }}
-                      />
-                    </span>
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {conditionList.map((condition, index) => {
+                      return (
+                        <div className="d-flex gap-2 mb-2 align-items-center">
+                          <span>{index + 1}) </span>
+                          <select
+                            className="form-select"
+                            value={condition.field}
+                            onChange={(e) =>
+                              setConditionList((prev) =>
+                                prev.map((item, i) =>
+                                  i === index
+                                    ? { ...item, field: e.target.value }
+                                    : item
+                                )
+                              )
+                            }
+                          >
+                            <option value="">Select a field</option>
+                            {formFields.map((field) => {
+                              return (
+                                <option value={field.name}>{field.name}</option>
+                              );
+                            })}
+                          </select>
+                          <select
+                            className="form-select"
+                            value={condition.condition}
+                            onChange={(e) =>
+                              setConditionList((prev) =>
+                                prev.map((item, i) =>
+                                  i === index
+                                    ? { ...item, condition: e.target.value }
+                                    : item
+                                )
+                              )
+                            }
+                          >
+                            <option value="">Select a condition</option>
+                            {field.conditionTypes.map((conditionType) => (
+                              <option value={conditionType}>
+                                {conditionType}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            id="conditionValue"
+                            name="conditionValue"
+                            type="text"
+                            className="form-control"
+                            onChange={(e) =>
+                              setConditionList((prev) =>
+                                prev.map((item, i) =>
+                                  i === index
+                                    ? { ...item, value: e.target.value }
+                                    : item
+                                )
+                              )
+                            }
+                            value={condition.value}
+                            placeholder="Value"
+                          />
+                          <span>
+                            <AiFillDelete
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setConditionList(
+                                  conditionList.filter((item, i) => i !== index)
+                                );
+                              }}
+                            />
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
-              })}
-            </div>
-          );
-        } else if (
-          field.type === "conditionalValidation" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <label htmlFor={field.name} className="form-label">
-                  {field.label}
-                </label>
-                <button
-                  type="button"
-                  className="btn btn-success btn-sm"
-                  onClick={() => {
-                    setValidationConditionList([
-                      ...validationConditionList,
-                      { field: "", condition: "", value: "" },
-                    ]);
-                  }}
-                >
-                  +add
-                </button>
-              </div>
-              {validationConditionList.map((condition, index) => {
+              } else if (
+                field.type === "conditionalValidation" &&
+                ifContainsType(type, field.apply)
+              ) {
                 return (
-                  <div className="d-flex gap-2 mb-2 align-items-center">
-                    <span>{index + 1}) </span>
-                    <select
-                      className="form-select"
-                      value={condition.condition}
-                      onChange={(e) =>
-                        setValidationConditionList((prev) =>
-                          prev.map((item, i) =>
-                            i === index
-                              ? { ...item, condition: e.target.value }
-                              : item
-                          )
-                        )
-                      }
-                    >
-                      <option value="">Select a condition</option>
-                      {field.conditionTypes.map((conditionType) => (
-                        <option value={conditionType}>{conditionType}</option>
-                      ))}
-                    </select>
-                    <select
-                      className="form-select"
-                      value={condition.field}
-                      onChange={(e) => {
-                        setValidationConditionList((prev) =>
-                          prev.map((item, i) =>
-                            i === index
-                              ? {
-                                  ...item,
-                                  field: e.target.value,
-                                  value: e.target.value ? "" : item.value,
-                                }
-                              : item
-                          )
-                        );
-                      }}
-                    >
-                      <option value="">Select a field</option>
-                      {formFields.map((field) => {
-                        return <option value={field.name}>{field.name}</option>;
-                      })}
-                    </select>
-                    <span>OR</span>
-                    <input
-                      id="conditionValue"
-                      name="conditionValue"
-                      type="text"
-                      className="form-control"
-                      onChange={(e) =>
-                        setValidationConditionList((prev) =>
-                          prev.map((item, i) =>
-                            i === index
-                              ? {
-                                  ...item,
-                                  value: e.target.value,
-                                  field: e.target.value ? "" : item.field,
-                                }
-                              : item
-                          )
-                        )
-                      }
-                      value={condition.value}
-                      placeholder="Value"
-                    />
-                    <span>
-                      <AiFillDelete
-                        className="cursor-pointer"
+                  <div className="mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <label htmlFor={field.name} className="form-label">
+                        {field.label}
+                      </label>
+                      <button
+                        type="button"
+                        className="btn btn-custom-primary px-3 btn-sm"
                         onClick={() => {
-                          setValidationConditionList(
-                            validationConditionList.filter(
-                              (item, i) => i !== index
-                            )
-                          );
+                          setValidationConditionList([
+                            ...validationConditionList,
+                            { field: "", condition: "", value: "" },
+                          ]);
                         }}
-                      />
-                    </span>
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {validationConditionList.map((condition, index) => {
+                      return (
+                        <div className="d-flex gap-2 mb-2 align-items-center">
+                          <span>{index + 1}) </span>
+                          <select
+                            className="form-select"
+                            value={condition.condition}
+                            onChange={(e) =>
+                              setValidationConditionList((prev) =>
+                                prev.map((item, i) =>
+                                  i === index
+                                    ? { ...item, condition: e.target.value }
+                                    : item
+                                )
+                              )
+                            }
+                          >
+                            <option value="">Select a condition</option>
+                            {field.conditionTypes.map((conditionType) => (
+                              <option value={conditionType}>
+                                {conditionType}
+                              </option>
+                            ))}
+                          </select>
+                          <select
+                            className="form-select"
+                            value={condition.field}
+                            onChange={(e) => {
+                              setValidationConditionList((prev) =>
+                                prev.map((item, i) =>
+                                  i === index
+                                    ? {
+                                        ...item,
+                                        field: e.target.value,
+                                        value: e.target.value ? "" : item.value,
+                                      }
+                                    : item
+                                )
+                              );
+                            }}
+                          >
+                            <option value="">Select a field</option>
+                            {formFields.map((field) => {
+                              return (
+                                <option value={field.name}>{field.name}</option>
+                              );
+                            })}
+                          </select>
+                          <span>OR</span>
+                          <input
+                            id="conditionValue"
+                            name="conditionValue"
+                            type="text"
+                            className="form-control"
+                            onChange={(e) =>
+                              setValidationConditionList((prev) =>
+                                prev.map((item, i) =>
+                                  i === index
+                                    ? {
+                                        ...item,
+                                        value: e.target.value,
+                                        field: e.target.value ? "" : item.field,
+                                      }
+                                    : item
+                                )
+                              )
+                            }
+                            value={condition.value}
+                            placeholder="Value"
+                          />
+                          <span>
+                            <AiFillDelete
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setValidationConditionList(
+                                  validationConditionList.filter(
+                                    (item, i) => i !== index
+                                  )
+                                );
+                              }}
+                            />
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
-              })}
-            </div>
-          );
-        } else if (
-          field.type === "copyFields" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <select
-                  className="form-select w-50"
-                  value={copyConditionList.copyField}
-                  onChange={(e) =>
-                    setCopyConditionList((prev) => ({
-                      ...prev,
-                      copyField: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Select a field</option>
-                  {formFields.map((field) => {
-                    return <option value={field.name}>{field.name}</option>;
-                  })}
-                </select>
-                <button
-                  type="button"
-                  className="btn btn-success btn-sm"
-                  disabled={!copyConditionList.copyField}
-                  onClick={() => {
-                    setCopyConditionList({
-                      ...copyConditionList,
-                      conditionList: [
-                        ...copyConditionList.conditionList,
-                        { field: "", condition: "", value: "" },
-                      ],
-                    });
-                  }}
-                >
-                  +add
-                </button>
-              </div>
-              {copyConditionList.conditionList.map((condition, index) => {
+              } else if (
+                field.type === "copyFields" &&
+                ifContainsType(type, field.apply)
+              ) {
                 return (
-                  <div className="d-flex gap-2 mb-2 align-items-center">
-                    <span>{index + 1}) </span>
-                    <select
-                      className="form-select"
-                      value={condition.field}
-                      onChange={(e) =>
-                        setCopyConditionList((prev) => ({
-                          ...prev,
-                          conditionList: prev.conditionList.map((item, i) =>
-                            i === index
-                              ? { ...item, field: e.target.value }
-                              : item
-                          ),
-                        }))
-                      }
-                    >
-                      <option value="">Select a field</option>
-                      {formFields.map((field) => {
-                        return <option value={field.name}>{field.name}</option>;
-                      })}
-                    </select>
-                    <select
-                      className="form-select"
-                      value={condition.condition}
-                      onChange={(e) =>
-                        setCopyConditionList((prev) => ({
-                          ...prev,
-                          conditionList: prev.conditionList.map((item, i) =>
-                            i === index
-                              ? { ...item, condition: e.target.value }
-                              : item
-                          ),
-                        }))
-                      }
-                    >
-                      <option value="">Select a condition</option>
-                      {field.conditionTypes.map((conditionType) => (
-                        <option value={conditionType}>{conditionType}</option>
-                      ))}
-                    </select>
-                    <input
-                      id="conditionValue"
-                      name="conditionValue"
-                      type="text"
-                      className="form-control"
-                      onChange={(e) =>
-                        setCopyConditionList((prev) => ({
-                          ...prev,
-                          conditionList: prev.conditionList.map((item, i) =>
-                            i === index
-                              ? { ...item, value: e.target.value }
-                              : item
-                          ),
-                        }))
-                      }
-                      value={condition.value}
-                      placeholder="Value"
-                    />
-                    <span>
-                      <AiFillDelete
-                        className="cursor-pointer"
-                        onClick={() => {
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <select
+                        className="form-select w-50"
+                        value={copyConditionList.copyField}
+                        onChange={(e) =>
                           setCopyConditionList((prev) => ({
                             ...prev,
-                            conditionList: prev.conditionList.filter(
-                              (item, i) => i !== index
-                            ),
-                          }));
-                        }}
-                      />
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          );
-        } else if (
-          field.type === "checkbox" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-              <div className="d-flex gap-3">
-                {field.options.map((option) => {
-                  return (
-                    <div className="form-check" key={option.value}>
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name={field.name}
-                        id={option.value}
-                        value={option.value} // Use option.value here
-                        checked={formik.values[field.name]?.includes(
-                          option.value
-                        )}
-                        onChange={(e) => {
-                          // Write method in here
-                          const isChecked = formik.values[field.name]?.includes(
-                            option.value
-                          );
-                          if (isChecked) {
-                            formik.setFieldValue(
-                              field.name,
-                              formik.values[field.name]?.filter(
-                                (item) => item !== option.value
-                              )
-                            );
-                          } else {
-                            formik.setFieldValue(field.name, [
-                              ...formik.values[field.name],
-                              option.value,
-                            ]);
-                          }
-                        }}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor={option.label}
-                        id={option.label}
+                            copyField: e.target.value,
+                          }))
+                        }
                       >
-                        {option.label}
-                      </label>
-                    </div>
-                  );
-                })}
-              </div>
-              {formik.errors[field.name] && formik.touched[field.name] ? (
-                <div>{formik.errors[field.name]}</div>
-              ) : null}
-            </div>
-          );
-        } else if (
-          field.type === "tableConfig" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <label htmlFor={field.name} className="form-label">
-                  {field.label}
-                </label>
-                <button
-                  type="button"
-                  className="btn btn-success btn-sm"
-                  onClick={() => {
-                    setTableConfig([
-                      ...tableConfig,
-                      { label: "", name: "", render: "" },
-                    ]);
-                  }}
-                >
-                  +add
-                </button>
-              </div>
-              {tableConfig.map((config, index) => {
-                return (
-                  <div className="d-flex gap-2 mb-2 align-items-center">
-                    <span>{index + 1}) </span>
-                    <input
-                      id="configLabel"
-                      name="configLabel"
-                      type="text"
-                      className="form-control"
-                      onChange={(e) =>
-                        setTableConfig((prev) =>
-                          prev.map((config, i) =>
-                            i === index
-                              ? { ...config, label: e.target.value }
-                              : config
-                          )
-                        )
-                      }
-                      value={config.label}
-                      placeholder="Label"
-                    />
-                    <select
-                      className="form-select"
-                      value={config.name}
-                      onChange={(e) =>
-                        setTableConfig((prev) =>
-                          prev.map((config, i) =>
-                            i === index
-                              ? { ...config, name: e.target.value }
-                              : config
-                          )
-                        )
-                      }
-                    >
-                      <option value="">Select a field</option>
-                      {formFields.map((field) => {
-                        return <option value={field.name}>{field.name}</option>;
-                      })}
-                    </select>
-                    <input
-                      id="configRender"
-                      name="configRender"
-                      type="text"
-                      className="form-control"
-                      onChange={(e) =>
-                        setTableConfig((prev) =>
-                          prev.map((config, i) =>
-                            i === index
-                              ? { ...config, render: e.target.value }
-                              : config
-                          )
-                        )
-                      }
-                      value={config.render}
-                      placeholder="Render"
-                    />
-                    <span>
-                      <AiFillDelete
-                        className="cursor-pointer"
-                        onClick={() => {
-                          setTableConfig(
-                            tableConfig.filter((config, i) => i !== index)
+                        <option value="">Select a field</option>
+                        {formFields.map((field) => {
+                          return (
+                            <option value={field.name}>{field.name}</option>
                           );
+                        })}
+                      </select>
+                      <button
+                        type="button"
+                        className="btn btn-custom-primary px-3 btn-sm"
+                        disabled={!copyConditionList.copyField}
+                        onClick={() => {
+                          setCopyConditionList({
+                            ...copyConditionList,
+                            conditionList: [
+                              ...copyConditionList.conditionList,
+                              { field: "", condition: "", value: "" },
+                            ],
+                          });
                         }}
-                      />
-                    </span>
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {copyConditionList.conditionList.map((condition, index) => {
+                      return (
+                        <div className="d-flex gap-2 mb-2 align-items-center">
+                          <span>{index + 1}) </span>
+                          <select
+                            className="form-select"
+                            value={condition.field}
+                            onChange={(e) =>
+                              setCopyConditionList((prev) => ({
+                                ...prev,
+                                conditionList: prev.conditionList.map(
+                                  (item, i) =>
+                                    i === index
+                                      ? { ...item, field: e.target.value }
+                                      : item
+                                ),
+                              }))
+                            }
+                          >
+                            <option value="">Select a field</option>
+                            {formFields.map((field) => {
+                              return (
+                                <option value={field.name}>{field.name}</option>
+                              );
+                            })}
+                          </select>
+                          <select
+                            className="form-select"
+                            value={condition.condition}
+                            onChange={(e) =>
+                              setCopyConditionList((prev) => ({
+                                ...prev,
+                                conditionList: prev.conditionList.map(
+                                  (item, i) =>
+                                    i === index
+                                      ? { ...item, condition: e.target.value }
+                                      : item
+                                ),
+                              }))
+                            }
+                          >
+                            <option value="">Select a condition</option>
+                            {field.conditionTypes.map((conditionType) => (
+                              <option value={conditionType}>
+                                {conditionType}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            id="conditionValue"
+                            name="conditionValue"
+                            type="text"
+                            className="form-control"
+                            onChange={(e) =>
+                              setCopyConditionList((prev) => ({
+                                ...prev,
+                                conditionList: prev.conditionList.map(
+                                  (item, i) =>
+                                    i === index
+                                      ? { ...item, value: e.target.value }
+                                      : item
+                                ),
+                              }))
+                            }
+                            value={condition.value}
+                            placeholder="Value"
+                          />
+                          <span>
+                            <AiFillDelete
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setCopyConditionList((prev) => ({
+                                  ...prev,
+                                  conditionList: prev.conditionList.filter(
+                                    (item, i) => i !== index
+                                  ),
+                                }));
+                              }}
+                            />
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
-              })}
-            </div>
-          );
-        } else if (
-          field.type === "tableSetting" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <div className="d-flex gap-3">
-                <div className="form-check mb-3">
-                  <label className="form-check-label" htmlFor="tableEdit">
-                    Table Edit
-                  </label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    name="tableEdit"
-                    id="tableEdit"
-                    checked={tableSetting.tableEdit}
-                    onChange={(e) => {
-                      setTableSetting((prev) => ({
-                        ...prev,
-                        tableEdit: !prev.tableEdit,
-                      }));
-                    }}
-                  />
-                </div>
-                <div className="form-check mb-3">
-                  <label className="form-check-label" htmlFor="tableDelete">
-                    Table Delete
-                  </label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    name="tableDelete"
-                    id="tableDelete"
-                    checked={tableSetting.tableDelete}
-                    onChange={(e) => {
-                      setTableSetting((prev) => ({
-                        ...prev,
-                        tableDelete: !prev.tableDelete,
-                      }));
-                    }}
-                  />
-                </div>
-                <div className="form-check mb-3">
-                  <label className="form-check-label" htmlFor="tableUseAPI">
-                    Table Use API
-                  </label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    name="tableUseAPI"
-                    id="tableUseAPI"
-                    checked={tableSetting.tableUseAPI}
-                    onChange={(e) => {
-                      setTableSetting((prev) => ({
-                        ...prev,
-                        tableUseAPI: !prev.tableUseAPI,
-                      }));
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label htmlFor="tableGetAPI" className="form-label">
-                  Table Get API
-                </label>
-                <input
-                  id="tableGetAPI"
-                  name="tableGetAPI"
-                  type="text"
-                  className="form-control"
-                  onChange={(e) =>
-                    setTableSetting((prev) => ({
-                      ...prev,
-                      tableGetAPI: e.target.value,
-                    }))
-                  }
-                  value={tableSetting.tableGetAPI}
-                  placeholder="Table Get API"
-                />
-              </div>
-
-              <div className="mb-3">
-                <label htmlFor="tableDeleteAPI" className="form-label">
-                  Table Delete API
-                </label>
-                <input
-                  id="tableDeleteAPI"
-                  name="tableDeleteAPI"
-                  type="text"
-                  className="form-control"
-                  onChange={(e) =>
-                    setTableSetting((prev) => ({
-                      ...prev,
-                      tableDeleteAPI: e.target.value,
-                    }))
-                  }
-                  value={tableSetting.tableDeleteAPI}
-                  placeholder="Table Delete API"
-                />
-              </div>
-            </div>
-          );
-        } else if (
-          field.type === "countryselect" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-              <div className="d-flex justify-content-between gap-5">
-                <div className="d-flex gap-4">
-                  <CountrySelectField
-                    setData={setCountry}
-                    field={{
-                      name: "countrySelect",
-                      placeholder: "Select a country",
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-success btn-sm"
-                    disabled={!country}
-                    onClick={() => {
-                      // Check if country is already added
-                      if (countryList.countryList.includes(country)) {
-                        return;
-                      }
-                      setCountryList((prev) => {
-                        return {
-                          ...prev,
-                          countryList: [...prev.countryList, country],
-                        };
-                      });
-                    }}
-                  >
-                    +add
-                  </button>
-                </div>
-              </div>
-              <div className="d-flex gap-2 mt-2 flex-wrap">
-                {countryList?.countryList?.length > 0 &&
-                  countryList.countryList.map((country) => (
-                    <div
-                      className="d-flex gap-3"
-                      style={{
-                        padding: "5px 10px",
-                        backgroundColor: "grey",
-                        color: "white",
-                        borderRadius: "100vh",
-                      }}
-                    >
-                      <span>{country}</span>
-                      <span>
-                        <AiFillDelete
-                          className="cursor-pointer"
-                          onClick={() => {
-                            setCountryList((prev) => {
-                              const newCountryList = prev.countryList.filter(
-                                (item) => item !== country
+              } else if (
+                field.type === "checkbox" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <div className="d-flex gap-3">
+                      {field.options.map((option) => {
+                        return (
+                          <div className="form-check" key={option.value}>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name={field.name}
+                              id={option.value}
+                              value={option.value} // Use option.value here
+                              checked={formik.values[field.name]?.includes(
+                                option.value
+                              )}
+                              onChange={(e) => {
+                                // Write method in here
+                                const isChecked = formik.values[
+                                  field.name
+                                ]?.includes(option.value);
+                                if (isChecked) {
+                                  formik.setFieldValue(
+                                    field.name,
+                                    formik.values[field.name]?.filter(
+                                      (item) => item !== option.value
+                                    )
+                                  );
+                                } else {
+                                  formik.setFieldValue(field.name, [
+                                    ...formik.values[field.name],
+                                    option.value,
+                                  ]);
+                                }
+                              }}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor={option.label}
+                              id={option.label}
+                            >
+                              {option.label}
+                            </label>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {formik.errors[field.name] && formik.touched[field.name] ? (
+                      <div>{formik.errors[field.name]}</div>
+                    ) : null}
+                  </div>
+                );
+              } else if (
+                field.type === "tableConfig" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <label htmlFor={field.name} className="form-label">
+                        {field.label}
+                      </label>
+                      <button
+                        type="button"
+                        className="btn btn-custom-primary px-3 btn-sm"
+                        onClick={() => {
+                          setTableConfig([
+                            ...tableConfig,
+                            { label: "", name: "", render: "" },
+                          ]);
+                        }}
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {tableConfig.map((config, index) => {
+                      return (
+                        <div className="d-flex gap-2 mb-2 align-items-center">
+                          <span>{index + 1}) </span>
+                          <input
+                            id="configLabel"
+                            name="configLabel"
+                            type="text"
+                            className="form-control"
+                            onChange={(e) =>
+                              setTableConfig((prev) =>
+                                prev.map((config, i) =>
+                                  i === index
+                                    ? { ...config, label: e.target.value }
+                                    : config
+                                )
+                              )
+                            }
+                            value={config.label}
+                            placeholder="Label"
+                          />
+                          <select
+                            className="form-select"
+                            value={config.name}
+                            onChange={(e) =>
+                              setTableConfig((prev) =>
+                                prev.map((config, i) =>
+                                  i === index
+                                    ? { ...config, name: e.target.value }
+                                    : config
+                                )
+                              )
+                            }
+                          >
+                            <option value="">Select a field</option>
+                            {formFields.map((field) => {
+                              return (
+                                <option value={field.name}>{field.name}</option>
                               );
+                            })}
+                          </select>
+                          <input
+                            id="configRender"
+                            name="configRender"
+                            type="text"
+                            className="form-control"
+                            onChange={(e) =>
+                              setTableConfig((prev) =>
+                                prev.map((config, i) =>
+                                  i === index
+                                    ? { ...config, render: e.target.value }
+                                    : config
+                                )
+                              )
+                            }
+                            value={config.render}
+                            placeholder="Render"
+                          />
+                          <span>
+                            <AiFillDelete
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setTableConfig(
+                                  tableConfig.filter((config, i) => i !== index)
+                                );
+                              }}
+                            />
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              } else if (
+                field.type === "tableSetting" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <div className="d-flex gap-3">
+                      <div className="form-check mb-3">
+                        <label className="form-check-label" htmlFor="tableEdit">
+                          Table Edit
+                        </label>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="tableEdit"
+                          id="tableEdit"
+                          checked={tableSetting.tableEdit}
+                          onChange={(e) => {
+                            setTableSetting((prev) => ({
+                              ...prev,
+                              tableEdit: !prev.tableEdit,
+                            }));
+                          }}
+                        />
+                      </div>
+                      <div className="form-check mb-3">
+                        <label
+                          className="form-check-label"
+                          htmlFor="tableDelete"
+                        >
+                          Table Delete
+                        </label>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="tableDelete"
+                          id="tableDelete"
+                          checked={tableSetting.tableDelete}
+                          onChange={(e) => {
+                            setTableSetting((prev) => ({
+                              ...prev,
+                              tableDelete: !prev.tableDelete,
+                            }));
+                          }}
+                        />
+                      </div>
+                      <div className="form-check mb-3">
+                        <label
+                          className="form-check-label"
+                          htmlFor="tableUseAPI"
+                        >
+                          Table Use API
+                        </label>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="tableUseAPI"
+                          id="tableUseAPI"
+                          checked={tableSetting.tableUseAPI}
+                          onChange={(e) => {
+                            setTableSetting((prev) => ({
+                              ...prev,
+                              tableUseAPI: !prev.tableUseAPI,
+                            }));
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label htmlFor="tableGetAPI" className="form-label">
+                        Table Get API
+                      </label>
+                      <input
+                        id="tableGetAPI"
+                        name="tableGetAPI"
+                        type="text"
+                        className="form-control"
+                        onChange={(e) =>
+                          setTableSetting((prev) => ({
+                            ...prev,
+                            tableGetAPI: e.target.value,
+                          }))
+                        }
+                        value={tableSetting.tableGetAPI}
+                        placeholder="Table Get API"
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label htmlFor="tableDeleteAPI" className="form-label">
+                        Table Delete API
+                      </label>
+                      <input
+                        id="tableDeleteAPI"
+                        name="tableDeleteAPI"
+                        type="text"
+                        className="form-control"
+                        onChange={(e) =>
+                          setTableSetting((prev) => ({
+                            ...prev,
+                            tableDeleteAPI: e.target.value,
+                          }))
+                        }
+                        value={tableSetting.tableDeleteAPI}
+                        placeholder="Table Delete API"
+                      />
+                    </div>
+                  </div>
+                );
+              } else if (
+                field.type === "countryselect" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <div className="d-flex justify-content-between gap-5">
+                      <div className="d-flex gap-4">
+                        <CountrySelectField
+                          setData={setCountry}
+                          field={{
+                            name: "countrySelect",
+                            placeholder: "Select a country",
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-custom-primary px-3 btn-sm"
+                          disabled={!country}
+                          onClick={() => {
+                            // Check if country is already added
+                            if (countryList.countryList.includes(country)) {
+                              return;
+                            }
+                            setCountryList((prev) => {
                               return {
                                 ...prev,
-                                countryList: newCountryList,
+                                countryList: [...prev.countryList, country],
                               };
                             });
                           }}
-                        />
-                      </span>
+                        >
+                          Add
+                        </button>
+                      </div>
                     </div>
-                  ))}
-              </div>
-            </div>
-          );
-        } else if (
-          field.type === "usergroupselect" &&
-          ifContainsType(type, field.apply)
-        ) {
-          return (
-            <div className="mb-3">
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-              <div className="d-flex justify-content-between gap-5">
-                <div className="d-flex gap-4">
-                  <UserGroupSelectField
-                    setData={setUserGroup}
-                    field={{
-                      name: "usergroupselect",
-                      placeholder: "Select a usergroup",
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-success btn-sm"
-                    disabled={!userGroup}
-                    onClick={() => {
-                      // Check usergroup is already added
-                      if (userGroupList?.includes(userGroup)) {
-                        return;
-                      }
-                      setUserGroupList((prev) => [...prev, userGroup]);
-                    }}
-                  >
-                    +add
-                  </button>
-                </div>
-              </div>
-              <div className="d-flex gap-2 mt-2 flex-wrap">
-                {userGroupList?.length > 0 &&
-                  userGroupList?.map((usergroup) => (
-                    <div
-                      className="d-flex gap-3"
-                      style={{
-                        padding: "5px 10px",
-                        backgroundColor: "grey",
-                        color: "white",
-                        borderRadius: "100vh",
-                      }}
-                    >
-                      <span>{usergroup}</span>
-                      <span>
-                        <AiFillDelete
-                          className="cursor-pointer"
-                          onClick={() => {
-                            setUserGroupList((prev) => {
-                              const newUserGroupList = prev.filter(
-                                (item) => item !== usergroup
-                              );
-                              return [...newUserGroupList];
-                            });
+                    <div className="d-flex gap-2 mt-2 flex-wrap">
+                      {countryList?.countryList?.length > 0 &&
+                        countryList.countryList.map((country) => (
+                          <div
+                            className="d-flex gap-3"
+                            style={{
+                              padding: "5px 10px",
+                              backgroundColor: "grey",
+                              color: "white",
+                              borderRadius: "100vh",
+                            }}
+                          >
+                            <span>{country}</span>
+                            <span>
+                              <AiFillDelete
+                                className="cursor-pointer"
+                                onClick={() => {
+                                  setCountryList((prev) => {
+                                    const newCountryList =
+                                      prev.countryList.filter(
+                                        (item) => item !== country
+                                      );
+                                    return {
+                                      ...prev,
+                                      countryList: newCountryList,
+                                    };
+                                  });
+                                }}
+                              />
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                );
+              } else if (
+                field.type === "usergroupselect" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <div className="d-flex justify-content-between gap-5">
+                      <div className="d-flex gap-4">
+                        <UserGroupSelectField
+                          setData={setUserGroup}
+                          field={{
+                            name: "usergroupselect",
+                            placeholder: "Select a usergroup",
                           }}
                         />
-                      </span>
+                        <button
+                          type="button"
+                          className="btn btn-custom-primary btn-sm px-3"
+                          disabled={!userGroup}
+                          onClick={() => {
+                            // Check usergroup is already added
+                            if (userGroupList?.includes(userGroup)) {
+                              return;
+                            }
+                            setUserGroupList((prev) => [...prev, userGroup]);
+                          }}
+                        >
+                          Add
+                        </button>
+                      </div>
                     </div>
-                  ))}
-              </div>
+                    <div className="d-flex gap-2 mt-2 flex-wrap">
+                      {userGroupList?.length > 0 &&
+                        userGroupList?.map((usergroup) => (
+                          <div
+                            className="d-flex gap-3"
+                            style={{
+                              padding: "5px 10px",
+                              backgroundColor: "grey",
+                              color: "white",
+                              borderRadius: "100vh",
+                            }}
+                          >
+                            <span>{usergroup}</span>
+                            <span>
+                              <AiFillDelete
+                                className="cursor-pointer"
+                                onClick={() => {
+                                  setUserGroupList((prev) => {
+                                    const newUserGroupList = prev.filter(
+                                      (item) => item !== usergroup
+                                    );
+                                    return [...newUserGroupList];
+                                  });
+                                }}
+                              />
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                );
+              }
+            })}
+
+            <div className="d-flex gap-3 mt-4">
+              {formBuilderUpdateData ? (
+                <button type="submit" className="btn btn-custom-primary">
+                  Update Field
+                </button>
+              ) : (
+                <button type="submit" className="btn btn-custom-primary">
+                  Create Field
+                </button>
+              )}
+
+              <button
+                type="button"
+                className="btn btn-custom-primary"
+                onClick={() => {
+                  setFormBuilderUpdateData(null);
+                  setFormBuilderType(null);
+                  setShowModalSchema(false);
+                }}
+              >
+                Cancel
+              </button>
             </div>
-          );
-        }
-      })}
-
-      <div className="d-flex gap-3 mt-4">
-        {formBuilderUpdateData ? (
-          <button type="submit" className="btn btn-secondary">
-            Update Field
-          </button>
-        ) : (
-          <button type="submit" className="btn btn-secondary">
-            Create Field
-          </button>
-        )}
-
-        <button
-          type="button"
-          className="btn btn-warning"
-          onClick={() => {
-            setFormBuilderUpdateData(null);
-            setFormBuilderType(null);
-            setShowModalSchema(false);
-          }}
-        >
-          Cancel
-        </button>
-      </div>
-    </form>
+          </form>
+        </CardBody>
+      </Card>
+    </div>
   );
 };
 

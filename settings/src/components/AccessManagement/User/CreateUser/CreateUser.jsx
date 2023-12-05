@@ -1,6 +1,6 @@
-import { BreadCrumb } from "@workspace/common";
 import { Form, Formik, Field } from "formik";
-import React, { useState } from "react";
+import { FormSelection } from "@workspace/common";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Breadcrumb,
@@ -18,13 +18,25 @@ import {
   FormFeedback,
 } from "reactstrap";
 import { initialValues, schema } from "../constants";
-import { useDispatch } from "react-redux";
-import { createUser } from "../../../../store/users/action";
+import { useDispatch, useSelector } from "react-redux";
+import { createUser, fetchUsers } from "../../../../store/users/action";
 
 function CreateUser() {
   document.title = "Create New User | RTS";
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const allUsers = useSelector((state) => state?.UserReducer?.users) || [];
+  const [sortBy, setSortBy] = useState(null);
+  const sortByName = [
+    {
+      options: allUsers.map((user) => ({
+        label: `${user.firstName} (${user.mobile})`,
+        value: user.firstName,
+      })),
+    },
+  ];
+  console.log(sortByName);
+  console.log(allUsers);
 
   const handleSubmit = async (values) => {
     const newUser = {
@@ -39,6 +51,10 @@ function CreateUser() {
     };
     dispatch(createUser({ newUser, navigate: navigate }));
   };
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, []);
 
   return (
     <React.Fragment>
@@ -238,6 +254,17 @@ function CreateUser() {
                                     {errors.confirmPassword}
                                   </FormFeedback>
                                 )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <FormSelection
+                                value={sortBy}
+                                onChange={(sortBy) => setSortBy(sortBy)}
+                                label="Select Manager"
+                                options={sortByName}
+                                className="js-example-basic-single mb-0"
+                              />
                             </div>
                           </Col>
                         </Row>

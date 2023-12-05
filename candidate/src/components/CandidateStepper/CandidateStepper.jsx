@@ -19,7 +19,7 @@ const CandidateStepper = ({ step, setStep }) => {
   }, [step]);
 
   return (
-    <Container className="p-4">
+    <Container fluid className="p-4">
       <Row>
         <Col xl={12}>
           <div className="progress-nav mb-5">

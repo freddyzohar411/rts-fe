@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { ModalBody, ModalHeader, ModalFooter } from "reactstrap";
 import "./Modal.scss";
 
 const Modal = ({ children, isOpen, closeModal, height, backgroundClose }) => {
@@ -18,6 +19,7 @@ const Modal = ({ children, isOpen, closeModal, height, backgroundClose }) => {
         className="modal-backdrop"
         onClick={() => backgroundClose && closeModal()}
       ></div>
+      
       <div className="modal-content-custom" style={{ height: height }}>
         {children}
       </div>

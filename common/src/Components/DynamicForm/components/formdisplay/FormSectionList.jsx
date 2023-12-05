@@ -73,7 +73,7 @@ const FormSectionList = ({
   return (
     <div>
       {isTitle && <h5 className="mb-3">{title}</h5>}
-      <div className="d-flex gap-3">{lists}</div>
+      <div className="d-flex gap-1">{lists}</div>
     </div>
   );
 };
