@@ -75,8 +75,7 @@ const authProtectedRoutes = [
 
   // Settings
   { path: "/settings", component: <MainSettings /> },
-  { path: "/settings/customisation", component: <CustomisationSettings /> },
-  { path: "/settings/customisation/new", component: <CustomisationNew/>},
+  { path: "/settings/customisation", component: <CustomisationNew /> },
 
   // Form Builder
   { path: "/form-builder", component: <FormbuilderMain /> },
