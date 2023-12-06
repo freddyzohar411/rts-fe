@@ -12,10 +12,10 @@ const FormSelection = ({ name, ...props }) => {
     control: (base, state) => ({
       ...base,
       // state.isFocused can display different borderColor if you need it
-      borderColor: state.isFocused ? "#ddd" : isValid ? "#ddd" : "red",
+      borderColor: state.isFocused ? "#8aaed6" : isValid ? "#8aaed6" : "red",
       // overwrittes hover style
       "&:hover": {
-        borderColor: state.isFocused ? "#ddd" : isValid ? "#ddd" : "red",
+        borderColor: state.isFocused ? "#ddd" : isValid ? "#8aaed6" : "red",
       },
     }),
   };
