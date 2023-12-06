@@ -25,6 +25,7 @@ import { JobCreation, JobListing } from "@workspace/job";
 import {
   MainSettings,
   CustomisationSettings,
+  DynamicFormListingSettings,
   AccessManagement,
   CreateNewRole,
   ViewRole,
@@ -75,7 +76,7 @@ const authProtectedRoutes = [
 
   // Settings
   { path: "/settings", component: <MainSettings /> },
-  { path: "/settings/customisation", component: <CustomisationSettings /> },
+  { path: "/settings/customisation", component: <DynamicFormListingSettings /> },
 
   // Form Builder
   { path: "/form-builder", component: <FormbuilderMain /> },

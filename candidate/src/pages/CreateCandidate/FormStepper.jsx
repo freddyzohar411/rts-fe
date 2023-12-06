@@ -90,7 +90,7 @@ const FormStepper = ({
   return (
     <Card>
       <CardBody>
-        <Container fluid>
+        <Container>
           <CandidateStepper step={activeStep} />
           <div className="px-3"> {children}</div>
           <div
@@ -101,19 +101,22 @@ const FormStepper = ({
             {candidateId && (
               <Button
                 onClick={() => setIsDeleteModalOpen(true)}
-                className="btn btn-danger"
+                className="btn btn-custom-primary"
               >
                 Reset
               </Button>
             )}
             <div className="d-flex gap-2">
               {activeStep > 0 && (
-                <Button color="dark" onClick={handleBack}>
+                <Button className="btn btn-custom-primary" onClick={handleBack}>
                   Back
                 </Button>
               )}
-              <Button color="dark">Skip</Button>
-              <Button color="dark" onClick={handleNextStep}>
+              <Button className="btn btn-custom-primary">Skip</Button>
+              <Button
+                className="btn btn-custom-primary"
+                onClick={handleNextStep}
+              >
                 Next
               </Button>
             </div>
