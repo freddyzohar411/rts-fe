@@ -1,0 +1,422 @@
+{
+  "formName": "job_document",
+  "formType": "custom",
+  "entityType": "",
+  "baseFormId": 10,
+  "stepperNumber": 0,
+  "formFieldsList": [
+    {
+      "label": "Document Type",
+      "name": "type",
+      "placeholder": "Select document type",
+      "required": false,
+      "requiredErrorMessage": "",
+      "pattern": "",
+      "patternValidationErrorMessage": "",
+      "minLength": null,
+      "minLengthErrorMessage": "",
+      "maxLength": null,
+      "maxLengthErrorMessage": "",
+      "emailValidation": null,
+      "emailValidationErrorMessage": "",
+      "maxValue": null,
+      "maxValueErrorMessage": "",
+      "minValue": null,
+      "minValueErrorMessage": "",
+      "fileTypeValidation": "",
+      "fileTypeValidationErrorMessage": "",
+      "fileSizeValidation": null,
+      "fileSizeValidationErrorMessage": "",
+      "options": [
+        {
+          "label": "Doc",
+          "value": "doc"
+        },
+        {
+          "label": "Docx",
+          "value": "docx"
+        },
+        {
+          "label": "Pdf",
+          "value": "pdf"
+        },
+        {
+          "label": "Xlsx",
+          "value": "xlsx"
+        }
+      ],
+      "parent": "",
+      "visible": [],
+      "userGroup": [],
+      "tableConfig": "",
+      "tableSetting": "",
+      "countryOptions": {
+        "countryField": "",
+        "countryList": []
+      },
+      "type": "select",
+      "fieldId": "8e24da35-e1e1-4e79-a17f-553debbc52a0",
+      "fieldType": "predefined",
+      "isUsed": true,
+      "buttonText": "",
+      "buttonName": "",
+      "buttonType": "button",
+      "buttonClass": "",
+      "buttonLocation": null,
+      "subName": "",
+      "copyFields": {
+        "copyField": "",
+        "conditionList": []
+      },
+      "fieldLocation": "left",
+      "fieldSize": "100%",
+      "wordSize": null,
+      "wordText": null,
+      "list": null,
+      "conditionValidation": null,
+      "conditionValidationErrorMessage": null
+    },
+    {
+      "label": "Document Title",
+      "name": "title",
+      "placeholder": "Enter document title",
+      "required": false,
+      "requiredErrorMessage": "",
+      "pattern": "",
+      "patternValidationErrorMessage": "",
+      "minLength": null,
+      "minLengthErrorMessage": "",
+      "maxLength": null,
+      "maxLengthErrorMessage": "",
+      "emailValidation": null,
+      "emailValidationErrorMessage": "",
+      "maxValue": null,
+      "maxValueErrorMessage": "",
+      "minValue": null,
+      "minValueErrorMessage": "",
+      "fileTypeValidation": "",
+      "fileTypeValidationErrorMessage": "",
+      "fileSizeValidation": null,
+      "fileSizeValidationErrorMessage": "",
+      "options": "",
+      "parent": "",
+      "visible": [],
+      "userGroup": [],
+      "tableConfig": "",
+      "tableSetting": "",
+      "countryOptions": {
+        "countryField": "",
+        "countryList": []
+      },
+      "type": "text",
+      "fieldId": "924d1e9d-dc12-43be-b18c-3877adfa734c",
+      "fieldType": "predefined",
+      "isUsed": true,
+      "buttonText": "",
+      "buttonName": "",
+      "buttonType": "button",
+      "buttonClass": "",
+      "buttonLocation": null,
+      "subName": "",
+      "copyFields": {
+        "copyField": "",
+        "conditionList": []
+      },
+      "fieldLocation": "left",
+      "fieldSize": "100%",
+      "wordSize": null,
+      "wordText": null,
+      "list": null,
+      "conditionValidation": null,
+      "conditionValidationErrorMessage": null
+    },
+    {
+      "label": "Upload Documents*",
+      "name": "file",
+      "placeholder": "Select file to upload",
+      "required": true,
+      "requiredErrorMessage": "Upload document is required",
+      "pattern": "",
+      "patternValidationErrorMessage": "",
+      "minLength": null,
+      "minLengthErrorMessage": "",
+      "maxLength": null,
+      "maxLengthErrorMessage": "",
+      "emailValidation": null,
+      "emailValidationErrorMessage": "",
+      "maxValue": null,
+      "maxValueErrorMessage": "",
+      "minValue": null,
+      "minValueErrorMessage": "",
+      "fileTypeValidation": [
+        "pdf",
+        "doc",
+        "docx",
+        "xls"
+      ],
+      "fileTypeValidationErrorMessage": "Please upload a valid file type",
+      "fileSizeValidation": 2,
+      "fileSizeValidationErrorMessage": "Please only upload file with file size 2mb and smaller",
+      "options": "",
+      "parent": "",
+      "visible": [],
+      "userGroup": [],
+      "tableConfig": "",
+      "tableSetting": "",
+      "countryOptions": {
+        "countryField": "",
+        "countryList": []
+      },
+      "type": "file",
+      "fieldId": "51f2a04a-2157-465c-83cf-580176ccfdac",
+      "fieldType": "predefined",
+      "isUsed": true,
+      "buttonText": "",
+      "buttonName": "",
+      "buttonType": "button",
+      "buttonClass": "",
+      "buttonLocation": null,
+      "subName": "",
+      "copyFields": {
+        "copyField": "",
+        "conditionList": []
+      },
+      "fieldLocation": "left",
+      "fieldSize": "100%",
+      "wordSize": null,
+      "wordText": null,
+      "list": null,
+      "conditionValidation": null,
+      "conditionValidationErrorMessage": null
+    },
+    {
+      "label": "Description",
+      "name": "description",
+      "placeholder": "Enter description...",
+      "required": false,
+      "requiredErrorMessage": "",
+      "pattern": "",
+      "patternValidationErrorMessage": "",
+      "minLength": null,
+      "minLengthErrorMessage": "",
+      "maxLength": null,
+      "maxLengthErrorMessage": "",
+      "emailValidation": null,
+      "emailValidationErrorMessage": "",
+      "maxValue": null,
+      "maxValueErrorMessage": "",
+      "minValue": null,
+      "minValueErrorMessage": "",
+      "fileTypeValidation": "",
+      "fileTypeValidationErrorMessage": "",
+      "fileSizeValidation": null,
+      "fileSizeValidationErrorMessage": "",
+      "options": "",
+      "parent": "",
+      "visible": [],
+      "userGroup": [],
+      "tableConfig": "",
+      "tableSetting": "",
+      "countryOptions": {
+        "countryField": "",
+        "countryList": []
+      },
+      "type": "textarea",
+      "fieldId": "30b075c5-1235-43bc-9bb7-a73c44deef63",
+      "fieldType": "predefined",
+      "isUsed": true,
+      "buttonText": "",
+      "buttonName": "",
+      "buttonType": "button",
+      "buttonClass": "",
+      "buttonLocation": null,
+      "subName": "",
+      "copyFields": {
+        "copyField": "",
+        "conditionList": []
+      },
+      "fieldLocation": "left",
+      "fieldSize": "100%",
+      "wordSize": null,
+      "wordText": null,
+      "list": null,
+      "conditionValidation": null,
+      "conditionValidationErrorMessage": null
+    },
+    {
+      "label": "",
+      "name": "",
+      "placeholder": "",
+      "required": false,
+      "requiredErrorMessage": "",
+      "pattern": "",
+      "patternValidationErrorMessage": "",
+      "minLength": null,
+      "minLengthErrorMessage": "",
+      "maxLength": null,
+      "maxLengthErrorMessage": "",
+      "emailValidation": null,
+      "emailValidationErrorMessage": "",
+      "maxValue": null,
+      "maxValueErrorMessage": "",
+      "minValue": null,
+      "minValueErrorMessage": "",
+      "fileTypeValidation": "",
+      "fileTypeValidationErrorMessage": "",
+      "fileSizeValidation": null,
+      "fileSizeValidationErrorMessage": "",
+      "options": "",
+      "parent": "",
+      "visible": [],
+      "userGroup": [],
+      "tableConfig": "",
+      "tableSetting": "",
+      "countryOptions": {
+        "countryField": "",
+        "countryList": []
+      },
+      "type": "buttonupdate",
+      "fieldId": "cfc4abd6-35ce-4dbd-9dff-fd208a7fa689",
+      "fieldType": "custom",
+      "isUsed": true,
+      "buttonText": "Add",
+      "buttonName": "add",
+      "buttonType": "submit",
+      "buttonClass": "btn btn-success",
+      "buttonLocation": null,
+      "subName": "",
+      "copyFields": {
+        "copyField": "",
+        "conditionList": []
+      },
+      "fieldLocation": "right",
+      "fieldSize": "100%",
+      "wordSize": null,
+      "wordText": null,
+      "list": null,
+      "conditionValidation": null,
+      "conditionValidationErrorMessage": null
+    },
+    {
+      "label": "Document List",
+      "name": "documentList",
+      "placeholder": "",
+      "required": false,
+      "requiredErrorMessage": "",
+      "pattern": "",
+      "patternValidationErrorMessage": "",
+      "minLength": null,
+      "minLengthErrorMessage": "",
+      "maxLength": null,
+      "maxLengthErrorMessage": "",
+      "emailValidation": null,
+      "emailValidationErrorMessage": "",
+      "maxValue": null,
+      "maxValueErrorMessage": "",
+      "minValue": null,
+      "minValueErrorMessage": "",
+      "fileTypeValidation": "",
+      "fileTypeValidationErrorMessage": "",
+      "fileSizeValidation": null,
+      "fileSizeValidationErrorMessage": "",
+      "options": "",
+      "parent": "",
+      "visible": [],
+      "userGroup": [],
+      "tableConfig": [
+        {
+          "label": "Document type",
+          "name": "type",
+          "render": ""
+        },
+        {
+          "label": "Document title",
+          "name": "title",
+          "render": ""
+        },
+        {
+          "label": "Document",
+          "name": "file",
+          "render": ""
+        }
+      ],
+      "tableSetting": {
+        "tableEdit": true,
+        "tableDelete": true,
+        "tableUseAPI": true,
+        "tableGetAPI": "",
+        "tableDeleteAPI": "",
+        "tableRenderer": false,
+        "tableEditId": null
+      },
+      "countryOptions": {
+        "countryField": "",
+        "countryList": []
+      },
+      "type": "table",
+      "fieldId": "bb34b244-7879-424a-af79-ea3e1b177c55",
+      "fieldType": "predefined",
+      "isUsed": true,
+      "buttonText": "",
+      "buttonName": "",
+      "buttonType": "button",
+      "buttonClass": "",
+      "buttonLocation": null,
+      "subName": "",
+      "copyFields": {
+        "copyField": "",
+        "conditionList": []
+      },
+      "fieldLocation": "left",
+      "fieldSize": "100%",
+      "wordSize": null,
+      "wordText": null,
+      "list": null,
+      "conditionValidation": null,
+      "conditionValidationErrorMessage": null,
+      "tableData": []
+    }
+  ],
+  "formSchemaList": [
+    {
+      "isTitle": true,
+      "title": "Documents",
+      "rowId": 1,
+      "droppableZones": [
+        {
+          "id": "1_0",
+          "fieldIds": [
+            "8e24da35-e1e1-4e79-a17f-553debbc52a0"
+          ]
+        },
+        {
+          "id": "1_1",
+          "fieldIds": [
+            "924d1e9d-dc12-43be-b18c-3877adfa734c"
+          ]
+        },
+        {
+          "id": "1_2",
+          "fieldIds": [
+            "51f2a04a-2157-465c-83cf-580176ccfdac"
+          ]
+        }
+      ]
+    },
+    {
+      "isTitle": false,
+      "title": "title",
+      "rowId": 2,
+      "droppableZones": [
+        {
+          "id": "2_0",
+          "fieldIds": [
+            "30b075c5-1235-43bc-9bb7-a73c44deef63",
+            "cfc4abd6-35ce-4dbd-9dff-fd208a7fa689",
+            "bb34b244-7879-424a-af79-ea3e1b177c55"
+          ]
+        }
+      ]
+    }
+  ]
+}

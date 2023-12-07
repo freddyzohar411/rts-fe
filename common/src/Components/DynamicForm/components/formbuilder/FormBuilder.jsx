@@ -23,9 +23,12 @@ import BaseFormSelectElement from "./BaseFormSelectElement";
 import SimpleBar from "simplebar-react";
 
 // Import JSON
-import JSON1 from "../../formjson/Candidate_education_details.json"
-
-console.log("JSON1", JSON1)
+// import JSON1 from "../../formjson/Candidate_education_details.json"
+// import JSON1 from "../../formjson/job_form_base.json"
+// import JSON1 from "../../formjson/job_form.json"
+// import JSON1 from "../../formjson/job_document.json"
+// console.log("JSON1", JSON1)
+// JSON1 = null;
 
 const FormBuilder = ({
   onSubmit,
@@ -103,6 +106,22 @@ const FormBuilder = ({
    * Set template data
    */
   useEffect(() => {
+  //   // Load in JSON 1
+  //   if (JSON1) {
+  //     console.log("JSON1 IN", JSON1)
+  //     setFormFields(JSON1.formFieldsList);
+  //     setFormLayoutSchema(JSON1.formSchemaList);
+  //     setFormName(JSON1.formName);
+  //     setFormOptions({
+  //       formType: JSON1.formType,
+  //       entityType: JSON1.entityType,
+  //       baseFormId: JSON1.baseFormId,
+  //       stepperNumber: JSON1.stepperNumber,
+  //       formCategory: JSON1.formCategory,
+  //     });
+  //     return
+  //   }
+
     if (baseFormTemplate && formState === "create") {
       setFormFields(baseFormTemplate?.formSchema);
       setFormLayoutSchema(baseFormTemplate?.formLayoutSchema);
