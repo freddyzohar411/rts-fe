@@ -130,7 +130,7 @@ const JobListing = () => {
                 <i className="ri-eye-line"></i>
               </Button>
             </Link>
-            {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+            {checkAllPermission([Permission.JOB_EDIT]) && (
               <Link
                 to={`/jobs/${data.id}/snapshot`}
                 style={{ color: "black" }}
@@ -144,7 +144,7 @@ const JobListing = () => {
                 </Button>
               </Link>
             )}
-            {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+            {checkAllPermission([Permission.JOB_DELETE]) && (
               <Button
                 type="button"
                 className="btn btn-danger d-flex align-items-center column-gap-2"
