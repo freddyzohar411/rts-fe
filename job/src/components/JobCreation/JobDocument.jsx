@@ -15,11 +15,11 @@ import {
   GET_DOCUMENT_BY_ENTITY_URL,
 } from "../../helpers/backend_helper";
 
-const JobDocument = ({ jobId }) => {
+const JobDocument = ({ jobId, view }) => {
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
   const { type } = useParams();
-  const isView = type === "view";
+  // const isView = type === "view";
 
   const documentForm = useSelector(
     (state) => state.JobFormReducer.documentForm
@@ -183,7 +183,7 @@ const JobDocument = ({ jobId }) => {
       onSubmit={handleFormSubmit}
       onFormFieldsChange={handleFormFieldChange}
       errorMessage={errorMessage}
-      view={isView}
+      view={view}
     />
   );
 };

@@ -17,12 +17,16 @@ import { useRef } from "react";
 const JobCreation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { getAllUserGroups } = useUserAuth();
+  const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
   const { jobId, type } = useParams();
   // const isView = type === "view";
   const location = useLocation();
   const linkState = location.state;
-  const isView =  linkState?.view ;
+  const [view, setView] = useState(
+    linkState?.view !== null && linkState?.view !== undefined
+      ? linkState?.view
+      : false
+  );
 
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
@@ -62,6 +66,14 @@ const JobCreation = () => {
     setFormFieldsData(formFields);
   }, []);
 
+  const checkReadEditPermission = () => {
+    return checkAllPermission([Permission.JOB_EDIT, Permission.JOB_READ]);
+  };
+
+  const toggleFormViewState = () => {
+    setView(!view);
+  };
+
   // Handle form submit
   const handleFormSubmit = async (
     event,
@@ -86,36 +98,53 @@ const JobCreation = () => {
   return (
     <div className="">
       {/* <Container> */}
-        {/* <Card>
+      {/* <Card>
           <CardBody> */}
-            <Form
-              template={formTemplate}
-              userDetails={getAllUserGroups()}
-              country={"India"}
-              editData={formSubmissionData}
-              onSubmit={handleFormSubmit}
-              onFormFieldsChange={handleFormFieldChange}
-              errorMessage={null}
-              view={isView}
-              ref={formikRef}
-            />
-            <JobDocument jobId={randomId} />
-            <div className="d-flex flex-row-reverse gap-3 mb-2">
-              <Button
-                className="btn btn-success"
-                type="button"
-                disabled={isView}
-                onClick={() => {
-                  formikRef.current.formik.submitForm();
-                }}
-              >
-                Submit
-              </Button>
-              <Button type="button" onClick={() => navigate("/jobs")}>
-                Cancel
-              </Button>
-            </div>
-          {/* </CardBody>
+      <Form
+        template={formTemplate}
+        userDetails={getAllUserGroups()}
+        country={"India"}
+        editData={formSubmissionData}
+        onSubmit={handleFormSubmit}
+        onFormFieldsChange={handleFormFieldChange}
+        errorMessage={null}
+        view={view}
+        ref={formikRef}
+      />
+      <JobDocument jobId={randomId} view={view} />
+      {/* <div className="d-flex flex-row-reverse gap-3 mb-2"> */}
+      <div
+        className={`d-flex ${
+          jobId && checkReadEditPermission()
+            ? "justify-content-between"
+            : "justify-content-end"
+        } align-items-center mb-2`}
+      >
+        {jobId && checkReadEditPermission() && (
+          <Button
+            onClick={toggleFormViewState}
+            className="btn btn-custom-primary"
+          >
+            {view ? "Edit" : "View"}
+          </Button>
+        )}
+        <div className="d-flex gap-2">
+          <Button type="button" onClick={() => navigate("/jobs")}>
+            Cancel
+          </Button>
+          <Button
+            className="btn btn-success"
+            type="button"
+            disabled={view}
+            onClick={() => {
+              formikRef.current.formik.submitForm();
+            }}
+          >
+            Submit
+          </Button>
+        </div>
+      </div>
+      {/* </CardBody>
         </Card> */}
       {/* </Container> */}
     </div>
