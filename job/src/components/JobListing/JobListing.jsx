@@ -119,7 +119,7 @@ const JobListing = () => {
         render: (data) => (
           <div className="d-flex column-gap-2">
             <Link
-              to={`/jobs/${data.id}/view`}
+              to={`/jobs/${data.id}/snapshot`}
               style={{ color: "black" }}
               state={{ view: true }}
             >
@@ -132,7 +132,7 @@ const JobListing = () => {
             </Link>
             {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
               <Link
-                to={`/jobs/${data.id}/edit`}
+                to={`/jobs/${data.id}/snapshot`}
                 style={{ color: "black" }}
                 state={{ view: false }}
               >

@@ -19,7 +19,7 @@ import {
 } from "@workspace/candidate";
 
 // Job
-import { JobCreation, JobListing, JobManage } from "@workspace/job";
+import { JobCreation, JobListing, JobManage, JobCreate } from "@workspace/job";
 
 // Settings
 import {
@@ -70,7 +70,8 @@ const authProtectedRoutes = [
   { path: "/accounts", component: <AccountListing /> },
 
   // Job
-  { path: "/jobs/job-creation", component: <JobCreation /> },
+  // { path: "/jobs/job-creation", component: <JobCreation /> },
+  { path: "/jobs/job-creation", component: <JobCreate /> },
   // { path: "/jobs/:jobId/:type", component: <JobCreation /> },
   { path: "/jobs", component: <JobListing /> },
   { path: "/jobs/:jobId/:slug", component: <JobManage />},

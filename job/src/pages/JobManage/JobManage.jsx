@@ -13,9 +13,13 @@ const JobManage = () => {
   const { jobId, slug } = useParams();
 
   const navContents = [
-    { link: "SNAPSHOT", url: `/jobs/${jobId}/snapshot`, slug: "snapshot"},
+    { link: "SNAPSHOT", url: `/jobs/${jobId}/snapshot`, slug: "snapshot" },
     { link: "OVERVIEW", url: `/jobs/${jobId}/overview`, slug: "overview" },
-    { link: "PERFORMANCE", url: `/jobs/${jobId}/performance`, slug: "performance" },
+    {
+      link: "PERFORMANCE",
+      url: `/jobs/${jobId}/performance`,
+      slug: "performance",
+    },
     { link: "EMAIL", url: `/jobs/${jobId}/email`, slug: "email" },
     { link: "TASK", url: `/jobs/${jobId}/task`, slug: "task" },
   ];
@@ -33,7 +37,11 @@ const JobManage = () => {
         </Row>
 
         <CustomNav navContents={navContents} slug={slug}>
-          {slug == "snapshot" && <JobCreation />}
+          {slug == "snapshot" && (
+            <div className="mt-5">
+              <JobCreation />
+            </div>
+          )}
           {slug == "overview" && <JobOverview />}
           {/* {slug == "performance" && <CandidatePerformance />}
           {slug == "email" && <CandidateEmail />}

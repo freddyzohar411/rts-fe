@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Container, Button, Card, CardBody } from "reactstrap";
 import { Form } from "@workspace/common";
 import { JOB_FORM_NAME } from "./constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearJobFormSubmission,
@@ -19,7 +19,10 @@ const JobCreation = () => {
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
   const { jobId, type } = useParams();
-  const isView = type === "view";
+  // const isView = type === "view";
+  const location = useLocation();
+  const linkState = location.state;
+  const isView =  linkState?.view ;
 
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
