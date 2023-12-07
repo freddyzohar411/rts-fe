@@ -22,6 +22,11 @@ import {
 import BaseFormSelectElement from "./BaseFormSelectElement";
 import SimpleBar from "simplebar-react";
 
+// Import JSON
+import JSON1 from "../../formjson/Candidate_education_details.json"
+
+console.log("JSON1", JSON1)
+
 const FormBuilder = ({
   onSubmit,
   userDetails,
@@ -61,6 +66,26 @@ const FormBuilder = ({
   const [jsonData, setJsonData] = useState(null);
   const [showJsonModal, setShowJsonModal] = useState(false);
 
+  // =====================================================
+  // Populate form with json
+  // useEffect(() => {
+  //   if (JSON1) {
+  //     console.log("JSON1 IN", JSON1)
+  //     setFormFields(JSON1.formFieldsList);
+  //     setFormLayoutSchema(JSON1.formSchemaList);
+  //     setFormName(JSON1.formName);
+  //     setFormOptions({
+  //       formType: JSON1.formType,
+  //       entityType: JSON1.entityType,
+  //       baseFormId: JSON1.baseFormId,
+  //       stepperNumber: JSON1.stepperNumber,
+  //       formCategory: JSON1.formCategory,
+  //     });
+  //   }
+  // }, [JSON1]);
+
+  // console.log("formFields Check 1", formFields);
+
   /**
    * Set form state
    */
@@ -72,6 +97,7 @@ const FormBuilder = ({
       setFormState("create");
     }
   }, [template, baseFormTemplate]);
+
 
   /**
    * Set template data
@@ -719,9 +745,13 @@ const FormBuilder = ({
   // Save JSON file to local
   const handleSaveJSONData = () => {
     const JSONData = {
-      formName,
-      formSchema: formFields,
-      formLayoutSchema,
+      formName: formName,
+      formType: formOptions.formType,
+      entityType: formOptions.entityType,
+      baseFormId: formOptions.baseFormId,
+      stepperNumber: formOptions.stepperNumber,
+      formFieldsList: formFields,
+      formSchemaList: formLayoutSchema,
     };
     const element = document.createElement("a");
     const file = new Blob([JSON.stringify(JSONData, null, 2)], {
@@ -741,10 +771,9 @@ const FormBuilder = ({
       entityType: formOptions.entityType,
       baseFormId: formOptions.baseFormId,
       stepperNumber: formOptions.stepperNumber,
-      formFields: stringifyObj(formFields),
-      formLayoutSchema: formLayoutSchema,
+      formFieldsList: stringifyObj(formFields),
+      formSchemaList: formLayoutSchema,
     };
-
     setJsonData(JSON.stringify(JSONData, null, 2));
     setShowJsonModal(true);
   };
