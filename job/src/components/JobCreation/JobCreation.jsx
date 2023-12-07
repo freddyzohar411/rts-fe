@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Container, Button } from "reactstrap";
+import { Container, Button, Card, CardBody } from "reactstrap";
 import { Form } from "@workspace/common";
 import { JOB_FORM_NAME } from "./constants";
 import { useNavigate, useParams } from "react-router-dom";
@@ -81,35 +81,41 @@ const JobCreation = () => {
 
   document.title = "Job Creation | RTS";
   return (
-    <Container className="page-content">
-      <Form
-        template={formTemplate}
-        userDetails={getAllUserGroups()}
-        country={"India"}
-        editData={formSubmissionData}
-        onSubmit={handleFormSubmit}
-        onFormFieldsChange={handleFormFieldChange}
-        errorMessage={null}
-        view={isView}
-        ref={formikRef}
-      />
-      <JobDocument jobId={randomId} />
-      <div className="d-flex flex-row-reverse gap-3 mb-2">
-        <Button
-          className="btn btn-success"
-          type="button"
-          disabled={isView}
-          onClick={() => {
-            formikRef.current.formik.submitForm();
-          }}
-        >
-          Submit
-        </Button>
-        <Button type="button" onClick={() => navigate("/jobs")}>
-          Cancel
-        </Button>
-      </div>
-    </Container>
+    <div className="">
+      {/* <Container> */}
+        {/* <Card>
+          <CardBody> */}
+            <Form
+              template={formTemplate}
+              userDetails={getAllUserGroups()}
+              country={"India"}
+              editData={formSubmissionData}
+              onSubmit={handleFormSubmit}
+              onFormFieldsChange={handleFormFieldChange}
+              errorMessage={null}
+              view={isView}
+              ref={formikRef}
+            />
+            <JobDocument jobId={randomId} />
+            <div className="d-flex flex-row-reverse gap-3 mb-2">
+              <Button
+                className="btn btn-success"
+                type="button"
+                disabled={isView}
+                onClick={() => {
+                  formikRef.current.formik.submitForm();
+                }}
+              >
+                Submit
+              </Button>
+              <Button type="button" onClick={() => navigate("/jobs")}>
+                Cancel
+              </Button>
+            </div>
+          {/* </CardBody>
+        </Card> */}
+      {/* </Container> */}
+    </div>
   );
 };
 
