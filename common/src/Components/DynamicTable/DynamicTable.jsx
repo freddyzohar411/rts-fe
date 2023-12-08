@@ -58,7 +58,14 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
             <tr>{data && generateHeaderJSX(config)}</tr>
           </thead>
           <tbody className="list form-check-all">
-            {data && generateBodyJSX(config, data)}
+            {data && data.length > 0 ? (
+              generateBodyJSX(config, data)
+            ) : (
+              <tr>
+                <td colSpan={config.length}>No data available.</td>
+              </tr>
+            )}
+            {/* {data && generateBodyJSX(config, data)} */}
           </tbody>
         </Table>
       </div>

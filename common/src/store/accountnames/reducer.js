@@ -1,31 +1,31 @@
 import {
-  FETCH_ACCOUNTCONTACTS,
-  FETCH_ACCOUNTCONTACTS_SUCCESS,
-  FETCH_ACCOUNTCONTACTS_FAILURE,
+  FETCH_ACCOUNT_NAMES,
+  FETCH_ACCOUNT_NAMES_SUCCESS,
+  FETCH_ACCOUNT_NAMES_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
-  accountContacts: [],
+  accountNames: [],
   errorMsg: "",
   loading: false,
   error: false,
 };
 
-const AccountContactsReducer = (state = initialState, action) => {
+const AccountNamesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_ACCOUNTCONTACTS:
+    case FETCH_ACCOUNT_NAMES:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case FETCH_ACCOUNTCONTACTS_SUCCESS:
+    case FETCH_ACCOUNT_NAMES_SUCCESS:
       return {
         ...state,
         loading: false,
-        accountContacts: action.payload,
+        accountNames: action.payload,
       };
-    case FETCH_ACCOUNTCONTACTS_FAILURE:
+    case FETCH_ACCOUNT_NAMES_FAILURE:
       return {
         ...state,
         loading: false,
@@ -37,4 +37,4 @@ const AccountContactsReducer = (state = initialState, action) => {
   }
 };
 
-export default AccountContactsReducer;
+export default AccountNamesReducer;

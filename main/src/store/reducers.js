@@ -32,6 +32,8 @@ const {
   IndustryReducer,
   ParentCompanyReducer,
   UserGroupReducer,
+  AccountNamesReducer,
+  AccountContactReducer,
 } = Reducers;
 
 const { Login, ForgetPassword, Profile } = LoginReducers;
@@ -41,12 +43,7 @@ const { AccountReducer, AccountRegistrationReducer, AccountFormReducer } =
 
 const { FormReducer } = FormBuilderReducers;
 
-const {
-  JobCountryCurrencyReducer,
-  JobAccountReducer,
-  JobAccountContactsReducer,
-  JobReducer,
-} = JobReducers;
+const { JobReducer, JobFormReducer, JobListReducer } = JobReducers;
 
 const {
   UserReducer,
@@ -70,6 +67,8 @@ const rootReducer = combineReducers({
   IndustryReducer,
   ParentCompanyReducer,
   UserGroupReducer,
+  AccountNamesReducer,
+  AccountContactReducer,
 
   // public
   Login,
@@ -83,10 +82,9 @@ const rootReducer = combineReducers({
   AccountFormReducer,
 
   // Job
-  JobCountryCurrencyReducer,
-  JobAccountReducer,
-  JobAccountContactsReducer,
   JobReducer,
+  JobFormReducer,
+  JobListReducer,
 
   // Form
   FormReducer,

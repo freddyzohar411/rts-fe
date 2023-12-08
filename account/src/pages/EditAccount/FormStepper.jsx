@@ -80,7 +80,7 @@ const FormStepper = ({
           )}
           <div className="d-flex gap-2">
             {activeStep > 0 && (
-              <Button color="dark" onClick={handleBack}>
+              <Button className="btn btn-custom-primary" onClick={handleBack}>
                 Back
               </Button>
             )}

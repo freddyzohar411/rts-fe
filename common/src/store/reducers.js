@@ -5,6 +5,8 @@ import DepartmentReducer from "./department/reducer";
 import IndustryReducer from "./industry/reducer";
 import ParentCompanyReducer from "./parentcompany/reducer";
 import UserGroupReducer from "./usergroup/reducer";
+import AccountNamesReducer from "./accountnames/reducer";
+import AccountContactReducer from "./accountcontact/reducer";
 
 export {
   Layout,
@@ -13,5 +15,7 @@ export {
   DepartmentReducer,
   IndustryReducer,
   ParentCompanyReducer,
-  UserGroupReducer
+  UserGroupReducer,
+  AccountNamesReducer,
+  AccountContactReducer,
 };

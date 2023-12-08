@@ -1,22 +1,41 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
-import axios from "axios";
+import { toast } from "react-toastify";
 
-import { FETCH_JOBS, CREATE_JOB } from "./actionTypes";
+import {
+  FETCH_JOBS,
+  CREATE_JOB,
+  FETCH_JOB,
+  CREATE_JOB_DOCUMENTS,
+} from "./actionTypes";
 import {
   fetchJobsSuccess,
   fetchJobsFailure,
   createJobSuccess,
   createJobFailure,
+  fetchJobSuccess,
+  fetchJobFailure,
+  createJobDocumentsSuccess,
+  createJobDocumentsFailure,
 } from "./action";
 import {
   getJobs,
   createJob,
-  createDocument,
+  getJobById,
+  createJobDocument,
+  updateJobDocument,
+  updateJob,
 } from "../../helpers/backend_helper";
 
-const JOB_ENTITY_TYPE = "job";
-
 // Fetch Accounts
+function* workFetchJob(action) {
+  try {
+    const response = yield call(getJobById, action.payload);
+    yield put(fetchJobSuccess(response.data));
+  } catch (error) {
+    yield put(fetchJobFailure(error));
+  }
+}
+
 function* workFetchJobs(action) {
   try {
     const response = yield call(getJobs, action.payload);
@@ -27,43 +46,52 @@ function* workFetchJobs(action) {
 }
 
 function* workCreateJob(action) {
+  const { payload, navigate } = action.payload;
   try {
-    const response = yield call();
-    yield put(createJobSuccess(response.data));
+    // Create a job
+    let jobResponse = null;
+    if (payload?.id) {
+      jobResponse = yield call(updateJob, payload?.id, payload);
+    } else {
+      jobResponse = yield call(createJob, payload);
+    }
+    yield put(createJobSuccess(jobResponse.data));
+    toast.success(jobResponse?.message);
+    navigate("/jobs");
   } catch (error) {
+    toast.error(error?.message);
     yield put(createJobFailure(error));
   }
 }
 
-function* workCreateJobAndDocuments(action) {
-  const { newJob, newDocuments, navigate } = action.payload;
+function* workCreateJobDocuments(action) {
+  const { entity, newData, config, rerenderTable, id, resetForm } =
+    action.payload;
   try {
     // Create a job
-    const jobResponse = yield call(createJob, newJob);
-    yield put(createJobSuccess(jobResponse.data));
-
-    // Create documents
-    const jobId = jobResponse.data.id;
-    for (let i = 0; i < newDocuments.length; i++) {
-      const document = newDocuments[i];
-      // Create a document
-      const documentData = new FormData();
-      documentData.append("file", document.file);
-      documentData.append("entityType", JOB_ENTITY_TYPE);
-      documentData.append("entityId", +jobId);
-      yield call(createDocument, documentData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+    if (id) {
+      const jobResponse = yield call(updateJobDocument, id, newData, config);
+      yield put(createJobDocumentsSuccess(jobResponse.data));
+    } else {
+      const jobResponse = yield call(createJobDocument, newData, config);
+      yield put(createJobDocumentsSuccess(jobResponse.data));
     }
-    navigate("/jobs");
+    if (typeof resetForm === "function") {
+      resetForm();
+    }
+
+    if (typeof rerenderTable === "function") {
+      rerenderTable();
+    }
   } catch (error) {
-    yield put(createJobFailure(error));
+    toast.error(error?.message);
+    yield put(createJobDocumentsFailure(error));
   }
 }
 
 export default function* watchFetchJobSaga() {
+  yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
-  yield takeEvery(CREATE_JOB, workCreateJobAndDocuments);
+  yield takeEvery(CREATE_JOB, workCreateJob);
+  yield takeEvery(CREATE_JOB_DOCUMENTS, workCreateJobDocuments);
 }

@@ -5,6 +5,8 @@ import IndustrySaga from "./industry/saga";
 import CountryCurrencySaga from "./countrycurrency/saga";
 import ParentCompanySaga from "./parentcompany/saga";
 import UserGroupSaga from "./usergroup/saga";
+import AccountNamesSaga from "./accountnames/saga";
+import AccountContactSaga from "./accountcontact/saga";
 
 export {
   LayoutSaga,
@@ -13,5 +15,7 @@ export {
   IndustrySaga,
   CountryCurrencySaga,
   ParentCompanySaga,
-  UserGroupSaga
+  UserGroupSaga,
+  AccountNamesSaga,
+  AccountContactSaga,
 };

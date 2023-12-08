@@ -1,11 +1,5 @@
-import JobCountryCurrencyReducer from "./countrycurrency/reducer";
-import JobAccountReducer from "./account/reducer";
-import JobAccountContactsReducer from "./accountcontact/reducer";
 import JobReducer from "./job/reducer";
+import JobFormReducer from "./jobForm/reducer";
+import JobListReducer from "./jobList/reducer";
 
-export {
-  JobCountryCurrencyReducer,
-  JobAccountReducer,
-  JobAccountContactsReducer,
-  JobReducer,
-};
+export { JobReducer, JobFormReducer, JobListReducer };

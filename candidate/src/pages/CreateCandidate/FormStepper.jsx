@@ -90,7 +90,7 @@ const FormStepper = ({
   return (
     <Card>
       <CardBody>
-        <Container fluid>
+        <Container>
           <CandidateStepper step={activeStep} />
           <div className="px-3"> {children}</div>
           <div
@@ -113,7 +113,10 @@ const FormStepper = ({
                 </Button>
               )}
               <Button className="btn btn-custom-primary">Skip</Button>
-              <Button className="btn btn-custom-primary" onClick={handleNextStep}>
+              <Button
+                className="btn btn-custom-primary"
+                onClick={handleNextStep}
+              >
                 Next
               </Button>
             </div>

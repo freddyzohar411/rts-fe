@@ -1,19 +1,19 @@
 import {
-  FETCH_ACCOUNTNAMES,
-  FETCH_ACCOUNTNAMES_SUCCESS,
-  FETCH_ACCOUNTNAMES_FAILURE,
+  FETCH_ACCOUNT_NAMES,
+  FETCH_ACCOUNT_NAMES_SUCCESS,
+  FETCH_ACCOUNT_NAMES_FAILURE,
 } from "./actionTypes";
 
 export const fetchAccountNames = () => ({
-  type: FETCH_ACCOUNTNAMES,
+  type: FETCH_ACCOUNT_NAMES,
 });
 
 export const fetchAccountNamesSuccess = (accounts) => ({
-  type: FETCH_ACCOUNTNAMES_SUCCESS,
+  type: FETCH_ACCOUNT_NAMES_SUCCESS,
   payload: accounts,
 });
 
 export const fetchAccountNamesFailure = (error) => ({
-  type: FETCH_ACCOUNTNAMES_FAILURE,
+  type: FETCH_ACCOUNT_NAMES_FAILURE,
   payload: error,
 });

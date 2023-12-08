@@ -231,6 +231,20 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableId: "multifile",
       type: "field",
     },
+    {
+      draggableLabelIcon: "ri-account-box-fill",
+      draggableLabel: "Account Name Select",
+      draggablePrefix: "element",
+      draggableId: "selectaccountname",
+      type: "field",
+    },
+    {
+      draggableLabelIcon: "ri-contacts-fill",
+      draggableLabel: "Account Contact Select",
+      draggablePrefix: "element",
+      draggableId: "selectaccountcontact",
+      type: "field",
+    },
   ];
 
   // Layout List

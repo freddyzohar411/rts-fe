@@ -1,53 +1,18 @@
-import {
-  call,
-  put,
-  takeEvery,
-  takeLatest,
-  select,
-  take,
-} from "redux-saga/effects";
+import { call, put, takeEvery, take } from "redux-saga/effects";
 import { toast } from "react-toastify";
-import { fetchProfile, profileSuccess } from "../profile/actions";
+import bcrypt from "bcryptjs-react";
+import { fetchProfile } from "../profile/actions";
 
 // Login Redux States
-import { LOGIN_USER, LOGOUT_USER, SOCIAL_LOGIN } from "./actionTypes";
-import {
-  apiError,
-  loginSuccess,
-  logoutUserSuccess,
-  logoutUser as logout,
-} from "./actions";
+import { LOGIN_USER, LOGOUT_USER } from "./actionTypes";
+import { apiError, loginSuccess, logoutUserSuccess } from "./actions";
 import { deleteProfile } from "../profile/actions";
-import {
-  getLogout,
-  postLogin,
-  getUserProfile,
-} from "../../../helpers/backend_helper";
-
-function getAllUserGroups(userProfile) {
-  const userGroupList = [];
-  if (userProfile?.userGroup) {
-    userProfile.userGroup.forEach((group) => {
-      userGroupList.push(group.groupName);
-    });
-  }
-  return userGroupList;
-}
-
-function getAllRoles(userProfile) {
-  const roleList = [];
-  if (userProfile?.userGroup) {
-    userProfile.userGroup.forEach((group) => {
-      group.roles.forEach((role) => {
-        roleList.push(role.roleName);
-      });
-    });
-  }
-  return roleList;
-}
+import { getLogout, postLogin } from "../../../helpers/backend_helper";
 
 function* loginUser({ payload: { user, history } }) {
   try {
+    const saltRounds = 10;
+    const hashedPassword = yield bcrypt.hash(user.password, saltRounds);
     const response = yield call(postLogin, {
       username: user.username,
       password: user.password,
@@ -55,34 +20,17 @@ function* loginUser({ payload: { user, history } }) {
     if (response) {
       yield put(loginSuccess(response));
       sessionStorage.setItem("authUser", JSON.stringify(response));
-
-      // // Check if user has any profile
+      // Check if user has any profile
       yield put(fetchProfile());
       yield take("PROFILE_SUCCESS");
-      
-      // const userProfile = yield select((state) => state.Profile.userProfile);
-
-      // if (getAllRoles(userProfile).length === 0) {
-      //   const logOutResponse = yield call(getLogout, {
-      //     token: response.refresh_token,
-      //   });
-      //   if (logOutResponse) {
-      //     sessionStorage.removeItem("authUser");
-      //     yield put(deleteProfile());
-      //     yield put(logoutUserSuccess(LOGOUT_USER, true));
-      //     toast.error("User has no profile");
-      //     return;
-      //   }
-      // }
-
       history("/dashboard");
-      toast.success("Login Successfully");
+      toast.success("Thanks for logging in.");
     } else {
       yield put(apiError(response));
     }
   } catch (error) {
-    if (error.message.includes("401")) {
-      toast.error("Bad Credentials");
+    if (error?.status === "UNAUTHORIZED") {
+      toast.error(error?.message);
     }
     yield put(apiError(error));
   }
