@@ -27,12 +27,12 @@ function CreateUser() {
   const dispatch = useDispatch();
   const allUsers = useSelector((state) => state?.UserReducer?.users) || [];
   const [sortBy, setSortBy] = useState(null);
-  console.log("sortby", sortBy)
+  console.log("sortby", sortBy);
   const sortByName = [
     {
       options: allUsers.map((user) => ({
         label: `${user.firstName} (${user.mobile})`,
-        value: user.firstName,
+        value: user.id.toString(),
       })),
     },
   ];
@@ -40,7 +40,7 @@ function CreateUser() {
   console.log(allUsers);
 
   const handleSubmit = async (values) => {
-    console.log("NewUservalues", values)
+
     const newUser = {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -50,9 +50,10 @@ function CreateUser() {
       employeeId: values.employeeId,
       password: values.password,
       confirmPassword: values.confirmPassword,
+      managerId: parseInt(values.managerId),
     };
-
-    return
+    console.log("NewUservalues", newUser);
+    return;
     dispatch(createUser({ newUser, navigate: navigate }));
   };
 
@@ -90,7 +91,7 @@ function CreateUser() {
                   validationSchema={schema}
                   onSubmit={handleSubmit}
                 >
-                  {({ errors, touched, resetForm }) => (
+                  {({ errors, touched, resetForm, values, handleChange }) => (
                     <Form>
                       <CardBody>
                         <Row>
@@ -265,7 +266,11 @@ function CreateUser() {
                               <FormSelection
                                 name="managerId"
                                 value={sortBy}
-                                onChange={(sortBy) => setSortBy(sortBy)}
+                                onChange={(selectedOption) => {
+                                  console.log("SS options",selectedOption);
+                                  setSortBy(selectedOption);
+                                  handleChange("managerId")(selectedOption.value);
+                                }}
                                 label="Select Manager"
                                 options={sortByName}
                                 style={{ borderColor: "#8aaed6" }}

@@ -24,7 +24,7 @@ export const initialValues = {
   password: "",
   confirmPassword: "",
   employeeId: "",
-  managerId: "",
+  managerId: null,
 };
 
 export const schema = yup.object().shape({
@@ -48,5 +48,6 @@ export const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords must match."),
 
   employeeId: yup.string().required("Please enter the Employee ID."),
-  managerId: yup.string().nullable().notRequired(),
+  // Id is a number
+  managerId: yup.number(),
 });
