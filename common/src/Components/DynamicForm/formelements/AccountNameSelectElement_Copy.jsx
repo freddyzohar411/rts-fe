@@ -23,24 +23,11 @@ const AccountNameSelectElement = ({ formik, field, formStateHook }) => {
     }
   }, [accountNamesData]);
 
-  const namesToid = (name) => {
-    const account = accountNamesData.find((account) => account.name === name);
-    return account?.id;
-  };
-
-  useEffect(() => {
-    if (formik?.values?.[field.name]) {
-      dispatch(
-        fetchAccountContacts(parseInt(namesToid(formik?.values?.[field.name])))
-      );
-    }
-  }, [formik?.values?.[field.name], accountNamesData]);
-
   // Handle Account Change, get account contact details
   const handleAccountChange = (e) => {
     if (e.target.value) {
       formik.handleChange(e);
-      dispatch(fetchAccountContacts(parseInt(namesToid(e.target.value))));
+      dispatch(fetchAccountContacts(parseInt(e.target.value)));
     }
   };
 
@@ -62,7 +49,7 @@ const AccountNameSelectElement = ({ formik, field, formStateHook }) => {
         >
           <option value="">{field.placeholder}</option>
           {fetchData?.map((item, index) => (
-            <option key={index} value={item?.name}>
+            <option key={index} value={item?.id}>
               {item?.name}
             </option>
           ))}

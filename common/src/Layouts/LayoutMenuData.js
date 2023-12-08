@@ -164,7 +164,7 @@ const Navdata = () => {
           link: "/jobs",
           parentId: "job",
         },
-        {
+        checkAllPermission([Permission.JOB_WRITE]) && {
           id: "newJob",
           label: "Create Job Openings",
           link: "/jobs/job-creation",

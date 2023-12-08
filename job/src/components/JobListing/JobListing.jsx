@@ -119,7 +119,7 @@ const JobListing = () => {
         render: (data) => (
           <div className="d-flex column-gap-2">
             <Link
-              to={`/jobs/${data.id}/view`}
+              to={`/jobs/${data.id}/snapshot`}
               style={{ color: "black" }}
               state={{ view: true }}
             >
@@ -130,9 +130,9 @@ const JobListing = () => {
                 <i className="ri-eye-line"></i>
               </Button>
             </Link>
-            {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+            {checkAllPermission([Permission.JOB_EDIT]) && (
               <Link
-                to={`/jobs/${data.id}/edit`}
+                to={`/jobs/${data.id}/snapshot`}
                 style={{ color: "black" }}
                 state={{ view: false }}
               >
@@ -144,7 +144,7 @@ const JobListing = () => {
                 </Button>
               </Link>
             )}
-            {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+            {checkAllPermission([Permission.JOB_DELETE]) && (
               <Button
                 type="button"
                 className="btn btn-danger d-flex align-items-center column-gap-2"
@@ -194,7 +194,7 @@ const JobListing = () => {
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
-        header="Delete JobList"
+        header="Delete Job"
         deleteText={"Are you sure you would like to delete this job?"}
       />
       <DynamicTableWrapper

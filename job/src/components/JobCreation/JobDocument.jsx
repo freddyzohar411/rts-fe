@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Form } from "@workspace/common";
 import { DOCUMENT_LIST, JOB_DOCUMENT_NAME } from "./constants";
 import { useParams } from "react-router-dom";
@@ -15,11 +15,12 @@ import {
   GET_DOCUMENT_BY_ENTITY_URL,
 } from "../../helpers/backend_helper";
 
-const JobDocument = ({ jobId }) => {
+const JobDocument = ({ jobId, view }) => {
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
+  const formikRef = useRef(null);
   const { type } = useParams();
-  const isView = type === "view";
+  // const isView = type === "view";
 
   const documentForm = useSelector(
     (state) => state.JobFormReducer.documentForm
@@ -68,7 +69,7 @@ const JobDocument = ({ jobId }) => {
       );
       setFormTemplate(formEdited);
     }
-  }, [documentForm]);
+  }, [documentForm, view]);
 
   /**
    * Get Form field data from Form component
@@ -76,6 +77,12 @@ const JobDocument = ({ jobId }) => {
   const handleFormFieldChange = useCallback((formFields) => {
     setFormFieldsData(formFields);
   }, []);
+
+  useEffect(() => {
+    if (formikRef.current && view === true) {
+      formikRef.current.clearForm();
+    }
+  }, [view]);
 
   // Handle form submit
   const handleFormSubmit = async (
@@ -86,6 +93,27 @@ const JobDocument = ({ jobId }) => {
     formStateHook,
     rerenderTable
   ) => {
+    const resetForm = (arrayFields = [], formState = "") => {
+      if (arrayFields.length > 0) {
+        arrayFields.forEach((field) => {
+          formikRef.current.formik.setFieldValue(field, "");
+        });
+      } else {
+        formikRef.current.clearForm();
+        formikRef.current.formik.setTouched({});
+        // Clear for fields with multi file + delete
+        const newFormFields = [...formFieldsData];
+        newFormFields.forEach((field) => {
+          if (field.type === "multifile") {
+            delete field.multiFileEnity;
+            delete field.multiFileDelete;
+          }
+        });
+      }
+      if (formState !== "") {
+        setFormState(formState);
+      }
+    };
     const { formState, setFormState } = formStateHook;
     const { buttonName, setButtonName } = buttonNameHook;
     if (buttonName === "add") {
@@ -117,9 +145,15 @@ const JobDocument = ({ jobId }) => {
             },
           },
           rerenderTable: rerenderTable,
-          resetForm: {},
+          resetForm: resetForm([], "create"),
         })
       );
+    }
+
+    // Cancel add document and reset form
+    if (buttonName === "cancel") {
+      resetForm([], "create");
+      return;
     }
 
     // Update document
@@ -166,7 +200,7 @@ const JobDocument = ({ jobId }) => {
             },
           },
           rerenderTable: rerenderTable,
-          resetForm: {},
+          resetForm: resetForm([], "create"),
         })
       );
     }
@@ -179,11 +213,12 @@ const JobDocument = ({ jobId }) => {
       template={formTemplate}
       userDetails={getAllUserGroups()}
       country={"India"}
-      editData={formSubmissionData}
+      editData={null}
       onSubmit={handleFormSubmit}
       onFormFieldsChange={handleFormFieldChange}
       errorMessage={errorMessage}
-      view={isView}
+      view={view}
+      ref={formikRef}
     />
   );
 };

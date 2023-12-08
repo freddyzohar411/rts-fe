@@ -61,6 +61,9 @@ const FormbuilderMain = () => {
       formFieldsList: JsonHelper.stringifyArrayObjectValues(formFields),
       formSchemaList: formLayoutSchema,
     };
+    // console.log("Final Form State", formState)
+    // console.log("Final Form Data", JSONData)
+    // return
 
     if (formState === "create") {
       dispatch(

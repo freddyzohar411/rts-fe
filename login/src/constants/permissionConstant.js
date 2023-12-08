@@ -6,6 +6,13 @@ export const Permission = {
   ACCOUNT_EDIT: "Accounts:Edit",
   ACCOUNT_NOACCESS: "Accounts:NoAccess",
 
+  // Job Permissions
+  JOB_READ: "Jobs:Read",
+  JOB_WRITE: "Jobs:Write",
+  JOB_DELETE: "Jobs:Delete",
+  JOB_EDIT: "Jobs:Edit",
+  JOB_NOACCESS: "Jobs:NoAccess",
+
   // Candidate Permissions
   CANDIDATE_READ: "Candidates:Read",
   CANDIDATE_WRITE: "Candidates:Write",

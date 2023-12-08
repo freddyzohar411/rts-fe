@@ -34,6 +34,8 @@ const DynamicTableWrapper = ({
     setSelectedOptGroup(selectedObjects);
   };
 
+  console.log("JOB config", config)
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -159,7 +161,7 @@ const DynamicTableWrapper = ({
                             </span>
                             Custom View
                           </Button>
-                          {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
+                          {checkAllPermission([Permission.JOB_WRITE]) && (
                             <Button type="button" className="btn btn-primary">
                               <Link
                                 to="/jobs/job-creation"
