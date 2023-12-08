@@ -14,7 +14,7 @@ const BasicInfo = ({ handleNext }) => {
   ];
 
   return (
-    <Container>
+    <Container fluid>
       <div className="mb-2">
         <Label className="h5">Basic Info</Label>
       </div>

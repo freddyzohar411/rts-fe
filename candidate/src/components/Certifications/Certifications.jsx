@@ -6,7 +6,7 @@ import { FormInput } from "@workspace/common";
 const Certifications = () => {
   const { errors } = useFormikContext();
   return (
-    <Container>
+    <Container fluid>
       <div className="mb-2">
         <Label className="h5">New Certification</Label>
       </div>

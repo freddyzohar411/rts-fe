@@ -17,7 +17,8 @@ import {
   generateInitialValues,
   generateValidationSchema2,
 } from "../../helpers/formik_helper";
-import { Label, Row, Alert, Container } from "reactstrap";
+import { Col, Card, CardBody, Label, Row, Alert, Container } from "reactstrap";
+import SimpleBar from "simplebar-react";
 
 const Form = forwardRef(
   (
@@ -234,7 +235,7 @@ const Form = forwardRef(
       Object.keys(formik.values).forEach((key) => {
         formik.setFieldValue(key, "");
       });
-    }
+    };
 
     /**
      * Declare imperative Handle for formik hook to be used by parent
@@ -249,44 +250,75 @@ const Form = forwardRef(
     );
 
     return (
-      <Container style={{ paddingRight: "40px" }}>
-        <div className="">
-          {formik && (
-            <FormikProvider value={formik}>
-              {showFormName && (
-                <>
-                  <div className="d-flex gap-2 mb-4">
-                    <h1>{formName}</h1>
-                  </div>
-                  <hr />
-                </>
-              )}
-              <div>
-                <form onSubmit={formik.handleSubmit} className="drag-zone">
-                  {formLayoutSchema.map((row, index) => (
-                    <Row key={index}>
-                      <FormSectionList
-                        key={row.rowId}
-                        row={row}
-                        formik={formik}
-                        formFields={formFields}
-                        formFieldsHook={{ formFields, setFormFields }}
-                        deleteTableData={deleteTableData}
-                        setFormState={setFormState}
-                        userDetails={userDetails}
-                        country={country}
-                        buttonNameHook={{ buttonName, setButtonName }}
-                        formStateHook={{ formState, setFormState }}
-                      />
-                    </Row>
-                  ))}
-                </form>
-              </div>
-            </FormikProvider>
-          )}
-        </div>
-        {errorMessage && <Alert color="danger">{errorMessage}</Alert>}
-      </Container>
+      <div>
+        <Container fluid>
+          <div className="bg-light">
+            <Card>
+              <SimpleBar style={{height: "600px"}}>
+                <CardBody className="p-4">
+                  <Row>
+                    <Col>
+                      <div>
+                        {formik && (
+                          <FormikProvider value={formik}>
+                            {showFormName && (
+                              <Row>
+                                <Col>
+                                  <div className="d-flex gap-2 mb-4">
+                                    <h1>{formName}</h1>
+                                  </div>
+                                </Col>
+                              </Row>
+                            )}
+                            <Row>
+                              <Col>
+                                <form
+                                  onSubmit={formik.handleSubmit}
+                                  className="drag-zone"
+                                >
+                                  {formLayoutSchema.map((row, index) => (
+                                    <Row key={index}>
+                                      <FormSectionList
+                                        key={row.rowId}
+                                        row={row}
+                                        formik={formik}
+                                        formFields={formFields}
+                                        formFieldsHook={{
+                                          formFields,
+                                          setFormFields,
+                                        }}
+                                        deleteTableData={deleteTableData}
+                                        setFormState={setFormState}
+                                        userDetails={userDetails}
+                                        country={country}
+                                        buttonNameHook={{
+                                          buttonName,
+                                          setButtonName,
+                                        }}
+                                        formStateHook={{
+                                          formState,
+                                          setFormState,
+                                        }}
+                                      />
+                                    </Row>
+                                  ))}
+                                </form>
+                              </Col>
+                            </Row>
+                          </FormikProvider>
+                        )}
+                      </div>
+                      {errorMessage && (
+                        <Alert color="danger">{errorMessage}</Alert>
+                      )}
+                    </Col>
+                  </Row>
+                </CardBody>
+              </SimpleBar>
+            </Card>
+          </div>
+        </Container>
+      </div>
     );
   }
 );

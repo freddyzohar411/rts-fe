@@ -30,7 +30,7 @@ const FormSectionList = ({
   let lists = [];
   for (let i = 0; i < col; i++) {
     lists.push(
-      <Col key={i} lg={colSize}>
+      <Col key={i}>
         {row.droppableZones[i].fieldIds.map((fieldId, index) => {
           const field = formFields.find((field) => field.fieldId === fieldId);
           if (

@@ -263,7 +263,6 @@ function CreateUser() {
                                 onChange={(sortBy) => setSortBy(sortBy)}
                                 label="Select Manager"
                                 options={sortByName}
-                                style={{borderColor: "#8aaed6"}}
                                 className="js-example-basic-single mb-0"
                               />
                             </div>

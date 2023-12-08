@@ -74,7 +74,7 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
     >
       <DropdownToggle
         as="button"
-        className="btn btn-primary arrow-none border border-primary"
+        className="btn btn-custom-primary arrow-none border border-primary"
         disabled={formState === "view" ? true : false}
         color="primary"
       >

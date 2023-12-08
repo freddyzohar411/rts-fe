@@ -20,7 +20,7 @@ const EducationDetails = ({ handleNext }) => {
   ];
 
   return (
-    <Container>
+    <Container fluid>
       <div className="mb-2">
         <Label className="h5">New Education Details</Label>
       </div>

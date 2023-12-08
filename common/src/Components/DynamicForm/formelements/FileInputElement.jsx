@@ -30,7 +30,7 @@ const FileInputElement = ({ formik, field, formStateHook }) => {
       <div className="d-flex align-items-center w-100 h-100">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-custom-primary"
           style={{
             borderTopRightRadius: "0px",
             borderBottomRightRadius: "0px",
