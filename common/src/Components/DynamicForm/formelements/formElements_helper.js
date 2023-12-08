@@ -348,8 +348,10 @@ const checkVisibleConditions = (field, formik) => {
       }
 
       if (condition.condition === "contains") {
-        if (formik.values[condition.field]?.includes(condition.value)) {
-          visble = false;
+        if (formik?.values?.[condition.field] && condition.value) {
+          if (formik?.values?.[condition.field]?.includes(condition.value)) {
+            visble = false;
+          }
         }
       }
 
