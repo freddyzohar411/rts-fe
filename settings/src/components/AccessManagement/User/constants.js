@@ -24,6 +24,7 @@ export const initialValues = {
   password: "",
   confirmPassword: "",
   employeeId: "",
+  managerId: "",
 };
 
 export const schema = yup.object().shape({
@@ -33,7 +34,10 @@ export const schema = yup.object().shape({
   lastName: yup.string().required("Please enter a last name."),
   username: yup.string().required("Please enter a username."),
   email: yup.string().required("Please enter an email address."),
-  mobile: yup.string().required("Please enter a contact number.").min(10, "Mobile number must be at least 10 digits long."),
+  mobile: yup
+    .string()
+    .required("Please enter a contact number.")
+    .min(10, "Mobile number must be at least 10 digits long."),
   password: yup
     .string()
     .required("Please enter a password.")
@@ -44,4 +48,5 @@ export const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords must match."),
 
   employeeId: yup.string().required("Please enter the Employee ID."),
+  managerId: yup.string().nullable().notRequired(),
 });

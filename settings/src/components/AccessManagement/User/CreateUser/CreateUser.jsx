@@ -27,6 +27,7 @@ function CreateUser() {
   const dispatch = useDispatch();
   const allUsers = useSelector((state) => state?.UserReducer?.users) || [];
   const [sortBy, setSortBy] = useState(null);
+  console.log("sortby", sortBy)
   const sortByName = [
     {
       options: allUsers.map((user) => ({
@@ -39,6 +40,7 @@ function CreateUser() {
   console.log(allUsers);
 
   const handleSubmit = async (values) => {
+    console.log("NewUservalues", values)
     const newUser = {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -49,6 +51,8 @@ function CreateUser() {
       password: values.password,
       confirmPassword: values.confirmPassword,
     };
+
+    return
     dispatch(createUser({ newUser, navigate: navigate }));
   };
 
@@ -259,11 +263,12 @@ function CreateUser() {
                           <Col lg={4}>
                             <div className="mb-3">
                               <FormSelection
+                                name="managerId"
                                 value={sortBy}
                                 onChange={(sortBy) => setSortBy(sortBy)}
                                 label="Select Manager"
                                 options={sortByName}
-                                style={{borderColor: "#8aaed6"}}
+                                style={{ borderColor: "#8aaed6" }}
                                 className="js-example-basic-single mb-0"
                               />
                             </div>
