@@ -194,7 +194,7 @@ const JobListing = () => {
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
-        header="Delete JobList"
+        header="Delete Job"
         deleteText={"Are you sure you would like to delete this job?"}
       />
       <DynamicTableWrapper

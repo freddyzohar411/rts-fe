@@ -34,6 +34,8 @@ const DynamicTableWrapper = ({
     setSelectedOptGroup(selectedObjects);
   };
 
+  console.log("JOB config", config)
+
   return (
     <React.Fragment>
       <div className="page-content">
