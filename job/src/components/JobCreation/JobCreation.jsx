@@ -1403,7 +1403,7 @@ function JobCreation() {
                               </Field>
                               <Button
                                 type="button"
-                                className="btn btn-primary"
+                                className="btn btn-custom-primary"
                                 onClick={() => addFileHandler(setFieldValue)}
                               >
                                 Add
@@ -1463,12 +1463,12 @@ function JobCreation() {
                     <div className="text-end">
                       <Button
                         type="button"
-                        className="btn btn-primary me-3"
+                        className="btn btn-custom-primary me-3"
                         onClick={() => navigate("/jobs")}
                       >
                         Cancel
                       </Button>
-                      <Button type="submit" className="btn btn-primary">
+                      <Button type="submit" className="btn btn-custom-primary">
                         Submit
                       </Button>
                     </div>

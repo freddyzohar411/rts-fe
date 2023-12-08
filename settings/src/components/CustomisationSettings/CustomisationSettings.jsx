@@ -52,7 +52,7 @@ function CustomisationSettings() {
         render: (data) => (
           <div className="d-flex column-gap-2">
             <Link to={`/form-builder/${data.formId}`}>
-              <Button type="button" className="btn btn-primary">
+              <Button type="button" className="btn btn-custom-primary">
                 <i className="ri-edit-2-line"></i>
               </Button>
             </Link>

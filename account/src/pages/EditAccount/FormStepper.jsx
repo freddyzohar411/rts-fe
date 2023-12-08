@@ -74,7 +74,7 @@ const FormStepper = ({
           } align-items-center mb-2`}
         >
           {accountId && checkReadEditPermission() && (
-            <Button onClick={toggleFormViewState} className="btn btn-danger">
+            <Button onClick={toggleFormViewState} className="btn btn-custom-primary">
               {viewState ? "Edit" : "View"}
             </Button>
           )}
@@ -84,8 +84,8 @@ const FormStepper = ({
                 Back
               </Button>
             )}
-            <Button color="dark">Skip</Button>
-            <Button color="dark" onClick={handleNextStep}>
+            <Button className="btn btn-custom-primary">Skip</Button>
+            <Button className="btn btn-custom-primary" onClick={handleNextStep}>
               Next
             </Button>
           </div>

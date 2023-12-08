@@ -14,7 +14,6 @@ const FormElementSidebar = ({ unusedFields }) => {
   });
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [customSearchQuery, setCustomSearchQuery] = useState("");
   // Element List
   const elementLists = [
     {
@@ -307,6 +306,25 @@ const FormElementSidebar = ({ unusedFields }) => {
         <UnusedFields unusedFields={unusedFields} />
       )}
       <hr style={{ border: "1px dashed #fff" }} />
+      <div className="d-flex flex-column gap-3">
+        <div>
+          <span className="h6 fw-bold text-white">SEARCH ALL ELEMENTS</span>
+        </div>
+        <div className="search-box">
+          <Input
+            className="form-control"
+            type="text"
+            placeholder="Search for elements.."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
+          />
+          <i className="ri-search-line search-icon"></i>
+        </div>
+      </div>
+
+      <hr style={{ border: "1px dashed #fff" }} />
 
       {/* Elements */}
       <span
@@ -323,18 +341,6 @@ const FormElementSidebar = ({ unusedFields }) => {
 
       {isListOpen.elements && (
         <div>
-          <div className="search-box my-2">
-            <Input
-              type="text"
-              placeholder="Search elements.."
-              className="form-control rounded"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-              }}
-            />
-            <i className="ri-search-line search-icon"></i>
-          </div>
           <SimpleBar style={{ maxHeight: `calc(100vh - 350px)` }}>
             {elementLists
               .filter((element) =>
@@ -381,24 +387,12 @@ const FormElementSidebar = ({ unusedFields }) => {
 
       {isListOpen.customElements && (
         <div>
-          <div className="search-box my-2">
-            <Input
-              type="text"
-              placeholder="Search elements.."
-              className="form-control rounded"
-              value={customSearchQuery}
-              onChange={(e) => {
-                setCustomSearchQuery(e.target.value);
-              }}
-            />
-            <i className="ri-search-line search-icon"></i>
-          </div>
           <SimpleBar style={{ maxHeight: `calc(100vh - 350px)` }}>
             {customElementLists
               .filter((customElement) =>
                 customElement.draggableLabel
                   .toLowerCase()
-                  .includes(customSearchQuery.toLowerCase())
+                  .includes(searchQuery.toLowerCase())
               )
               .map((customElement) => (
                 <DraggableBox
@@ -413,7 +407,7 @@ const FormElementSidebar = ({ unusedFields }) => {
             {customElementLists.filter((customElement) =>
               customElement.draggableLabel
                 .toLowerCase()
-                .includes(customSearchQuery.toLowerCase())
+                .includes(searchQuery.toLowerCase())
             ).length === 0 && (
               <div className="text-start text-white my-4">
                 <span>No custom elements found.</span>

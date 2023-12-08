@@ -30,7 +30,7 @@ const FormSectionList = ({
   let lists = [];
   for (let i = 0; i < col; i++) {
     lists.push(
-      <Col key={i} lg={colSize}>
+      <Col key={i}>
         {row.droppableZones[i].fieldIds.map((fieldId, index) => {
           const field = formFields.find((field) => field.fieldId === fieldId);
           if (
@@ -73,7 +73,7 @@ const FormSectionList = ({
   return (
     <div>
       {isTitle && <h5 className="mb-3">{title}</h5>}
-      <div className="d-flex gap-1">{lists}</div>
+      <div className="d-flex gap-3">{lists}</div>
     </div>
   );
 };

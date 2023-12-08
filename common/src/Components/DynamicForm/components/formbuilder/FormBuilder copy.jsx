@@ -939,7 +939,7 @@ const FormBuilder = ({
                     )}
                   </div>
                   {formFields.length > 0 && (
-                    <button type="submit" className="btn btn-primary mt-3">
+                    <button type="submit" className="btn btn-custom-primary mt-3">
                       {formState === "create" ? "Create" : "Update"}
                     </button>
                   )}
@@ -959,7 +959,7 @@ const FormBuilder = ({
                   {formFields.length > 0 && (
                     <button
                       type="button"
-                      className="btn btn-primary mt-3 ms-3"
+                      className="btn btn-custom-primary mt-3 ms-3"
                       onClick={() => {
                         const JSONData = {
                           formName,
@@ -976,7 +976,7 @@ const FormBuilder = ({
                   )}
                   {formFields.length > 0 && (
                     <button
-                      className="btn btn-primary mt-3 ms-3"
+                      className="btn btn-custom-primary mt-3 ms-3"
                       onClick={viewJSON}
                     >
                       View JSON
@@ -984,7 +984,7 @@ const FormBuilder = ({
                   )}
                   {formFields.length > 0 && (
                     <button
-                      className="btn btn-primary mt-3 ms-3"
+                      className="btn btn-custom-primary mt-3 ms-3"
                       onClick={handleSaveJSONData}
                     >
                       Save
@@ -992,7 +992,7 @@ const FormBuilder = ({
                   )}
                   {formFields.length > 0 && (
                     <button
-                      className="btn btn-primary mt-3 ms-3"
+                      className="btn btn-custom-primary mt-3 ms-3"
                       onClick={handleSaveJsonAPI}
                     >
                       Save to API

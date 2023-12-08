@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, FormFeedback } from "reactstrap";
 import {
   generateInitialValues,
   generateValidationSchemaForFieldBuilder,
@@ -1382,10 +1382,12 @@ const FieldBuilder = ({
 
   return (
     <div className="bg-light">
-      <Card>
-        <CardBody>
-          <form onSubmit={formik.handleSubmit}>
-            <span className="h5">{header}</span>
+      <form onSubmit={formik.handleSubmit}>
+        <Card>
+          <CardBody>
+            <div className="mb-3">
+              <span className="h5">{header}</span>
+            </div>
             {schema?.map((field, index) => {
               if (
                 field.type === "text" &&
@@ -1393,7 +1395,8 @@ const FieldBuilder = ({
                 (field.renderCondition ?? true)
               ) {
                 return (
-                  <div className="my-3">
+                  // TEXT FIELD
+                  <div className="mb-3">
                     <label htmlFor={field.name} className="form-label">
                       {field.label}
                     </label>
@@ -1408,8 +1411,8 @@ const FieldBuilder = ({
                       {...field.events}
                     />
                     {formik.errors[field.name] && formik.touched[field.name] ? (
-                      <div style={{ color: "red" }}>
-                        {formik.errors[field.name]}
+                      <div className="mt-2 text-danger">
+                          {formik.errors[field.name]}
                       </div>
                     ) : null}
                   </div>
@@ -1419,6 +1422,7 @@ const FieldBuilder = ({
                 ifContainsType(type, field.apply)
               ) {
                 return (
+                  // TEXTAREA FIELD
                   <div className="mb-3">
                     <label htmlFor={field.name} className="form-label">
                       {field.label}
@@ -1433,7 +1437,7 @@ const FieldBuilder = ({
                       {...field.events}
                     />
                     {formik.errors[field.name] && formik.touched[field.name] ? (
-                      <div>{formik.errors[field.name]}</div>
+                      <div className="mt-2">{formik.errors[field.name]}</div>
                     ) : null}
                   </div>
                 );
@@ -1442,6 +1446,7 @@ const FieldBuilder = ({
                 ifContainsType(type, field.apply)
               ) {
                 return (
+                  // SELECT FIELD
                   <div className="mb-3">
                     <label htmlFor={field.name} className="form-label">
                       {field.label}
@@ -1462,7 +1467,7 @@ const FieldBuilder = ({
                       })}
                     </select>
                     {formik.errors[field.name] && formik.touched[field.name] ? (
-                      <div>{formik.errors[field.name]}</div>
+                      <div className="mt-2">{formik.errors[field.name]}</div>
                     ) : null}
                   </div>
                 );
@@ -1471,6 +1476,7 @@ const FieldBuilder = ({
                 ifContainsType(type, field.apply)
               ) {
                 return (
+                  // RADIO FIELD
                   <div className="mb-3">
                     <label htmlFor={field.name} className="form-label">
                       {field.label}
@@ -1507,7 +1513,7 @@ const FieldBuilder = ({
                       })}
                     </div>
                     {formik.errors[field.name] && formik.touched[field.name] ? (
-                      <div>{formik.errors[field.name]}</div>
+                      <div className="mt-2">{formik.errors[field.name]}</div>
                     ) : null}
                   </div>
                 );
@@ -1516,6 +1522,7 @@ const FieldBuilder = ({
                 ifContainsType(type, field.apply)
               ) {
                 return (
+                  // NUMBER FIELD
                   <div className="mb-3">
                     <label htmlFor={field.name} className="form-label">
                       {field.label}
@@ -1531,7 +1538,7 @@ const FieldBuilder = ({
                       {...field.events}
                     />
                     {formik.errors[field.name] && formik.touched[field.name] ? (
-                      <div>{formik.errors[field.name]}</div>
+                      <div className="mt-2">{formik.errors[field.name]}</div>
                     ) : null}
                   </div>
                 );
@@ -1540,6 +1547,7 @@ const FieldBuilder = ({
                 ifContainsType(type, field.apply)
               ) {
                 return (
+                  // MULTISELECT FIELD
                   <div className="mb-3">
                     <label htmlFor={field.name} className="form-label">
                       {field.label}
@@ -1561,7 +1569,7 @@ const FieldBuilder = ({
                       })}
                     </select>
                     {formik.errors[field.name] && formik.touched[field.name] ? (
-                      <div>{formik.errors[field.name]}</div>
+                      <div className="mt-2">{formik.errors[field.name]}</div>
                     ) : null}
                   </div>
                 );
@@ -1569,6 +1577,7 @@ const FieldBuilder = ({
                 field.type === "keyvalue" &&
                 ifContainsType(type, field.apply)
               ) {
+                // KEY VALUE FIELD
                 return (
                   <div className="mb-3">
                     <div className="d-flex justify-content-between align-items-center mb-3">
@@ -1577,7 +1586,7 @@ const FieldBuilder = ({
                       </label>
                       <button
                         type="button"
-                        className="btn btn-success btn-sm"
+                        className="btn btn-custom-primary"
                         onClick={() => {
                           setKeyValueList([
                             ...keyValueList,
@@ -1591,7 +1600,7 @@ const FieldBuilder = ({
 
                     {keyValueList.map((keyValue, index) => {
                       return (
-                        <div className="d-flex gap-2 mb-2 align-items-center">
+                        <div className="d-flex gap-2 mb-3 align-items-center">
                           <span>{index + 1}) </span>
                           <input
                             id="optionLabel"
@@ -1654,7 +1663,7 @@ const FieldBuilder = ({
                       </label>
                       <button
                         type="button"
-                        className="btn btn-custom-primary px-3 btn-sm"
+                        className="btn btn-custom-primary"
                         onClick={() => {
                           setConditionList([
                             ...conditionList,
@@ -1728,7 +1737,7 @@ const FieldBuilder = ({
                           />
                           <span>
                             <AiFillDelete
-                              className="cursor-pointer"
+                              className="cursor-pointer text-custom-primary"
                               onClick={() => {
                                 setConditionList(
                                   conditionList.filter((item, i) => i !== index)
@@ -1753,7 +1762,7 @@ const FieldBuilder = ({
                       </label>
                       <button
                         type="button"
-                        className="btn btn-custom-primary px-3 btn-sm"
+                        className="btn btn-custom-primary"
                         onClick={() => {
                           setValidationConditionList([
                             ...validationConditionList,
@@ -1836,7 +1845,7 @@ const FieldBuilder = ({
                           />
                           <span>
                             <AiFillDelete
-                              className="cursor-pointer"
+                              className="cursor-pointer text-custom-primary"
                               onClick={() => {
                                 setValidationConditionList(
                                   validationConditionList.filter(
@@ -1880,7 +1889,7 @@ const FieldBuilder = ({
                       </select>
                       <button
                         type="button"
-                        className="btn btn-custom-primary px-3 btn-sm"
+                        className="btn btn-custom-primary"
                         disabled={!copyConditionList.copyField}
                         onClick={() => {
                           setCopyConditionList({
@@ -1964,7 +1973,7 @@ const FieldBuilder = ({
                           />
                           <span>
                             <AiFillDelete
-                              className="cursor-pointer"
+                              className="cursor-pointer text-custom-primary"
                               onClick={() => {
                                 setCopyConditionList((prev) => ({
                                   ...prev,
@@ -2034,7 +2043,7 @@ const FieldBuilder = ({
                       })}
                     </div>
                     {formik.errors[field.name] && formik.touched[field.name] ? (
-                      <div>{formik.errors[field.name]}</div>
+                      <div className="mt-2">{formik.errors[field.name]}</div>
                     ) : null}
                   </div>
                 );
@@ -2050,7 +2059,7 @@ const FieldBuilder = ({
                       </label>
                       <button
                         type="button"
-                        className="btn btn-custom-primary px-3 btn-sm"
+                        className="btn btn-custom-primary"
                         onClick={() => {
                           setTableConfig([
                             ...tableConfig,
@@ -2121,7 +2130,7 @@ const FieldBuilder = ({
                           />
                           <span>
                             <AiFillDelete
-                              className="cursor-pointer"
+                              className="cursor-pointer text-custom-primary"
                               onClick={() => {
                                 setTableConfig(
                                   tableConfig.filter((config, i) => i !== index)
@@ -2264,7 +2273,7 @@ const FieldBuilder = ({
                         />
                         <button
                           type="button"
-                          className="btn btn-custom-primary px-3 btn-sm"
+                          className="btn btn-custom-primary"
                           disabled={!country}
                           onClick={() => {
                             // Check if country is already added
@@ -2298,7 +2307,7 @@ const FieldBuilder = ({
                             <span>{country}</span>
                             <span>
                               <AiFillDelete
-                                className="cursor-pointer"
+                                className="cursor-pointer text-custom-primary"
                                 onClick={() => {
                                   setCountryList((prev) => {
                                     const newCountryList =
@@ -2367,7 +2376,7 @@ const FieldBuilder = ({
                             <span>{usergroup}</span>
                             <span>
                               <AiFillDelete
-                                className="cursor-pointer"
+                                className="cursor-pointer text-custom-primary"
                                 onClick={() => {
                                   setUserGroupList((prev) => {
                                     const newUserGroupList = prev.filter(
@@ -2385,33 +2394,33 @@ const FieldBuilder = ({
                 );
               }
             })}
+          </CardBody>
+        </Card>
 
-            <div className="d-flex gap-3 mt-4">
-              {formBuilderUpdateData ? (
-                <button type="submit" className="btn btn-custom-primary">
-                  Update Field
-                </button>
-              ) : (
-                <button type="submit" className="btn btn-custom-primary">
-                  Create Field
-                </button>
-              )}
+        <div className="d-flex justify-content-end gap-3 mt-4">
+          {formBuilderUpdateData ? (
+            <button type="submit" className="btn btn-custom-primary">
+              Update Field
+            </button>
+          ) : (
+            <button type="submit" className="btn btn-custom-primary">
+              Create Field
+            </button>
+          )}
 
-              <button
-                type="button"
-                className="btn btn-custom-primary"
-                onClick={() => {
-                  setFormBuilderUpdateData(null);
-                  setFormBuilderType(null);
-                  setShowModalSchema(false);
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </CardBody>
-      </Card>
+          <button
+            type="button"
+            className="btn btn-custom-primary"
+            onClick={() => {
+              setFormBuilderUpdateData(null);
+              setFormBuilderType(null);
+              setShowModalSchema(false);
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

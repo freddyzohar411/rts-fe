@@ -230,7 +230,7 @@ function JobListing() {
                               <Input
                                 type="text"
                                 placeholder="Search"
-                                className="form-control search bg-light border-light"
+                                className="form-control search"
                                 value={searchInput}
                                 style={{ width: "350px" }}
                                 onChange={(e) => setSearchInput(e.target.value)}
@@ -267,7 +267,7 @@ function JobListing() {
                         <div className="d-flex column-gap-2 justify-content-end">
                           <Button
                             type="button"
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="mdi mdi-download"></i>
@@ -276,17 +276,17 @@ function JobListing() {
                           </Button>
                           <Button
                             type="button"
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="ri-settings-3-fill"></i>
                             </span>
                             Custom View
                           </Button>
-                          <Button type="button" className="btn btn-primary">
+                          <Button type="button" className="btn btn-custom-primary">
                             Create New Account
                           </Button>
-                          <Button type="button" className="btn btn-primary">
+                          <Button type="button" className="btn btn-custom-primary">
                             <i className="ri-filter-line"></i>
                           </Button>
                         </div>

@@ -100,7 +100,7 @@ const DynamicTableWrapper = ({
                   />
                   <div className="d-flex justify-content-end">
                     <button
-                      className="btn btn-primary mt-3 "
+                      className="btn btn-custom-primary mt-3 "
                       onClick={() => {
                         setCustomConfigData(selectedOptGroup);
                         setIsCustomModalView(false);
@@ -142,7 +142,7 @@ const DynamicTableWrapper = ({
                         <div className="d-flex column-gap-2 justify-content-end">
                           <Button
                             type="button"
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="mdi mdi-download"></i>
@@ -155,7 +155,7 @@ const DynamicTableWrapper = ({
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="ri-settings-3-fill"></i>
@@ -163,7 +163,7 @@ const DynamicTableWrapper = ({
                             Custom View
                           </Button>
                           {checkAllPermission([Permission.CANDIDATE_WRITE]) && (
-                            <Button type="button" className="btn btn-primary">
+                            <Button type="button" className="btn btn-custom-primary">
                               <Link
                                 to="/accounts/create"
                                 style={{ color: "black" }}
@@ -172,7 +172,7 @@ const DynamicTableWrapper = ({
                               </Link>
                             </Button>
                           )}
-                          <Button type="button" className="btn btn-primary">
+                          <Button type="button" className="btn btn-custom-primary">
                             <i className="ri-filter-line"></i>
                           </Button>
                         </div>
