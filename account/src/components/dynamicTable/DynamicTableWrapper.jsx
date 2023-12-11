@@ -100,7 +100,7 @@ const DynamicTableWrapper = ({
                   />
                   <div className="d-flex justify-content-end">
                     <button
-                      className="btn btn-primary mt-3 "
+                      className="btn btn-custom-primary mt-3 "
                       onClick={() => {
                         setCustomConfigData(selectedOptGroup);
                         setIsCustomModalView(false);
@@ -128,7 +128,7 @@ const DynamicTableWrapper = ({
                               <Input
                                 type="text"
                                 placeholder="Search"
-                                className="form-control search bg-light border-light"
+                                className="form-control search"
                                 value={search}
                                 style={{ width: "350px" }}
                                 onChange={(e) => setSearch(e.target.value)}

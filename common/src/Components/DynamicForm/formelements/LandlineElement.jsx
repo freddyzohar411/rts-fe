@@ -110,7 +110,7 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
     >
       <DropdownToggle
         as="button"
-        className="btn btn-primary arrow-none border border"
+        className="btn btn-custom-primary arrow-none border border"
         disabled={formState === "view" ? true : false}
         color="primary"
       >

@@ -18,6 +18,20 @@
     @media (min-width: 768px) {
         margin-left: var(--#{$prefix}vertical-menu-width);
     }
+
+     /* Customize the scrollbar */
+     &::-webkit-scrollbar {
+        width: 12px; /* Set the width of the scrollbar */
+      }
+  
+      &::-webkit-scrollbar-thumb {
+        background-color: #5B78DA; /* Set the color of the thumb */
+        border-radius: 6px; /* Optional: Set the border radius of the thumb */
+      }
+  
+      &::-webkit-scrollbar-track {
+        background-color: grey; /* Set the color of the track */
+      }
 }
 
 .page-content {

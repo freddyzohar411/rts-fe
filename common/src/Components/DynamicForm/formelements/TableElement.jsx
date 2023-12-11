@@ -191,7 +191,7 @@ const TableElement = ({
                         <td>
                           <button
                             type="button"
-                            className="btn btn-primary"
+                            className="btn btn-custom-primary"
                             onClick={() => handleEdit(row)}
                           >
                             Edit

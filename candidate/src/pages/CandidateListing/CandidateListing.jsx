@@ -125,7 +125,7 @@ function CandidateListing() {
             >
               <Button
                 type="button"
-                className="btn btn-primary d-flex align-items-center column-gap-2"
+                className="btn btn-custom-primary d-flex align-items-center column-gap-2"
               >
                 <i className="ri-eye-line"></i>
               </Button>
@@ -139,7 +139,7 @@ function CandidateListing() {
               >
                 <Button
                   type="button"
-                  className="btn btn-primary d-flex align-items-center column-gap-2"
+                  className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                 >
                   <i className="mdi mdi-pencil"></i>
                 </Button>

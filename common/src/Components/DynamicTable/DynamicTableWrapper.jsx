@@ -95,7 +95,7 @@ const DynamicTableWrapper = ({
                 </Col>
               </Row>
               <button
-                className="btn btn-primary mt-3"
+                className="btn btn-custom-primary mt-3"
                 onClick={() => setCustomConfigData(selectedOptGroup)}
               >
                 Set
@@ -129,7 +129,7 @@ const DynamicTableWrapper = ({
                         <div className="d-flex column-gap-2 justify-content-end">
                           <Button
                             type="button"
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="mdi mdi-download"></i>
@@ -139,17 +139,17 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             onClick={() => setCustomViewShow(!customViewShow)}
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="ri-settings-3-fill"></i>
                             </span>
                             Custom View
                           </Button>
-                          <Button type="button" className="btn btn-primary">
+                          <Button type="button" className="btn btn-custom-primary">
                             Create New Account
                           </Button>
-                          <Button type="button" className="btn btn-primary">
+                          <Button type="button" className="btn btn-custom-primary">
                             <i className="ri-filter-line"></i>
                           </Button>
                         </div>

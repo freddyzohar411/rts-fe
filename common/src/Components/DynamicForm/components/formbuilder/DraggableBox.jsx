@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { v4 as uuid } from "uuid";
-import "./DraggableBox.scss";
+// import "./DraggableBox.scss";
 
 const DraggableBox = ({
+  draggableLabelIcon,
   draggableLabel,
   draggablePrefix,
   draggableId,
@@ -22,10 +23,10 @@ const DraggableBox = ({
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
-                className="drag-box bg-light border-dark border rounded-pill p-2 my-3 fs-5"
                 id={`${draggablePrefix}-${draggableId}`}
+                className="text-start text-white mt-3 d-flex flex-row gap-2"
               >
-                {draggableLabel}
+                <i className={draggableLabelIcon}></i> {draggableLabel}
               </div>
             )}
           </Draggable>

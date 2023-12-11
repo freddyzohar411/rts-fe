@@ -3,7 +3,20 @@ import { FormikProvider, useFormik } from "formik";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DroppableList from "./DroppableList";
 import "./FormBuilder.scss";
-import Modal from "../modal/Modal";
+import "@workspace/common/src/assets/scss/components/simplebar.min.css";
+// import Modal from "../modal/Modal";
+import {
+  Button,
+  Card,
+  CardBody,
+  Label,
+  Input,
+  Container,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
 import {
   generateInitialValues,
   generateValidationSchema2,
@@ -101,26 +114,25 @@ const FormBuilder = ({
     }
   }, [template, baseFormTemplate]);
 
-
   /**
    * Set template data
    */
   useEffect(() => {
-  //   // Load in JSON 1
-  //   if (JSON1) {
-  //     console.log("JSON1 IN", JSON1)
-  //     setFormFields(JSON1.formFieldsList);
-  //     setFormLayoutSchema(JSON1.formSchemaList);
-  //     setFormName(JSON1.formName);
-  //     setFormOptions({
-  //       formType: JSON1.formType,
-  //       entityType: JSON1.entityType,
-  //       baseFormId: JSON1.baseFormId,
-  //       stepperNumber: JSON1.stepperNumber,
-  //       formCategory: JSON1.formCategory,
-  //     });
-  //     return
-  //   }
+    //   // Load in JSON 1
+    //   if (JSON1) {
+    //     console.log("JSON1 IN", JSON1)
+    //     setFormFields(JSON1.formFieldsList);
+    //     setFormLayoutSchema(JSON1.formSchemaList);
+    //     setFormName(JSON1.formName);
+    //     setFormOptions({
+    //       formType: JSON1.formType,
+    //       entityType: JSON1.entityType,
+    //       baseFormId: JSON1.baseFormId,
+    //       stepperNumber: JSON1.stepperNumber,
+    //       formCategory: JSON1.formCategory,
+    //     });
+    //     return
+    //   }
 
     if (baseFormTemplate && formState === "create") {
       setFormFields(baseFormTemplate?.formSchema);
@@ -392,7 +404,7 @@ const FormBuilder = ({
     if (col === 0) {
       return {
         isTitle: false,
-        title: "title",
+        title: "Enter Row Title",
         rowId: id,
         droppableZones: droppableZones,
       };
@@ -405,7 +417,7 @@ const FormBuilder = ({
       }
       return {
         isTitle: true,
-        title: "title",
+        title: "Enter Row Title",
         rowId: id,
         droppableZones: droppableZones,
       };
@@ -425,7 +437,7 @@ const FormBuilder = ({
     // Get Row
     const row = {
       isTitle: false,
-      title: "title",
+      title: "Enter Row Title",
       rowId: id,
       droppableZones: droppableZones,
     };
@@ -856,276 +868,356 @@ const FormBuilder = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      {/* Form Preview */}
       <Modal
         isOpen={showModal}
-        closeModal={() => setShowModal(false)}
-        height="90%"
-        backgroundClose
+        toggle={() => setShowModal(!showModal)}
+        size="xl"
+        scrollable={true}
+        centered
       >
-        <Form
-          template={JSON.parse(jsonData)}
-          userDetails={userDetails}
-          country={country}
-          editData={null}
-          onFormikChange={null}
-          onSubmit={handleFormSubmit}
-          onFormFieldsChange={null}
-          errorMessage={null}
-        />
-      </Modal>
-      <div className="grid-formbuilder">
-        {/* <SimpleBar style={{height:"160vh"}}> */}
-        <div className="left-sidebar text-center bg-secondary px-4 py-3">
-          <FormElementSidebar unusedFields={unusedFields} />
-        </div>
-        {/* </SimpleBar> */}
-
-        <SimpleBar style={{ height: "800px" }}>
-          <div className="middle-sidebar">
-            <div className="form-container">
-              <FormikProvider value={formik}>
-                <div className="d-flex justify-content-between align-items-center">
-                  <h1 className="mb-4 mt-4">{`Form Builder (Total Fields: ${formFields?.length})`}</h1>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    style={{ padding: "10px 20px" }}
-                    onClick={() => setShowAll((prev) => !prev)}
-                  >
-                    {showAll ? "Hide Fields" : "Show All Fields"}
-                  </button>
-                </div>
-
-                <div className="d-flex gap-2 mb-4">
-                  <label htmlFor="" className="">
-                    Form Name:
-                  </label>
-                  <input
-                    type="text"
-                    value={formName}
-                    onChange={(e) => setFormName(e.target.value)}
-                    className="form-control"
-                  />
-                </div>
-
-                <div className="d-flex align-items-center gap-4 mb-3">
-                  <div className="w-100">
-                    <label htmlFor="" className="">
-                      Form Type
-                    </label>
-                    <select
-                      value={formOptions.formType}
-                      onChange={(e) =>
-                        setFormOptions((prev) => ({
-                          ...prev,
-                          formType: e.target.value,
-                        }))
-                      }
-                      className="form-select w-100"
-                    >
-                      <option value="">Select Form Type</option>
-                      <option value="custom">Custom</option>
-                      <option value="base">Base</option>
-                    </select>
-                  </div>
-                  <div className="w-100">
-                    <label htmlFor="" className="">
-                      Form Category
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      value={formOptions.formCategory}
-                      onChange={(e) =>
-                        setFormOptions((prev) => ({
-                          ...prev,
-                          formCategory: e.target.value,
-                        }))
-                      }
-                      placeholder="Enter form category"
-                    />
-                  </div>
-                </div>
-                {formOptions.formType === "custom" && (
-                  <div className="d-flex align-items-center gap-4">
-                    <div className="flex-grow-1">
-                      <BaseFormSelectElement
-                        setBaseFormTemplate={setBaseFormTemplate}
-                        setFormOptions={setFormOptions}
-                        initialBaseFormId={formOptions.baseFormId}
-                      />
-                    </div>
-
-                    <div className="flex-grow-1">
-                      <label htmlFor="" className="form-label">
-                        Entity Type
-                      </label>
-                      <input
-                        value={formOptions.entityType}
-                        onChange={(e) =>
-                          setFormOptions((prev) => ({
-                            ...prev,
-                            entityType: e.target.value,
-                          }))
-                        }
-                        type="text"
-                        className="form-control w-100"
-                      />
-                    </div>
-
-                    <div className="flex-grow-1">
-                      <label htmlFor="" className="form-label">
-                        Stepper No
-                      </label>
-                      <input
-                        value={formOptions.stepperNumber}
-                        onChange={(e) =>
-                          setFormOptions((prev) => ({
-                            ...prev,
-                            stepperNumber: parseInt(e.target.value),
-                          }))
-                        }
-                        type="number"
-                        className="form-control w-100"
-                      />
-                    </div>
-                  </div>
-                )}
-                <hr />
-                <div className="layout-drop-zone">
-                  <form onSubmit={formik.handleSubmit} className="drag-zone">
-                    <div className="lists-container">
-                      {formLayoutSchema.length > 0 ? (
-                        formLayoutSchema.map((row, index) => (
-                          <DnDWrapper
-                            key={index}
-                            droppableType="row"
-                            draggablePrefix="draggable-row-"
-                            draggableId={index}
-                            placeholder
-                            index={index}
-                            dropColor="#eeeeee"
-                          >
-                            <DroppableList
-                              key={row.rowId}
-                              row={row}
-                              setRowtitle={setRowtitle}
-                              formik={formik}
-                              handleFormFieldEdit={handleFormFieldEdit}
-                              handleFormFieldDelete={handleFormFieldDelete}
-                              formFields={formFields}
-                              handleDeleteLayoutAndField={
-                                handleDeleteLayoutAndField
-                              }
-                              toggleRowLayoutTitle={toggleRowLayoutTitle}
-                              addDropzoneToRowLayout={addDropzoneToRowLayout}
-                              deleteColumn={deleteColumn}
-                              setUnusedFieldIsUsed={setUnusedFieldIsUsed}
-                              deleteTableData={deleteTableData}
-                              setFormState={setFormState}
-                              userDetails={userDetails}
-                              country={country}
-                              showAll={showAll}
-                              removeUnusedFieldFromSchema={
-                                removeUnusedFieldFromSchema
-                              }
-                              formOptions={formOptions}
-                              formStateHook={{ formState, setFormState }}
-                              buttonNameHook={{ buttonName, setButtonName }}
-                              formFieldsHook={{ formFields, setFormFields }}
-                            />
-                          </DnDWrapper>
-                        ))
-                      ) : (
-                        <div style={{ position: "relative" }}>
-                          {formFields.length === 0 && (
-                            <div className="drop-zone-text">DROP ZONE</div>
-                          )}
-                          <DnDWrapper
-                            droppableType="row"
-                            draggablePrefix="draggable-row-"
-                            draggableId={0}
-                            placeholder
-                            index={0}
-                            dropColor="#eeeeee"
-                          >
-                            <div
-                              className="d-flex justify-content-center align-items-center absolute"
-                              style={{ height: "200px" }}
-                            >
-                              {/* <span>DROP ZONE</span> */}
-                            </div>
-                          </DnDWrapper>
-                        </div>
-                      )}
-                    </div>
-                    {formFields.length > 0 && (
-                      <button type="submit" className="btn btn-primary mt-3">
-                        {formState === "create" ? "Create" : "Update"}
-                      </button>
-                    )}
-                    {formState === "update" && (
-                      <button
-                        type="button"
-                        className="btn btn-danger mt-3 ms-3"
-                        onClick={() => {
-                          setFormState("create");
-                          formik.resetForm();
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    )}
-
-                    {formFields.length > 0 && (
-                      <button
-                        type="button"
-                        className="btn btn-primary mt-3 ms-3"
-                        onClick={() => {
-                          const JSONData = {
-                            formName,
-                            formSchema: formFields,
-                            formLayoutSchema,
-                          };
-                          setJsonData(JSON.stringify(JSONData));
-                          console.log(JSON.stringify(JSONData));
-                          setShowModal(true);
-                        }}
-                      >
-                        Preview
-                      </button>
-                    )}
-                    {formFields.length > 0 && (
-                      <button
-                        className="btn btn-primary mt-3 ms-3"
-                        onClick={viewJSON}
-                      >
-                        View JSON
-                      </button>
-                    )}
-                    {formFields.length > 0 && (
-                      <button
-                        className="btn btn-primary mt-3 ms-3"
-                        onClick={handleSaveJSONData}
-                      >
-                        Save
-                      </button>
-                    )}
-                    {formFields.length > 0 && (
-                      <button
-                        className="btn btn-primary mt-3 ms-3"
-                        onClick={handleSaveJsonAPI}
-                      >
-                        Save to API
-                      </button>
-                    )}
-                  </form>
-                </div>
-              </FormikProvider>
-            </div>
+        <ModalHeader
+          className="bg-primary border-bottom border-custom-primary"
+          toggle={() => setShowModal(!showModal)}
+        >
+          <div className="d-flex flex-column gap-1">
+            <span className="fw-bold text-dark">Form Preview</span>
+            <span className="fs-6">
+              Have a preview of how the customised form will appear to the user.
+            </span>
           </div>
-        </SimpleBar>
+        </ModalHeader>
 
+        <ModalBody className="bg-light">
+          <SimpleBar style={{height: "450px", paddingRight: "20px"}}>
+            <Card>
+              <CardBody className="p-4">
+                <Form
+                  template={JSON.parse(jsonData)}
+                  userDetails={userDetails}
+                  country={country}
+                  editData={null}
+                  onFormikChange={null}
+                  onSubmit={handleFormSubmit}
+                  onFormFieldsChange={null}
+                  errorMessage={null}
+                />
+              </CardBody>
+            </Card>
+          </SimpleBar>
+        </ModalBody>
+        <ModalFooter className="p-1">
+          <Button
+            onClick={() => {
+              setShowModal(!showModal);
+            }}
+            className="btn btn-custom-primary"
+          >
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <div className="d-flex flex-row">
+        {/* Sidebar */}
+        <div
+          className="text-center px-4 py-3"
+          style={{
+            backgroundColor: "#405189",
+            width: "310px",
+            border: "2px solid #4c66b2",
+          }}
+        >
+          <SimpleBar
+            color="danger"
+            style={{ height: "100vh", paddingRight: "30px" }}
+          >
+            <FormElementSidebar
+              unusedFields={unusedFields}
+              className="border border-start border-primary"
+            />
+          </SimpleBar>
+        </div>
+        {/* Main Content */}
+        <div className="flex-grow-1">
+          <div>
+            <FormikProvider value={formik}>
+              <div className="bg-secondary p-3 d-flex flex-row justify-content-between align-items-baseline pt-4 mb-3">
+                <span
+                  className="h5"
+                  style={{ color: "#405189" }}
+                >{`Form Builder (Total Fields: ${formFields?.length})`}</span>
+                <Button
+                  type="button"
+                  onClick={() => setShowAll((prev) => !prev)}
+                  style={{
+                    border: "1px solid #405189",
+                    color: "#405189",
+                  }}
+                >
+                  {showAll ? "Hide Fields" : "Show All Fields"}
+                </Button>
+              </div>
+
+              <Container fluid>
+                <Card>
+                  <CardBody>
+                    <div className="d-flex flex-column mb-3">
+                      <Label
+                        className="nowrap"
+                        style={{ whiteSpace: "nowrap" }}
+                      >
+                        Form Name
+                      </Label>
+                      <Input
+                        type="text"
+                        value={formName}
+                        placeholder="Enter Form Name"
+                        onChange={(e) => setFormName(e.target.value)}
+                        className="form-control"
+                      />
+                    </div>
+
+                    <div className="d-flex flex-row gap-4">
+                      {/* Form Type */}
+                      <div className="w-100 mb-3">
+                        <Label>Form Type</Label>
+                        <Input
+                          type="select"
+                          value={formOptions.formType}
+                          onChange={(e) =>
+                            setFormOptions((prev) => ({
+                              ...prev,
+                              formType: e.target.value,
+                            }))
+                          }
+                          className="form-select w-100"
+                        >
+                          <option value="">Select Form Type</option>
+                          <option value="custom">Custom</option>
+                          <option value="base">Base</option>
+                        </Input>
+                      </div>
+                      {/* Form Category */}
+                      <div className="w-100 mb-3">
+                        <Label>Form Category</Label>
+                        <Input
+                          className="form-control"
+                          type="text"
+                          value={formOptions.formCategory}
+                          onChange={(e) =>
+                            setFormOptions((prev) => ({
+                              ...prev,
+                              formCategory: e.target.value,
+                            }))
+                          }
+                          placeholder="Enter Form Category"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Custom Input Fields */}
+                    {formOptions.formType === "custom" && (
+                      <div className="d-flex flex-row align-items-center gap-4">
+                        {/* Select Form Template */}
+                        <div className="w-100 mb-3">
+                          <BaseFormSelectElement
+                            setBaseFormTemplate={setBaseFormTemplate}
+                            setFormOptions={setFormOptions}
+                            initialBaseFormId={formOptions.baseFormId}
+                          />
+                        </div>
+                        {/* Entity Type */}
+                        <div className="w-100 mb-3">
+                          <Label className="form-Label">Entity Type</Label>
+                          <Input
+                            value={formOptions.entityType}
+                            placeholder="Enter Entity Type"
+                            onChange={(e) =>
+                              setFormOptions((prev) => ({
+                                ...prev,
+                                entityType: e.target.value,
+                              }))
+                            }
+                            type="text"
+                            className="form-control"
+                          />
+                        </div>
+                        {/* Stepper No. */}
+                        <div className="w-100 mb-3">
+                          <Label>Stepper No</Label>
+                          <Input
+                            value={formOptions.stepperNumber}
+                            onChange={(e) =>
+                              setFormOptions((prev) => ({
+                                ...prev,
+                                stepperNumber: parseInt(e.target.value),
+                              }))
+                            }
+                            type="number"
+                            className="form-control"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    <hr />
+                    <div className="border border-dotted border-dark p-3">
+                      <form
+                        onSubmit={formik.handleSubmit}
+                        className="drag-zone"
+                      >
+                        <div>
+                          {formLayoutSchema.length > 0 ? (
+                            formLayoutSchema.map((row, index) => (
+                              <DnDWrapper
+                                key={index}
+                                droppableType="row"
+                                draggablePrefix="draggable-row-"
+                                draggableId={index}
+                                placeholder
+                                index={index}
+                                dropColor="#eeeeee"
+                              >
+                                <DroppableList
+                                  key={row.rowId}
+                                  row={row}
+                                  setRowtitle={setRowtitle}
+                                  formik={formik}
+                                  handleFormFieldEdit={handleFormFieldEdit}
+                                  handleFormFieldDelete={handleFormFieldDelete}
+                                  formFields={formFields}
+                                  handleDeleteLayoutAndField={
+                                    handleDeleteLayoutAndField
+                                  }
+                                  toggleRowLayoutTitle={toggleRowLayoutTitle}
+                                  addDropzoneToRowLayout={
+                                    addDropzoneToRowLayout
+                                  }
+                                  deleteColumn={deleteColumn}
+                                  setUnusedFieldIsUsed={setUnusedFieldIsUsed}
+                                  deleteTableData={deleteTableData}
+                                  setFormState={setFormState}
+                                  userDetails={userDetails}
+                                  country={country}
+                                  showAll={showAll}
+                                  removeUnusedFieldFromSchema={
+                                    removeUnusedFieldFromSchema
+                                  }
+                                  formOptions={formOptions}
+                                  formStateHook={{
+                                    formState,
+                                    setFormState,
+                                  }}
+                                  buttonNameHook={{
+                                    buttonName,
+                                    setButtonName,
+                                  }}
+                                  formFieldsHook={{
+                                    formFields,
+                                    setFormFields,
+                                  }}
+                                />
+                              </DnDWrapper>
+                            ))
+                          ) : (
+                            <div className="position-relative d-flex align-items-center justify-content-center">
+                              {formFields.length === 0 && (
+                                <div>
+                                  <span className="fw-medium h4 fs-3 text-muted">
+                                    DROP ZONE
+                                  </span>
+                                </div>
+                              )}
+                              <DnDWrapper
+                                droppableType="row"
+                                draggablePrefix="draggable-row-"
+                                draggableId={0}
+                                placeholder
+                                index={0}
+                                dropColor="#eeeeee"
+                              >
+                                <div
+                                  className="d-flex justify-content-center align-items-center absolute"
+                                  style={{ height: "200px" }}
+                                >
+                                  {/* <span>DROP ZONE</span> */}
+                                </div>
+                              </DnDWrapper>
+                            </div>
+                          )}
+                        </div>
+                        {formFields.length > 0 && (
+                          <Button
+                            type="submit"
+                            className="btn btn-custom-primary mt-3"
+                          >
+                            {formState === "create" ? "Create" : "Update"}
+                          </Button>
+                        )}
+                        {formState === "update" && (
+                          <Button
+                            type="button"
+                            className="btn btn-danger mt-3 ms-3"
+                            onClick={() => {
+                              setFormState("create");
+                              formik.resetForm();
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        )}
+
+                        {formFields.length > 0 && (
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary mt-3 ms-3"
+                            onClick={() => {
+                              const JSONData = {
+                                formName,
+                                formSchema: formFields,
+                                formLayoutSchema,
+                              };
+                              setJsonData(JSON.stringify(JSONData));
+                              console.log(JSON.stringify(JSONData));
+                              setShowModal(true);
+                            }}
+                          >
+                            Preview
+                          </Button>
+                        )}
+                        {formFields.length > 0 && (
+                          <Button
+                            className="btn btn-custom-primary mt-3 ms-3"
+                            onClick={viewJSON}
+                          >
+                            View JSON
+                          </Button>
+                        )}
+                        {formFields.length > 0 && (
+                          <Button
+                            className="btn btn-custom-primary mt-3 ms-3"
+                            onClick={handleSaveJSONData}
+                          >
+                            Save
+                          </Button>
+                        )}
+                        {formFields.length > 0 && (
+                          <Button
+                            className="btn btn-custom-primary mt-3 ms-3"
+                            onClick={handleSaveJsonAPI}
+                          >
+                            Save to API
+                          </Button>
+                        )}
+                      </form>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Container>
+            </FormikProvider>
+          </div>
+        </div>
+        {/* Edit Field Modal */}
         <Modal
           isOpen={showModalSchema}
           closeModal={() => {
@@ -1133,44 +1225,73 @@ const FormBuilder = ({
             setFormBuilderUpdateData(null);
             setShowModalSchema(false);
           }}
-          height="90%"
-          backgroundClose
+          centered
+          scrollable
+          size="xl"
         >
-          {formBuilderType && (
-            <FieldBuilder
-              type={formBuilderType}
-              addFormField={addFormField}
-              setFormBuilderType={setFormBuilderType}
-              formBuilderUpdateData={formBuilderUpdateData}
-              updateFormField={updateFormField}
-              setFormBuilderUpdateData={setFormBuilderUpdateData}
-              setFormFieldId={setFormFieldId}
-              formFields={formFields}
-              setShowModalSchema={setShowModalSchema}
-              formOptions={formOptions}
-            />
-          )}
+          <ModalHeader
+            className="bg-primary pb-3"
+            toggle={() => setShowModalSchema(!showModalSchema)}
+          >
+            <div className="d-flex flex-column text-dark">
+              <span className="h5 fw-bold">Edit Field</span>
+              <span className="fs-6">
+                Make changes and configure your chosen field.
+              </span>
+            </div>
+          </ModalHeader>
+          <ModalBody className="bg-light">
+            <div>
+              {formBuilderType && (
+                <FieldBuilder
+                  type={formBuilderType}
+                  addFormField={addFormField}
+                  setFormBuilderType={setFormBuilderType}
+                  formBuilderUpdateData={formBuilderUpdateData}
+                  updateFormField={updateFormField}
+                  setFormBuilderUpdateData={setFormBuilderUpdateData}
+                  setFormFieldId={setFormFieldId}
+                  formFields={formFields}
+                  setShowModalSchema={setShowModalSchema}
+                  formOptions={formOptions}
+                />
+              )}
+            </div>
+          </ModalBody>
         </Modal>
-
+        {/* JSON Modal */}
         <Modal
           isOpen={showJsonModal}
           closeModal={() => {
             setShowJsonModal(false);
           }}
           height="90%"
-          backgroundClose
+          centered
+          scrollable
+          size="xl"
         >
-          <div className="json-modal">
-            <pre style={{ fontSize: "1.1rem" }}>{jsonData}</pre>
-          </div>
+          <ModalHeader>
+            <span className="modal-title">JSON Data</span>
+          </ModalHeader>
+          <ModalBody className="bg-light">
+            <Card>
+              <CardBody>
+                <div>
+                  <pre style={{ fontSize: "1.1rem" }}>{jsonData}</pre>
+                </div>
+              </CardBody>
+            </Card>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              className="btn btn-custom-primary"
+              onClick={() => setShowJsonModal(!showJsonModal)}
+            >
+              Close
+            </Button>
+          </ModalFooter>
         </Modal>
       </div>
-      {/* <input
-        type="text"
-        name="country"
-        value={country}
-        onChange={(e) => setCountry(e.target.value)}
-      /> */}
     </DragDropContext>
   );
 };

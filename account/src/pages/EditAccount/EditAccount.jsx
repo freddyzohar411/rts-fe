@@ -585,7 +585,7 @@ const EditAccount = () => {
 
   return (
     <>
-      <Container className="page-content">
+      <Container fluid className="page-content">
         <FormStepper
           activeStep={step}
           handleBack={handleBack}

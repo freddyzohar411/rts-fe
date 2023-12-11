@@ -20,7 +20,7 @@ const Documents = () => {
   ];
 
   return (
-    <Container>
+    <Container fluid>
       <div className="mb-2">
         <Label className="h5">New Documents</Label>
       </div>

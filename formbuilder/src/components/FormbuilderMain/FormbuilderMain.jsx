@@ -7,6 +7,7 @@ import { createForm, updateForm, fetchForm } from "../../store/forms/action";
 import { JsonHelper } from "@workspace/common";
 
 const FormbuilderMain = () => {
+  document.title = "Form Builder | RTS"
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [unusedFields, setUnusedFields] = useState(null);

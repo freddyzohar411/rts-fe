@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "reactstrap";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { Actions as formActions } from "@workspace/formbuilder";
-import CustomisationTableWrapper from "./CustomisationTableWrapper";
-import { useTableHook } from "@workspace/common";
-import { DynamicTableHelper } from "@workspace/common";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  DeleteCustomModal,
+  DynamicTableHelper,
+  useTableHook,
+} from "@workspace/common";
 import { CUSTOMISATION_INITIAL_OPTION } from "./customisationTableInitialOptions";
-import { DeleteCustomModal } from "@Workspace/common";
+import { Actions as formActions } from "@workspace/formbuilder";
+import { Link } from "react-router-dom";
+import { formatDate } from "@workspace/common/src/helpers/date_helper";
+import CustomisationNewWrapper from "./CustomisationNewWrapper";
 
-function CustomisationSettings() {
-  // Delete modal states
+function CustomisationNew() {
+  document.title = "Form Customisation Settings | RTS";
+
+  // Delete Modal States
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+
   const dispatch = useDispatch();
   const { forms } = useSelector((state) => state.FormReducer);
   const { generateConfig, generateSeachFieldArray, cleanPageRequest } =
     DynamicTableHelper;
 
-  // Use Use table hook
+  // Use Table Hook
   const {
     pageRequest,
     pageRequestSet,
@@ -30,7 +36,7 @@ function CustomisationSettings() {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 5,
+      pageSize: 30,
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
@@ -39,8 +45,6 @@ function CustomisationSettings() {
     CUSTOMISATION_INITIAL_OPTION
   );
 
-  //========================== User Setup ============================
-  // This will vary with the table main page. Each table have it own config with additional columns
   const generateFormConfig = (customConfig) => {
     return [
       ...customConfig,
@@ -64,16 +68,15 @@ function CustomisationSettings() {
                 setIsDeleteModalOpen(true);
               }}
             >
-              <i className="ri-delete-bin-2-line text-light"></i>
+              <i className="ri-delete-bin-6-line"></i>
             </Button>
           </div>
         ),
       },
     ];
   };
-  // =================================================================
 
-  // Fetch the forms data
+  // Fetch Form Data
   useEffect(() => {
     dispatch(
       formActions.fetchForms(DynamicTableHelper.cleanPageRequest(pageRequest))
@@ -83,14 +86,13 @@ function CustomisationSettings() {
     };
   }, [pageRequest]);
 
-  // Update the page info when account Data changes
+  // Update Page Information
   useEffect(() => {
     if (forms) {
       setPageInfoData(forms);
     }
   }, [forms]);
 
-  // Modal Delete
   const confirmDelete = () => {
     dispatch(formActions.deleteForm(deleteId));
     setIsDeleteModalOpen(false);
@@ -102,14 +104,14 @@ function CustomisationSettings() {
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
+        deleteId={deleteId}
         header="Delete Form Template"
-        deleteText={"Are you sure you would like to delete this form template?"}
+        message="Are you sure you want to delete this form template?"
       />
-      <CustomisationTableWrapper
+      <CustomisationNewWrapper
         data={forms.forms}
         config={generateFormConfig(customConfig)}
         pageInfo={pageInfo}
-        pageRequest={pageRequest}
         pageRequestSet={pageRequestSet}
         search={search}
         setSearch={setSearch}
@@ -118,4 +120,4 @@ function CustomisationSettings() {
   );
 }
 
-export default CustomisationSettings;
+export default CustomisationNew;

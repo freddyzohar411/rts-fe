@@ -20,7 +20,7 @@ const EmployerDetails = ({ handleNext }) => {
   ];
 
   return (
-    <Container>
+    <Container fluid>
       <div className="mb-2">
         <Label className="h5">New Employer Details</Label>
       </div>

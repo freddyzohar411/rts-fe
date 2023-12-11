@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import { Label } from "reactstrap";
 import "./DroppableList.scss";
 import { AiFillDelete } from "react-icons/ai";
 import { AiFillEdit } from "react-icons/ai";
@@ -109,7 +110,7 @@ const DroppableList = ({
                                     {(field?.fieldType === "custom" ||
                                       formOptions.formType === "base") && (
                                       <button
-                                        className="btn btn-secondary"
+                                        className="btn btn-custom-primary"
                                         style={{ fontSize: "0.8rem" }}
                                         onClick={() =>
                                           handleFormFieldEdit(field.fieldId)
@@ -118,9 +119,9 @@ const DroppableList = ({
                                         <AiFillEdit />
                                       </button>
                                     )}
-                                    {(field?.fieldType === "predefined" ) && (
+                                    {field?.fieldType === "predefined" && (
                                       <button
-                                        className="btn btn-warning"
+                                        className="btn btn-custom-primary"
                                         style={{ fontSize: "0.8rem" }}
                                         onClick={() => {
                                           setUnusedFieldIsUsed(
@@ -132,13 +133,14 @@ const DroppableList = ({
                                           );
                                         }}
                                       >
-                                        <AiFillDelete />
+                                        <i className="ri-edit-2-line"></i>
                                       </button>
                                     )}
-                                    {(field?.fieldType !== "static" && field?.fieldType !== "predefined" ||
+                                    {((field?.fieldType !== "static" &&
+                                      field?.fieldType !== "predefined") ||
                                       formOptions.formType === "base") && (
                                       <button
-                                        className="btn btn-danger"
+                                        className="btn btn-custom-primary"
                                         style={{ fontSize: "0.8rem" }}
                                         onClick={() => {
                                           handleFormFieldDelete(
@@ -147,7 +149,7 @@ const DroppableList = ({
                                           );
                                         }}
                                       >
-                                        <AiFillDelete />
+                                        <i className="ri-delete-bin-line"></i>
                                       </button>
                                     )}
                                   </div>
@@ -187,9 +189,9 @@ const DroppableList = ({
   });
 
   return (
-    <div className="droppable-list">
+    <div className="border border-dotted border-dark p-3 m-2 droppable-list">
       <div
-        className={`d-flex  align-items-center ${
+        className={`d-flex align-items-center ${
           isTitle ? "justify-content-between" : "justify-content-end"
         }`}
       >
@@ -197,8 +199,8 @@ const DroppableList = ({
           <input
             type="text"
             value={title}
-            className="row-title mb-2"
-            style={{ fontSize: "1.3rem", padding: "0.3rem" }}
+            className="mb-3 fw-bold h6 form-control"
+            style={{borderColor: "lightgrey"}}
             onChange={(e) => setRowtitle(row, e.target.value)}
           />
         )}
@@ -207,7 +209,7 @@ const DroppableList = ({
           <Setting>
             <div className="setting-menu">
               <div
-                className="setting-menu-item"
+                className="p-1 cursor-pointer text-center border-bottom border-muted hover:bg-gray-200"
                 onClick={() => toggleRowLayoutTitle(row)}
               >
                 Toggle Title
@@ -216,14 +218,14 @@ const DroppableList = ({
                 .fill(0)
                 .map((_, index) => (
                   <div
-                    className="setting-menu-item"
+                    className="p-1 cursor-pointer text-center border-bottom border-muted"
                     onClick={() => addDropzoneToRowLayout(row, index + 1)}
                   >
                     {`${index + 1} Column`}
                   </div>
                 ))}
               <div
-                className="setting-menu-item"
+                className="p-1 cursor-pointer text-center border-bottom border-muted"
                 onClick={() => handleDeleteLayoutAndField(row)}
               >
                 Delete
