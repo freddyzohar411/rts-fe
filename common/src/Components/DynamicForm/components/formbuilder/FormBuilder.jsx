@@ -889,7 +889,7 @@ const FormBuilder = ({
         </ModalHeader>
 
         <ModalBody className="bg-light">
-          <SimpleBar style={{height: "450px", paddingRight: "20px"}}>
+          <SimpleBar style={{ height: "450px", paddingRight: "20px" }}>
             <Card>
               <CardBody className="p-4">
                 <Form
@@ -1120,14 +1120,26 @@ const FormBuilder = ({
                               </DnDWrapper>
                             ))
                           ) : (
-                            <div className="position-relative d-flex align-items-center justify-content-center">
-                              {formFields.length === 0 && (
-                                <div>
-                                  <span className="fw-medium h4 fs-3 text-muted">
-                                    DROP ZONE
-                                  </span>
-                                </div>
-                              )}
+                            // <div className="position-relative d-flex align-items-center justify-content-center" style={{ width: "100%" }}>
+                            <div>
+                              <div
+                                style={{ position: "relative", width: "100%" }}
+                              >
+                                {formFields.length === 0 && (
+                                  <div
+                                    style={{
+                                      marginTop: "90px",
+                                      position: "absolute",
+                                      left: "50%",
+                                      transform: "translate(-50%,0%)",
+                                    }}
+                                  >
+                                    <span className="fw-medium h4 fs-3 text-muted">
+                                      DROP ZONE
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
                               <DnDWrapper
                                 droppableType="row"
                                 draggablePrefix="draggable-row-"
@@ -1135,6 +1147,7 @@ const FormBuilder = ({
                                 placeholder
                                 index={0}
                                 dropColor="#eeeeee"
+                                classes={"w-100"}
                               >
                                 <div
                                   className="d-flex justify-content-center align-items-center absolute"

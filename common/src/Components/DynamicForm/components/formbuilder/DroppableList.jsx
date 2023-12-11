@@ -133,7 +133,8 @@ const DroppableList = ({
                                           );
                                         }}
                                       >
-                                        <i className="ri-edit-2-line"></i>
+                                        {/* <i className="ri-edit-2-line"></i> */}
+                                        <i className="ri-arrow-go-back-line"></i>
                                       </button>
                                     )}
                                     {((field?.fieldType !== "static" &&
@@ -209,7 +210,7 @@ const DroppableList = ({
           <Setting>
             <div className="setting-menu">
               <div
-                className="p-1 cursor-pointer text-center border-bottom border-muted hover:bg-gray-200"
+                className="p-2 cursor-pointer text-center border-bottom border-muted hover:bg-gray-200 setting-text"
                 onClick={() => toggleRowLayoutTitle(row)}
               >
                 Toggle Title
@@ -218,14 +219,14 @@ const DroppableList = ({
                 .fill(0)
                 .map((_, index) => (
                   <div
-                    className="p-1 cursor-pointer text-center border-bottom border-muted"
+                    className="p-1 cursor-pointer text-center border-bottom border-muted setting-text"
                     onClick={() => addDropzoneToRowLayout(row, index + 1)}
                   >
                     {`${index + 1} Column`}
                   </div>
                 ))}
               <div
-                className="p-1 cursor-pointer text-center border-bottom border-muted"
+                className="p-1 cursor-pointer text-center border-bottom border-muted setting-text"
                 onClick={() => handleDeleteLayoutAndField(row)}
               >
                 Delete

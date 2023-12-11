@@ -13,6 +13,7 @@ const DnDWrapper = ({
   direction,
   dropColor,
   droppableId,
+  classes
 }) => {
   return (
     <Droppable
@@ -24,7 +25,7 @@ const DnDWrapper = ({
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className={`${flex ? "flex-fill w-100" : ""}`}
+          className={`${flex ? "flex-fill w-100" : ""} ${classes}`}
           style={{ backgroundColor: snapshot.isDraggingOver ? dropColor : "" }}
         >
           <Draggable
