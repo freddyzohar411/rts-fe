@@ -20,7 +20,7 @@ const Setting = ({ children }) => {
       }}
     >
       {/* <AiFillSetting style={{ fontSize: "1.5rem" }} /> */}
-      <i className="ri-settings-4-fill fs-4" style={{color: "#405189"}}></i>
+      <i className="ri-settings-4-fill fs-3" style={{color: "#405189"}}></i>
       {isSettingOpen && children}
     </div>
   );

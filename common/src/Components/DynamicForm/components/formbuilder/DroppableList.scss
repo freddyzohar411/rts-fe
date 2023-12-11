@@ -47,6 +47,9 @@
 .setting-container {
   position: relative;
   display: none;
+  top: -35px;
+  right:-25px;
+  background: white;
 }
 
 .droppable-list {
@@ -66,5 +69,6 @@
 
 .droppable-list:hover .setting-container {
   display: block;
+  z-index: 9999;
   transition: all 0.5s ease-in-out;
 }

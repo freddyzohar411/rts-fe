@@ -189,7 +189,7 @@ const DroppableList = ({
   });
 
   return (
-    <div className="border border-dotted border-dark p-3 m-2">
+    <div className="border border-dotted border-dark p-3 m-2 droppable-list">
       <div
         className={`d-flex align-items-center ${
           isTitle ? "justify-content-between" : "justify-content-end"
