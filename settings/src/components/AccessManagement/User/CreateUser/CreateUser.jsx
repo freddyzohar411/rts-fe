@@ -52,8 +52,8 @@ function CreateUser() {
       confirmPassword: values.confirmPassword,
       managerId: parseInt(values.managerId),
     };
-    console.log("NewUservalues", newUser);
-    return;
+    // console.log("NewUservalues", newUser);
+    // return;
     dispatch(createUser({ newUser, navigate: navigate }));
   };
 
