@@ -97,10 +97,6 @@ function UpdateRole() {
 
   // Handle Submit Button
   const handleSubmit = async (values) => {
-    // const cleanedModules = values?.modules?.filter( module => module?.permissions?.length > 0);
-    // values.modules = cleanedModules;
-    // console.log("values", values)
-    // return
     dispatch(updateRole({ updatedRole: values, navigate: navigate }));
   };
 
