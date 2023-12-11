@@ -165,8 +165,8 @@ const DynamicTableWrapper = ({
                           {checkAllPermission([Permission.CANDIDATE_WRITE]) && (
                             <Button type="button" className="btn btn-custom-primary">
                               <Link
-                                to="/accounts/create"
-                                style={{ color: "black" }}
+                                to="/candidates/create"
+                                style={{ color: "white" }}
                               >
                                 Create New Candidate
                               </Link>
