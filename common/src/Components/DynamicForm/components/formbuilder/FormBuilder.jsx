@@ -114,26 +114,25 @@ const FormBuilder = ({
     }
   }, [template, baseFormTemplate]);
 
-
   /**
    * Set template data
    */
   useEffect(() => {
-  //   // Load in JSON 1
-  //   if (JSON1) {
-  //     console.log("JSON1 IN", JSON1)
-  //     setFormFields(JSON1.formFieldsList);
-  //     setFormLayoutSchema(JSON1.formSchemaList);
-  //     setFormName(JSON1.formName);
-  //     setFormOptions({
-  //       formType: JSON1.formType,
-  //       entityType: JSON1.entityType,
-  //       baseFormId: JSON1.baseFormId,
-  //       stepperNumber: JSON1.stepperNumber,
-  //       formCategory: JSON1.formCategory,
-  //     });
-  //     return
-  //   }
+    //   // Load in JSON 1
+    //   if (JSON1) {
+    //     console.log("JSON1 IN", JSON1)
+    //     setFormFields(JSON1.formFieldsList);
+    //     setFormLayoutSchema(JSON1.formSchemaList);
+    //     setFormName(JSON1.formName);
+    //     setFormOptions({
+    //       formType: JSON1.formType,
+    //       entityType: JSON1.entityType,
+    //       baseFormId: JSON1.baseFormId,
+    //       stepperNumber: JSON1.stepperNumber,
+    //       formCategory: JSON1.formCategory,
+    //     });
+    //     return
+    //   }
 
     if (baseFormTemplate && formState === "create") {
       setFormFields(baseFormTemplate?.formSchema);
@@ -890,18 +889,22 @@ const FormBuilder = ({
         </ModalHeader>
 
         <ModalBody className="bg-light">
-          <div>
-            <Form
-              template={JSON.parse(jsonData)}
-              userDetails={userDetails}
-              country={country}
-              editData={null}
-              onFormikChange={null}
-              onSubmit={handleFormSubmit}
-              onFormFieldsChange={null}
-              errorMessage={null}
-            />
-          </div>
+          <SimpleBar style={{height: "450px", paddingRight: "20px"}}>
+            <Card>
+              <CardBody className="p-4">
+                <Form
+                  template={JSON.parse(jsonData)}
+                  userDetails={userDetails}
+                  country={country}
+                  editData={null}
+                  onFormikChange={null}
+                  onSubmit={handleFormSubmit}
+                  onFormFieldsChange={null}
+                  errorMessage={null}
+                />
+              </CardBody>
+            </Card>
+          </SimpleBar>
         </ModalBody>
         <ModalFooter className="p-1">
           <Button

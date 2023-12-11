@@ -47,7 +47,6 @@ const Form = forwardRef(
     const [buttonName, setButtonName] = useState("");
     const [editDataValues, setEditDataValues] = useState(null);
 
-
     useEffect(() => {
       if (onFormFieldsChange) {
         onFormFieldsChange(formFields);
@@ -253,70 +252,62 @@ const Form = forwardRef(
     return (
       <div>
         <Container fluid>
-          <div className="bg-light">
-            <Card>
-              <SimpleBar style={{height: "600px"}}>
-                <CardBody className="p-4">
-                  <Row>
-                    <Col>
-                      <div>
-                        {formik && (
-                          <FormikProvider value={formik}>
-                            {showFormName && (
-                              <Row>
-                                <Col>
-                                  <div className="d-flex gap-2 mb-4">
-                                    <h1>{formName}</h1>
-                                  </div>
-                                </Col>
-                              </Row>
-                            )}
-                            <Row>
-                              <Col>
-                                <form
-                                  onSubmit={formik.handleSubmit}
-                                  className="drag-zone"
-                                >
-                                  {formLayoutSchema.map((row, index) => (
-                                    <Row key={index}>
-                                      <FormSectionList
-                                        key={row.rowId}
-                                        row={row}
-                                        formik={formik}
-                                        formFields={formFields}
-                                        formFieldsHook={{
-                                          formFields,
-                                          setFormFields,
-                                        }}
-                                        deleteTableData={deleteTableData}
-                                        setFormState={setFormState}
-                                        userDetails={userDetails}
-                                        country={country}
-                                        buttonNameHook={{
-                                          buttonName,
-                                          setButtonName,
-                                        }}
-                                        formStateHook={{
-                                          formState,
-                                          setFormState,
-                                        }}
-                                      />
-                                    </Row>
-                                  ))}
-                                </form>
-                              </Col>
-                            </Row>
-                          </FormikProvider>
-                        )}
-                      </div>
-                      {errorMessage && (
-                        <Alert color="danger">{errorMessage}</Alert>
+          <div>
+            <Row>
+              <Col>
+                <div>
+                  {formik && (
+                    <FormikProvider value={formik}>
+                      {showFormName && (
+                        <Row>
+                          <Col>
+                            <div className="d-flex gap-2 mb-4">
+                              <h1>{formName}</h1>
+                            </div>
+                          </Col>
+                        </Row>
                       )}
-                    </Col>
-                  </Row>
-                </CardBody>
-              </SimpleBar>
-            </Card>
+                      <Row>
+                        <Col>
+                          <form
+                            onSubmit={formik.handleSubmit}
+                            className="drag-zone"
+                          >
+                            {formLayoutSchema.map((row, index) => (
+                              <Row key={index}>
+                                <FormSectionList
+                                  key={row.rowId}
+                                  row={row}
+                                  formik={formik}
+                                  formFields={formFields}
+                                  formFieldsHook={{
+                                    formFields,
+                                    setFormFields,
+                                  }}
+                                  deleteTableData={deleteTableData}
+                                  setFormState={setFormState}
+                                  userDetails={userDetails}
+                                  country={country}
+                                  buttonNameHook={{
+                                    buttonName,
+                                    setButtonName,
+                                  }}
+                                  formStateHook={{
+                                    formState,
+                                    setFormState,
+                                  }}
+                                />
+                              </Row>
+                            ))}
+                          </form>
+                        </Col>
+                      </Row>
+                    </FormikProvider>
+                  )}
+                </div>
+                {errorMessage && <Alert color="danger">{errorMessage}</Alert>}
+              </Col>
+            </Row>
           </div>
         </Container>
       </div>
