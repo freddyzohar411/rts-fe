@@ -27,7 +27,7 @@ import {
 
 const initialState = {
   user: {},
-  users: [],
+  users: null,
   usersListing: [],
   message: "",
   loading: false,

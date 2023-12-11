@@ -157,7 +157,7 @@ const useUserAuth = () => {
     return false;
   }
 
-  console.log("userProfile", convertUserProfileToPermissionObj(userProfile))
+  // console.log("userProfile", convertUserProfileToPermissionObj(userProfile))
 
   return {
     userProfile,

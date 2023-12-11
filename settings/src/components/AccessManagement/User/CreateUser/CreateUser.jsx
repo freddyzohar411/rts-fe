@@ -25,22 +25,23 @@ function CreateUser() {
   document.title = "Create New User | RTS";
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const allUsers = useSelector((state) => state?.UserReducer?.users) || [];
+  const allUsers = useSelector((state) => state?.UserReducer?.users);
   const [sortBy, setSortBy] = useState(null);
-  console.log("sortby", sortBy);
-  const sortByName = [
-    {
-      options: allUsers.map((user) => ({
-        label: `${user.firstName} (${user.mobile})`,
-        value: user.id.toString(),
-      })),
-    },
-  ];
-  console.log(sortByName);
-  console.log(allUsers);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  useEffect(() => {
+    if (!allUsers) return;
+    setSelectedOption([
+      {
+        options: allUsers.map((user) => ({
+          label: `${user.firstName} (${user.mobile})`,
+          value: user.id.toString(),
+        })),
+      },
+    ]);
+  }, [allUsers]);
 
   const handleSubmit = async (values) => {
-
     const newUser = {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -52,13 +53,13 @@ function CreateUser() {
       confirmPassword: values.confirmPassword,
       managerId: parseInt(values.managerId),
     };
-    // console.log("NewUservalues", newUser);
-    // return;
     dispatch(createUser({ newUser, navigate: navigate }));
   };
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    // if (!allUsers) {
+      dispatch(fetchUsers());
+    // }
   }, []);
 
   return (
@@ -267,12 +268,14 @@ function CreateUser() {
                                 name="managerId"
                                 value={sortBy}
                                 onChange={(selectedOption) => {
-                                  console.log("SS options",selectedOption);
+                                  console.log("SS options", selectedOption);
                                   setSortBy(selectedOption);
-                                  handleChange("managerId")(selectedOption.value);
+                                  handleChange("managerId")(
+                                    selectedOption.value
+                                  );
                                 }}
                                 label="Select Manager"
-                                options={sortByName}
+                                options={selectedOption}
                                 style={{ borderColor: "#8aaed6" }}
                                 className="js-example-basic-single mb-0"
                               />
