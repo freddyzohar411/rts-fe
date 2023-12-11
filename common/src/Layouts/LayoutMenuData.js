@@ -100,7 +100,7 @@ const Navdata = () => {
       },
       stateVariables: isAccounts,
       subItems: [
-        {
+        checkAllPermission([Permission.ACCOUNT_READ]) && {
           id: "accounts",
           label: "All Accounts",
           link: "/accounts",
@@ -158,7 +158,7 @@ const Navdata = () => {
       },
       stateVariables: isJob,
       subItems: [
-        {
+        checkAllPermission([Permission.JOB_READ]) && {
           id: "jobs",
           label: "All Job Openings",
           link: "/jobs",
@@ -176,7 +176,7 @@ const Navdata = () => {
           link: "/job/mass-imports",
           parentId: "job",
         },
-      ],
+      ].filter(Boolean),
     },
 
     // Candidates
@@ -193,7 +193,7 @@ const Navdata = () => {
       },
       stateVariables: isCandidates,
       subItems: [
-        {
+        checkAllPermission([Permission.CANDIDATE_READ]) &&{
           id: "allCandidates",
           label: "All Candidates",
           link: "/candidates",
