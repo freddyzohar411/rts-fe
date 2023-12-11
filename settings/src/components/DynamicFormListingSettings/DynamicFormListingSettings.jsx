@@ -35,7 +35,7 @@ function DynamicFormListingSettings() {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 30,
+      pageSize: 99,
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,

@@ -48,8 +48,10 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
   }, [formik?.values?.[field.subName]]);
 
   useEffect(() => {
-    if (selectedCurrency && formik?.values?.[field.subName]) {
-      formik.setFieldValue(field.subName, selectedCurrency);
+    if (selectedCurrency && formik) {
+      try {
+        formik?.setFieldValue?.(field.subName, selectedCurrency);
+      } catch {}
     }
   }, [selectedCurrency]);
 
