@@ -478,7 +478,7 @@ const FormBuilder = ({
   const setRowtitle = (row, title) => {
     const newFormLayoutSchema = [...formLayoutSchema];
     newFormLayoutSchema.forEach((r) => {
-      if (r.rowId === row.rowId) {
+      if (r?.rowId === row?.rowId) {
         r.title = title;
       }
     });
@@ -490,7 +490,7 @@ const FormBuilder = ({
     // Get array of form field id
     const formFieldIds = [];
     formLayoutSchema.forEach((r) => {
-      if (r.rowId === row.rowId) {
+      if (r?.rowId === row?.rowId) {
         r.droppableZones.forEach((zone) => {
           formFieldIds.push(...zone.fieldIds);
         });
@@ -505,7 +505,7 @@ const FormBuilder = ({
 
     // Delete row layout
     const newFormLayoutSchema = formLayoutSchema.filter(
-      (r) => r.rowId !== row.rowId
+      (r) => r?.rowId !== row?.rowId
     );
     // setFormLayoutSchema(newFormLayoutSchema);
     setFormLayoutSchema(reorderSchema(newFormLayoutSchema));
@@ -515,7 +515,7 @@ const FormBuilder = ({
   const toggleRowLayoutTitle = (row) => {
     const newFormLayoutSchema = [...formLayoutSchema];
     newFormLayoutSchema.forEach((r) => {
-      if (r.rowId === row.rowId) {
+      if (r?.rowId === row?.rowId) {
         r.isTitle = !r.isTitle;
       }
     });
@@ -527,10 +527,10 @@ const FormBuilder = ({
   const addDropzoneToRowLayout = (row, number) => {
     const newFormLayoutSchema = [...formLayoutSchema];
     newFormLayoutSchema.forEach((r) => {
-      if (r.rowId === row.rowId) {
+      if (r?.rowId === row?.rowId) {
         r.droppableZones = [];
         for (let i = 0; i < number; i++) {
-          r.droppableZones.push({ id: `${r.rowId}_${i}`, fieldIds: [] });
+          r.droppableZones.push({ id: `${r?.rowId}_${i}`, fieldIds: [] });
         }
       }
     });
@@ -698,10 +698,13 @@ const FormBuilder = ({
   const reorderSchema = (formLayoutSchema) => {
     const newFormLayoutSchema = [...formLayoutSchema];
     newFormLayoutSchema.forEach((row, index) => {
-      row.rowId = index + 1;
-      row.droppableZones.forEach((zone, zoneIndex) => {
-        zone.id = `${index + 1}_${zoneIndex}`;
-      });
+      // Check if row is there
+      if (row) {
+        row.rowId = index + 1;
+        row.droppableZones.forEach((zone, zoneIndex) => {
+          zone.id = `${index + 1}_${zoneIndex}`;
+        });
+      }
     });
     return newFormLayoutSchema;
   };
@@ -1079,7 +1082,7 @@ const FormBuilder = ({
                                 dropColor="#eeeeee"
                               >
                                 <DroppableList
-                                  key={row.rowId}
+                                  key={row?.rowId}
                                   row={row}
                                   setRowtitle={setRowtitle}
                                   formik={formik}
@@ -1121,7 +1124,7 @@ const FormBuilder = ({
                             ))
                           ) : (
                             // <div className="position-relative d-flex align-items-center justify-content-center" style={{ width: "100%" }}>
-                            <div>
+                            <div style={{pointerEvents:"none"}}>
                               <div
                                 style={{ position: "relative", width: "100%" }}
                               >

@@ -38,6 +38,7 @@ const DroppableList = ({
   formStateHook,
   formFieldsHook,
 }) => {
+  if (!row) return null;
   const { rowId, title, isTitle } = row;
 
   // Generate JSX for row section with droppable zones and draggable items(fields)
