@@ -17,6 +17,7 @@ import {
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {  deleteUser, listUsers } from "../../../store/users/action";
+import { DateHelper } from "@workspace/common";
 
 function UsersTab() {
   const [modal, setModal] = useState(false);
@@ -124,7 +125,7 @@ function UsersTab() {
                   </th>
                   <th scope="col">Member of Group(s)</th>
                   <th scope="col">Date Joined</th>
-                  <th scope="col">Last Login</th>
+                  {/* <th scope="col">Last Login</th> */}
 
                   <th scope="col" style={{ width: "30px" }}>
                     Status
@@ -169,8 +170,8 @@ function UsersTab() {
                         )}
                       </td>
 
-                      <td>23/09/2023</td>
-                      <td>11/01/2023</td>
+                      <td>{DateHelper.formatDateStandard(user.createdAt)}</td>
+                      {/* <td>11/01/2023</td> */}
                       <td>
                         {user?.enabled ? (
                           <Badge color="success">Active</Badge>
