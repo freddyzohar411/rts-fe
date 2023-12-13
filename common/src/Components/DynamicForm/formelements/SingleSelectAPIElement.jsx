@@ -147,6 +147,11 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
       "&:hover": {
         borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       },
+      backgroundColor: state.isDisabled ? '#EFF2F7' : base.backgroundColor,
+    }),
+    singleValue: (provided, state) => ({
+      ...provided,
+      color: state.isDisabled ? 'black !important' : provided.color,
     }),
   };
 
