@@ -124,7 +124,14 @@ function UsersTab() {
                     Roles
                   </th>
                   <th scope="col">Member of Group(s)</th>
-                  <th scope="col">Date Joined</th>
+                  <th scope="col"> <span className="me-1">Date Joined</span>
+                    <i
+                      className="mdi mdi-sort"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        handleSortAndDirection("createdAt");
+                      }}
+                    ></i></th>
                   {/* <th scope="col">Last Login</th> */}
 
                   <th scope="col" style={{ width: "30px" }}>
