@@ -35,7 +35,7 @@ function CandidateListing() {
     {
       names: ["updatedAt", "createdAt"],
       render: (data, opt) =>
-        DateHelper.formatDateStandard(
+        DateHelper.formatDateStandard2(
           DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
         ),
     },

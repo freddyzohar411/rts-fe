@@ -177,7 +177,7 @@ function UsersTab() {
                         )}
                       </td>
 
-                      <td>{DateHelper.formatDateStandard(user.createdAt)}</td>
+                      <td>{DateHelper.formatDateStandard2(user.createdAt)}</td>
                       {/* <td>11/01/2023</td> */}
                       <td>
                         {user?.enabled ? (
