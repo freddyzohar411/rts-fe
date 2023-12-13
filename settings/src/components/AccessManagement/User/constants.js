@@ -51,5 +51,5 @@ export const schema = yup.object().shape({
 
   employeeId: yup.string().required("Please enter the Employee ID."),
   // Id is a number
-  managerId: yup.number(),
+  managerId: yup.number().nullable().notRequired(),
 });

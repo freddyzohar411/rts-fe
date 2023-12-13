@@ -115,34 +115,34 @@ const Navdata = () => {
       ].filter(Boolean),
     },
 
-    // Contacts
-    {
-      id: "contact",
-      label: "Contacts",
-      icon: "ri-user-3-fill",
-      link: "/#",
-      click: function (e) {
-        e.preventDefault();
-        setIsContacts(!isContacts);
-        setIscurrentState("Contacts");
-        updateIconSidebar(e);
-      },
-      stateVariables: isContacts,
-      subItems: [
-        {
-          id: "allContacts",
-          label: "All Contacts",
-          link: "/contacts",
-          parentId: "contact",
-        },
-        {
-          id: "newContact",
-          label: "Create New Contacts",
-          link: "/contact/contact-creation",
-          parentId: "contact",
-        },
-      ],
-    },
+    // Contacts (Hide first)
+    // {
+    //   id: "contact",
+    //   label: "Contacts",
+    //   icon: "ri-user-3-fill",
+    //   link: "/#",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsContacts(!isContacts);
+    //     setIscurrentState("Contacts");
+    //     updateIconSidebar(e);
+    //   },
+    //   stateVariables: isContacts,
+    //   subItems: [
+    //     {
+    //       id: "allContacts",
+    //       label: "All Contacts",
+    //       link: "/contacts",
+    //       parentId: "contact",
+    //     },
+    //     {
+    //       id: "newContact",
+    //       label: "Create New Contacts",
+    //       link: "/contact/contact-creation",
+    //       parentId: "contact",
+    //     },
+    //   ],
+    // },
 
     // Job Openings
     checkAnyPermission([Permission.JOB_READ, Permission.JOB_WRITE]) && {

@@ -50,7 +50,9 @@ function UpdateUser() {
 
   useEffect(() => {
     if (!user) return;
-    const manager = allUsers?.find((singleUser) => singleUser.id === parseInt(user.managerId));
+    const manager = allUsers?.find(
+      (singleUser) => singleUser.id === parseInt(user.managerId)
+    );
     if (!manager) return;
     setSortBy({
       label: `${manager.firstName} (${manager.mobile})`,
@@ -105,7 +107,7 @@ function UpdateUser() {
       id: values.id,
       keycloackId: values.keycloackId,
       password: values.password,
-      managerId: parseInt(values.managerId),
+      managerId: parseInt(values.managerId) ?? null,
     };
     dispatch(updateUser({ updatedUser, navigate: navigate }));
   };
@@ -280,20 +282,26 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="mb-3">
-                            <Label className="fw-semibold">Select Manager</Label>
+                              <Label className="fw-semibold">
+                                Select Manager
+                              </Label>
                               <FormSelection
                                 name="managerId"
                                 value={sortBy}
                                 onChange={(selectedOption) => {
-                                  console.log("SS options", selectedOption);
                                   setSortBy(selectedOption);
-                                  handleChange("managerId")(
-                                    selectedOption.value
-                                  );
+                                  if (!selectedOption) {
+                                    handleChange("managerId")("");
+                                  } else {
+                                    handleChange("managerId")(
+                                      selectedOption?.value
+                                    );
+                                  }
                                 }}
                                 options={selectedOption}
                                 style={{ borderColor: "#8aaed6" }}
                                 className="js-example-basic-single mb-0"
+                                isClearable
                               />
                             </div>
                           </Col>

@@ -58,7 +58,7 @@ function CreateUser() {
 
   useEffect(() => {
     // if (!allUsers) {
-      dispatch(fetchUsers());
+    dispatch(fetchUsers());
     // }
   }, []);
 
@@ -270,14 +270,19 @@ function CreateUser() {
                                 onChange={(selectedOption) => {
                                   console.log("SS options", selectedOption);
                                   setSortBy(selectedOption);
-                                  handleChange("managerId")(
-                                    selectedOption.value
-                                  );
+                                  if (!selectedOption) {
+                                    handleChange("managerId")("");
+                                  } else {
+                                    handleChange("managerId")(
+                                      selectedOption?.value
+                                    );
+                                  }
                                 }}
                                 label="Select Manager"
                                 options={selectedOption}
                                 style={{ borderColor: "#8aaed6" }}
                                 className="js-example-basic-single mb-0"
+                                isClearable
                               />
                             </div>
                           </Col>
