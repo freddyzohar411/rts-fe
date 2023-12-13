@@ -4,7 +4,7 @@ import * as AuthHelper from "../helpers/auth_helper";
 import { useUserAuth } from "@workspace/login";
 
 const Navdata = () => {
-  const { checkAllPermission, Permission, checkAllRole } = useUserAuth();
+  const { checkAllPermission, Permission, checkAnyPermission } = useUserAuth();
   const history = useNavigate();
   //state data
   const [isDashboard, setIsDashboard] = useState(false);
@@ -87,7 +87,7 @@ const Navdata = () => {
     },
 
     // Accounts
-    {
+    checkAnyPermission([Permission.ACCOUNT_READ, Permission.ACCOUNT_WRITE]) && {
       id: "account",
       label: "Accounts",
       icon: "ri-map-pin-line",
@@ -145,7 +145,7 @@ const Navdata = () => {
     },
 
     // Job Openings
-    {
+    checkAnyPermission([Permission.JOB_READ, Permission.JOB_WRITE]) && {
       id: "job",
       label: "Job Openings",
       icon: "ri-search-eye-line",
@@ -180,7 +180,7 @@ const Navdata = () => {
     },
 
     // Candidates
-    {
+    checkAnyPermission([Permission.CANDIDATE_READ, Permission.CANDIDATE_WRITE]) && {
       id: "candidates",
       label: "Candidates",
       icon: "ri-user-follow-fill",
@@ -193,7 +193,7 @@ const Navdata = () => {
       },
       stateVariables: isCandidates,
       subItems: [
-        checkAllPermission([Permission.CANDIDATE_READ]) &&{
+        checkAllPermission([Permission.CANDIDATE_READ]) && {
           id: "allCandidates",
           label: "All Candidates",
           link: "/candidates",
@@ -236,8 +236,7 @@ const Navdata = () => {
         },
       ],
     },
-    checkAllPermission([...Permission.SETTING_ALL]) &&
-    {
+    checkAllPermission([...Permission.SETTING_ALL]) && {
       id: "settings",
       label: "Settings",
       icon: "ri-settings-4-fill",
@@ -276,7 +275,7 @@ const Navdata = () => {
         },
       ].filter(Boolean),
     },
-  ];
+  ].filter(Boolean);
   return <React.Fragment>{menuItems}</React.Fragment>;
 };
 export default Navdata;

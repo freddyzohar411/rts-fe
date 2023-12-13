@@ -53,13 +53,21 @@ const authProtectedRoutes = [
   { path: "/profile", component: <UserProfile /> },
 
   // Candidate
-  { path: "/candidates", component: <CandidateListing /> },
+  {
+    path: "/candidates",
+    component: <CandidateListing />,
+    requiredPermissions: [Permission.CANDIDATE_READ],
+  },
   {
     path: "/candidates/create",
     component: <CreateCandidate />,
     requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
-  { path: "/candidates/:candidateId/:slug", component: <CandidateManage />},
+  {
+    path: "/candidates/:candidateId/:slug",
+    component: <CandidateManage />,
+    requiredPermissions: [Permission.CANDIDATE_READ],
+  },
 
   // Account
   {
@@ -67,19 +75,42 @@ const authProtectedRoutes = [
     component: <CreateAccount />,
     requiredPermissions: [Permission.ACCOUNT_WRITE],
   },
-  { path: "/accounts/:accountId/edit", component: <EditAccount /> },
-  { path: "/accounts", component: <AccountListing /> },
+  {
+    path: "/accounts/:accountId/edit",
+    component: <EditAccount />,
+    requiredPermissions: [Permission.ACCOUNT_READ],
+  },
+  {
+    path: "/accounts",
+    component: <AccountListing />,
+    requiredPermissions: [Permission.ACCOUNT_READ],
+  },
 
   // Job
   // { path: "/jobs/job-creation", component: <JobCreation /> },
-  { path: "/jobs/job-creation", component: <JobCreate /> },
+  {
+    path: "/jobs/job-creation",
+    component: <JobCreate />,
+    requiredPermissions: [Permission.JOB_WRITE],
+  },
   // { path: "/jobs/:jobId/:type", component: <JobCreation /> },
-  { path: "/jobs", component: <JobListing /> },
-  { path: "/jobs/:jobId/:slug", component: <JobManage />},
+  {
+    path: "/jobs",
+    component: <JobListing />,
+    requiredPermissions: [Permission.JOB_READ],
+  },
+  {
+    path: "/jobs/:jobId/:slug",
+    component: <JobManage />,
+    requiredPermissions: [Permission.JOB_READ],
+  },
 
   // Settings
   { path: "/settings", component: <MainSettings /> },
-  { path: "/settings/customisation", component: <DynamicFormListingSettings /> },
+  {
+    path: "/settings/customisation",
+    component: <DynamicFormListingSettings />,
+  },
 
   // Form Builder
   { path: "/form-builder", component: <FormbuilderMain /> },
