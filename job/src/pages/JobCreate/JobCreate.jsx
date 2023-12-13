@@ -14,21 +14,19 @@ import { JobCreation } from "../../components";
 
 const JobCreate = () => {
   return (
-    <div className="page-content">
-      <Container >
-        <Row>
-          <Col>
-            <Card>
-              <CardBody>
-                <CardTitle tag="h5">Create a new job</CardTitle>
-                <CardText>Fill out the form below to create a new job</CardText>
-                <JobCreation />
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    <Container fluid className="page-content">
+    <Row>
+      <Col>
+        <Card>
+          <CardBody>
+            <Container fluid className="pt-3">
+              <JobCreation />
+            </Container>
+          </CardBody>
+        </Card>
+      </Col>
+    </Row>
+  </Container>
   );
 };
 
