@@ -15,18 +15,18 @@ import { JobCreation } from "../../components";
 const JobCreate = () => {
   return (
     <Container fluid className="page-content">
-    <Row>
-      <Col>
-        <Card>
-          <CardBody>
-            <Container fluid className="pt-3">
-              <JobCreation />
-            </Container>
-          </CardBody>
-        </Card>
-      </Col>
-    </Row>
-  </Container>
+      <Row>
+        <Col>
+          <Card>
+            <CardBody>
+              <Container fluid className="pt-3">
+                <JobCreation />
+              </Container>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
