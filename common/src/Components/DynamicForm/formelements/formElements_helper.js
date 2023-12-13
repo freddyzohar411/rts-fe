@@ -29,6 +29,7 @@ import {
   permissionConstant,
 } from "../../../constants/authConstant";
 import AccountNameSelectElement from "./AccountNameSelectElement";
+import AccountNameSelectAllElement from "./AccountNameSelectElementAll";
 import AccountContactSelectElement from "./AccountContactSelectElement";
 
 /**
@@ -125,6 +126,16 @@ const generateFormField = (
   if (type === "selectaccountname") {
     return (
       <AccountNameSelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "selectaccountnameall") {
+    return (
+      <AccountNameSelectAllElement
         formik={formik}
         field={field}
         formStateHook={formStateHook}
