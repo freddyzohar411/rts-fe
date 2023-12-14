@@ -17,10 +17,41 @@ const Navdata = () => {
   const [isCandidates, setIsCandidates] = useState(false);
   const [isReports, setIsReports] = useState(false);
   const [isSettings, setIsSettings] = useState(false);
-
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
-  console.log("isAccounts", isAccounts)
+
   function updateIconSidebar(e) {
+    // Fixed the arrow and active
+    const a = e.target.closest("a");
+    if (a && a.classList.contains("active")) {
+      a.classList.remove("active");
+      a.setAttribute("aria-expanded", "false");
+    } else {
+      const navLink = document.querySelectorAll(".nav-link.menu-link");
+      let navLinkItems = [...navLink];
+      navLinkItems.forEach((item) => {
+        item.classList.remove("active");
+        item.setAttribute("aria-expanded", "false");
+      });
+      // Remove all active from  alla with only nav-link and active
+      const navLinkActive = document.querySelectorAll(".nav-link.active");
+      let navLinkActiveItems = [...navLinkActive];
+      navLinkActiveItems.forEach((item) => {
+        item.classList.remove("active");
+        item.setAttribute("aria-expanded", "false");
+      });
+
+      // Find all div with id=sidebarApps and remove the show class
+      const sidebarApps = document.querySelectorAll("#sidebarApps");
+      let sidebarAppsItems = [...sidebarApps];
+      sidebarAppsItems.forEach((item) => {
+        item.classList.remove("show");
+      });
+
+      a.classList.add("active");
+      a.setAttribute("aria-expanded", "true");
+    }
+
+    // when a menu is open and i click other menu, i want to close the previous menu
     if (e && e.target && e.target.getAttribute("subitems")) {
       const ul = document.getElementById("two-column-menu");
       const iconItems = ul.querySelectorAll(".nav-icon.active");
@@ -53,6 +84,9 @@ const Navdata = () => {
     }
     if (iscurrentState !== "Settings") {
       setIsSettings(false);
+    }
+    if (iscurrentState !== "Accounts") {
+      setIsAccounts(false);
     }
   }, [
     history,
@@ -181,7 +215,10 @@ const Navdata = () => {
     },
 
     // Candidates
-    checkAnyPermission([Permission.CANDIDATE_READ, Permission.CANDIDATE_WRITE]) && {
+    checkAnyPermission([
+      Permission.CANDIDATE_READ,
+      Permission.CANDIDATE_WRITE,
+    ]) && {
       id: "candidates",
       label: "Candidates",
       icon: "ri-user-follow-fill",

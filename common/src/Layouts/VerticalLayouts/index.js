@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
 const VerticalLayout = (props) => {
+  console.log("WHEE")
   const navData = navdata().props.children;
 
   /*
@@ -94,6 +95,7 @@ const VerticalLayout = (props) => {
       const items = ul.getElementsByTagName("a");
       let itemsArray = [...items]; // converts NodeList to Array
       removeActivation(itemsArray);
+      console.log("itemsArray", itemsArray)
       let matchingMenuItem = itemsArray.find((x) => {
         return x.pathname === pathName;
       });
