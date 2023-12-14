@@ -100,7 +100,6 @@ const JobListing = () => {
         },
       },
       {
-        header: "ASSIGNED",
         name: "badges",
         sort: false,
         sortValue: "badges",
