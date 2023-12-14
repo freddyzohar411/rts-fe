@@ -170,12 +170,12 @@ const Navdata = () => {
           link: "/jobs/job-creation",
           parentId: "job",
         },
-        {
-          id: "jobMassImport",
-          label: "Mass Imports",
-          link: "/job/mass-imports",
-          parentId: "job",
-        },
+        // {
+        //   id: "jobMassImport",
+        //   label: "Mass Imports",
+        //   link: "/job/mass-imports",
+        //   parentId: "job",
+        // },
       ].filter(Boolean),
     },
 
@@ -209,33 +209,35 @@ const Navdata = () => {
     },
 
     // Reports
-    {
-      id: "reports",
-      label: "Reports",
-      icon: "ri-bar-chart-grouped-fill",
-      link: "/#",
-      click: function (e) {
-        e.preventDefault();
-        setIsReports(!isReports);
-        setIscurrentState("Reports");
-        updateIconSidebar(e);
-      },
-      stateVariables: isReports,
-      subItems: [
-        {
-          id: "allReports",
-          label: "All Reports",
-          link: "/reports",
-          parentId: "reports",
-        },
-        {
-          id: "newReport",
-          label: "Create New Report",
-          link: "/report/report-creation",
-          parentId: "reports",
-        },
-      ],
-    },
+    // {
+    //   id: "reports",
+    //   label: "Reports",
+    //   icon: "ri-bar-chart-grouped-fill",
+    //   link: "/#",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsReports(!isReports);
+    //     setIscurrentState("Reports");
+    //     updateIconSidebar(e);
+    //   },
+    //   stateVariables: isReports,
+    //   subItems: [
+    //     {
+    //       id: "allReports",
+    //       label: "All Reports",
+    //       link: "/reports",
+    //       parentId: "reports",
+    //     },
+    //     {
+    //       id: "newReport",
+    //       label: "Create New Report",
+    //       link: "/report/report-creation",
+    //       parentId: "reports",
+    //     },
+    //   ],
+    // },
+
+    // Settings
     checkAllPermission([...Permission.SETTING_ALL]) && {
       id: "settings",
       label: "Settings",
