@@ -106,7 +106,7 @@ const authProtectedRoutes = [
   },
 
   // Settings
-  { path: "/settings", component: <MainSettings /> },
+  { path: "/settings/general", component: <MainSettings /> },
   {
     path: "/settings/customisation",
     component: <DynamicFormListingSettings />,

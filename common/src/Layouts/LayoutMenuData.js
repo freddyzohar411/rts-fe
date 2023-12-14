@@ -292,7 +292,7 @@ const Navdata = () => {
         {
           id: "settingsGeneral",
           label: "General",
-          link: "/settings",
+          link: "/settings/general",
           parentId: "settings",
         },
         {
