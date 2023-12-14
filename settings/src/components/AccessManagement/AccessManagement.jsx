@@ -106,7 +106,7 @@ function AccessManagement() {
                               type="button"
                             >
                               <i className="ri-user-line me-2"></i>
-                              <span>NEW USER</span>
+                              <span>New User</span>
                             </Button>
                           </Link>
                           <Link to="/settings/access/group/group-creation">
@@ -116,7 +116,7 @@ function AccessManagement() {
                               size="sm"
                             >
                               <i className="ri-team-line me-2"></i>
-                              <span>NEW USER GROUP</span>
+                              <span>New User Group</span>
                             </Button>
                           </Link>
                         </Col>

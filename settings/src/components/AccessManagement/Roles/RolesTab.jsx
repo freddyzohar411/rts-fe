@@ -102,7 +102,7 @@ function RolesTab() {
             <Link to="/settings/access/role/role-creation">
               <Button className="btn btn-custom-primary btn-sm d-flex flex-row align-items-center">
                 <i className="ri-contacts-line me-2"></i>
-                <span>ADD NEW ROLE</span>
+                <span>Add New Role</span>
               </Button>
             </Link>
           </div>
@@ -134,7 +134,9 @@ function RolesTab() {
               <thead>
                 <tr>
                   <th scope="col">
-                    <span className="me-1">Roles</span>
+                    <span className="me-1" style={{ color: "#00000099" }}>
+                      Roles
+                    </span>
                     <i
                       className="mdi mdi-sort"
                       onClick={() => {
@@ -143,8 +145,12 @@ function RolesTab() {
                       style={{ cursor: "pointer" }}
                     ></i>
                   </th>
-                  <th scope="col">Description</th>
-                  <th scope="col">Actions</th>
+                  <th scope="col" style={{ color: "#00000099" }}>
+                    Description
+                  </th>
+                  <th scope="col" style={{ width: "30px", color: "#00000099" }}>
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -162,8 +168,11 @@ function RolesTab() {
                           <Link
                             to={role ? `/settings/access/role/${role.id}` : "#"}
                           >
-                            <Button className="btn btn-custom-primary">
-                              <i className="ri-eye-line"></i>
+                            <Button className="btn btn-custom-primary px-2 py-1">
+                              <i
+                                className="ri-eye-line"
+                                style={{ fontSize: "0.65rem" }}
+                              ></i>
                             </Button>
                           </Link>
                           <Link
@@ -173,16 +182,21 @@ function RolesTab() {
                                 : "#"
                             }
                           >
-                            {" "}
-                            <Button className="btn btn-custom-primary">
-                              <i className="ri-pencil-line"></i>
+                            <Button className="btn btn-custom-primary px-2 py-1">
+                              <i
+                                className="ri-pencil-line"
+                                style={{ fontSize: "0.65rem" }}
+                              ></i>
                             </Button>
                           </Link>
                           <Button
-                            className="btn btn-custom-primary"
+                            className="btn btn-danger px-2 py-0"
                             onClick={() => confirmDelete(role?.id)}
                           >
-                            <i className="ri-delete-bin-2-line"></i>
+                            <i
+                              className="ri-delete-bin-2-line"
+                              style={{ fontSize: "0.65rem" }}
+                            ></i>
                           </Button>
                         </div>
                       </td>

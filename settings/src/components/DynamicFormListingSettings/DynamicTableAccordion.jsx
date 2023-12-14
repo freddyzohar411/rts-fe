@@ -29,15 +29,20 @@ const DynamicTableAccordion = ({ data, config, pageInfo, pageRequestSet }) => {
             <th
               key={option.name}
               scope="col"
-              className="text-uppercase cursor-pointer"
+              className="cursor-pointer"
               onClick={() => pageRequestSet.setSortAndDirection(option)}
+              style={{ color: "#00000099" }}
             >
               {option.header} <i className="mdi mdi-sort-descending"></i>
             </th>
           );
         } else {
           return (
-            <th key={option.name} scope="col" className="text-uppercase">
+            <th
+              key={option.name}
+              scope="col"
+              style={{ color: "#00000099" }}
+            >
               {option.header}
             </th>
           );
@@ -73,7 +78,9 @@ const DynamicTableAccordion = ({ data, config, pageInfo, pageRequestSet }) => {
                 categoryData?.map((rowData) => (
                   <tr key={rowData.formId}>
                     {config.map((option) => (
-                      <td key={option.name}>{option.render(rowData)}</td>
+                      <td key={option.name} style={{ verticalAlign: "middle" }}>
+                        {option.render(rowData)}
+                      </td>
                     ))}
                   </tr>
                 ))

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { CustomNav } from "@workspace/common";
 import { Container, Breadcrumb, BreadcrumbItem, Row, Col } from "reactstrap";
+import { StringHelper } from "@workspace/common";
 
 import JobCreation from "../../components/JobCreation/JobCreation";
 import JobOverview from "../../components/JobOverview/JobOverview";
@@ -13,15 +14,15 @@ const JobManage = () => {
   const { jobId, slug } = useParams();
 
   const navContents = [
-    { link: "SNAPSHOT", url: `/jobs/${jobId}/snapshot`, slug: "snapshot" },
-    { link: "OVERVIEW", url: `/jobs/${jobId}/overview`, slug: "overview" },
+    { link: "Snapshot", url: `/jobs/${jobId}/snapshot`, slug: "snapshot" },
+    { link: "Overview", url: `/jobs/${jobId}/overview`, slug: "overview" },
     {
-      link: "PERFORMANCE",
+      link: "Performance",
       url: `/jobs/${jobId}/performance`,
       slug: "performance",
     },
-    { link: "EMAIL", url: `/jobs/${jobId}/email`, slug: "email" },
-    { link: "TASK", url: `/jobs/${jobId}/task`, slug: "task" },
+    { link: "Email", url: `/jobs/${jobId}/email`, slug: "email" },
+    { link: "Task", url: `/jobs/${jobId}/task`, slug: "task" },
   ];
 
   return (
@@ -30,8 +31,10 @@ const JobManage = () => {
         <Row>
           <Col>
             <Breadcrumb>
-              <BreadcrumbItem>jobs</BreadcrumbItem>
-              <BreadcrumbItem active>{`${slug}`}</BreadcrumbItem>
+              <BreadcrumbItem>Jobs</BreadcrumbItem>
+              <BreadcrumbItem active>{`${StringHelper.capitalizeFirstLetter(
+                slug
+              )}`}</BreadcrumbItem>
             </Breadcrumb>
           </Col>
         </Row>
