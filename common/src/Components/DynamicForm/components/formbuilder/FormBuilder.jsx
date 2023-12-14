@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormikProvider, useFormik } from "formik";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DroppableList from "./DroppableList";
+import { useNavigate } from "react-router-dom";
 import "./FormBuilder.scss";
 import "@workspace/common/src/assets/scss/components/simplebar.min.css";
 // import Modal from "../modal/Modal";
@@ -51,6 +52,7 @@ const FormBuilder = ({
   onSave,
   initialFormState,
 }) => {
+  const navigate = useNavigate();
   const [buttonName, setButtonName] = useState("");
   const [baseFormTemplate, setBaseFormTemplate] = useState(null);
   const [formOptions, setFormOptions] = useState({
@@ -950,6 +952,7 @@ const FormBuilder = ({
                   className="h5"
                   style={{ color: "#405189" }}
                 >{`Form Builder (Total Fields: ${formFields?.length})`}</span>
+                {/* Dev hide field button */}
                 <Button
                   type="button"
                   onClick={() => setShowAll((prev) => !prev)}
@@ -1124,7 +1127,7 @@ const FormBuilder = ({
                             ))
                           ) : (
                             // <div className="position-relative d-flex align-items-center justify-content-center" style={{ width: "100%" }}>
-                            <div style={{pointerEvents:"none"}}>
+                            <div style={{ pointerEvents: "none" }}>
                               <div
                                 style={{ position: "relative", width: "100%" }}
                               >
@@ -1162,7 +1165,8 @@ const FormBuilder = ({
                             </div>
                           )}
                         </div>
-                        {formFields.length > 0 && (
+                        {/* Dev Buttons */}
+                        {/* {formFields.length > 0 && (
                           <Button
                             type="submit"
                             className="btn btn-custom-primary mt-3"
@@ -1182,7 +1186,6 @@ const FormBuilder = ({
                             Cancel
                           </Button>
                         )}
-
                         {formFields.length > 0 && (
                           <Button
                             type="button"
@@ -1224,8 +1227,39 @@ const FormBuilder = ({
                           >
                             Save to API
                           </Button>
-                        )}
+                        )} */}
                       </form>
+                    </div>
+                    {/* User Buttons */}
+                    <div className="d-flex justify-content-between">
+                      <Button
+                        className="btn btn-custom-secondary mt-3"
+                        onClick={() => navigate("/settings/customisation")}
+                      >
+                        Back
+                      </Button>
+                      <div>
+                        {formFields.length > 0 && (
+                          <Button
+                            className="btn btn-danger mt-3 ms-3"
+                            onClick={() => {
+                              //Clear form and all json and schema
+                              setFormFields([]);
+                              setFormLayoutSchema([]);
+                            }}
+                          >
+                            Clear
+                          </Button>
+                        )}
+                        {formFields.length > 0 && (
+                          <Button
+                            className="btn btn-custom-primary mt-3 ms-3"
+                            onClick={handleSaveJsonAPI}
+                          >
+                            Save
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </CardBody>
                 </Card>
