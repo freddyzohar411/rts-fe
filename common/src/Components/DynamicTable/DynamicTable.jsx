@@ -18,7 +18,8 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
             <th
               key={option.name}
               scope="col"
-              className="text-uppercase cursor-pointer"
+              className="cursor-pointer"
+              style={{ color: "#00000099" }}
               onClick={() => pageRequestSet.setSortAndDirection(option)}
             >
               {option.header} <i className="mdi mdi-sort-descending"></i>
@@ -26,7 +27,7 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
           );
         } else {
           return (
-            <th key={option.name} scope="col" className="text-uppercase">
+            <th key={option.name} scope="col" style={{ color: "#00000099" }}>
               {option.header}
             </th>
           );
