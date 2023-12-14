@@ -11,6 +11,7 @@ const Navdata = () => {
   const [isApps, setIsApps] = useState(false);
 
   const [isAccounts, setIsAccounts] = useState(false);
+
   const [isContacts, setIsContacts] = useState(false);
   const [isJob, setIsJob] = useState(false);
   const [isCandidates, setIsCandidates] = useState(false);
@@ -18,7 +19,7 @@ const Navdata = () => {
   const [isSettings, setIsSettings] = useState(false);
 
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
-
+  console.log("isAccounts", isAccounts)
   function updateIconSidebar(e) {
     if (e && e.target && e.target.getAttribute("subitems")) {
       const ul = document.getElementById("two-column-menu");
