@@ -35,8 +35,6 @@ function CreateUser() {
       })),
     },
   ];
-  console.log(sortByName);
-  console.log(allUsers);
 
   const handleSubmit = async (values) => {
     const newUser = {

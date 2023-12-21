@@ -167,7 +167,7 @@ const JobListing = () => {
 
   // Modal Delete
   const confirmDelete = () => {
-    dispatch(deleteJobList(deleteId));
+    dispatch(deleteJobList({ deleteId, isDraft: false }));
     setIsDeleteModalOpen(false);
   };
 

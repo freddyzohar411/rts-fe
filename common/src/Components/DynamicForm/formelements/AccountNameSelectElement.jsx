@@ -29,7 +29,7 @@ const AccountNameSelectElement = ({ formik, field, formStateHook }) => {
   };
 
   useEffect(() => {
-    if (formik?.values?.[field.name]) {
+    if (formik?.values?.[field.name]?.length > 0) {
       dispatch(
         fetchAccountContacts(parseInt(namesToid(formik?.values?.[field.name])))
       );

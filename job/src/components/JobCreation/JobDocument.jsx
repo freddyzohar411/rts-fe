@@ -19,8 +19,6 @@ const JobDocument = ({ jobId, view }) => {
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
   const formikRef = useRef(null);
-  const { type } = useParams();
-  // const isView = type === "view";
 
   const documentForm = useSelector(
     (state) => state.JobFormReducer.documentForm
@@ -60,7 +58,7 @@ const JobDocument = ({ jobId, view }) => {
 
   useEffect(() => {
     setEditData(null);
-    if (documentForm) {
+    if (documentForm && jobId) {
       const formEdited = setTableAPI(
         documentForm,
         DOCUMENT_LIST,
@@ -69,7 +67,7 @@ const JobDocument = ({ jobId, view }) => {
       );
       setFormTemplate(formEdited);
     }
-  }, [documentForm, view]);
+  }, [documentForm, view, jobId]);
 
   /**
    * Get Form field data from Form component
