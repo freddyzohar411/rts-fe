@@ -16,6 +16,7 @@ import SimpleBar from "simplebar-react";
 import VerticalLayout from '../VerticalLayouts/index';
 
 const TwoColumnLayout = (props) => {
+    console.log("props", props)
     const navData = navdata().props.children;
 
     const activateParentDropdown = useCallback((item) => {
@@ -47,6 +48,7 @@ const TwoColumnLayout = (props) => {
         const ul = document.getElementById("navbar-nav");
         const items = ul.getElementsByTagName("a");
         let itemsArray = [...items]; // converts NodeList to Array
+        console.log("ItemsArray", itemsArray)
         removeActivation(itemsArray);
         let matchingMenuItem = itemsArray.find((x) => {
             return x.pathname === pathName;
@@ -69,6 +71,8 @@ const TwoColumnLayout = (props) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         initMenu();
     }, [props.router.location.pathname, initMenu]);
+
+   
 
     function activateIconSidebarActive(id) {
         var menu = document.querySelector("#two-column-menu .simplebar-content-wrapper a[subitems='" + id + "'].nav-icon");

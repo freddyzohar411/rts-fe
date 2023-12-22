@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as api from "../config";
+import { toast } from "react-toastify";
 
 // default
 axios.defaults.baseURL = api.API_URL;
@@ -19,6 +20,15 @@ axios.interceptors.response.use(
   },
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
+    if (error?.response?.status === 403) {
+      toast.error("JWT token got expired.");
+      window.location.replace("/login");
+    }
+
+    if (error?.response?.data) {
+      return Promise.reject(error.response.data);
+    }
+
     let message;
     switch (error.status) {
       case 500:
@@ -75,8 +85,8 @@ class APIClient {
   /**
    * post given data to url
    */
-  create = (url, data) => {
-    return axios.post(url, data);
+  create = (url, data, config = {}) => {
+    return axios.post(url, data, config);
   };
   /**
    * Updates data
@@ -85,8 +95,8 @@ class APIClient {
     return axios.patch(url, data);
   };
 
-  put = (url, data) => {
-    return axios.put(url, data);
+  put = (url, data, config) => {
+    return axios.put(url, data, config);
   };
   /**
    * Delete
@@ -94,7 +104,14 @@ class APIClient {
   delete = (url, config) => {
     return axios.delete(url, { ...config });
   };
+
+  getToken = () => {
+    return sessionStorage.getItem("authUser")
+      ? JSON.parse(sessionStorage.getItem("authUser")).access_token
+      : null;
+  };
 }
+
 const getLoggedinUser = () => {
   const user = sessionStorage.getItem("authUser");
   if (!user) {

@@ -20,7 +20,12 @@ module.exports = function override(config, env) {
     resolveApp("node_modules/isemail"),
     resolveApp("../login"),
     resolveApp("../dashboard"),
-    resolveApp("../common")
+    resolveApp("../common"),
+    resolveApp("../account"),
+    resolveApp("../candidate"),
+    resolveApp("../job"),
+    resolveApp("../settings"),
+    resolveApp("../formbuilder")
   );
 
   // black-list some modules from the babel-loader pipeline

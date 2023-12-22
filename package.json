@@ -5,7 +5,12 @@
       "./common",
       "./main",
       "./dashboard",
-      "./login"
+      "./login",
+      "./account",
+      "./candidate",
+      "./job",
+      "./settings",
+      "./formbuilder"
     ]
   },
   "scripts": {

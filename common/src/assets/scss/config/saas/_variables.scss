@@ -27,7 +27,6 @@ $topbar-dark-mode:                                true;
 $sidebar-dark-mode:                               true;
 $sidebar-gradient-dark-mode:                      false;
 
-
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -325,8 +324,23 @@ $cyans: (
 // fusv-enable
 
 // scss-docs-start theme-color-variables
-$primary:       $blue;
-$secondary:     $purple;
+$theme-primary:   #B4D0F0;
+$theme-primary-custom:   #8AAED6;
+$theme-secondary: #DAECFB;
+$theme-color-1:   #D4E4FB;
+$theme-color-2:   #F0F5FC;
+$theme-color-3:   #CCE0F4;
+$theme-color-4:   #7EABE7;
+$theme-color-5:   #BCD4F8;
+$theme-color-6:   #BDD6FB;
+// Next Button
+$theme-color-7:   #83A9E2;
+$theme-color-8:   #5D87C7;
+$theme-color-9:   #BDD6FA;
+
+$primary:       $theme-primary;
+$primary-custom:$theme-primary-custom;
+$secondary:     $theme-secondary;
 $success:       $green;
 $info:          $cyan;
 $warning:       $yellow;
@@ -334,28 +348,30 @@ $danger:        $red;
 $light:         $gray-100;
 $dark:          $gray-800;
 
-
-
-
-
 // scss-docs-end theme-color-variables
 
 // scss-docs-start theme-colors-map
 $theme-colors: (
-  "primary":    $primary,
-  "secondary":  $secondary,
+  "primary":    $theme-primary,
+  "secondary":  $theme-secondary,
   "success":    $success,
   "info":       $info,
   "warning":    $warning,
   "danger":     $danger,
   "light":      $light,
-  "dark":       $dark
+  "dark":       $dark,
+  "custom-primary":       $theme-color-4,
+  "custom-primary-hover": $theme-color-5,
+  "header":     $theme-color-6,
+  "next-button": $theme-color-7,
+  "next-button-border": $theme-color-8,
+  "next-button-hover": $theme-color-9
 );
 // scss-docs-end theme-colors-map
 
 // scss-docs-start theme-text-variables
-$primary-text-emphasis:   shade-color($primary, 15%);
-$secondary-text-emphasis: shade-color($secondary, 15%);
+$primary-text-emphasis:   shade-color($theme-primary, 15%);
+$secondary-text-emphasis: shade-color($theme-secondary, 15%);
 $success-text-emphasis:   shade-color($success, 15%);
 $info-text-emphasis:      shade-color($info, 15%);
 $warning-text-emphasis:   shade-color($warning, 15%);
@@ -365,8 +381,8 @@ $dark-text-emphasis:      $gray-800;
 // scss-docs-end theme-text-variables
 
 // scss-docs-start theme-bg-subtle-variables
-$primary-bg-subtle:       tint-color($primary, 85%);
-$secondary-bg-subtle:     tint-color($secondary, 85%);
+$primary-bg-subtle:       tint-color($theme-primary, 85%);
+$secondary-bg-subtle:     tint-color($theme-secondary, 85%);
 $success-bg-subtle:       tint-color($success, 85%);
 $info-bg-subtle:          tint-color($info, 85%);
 $warning-bg-subtle:       tint-color($warning, 85%);
@@ -376,8 +392,8 @@ $dark-bg-subtle:          $gray-300;
 // scss-docs-end theme-bg-subtle-variables
 
 // scss-docs-start theme-border-subtle-variables
-$primary-border-subtle:   tint-color($primary, 60%);
-$secondary-border-subtle: tint-color($secondary, 60%);
+$primary-border-subtle:   tint-color($theme-primary, 60%);
+$secondary-border-subtle: tint-color($theme-secondary, 60%);
 $success-border-subtle:   tint-color($success, 60%);
 $info-border-subtle:      tint-color($info, 60%);
 $warning-border-subtle:   tint-color($warning, 60%);
@@ -567,8 +583,8 @@ $border-widths: (
   5: 5px
 );
 $border-style:                solid;
-$border-color:                $gray-300;
-$border-color-translucent:    $gray-400;
+$border-color:                $theme-primary;
+$border-color-translucent:    $theme-primary-custom;
 // scss-docs-end border-variables
 
 // scss-docs-start border-radius-variables
@@ -592,7 +608,7 @@ $element-shadow:              none;
 // scss-docs-end box-shadow-variables
 
 $component-active-color:      $white;
-$component-active-bg:         $primary;
+$component-active-bg:         $theme-primary-custom;
 
 // scss-docs-start focus-ring-variables
 $focus-ring-width:      0.25rem;
@@ -1105,7 +1121,7 @@ $form-range-thumb-transition:              background-color .15s ease-in-out, bo
 
 // scss-docs-start form-file-variables
 $form-file-button-color:          $input-color;
-$form-file-button-bg:             var(--#{$prefix}tertiary-bg);
+$form-file-button-bg:             $theme-primary;
 $form-file-button-hover-bg:       var(--#{$prefix}secondary-bg);
 // scss-docs-end form-file-variables
 
@@ -1203,18 +1219,18 @@ $nav-link-padding-x:                1rem;
 $nav-link-font-size:                null;
 $nav-link-font-weight:              null;
 $nav-link-color:                    var(--#{$prefix}link-color);
-$nav-link-hover-color:              var(--#{$prefix}link-hover-color);
+$nav-link-hover-color:              var(--#{$prefix}custom-primary);
 $nav-link-transition:               color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
 $nav-link-disabled-color:           var(--#{$prefix}secondary-color);
 $nav-link-focus-box-shadow:         $focus-ring-box-shadow;
 
-$nav-tabs-border-color:             var(--#{$prefix}border-color);
+$nav-tabs-border-color:             var(--#{$prefix}custom-primary);
 $nav-tabs-border-width:             var(--#{$prefix}border-width);
 $nav-tabs-border-radius:            var(--#{$prefix}border-radius);
 $nav-tabs-link-hover-border-color:  var(--#{$prefix}secondary-bg) var(--#{$prefix}secondary-bg) $nav-tabs-border-color;
-$nav-tabs-link-active-color:        var(--#{$prefix}emphasis-color);
-$nav-tabs-link-active-bg:           var(--#{$prefix}tertiary-bg);
-$nav-tabs-link-active-border-color: var(--#{$prefix}border-color) var(--#{$prefix}border-color) $nav-tabs-link-active-bg;
+$nav-tabs-link-active-color:        var(--#{$prefix}light);
+$nav-tabs-link-active-bg:           var(--#{$prefix}custom-primary);
+$nav-tabs-link-active-border-color: var(--#{$prefix}custom-primary) var(--#{$prefix}border-color) $nav-tabs-link-active-bg;
 
 $nav-pills-border-radius:           var(--#{$prefix}border-radius);
 $nav-pills-link-active-color:       $component-active-color;

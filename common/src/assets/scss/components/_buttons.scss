@@ -55,6 +55,22 @@ a {
         --#{$prefix}btn-active-border-color: var(--#{$prefix}#{$state}-text-emphasis);
     }
 
+    @if $state == custom-primary {
+        .btn-#{$state} {
+          --#{$prefix}btn-hover-bg: var(--#{$prefix}custom-primary-hover);
+          --#{$prefix}btn-hover-border-color: var(--#{$prefix}custom-primary-hover);
+          --#{$prefix}btn-hover-color: var(--#{$prefix}dark);
+        }
+      }
+
+    @if $state == next-button {
+        .btn-#{$state} {
+          --#{$prefix}btn-hover-bg: var(--#{$prefix}next-button-hover);
+          --#{$prefix}btn-hover-border-color: var(--#{$prefix}cnext-button-border);
+          --#{$prefix}btn-hover-color: var(--#{$prefix}dark);
+        }
+    }
+
     .btn-outline-#{$state} {
         --#{$prefix}btn-color: var(--#{$prefix}#{$state});
         --#{$prefix}btn-bg: transparent;

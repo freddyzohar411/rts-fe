@@ -1,0 +1,32 @@
+// Create Role
+export const CREATE_ROLE = "CREATE_ROLE";
+export const CREATE_ROLE_SUCCESS = "CREATE_ROLE_SUCCESS";
+export const CREATE_ROLE_FAILURE = "CREATE_ROLE_FAILURE";
+
+// List Roles
+export const LIST_ROLES = "LIST_ROLES";
+export const LIST_ROLES_SUCCESS = "LIST_ROLES_SUCCESS";
+export const LIST_ROLES_FAILURE = "LIST_ROLES_FAILURE";
+
+// Fetch All Roles
+export const FETCH_ROLES = "FETCH_ROLES";
+export const FETCH_ROLES_SUCCESS = "FETCH_ROLES_SUCCESS";
+export const FETCH_ROLES_FAILURE = "FETCH_ROLES_FAILURE";
+
+// Fetch Role
+export const FETCH_ROLE = "FETCH_ROLE";
+export const FETCH_ROLE_SUCCESS = "FETCH_ROLE_SUCCESS";
+export const FETCH_ROLE_FAILURE = "FETCH_ROLE_FAILURE";
+
+// Update Role
+export const UPDATE_ROLE = "UPDATE_ROLE";
+export const UPDATE_ROLE_SUCCESS = "UPDATE_ROLE_SUCCESS";
+export const UPDATE_ROLE_FAILURE = "UPDATE_ROLE_FAILURE";
+
+// Delete Role
+export const DELETE_ROLE = "DELETE_ROLE";
+export const DELETE_ROLE_SUCCESS = "DELETE_ROLE_SUCCESS";
+export const DELETE_ROLE_FAILURE = "DELETE_ROLE_FAILURE";
+
+// Remove Role
+export const REMOVE_ROLE = "REMOVE_ROLE";

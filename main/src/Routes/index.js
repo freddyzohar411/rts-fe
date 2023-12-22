@@ -13,11 +13,33 @@ import VerticalLayout from "@workspace/common/src/Layouts/index";
 //routes
 import { authProtectedRoutes, publicRoutes } from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";
+import PermissionProtected from "./PermissionProtected";
+
+// Test
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// Action
+import { usePollingAuthHook } from "@workspace/login";
 
 const Index = () => {
+  // usePollingAuthHook(1000)
+
   return (
     <React.Fragment>
       <Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <Routes>
           <Route>
             {publicRoutes.map((route, idx) => (
@@ -31,18 +53,56 @@ const Index = () => {
           </Route>
 
           <Route>
-            {authProtectedRoutes.map((route, idx) => (
-              <Route
-                path={route.path}
-                element={
-                  <AuthProtected>
-                    <VerticalLayout>{route.component}</VerticalLayout>
-                  </AuthProtected>
-                }
-                key={idx}
-                exact={true}
-              />
-            ))}
+            {authProtectedRoutes.map((route, idx) => {
+              if (route?.nested) {
+                return (
+                  <Route
+                    path={route?.path}
+                    element={
+                      <AuthProtected>
+                        <PermissionProtected
+                          moduleName={route.moduleName}
+                          requiredPermissions={route.requiredPermissions}
+                        >
+                          <VerticalLayout>{route.component}</VerticalLayout>
+                        </PermissionProtected>
+                      </AuthProtected>
+                    }
+                    key={idx}
+                    exact={true}
+                  >
+                    {route.subroutes.map((route, idx) => (
+                      <Route
+                        path={route.path}
+                        element={
+                          <AuthProtected>{route.component}</AuthProtected>
+                        }
+                        key={idx}
+                        exact={true}
+                      />
+                    ))}
+                  </Route>
+                );
+              } else {
+                return (
+                  <Route
+                    path={route.path}
+                    element={
+                      <AuthProtected>
+                        <PermissionProtected
+                          moduleName={route.moduleName}
+                          requiredPermissions={route.requiredPermissions}
+                        >
+                          <VerticalLayout>{route.component}</VerticalLayout>
+                        </PermissionProtected>
+                      </AuthProtected>
+                    }
+                    key={idx}
+                    exact={true}
+                  />
+                );
+              }
+            })}
           </Route>
         </Routes>
       </Router>

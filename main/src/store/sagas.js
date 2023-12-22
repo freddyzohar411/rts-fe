@@ -9,17 +9,89 @@ import { Sagas as LoginSaga } from "@workspace/login";
 //Auth
 import { Sagas as DashboardSaga } from "@workspace/dashboard";
 
-const { LayoutSaga } = CommonSaga;
+//Account
+import { Sagas as AccountSagas } from "@workspace/account";
+
+//Job
+import { Sagas as JobSagas } from "@workspace/job";
+
+//Settings
+import { Sagas as FormBuilderSagas } from "@workspace/formbuilder";
+
+// Settings
+import { Sagas as SettingSagas } from "@workspace/settings";
+
+// Candidate
+import { Sagas as CandidateSagas } from "@workspace/candidate";
+
+const {
+  LayoutSaga,
+  CountryCurrencySaga,
+  CitySaga,
+  IndustrySaga,
+  DepartmentSaga,
+  ParentCompanySaga,
+  UserGroupSaga,
+  AccountNamesSaga,
+  AccountContactSaga,
+} = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
 const { DashboardEcommerceSaga } = DashboardSaga;
+const { AccountSaga, AccountRegistrationSaga, AccountFormSaga } = AccountSagas;
+
+const { JobSaga, JobFormSaga, JobListSaga } = JobSagas;
+
+const { FormSaga } = FormBuilderSagas;
+
+const { UserSaga, RoleSaga, ModuleSaga, PermissionSaga, GroupSaga } =
+  SettingSagas;
+
+const { CandidateFormSaga, CandidateSaga, CandidateRegistrationSaga } =
+  CandidateSagas;
 
 export default function* rootSaga() {
   yield all([
-    //public
+    //Common
+    fork(CountryCurrencySaga),
+    fork(CitySaga),
+    fork(IndustrySaga),
+    fork(DepartmentSaga),
     fork(LayoutSaga),
+    fork(ParentCompanySaga),
+    fork(UserGroupSaga),
+    fork(AccountNamesSaga),
+    fork(AccountContactSaga),
+
+    //public
     fork(AuthSaga),
     fork(ForgetSaga),
     fork(ProfileSaga),
     fork(DashboardEcommerceSaga),
+
+    //Account
+    fork(IndustrySaga),
+    fork(AccountSaga),
+    fork(AccountRegistrationSaga),
+    fork(AccountFormSaga),
+
+    //Job
+    fork(JobSaga),
+    fork(JobFormSaga),
+    fork(JobListSaga),
+
+    //Form
+    fork(FormSaga),
+
+    //Settings
+    fork(UserSaga),
+    fork(RoleSaga),
+    fork(ModuleSaga),
+    fork(PermissionSaga),
+    fork(GroupSaga),
+
+    // Candidate
+    fork(CandidateFormSaga),
+    fork(CandidateSaga),
+    fork(CandidateRegistrationSaga),
   ]);
 }

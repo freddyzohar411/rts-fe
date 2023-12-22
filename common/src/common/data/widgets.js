@@ -21,7 +21,7 @@ import image8 from "../../assets/images/companies/img-8.png";
 const tileBoxs1 = [
     {
         id: 1,
-        label: "Total Earnings",
+        label: "Focus of the Day",
         labelClass: "muted",
         percentage: "+16.24 %",
         percentageClass: "success",
