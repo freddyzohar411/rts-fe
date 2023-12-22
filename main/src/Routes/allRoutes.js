@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 // Dashboard
-import { DashboardEcommerce } from "@workspace/dashboard";
+import { Dashboard } from "@workspace/dashboard";
 
 // User Profile
 import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
@@ -19,7 +19,13 @@ import {
 } from "@workspace/candidate";
 
 // Job
-import { JobCreation, JobListing, JobManage, JobCreate } from "@workspace/job";
+import {
+  JobCreation,
+  JobListing,
+  JobManage,
+  JobCreate,
+  FOD,
+} from "@workspace/job";
 
 // Settings
 import {
@@ -46,8 +52,8 @@ import { FormbuilderMain } from "@workspace/formbuilder";
 import { Permission } from "@workspace/login";
 
 const authProtectedRoutes = [
-  { path: "/dashboard", component: <DashboardEcommerce /> },
-  { path: "/index", component: <DashboardEcommerce /> },
+  { path: "/dashboard", component: <Dashboard /> },
+  { path: "/index", component: <Dashboard /> },
 
   // User Profile
   { path: "/profile", component: <UserProfile /> },
@@ -104,6 +110,8 @@ const authProtectedRoutes = [
     component: <JobManage />,
     requiredPermissions: [Permission.JOB_READ],
   },
+
+  { path: "/jobs/fod", component: <FOD /> },
 
   // Settings
   { path: "/settings/general", component: <MainSettings /> },

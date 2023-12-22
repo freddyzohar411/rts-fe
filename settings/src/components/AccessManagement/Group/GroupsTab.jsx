@@ -100,10 +100,10 @@ function GroupsTab() {
 
       <Row>
         <Col lg={12}>
-          <Table className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3">
-            <thead>
+          <Table className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3">
+            <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
               <tr>
-                <th scope="col" style={{ color: "#00000099" }}>
+                <th scope="col">
                   <span className="me-1">Group Name</span>
                   <i
                     className="mdi mdi-sort"
@@ -111,10 +111,10 @@ function GroupsTab() {
                     style={{ cursor: "pointer" }}
                   ></i>
                 </th>
-                <th scope="col" style={{ width: "600px", color: "#00000099" }}>
+                <th scope="col" style={{ width: "600px"}}>
                   Description
                 </th>
-                <th scope="col" style={{ width: "10px", color: "#00000099" }}>
+                <th scope="col" style={{ width: "10px" }}>
                   Actions
                 </th>
               </tr>

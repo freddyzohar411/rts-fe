@@ -12,7 +12,6 @@ import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
 const VerticalLayout = (props) => {
-  console.log("WHEE")
   const navData = navdata().props.children;
 
   /*

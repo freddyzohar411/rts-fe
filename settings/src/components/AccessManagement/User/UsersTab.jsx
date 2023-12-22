@@ -96,13 +96,13 @@ function UsersTab() {
         <Col lg={12}>
           <div className="table-responsive mb-1">
             <Table
-              className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3"
+              className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3"
               id="customFormTable"
             >
-              <thead>
+              <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
                 <tr>
                   <th>
-                    <span className="me-1" style={{ color: "#00000099" }}>
+                    <span className="me-1">
                       Name
                     </span>
                     <i
@@ -113,7 +113,7 @@ function UsersTab() {
                       }}
                     ></i>
                   </th>
-                  <th scope="col" style={{ color: "#00000099" }}>
+                  <th scope="col">
                     <span className="me-1">Employee ID</span>
                     <i
                       className="mdi mdi-sort"
@@ -126,10 +126,10 @@ function UsersTab() {
                   <th scope="col" hidden>
                     Roles
                   </th>
-                  <th scope="col" style={{ color: "#00000099" }}>
+                  <th scope="col">
                     Member of Group(s)
                   </th>
-                  <th scope="col" style={{ width: "30px", color: "#00000099" }}>
+                  <th scope="col" style={{ width: "30px"}}>
                     <span className="me-1">Date Joined</span>
                     <i
                       className="mdi mdi-sort"
@@ -141,10 +141,10 @@ function UsersTab() {
                   </th>
                   {/* <th scope="col">Last Login</th> */}
 
-                  <th scope="col" style={{ width: "30px", color: "#00000099" }}>
+                  <th scope="col" style={{ width: "30px" }}>  
                     Status
                   </th>
-                  <th scope="col" style={{ width: "30px", color: "#00000099" }}>
+                  <th scope="col" style={{ width: "30px" }}>
                     Actions
                   </th>
                 </tr>

@@ -128,13 +128,13 @@ function RolesTab() {
         <Col>
           <div className="table-responsive">
             <Table
-              className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3"
+              className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3"
               id="rolesTable"
             >
-              <thead>
+              <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
                 <tr>
                   <th scope="col">
-                    <span className="me-1" style={{ color: "#00000099" }}>
+                    <span className="me-1">
                       Roles
                     </span>
                     <i
@@ -145,10 +145,10 @@ function RolesTab() {
                       style={{ cursor: "pointer" }}
                     ></i>
                   </th>
-                  <th scope="col" style={{ color: "#00000099" }}>
+                  <th scope="col">
                     Description
                   </th>
-                  <th scope="col" style={{ width: "30px", color: "#00000099" }}>
+                  <th scope="col" style={{ width: "30px" }}>
                     Actions
                   </th>
                 </tr>
