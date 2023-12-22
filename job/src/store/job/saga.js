@@ -56,7 +56,9 @@ function* workCreateJob(action) {
       jobResponse = yield call(createJob, payload);
     }
     yield put(createJobSuccess(jobResponse.data));
-    toast.success(jobResponse?.message);
+    if (!payload?.isDraft) {
+      toast.success(jobResponse?.message);
+    }
     navigate("/jobs");
   } catch (error) {
     toast.error(error?.message);

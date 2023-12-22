@@ -127,9 +127,12 @@ function* workFetchJobLists(action) {
 // Delete JobList
 function* workDeleteJobList(action) {
   try {
-    const response = yield call(deleteJob, action.payload);
-    yield put(deleteJobListSuccess(action.payload));
-    toast.success(response?.message);
+    const { deleteId, isDraft } = action.payload;
+    const response = yield call(deleteJob, deleteId);
+    yield put(deleteJobListSuccess(deleteId));
+    if (!isDraft) {
+      toast.success(response?.message);
+    }
   } catch (error) {
     yield put(deleteJobListFailure(error));
     toast.error("Error deleting account");

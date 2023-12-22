@@ -26,6 +26,9 @@ export const deleteJob = (id) => api.delete(`${JOB_URL}${BASE_JOBS}/${id}`);
 
 export const getJobFields = () => api.get(`${JOB_URL}${BASE_JOBS}/fields`);
 
+// Get Jobs
+export const draftJob = (id) => api.get(`${JOB_URL}${BASE_JOBS}/draft`);
+
 // Create Job Document
 
 export const DOCUMENT_BASE_URL = `${DOCUMENT_URL}${BASE_DOCUMENTS}`;
