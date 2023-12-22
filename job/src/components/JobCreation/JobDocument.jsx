@@ -1,13 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Form } from "@workspace/common";
 import { DOCUMENT_LIST, JOB_DOCUMENT_NAME } from "./constants";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearJobFormSubmission,
-  createJobDocuments,
-  fetchJobDocumentForm,
-} from "../../store/actions";
+import { createJobDocuments, fetchJobDocumentForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { ObjectHelper } from "@workspace/common";
 import {
