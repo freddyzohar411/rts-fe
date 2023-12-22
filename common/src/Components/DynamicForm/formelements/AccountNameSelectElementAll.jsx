@@ -1,37 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { Label, FormFeedback } from "reactstrap";
+import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
-import { Lists } from "./listOptions";
+import {
+  fetchAccountContacts,
+  fetchAccountNamesAll,
+} from "../../../store/actions";
 
-const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
+const AccountNameSelectElementAll = ({
+  formik,
+  field,
+  formStateHook,
+  ...props
+}) => {
   const { formState } = formStateHook;
-  const getInitialOptions = (field) => {
-    if (!field) return [];
-    if (field.list) {
-      return Lists[field.list];
-    } else if (field.options) {
-      return field.options;
-    } else {
-      return null;
-    }
-  };
+  const accountNamesData = useSelector(
+    (state) => state.AccountNamesReducer.accountNames
+  );
+  const dispatch = useDispatch();
+  const [fetchData, setFetchData] = useState([]);
   const [search, setSearch] = useState("");
-  const [options, setOptions] = useState(getInitialOptions(field));
+  const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+
+  useEffect(() => {
+    dispatch(fetchAccountNamesAll());
+  }, []);
+
+  useEffect(() => {
+    if (accountNamesData) {
+      setFetchData(accountNamesData);
+    }
+  }, [accountNamesData]);
+
+  const namesToid = (name) => {
+    const account = accountNamesData.find((account) => account.name === name);
+    return account?.id;
+  };
+
+  useEffect(() => {
+    if (formik?.values?.[field.name]) {
+      dispatch(
+        fetchAccountContacts(parseInt(namesToid(formik?.values?.[field.name])))
+      );
+    }
+    if (formik?.values?.[field.name] === "") {
+      dispatch(fetchAccountContacts(-99));
+    }
+  }, [formik?.values?.[field.name], accountNamesData]);
+
+  // Helper Functions
+  function mapToOptionFormat(apiData) {
+    return apiData.map((item) => ({
+      label: item?.name,
+      value: item?.name,
+    }));
+  }
 
   function getSingleExistingDataOptions(data) {
     if (!data) return undefined;
     return options?.find((option) => option.label === data);
   }
 
-  const mapToOptionFormat = (data) => {
-    return data.map((item) => {
-      return {
-        label: item.name,
-        value: item.id,
-      };
-    });
-  };
+  // Get Data for normal API calls without parents
+  useEffect(() => {
+    if (accountNamesData) {
+      setOptions(mapToOptionFormat(accountNamesData));
+    }
+  }, [accountNamesData]);
 
   const handleInputChange = (inputValue) => {
     setSearch(inputValue);
@@ -39,7 +74,7 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
 
   const handleChange = (selectedOptions) => {
     setSelectedOptions(selectedOptions);
-    if (selectedOptions === null) {
+    if (selectedOptions == null) {
       formik?.setFieldValue(field.name, "");
     } else {
       formik?.setFieldValue(field.name, selectedOptions.label);
@@ -47,21 +82,31 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
   };
 
   useEffect(() => {
-    if (formik?.values?.[field.name] && formik?.values?.[field.name] !== "") {
-      setSelectedOptions(
-        getSingleExistingDataOptions(formik?.values?.[field.name])
+    setSelectedOptions(null);
+    if (
+      formik?.values?.[field.name] &&
+      formik?.values?.[field.name] !== "" &&
+      options
+    ) {
+      const setOption = getSingleExistingDataOptions(
+        formik?.values?.[field.name]
       );
+      if (setOption) {
+        setSelectedOptions(setOption);
+      } else {
+        setSelectedOptions(null);
+      }
     } else {
       setSelectedOptions(null);
     }
-  }, [formik?.values?.[field.name]]);
+  }, [formik?.values?.[field.name], options]);
 
   const isValid = !props?.error;
 
   const customStyles = {
     menu: (provided) => ({
       ...provided,
-      zIndex: 9999, 
+      zIndex: 9999,
     }),
     control: (base, state) => ({
       ...base,
@@ -71,11 +116,11 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
       "&:hover": {
         borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       },
-      backgroundColor: state.isDisabled ? '#EFF2F7' : base.backgroundColor,
+      backgroundColor: state.isDisabled ? "#EFF2F7" : base.backgroundColor,
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      color: state.isDisabled ? 'black !important' : provided.color,
+      color: state.isDisabled ? "black !important" : provided.color,
     }),
   };
 
@@ -109,4 +154,4 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
   );
 };
 
-export default SingleSelectElement;
+export default AccountNameSelectElementAll;

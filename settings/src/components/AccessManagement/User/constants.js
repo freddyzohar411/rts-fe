@@ -1,6 +1,7 @@
 import * as yup from "yup";
 
 export const populateForm = (value) => {
+  console.log("Update Value", value)
   return {
     id: value.id,
     keycloackId: value.keycloackId,
@@ -12,6 +13,7 @@ export const populateForm = (value) => {
     password: value.password,
     confirmPassword: value.confirmPassword,
     employeeId: value.employeeId,
+    managerId: value.managerId,
   };
 };
 
@@ -24,6 +26,7 @@ export const initialValues = {
   password: "",
   confirmPassword: "",
   employeeId: "",
+  managerId: null,
 };
 
 export const schema = yup.object().shape({
@@ -33,7 +36,10 @@ export const schema = yup.object().shape({
   lastName: yup.string().required("Please enter a last name."),
   username: yup.string().required("Please enter a username."),
   email: yup.string().required("Please enter an email address."),
-  mobile: yup.string().required("Please enter a contact number.").min(10, "Mobile number must be at least 10 digits long."),
+  mobile: yup
+    .string()
+    .required("Please enter a contact number.")
+    .min(10, "Mobile number must be at least 10 digits long."),
   password: yup
     .string()
     .required("Please enter a password.")
@@ -44,4 +50,6 @@ export const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords must match."),
 
   employeeId: yup.string().required("Please enter the Employee ID."),
+  // Id is a number
+  managerId: yup.number().nullable().notRequired(),
 });

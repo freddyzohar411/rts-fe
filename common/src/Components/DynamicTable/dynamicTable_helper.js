@@ -35,7 +35,7 @@ function generateConfig(selectedOptGroup) {
       sortValue: opt.sortValue,
       render: (data) => {
         if (opt.value === "createdAt" || opt.value === "updatedAt") {
-          return DateHelper.formatDateStandard(
+          return DateHelper.formatDateStandard2(
             getDynamicNestedResult(data, opt.value) || "-"
           );
         }

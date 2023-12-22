@@ -16,11 +16,13 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {  deleteUser, listUsers } from "../../../store/users/action";
+import { deleteUser, listUsers } from "../../../store/users/action";
+import { DateHelper } from "@workspace/common";
 
 function UsersTab() {
   const [modal, setModal] = useState(false);
-  const usersListing = useSelector((state) => state?.UserReducer?.usersListing) || [];
+  const usersListing =
+    useSelector((state) => state?.UserReducer?.usersListing) || [];
   const users = usersListing.users;
   const totalPages = usersListing.totalPages;
   const dispatch = useDispatch();
@@ -94,13 +96,15 @@ function UsersTab() {
         <Col lg={12}>
           <div className="table-responsive mb-1">
             <Table
-              className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3"
+              className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3"
               id="customFormTable"
             >
-              <thead>
+              <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
                 <tr>
                   <th>
-                    <span className="me-1">Name</span>
+                    <span className="me-1">
+                      Name
+                    </span>
                     <i
                       className="mdi mdi-sort"
                       style={{ cursor: "pointer" }}
@@ -122,11 +126,22 @@ function UsersTab() {
                   <th scope="col" hidden>
                     Roles
                   </th>
-                  <th scope="col">Member of Group(s)</th>
-                  <th scope="col">Date Joined</th>
-                  <th scope="col">Last Login</th>
+                  <th scope="col">
+                    Member of Group(s)
+                  </th>
+                  <th scope="col" style={{ width: "30px"}}>
+                    <span className="me-1">Date Joined</span>
+                    <i
+                      className="mdi mdi-sort"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        handleSortAndDirection("createdAt");
+                      }}
+                    ></i>
+                  </th>
+                  {/* <th scope="col">Last Login</th> */}
 
-                  <th scope="col" style={{ width: "30px" }}>
+                  <th scope="col" style={{ width: "30px" }}>  
                     Status
                   </th>
                   <th scope="col" style={{ width: "30px" }}>
@@ -169,8 +184,8 @@ function UsersTab() {
                         )}
                       </td>
 
-                      <td>23/09/2023</td>
-                      <td>11/01/2023</td>
+                      <td>{DateHelper.formatDateStandard2(user.createdAt)}</td>
+                      {/* <td>11/01/2023</td> */}
                       <td>
                         {user?.enabled ? (
                           <Badge color="success">Active</Badge>
@@ -181,21 +196,29 @@ function UsersTab() {
                       <td>
                         <div className="d-flex flex-start gap-2">
                           <Link to={`/settings/access/user/${user.id}`}>
-                            <Button className="btn btn-custom-primary">
-                              <i className="ri-eye-line"></i>
+                            <Button className="btn btn-custom-primary px-2 py-1">
+                              <i
+                                className="ri-eye-line"
+                                style={{ fontSize: "0.65rem" }}
+                              ></i>
                             </Button>
                           </Link>
                           <Link to={`/settings/access/user/update/${user.id}`}>
-                            <Button className="btn btn-custom-primary">
-                              {" "}
-                              <i className="ri-pencil-line"></i>
+                            <Button className="btn btn-custom-primary  px-2 py-1">
+                              <i
+                                className="ri-pencil-line"
+                                style={{ fontSize: "0.65rem" }}
+                              ></i>
                             </Button>
                           </Link>
                           <Button
-                            className="btn btn-custom-primary"
+                            className="btn btn-danger  px-2 py-0"
                             onClick={() => openDeleteUserModal(user.id)}
                           >
-                            <i className="ri-delete-bin-2-line"></i>
+                            <i
+                              className="ri-delete-bin-2-line"
+                              style={{ fontSize: "0.65rem" }}
+                            ></i>
                           </Button>
                         </div>
                       </td>

@@ -100,8 +100,8 @@ function GroupsTab() {
 
       <Row>
         <Col lg={12}>
-          <Table className="table table-hover table-bordered table-striped border-secondary align-middle table-nowrap rounded-3">
-            <thead>
+          <Table className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3">
+            <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
               <tr>
                 <th scope="col">
                   <span className="me-1">Group Name</span>
@@ -111,7 +111,7 @@ function GroupsTab() {
                     style={{ cursor: "pointer" }}
                   ></i>
                 </th>
-                <th scope="col" style={{ width: "600px" }}>
+                <th scope="col" style={{ width: "600px"}}>
                   Description
                 </th>
                 <th scope="col" style={{ width: "10px" }}>
@@ -128,28 +128,37 @@ function GroupsTab() {
                     <td className="d-flex flex-row justify-between gap-2">
                       <Link to={`/settings/access/group/${item?.id}`}>
                         <Button
-                          className="btn btn-custom-primary"
+                          className="btn btn-custom-primary px-2 py-1"
                           style={{ pointerEvents: "none" }}
                         >
-                          <i className="ri-eye-line"></i>
+                          <i
+                            className="ri-eye-line"
+                            style={{ fontSize: "0.65rem" }}
+                          ></i>
                         </Button>
                       </Link>
                       <Link to={`/settings/access/group/update/${item?.id}`}>
                         <Button
-                          className="btn btn-custom-primary"
+                          className="btn btn-custom-primary px-2 py-1"
                           style={{ pointerEvents: "none" }}
                         >
-                          <i className="ri-pencil-line"></i>
+                          <i
+                            className="ri-pencil-line"
+                            style={{ fontSize: "0.65rem" }}
+                          ></i>
                         </Button>
                       </Link>
                       <Button
-                        className="btn btn-custom-primary"
+                        className="btn btn-danger px-2 py-0"
                         onClick={() => {
                           setModal(true);
                           setDeletedId(item?.id);
                         }}
                       >
-                        <i className="ri-delete-bin-line"></i>
+                        <i
+                          className="ri-delete-bin-line"
+                          style={{ fontSize: "0.65rem" }}
+                        ></i>
                       </Button>
                     </td>
                   </tr>

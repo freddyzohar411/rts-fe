@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 // Dashboard
-import { DashboardEcommerce } from "@workspace/dashboard";
+import { Dashboard } from "@workspace/dashboard";
 
 // User Profile
 import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
@@ -19,7 +19,13 @@ import {
 } from "@workspace/candidate";
 
 // Job
-import { JobCreation, JobListing, JobManage, JobCreate } from "@workspace/job";
+import {
+  JobCreation,
+  JobListing,
+  JobManage,
+  JobCreate,
+  FOD,
+} from "@workspace/job";
 
 // Settings
 import {
@@ -46,20 +52,28 @@ import { FormbuilderMain } from "@workspace/formbuilder";
 import { Permission } from "@workspace/login";
 
 const authProtectedRoutes = [
-  { path: "/dashboard", component: <DashboardEcommerce /> },
-  { path: "/index", component: <DashboardEcommerce /> },
+  { path: "/dashboard", component: <Dashboard /> },
+  { path: "/index", component: <Dashboard /> },
 
   // User Profile
   { path: "/profile", component: <UserProfile /> },
 
   // Candidate
-  { path: "/candidates", component: <CandidateListing /> },
+  {
+    path: "/candidates",
+    component: <CandidateListing />,
+    requiredPermissions: [Permission.CANDIDATE_READ],
+  },
   {
     path: "/candidates/create",
     component: <CreateCandidate />,
     requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
-  { path: "/candidates/:candidateId/:slug", component: <CandidateManage />},
+  {
+    path: "/candidates/:candidateId/:slug",
+    component: <CandidateManage />,
+    requiredPermissions: [Permission.CANDIDATE_READ],
+  },
 
   // Account
   {
@@ -67,19 +81,44 @@ const authProtectedRoutes = [
     component: <CreateAccount />,
     requiredPermissions: [Permission.ACCOUNT_WRITE],
   },
-  { path: "/accounts/:accountId/edit", component: <EditAccount /> },
-  { path: "/accounts", component: <AccountListing /> },
+  {
+    path: "/accounts/:accountId/edit",
+    component: <EditAccount />,
+    requiredPermissions: [Permission.ACCOUNT_READ],
+  },
+  {
+    path: "/accounts",
+    component: <AccountListing />,
+    requiredPermissions: [Permission.ACCOUNT_READ],
+  },
 
   // Job
   // { path: "/jobs/job-creation", component: <JobCreation /> },
-  { path: "/jobs/job-creation", component: <JobCreate /> },
+  {
+    path: "/jobs/job-creation",
+    component: <JobCreate />,
+    requiredPermissions: [Permission.JOB_WRITE],
+  },
   // { path: "/jobs/:jobId/:type", component: <JobCreation /> },
-  { path: "/jobs", component: <JobListing /> },
-  { path: "/jobs/:jobId/:slug", component: <JobManage />},
+  {
+    path: "/jobs",
+    component: <JobListing />,
+    requiredPermissions: [Permission.JOB_READ],
+  },
+  {
+    path: "/jobs/:jobId/:slug",
+    component: <JobManage />,
+    requiredPermissions: [Permission.JOB_READ],
+  },
+
+  { path: "/jobs/fod", component: <FOD /> },
 
   // Settings
-  { path: "/settings", component: <MainSettings /> },
-  { path: "/settings/customisation", component: <DynamicFormListingSettings /> },
+  { path: "/settings/general", component: <MainSettings /> },
+  {
+    path: "/settings/customisation",
+    component: <DynamicFormListingSettings />,
+  },
 
   // Form Builder
   { path: "/form-builder", component: <FormbuilderMain /> },

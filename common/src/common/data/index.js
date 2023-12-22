@@ -16,6 +16,7 @@ import {
   lastMonthaudiencesCountryData,
   currentyearaudiencesCountryData,
 } from "./analytics";
+import { recruiterDashboard, salesDashboard } from "./dashboard";
 import {
   crmWidgets,
   dealsStatus,
@@ -157,7 +158,7 @@ import {
 } from "./ecommerce";
 
 import { crmcontacts, companies, leads, deals } from "./crm";
-import country from "./country"
+import country from "./country";
 import {
   expolreNow,
   aution,
@@ -367,4 +368,6 @@ export {
   jobCategories,
   jobApplication,
   apiKey,
+  recruiterDashboard,
+  salesDashboard,
 };

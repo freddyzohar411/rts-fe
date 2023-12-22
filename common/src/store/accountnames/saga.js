@@ -1,8 +1,16 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 
-import { FETCH_ACCOUNT_NAMES } from "./actionTypes";
-import { fetchAccountNamesSuccess, fetchAccountNamesFailure } from "./action";
-import { getAccountNames } from "../../helpers/backend_helper";
+import { FETCH_ACCOUNT_NAMES, FETCH_ACCOUNT_NAMES_ALL } from "./actionTypes";
+import {
+  fetchAccountNamesSuccess,
+  fetchAccountNamesFailure,
+  fetchAccountNamesAllFailure,
+  fetchAccountNamesAllSuccess,
+} from "./action";
+import {
+  getAccountNames,
+  getAccountNamesAll,
+} from "../../helpers/backend_helper";
 
 function* workFetchAccountNames() {
   try {
@@ -13,6 +21,16 @@ function* workFetchAccountNames() {
   }
 }
 
+function* workFetchAccountNamesAll() {
+  try {
+    const response = yield call(getAccountNamesAll);
+    yield put(fetchAccountNamesAllSuccess(response.data));
+  } catch (error) {
+    yield put(fetchAccountNamesAllFailure(error));
+  }
+}
+
 export default function* watchFetchAccountNamesSaga() {
   yield takeLatest(FETCH_ACCOUNT_NAMES, workFetchAccountNames);
+  yield takeLatest(FETCH_ACCOUNT_NAMES_ALL, workFetchAccountNamesAll);
 }

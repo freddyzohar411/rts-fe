@@ -25,16 +25,21 @@ function CreateUser() {
   document.title = "Create New User | RTS";
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const allUsers = useSelector((state) => state?.UserReducer?.users) || [];
+  const allUsers = useSelector((state) => state?.UserReducer?.users);
   const [sortBy, setSortBy] = useState(null);
-  const sortByName = [
-    {
-      options: allUsers.map((user) => ({
-        label: `${user.firstName} (${user.mobile})`,
-        value: user.firstName,
-      })),
-    },
-  ];
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  useEffect(() => {
+    if (!allUsers) return;
+    setSelectedOption([
+      {
+        options: allUsers.map((user) => ({
+          label: `${user.firstName} (${user.mobile})`,
+          value: user.id.toString(),
+        })),
+      },
+    ]);
+  }, [allUsers]);
 
   const handleSubmit = async (values) => {
     const newUser = {
@@ -46,12 +51,15 @@ function CreateUser() {
       employeeId: values.employeeId,
       password: values.password,
       confirmPassword: values.confirmPassword,
+      managerId: parseInt(values.managerId),
     };
     dispatch(createUser({ newUser, navigate: navigate }));
   };
 
   useEffect(() => {
+    // if (!allUsers) {
     dispatch(fetchUsers());
+    // }
   }, []);
 
   return (
@@ -84,7 +92,7 @@ function CreateUser() {
                   validationSchema={schema}
                   onSubmit={handleSubmit}
                 >
-                  {({ errors, touched, resetForm }) => (
+                  {({ errors, touched, resetForm, values, handleChange }) => (
                     <Form>
                       <CardBody>
                         <Row>
@@ -257,11 +265,24 @@ function CreateUser() {
                           <Col lg={4}>
                             <div className="mb-3">
                               <FormSelection
+                                name="managerId"
                                 value={sortBy}
-                                onChange={(sortBy) => setSortBy(sortBy)}
+                                onChange={(selectedOption) => {
+                                  console.log("SS options", selectedOption);
+                                  setSortBy(selectedOption);
+                                  if (!selectedOption) {
+                                    handleChange("managerId")("");
+                                  } else {
+                                    handleChange("managerId")(
+                                      selectedOption?.value
+                                    );
+                                  }
+                                }}
                                 label="Select Manager"
-                                options={sortByName}
+                                options={selectedOption}
+                                style={{ borderColor: "#8aaed6" }}
                                 className="js-example-basic-single mb-0"
+                                isClearable
                               />
                             </div>
                           </Col>

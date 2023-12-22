@@ -33,7 +33,7 @@ const AccountListing = () => {
     {
       names: ["updatedAt", "createdAt"],
       render: (data, opt) =>
-        DateHelper.formatDateStandard(
+        DateHelper.formatDateStandard2(
           DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
         ),
     },
@@ -142,9 +142,9 @@ const AccountListing = () => {
             >
               <Button
                 type="button"
-                className="btn btn-custom-primary d-flex align-items-center column-gap-2"
+                className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
               >
-                <i className="ri-eye-line"></i>
+                <i className="ri-eye-line" style={{ fontSize: "0.65rem" }}></i>
               </Button>
             </Link>
             {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
@@ -155,23 +155,29 @@ const AccountListing = () => {
               >
                 <Button
                   type="button"
-                  className="btn btn-custom-primary d-flex align-items-center column-gap-2"
+                  className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
                 >
-                  <i className="mdi mdi-pencil"></i>
+                  <i
+                    className="mdi mdi-pencil"
+                    style={{ fontSize: "0.65rem" }}
+                  ></i>
                 </Button>
               </Link>
             )}
             {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
               <Button
                 type="button"
-                className="btn btn-danger d-flex align-items-center column-gap-2"
+                className="btn btn-danger d-flex align-items-center column-gap-2 px-2 py-0"
                 onClick={() => {
                   setDeleteId(data.id);
                   setIsDeleteModalOpen(true);
                 }}
               >
                 <span>
-                  <i className="mdi mdi-delete"></i>
+                  <i
+                    className="mdi mdi-delete"
+                    style={{ fontSize: "0.65rem" }}
+                  ></i>
                 </span>
               </Button>
             )}

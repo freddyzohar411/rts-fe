@@ -36,6 +36,7 @@ function UserDetails() {
   }, [userId]);
 
   const user = useSelector((state) => state.UserReducer.user);
+  console.log("User", user);
   // Document Title
   useEffect(() => {
     if (user) {
@@ -105,6 +106,16 @@ function UserDetails() {
                       <div className="mb-3 d-flex flex-column gap-1">
                         <span className="fw-semibold">Contact Number</span>
                         <span>{user?.mobile}</span>
+                      </div>
+                    </Col>
+                    <Col lg={4}>
+                      <div className="mb-3 d-flex flex-column gap-1">
+                        <span className="fw-semibold">Manager</span>
+                        <span>
+                          {user.manager
+                            ? `${user.manager.firstName} (${user.manager.mobile})`
+                            : "-"}
+                        </span>
                       </div>
                     </Col>
                   </Row>

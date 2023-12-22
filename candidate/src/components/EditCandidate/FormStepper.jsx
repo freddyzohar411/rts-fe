@@ -21,6 +21,7 @@ const FormStepper = ({
 }) => {
   const { Permission, checkAllPermission } = useUserAuth();
   const navigate = useNavigate();
+  
   const handleNextStep = () => {
     if (activeStep === 0 && formikRef?.current?.formik) {
       formikRef.current.formik.submitForm();

@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Badge, Button, Input } from "reactstrap";
+import {
+  Badge,
+  Button,
+  Input,
+  Dropdown,
+  DropdownMenu,
+  DropdownToggle,
+  Row,
+  Col,
+  Label,
+} from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
@@ -21,6 +31,31 @@ const JobListing = () => {
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
 
+  // Dropdown State
+  const [fodAssign, setFodAssign] = useState({});
+  const handleFodAssignDropdown = (dataId) => {
+    setFodAssign((prevStates) => ({
+      ...prevStates,
+      [dataId]: !prevStates[dataId],
+    }));
+  };
+
+  // Placeholder Recruiter Name List
+  const [nestedVisible, setNestedVisible] = useState([]);
+
+  const toggleNested = (index) => {
+    setNestedVisible((prev) => {
+      const updatedVisibility = [...prev];
+      updatedVisibility[index] = !updatedVisibility[index];
+      return updatedVisibility;
+    });
+  };
+
+  const namesData = [
+    { name: "Anna", subNames: ["John", "Ben"] },
+    { name: "Sally", subNames: ["Alice", "Ken"] },
+  ];
+
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -30,7 +65,7 @@ const JobListing = () => {
     {
       names: ["updatedAt", "createdAt"],
       render: (data, opt) =>
-        DateHelper.formatDateStandard(
+        DateHelper.formatDateStandard2(
           DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
         ),
     },
@@ -100,7 +135,6 @@ const JobListing = () => {
         },
       },
       {
-        header: "ASSIGNED",
         name: "badges",
         sort: false,
         sortValue: "badges",
@@ -118,6 +152,77 @@ const JobListing = () => {
         sortValue: "action",
         render: (data) => (
           <div className="d-flex column-gap-2">
+            <Dropdown
+              isOpen={fodAssign[data.id] || false}
+              toggle={() => handleFodAssignDropdown(data.id)}
+            >
+              <DropdownToggle className="btn btn-sm btn-custom-primary">
+                FOD
+              </DropdownToggle>
+              <DropdownMenu className="p-3">
+                {/* Map Recruiter Checkbox Here */}
+                <Row className="mb-2">
+                  <Col>
+                    <div className="search-box">
+                      <Input
+                        className="form-control form-control-sm"
+                        placeholder="Search.."
+                        type="text"
+                      />
+                      <i className="ri-search-eye-line search-icon"></i>
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <ul className="ps-0 list-unstyled">
+                      {namesData.map((item, index) => (
+                        <li key={index}>
+                          <div
+                            className="d-flex flex-row justify-content-between mb-1"
+                            onClick={() => toggleNested(index)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <span>{item.name}</span>
+                            <span>{nestedVisible[index] ? "-" : "+"}</span>
+                          </div>
+                          {nestedVisible[index] && (
+                            <ul
+                              style={{
+                                listStyleType: "circle",
+                                paddingLeft: "20px",
+                              }}
+                            >
+                              {item.subNames.map((subName, subIndex) => (
+                                <li
+                                  key={subIndex}
+                                  className="d-flex flew-row justify-content-between"
+                                >
+                                  {subName}
+                                  <Label check className="mb-0 ms-2">
+                                    <Input type="checkbox" />
+                                  </Label>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <div className="d-flex justify-content-end">
+                      <Button className="btn btn-sm btn-custom-primary px-3">
+                        Assign
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
+              </DropdownMenu>
+            </Dropdown>
+
             <Link
               to={`/jobs/${data.id}/snapshot`}
               style={{ color: "black" }}
@@ -125,11 +230,12 @@ const JobListing = () => {
             >
               <Button
                 type="button"
-                className="btn btn-primary d-flex align-items-center column-gap-2"
+                className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
               >
-                <i className="ri-eye-line"></i>
+                <i className="ri-eye-line" style={{ fontSize: "0.65rem" }}></i>
               </Button>
             </Link>
+
             {checkAllPermission([Permission.JOB_EDIT]) && (
               <Link
                 to={`/jobs/${data.id}/snapshot`}
@@ -138,23 +244,30 @@ const JobListing = () => {
               >
                 <Button
                   type="button"
-                  className="btn btn-primary d-flex align-items-center column-gap-2"
+                  className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
                 >
-                  <i className="mdi mdi-pencil"></i>
+                  <i
+                    className="mdi mdi-pencil"
+                    style={{ fontSize: "0.65rem" }}
+                  ></i>
                 </Button>
               </Link>
             )}
+
             {checkAllPermission([Permission.JOB_DELETE]) && (
               <Button
                 type="button"
-                className="btn btn-danger d-flex align-items-center column-gap-2"
+                className="btn btn-danger d-flex align-items-center column-gap-2 px-2 py-0"
                 onClick={() => {
                   setDeleteId(data.id);
                   setIsDeleteModalOpen(true);
                 }}
               >
                 <span>
-                  <i className="mdi mdi-delete"></i>
+                  <i
+                    className="mdi mdi-delete"
+                    style={{ fontSize: "0.65rem" }}
+                  ></i>
                 </span>
               </Button>
             )}

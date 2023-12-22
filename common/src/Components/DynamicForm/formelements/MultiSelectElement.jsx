@@ -60,6 +60,7 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
       "&:hover": {
         borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       },
+      backgroundColor: state.isDisabled ? '#EFF2F7' : base.backgroundColor,
     }),
   };
 

@@ -35,7 +35,7 @@ function DynamicFormListingSettings() {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 30,
+      pageSize: 99,
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
@@ -55,19 +55,25 @@ function DynamicFormListingSettings() {
         render: (data) => (
           <div className="d-flex column-gap-2">
             <Link to={`/form-builder/${data.formId}`}>
-              <Button type="button" className="btn btn-primary">
-                <i className="ri-edit-2-line"></i>
+              <Button type="button" className="btn btn-custom-primary px-2 py-1">
+                <i
+                  className="ri-edit-2-line"
+                  style={{ fontSize: "0.65rem" }}
+                ></i>
               </Button>
             </Link>
             <Button
               type="button"
-              className="btn btn-danger"
+              className="btn btn-danger px-2 py-1"
               onClick={() => {
                 setDeleteId(data.formId);
                 setIsDeleteModalOpen(true);
               }}
             >
-              <i className="ri-delete-bin-6-line"></i>
+              <i
+                className="ri-delete-bin-6-line"
+                style={{ fontSize: "0.65rem" }}
+              ></i>
             </Button>
           </div>
         ),

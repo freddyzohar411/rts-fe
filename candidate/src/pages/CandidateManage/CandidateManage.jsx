@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { CustomNav } from "@workspace/common";
 import { Container, Breadcrumb, BreadcrumbItem, Row, Col } from "reactstrap";
+import { StringHelper } from "@workspace/common";
 
 import EditCandidate from "../../components/EditCandidate/EditCandidate";
 import CandidateOverview from "../../components/CandidateOverview/CandidateOverview";
@@ -13,11 +14,11 @@ const CandidateManage = () => {
   const { candidateId, slug } = useParams();
 
   const navContents = [
-    { link: "SNAPSHOT", url: `/candidates/${candidateId}/snapshot`, slug: "snapshot"},
-    { link: "OVERVIEW", url: `/candidates/${candidateId}/overview`, slug: "overview" },
-    { link: "PERFORMANCE", url: `/candidates/${candidateId}/performance`, slug: "performance" },
-    { link: "EMAIL", url: `/candidates/${candidateId}/email`, slug: "email" },
-    { link: "TASK", url: `/candidates/${candidateId}/task`, slug: "task" },
+    { link: "Snapshot", url: `/candidates/${candidateId}/snapshot`, slug: "snapshot"},
+    { link: "Overview", url: `/candidates/${candidateId}/overview`, slug: "overview" },
+    { link: "Performance", url: `/candidates/${candidateId}/performance`, slug: "performance" },
+    { link: "Email", url: `/candidates/${candidateId}/email`, slug: "email" },
+    { link: "Task", url: `/candidates/${candidateId}/task`, slug: "task" },
   ];
 
   return (
@@ -26,8 +27,8 @@ const CandidateManage = () => {
         <Row>
           <Col>
             <Breadcrumb>
-              <BreadcrumbItem>candidates</BreadcrumbItem>
-              <BreadcrumbItem active>{`${slug}`}</BreadcrumbItem>
+              <BreadcrumbItem>Candidates</BreadcrumbItem>
+              <BreadcrumbItem active>{`${StringHelper.capitalizeFirstLetter(slug)}`}</BreadcrumbItem>
             </Breadcrumb>
           </Col>
         </Row>

@@ -141,6 +141,21 @@ const useUserAuth = () => {
   }
 
   /**
+   * Check if user has any permission
+   * @param {*} modulePermissions 
+   * @returns 
+   */
+  function checkAnyPermission(modulePermissions = []) {
+    const userPermission = convertUserProfileToPermissionObj(userProfile);
+    for (const modulePermission of modulePermissions) {
+      if (checkSinglePermission(userPermission, modulePermission)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Helper function to check if user has a single permission
    * @param {*} userPermission
    * @param {*} modulePermission
@@ -157,11 +172,14 @@ const useUserAuth = () => {
     return false;
   }
 
+  // console.log("userProfile", convertUserProfileToPermissionObj(userProfile))
+
   return {
     userProfile,
     getAllRoles,
     getAllUserGroups,
     checkAllPermission,
+    checkAnyPermission,
     checkAllUserGroup,
     checkAnyUserGroup,
     checkAllRole,

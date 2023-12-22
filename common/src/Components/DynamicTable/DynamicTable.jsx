@@ -18,7 +18,7 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
             <th
               key={option.name}
               scope="col"
-              className="text-uppercase cursor-pointer"
+              className="cursor-pointer"
               onClick={() => pageRequestSet.setSortAndDirection(option)}
             >
               {option.header} <i className="mdi mdi-sort-descending"></i>
@@ -26,7 +26,7 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
           );
         } else {
           return (
-            <th key={option.name} scope="col" className="text-uppercase">
+            <th key={option.name} scope="col">
               {option.header}
             </th>
           );
@@ -49,13 +49,13 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
   return (
     <>
       {/* Table */}
-      <div className="table-responsive table-hover table-card mt-3 mb-1">
+      <div className="table-responsive table-hover table-card mt-3 mb-1" style={{height: "400px"}}>
         <Table
-          className="table align-middle table-nowrap"
+          className="table align-middle table-nowrap border-secondary align-middle"
           id="accountListingTable"
         >
-          <thead className="table-light">
-            <tr>{data && generateHeaderJSX(config)}</tr>
+          <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
+            <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
           </thead>
           <tbody className="list form-check-all">
             {data && data.length > 0 ? (
@@ -75,7 +75,7 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
         <Input
           onChange={(e) => pageRequestSet.setPageSize(parseInt(e.target.value))}
           type="select"
-          className="form-select"
+          className="form-select border-secondary"
           style={{ height: "34px", marginRight: "10px", width: "70px" }}
         >
           <option value="5">5</option>

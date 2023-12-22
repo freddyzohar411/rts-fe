@@ -18,18 +18,37 @@ const MultiFileInputElement = ({
   const [deletedIds, setDeletedIds] = useState([]);
   const fileInputRef = useRef();
 
+  // useEffect(() => {
+  //   if (
+  //     formik?.values?.[field.name] === "" ||
+  //     formik?.values?.[field.name] === null ||
+  //     formik?.values?.[field.name] === undefined
+  //     // typeof formik?.values?.[field.name] !== "object"
+  //   ) {
+  //     setFiles([]);
+  //     setExistingFiles([]);
+  //     setDeletedIds([]);
+  //   }
+  // }, [formik?.values?.[field.name]]);
+
   useEffect(() => {
+    const fieldValue = formik?.values?.[field.name];
+  
     if (
-      formik?.values?.[field.name] === "" ||
-      formik?.values?.[field.name] === null ||
-      formik?.values?.[field.name] === undefined
-      // typeof formik?.values?.[field.name] !== "object"
+      fieldValue === "" ||
+      fieldValue === null ||
+      fieldValue === undefined
+      // typeof fieldValue !== "object"
     ) {
-      setFiles([]);
-      setExistingFiles([]);
-      setDeletedIds([]);
+      // Check if an update is needed before updating the state
+      if (files.length > 0 || existingFiles.length > 0 || deletedIds.length > 0) {
+        setFiles([]);
+        setExistingFiles([]);
+        setDeletedIds([]);
+      }
     }
-  }, [formik?.values?.[field.name]]);
+  // }, [formik?.values?.[field.name], files, existingFiles, deletedIds]);
+}, [formik?.values?.[field.name]]);
 
   useEffect(() => {
     if (field?.multiFileEnity) {

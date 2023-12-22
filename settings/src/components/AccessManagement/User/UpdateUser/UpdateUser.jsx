@@ -1,4 +1,5 @@
 import { Field, Form, Formik } from "formik";
+import { FormSelection } from "@workspace/common";
 import React, { useEffect, useState } from "react";
 import {
   Breadcrumb,
@@ -17,7 +18,11 @@ import {
 import { initialValues, schema, populateForm } from "../constants";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser, updateUser } from "../../../../store/users/action";
+import {
+  fetchUser,
+  updateUser,
+  fetchUsers,
+} from "../../../../store/users/action";
 
 function UpdateUser() {
   const { userId } = useParams();
@@ -26,13 +31,43 @@ function UpdateUser() {
   const [userInitialValues, setUserInitialValues] = useState(
     populateForm(initialValues)
   );
-
-  // Get User Details
+  const [sortBy, setSortBy] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const allUsers = useSelector((state) => state?.UserReducer?.users);
   const user = useSelector((state) => state.UserReducer.user);
+
+  useEffect(() => {
+    if (!allUsers) return;
+    setSelectedOption([
+      {
+        options: allUsers.map((user) => ({
+          label: `${user.firstName} (${user.mobile})`,
+          value: user?.id?.toString(),
+        })),
+      },
+    ]);
+  }, [allUsers]);
+
+  useEffect(() => {
+    if (!user) return;
+    const manager = allUsers?.find(
+      (singleUser) => singleUser.id === parseInt(user.managerId)
+    );
+    if (!manager) return;
+    setSortBy({
+      label: `${manager.firstName} (${manager.mobile})`,
+      value: manager?.id?.toString(),
+    });
+  }, [user, allUsers]);
+
   useEffect(() => {
     if (userId) {
       dispatch(fetchUser(userId));
     }
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchUsers());
   }, []);
 
   // Set User Initial Values
@@ -47,6 +82,7 @@ function UpdateUser() {
         email: user?.email,
         keycloackId: user?.keycloackId,
         id: user?.id,
+        managerId: user?.managerId,
       };
       setUserInitialValues(populateForm(fetchInitialValues));
     }
@@ -71,6 +107,7 @@ function UpdateUser() {
       id: values.id,
       keycloackId: values.keycloackId,
       password: values.password,
+      managerId: parseInt(values.managerId) ?? null,
     };
     dispatch(updateUser({ updatedUser, navigate: navigate }));
   };
@@ -106,7 +143,7 @@ function UpdateUser() {
                   enableReinitialize={true}
                   onSubmit={handleSubmit}
                 >
-                  {({ errors, touched }) => (
+                  {({ errors, touched, resetForm, values, handleChange }) => (
                     <Form>
                       <CardBody>
                         <Row className="mb-3">
@@ -243,7 +280,33 @@ function UpdateUser() {
                               )}
                             </div>
                           </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label className="fw-semibold">
+                                Select Manager
+                              </Label>
+                              <FormSelection
+                                name="managerId"
+                                value={sortBy}
+                                onChange={(selectedOption) => {
+                                  setSortBy(selectedOption);
+                                  if (!selectedOption) {
+                                    handleChange("managerId")("");
+                                  } else {
+                                    handleChange("managerId")(
+                                      selectedOption?.value
+                                    );
+                                  }
+                                }}
+                                options={selectedOption}
+                                style={{ borderColor: "#8aaed6" }}
+                                className="js-example-basic-single mb-0"
+                                isClearable
+                              />
+                            </div>
+                          </Col>
                         </Row>
+
                         <Row className="mb-3">
                           <Col>
                             <span className="h6 fw-bold">Password</span>

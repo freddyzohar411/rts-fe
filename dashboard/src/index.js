@@ -1,6 +1,8 @@
-import DashboardEcommerce from "./pages/DashboardEcommerce";
+// import DashboardEcommerce from "./pages/DashboardEcommerce";
+// export { DashboardEcommerce };
 
-export { DashboardEcommerce };
+import Dashboard from "./pages/Dashboard";
+export { Dashboard };
 
 // Redux Store
 export * as Actions from "./store/actions";

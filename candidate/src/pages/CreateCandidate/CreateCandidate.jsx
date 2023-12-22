@@ -884,9 +884,7 @@ const CreateCandidate = () => {
   }
 
   return (
-    <div className="page-content">
-      {/* {isModalOpen && !accountId && <CountryModal setCountry={setCountry} />} */}
-      <Container>
+    <Container fluid className="page-content">
         <FormStepper
           activeStep={step}
           handleBack={handleBack}
@@ -910,7 +908,6 @@ const CreateCandidate = () => {
           />
         </FormStepper>
       </Container>
-    </div>
   );
 };
 

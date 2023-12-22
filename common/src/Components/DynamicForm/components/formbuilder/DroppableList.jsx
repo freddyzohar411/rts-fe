@@ -38,6 +38,7 @@ const DroppableList = ({
   formStateHook,
   formFieldsHook,
 }) => {
+  if (!row) return null;
   const { rowId, title, isTitle } = row;
 
   // Generate JSX for row section with droppable zones and draggable items(fields)
@@ -133,7 +134,8 @@ const DroppableList = ({
                                           );
                                         }}
                                       >
-                                        <i className="ri-edit-2-line"></i>
+                                        {/* <i className="ri-edit-2-line"></i> */}
+                                        <i className="ri-arrow-go-back-line"></i>
                                       </button>
                                     )}
                                     {((field?.fieldType !== "static" &&
@@ -189,7 +191,7 @@ const DroppableList = ({
   });
 
   return (
-    <div className="border border-dotted border-dark p-3 m-2">
+    <div className="border border-dotted border-dark p-3 m-2 droppable-list">
       <div
         className={`d-flex align-items-center ${
           isTitle ? "justify-content-between" : "justify-content-end"
@@ -209,7 +211,7 @@ const DroppableList = ({
           <Setting>
             <div className="setting-menu">
               <div
-                className="p-1 cursor-pointer text-center border-bottom border-muted hover:bg-gray-200"
+                className="p-2 cursor-pointer text-center border-bottom border-muted hover:bg-gray-200 setting-text"
                 onClick={() => toggleRowLayoutTitle(row)}
               >
                 Toggle Title
@@ -218,14 +220,14 @@ const DroppableList = ({
                 .fill(0)
                 .map((_, index) => (
                   <div
-                    className="p-1 cursor-pointer text-center border-bottom border-muted"
+                    className="p-1 cursor-pointer text-center border-bottom border-muted setting-text"
                     onClick={() => addDropzoneToRowLayout(row, index + 1)}
                   >
                     {`${index + 1} Column`}
                   </div>
                 ))}
               <div
-                className="p-1 cursor-pointer text-center border-bottom border-muted"
+                className="p-1 cursor-pointer text-center border-bottom border-muted setting-text"
                 onClick={() => handleDeleteLayoutAndField(row)}
               >
                 Delete

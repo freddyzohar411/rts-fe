@@ -239,6 +239,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabelIcon: "ri-account-box-fill",
+      draggableLabel: "Account Name All Select",
+      draggablePrefix: "element",
+      draggableId: "selectaccountnameall",
+      type: "field",
+    },
+    {
       draggableLabelIcon: "ri-contacts-fill",
       draggableLabel: "Account Contact Select",
       draggablePrefix: "element",

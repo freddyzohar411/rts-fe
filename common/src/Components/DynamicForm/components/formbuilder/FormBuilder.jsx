@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormikProvider, useFormik } from "formik";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DroppableList from "./DroppableList";
+import { useNavigate } from "react-router-dom";
 import "./FormBuilder.scss";
 import "@workspace/common/src/assets/scss/components/simplebar.min.css";
 // import Modal from "../modal/Modal";
@@ -51,6 +52,7 @@ const FormBuilder = ({
   onSave,
   initialFormState,
 }) => {
+  const navigate = useNavigate();
   const [buttonName, setButtonName] = useState("");
   const [baseFormTemplate, setBaseFormTemplate] = useState(null);
   const [formOptions, setFormOptions] = useState({
@@ -478,7 +480,7 @@ const FormBuilder = ({
   const setRowtitle = (row, title) => {
     const newFormLayoutSchema = [...formLayoutSchema];
     newFormLayoutSchema.forEach((r) => {
-      if (r.rowId === row.rowId) {
+      if (r?.rowId === row?.rowId) {
         r.title = title;
       }
     });
@@ -490,7 +492,7 @@ const FormBuilder = ({
     // Get array of form field id
     const formFieldIds = [];
     formLayoutSchema.forEach((r) => {
-      if (r.rowId === row.rowId) {
+      if (r?.rowId === row?.rowId) {
         r.droppableZones.forEach((zone) => {
           formFieldIds.push(...zone.fieldIds);
         });
@@ -505,7 +507,7 @@ const FormBuilder = ({
 
     // Delete row layout
     const newFormLayoutSchema = formLayoutSchema.filter(
-      (r) => r.rowId !== row.rowId
+      (r) => r?.rowId !== row?.rowId
     );
     // setFormLayoutSchema(newFormLayoutSchema);
     setFormLayoutSchema(reorderSchema(newFormLayoutSchema));
@@ -515,7 +517,7 @@ const FormBuilder = ({
   const toggleRowLayoutTitle = (row) => {
     const newFormLayoutSchema = [...formLayoutSchema];
     newFormLayoutSchema.forEach((r) => {
-      if (r.rowId === row.rowId) {
+      if (r?.rowId === row?.rowId) {
         r.isTitle = !r.isTitle;
       }
     });
@@ -527,10 +529,10 @@ const FormBuilder = ({
   const addDropzoneToRowLayout = (row, number) => {
     const newFormLayoutSchema = [...formLayoutSchema];
     newFormLayoutSchema.forEach((r) => {
-      if (r.rowId === row.rowId) {
+      if (r?.rowId === row?.rowId) {
         r.droppableZones = [];
         for (let i = 0; i < number; i++) {
-          r.droppableZones.push({ id: `${r.rowId}_${i}`, fieldIds: [] });
+          r.droppableZones.push({ id: `${r?.rowId}_${i}`, fieldIds: [] });
         }
       }
     });
@@ -698,10 +700,13 @@ const FormBuilder = ({
   const reorderSchema = (formLayoutSchema) => {
     const newFormLayoutSchema = [...formLayoutSchema];
     newFormLayoutSchema.forEach((row, index) => {
-      row.rowId = index + 1;
-      row.droppableZones.forEach((zone, zoneIndex) => {
-        zone.id = `${index + 1}_${zoneIndex}`;
-      });
+      // Check if row is there
+      if (row) {
+        row.rowId = index + 1;
+        row.droppableZones.forEach((zone, zoneIndex) => {
+          zone.id = `${index + 1}_${zoneIndex}`;
+        });
+      }
     });
     return newFormLayoutSchema;
   };
@@ -889,7 +894,7 @@ const FormBuilder = ({
         </ModalHeader>
 
         <ModalBody className="bg-light">
-          <SimpleBar style={{height: "450px", paddingRight: "20px"}}>
+          <SimpleBar style={{ height: "450px", paddingRight: "20px" }}>
             <Card>
               <CardBody className="p-4">
                 <Form
@@ -947,6 +952,7 @@ const FormBuilder = ({
                   className="h5"
                   style={{ color: "#405189" }}
                 >{`Form Builder (Total Fields: ${formFields?.length})`}</span>
+                {/* Dev hide field button */}
                 <Button
                   type="button"
                   onClick={() => setShowAll((prev) => !prev)}
@@ -1079,7 +1085,7 @@ const FormBuilder = ({
                                 dropColor="#eeeeee"
                               >
                                 <DroppableList
-                                  key={row.rowId}
+                                  key={row?.rowId}
                                   row={row}
                                   setRowtitle={setRowtitle}
                                   formik={formik}
@@ -1120,14 +1126,26 @@ const FormBuilder = ({
                               </DnDWrapper>
                             ))
                           ) : (
-                            <div className="position-relative d-flex align-items-center justify-content-center">
-                              {formFields.length === 0 && (
-                                <div>
-                                  <span className="fw-medium h4 fs-3 text-muted">
-                                    DROP ZONE
-                                  </span>
-                                </div>
-                              )}
+                            // <div className="position-relative d-flex align-items-center justify-content-center" style={{ width: "100%" }}>
+                            <div style={{ pointerEvents: "none" }}>
+                              <div
+                                style={{ position: "relative", width: "100%" }}
+                              >
+                                {formFields.length === 0 && (
+                                  <div
+                                    style={{
+                                      marginTop: "90px",
+                                      position: "absolute",
+                                      left: "50%",
+                                      transform: "translate(-50%,0%)",
+                                    }}
+                                  >
+                                    <span className="fw-medium h4 fs-3 text-muted">
+                                      DROP ZONE
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
                               <DnDWrapper
                                 droppableType="row"
                                 draggablePrefix="draggable-row-"
@@ -1135,6 +1153,7 @@ const FormBuilder = ({
                                 placeholder
                                 index={0}
                                 dropColor="#eeeeee"
+                                classes={"w-100"}
                               >
                                 <div
                                   className="d-flex justify-content-center align-items-center absolute"
@@ -1146,7 +1165,8 @@ const FormBuilder = ({
                             </div>
                           )}
                         </div>
-                        {formFields.length > 0 && (
+                        {/* Dev Buttons */}
+                        {/* {formFields.length > 0 && (
                           <Button
                             type="submit"
                             className="btn btn-custom-primary mt-3"
@@ -1166,7 +1186,6 @@ const FormBuilder = ({
                             Cancel
                           </Button>
                         )}
-
                         {formFields.length > 0 && (
                           <Button
                             type="button"
@@ -1208,8 +1227,39 @@ const FormBuilder = ({
                           >
                             Save to API
                           </Button>
-                        )}
+                        )} */}
                       </form>
+                    </div>
+                    {/* User Buttons */}
+                    <div className="d-flex justify-content-between">
+                      <Button
+                        className="btn btn-custom-secondary mt-3"
+                        onClick={() => navigate("/settings/customisation")}
+                      >
+                        Back
+                      </Button>
+                      <div>
+                        {formFields.length > 0 && (
+                          <Button
+                            className="btn btn-danger mt-3 ms-3"
+                            onClick={() => {
+                              //Clear form and all json and schema
+                              setFormFields([]);
+                              setFormLayoutSchema([]);
+                            }}
+                          >
+                            Clear
+                          </Button>
+                        )}
+                        {formFields.length > 0 && (
+                          <Button
+                            className="btn btn-custom-primary mt-3 ms-3"
+                            onClick={handleSaveJsonAPI}
+                          >
+                            Save
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </CardBody>
                 </Card>

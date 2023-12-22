@@ -4,22 +4,54 @@ import * as AuthHelper from "../helpers/auth_helper";
 import { useUserAuth } from "@workspace/login";
 
 const Navdata = () => {
-  const { checkAllPermission, Permission, checkAllRole } = useUserAuth();
+  const { checkAllPermission, Permission, checkAnyPermission } = useUserAuth();
   const history = useNavigate();
   //state data
   const [isDashboard, setIsDashboard] = useState(false);
   const [isApps, setIsApps] = useState(false);
 
   const [isAccounts, setIsAccounts] = useState(false);
+
   const [isContacts, setIsContacts] = useState(false);
   const [isJob, setIsJob] = useState(false);
   const [isCandidates, setIsCandidates] = useState(false);
   const [isReports, setIsReports] = useState(false);
   const [isSettings, setIsSettings] = useState(false);
-
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
 
   function updateIconSidebar(e) {
+    // Fixed the arrow and active
+    const a = e.target.closest("a");
+    if (a && a.classList.contains("active")) {
+      a.classList.remove("active");
+      a.setAttribute("aria-expanded", "false");
+    } else {
+      const navLink = document.querySelectorAll(".nav-link.menu-link");
+      let navLinkItems = [...navLink];
+      navLinkItems.forEach((item) => {
+        item.classList.remove("active");
+        item.setAttribute("aria-expanded", "false");
+      });
+      // Remove all active from  alla with only nav-link and active
+      const navLinkActive = document.querySelectorAll(".nav-link.active");
+      let navLinkActiveItems = [...navLinkActive];
+      navLinkActiveItems.forEach((item) => {
+        item.classList.remove("active");
+        item.setAttribute("aria-expanded", "false");
+      });
+
+      // Find all div with id=sidebarApps and remove the show class
+      const sidebarApps = document.querySelectorAll("#sidebarApps");
+      let sidebarAppsItems = [...sidebarApps];
+      sidebarAppsItems.forEach((item) => {
+        item.classList.remove("show");
+      });
+
+      a.classList.add("active");
+      a.setAttribute("aria-expanded", "true");
+    }
+
+    // when a menu is open and i click other menu, i want to close the previous menu
     if (e && e.target && e.target.getAttribute("subitems")) {
       const ul = document.getElementById("two-column-menu");
       const iconItems = ul.querySelectorAll(".nav-icon.active");
@@ -52,6 +84,9 @@ const Navdata = () => {
     }
     if (iscurrentState !== "Settings") {
       setIsSettings(false);
+    }
+    if (iscurrentState !== "Accounts") {
+      setIsAccounts(false);
     }
   }, [
     history,
@@ -87,7 +122,7 @@ const Navdata = () => {
     },
 
     // Accounts
-    {
+    checkAnyPermission([Permission.ACCOUNT_READ, Permission.ACCOUNT_WRITE]) && {
       id: "account",
       label: "Accounts",
       icon: "ri-map-pin-line",
@@ -100,7 +135,7 @@ const Navdata = () => {
       },
       stateVariables: isAccounts,
       subItems: [
-        {
+        checkAllPermission([Permission.ACCOUNT_READ]) && {
           id: "accounts",
           label: "All Accounts",
           link: "/accounts",
@@ -115,37 +150,37 @@ const Navdata = () => {
       ].filter(Boolean),
     },
 
-    // Contacts
-    {
-      id: "contact",
-      label: "Contacts",
-      icon: "ri-user-3-fill",
-      link: "/#",
-      click: function (e) {
-        e.preventDefault();
-        setIsContacts(!isContacts);
-        setIscurrentState("Contacts");
-        updateIconSidebar(e);
-      },
-      stateVariables: isContacts,
-      subItems: [
-        {
-          id: "allContacts",
-          label: "All Contacts",
-          link: "/contacts",
-          parentId: "contact",
-        },
-        {
-          id: "newContact",
-          label: "Create New Contacts",
-          link: "/contact/contact-creation",
-          parentId: "contact",
-        },
-      ],
-    },
+    // Contacts (Hide first)
+    // {
+    //   id: "contact",
+    //   label: "Contacts",
+    //   icon: "ri-user-3-fill",
+    //   link: "/#",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsContacts(!isContacts);
+    //     setIscurrentState("Contacts");
+    //     updateIconSidebar(e);
+    //   },
+    //   stateVariables: isContacts,
+    //   subItems: [
+    //     {
+    //       id: "allContacts",
+    //       label: "All Contacts",
+    //       link: "/contacts",
+    //       parentId: "contact",
+    //     },
+    //     {
+    //       id: "newContact",
+    //       label: "Create New Contacts",
+    //       link: "/contact/contact-creation",
+    //       parentId: "contact",
+    //     },
+    //   ],
+    // },
 
     // Job Openings
-    {
+    checkAnyPermission([Permission.JOB_READ, Permission.JOB_WRITE]) && {
       id: "job",
       label: "Job Openings",
       icon: "ri-search-eye-line",
@@ -158,7 +193,7 @@ const Navdata = () => {
       },
       stateVariables: isJob,
       subItems: [
-        {
+        checkAllPermission([Permission.JOB_READ]) && {
           id: "jobs",
           label: "All Job Openings",
           link: "/jobs",
@@ -170,17 +205,20 @@ const Navdata = () => {
           link: "/jobs/job-creation",
           parentId: "job",
         },
-        {
-          id: "jobMassImport",
-          label: "Mass Imports",
-          link: "/job/mass-imports",
-          parentId: "job",
-        },
-      ],
+        // {
+        //   id: "jobMassImport",
+        //   label: "Mass Imports",
+        //   link: "/job/mass-imports",
+        //   parentId: "job",
+        // },
+      ].filter(Boolean),
     },
 
     // Candidates
-    {
+    checkAnyPermission([
+      Permission.CANDIDATE_READ,
+      Permission.CANDIDATE_WRITE,
+    ]) && {
       id: "candidates",
       label: "Candidates",
       icon: "ri-user-follow-fill",
@@ -193,7 +231,7 @@ const Navdata = () => {
       },
       stateVariables: isCandidates,
       subItems: [
-        {
+        checkAllPermission([Permission.CANDIDATE_READ]) && {
           id: "allCandidates",
           label: "All Candidates",
           link: "/candidates",
@@ -209,35 +247,36 @@ const Navdata = () => {
     },
 
     // Reports
-    {
-      id: "reports",
-      label: "Reports",
-      icon: "ri-bar-chart-grouped-fill",
-      link: "/#",
-      click: function (e) {
-        e.preventDefault();
-        setIsReports(!isReports);
-        setIscurrentState("Reports");
-        updateIconSidebar(e);
-      },
-      stateVariables: isReports,
-      subItems: [
-        {
-          id: "allReports",
-          label: "All Reports",
-          link: "/reports",
-          parentId: "reports",
-        },
-        {
-          id: "newReport",
-          label: "Create New Report",
-          link: "/report/report-creation",
-          parentId: "reports",
-        },
-      ],
-    },
-    checkAllPermission([...Permission.SETTING_ALL]) &&
-    {
+    // {
+    //   id: "reports",
+    //   label: "Reports",
+    //   icon: "ri-bar-chart-grouped-fill",
+    //   link: "/#",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsReports(!isReports);
+    //     setIscurrentState("Reports");
+    //     updateIconSidebar(e);
+    //   },
+    //   stateVariables: isReports,
+    //   subItems: [
+    //     {
+    //       id: "allReports",
+    //       label: "All Reports",
+    //       link: "/reports",
+    //       parentId: "reports",
+    //     },
+    //     {
+    //       id: "newReport",
+    //       label: "Create New Report",
+    //       link: "/report/report-creation",
+    //       parentId: "reports",
+    //     },
+    //   ],
+    // },
+
+    // Settings
+    checkAllPermission([...Permission.SETTING_ALL]) && {
       id: "settings",
       label: "Settings",
       icon: "ri-settings-4-fill",
@@ -253,7 +292,7 @@ const Navdata = () => {
         {
           id: "settingsGeneral",
           label: "General",
-          link: "/settings",
+          link: "/settings/general",
           parentId: "settings",
         },
         {
@@ -276,7 +315,7 @@ const Navdata = () => {
         },
       ].filter(Boolean),
     },
-  ];
+  ].filter(Boolean);
   return <React.Fragment>{menuItems}</React.Fragment>;
 };
 export default Navdata;

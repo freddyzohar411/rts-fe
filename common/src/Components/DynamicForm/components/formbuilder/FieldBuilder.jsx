@@ -111,6 +111,7 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectlandline",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "submit",
         "table",
@@ -161,6 +162,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "editor",
         "table",
@@ -202,6 +204,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "editor",
         "parentcompany",
@@ -243,6 +246,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "editor",
         "button",
@@ -288,6 +292,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "editor",
         // "button",
@@ -388,6 +393,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "editor",
         "parentcompany",
@@ -423,6 +429,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "editor",
         "parentcompany",
@@ -744,6 +751,7 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "editor",
         "parentcompany",
@@ -802,6 +810,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "selectaccountnameall",
       ],
     },
     {
@@ -835,6 +844,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectaccountnameall",
       ],
       renderCondition: validationConditionList.length > 0,
     },
@@ -874,6 +884,7 @@ const FieldBuilder = ({
         "selectcurrency",
         "selectlandline",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "selectstate",
         "selectdepartment",
@@ -940,6 +951,7 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "editor",
         "parentcompany",
@@ -991,6 +1003,7 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "parentcompany",
         "multiselect",
@@ -1035,6 +1048,7 @@ const FieldBuilder = ({
         "table",
         "selectdepartment",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "editor",
         "parentcompany",
@@ -1074,6 +1088,7 @@ const FieldBuilder = ({
         "selectlandline",
         "selectstate",
         "selectaccountname",
+        "selectaccountnameall",
         "selectaccountcontact",
         "submit",
         "table",
@@ -1182,6 +1197,9 @@ const FieldBuilder = ({
       break;
     case "selectaccountname":
       header = "Select Account Name";
+      break;
+    case "selectaccountnameall":
+      header = "Select Account Names All";
       break;
     case "selectaccountcontact":
       header = "Select Account Contact";
@@ -1450,7 +1468,7 @@ const FieldBuilder = ({
                     />
                     {formik.errors[field.name] && formik.touched[field.name] ? (
                       <div className="mt-2 text-danger">
-                          {formik.errors[field.name]}
+                        {formik.errors[field.name]}
                       </div>
                     ) : null}
                   </div>

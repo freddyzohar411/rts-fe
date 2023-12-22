@@ -89,40 +89,35 @@ const FormStepper = ({
 
   return (
     <Card>
-      <CardBody>
-        <Container>
-          <CandidateStepper step={activeStep} />
-          <div className="px-3"> {children}</div>
-          <div
-            className={`d-flex ${
-              candidateId ? "justify-content-between" : "justify-content-end"
-            } align-items-center mb-2`}
-          >
-            {candidateId && (
-              <Button
-                onClick={() => setIsDeleteModalOpen(true)}
-                className="btn btn-custom-primary"
-              >
-                Reset
+      <Container fluid>
+        <CandidateStepper step={activeStep} />
+        <div className="px-3"> {children}</div>
+        <div
+          className={`d-flex ${
+            candidateId ? "justify-content-between" : "justify-content-end"
+          } align-items-center mb-2`}
+        >
+          {candidateId && (
+            <Button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="btn btn-custom-primary"
+            >
+              Reset
+            </Button>
+          )}
+          <div className="d-flex gap-2">
+            {activeStep > 0 && (
+              <Button className="btn btn-custom-primary" onClick={handleBack}>
+                Back
               </Button>
             )}
-            <div className="d-flex gap-2">
-              {activeStep > 0 && (
-                <Button className="btn btn-custom-primary" onClick={handleBack}>
-                  Back
-                </Button>
-              )}
-              <Button className="btn btn-custom-primary">Skip</Button>
-              <Button
-                className="btn btn-custom-primary"
-                onClick={handleNextStep}
-              >
-                Next
-              </Button>
-            </div>
+            <Button className="btn btn-custom-primary">Skip</Button>
+            <Button className="btn btn-custom-primary" onClick={handleNextStep}>
+              Next
+            </Button>
           </div>
-        </Container>
-      </CardBody>
+        </div>
+      </Container>
       <DeleteCustomModal
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}

@@ -61,8 +61,8 @@ const DynamicTableWrapper = ({
                       return new RegExp(filterInput, "i").test(optGroup.label);
                     }}
                     filterPlaceholder="Search..."
-                    options={optGroup}
-                    selected={selectedOptGroup.map((option) => option?.value)}
+                    options={optGroup ?? []}
+                    selected={selectedOptGroup.map((option) => option?.value) ?? []}
                     onChange={handleChange}
                     icons={{
                       moveLeft: (
@@ -165,8 +165,8 @@ const DynamicTableWrapper = ({
                           {checkAllPermission([Permission.CANDIDATE_WRITE]) && (
                             <Button type="button" className="btn btn-custom-primary">
                               <Link
-                                to="/accounts/create"
-                                style={{ color: "black" }}
+                                to="/candidates/create"
+                                style={{ color: "white" }}
                               >
                                 Create New Candidate
                               </Link>
