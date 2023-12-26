@@ -358,13 +358,13 @@ const checkVisibleConditions = (field, formik) => {
   if (conditions.length > 0) {
     conditions.forEach((condition) => {
       if (condition.condition === "equals") {
-        if (formik.values[condition.field] === condition.value) {
+        if (formik.values?.[condition.field] === condition.value) {
           visble = false;
         }
       }
 
       if (condition.condition === "notEquals") {
-        if (formik.values[condition.field] !== condition.value) {
+        if (formik.values?.[condition.field] !== condition.value) {
           visble = false;
         }
       }
@@ -378,31 +378,31 @@ const checkVisibleConditions = (field, formik) => {
       }
 
       if (condition.condition === "notContains") {
-        if (!formik.values[condition.field]?.includes(condition.value)) {
+        if (!formik.values?.[condition.field]?.includes(condition.value)) {
           visble = false;
         }
       }
 
       if (condition.condition === "greaterThan") {
-        if (formik.values[condition.field] > condition.value) {
+        if (formik.values?.[condition.field] > condition.value) {
           visble = false;
         }
       }
 
       if (condition.condition === "lessThan") {
-        if (formik.values[condition.field] < condition.value) {
+        if (formik.values?.[condition.field] < condition.value) {
           visble = false;
         }
       }
 
       if (condition.condition === "greaterThanEquals") {
-        if (formik.values[condition.field] >= condition.value) {
+        if (formik.values?.[condition.field] >= condition.value) {
           visble = false;
         }
       }
 
       if (condition.condition === "lessThanEquals") {
-        if (formik.values[condition.field] <= condition.value) {
+        if (formik.values?.[condition.field] <= condition.value) {
           visble = false;
         }
       }

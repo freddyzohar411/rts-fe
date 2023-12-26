@@ -103,8 +103,8 @@ const JobCreation = () => {
     // Check files array is empty or not
     const payload = {
       id: (jobId || editId) ?? null,
-      title: values?.jobTitle,
-      formData: JSON.stringify(values),
+      title: newValues?.jobTitle,
+      formData: JSON.stringify(newValues),
       formId: parseInt(form.formId),
       tempDocId: randomId,
       isDraft: false,
