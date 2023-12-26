@@ -48,7 +48,6 @@ const TwoColumnLayout = (props) => {
         const ul = document.getElementById("navbar-nav");
         const items = ul.getElementsByTagName("a");
         let itemsArray = [...items]; // converts NodeList to Array
-        console.log("ItemsArray", itemsArray)
         removeActivation(itemsArray);
         let matchingMenuItem = itemsArray.find((x) => {
             return x.pathname === pathName;

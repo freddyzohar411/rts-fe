@@ -778,6 +778,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "selectformtemplate",
       ],
     },
     {

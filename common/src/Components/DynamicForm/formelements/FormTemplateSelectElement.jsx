@@ -22,7 +22,7 @@ const FormTemplateSelectElement = ({
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchFormsByCategory(field.formCategorySelect || ""));
+    dispatch(fetchFormsByCategory(field.formCategorySelect || "ALL"));
   }, []);
 
   useEffect(() => {
@@ -44,10 +44,14 @@ const FormTemplateSelectElement = ({
     return options?.find((option) => option.label === data);
   }
 
+
   // Get Data for normal API calls without parents
   useEffect(() => {
-    if (formsDataByCategory) {
-      setOptions(mapToOptionFormat(formsDataByCategory));
+    if (formsDataByCategory && formsDataByCategory?.category === field.formCategorySelect) {
+      setOptions(mapToOptionFormat(formsDataByCategory?.formTemplateNamesList));
+    } 
+    if (formsDataByCategory && field.formCategorySelect === "" ) {
+      setOptions(mapToOptionFormat(formsDataByCategory?.formTemplateNamesList));
     }
   }, [formsDataByCategory]);
 
