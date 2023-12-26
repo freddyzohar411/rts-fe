@@ -109,6 +109,7 @@ const JobCreation = () => {
       tempDocId: randomId,
       isDraft: false,
     };
+
     dispatch(createJob({ payload, navigate }));
   };
 

@@ -253,7 +253,7 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
-      draggableLabelIcon: "ri-contacts-fill",
+      draggableLabelIcon: "ri-file-text-line",
       draggableLabel: "Form Template Select",
       draggablePrefix: "element",
       draggableId: "selectformtemplate",

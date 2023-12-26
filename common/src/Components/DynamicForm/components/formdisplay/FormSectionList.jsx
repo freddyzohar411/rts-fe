@@ -6,9 +6,8 @@ import {
   checkVisibleOnGlobalCountry,
   checkAccessible,
 } from "../../formelements/formElements_helper";
-import {
-  Col,
-} from "reactstrap";
+import { Col } from "reactstrap";
+import FieldToolTip from "./FieldToolTip";
 
 const FormSectionList = ({
   row,
@@ -43,9 +42,12 @@ const FormSectionList = ({
             return (
               <div key={field.fieldId} className="draggable-item">
                 <div className="mb-1">
-                  <label htmlFor={field.name} className="form-label">
-                    {field.label}
-                  </label>
+                  <div className="d-flex gap-2">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <FieldToolTip field={field} />
+                  </div>
                   {generateFormField(
                     field,
                     formik,
