@@ -31,6 +31,7 @@ import {
 import AccountNameSelectElement from "./AccountNameSelectElement";
 import AccountNameSelectAllElement from "./AccountNameSelectElementAll";
 import AccountContactSelectElement from "./AccountContactSelectElement";
+import FormTemplateSelectElement from "./FormTemplateSelectElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -313,6 +314,16 @@ const generateFormField = (
         formik={formik}
         formStateHook={formStateHook}
         formFieldsHook={formFieldsHook}
+      />
+    );
+  }
+
+  if (type === "selectformtemplate") {
+    return (
+      <FormTemplateSelectElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
       />
     );
   }

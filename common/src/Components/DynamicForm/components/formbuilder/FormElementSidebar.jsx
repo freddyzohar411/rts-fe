@@ -252,6 +252,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableId: "selectaccountcontact",
       type: "field",
     },
+    {
+      draggableLabelIcon: "ri-contacts-fill",
+      draggableLabel: "Form Template Select",
+      draggablePrefix: "element",
+      draggableId: "selectformtemplate",
+      type: "field",
+    },
   ];
 
   // Layout List

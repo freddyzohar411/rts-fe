@@ -49,3 +49,10 @@ export const getAccountContacts = (input) =>
 
   export const getAccountNamesAll = () =>
   api.get(`${configURL.ACCOUNT_URL}/${baseURL.ACCOUNT}/names-all`);
+
+// Form Microservice
+export const getFormCategories = () =>
+  api.get(`${configURL.FORM_URL}/${baseURL.FORM}/categories`);
+
+export const getFormsByCategories = (category) =>
+  api.get(`${configURL.FORM_URL}/${baseURL.FORM}/categories/${category}`);

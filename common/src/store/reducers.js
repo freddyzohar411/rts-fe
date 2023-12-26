@@ -7,6 +7,7 @@ import ParentCompanyReducer from "./parentcompany/reducer";
 import UserGroupReducer from "./usergroup/reducer";
 import AccountNamesReducer from "./accountnames/reducer";
 import AccountContactReducer from "./accountcontact/reducer";
+import FormCommonReducer from "./form/reducer";
 
 export {
   Layout,
@@ -18,4 +19,5 @@ export {
   UserGroupReducer,
   AccountNamesReducer,
   AccountContactReducer,
+  FormCommonReducer
 };
