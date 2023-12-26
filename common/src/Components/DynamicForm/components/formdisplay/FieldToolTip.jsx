@@ -1,22 +1,12 @@
 import React, { useState, useId } from "react";
 import { Tooltip } from "reactstrap";
+import { generateRandomString } from "../../../../helpers/string_helper";
 
 const FieldToolTip = ({ field }) => {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [targetId, setTargetId] = useState(generateRandomString(18));
 
   const toggle = () => setTooltipOpen(!tooltipOpen);
-
-  function generateRandomString(length) {
-    const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let randomString = "";
-
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * alphabet.length);
-      randomString += alphabet.charAt(randomIndex);
-    }
-    return randomString;
-  }
 
   return (
     <div>
@@ -28,7 +18,7 @@ const FieldToolTip = ({ field }) => {
         target={targetId}
         toggle={toggle}
       >
-        Try to select this text!
+        {field.informationText}
       </Tooltip>
     </div>
   );

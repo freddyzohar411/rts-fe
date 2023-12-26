@@ -46,7 +46,7 @@ const FormSectionList = ({
                     <label htmlFor={field.name} className="form-label">
                       {field.label}
                     </label>
-                    <FieldToolTip field={field} />
+                    {field.information && <FieldToolTip field={field} />}
                   </div>
                   {generateFormField(
                     field,
