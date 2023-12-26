@@ -57,7 +57,12 @@ const FormSectionList = ({
                     formFieldsHook
                   )}
                   <div style={{ minHeight: "25px" }}>
-                    {formik.errors[field.name] && formik.touched[field.name] ? (
+                    {/* {formik.errors[field.name] && formik.touched[field.name] ? (
+                      <div style={{ color: "red", fontSize: "0.9rem" }}>
+                        {formik.errors[field.name]}
+                      </div>
+                    ) : null} */}
+                    {formik.errors[field.name] ? (
                       <div style={{ color: "red", fontSize: "0.9rem" }}>
                         {formik.errors[field.name]}
                       </div>
