@@ -5,10 +5,23 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { FormikProvider, useFormik } from "formik";
-import { Col, Row, Label, Input } from "reactstrap";
+import { Col, Row, Label, Input, Button } from "reactstrap";
 import { initialValues, schema } from "./formikConfig";
+import { moduleConstants, moduleFields } from "./constants";
+import SelectElement from "./SelectElement";
 
 const TemplateBuilder = forwardRef(({ ...props }, ref) => {
+  const [typeData, setTypeData] = useState("");
+  const [fieldName, setFieldName] = useState("");
+  console.log("typeData", typeData);
+
+  // Fake data
+  const option1 = [
+    { value: "1", label: "1" },
+    { value: "2", label: "2" },
+    { value: "3", label: "3" },
+  ];
+
   const handleFormSubmit = async (values) => {
     console.log(values);
   };
@@ -109,6 +122,33 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
                   </div>
                 ) : null}
               </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <SelectElement
+                optionsData={moduleConstants}
+                setSelectedOptionData={setTypeData}
+                placeholder="Select a type"
+                value={typeData}
+              />
+            </Col>
+            <Col>
+              <SelectElement
+                optionsData={moduleFields}
+                setSelectedOptionData={setFieldName}
+                placeholder="Select a field"
+                value={fieldName}
+              />
+            </Col>
+            <Col>
+              <Button className="" onClick={
+                () => {
+                    console.log(`$${typeData.value}.${fieldName.value}`)
+                    setFieldName("")
+                    setTypeData("")
+                }
+              }>Add</Button>
             </Col>
           </Row>
         </Col>
