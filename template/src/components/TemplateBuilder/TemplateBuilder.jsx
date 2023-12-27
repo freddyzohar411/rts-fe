@@ -21,6 +21,21 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
     console.log(values);
   };
 
+  const mappedVariableData = {
+    Jobs: {
+        "One": "Job 1",
+        "Two": "Job 2",
+    },
+    Candidates: {
+        "One": "Candidate 1",
+        "Two": "Candidate 2",
+    },
+    Accounts: {
+        "One": "Account 1",
+        "Two": "Account 2",
+    }
+  }
+
   /**
    * Initialize Formik (useFormik Hook)
    */
@@ -181,7 +196,7 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
           {/* // Just for checking */}
           <Row>
             <Col>
-              <TemplateDisplay content={formik?.values?.["content"]} />
+              <TemplateDisplay content={formik?.values?.["content"]} mappedVariableData={mappedVariableData}/>
             </Col>
           </Row>
         </Col>
