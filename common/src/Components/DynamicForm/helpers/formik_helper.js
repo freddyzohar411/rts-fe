@@ -319,7 +319,6 @@ const generateValidationSchema2 = (
                 }
               }
               if (condition?.condition === "before") {
-                console.log("before", value, valueToCompare)
                 // Compare dates
                 if (new Date(value) < new Date(valueToCompare)) {
                   isValid = false;
@@ -344,9 +343,7 @@ const generateValidationSchema2 = (
                 }
               }
               if (condition?.condition === "isNotEmpty"){
-                console.log("isNotEmpty", value,"XXX", valueToCompare)
                 if (value != "" && valueToCompare === "") {
-                  console.log("isNotEmpty", value, "XXX", valueToCompare)
                   isValid = false;
                 }
               }

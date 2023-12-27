@@ -218,7 +218,7 @@ const EditAccount = () => {
     rerenderTable
   ) => {
     // Check if form is edited. If updated, update in db
-    console.log("NEW VALUES", newValues)
+
     const isFormChanged = await isFormEdited(formSubmissionData, newValues);
 
     if (!isFormChanged) {

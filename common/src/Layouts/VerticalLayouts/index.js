@@ -94,7 +94,7 @@ const VerticalLayout = (props) => {
       const items = ul.getElementsByTagName("a");
       let itemsArray = [...items]; // converts NodeList to Array
       removeActivation(itemsArray);
-      console.log("itemsArray", itemsArray)
+
       let matchingMenuItem = itemsArray.find((x) => {
         return x.pathname === pathName;
       });

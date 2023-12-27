@@ -1,6 +1,16 @@
 import { Axios } from "@workspace/common";
-import { BASE_DOCUMENTS, BASE_FORMS, BASE_JOBS } from "./url_helper";
-import { JOB_URL, DOCUMENT_URL, FORM_URL } from "@workspace/common/src/config";
+import {
+  BASE_DOCUMENTS,
+  BASE_FORMS,
+  BASE_JOBS,
+  BASE_USER_GROUP,
+} from "./url_helper";
+import {
+  JOB_URL,
+  DOCUMENT_URL,
+  FORM_URL,
+  GROUP_URL,
+} from "@workspace/common/src/config";
 
 const { APIClient } = Axios;
 
@@ -26,8 +36,14 @@ export const deleteJob = (id) => api.delete(`${JOB_URL}${BASE_JOBS}/${id}`);
 
 export const getJobFields = () => api.get(`${JOB_URL}${BASE_JOBS}/fields`);
 
+export const postJobFOD = (data) =>
+  api.create(`${JOB_URL}${BASE_JOBS}/jobfod`, data);
+
 // Get Jobs
-export const draftJob = (id) => api.get(`${JOB_URL}${BASE_JOBS}/draft`);
+export const draftJob = () => api.get(`${JOB_URL}${BASE_JOBS}/draft`);
+
+export const getUserGroupByName = (name) =>
+  api.get(`${GROUP_URL}${BASE_USER_GROUP}/name/${name}`);
 
 // Create Job Document
 

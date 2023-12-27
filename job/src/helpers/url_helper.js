@@ -6,3 +6,6 @@ export const BASE_FORMS = "/forms";
 
 //Document
 export const BASE_DOCUMENTS = "/documents";
+
+//Document
+export const BASE_USER_GROUP = "/api/usergroup";

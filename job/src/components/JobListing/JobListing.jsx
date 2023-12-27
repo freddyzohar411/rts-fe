@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   Badge,
   Button,
@@ -19,20 +20,42 @@ import { DynamicTableHelper } from "@workspace/common";
 import { JOB_INITIAL_OPTIONS } from "./jobListingConstants";
 import { DeleteCustomModal } from "@Workspace/common";
 import {
+  createJobFOD,
   deleteJobList,
   fetchJobLists,
   fetchJobListsFields,
+  fetchUserGroupByName,
 } from "../../store/jobList/action";
 import { useUserAuth } from "@workspace/login";
+import { RECRUITER_GROUP } from "../../helpers/constant";
 
 const JobListing = () => {
   const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
+  const recruiterGroup = useSelector(
+    (state) => state.JobListReducer.recruiterGroup
+  );
 
   // Dropdown State
   const [fodAssign, setFodAssign] = useState({});
+  const [namesData, setNamesData] = useState([]);
+  const [activeJob, setActiveJob] = useState(-1);
+  const [selectedRecruiter, setSelectedRecruiter] = useState();
+
+  useEffect(() => {
+    if (recruiterGroup?.users?.length > 0) {
+      const users = [];
+
+      recruiterGroup?.users?.map((user) => {
+        users?.push(user?.id + "@" + user?.firstName + " " + user?.lastName);
+      });
+      const data = [{ name: recruiterGroup?.userGroupName, subNames: users }];
+      setNamesData(data);
+    }
+  }, [recruiterGroup]);
+
   const handleFodAssignDropdown = (dataId) => {
     setFodAssign((prevStates) => ({
       ...prevStates,
@@ -51,10 +74,16 @@ const JobListing = () => {
     });
   };
 
-  const namesData = [
-    { name: "Anna", subNames: ["John", "Ben"] },
-    { name: "Sally", subNames: ["Alice", "Ken"] },
-  ];
+  const handleFODAssign = () => {
+    if (selectedRecruiter) {
+      dispatch(
+        createJobFOD({ jobId: activeJob, recruiterId: selectedRecruiter })
+      );
+      setFodAssign({});
+    } else {
+      toast.error("Please select a recruiter.");
+    }
+  };
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -156,7 +185,13 @@ const JobListing = () => {
               isOpen={fodAssign[data.id] || false}
               toggle={() => handleFodAssignDropdown(data.id)}
             >
-              <DropdownToggle className="btn btn-sm btn-custom-primary">
+              <DropdownToggle
+                className="btn btn-sm btn-custom-primary"
+                onClick={() => {
+                  setActiveJob(data.id);
+                  setSelectedRecruiter();
+                }}
+              >
                 FOD
               </DropdownToggle>
               <DropdownMenu className="p-3">
@@ -176,7 +211,7 @@ const JobListing = () => {
                 <Row>
                   <Col>
                     <ul className="ps-0 list-unstyled">
-                      {namesData.map((item, index) => (
+                      {namesData?.map((item, index) => (
                         <li key={index}>
                           <div
                             className="d-flex flex-row justify-content-between mb-1"
@@ -193,17 +228,31 @@ const JobListing = () => {
                                 paddingLeft: "20px",
                               }}
                             >
-                              {item.subNames.map((subName, subIndex) => (
-                                <li
-                                  key={subIndex}
-                                  className="d-flex flew-row justify-content-between"
-                                >
-                                  {subName}
-                                  <Label check className="mb-0 ms-2">
-                                    <Input type="checkbox" />
-                                  </Label>
-                                </li>
-                              ))}
+                              {item.subNames.map((subName, subIndex) => {
+                                const split = subName?.split("@");
+                                return (
+                                  <li
+                                    key={subIndex}
+                                    className="d-flex flew-row justify-content-between"
+                                  >
+                                    {split[1]}
+                                    <Label check className="mb-0 ms-2">
+                                      <Input
+                                        type="checkbox"
+                                        checked={
+                                          selectedRecruiter ===
+                                          parseInt(split[0])
+                                        }
+                                        onChange={() =>
+                                          setSelectedRecruiter(
+                                            parseInt(split[0])
+                                          )
+                                        }
+                                      />
+                                    </Label>
+                                  </li>
+                                );
+                              })}
                             </ul>
                           )}
                         </li>
@@ -214,7 +263,10 @@ const JobListing = () => {
                 <Row>
                   <Col>
                     <div className="d-flex justify-content-end">
-                      <Button className="btn btn-sm btn-custom-primary px-3">
+                      <Button
+                        className="btn btn-sm btn-custom-primary px-3"
+                        onClick={() => handleFODAssign()}
+                      >
                         Assign
                       </Button>
                     </div>
@@ -287,6 +339,7 @@ const JobListing = () => {
   // Get all the option groups
   useEffect(() => {
     dispatch(fetchJobListsFields());
+    dispatch(fetchUserGroupByName(RECRUITER_GROUP));
   }, []);
 
   // Fetch the job when the pageRequest changes
