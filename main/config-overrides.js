@@ -25,7 +25,8 @@ module.exports = function override(config, env) {
     resolveApp("../candidate"),
     resolveApp("../job"),
     resolveApp("../settings"),
-    resolveApp("../formbuilder")
+    resolveApp("../formbuilder"),
+    resolveApp("../template"),
   );
 
   // black-list some modules from the babel-loader pipeline

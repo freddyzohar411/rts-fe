@@ -10,7 +10,8 @@
       "./candidate",
       "./job",
       "./settings",
-      "./formbuilder"
+      "./formbuilder",
+      "./template"
     ]
   },
   "scripts": {
