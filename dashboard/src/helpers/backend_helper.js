@@ -5,6 +5,8 @@ import {
   GET_MONTHREVENUE_DATA,
   GET_HALFYEARREVENUE_DATA,
   GET_YEARREVENUE_DATA,
+  JOB_URL,
+  BASE_JOBS,
 } from "./url_helper";
 
 const { APIClient } = Axios;
@@ -17,3 +19,4 @@ export const getAllRevenueData = () => api.get(GET_ALLREVENUE_DATA);
 export const getMonthRevenueData = () => api.get(GET_MONTHREVENUE_DATA);
 export const getHalfYearRevenueData = () => api.get(GET_HALFYEARREVENUE_DATA);
 export const getYearRevenueData = () => api.get(GET_YEARREVENUE_DATA);
+export const getJobCounts = () => api.get(`${JOB_URL}${BASE_JOBS}/jobfod`);

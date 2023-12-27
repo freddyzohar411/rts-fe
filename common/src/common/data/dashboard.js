@@ -13,6 +13,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "fod",
   },
   {
     id: 2,
@@ -28,6 +29,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "all_jobs",
   },
   {
     id: 3,
@@ -43,6 +45,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "total_assigned_jobs",
   },
   {
     id: 4,
@@ -58,6 +61,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "all_job_status",
   },
   {
     id: 5,
@@ -73,6 +77,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "total_fod",
   },
   {
     id: 6,
@@ -89,6 +94,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "kpi",
   },
   {
     id: 7,
@@ -104,6 +110,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "update_candidate_status",
   },
   {
     id: 8,
@@ -124,6 +131,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "offer_status",
   },
   {
     id: 9,
@@ -139,6 +147,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "offer_review_by_recruiter",
   },
 ];
 
@@ -157,6 +166,7 @@ const salesDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "all_jobs",
   },
   {
     id: 2,
@@ -172,6 +182,7 @@ const salesDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "active_jobs",
   },
   {
     id: 3,
@@ -187,6 +198,7 @@ const salesDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "inactive_jobs",
   },
   {
     id: 4,
@@ -202,6 +214,7 @@ const salesDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "closed_jobs",
   },
   {
     id: 5,
@@ -217,6 +230,7 @@ const salesDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "fod",
   },
   {
     id: 6,
@@ -232,6 +246,7 @@ const salesDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "assigned_jobs",
   },
   {
     id: 7,
@@ -247,6 +262,7 @@ const salesDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "update_cadidate_profile",
   },
   {
     id: 8,
@@ -267,6 +283,7 @@ const salesDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "offer_status",
   },
   {
     id: 9,
@@ -282,6 +299,7 @@ const salesDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
+    key: "pending_onboarding",
   },
 ];
 

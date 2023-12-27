@@ -27,7 +27,6 @@ const useUserAuth = () => {
     return userProfile?.firstName + " " + userProfile?.lastName;
   };
 
-
   // ------------------ Get & Check UserGroup ------------------
   function getAllUserGroups() {
     const userGroupList = [];
@@ -142,8 +141,8 @@ const useUserAuth = () => {
 
   /**
    * Check if user has any permission
-   * @param {*} modulePermissions 
-   * @returns 
+   * @param {*} modulePermissions
+   * @returns
    */
   function checkAnyPermission(modulePermissions = []) {
     const userPermission = convertUserProfileToPermissionObj(userProfile);
@@ -171,8 +170,6 @@ const useUserAuth = () => {
     }
     return false;
   }
-
-  // console.log("userProfile", convertUserProfileToPermissionObj(userProfile))
 
   return {
     userProfile,

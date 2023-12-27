@@ -20,7 +20,29 @@ import {
   FETCH_JOB_LISTS_FIELDS,
   FETCH_JOB_LISTS_FIELDS_SUCCESS,
   FETCH_JOB_LISTS_FIELDS_FAILURE,
+  FETCH_USER_GROUP_BY_NAME,
+  FETCH_USER_GROUP_BY_NAME_SUCCESS,
+  FETCH_USER_GROUP_BY_NAME_FAILURE,
+  CREATE_JOB_FOD,
+  CREATE_JOB_FOD_SUCCESS,
+  CREATE_JOB_FOD_FAILURE,
 } from "./actionTypes";
+
+// Fetch User Group by name
+export const fetchUserGroupByName = (groupName) => ({
+  type: FETCH_USER_GROUP_BY_NAME,
+  payload: groupName,
+});
+
+export const fetchUserGroupByNameSuccess = (group) => ({
+  type: FETCH_USER_GROUP_BY_NAME_SUCCESS,
+  payload: group,
+});
+
+export const fetchUserGroupByNameFailure = (error) => ({
+  type: FETCH_USER_GROUP_BY_NAME_FAILURE,
+  payload: error,
+});
 
 // Fetch JobList
 export const fetchJobList = (accountId) => ({
@@ -129,5 +151,21 @@ export const fetchJobListsFieldsSuccess = (accountsFields) => ({
 
 export const fetchJobListsFieldsFailure = (error) => ({
   type: FETCH_JOB_LISTS_FIELDS_FAILURE,
+  payload: error,
+});
+
+// Create JobFOD
+export const createJobFOD = (request) => ({
+  type: CREATE_JOB_FOD,
+  payload: request,
+});
+
+export const createJobFODSuccess = (job) => ({
+  type: CREATE_JOB_FOD_SUCCESS,
+  payload: job,
+});
+
+export const createJobFODFailure = (error) => ({
+  type: CREATE_JOB_FOD_FAILURE,
   payload: error,
 });
