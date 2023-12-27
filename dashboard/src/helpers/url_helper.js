@@ -6,7 +6,7 @@ export const GET_HALFYEARREVENUE_DATA = "/halfYearRevenue-data";
 export const GET_YEARREVENUE_DATA = "/yearRevenue-data";
 
 // Job Service
-export const JOB_URL = "http://localhost:9200";
+export const DASHBOARD_URL = "http://localhost:9300";
 
 //Job
-export const BASE_JOBS = "/api/job";
+export const BASE_DASHBOARD = "/api/dashboard";
