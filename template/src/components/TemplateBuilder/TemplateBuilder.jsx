@@ -9,18 +9,13 @@ import { Col, Row, Label, Input, Button } from "reactstrap";
 import { initialValues, schema } from "./formikConfig";
 import { moduleConstants, moduleFields } from "./constants";
 import SelectElement from "./SelectElement";
+import EditorElement from "./EditorElement";
+import TemplateDisplay from "../TemplateDisplay/TemplateDisplay";
 
 const TemplateBuilder = forwardRef(({ ...props }, ref) => {
   const [typeData, setTypeData] = useState("");
   const [fieldName, setFieldName] = useState("");
-  console.log("typeData", typeData);
-
-  // Fake data
-  const option1 = [
-    { value: "1", label: "1" },
-    { value: "2", label: "2" },
-    { value: "3", label: "3" },
-  ];
+  const [injectVariable, setInjectVariable] = useState("");
 
   const handleFormSubmit = async (values) => {
     console.log(values);
@@ -124,8 +119,9 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
               </div>
             </Col>
           </Row>
-          <Row>
+          <Row className="align-items-end">
             <Col>
+              <Label>Module Type</Label>
               <SelectElement
                 optionsData={moduleConstants}
                 setSelectedOptionData={setTypeData}
@@ -134,6 +130,7 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
               />
             </Col>
             <Col>
+              <Label>Module Field</Label>
               <SelectElement
                 optionsData={moduleFields}
                 setSelectedOptionData={setFieldName}
@@ -142,13 +139,25 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
               />
             </Col>
             <Col>
-              <Button className="" onClick={
-                () => {
-                    console.log(`$${typeData.value}.${fieldName.value}`)
-                    setFieldName("")
-                    setTypeData("")
-                }
-              }>Add</Button>
+              <Button
+                type="button"
+                className="self-end"
+                disabled={!typeData || !fieldName}
+                onClick={() => {
+                  console.log(
+                    "${",
+                    `${typeData.value}.${fieldName.value}`,
+                    "}"
+                  );
+                  setInjectVariable(
+                    "${" + `${typeData.value}.${fieldName.value}` + "}"
+                  );
+                  setFieldName("");
+                  setTypeData("");
+                }}
+              >
+                Add
+              </Button>
             </Col>
           </Row>
         </Col>
@@ -157,11 +166,23 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
         <Col>
           <Row className="mb-3">
             <Col>
-              <span className="h6 fw-bold">Members and Roles</span>
+              <span className="h6 fw-bold">Template</span>
             </Col>
           </Row>
           <Row>
-            <Col>{/* // Rich Editor */}</Col>
+            <Col>
+              <EditorElement
+                name="content"
+                formik={formik}
+                injectVariable={injectVariable}
+              />
+            </Col>
+          </Row>
+          {/* // Just for checking */}
+          <Row>
+            <Col>
+              <TemplateDisplay content={formik?.values?.["content"]} />
+            </Col>
           </Row>
         </Col>
       </Row>

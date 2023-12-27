@@ -34,7 +34,10 @@ const TemplateBuilderPage = () => {
                 <BreadcrumbItem>
                   <Link to="/settings/access">Settings</Link>
                 </BreadcrumbItem>
-                <BreadcrumbItem active>Create Group</BreadcrumbItem>
+                <BreadcrumbItem>
+                  <Link to="/settings/access">Templates</Link>
+                </BreadcrumbItem>
+                <BreadcrumbItem active>Create</BreadcrumbItem>
               </Breadcrumb>
             </Col>
           </Row>

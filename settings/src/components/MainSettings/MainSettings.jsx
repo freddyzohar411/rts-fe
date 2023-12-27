@@ -50,7 +50,7 @@ function MainSettings() {
                   </Link>
                 </li>
                 <li>
-                  <Link className="text-dark" to="/settings/templates/new">
+                  <Link className="text-dark" to="/settings/templates/create">
                     Templates
                   </Link>
                 </li>

@@ -149,7 +149,7 @@ const authProtectedRoutes = [
 
   // Template in Settings
   { path: "/settings/templates", component: <TemplateBuilderPage /> },
-  { path: "/settings/templates/new", component: <TemplateBuilderPage /> },
+  { path: "/settings/templates/create", component: <TemplateBuilderPage /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
