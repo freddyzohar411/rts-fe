@@ -1,5 +1,5 @@
 export const moduleConstants = [
-  { label: "Account", value: "Account" },
+  { label: "Accounts", value: "Accounts" },
   { label: "Jobs", value: "Jobs" },
   { label: "Candidates", value: "Candidates" },
 ];

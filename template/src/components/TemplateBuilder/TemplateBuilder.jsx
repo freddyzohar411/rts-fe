@@ -11,6 +11,7 @@ import { moduleConstants, moduleFields } from "./constants";
 import SelectElement from "./SelectElement";
 import EditorElement from "./EditorElement";
 import TemplateDisplay from "../TemplateDisplay/TemplateDisplay";
+import SelectAPIElement from "./SelectAPIElement";
 
 const TemplateBuilder = forwardRef(({ ...props }, ref) => {
   const [typeData, setTypeData] = useState("");
@@ -146,12 +147,13 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
             </Col>
             <Col>
               <Label>Module Field</Label>
-              <SelectElement
+              {/* <SelectElement
                 optionsData={moduleFields}
                 setSelectedOptionData={setFieldName}
                 placeholder="Select a field"
                 value={fieldName}
-              />
+              /> */}
+              <SelectAPIElement value={fieldName} placeholder="Select a field" setSelectedOptionData={setFieldName} module={typeData}/>
             </Col>
             <Col>
               <Button

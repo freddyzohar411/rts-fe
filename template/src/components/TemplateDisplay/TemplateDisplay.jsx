@@ -13,9 +13,6 @@ const TemplateDisplay = ({ content, mappedVariableData }) => {
   }
 
   let parsedContent = replaceVariables(content, mappedVariableData);
-  // useEffect(() => {
-
-  // }, [mappedVariableData, content]);
 
   return <div>{ReactHtmlParser(parsedContent)}</div>;
 };

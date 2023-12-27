@@ -24,6 +24,9 @@ const AccountListing = () => {
     (state) => state.AccountReducer.accountsFields
   );
 
+  console.log("accountsFields", accountsFields)
+  console.log("accountsData", accountsData)
+
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
