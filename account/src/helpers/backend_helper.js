@@ -23,7 +23,6 @@ import {
 import { generateAccountModuleURL, accountModuleURL } from "./constant";
 
 const { APIClient } = Axios;
-
 const api = new APIClient();
 
 // Get Accounts Fields

@@ -1,103 +1,103 @@
 import {
-  FETCH_FORMS,
-  FETCH_FORMS_SUCCESS,
-  FETCH_FORMS_FAILURE,
-  FETCH_FORM,
-  FETCH_FORM_SUCCESS,
-  FETCH_FORM_FAILURE,
-  DELETE_FORM,
-  DELETE_FORM_SUCCESS,
-  DELETE_FORM_FAILURE,
-  CREATE_FORM,
-  CREATE_FORM_SUCCESS,
-  CREATE_FORM_FAILURE,
-  UPDATE_FORM,
-  UPDATE_FORM_SUCCESS,
-  UPDATE_FORM_FAILURE,
-  CLEAR_FORM,
+  FETCH_TEMPLATES,
+  FETCH_TEMPLATES_SUCCESS,
+  FETCH_TEMPLATES_FAILURE,
+  FETCH_TEMPLATE,
+  FETCH_TEMPLATE_SUCCESS,
+  FETCH_TEMPLATE_FAILURE,
+  DELETE_TEMPLATE,
+  DELETE_TEMPLATE_SUCCESS,
+  DELETE_TEMPLATE_FAILURE,
+  CREATE_TEMPLATE,
+  CREATE_TEMPLATE_SUCCESS,
+  CREATE_TEMPLATE_FAILURE,
+  UPDATE_TEMPLATE,
+  UPDATE_TEMPLATE_SUCCESS,
+  UPDATE_TEMPLATE_FAILURE,
+  CLEAR_TEMPLATE,
 } from "./actionTypes";
 
-// Fetch forms
-export const fetchForms = (formPageRequest) => ({
-  type: FETCH_FORMS,
-  payload: formPageRequest,
+// Fetch templates
+export const fetchTemplates = (templatePageRequest) => ({
+  type: FETCH_TEMPLATES,
+  payload: templatePageRequest,
 });
 
-export const fetchFormsSuccess = (forms) => ({
-  type: FETCH_FORMS_SUCCESS,
-  payload: forms,
+export const fetchTemplatesSuccess = (templates) => ({
+  type: FETCH_TEMPLATES_SUCCESS,
+  payload: templates,
 });
 
-export const fetchFormsFailure = (error) => ({
-  type: FETCH_FORMS_FAILURE,
+export const fetchTemplatesFailure = (error) => ({
+  type: FETCH_TEMPLATES_FAILURE,
   payload: error,
 });
 
-// Fetch form by id
-export const fetchForm = (id) => ({
-  type: FETCH_FORM,
+// Fetch template by id
+export const fetchTemplate = (id) => ({
+  type: FETCH_TEMPLATE,
   payload: id,
 });
 
-export const fetchFormSuccess = (form) => ({
-  type: FETCH_FORM_SUCCESS,
-  payload: form,
+export const fetchTemplateSuccess = (template) => ({
+  type: FETCH_TEMPLATE_SUCCESS,
+  payload: template,
 });
 
-export const fetchFormFailure = (error) => ({
-  type: FETCH_FORM_FAILURE,
+export const fetchTemplateFailure = (error) => ({
+  type: FETCH_TEMPLATE_FAILURE,
   payload: error,
 });
 
-// Delete Forms
-export const deleteForm = (id) => ({
-  type: DELETE_FORM,
+// Delete Templates
+export const deleteTemplate = (id) => ({
+  type: DELETE_TEMPLATE,
   payload: id,
 });
 
-export const deleteFormSuccess = (id) => ({
-  type: DELETE_FORM_SUCCESS,
+export const deleteTemplateSuccess = (id) => ({
+  type: DELETE_TEMPLATE_SUCCESS,
   payload: id,
 });
 
-export const deleteFormFailure = (error) => ({
-  type: DELETE_FORM_FAILURE,
+export const deleteTemplateFailure = (error) => ({
+  type: DELETE_TEMPLATE_FAILURE,
   payload: error,
 });
 
-// Create Form
-export const createForm = (formRequest) => ({
-  type: CREATE_FORM,
-  payload: formRequest,
+// Create Template
+export const createTemplate = (templateRequest) => ({
+  type: CREATE_TEMPLATE,
+  payload: templateRequest,
 });
 
-export const createFormSuccess = (form) => ({
-  type: CREATE_FORM_SUCCESS,
-  payload: form,
+export const createTemplateSuccess = (template) => ({
+  type: CREATE_TEMPLATE_SUCCESS,
+  payload: template,
 });
 
-export const createFormFailure = (error) => ({
-  type: CREATE_FORM_FAILURE,
+export const createTemplateFailure = (error) => ({
+  type: CREATE_TEMPLATE_FAILURE,
   payload: error,
 });
 
-// Update Form
-export const updateForm = (formRequest) => ({
-  type: UPDATE_FORM,
-  payload: formRequest,
+// Update Template
+export const updateTemplate = (templateRequest) => ({
+  type: UPDATE_TEMPLATE,
+  payload: templateRequest,
 });
 
-export const updateFormSuccess = (form) => ({
-  type: UPDATE_FORM_SUCCESS,
-  payload: form,
+export const updateTemplateSuccess = (template) => ({
+  type: UPDATE_TEMPLATE_SUCCESS,
+  payload: template,
 });
 
-export const updateFormFailure = (error) => ({
-  type: UPDATE_FORM_FAILURE,
+export const updateTemplateFailure = (error) => ({
+  type: UPDATE_TEMPLATE_FAILURE,
   payload: error,
 });
 
-// Clear Form
-export const clearForm = () => ({
-  type: CLEAR_FORM,
+// Clear Template
+export const clearTemplate = () => ({
+  type: CLEAR_TEMPLATE,
 });

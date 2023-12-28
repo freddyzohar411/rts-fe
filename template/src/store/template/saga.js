@@ -1,88 +1,87 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
 import {
-  FETCH_FORMS,
-  DELETE_FORM,
-  CREATE_FORM,
-  UPDATE_FORM,
-  FETCH_FORM,
+  FETCH_TEMPLATES,
+  DELETE_TEMPLATE,
+  CREATE_TEMPLATE,
+  UPDATE_TEMPLATE,
+  FETCH_TEMPLATE,
 } from "./actionTypes";
 import {
-  fetchFormsSuccess,
-  fetchFormsFailure,
-  fetchFormSuccess,
-  fetchFormFailure,
-  deleteFormFailure,
-  deleteFormSuccess,
-  createFormFailure,
-  createFormSuccess,
-  updateFormFailure,
-  updateFormSuccess,
+  fetchTemplatesSuccess,
+  fetchTemplatesFailure,
+  fetchTemplateSuccess,
+  fetchTemplateFailure,
+  deleteTemplateFailure,
+  deleteTemplateSuccess,
+  createTemplateFailure,
+  createTemplateSuccess,
+  updateTemplateFailure,
+  updateTemplateSuccess,
 } from "./action";
 import {
-  getForms,
-  createForm,
-  deleteFormById,
-  updateFormById,
-  getFormById,
-} from "../../helpers/backend_helper";
+  createTemplate,
+  deleteTemplateById,
+  getTemplateById,
+  updateTemplateById
+} from "../../helpers/backend_helper.js";
 import { toast } from "react-toastify";
 
-function* workFetchForms(action) {
+function* workFetchTemplates(action) {
   try {
-    const response = yield call(getForms, action.payload);
-    yield put(fetchFormsSuccess(response.data));
+    const response = yield call(getTemplates, action.payload);
+    yield put(fetchTemplatesSuccess(response.data));
   } catch (error) {
-    yield put(fetchFormsFailure(error));
+    yield put(fetchTemplatesFailure(error));
   }
 }
 
-function* workDeleteForm(action) {
+function* workDeleteTemplate(action) {
   try {
-    const response = yield call(deleteFormById, action.payload);
-    yield put(deleteFormSuccess(action.payload));
+    const response = yield call(deleteTemplateById, action.payload);
+    yield put(deleteTemplateSuccess(action.payload));
   } catch (error) {
-    yield put(deleteFormFailure(error));
+    yield put(deleteTemplateFailure(error));
   }
 }
 
-function* workCreateForm(action) {
-  const { newForm, navigate, path } = action.payload;
+function* workCreateTemplate(action) {
+  const { newTemplate, navigate, path } = action.payload;
   try {
-    const response = yield call(createForm, newForm);
-    yield put(createFormSuccess(response.data));
-    toast.success("Form created successfully!");
+    const response = yield call(createTemplate, newTemplate);
+    yield put(createTemplateSuccess(response.data));
+    toast.success("Template created successfully!");
     navigate(path);
   } catch (error) {
-    yield put(createFormFailure(error));
+    yield put(createTemplateFailure(error));
   }
 }
 
-function* workUpdateForm(action) {
-  const { formId, updatedForm, navigate, path } = action.payload;
+function* workUpdateTemplate(action) {
+  const { templateId, updatedTemplate, navigate, path } = action.payload;
   try {
-    const response = yield call(updateFormById, updatedForm, formId);
-    yield put(updateFormSuccess(response.data));
-    toast.success("Form updated successfully!");
+    const response = yield call(updateTemplateById, updatedTemplate, templateId);
+    yield put(updateTemplateSuccess(response.data));
+    toast.success("Template updated successfully!");
     navigate(path);
   } catch (error) {
-    yield put(updateFormFailure(error));
+    yield put(updateTemplateFailure(error));
   }
 }
 
-function* workFetchForm(action) {
+function* workFetchTemplate(action) {
   try {
-    const response = yield call(getFormById, action.payload);
-    yield put(fetchFormSuccess(response.data));
+    const response = yield call(getTemplateById, action.payload);
+    yield put(fetchTemplateSuccess(response.data));
   } catch (error) {
-    yield put(fetchFormFailure(error));
+    yield put(fetchTemplateFailure(error));
   }
 }
 
-export default function* watchFetchFormsSaga() {
-  yield takeEvery(FETCH_FORMS, workFetchForms);
-  yield takeEvery(DELETE_FORM, workDeleteForm);
-  yield takeEvery(CREATE_FORM, workCreateForm);
-  yield takeEvery(UPDATE_FORM, workUpdateForm);
-  yield takeEvery(FETCH_FORM, workFetchForm);
+export default function* watchFetchTemplatesSaga() {
+  yield takeEvery(FETCH_TEMPLATES, workFetchTemplates);
+  yield takeEvery(DELETE_TEMPLATE, workDeleteTemplate);
+  yield takeEvery(CREATE_TEMPLATE, workCreateTemplate);
+  yield takeEvery(UPDATE_TEMPLATE, workUpdateTemplate);
+  yield takeEvery(FETCH_TEMPLATE, workFetchTemplate);
 }

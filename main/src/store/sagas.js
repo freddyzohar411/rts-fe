@@ -24,6 +24,9 @@ import { Sagas as SettingSagas } from "@workspace/settings";
 // Candidate
 import { Sagas as CandidateSagas } from "@workspace/candidate";
 
+// Template
+import { Sagas as TemplateSagas } from "@workspace/template";
+
 const {
   LayoutSaga,
   CountryCurrencySaga,
@@ -34,7 +37,7 @@ const {
   UserGroupSaga,
   AccountNamesSaga,
   AccountContactSaga,
-  FormCommonSaga
+  FormCommonSaga,
 } = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
 const { DashboardEcommerceSaga } = DashboardSaga;
@@ -49,6 +52,8 @@ const { UserSaga, RoleSaga, ModuleSaga, PermissionSaga, GroupSaga } =
 
 const { CandidateFormSaga, CandidateSaga, CandidateRegistrationSaga } =
   CandidateSagas;
+
+const { TemplateSaga } = TemplateSagas;
 
 export default function* rootSaga() {
   yield all([
@@ -95,5 +100,8 @@ export default function* rootSaga() {
     fork(CandidateFormSaga),
     fork(CandidateSaga),
     fork(CandidateRegistrationSaga),
+
+    // Template 
+    fork(TemplateSaga),
   ]);
 }

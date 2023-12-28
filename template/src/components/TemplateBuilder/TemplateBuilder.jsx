@@ -13,15 +13,14 @@ import EditorElement from "./EditorElement";
 import TemplateDisplay from "../TemplateDisplay/TemplateDisplay";
 import SelectAPIElement from "./SelectAPIElement";
 
-const TemplateBuilder = forwardRef(({ ...props }, ref) => {
+const TemplateBuilder = forwardRef(({ onSubmit, ...props }, ref) => {
   const [typeData, setTypeData] = useState("");
   const [fieldName, setFieldName] = useState("");
   const [injectVariable, setInjectVariable] = useState("");
   const [editorRef, setEditorRef] = useState(null);
-  console.log("editorRef", editorRef);
 
   const handleFormSubmit = async (values) => {
-    console.log(values);
+    await onSubmit(values);
   };
 
   /**

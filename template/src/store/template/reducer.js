@@ -1,26 +1,26 @@
 import {
-  FETCH_FORMS,
-  FETCH_FORMS_SUCCESS,
-  FETCH_FORMS_FAILURE,
-  FETCH_FORM,
-  FETCH_FORM_SUCCESS,
-  FETCH_FORM_FAILURE,
-  DELETE_FORM,
-  DELETE_FORM_SUCCESS,
-  DELETE_FORM_FAILURE,
-  CREATE_FORM,
-  CREATE_FORM_SUCCESS,
-  CREATE_FORM_FAILURE,
-  UPDATE_FORM,
-  UPDATE_FORM_SUCCESS,
-  UPDATE_FORM_FAILURE,
-  CLEAR_FORM,
+  FETCH_TEMPLATES,
+  FETCH_TEMPLATES_SUCCESS,
+  FETCH_TEMPLATES_FAILURE,
+  FETCH_TEMPLATE,
+  FETCH_TEMPLATE_SUCCESS,
+  FETCH_TEMPLATE_FAILURE,
+  DELETE_TEMPLATE,
+  DELETE_TEMPLATE_SUCCESS,
+  DELETE_TEMPLATE_FAILURE,
+  CREATE_TEMPLATE,
+  CREATE_TEMPLATE_SUCCESS,
+  CREATE_TEMPLATE_FAILURE,
+  UPDATE_TEMPLATE,
+  UPDATE_TEMPLATE_SUCCESS,
+  UPDATE_TEMPLATE_FAILURE,
+  CLEAR_TEMPLATE,
 } from "./actionTypes";
 import { JsonHelper } from "@workspace/common";
 
 const initialState = {
-  forms: [],
-  form: null,
+  templates: [],
+  template: null,
   errorMsg: "",
   loading: false,
   error: false,
@@ -28,20 +28,20 @@ const initialState = {
 
 const TemplateReducer = (state = initialState, action) => {
   switch (action.type) {
-    // Fetch forms
-    case FETCH_FORMS:
+    // Fetch templates
+    case FETCH_TEMPLATES:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case FETCH_FORMS_SUCCESS:
+    case FETCH_TEMPLATES_SUCCESS:
       return {
         ...state,
         loading: false,
-        forms: action.payload,
+        templates: action.payload,
       };
-    case FETCH_FORMS_FAILURE:
+    case FETCH_TEMPLATES_FAILURE:
       return {
         ...state,
         loading: false,
@@ -49,31 +49,31 @@ const TemplateReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
 
-    // Fetch Form by id
-    case FETCH_FORM:
+    // Fetch Template by id
+    case FETCH_TEMPLATE:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case FETCH_FORM_SUCCESS:
+    case FETCH_TEMPLATE_SUCCESS:
       const data = action.payload;
-      const newForm = {
-        formName: data?.formName,
-        formType: data?.formType,
-        baseFormId: data?.baseFormId || 0,
-        formCategory: data?.formCategory,
+      const newTemplate = {
+        templateName: data?.templateName,
+        templateType: data?.templateType,
+        baseTemplateId: data?.baseTemplateId || 0,
+        templateCategory: data?.templateCategory,
         entityType: data?.entityType,
         stepperNumber: parseInt(data?.stepperNumber),
-        formSchema: JsonHelper.parseArrayObjectValues(data.formFieldsList),
-        formLayoutSchema: data.formSchemaList,
+        templateSchema: JsonHelper.parseArrayObjectValues(data.templateFieldsList),
+        templateLayoutSchema: data.templateSchemaList,
       };
       return {
         ...state,
         loading: false,
-        form: newForm,
+        template: newTemplate,
       };
-    case FETCH_FORM_FAILURE:
+    case FETCH_TEMPLATE_FAILURE:
       return {
         ...state,
         loading: false,
@@ -81,26 +81,26 @@ const TemplateReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
 
-    // Delete form by id
-    case DELETE_FORM:
+    // Delete template by id
+    case DELETE_TEMPLATE:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case DELETE_FORM_SUCCESS:
-      // Let filter away the deleted form from forms
-      const newForms = JSON.parse(JSON.stringify(state.forms));
-      const formsData = newForms.forms.filter(
-        (form) => parseInt(form.formId) !== action.payload
+    case DELETE_TEMPLATE_SUCCESS:
+      // Let filter away the deleted template from templates
+      const newTemplates = JSON.parse(JSON.stringify(state.templates));
+      const templatesData = newTemplates.templates.filter(
+        (template) => parseInt(template.templateId) !== action.payload
       );
-      newForms.forms = formsData;
+      newTemplates.templates = templatesData;
       return {
         ...state,
         loading: false,
-        forms: newForms,
+        templates: newTemplates,
       };
-    case DELETE_FORM_FAILURE:
+    case DELETE_TEMPLATE_FAILURE:
       return {
         ...state,
         loading: false,
@@ -108,22 +108,22 @@ const TemplateReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
 
-    // Create a form
-    case CREATE_FORM:
+    // Create a template
+    case CREATE_TEMPLATE:
       return {
         ...state,
         loading: true,
         error: false,
       };
 
-    case CREATE_FORM_SUCCESS:
+    case CREATE_TEMPLATE_SUCCESS:
       return {
         ...state,
         loading: false,
-        form: null,
+        template: null,
       };
 
-    case CREATE_FORM_FAILURE:
+    case CREATE_TEMPLATE_FAILURE:
       return {
         ...state,
         loading: false,
@@ -131,30 +131,30 @@ const TemplateReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
 
-    // Update a form
-    case UPDATE_FORM:
+    // Update a template
+    case UPDATE_TEMPLATE:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case UPDATE_FORM_SUCCESS:
+    case UPDATE_TEMPLATE_SUCCESS:
       return {
         ...state,
         loading: false,
-        form: null,
+        template: null,
       };
-    case UPDATE_FORM_FAILURE:
+    case UPDATE_TEMPLATE_FAILURE:
       return {
         ...state,
         loading: false,
         error: true,
         errorMsg: action.payload,
       };
-    case CLEAR_FORM:
+    case CLEAR_TEMPLATE:
       return {
         ...state,
-        form: null,
+        template: null,
       };
     default:
       return state;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,20 +11,25 @@ import {
   CardHeader,
   Col,
   Container,
-  FormFeedback,
-  Label,
-  Nav,
-  NavItem,
-  NavLink,
   Row,
-  TabContent,
-  TabPane,
 } from "reactstrap";
-
+import { createTemplate } from "../../store/template/action";
 import { TemplateBuilder } from "../../components";
 
 const TemplateBuilderPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const formikRef = useRef(null);
+
+  const handleFormSubmit = async (values) => {
+    console.log(values);
+    dispatch(createTemplate({
+      newTemplate: values,
+      navigate: navigate,
+      path:"/settings"
+    }));
+  }
+  
   return (
     <React.Fragment>
       <div className="page-content">
@@ -55,7 +61,7 @@ const TemplateBuilderPage = () => {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <TemplateBuilder ref={formikRef} />
+                  <TemplateBuilder ref={formikRef} onSubmit={handleFormSubmit}/>
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex flex-row justify-content-between">
