@@ -5,9 +5,9 @@ import {
   GET_MONTHREVENUE_DATA,
   GET_HALFYEARREVENUE_DATA,
   GET_YEARREVENUE_DATA,
-  DASHBOARD_URL,
   BASE_DASHBOARD,
 } from "./url_helper";
+import { DASHBOARD_URL } from "@workspace/common/src/config";
 
 const { APIClient } = Axios;
 

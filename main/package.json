@@ -40,14 +40,17 @@
     "uuid": "^9.0.1",
     "react-beautiful-dnd": "^13.1.1",
     "react-icons": "^4.11.0",
-    "react-dual-listbox": "^5.0.2"
+    "react-dual-listbox": "^5.0.2",
+    "env-cmd": "10.1.0"
   },
   "devDependencies": {
     "react-app-rewired": "2.2.1",
     "react-app-rewire-babel-loader": "0.1.1"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "env-cmd -f .env react-app-rewired start",
+    "start:staging": "env-cmd -f .env.staging react-app-rewired start",
+    "start:prod": "env-cmd -f .env.prod react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
