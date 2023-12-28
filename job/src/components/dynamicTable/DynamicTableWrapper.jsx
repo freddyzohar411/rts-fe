@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
 import { Link } from "react-router-dom";
-import { DynamicTable } from "@Workspace/common";
+import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
-import { GeneralModal } from "@Workspace/common";
+import { GeneralModal } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { JOB_INITIAL_OPTIONS } from "../JobListing/jobListingConstants";
