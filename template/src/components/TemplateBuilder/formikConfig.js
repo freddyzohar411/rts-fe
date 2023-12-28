@@ -11,17 +11,27 @@ export const populateForm = (value) => {
 };
 
 export const initialValues = {
-  // id: null,
+  id: null,
   name: "",
   description: "",
   category: "",
-  // content: "",
+  content: "",
+};
+
+export const generateSchema = () => {
+  return yup.object().shape({
+    id: yup.number().nullable().notRequired(),
+    name: yup.string().required("Please enter a name."),
+    category: yup.string().required("Please enter a category."),
+    description: yup.string().nullable().notRequired(),
+    content: yup.string().required("Please enter a content."),
+  });
 };
 
 export const schema = yup.object().shape({
-  // id: yup.number().nullable().notRequired(),
+  id: yup.number().nullable().notRequired(),
   name: yup.string().required("Please enter a name."),
   category: yup.string().required("Please enter a category."),
   description: yup.string().nullable().notRequired(),
-  // content: yup.string().required("Please enter a content."),
+  content: yup.string().required("Please enter a content."),
 });

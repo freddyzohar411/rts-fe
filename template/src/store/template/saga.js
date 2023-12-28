@@ -23,7 +23,8 @@ import {
   createTemplate,
   deleteTemplateById,
   getTemplateById,
-  updateTemplateById
+  updateTemplateById,
+  getTemplates,
 } from "../../helpers/backend_helper.js";
 import { toast } from "react-toastify";
 
@@ -60,7 +61,11 @@ function* workCreateTemplate(action) {
 function* workUpdateTemplate(action) {
   const { templateId, updatedTemplate, navigate, path } = action.payload;
   try {
-    const response = yield call(updateTemplateById, updatedTemplate, templateId);
+    const response = yield call(
+      updateTemplateById,
+      templateId,
+      updatedTemplate
+    );
     yield put(updateTemplateSuccess(response.data));
     toast.success("Template updated successfully!");
     navigate(path);

@@ -19,3 +19,6 @@ export const getTemplateById = (templateId) =>
 // Delete Template by id
 export const deleteTemplateById = (templateId) =>
   api.delete(`${COMMON_URL}${BASE_TEMPLATE}/delete/${templateId}`);
+
+// Get Templates
+export const getTemplates = (data) => api.create(`${COMMON_URL}${BASE_TEMPLATE}/listing`, data);

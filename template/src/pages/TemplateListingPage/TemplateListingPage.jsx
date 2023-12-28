@@ -8,32 +8,32 @@ import {
   DateHelper
 } from "@workspace/common";
 import { CUSTOMISATION_INITIAL_OPTION } from "./customisationTableInitialOptions";
-import { Actions as formActions } from "@workspace/formbuilder";
+import * as TemplateActions from "../../store/template/action";
 import { Link } from "react-router-dom";
-import DynamicFormListingWrapper from "./DynamicFormListingWrapper";
+import TemplateListingWrapper from "../../components/TemplateListingAccordion/TemplateListingWrapper";
 
-function DynamicFormListingSettings() {
-  document.title = "Form Customisation Settings | RTS";
+function TemplateListingPage() {
+  document.title = "Template Customisation Settings | RTS";
 
   // Delete Modal States
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
   const dispatch = useDispatch();
-  const { forms } = useSelector((state) => state.FormReducer);
+  const { templates } = useSelector((state) => state.TemplateReducer);
   const { generateConfig, generateSeachFieldArray, cleanPageRequest } =
     DynamicTableHelper;
-  
-     // Custom renders
+
+ // Custom renders
  const customRenderList = [
-  {
-    names: ["updatedAt", "createdAt"],
-    render: (data, opt) =>
-      DateHelper.formatDateStandard2(
-        DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
-      ),
-  },
-];
+    {
+      names: ["updatedAt", "createdAt"],
+      render: (data, opt) =>
+        DateHelper.formatDateStandard2(
+          DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
+        ),
+    },
+  ];
 
   // Use Table Hook
   const {
@@ -47,7 +47,7 @@ function DynamicFormListingSettings() {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 999,
+      pageSize: 99,
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
@@ -67,7 +67,7 @@ function DynamicFormListingSettings() {
         sortValue: "action",
         render: (data) => (
           <div className="d-flex column-gap-2">
-            <Link to={`/form-builder/${data.formId}`}>
+            <Link to={`/settings/templates/${data.id}/edit`}>
               <Button type="button" className="btn btn-custom-primary px-2 py-1">
                 <i
                   className="ri-edit-2-line"
@@ -79,7 +79,7 @@ function DynamicFormListingSettings() {
               type="button"
               className="btn btn-danger px-2 py-1"
               onClick={() => {
-                setDeleteId(data.formId);
+                setDeleteId(data.id);
                 setIsDeleteModalOpen(true);
               }}
             >
@@ -97,22 +97,22 @@ function DynamicFormListingSettings() {
   // Fetch Form Data
   useEffect(() => {
     dispatch(
-      formActions.fetchForms(DynamicTableHelper.cleanPageRequest(pageRequest))
+        TemplateActions.fetchTemplates(DynamicTableHelper.cleanPageRequest(pageRequest))
     );
     return () => {
-      dispatch(formActions.clearForm());
+      dispatch(TemplateActions.clearTemplate());
     };
   }, [pageRequest]);
 
   // Update Page Information
   useEffect(() => {
-    if (forms) {
-      setPageInfoData(forms);
+    if (templates) {
+      setPageInfoData(templates);
     }
-  }, [forms]);
+  }, [templates]);
 
   const confirmDelete = () => {
-    dispatch(formActions.deleteForm(deleteId));
+    dispatch(TemplateActions.deleteTemplate(deleteId));
     setIsDeleteModalOpen(false);
   };
 
@@ -123,11 +123,11 @@ function DynamicFormListingSettings() {
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
         deleteId={deleteId}
-        header="Delete Form Template"
-        message="Are you sure you want to delete this form template?"
+        header="Delete Template"
+        message="Are you sure you want to delete this template?"
       />
-      <DynamicFormListingWrapper
-        data={forms.forms}
+      <TemplateListingWrapper
+        data={templates.templates}
         config={generateFormConfig(customConfig)}
         pageInfo={pageInfo}
         pageRequestSet={pageRequestSet}
@@ -138,4 +138,4 @@ function DynamicFormListingSettings() {
   );
 }
 
-export default DynamicFormListingSettings;
+export default TemplateListingPage;

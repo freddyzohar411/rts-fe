@@ -57,21 +57,10 @@ const TemplateReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_TEMPLATE_SUCCESS:
-      const data = action.payload;
-      const newTemplate = {
-        templateName: data?.templateName,
-        templateType: data?.templateType,
-        baseTemplateId: data?.baseTemplateId || 0,
-        templateCategory: data?.templateCategory,
-        entityType: data?.entityType,
-        stepperNumber: parseInt(data?.stepperNumber),
-        templateSchema: JsonHelper.parseArrayObjectValues(data.templateFieldsList),
-        templateLayoutSchema: data.templateSchemaList,
-      };
       return {
         ...state,
         loading: false,
-        template: newTemplate,
+        template: action.payload,
       };
     case FETCH_TEMPLATE_FAILURE:
       return {
@@ -92,7 +81,7 @@ const TemplateReducer = (state = initialState, action) => {
       // Let filter away the deleted template from templates
       const newTemplates = JSON.parse(JSON.stringify(state.templates));
       const templatesData = newTemplates.templates.filter(
-        (template) => parseInt(template.templateId) !== action.payload
+        (template) => parseInt(template.id) !== action.payload
       );
       newTemplates.templates = templatesData;
       return {

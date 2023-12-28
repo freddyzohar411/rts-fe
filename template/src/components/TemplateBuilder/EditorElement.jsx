@@ -5,7 +5,6 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 const EditorElement = ({ name, formik, injectVariable, setEditorRef }) => {
   const editorRef = useRef();
   useEffect(() => {
-    console.log("Inject Variable", injectVariable);
     // Get the CKEditor instance from the editorRef
     const editor = editorRef.current.editor;
 
@@ -23,10 +22,8 @@ const EditorElement = ({ name, formik, injectVariable, setEditorRef }) => {
       editor?.model.insertContent(injectVariable);
     }
   }, [injectVariable]);
-  //   const { formState } = formStateHook;
 
   useEffect(() => {
-    // Pass the editorRef to the parent component
     setEditorRef(editorRef);
   }, [setEditorRef]);
 
@@ -44,6 +41,9 @@ const EditorElement = ({ name, formik, injectVariable, setEditorRef }) => {
             formik?.setFieldValue(name, data);
           } catch (error) {}
         }
+      }}
+      onBlur={() => {
+        formik.handleBlur({ target: { name } });
       }}
       // disabled={formState === "view" ? true : false}
     />
