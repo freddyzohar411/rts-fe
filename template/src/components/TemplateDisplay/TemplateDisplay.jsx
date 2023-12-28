@@ -44,7 +44,7 @@ const TemplateDisplay = ({ content, mappedVariableData }) => {
   }
 
   useEffect(() => {
-    dispatch(fetchAccountData(192));
+    dispatch(fetchAccountData(1001));
   }, []);
   // Function to replace variables with actual values
   function replaceVariables(html, variableData) {

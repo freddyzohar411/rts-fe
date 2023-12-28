@@ -45,6 +45,7 @@ const EditorElement = ({ name, formik, injectVariable, setEditorRef }) => {
       onBlur={() => {
         formik.handleBlur({ target: { name } });
       }}
+      onError={(error) => console.error("CKEditor Error:", error)}
       // disabled={formState === "view" ? true : false}
     />
   );
