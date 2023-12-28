@@ -18,7 +18,7 @@ import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
 import { JOB_INITIAL_OPTIONS } from "./jobListingConstants";
-import { DeleteCustomModal } from "@Workspace/common";
+import { DeleteCustomModal } from "@workspace/common";
 import {
   createJobFOD,
   deleteJobList,

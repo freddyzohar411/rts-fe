@@ -2,7 +2,7 @@ import { Button, Card, Container } from "reactstrap";
 import { useDispatch } from "react-redux";
 import AccountStepper from "../../components/AccountStepper/AccountStepper";
 import { deleteDraftAccount } from "../../store/accountregistration/action";
-import { DeleteCustomModal } from "@Workspace/common";
+import { DeleteCustomModal } from "@workspace/common";
 import { useState } from "react";
 
 const FormStepper = ({

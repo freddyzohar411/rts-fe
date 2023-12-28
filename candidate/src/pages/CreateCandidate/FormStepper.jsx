@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Card, CardBody, Container } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CandidateStepper from "../../components/CandidateStepper/CandidateStepper";
-import { DeleteCustomModal } from "@Workspace/common";
+import { DeleteCustomModal } from "@workspace/common";
 import { CandidateTableListConstant } from "../../constants/candidateConstant";
 import {
   deleteDraftCandidate,
