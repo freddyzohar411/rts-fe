@@ -11,11 +11,11 @@ const SelectAPIElement = ({
   value,
   placeholder,
   module,
+  editorRef,
   ...props
 }) => {
   const dispatch = useDispatch();
   const fieldsData = useSelector((state) => {
-    console.log("state", state)
     if (module.label === "Accounts") {
       return state.AccountReducer.accountsFields;
     }
@@ -27,14 +27,12 @@ const SelectAPIElement = ({
     }
   });
 
-  console.log("fieldsData", fieldsData);
 
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   useEffect(() => {
-    console.log("module", module)
     if (module.label === "Accounts") {
       dispatch(fetchAccountsFields());
     }
@@ -56,8 +54,6 @@ const SelectAPIElement = ({
     setSelectedOptions(selectedOptions);
     setSelectedOptionData(selectedOptions);
   };
-
-
 
   useEffect(() => {
     if (fieldsData) {
@@ -122,6 +118,8 @@ const SelectAPIElement = ({
         placeholder={placeholder}
         options={options}
         noOptionsMessage={noOptionsMessage}
+        onMenuOpen={() =>  editorRef?.current?.editor.editing.view.focus()}
+        onMenuClose={() =>  editorRef?.current?.editor.editing.view.focus()}
         // isDisabled={formState === "view" ? true : false}
       />
       {props?.error && (

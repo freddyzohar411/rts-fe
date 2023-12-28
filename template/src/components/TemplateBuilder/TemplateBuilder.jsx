@@ -17,25 +17,12 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
   const [typeData, setTypeData] = useState("");
   const [fieldName, setFieldName] = useState("");
   const [injectVariable, setInjectVariable] = useState("");
+  const [editorRef, setEditorRef] = useState(null);
+  console.log("editorRef", editorRef);
 
   const handleFormSubmit = async (values) => {
     console.log(values);
   };
-
-  const mappedVariableData = {
-    Jobs: {
-        "One": "Job 1",
-        "Two": "Job 2",
-    },
-    Candidates: {
-        "One": "Candidate 1",
-        "Two": "Candidate 2",
-    },
-    Accounts: {
-        "One": "Account 1",
-        "Two": "Account 2",
-    }
-  }
 
   /**
    * Initialize Formik (useFormik Hook)
@@ -143,6 +130,7 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
                 setSelectedOptionData={setTypeData}
                 placeholder="Select a type"
                 value={typeData}
+                editorRef={editorRef}
               />
             </Col>
             <Col>
@@ -153,7 +141,13 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
                 placeholder="Select a field"
                 value={fieldName}
               /> */}
-              <SelectAPIElement value={fieldName} placeholder="Select a field" setSelectedOptionData={setFieldName} module={typeData}/>
+              <SelectAPIElement
+                value={fieldName}
+                placeholder="Select a field"
+                setSelectedOptionData={setFieldName}
+                module={typeData}
+                editorRef={editorRef}
+              />
             </Col>
             <Col>
               <Button
@@ -192,13 +186,17 @@ const TemplateBuilder = forwardRef(({ ...props }, ref) => {
                 name="content"
                 formik={formik}
                 injectVariable={injectVariable}
+                setEditorRef={setEditorRef}
               />
             </Col>
           </Row>
           {/* // Just for checking */}
           <Row>
             <Col>
-              <TemplateDisplay content={formik?.values?.["content"]} mappedVariableData={mappedVariableData}/>
+              <TemplateDisplay
+                content={formik?.values?.["content"]}
+                mappedVariableData={null}
+              />
             </Col>
           </Row>
         </Col>

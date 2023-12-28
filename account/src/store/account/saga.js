@@ -8,6 +8,7 @@ import {
   DELETE_ACCOUNT,
   FETCH_ACCOUNTS,
   FETCH_ACCOUNTS_FIELDS,
+  FETCH_ACCOUNT_DATA,
 } from "./actionTypes";
 import {
   fetchAccountSuccess,
@@ -25,6 +26,8 @@ import {
   setTableSuccess,
   setTableFailure,
   setTableReset,
+  fetchAccountDataSuccess,
+  fetchAccountDataFailure,
 } from "./action";
 import {
   getAccounts,
@@ -33,6 +36,7 @@ import {
   deleteAccount,
   getAccountsFields,
   getAccountById,
+  getAccountDataById
 } from "../../helpers/backend_helper";
 import {
   setAccountId,
@@ -162,6 +166,17 @@ function* workFetchAccount(action) {
   }
 }
 
+// Fetch account data
+function* workFetchAccountData(action) {
+  try {
+    const response = yield call(getAccountDataById, action.payload);
+    yield put(fetchAccountDataSuccess(response.data));
+  } catch (error) {
+    toast.error("Error fetching account data");
+    yield put(fetchAccountDataFailure(error));
+  }
+}
+
 export default function* watchFetchAccountSaga() {
   yield takeEvery(POST_ACCOUNT, workPostAccount);
   yield takeEvery(PUT_ACCOUNT, workPutAccount);
@@ -169,4 +184,5 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(DELETE_ACCOUNT, workDeleteAccount);
   yield takeEvery(FETCH_ACCOUNTS_FIELDS, workFetchAccountsFields);
   yield takeEvery(FETCH_ACCOUNT, workFetchAccount);
+  yield takeEvery(FETCH_ACCOUNT_DATA, workFetchAccountData);
 }

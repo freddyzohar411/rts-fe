@@ -7,6 +7,7 @@ const SingleSelectElement = ({
   setSelectedOptionData,
   value,
   placeholder,
+  editorRef,
   ...props
 }) => {
   const [search, setSearch] = useState("");
@@ -66,6 +67,8 @@ const SingleSelectElement = ({
         placeholder={placeholder}
         options={options}
         noOptionsMessage={noOptionsMessage}
+        onMenuOpen={() =>  editorRef.current.editor.editing.view.focus()}
+        onMenuClose={() =>  editorRef.current.editor.editing.view.focus()}
         // isDisabled={formState === "view" ? true : false}
       />
       {props?.error && (

@@ -77,3 +77,7 @@ export const deleteDraftAccountById = (id) =>
 // Get account Commercial by id
 export const getAccountCommercialById = (id) =>
   api.get(`${ACCOUNT_URL}${BASE_COMMERCIAL}/${id}`);
+
+// Get account data by Id
+export const getAccountDataById = (id) =>
+  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/${id}/data`);

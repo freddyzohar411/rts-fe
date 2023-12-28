@@ -21,6 +21,9 @@ import {
   FETCH_ACCOUNTS_FIELDS_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_FAILURE,
   RESET_META_DATA,
+  FETCH_ACCOUNT_DATA,
+  FETCH_ACCOUNT_DATA_SUCCESS,
+  FETCH_ACCOUNT_DATA_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -136,3 +139,19 @@ export const fetchAccountsFieldsFailure = (error) => ({
 export const resetMetaData = () => ({
   type: RESET_META_DATA,
 });
+
+export const fetchAccountData = (accountId) => ({
+  type: FETCH_ACCOUNT_DATA,
+  payload: accountId,
+});
+
+export const fetchAccountDataSuccess = (accountData) => ({
+  type: FETCH_ACCOUNT_DATA_SUCCESS,
+  payload: accountData,
+});
+
+export const fetchAccountDataFailure = (error) => ({
+  type: FETCH_ACCOUNT_DATA_FAILURE,
+  payload: error,
+});
+

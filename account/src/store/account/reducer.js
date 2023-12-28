@@ -21,6 +21,9 @@ import {
   FETCH_ACCOUNTS_FIELDS_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_FAILURE,
   RESET_META_DATA,
+  FETCH_ACCOUNT_DATA,
+  FETCH_ACCOUNT_DATA_SUCCESS,
+  FETCH_ACCOUNT_DATA_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -32,6 +35,7 @@ import {
 
 const initialState = {
   account: {},
+  accountData:{},
   accounts: [],
   accountsFields: [],
   meta: {},
@@ -197,6 +201,25 @@ const AccountReducer = (state = initialState, action) => {
         createMeta: resetAllMetaData(),
         updateMeta: resetAllMetaData(),
         deleteMeta: resetAllMetaData(),
+      };
+    case FETCH_ACCOUNT_DATA:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_ACCOUNT_DATA_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accountData: action.payload,
+      };
+    case FETCH_ACCOUNT_DATA_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;

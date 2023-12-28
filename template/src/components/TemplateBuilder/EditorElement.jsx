@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
-const EditorElement = ({ name, formik, injectVariable }) => {
+const EditorElement = ({ name, formik, injectVariable, setEditorRef }) => {
   const editorRef = useRef();
   useEffect(() => {
     console.log("Inject Variable", injectVariable);
@@ -24,6 +24,12 @@ const EditorElement = ({ name, formik, injectVariable }) => {
     }
   }, [injectVariable]);
   //   const { formState } = formStateHook;
+
+  useEffect(() => {
+    // Pass the editorRef to the parent component
+    setEditorRef(editorRef);
+  }, [setEditorRef]);
+
   return (
     <CKEditor
       id="editor"
