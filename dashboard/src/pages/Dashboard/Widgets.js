@@ -54,7 +54,7 @@ const Widgets = () => {
                             prefix={item.prefix}
                             suffix={item.suffix}
                             separator={item.separator}
-                            end={jobCounts[item.key] ? jobCounts[item.key] : 0}
+                            end={jobCounts?.[item?.key] ?? 0}
                             decimals={item.decimals}
                             duration={4}
                           />
@@ -104,7 +104,7 @@ const Widgets = () => {
                             prefix={item.prefix}
                             suffix={item.suffix}
                             separator={item.separator}
-                            end={jobCounts[item.key] ? jobCounts[item.key] : 0}
+                            end={jobCounts?.[item?.key] ?? 0}
                             decimals={item.decimals}
                             duration={4}
                           />
