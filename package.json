@@ -15,6 +15,8 @@
   },
   "scripts": {
     "start": "lerna run --scope @workspace/main start",
+    "start:staging": "lerna run --scope @workspace/main start:staging",
+    "start:prod": "lerna run --scope @workspace/main start:prod",
     "yarn:start": "yarn workspace main start",
     "test": "yarn workspaces run test"
   },
