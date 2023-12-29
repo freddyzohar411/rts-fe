@@ -5,8 +5,8 @@ import { fetchAccountData } from "../../../../account/src/store/account/action";
 import { fetchJobListsFields } from "../../../../job/src/store/jobList/action";
 import { fetchCandidatesFields } from "../../../../candidate/src/store/candidate/action";
 
-const TemplateDisplay = ({ content, mappedVariableData }) => {
-  const [mappedVariableData2, setMappedVariableData2] = useState({});
+const TemplateDisplay = ({ content, allData }) => {
+  const [mappedVariableData, setMappedVariableData] = useState(allData || {});
   const [parsedContent, setParsedContent] = useState("");
   const dispatch = useDispatch();
   const accountData = useSelector((state) =>
@@ -14,38 +14,47 @@ const TemplateDisplay = ({ content, mappedVariableData }) => {
   );
 
   useEffect(() => {
-    if (accountData) {
-      const obj = JSON.parse(JSON.stringify(mappedVariableData2));
-      obj["Accounts"] = flattenObject(accountData);
-      setMappedVariableData2(obj);
+    if (allData) {
+      setMappedVariableData(allData);
     }
-  }, [accountData]);
+  }, [allData,content]);
 
-  console.log("mappedVariableData2", mappedVariableData2);
+  console.log("mappedVariableData FF", mappedVariableData);
+  console.log("Content FF", content);
 
-  function flattenObject(obj) {
-    let flattened = {};
+//   useEffect(() => {
+//     if (accountData) {
+//       const obj = JSON.parse(JSON.stringify(mappedVariableData2));
+//       obj["Accounts"] = flattenObject(accountData);
+//       setMappedVariableData2(obj);
+//     }
+//   }, [accountData]);
 
-    function recursiveFlatten(currentObj) {
-      for (const key in currentObj) {
-        if (currentObj.hasOwnProperty(key)) {
-          if (typeof currentObj[key] === "object" && currentObj[key] !== null) {
-            // Recursively flatten nested objects
-            recursiveFlatten(currentObj[key]);
-          } else {
-            flattened[key] = currentObj[key];
-          }
-        }
-      }
-    }
+//   console.log("mappedVariableData2", mappedVariableData2);
 
-    recursiveFlatten(obj);
-    return flattened;
-  }
+//   function flattenObject(obj) {
+//     let flattened = {};
 
-  useEffect(() => {
-    dispatch(fetchAccountData(1001));
-  }, []);
+//     function recursiveFlatten(currentObj) {
+//       for (const key in currentObj) {
+//         if (currentObj.hasOwnProperty(key)) {
+//           if (typeof currentObj[key] === "object" && currentObj[key] !== null) {
+//             // Recursively flatten nested objects
+//             recursiveFlatten(currentObj[key]);
+//           } else {
+//             flattened[key] = currentObj[key];
+//           }
+//         }
+//       }
+//     }
+
+//     recursiveFlatten(obj);
+//     return flattened;
+//   }
+
+//   useEffect(() => {
+//     dispatch(fetchAccountData(1001));
+//   }, []);
   // Function to replace variables with actual values
   function replaceVariables(html, variableData) {
     return html?.replace(/\${(.*?)}/g, (match, variableName) => {
@@ -58,10 +67,10 @@ const TemplateDisplay = ({ content, mappedVariableData }) => {
   }
 
   useEffect(() => {
-    if (mappedVariableData2) {
-      setParsedContent(replaceVariables(content, mappedVariableData2));
+    if (mappedVariableData) {
+      setParsedContent(replaceVariables(content, mappedVariableData));
     }
-  }, [mappedVariableData2, content]);
+  }, [mappedVariableData, content]);
 
   return <div>{ReactHtmlParser(parsedContent)}</div>;
 };

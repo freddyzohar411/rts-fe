@@ -32,7 +32,9 @@ function TemplateListingWrapper({
           <Row>
             <Col>
               <Breadcrumb>
-                <BreadcrumbItem><Link to="/settings">Settings</Link></BreadcrumbItem>
+                <BreadcrumbItem>
+                  <Link to="/settings">Settings</Link>
+                </BreadcrumbItem>
                 <BreadcrumbItem active>
                   Template Customisation Settings
                 </BreadcrumbItem>
@@ -59,15 +61,27 @@ function TemplateListingWrapper({
                           </form>
                           <i className="bx bx-search-alt search-icon"></i>
                         </div>
-                        <Link to="/settings/templates/create">
-                          <Button
-                            onClick={() => dispatch(TemplateActions.clearTemplate())}
-                            type="button"
-                            className="btn btn-custom-primary"
-                          >
-                            New Template
-                          </Button>
-                        </Link>
+                        <div className="d-flex gap-3">
+                          <Link to="/settings/templates/demo">
+                            <Button
+                              type="button"
+                              className="btn btn-custom-primary"
+                            >
+                              Template Demo
+                            </Button>
+                          </Link>
+                          <Link to="/settings/templates/create">
+                            <Button
+                              onClick={() =>
+                                dispatch(TemplateActions.clearTemplate())
+                              }
+                              type="button"
+                              className="btn btn-custom-primary"
+                            >
+                              New Template
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
                     </Col>
                   </Row>

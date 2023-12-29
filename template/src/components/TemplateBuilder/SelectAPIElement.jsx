@@ -16,13 +16,13 @@ const SelectAPIElement = ({
 }) => {
   const dispatch = useDispatch();
   const fieldsData = useSelector((state) => {
-    if (module.label === "Accounts") {
+    if (module?.label === "Accounts") {
       return state.AccountReducer.accountsFields;
     }
-    if (module.label === "Jobs") {
+    if (module?.label === "Jobs") {
       return state.JobListReducer.jobsFields;
     }
-    if (module.label === "Candidates") {
+    if (module?.label === "Candidates") {
       return state.CandidateReducer.candidatesFields;
     }
   });
@@ -33,13 +33,13 @@ const SelectAPIElement = ({
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   useEffect(() => {
-    if (module.label === "Accounts") {
+    if (module?.label === "Accounts") {
       dispatch(fetchAccountsFields());
     }
-    if (module.label === "Jobs") {
+    if (module?.label === "Jobs") {
       dispatch(fetchJobListsFields());
     }
-    if (module.label === "Candidates") {
+    if (module?.label === "Candidates") {
       dispatch(fetchCandidatesFields());
     }
     setSelectedOptions(null);
