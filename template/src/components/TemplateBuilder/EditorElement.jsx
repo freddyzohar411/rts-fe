@@ -2,7 +2,8 @@ import React, { useRef, useEffect } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
-const EditorElement = ({ name, formik, injectVariable, setEditorRef }) => {
+
+const EditorElement = ({ name, formik, injectVariable, setEditorRef, setEditorContent }) => {
   const editorRef = useRef();
   useEffect(() => {
     // Get the CKEditor instance from the editorRef
@@ -31,6 +32,27 @@ const EditorElement = ({ name, formik, injectVariable, setEditorRef }) => {
     <CKEditor
       id="editor"
       editor={ClassicEditor}
+      config={{
+        toolbar: [
+          "undo",
+          "redo",
+          "|",
+          "heading",
+          "|",
+          "bold",
+          "italic",
+          "link",
+          "|",
+          "bulletedList",
+          "numberedList",
+          "|",
+          "blockQuote",
+          "insertTable",
+          "|",
+          "indent",
+          "outdent",
+        ],
+      }}
       data={formik?.values?.[name] || ""}
       onReady={(editor) => {}}
       ref={editorRef}

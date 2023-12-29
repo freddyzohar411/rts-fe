@@ -1319,6 +1319,7 @@ const FormBuilder = ({
           centered
           scrollable
           size="xl"
+
         >
           <ModalHeader>
             <span className="modal-title">JSON Data</span>

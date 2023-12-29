@@ -33,6 +33,7 @@ const TemplateBuilderPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filterTemplates, setFilterTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [isView, setIsView] = useState(true);
   const templateData = useSelector((state) => state.TemplateReducer.template);
   const {
     allModuleData,
@@ -192,13 +193,37 @@ const TemplateBuilderPage = () => {
                             Set
                           </Button>
                         </Col>
+                        <Col>
+                          <Button
+                            type="button"
+                            className="self-end"
+                            onClick={() => {
+                              setIsView(!isView);
+                            }}
+                          >
+                            Toggle
+                          </Button>
+                        </Col>
                       </Row>
                     </Col>
                   </Row>
-                  <TemplateDisplay
-                    content={templateData?.content}
-                    allData={allModuleData}
-                  />
+                  <hr />
+                  <Row className="">
+                    <Container
+                      className="border pt-3"
+                      style={{
+                        width: "850px",
+                        height: "1000px",
+                        borderColor: "#000000",
+                      }}
+                    >
+                      <TemplateDisplay
+                        content={templateData?.content}
+                        allData={allModuleData}
+                        isView={isView}
+                      />
+                    </Container>
+                  </Row>
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex flex-row justify-content-between">
@@ -220,6 +245,7 @@ const TemplateBuilderPage = () => {
               </Card>
             </Col>
           </Row>
+
         </Container>
       </div>
     </React.Fragment>

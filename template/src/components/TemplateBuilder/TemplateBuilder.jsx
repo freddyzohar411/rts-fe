@@ -6,11 +6,7 @@ import React, {
 } from "react";
 import { FormikProvider, useFormik } from "formik";
 import { Col, Row, Label, Input, Button } from "reactstrap";
-import {
-  initialValues,
-  schema,
-  populateForm,
-} from "./formikConfig";
+import { initialValues, schema, populateForm } from "./formikConfig";
 import { moduleConstants, moduleFields } from "./constants";
 import SelectElement from "./SelectElement";
 import EditorElement from "./EditorElement";
@@ -207,14 +203,14 @@ const TemplateBuilder = forwardRef(
               </Col>
             </Row>
             {/* // Just for checking */}
-            <Row>
+            {/* <Row>
               <Col>
                 <TemplateDisplay
                   content={formik?.values?.["content"]}
                   mappedVariableData={null}
                 />
               </Col>
-            </Row>
+            </Row> */}
           </Col>
         </Row>
       </div>

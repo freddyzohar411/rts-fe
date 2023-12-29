@@ -12,6 +12,10 @@ import {
   Col,
   Container,
   Row,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import {
   createTemplate,
@@ -19,6 +23,7 @@ import {
   updateTemplate,
 } from "../../store/template/action";
 import { TemplateBuilder } from "../../components";
+import TemplateDisplay from "../../components/TemplateDisplay/TemplateDisplay";
 
 const TemplateBuilderPage = () => {
   const { templateId } = useParams();
@@ -26,6 +31,8 @@ const TemplateBuilderPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formikRef = useRef(null);
+  const [showModalSchema, setShowModalSchema] = useState(false);
+  const [editorContent, setEditorContent] = useState("");
 
   const templateEditData = useSelector(
     (state) => state.TemplateReducer.template
@@ -99,6 +106,7 @@ const TemplateBuilderPage = () => {
                     templateEditData={templateEditData}
                     ref={formikRef}
                     onSubmit={handleFormSubmit}
+                    setEditorContent={setEditorContent}
                   />
                 </CardBody>
                 <CardFooter>
@@ -109,6 +117,13 @@ const TemplateBuilderPage = () => {
                       </Button>
                     </Link>
                     <div className="d-flex flex-row gap-2">
+                      <Button
+                        type="button"
+                        className="btn btn-custom-primary"
+                        onClick={() => setShowModalSchema(true)}
+                      >
+                        Preview
+                      </Button>
                       <Button
                         type="button"
                         className="btn btn-custom-primary"
@@ -129,6 +144,35 @@ const TemplateBuilderPage = () => {
               </Card>
             </Col>
           </Row>
+
+          <Modal
+            isOpen={showModalSchema}
+            closeModal={() => {
+              setFormBuilderType(null);
+              setFormBuilderUpdateData(null);
+              setShowModalSchema(false);
+            }}
+            centered
+            scrollable
+            size="xl"
+          >
+            <ModalHeader
+              className="bg-primary pb-3"
+              toggle={() => setShowModalSchema(!showModalSchema)}
+            >
+              <div className="d-flex flex-column text-dark">
+                <span className="h5 fw-bold">Template Preview</span>
+              </div>
+            </ModalHeader>
+            <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
+              <div>
+                <TemplateDisplay
+                  content={formikRef?.current?.formik.values["content"]}
+                  isView={true}
+                />
+              </div>
+            </ModalBody>
+          </Modal>
         </Container>
       </div>
     </React.Fragment>
