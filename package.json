@@ -17,6 +17,9 @@
     "start": "lerna run --scope @workspace/main start",
     "start:staging": "lerna run --scope @workspace/main start:staging",
     "start:prod": "lerna run --scope @workspace/main start:prod",
+    "build": "lerna run --scope @workspace/main build",
+    "build:staging": "lerna run --scope @workspace/main build:staging",
+    "build:prod": "lerna run --scope @workspace/main build:prod",
     "yarn:start": "yarn workspace main start",
     "test": "yarn workspaces run test"
   },
