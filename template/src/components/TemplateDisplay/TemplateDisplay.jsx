@@ -78,7 +78,7 @@ const TemplateDisplay = ({ content, allData, isView }) => {
   return (
     <div>
       {isView ? (
-        <div style={{ margin: 0, padding: 0 }}>
+        <div>
           {ReactHtmlParser(parsedContent)}
         </div>
       ) : (

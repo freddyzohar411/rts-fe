@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+// import { Alignment } from '@ckeditor/ckeditor5-alignment';
 
 const EditorElement = ({ name, formik, injectVariable, setEditorRef, setEditorContent }) => {
   const editorRef = useRef();
@@ -51,8 +51,14 @@ const EditorElement = ({ name, formik, injectVariable, setEditorRef, setEditorCo
           "|",
           "indent",
           "outdent",
+          "|",
+          "alignment:left",
+          "alignment:right",
+          "alignment:center",
+          "alignment:justify",
         ],
       }}
+      // plugins={[Alignment]}
       data={formik?.values?.[name] || ""}
       onReady={(editor) => {}}
       ref={editorRef}

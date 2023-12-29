@@ -20,7 +20,6 @@ import {
   fetchTemplate,
   updateTemplate,
 } from "../../store/template/action";
-import { TemplateBuilder } from "../../components";
 import TemplateDisplay from "../../components/TemplateDisplay/TemplateDisplay";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
