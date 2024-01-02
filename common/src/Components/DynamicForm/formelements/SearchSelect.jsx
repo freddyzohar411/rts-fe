@@ -16,7 +16,7 @@ const SearchSelect = ({ formik, field, ...props }) => {
       // Convert to URI encoded string
       const encodedQuery = setLoading(true);
       axios
-        .get(`http://localhost:8100/accounts/search${dynamicQuery}`)
+        .get(`http://localhost:8100/api/accounts/search${dynamicQuery}`)
         .then((res) => {
           setLoading(false);
           setOptions(mapToOptionFormat(res.data));
