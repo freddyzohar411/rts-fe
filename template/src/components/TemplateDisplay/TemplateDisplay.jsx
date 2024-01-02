@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import juice from "juice";
 import { useDispatch, useSelector } from "react-redux";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -8,12 +9,51 @@ import { fetchJobListsFields } from "../../../../job/src/store/jobList/action";
 import { fetchCandidatesFields } from "../../../../candidate/src/store/candidate/action";
 import "./TemplateDisplay.scss";
 
+
 const TemplateDisplay = ({ content, allData, isView }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || {});
   const [parsedContent, setParsedContent] = useState("");
   //   const [isView, setIsView] = useState(true);
   const dispatch = useDispatch();
   const accountData = useSelector((state) => state.AccountReducer.accountData);
+
+  const [htmlWithInlineStyles, setHtmlWithInlineStyles] = useState("");
+
+  useEffect(() => {
+    const inlineStyles = async () => {
+      const cssStyles = `
+        p, span, h1, h2, h3, h4, h5, h6 {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+
+        th, td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+        }
+
+        th {
+          background-color: #f2f2f2;
+        }
+      `;
+      const inlinedHtml = await juice(parsedContent ?? "", {
+        extraCss: cssStyles,
+      });
+      setHtmlWithInlineStyles(inlinedHtml);
+    };
+    if (parsedContent) {
+      inlineStyles();
+    }
+  }, [parsedContent]);
+
+  console.log("htmlWithInlineStyles", htmlWithInlineStyles);
 
   useEffect(() => {
     if (allData) {
@@ -78,9 +118,7 @@ const TemplateDisplay = ({ content, allData, isView }) => {
   return (
     <div>
       {isView ? (
-        <div>
-          {ReactHtmlParser(parsedContent)}
-        </div>
+        <div>{ReactHtmlParser(parsedContent)}</div>
       ) : (
         <CKEditor
           id="editor"
