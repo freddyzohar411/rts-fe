@@ -1,5 +1,5 @@
 //Job
-export const GET_FORMS = "/forms";
+export const GET_FORMS = "/api/forms";
 
 // User
 export const GET_USER = "/api/user";

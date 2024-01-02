@@ -1,30 +1,30 @@
 // Candidate_basic_info
-export const BASE_CANDIDATES = "/candidates";
+export const BASE_CANDIDATES = "/api/candidates";
 
 // Candidate documents
-export const BASE_DOCUMENTS = "/documents";
+export const BASE_DOCUMENTS = "/api/documents";
 
 // Candidate work experience
-export const BASE_WORK_EXPERIENCE = "/work-experience";
+export const BASE_WORK_EXPERIENCE = "/api/work-experience";
 
 // Candidate education details
-export const BASE_EDUCATION_DETAILS = "/education-details";
+export const BASE_EDUCATION_DETAILS = "/api/education-details";
 
 // Candidate certificate
-export const BASE_CERTIFICATE = "/certifications";
+export const BASE_CERTIFICATE = "/api/certifications";
 
 // Candidate languages
-export const BASE_LANGUAGES = "/languages";
+export const BASE_LANGUAGES = "/api/languages";
 
 // Candidate employer details
-export const BASE_EMPLOYER_DETAILS = "/employer-details";
+export const BASE_EMPLOYER_DETAILS = "/api/employer-details";
 
 // Candidate forms
-export const BASE_FORMS = "/forms";
+export const BASE_FORMS = "/api/forms";
 
 // Candidate work experience
-export const BASE_CANDIDATE_WORK_EXPERIENCE = "/work-experience";
+export const BASE_CANDIDATE_WORK_EXPERIENCE = "/api/work-experience";
 
 // Candidate education details
-export const BASE_CANDIDATE_EDUCATION_DETAILS = "/education-details";
+export const BASE_CANDIDATE_EDUCATION_DETAILS = "/api/education-details";
 
