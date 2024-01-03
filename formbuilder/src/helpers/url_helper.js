@@ -1,4 +1,2 @@
 //Form
-export const    BASE_FORMS = "/forms";
-
-
+export const BASE_FORMS = "/api/forms";

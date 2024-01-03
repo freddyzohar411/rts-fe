@@ -4,9 +4,13 @@ import { Badge, Card, CardBody, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import { recruiterDashboard, salesDashboard } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
+import { useSelector } from "react-redux";
 
 const Widgets = () => {
   const { Permission, checkAllPermission } = useUserAuth();
+
+  const jobCounts = useSelector((state) => state.DashboardEcommerce.jobCounts);
+
   const renderStatusArray = (statusArray) => {
     if (!statusArray || !Array.isArray(statusArray)) {
       return null;
@@ -45,20 +49,18 @@ const Widgets = () => {
                     <div>
                       <h4 className="fs-22 fw-semibold ff-secondary mb-4">
                         <span className="counter-value" data-target="559.25">
-                          {item.counter > 0 && (
-                            <CountUp
-                              start={0}
-                              prefix={item.prefix}
-                              suffix={item.suffix}
-                              separator={item.separator}
-                              end={item.counter}
-                              decimals={item.decimals}
-                              duration={4}
-                            />
-                          )}
+                          <CountUp
+                            start={0}
+                            prefix={item.prefix}
+                            suffix={item.suffix}
+                            separator={item.separator}
+                            end={jobCounts?.[item?.key] ?? 0}
+                            decimals={item.decimals}
+                            duration={4}
+                          />
                           {item.statusArray &&
                             renderStatusArray(item.statusArray)}
-                          {item.data && (item.data)}
+                          {item.data && item.data}
                         </span>
                       </h4>
                     </div>
@@ -97,20 +99,18 @@ const Widgets = () => {
                     <div>
                       <h4 className="fs-22 fw-semibold ff-secondary mb-4">
                         <span className="counter-value" data-target="559.25">
-                          {item.counter > 0 && (
-                            <CountUp
-                              start={0}
-                              prefix={item.prefix}
-                              suffix={item.suffix}
-                              separator={item.separator}
-                              end={item.counter}
-                              decimals={item.decimals}
-                              duration={4}
-                            />
-                          )}
+                          <CountUp
+                            start={0}
+                            prefix={item.prefix}
+                            suffix={item.suffix}
+                            separator={item.separator}
+                            end={jobCounts?.[item?.key] ?? 0}
+                            decimals={item.decimals}
+                            duration={4}
+                          />
                           {item.statusArray &&
                             renderStatusArray(item.statusArray)}
-                          {item.data && (item.data)}
+                          {item.data && item.data}
                         </span>
                       </h4>
                     </div>

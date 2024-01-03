@@ -6,9 +6,6 @@ import { StringHelper } from "@workspace/common";
 
 import JobCreation from "../../components/JobCreation/JobCreation";
 import JobOverview from "../../components/JobOverview/JobOverview";
-// import CandidatePerformance from "../../components/CandidatePerformance/CandidatePerformance";
-// import CandidateEmail from "../../components/CandidateEmail/CandidateEmail";
-// import CandidateTask from "../../components/CandidateTask/CandidateTask";
 
 const JobManage = () => {
   const { jobId, slug } = useParams();
@@ -46,9 +43,6 @@ const JobManage = () => {
             </div>
           )}
           {slug == "overview" && <JobOverview />}
-          {/* {slug == "performance" && <CandidatePerformance />}
-          {slug == "email" && <CandidateEmail />}
-          {slug == "task" && <CandidateTask />} */}
         </CustomNav>
       </Container>
     </div>

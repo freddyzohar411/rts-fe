@@ -100,13 +100,11 @@ const authProtectedRoutes = [
   },
 
   // Job
-  // { path: "/jobs/job-creation", component: <JobCreation /> },
   {
     path: "/jobs/job-creation",
     component: <JobCreate />,
     requiredPermissions: [Permission.JOB_WRITE],
   },
-  // { path: "/jobs/:jobId/:type", component: <JobCreation /> },
   {
     path: "/jobs",
     component: <JobListing />,

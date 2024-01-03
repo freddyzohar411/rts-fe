@@ -7,7 +7,7 @@ import { createForm, updateForm, fetchForm } from "../../store/forms/action";
 import { JsonHelper } from "@workspace/common";
 
 const FormbuilderMain = () => {
-  document.title = "Form Builder | RTS"
+  document.title = "Form Builder | RTS";
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [unusedFields, setUnusedFields] = useState(null);
@@ -61,10 +61,6 @@ const FormbuilderMain = () => {
       formFieldsList: JsonHelper.stringifyArrayObjectValues(formFields),
       formSchemaList: formLayoutSchema,
     };
-    // console.log("Final Form State", formState)
-    // console.log("Final Form Data", JSONData)
-    // return
-
     if (formState === "create") {
       dispatch(
         createForm({

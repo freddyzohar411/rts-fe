@@ -1,8 +1,9 @@
-export const ACCOUNT = "accounts";
+export const ACCOUNT = "api/accounts";
 export const GEO = "geo";
-export const INDUSTRY = "industries";
-export const DEPARTMENT = "departments";
+export const INDUSTRY = "api/industries";
+export const DEPARTMENT = "api/departments";
 export const USERGROUP = "api/usergroup";
-export const DOCUMENTS = "documents";
-export const CONTACTS = "contacts";
-export const FORM = "forms";
+export const FORM = "api/forms";
+export const DOCUMENTS = "api/documents";
+export const CONTACTS = "api/contacts";
+

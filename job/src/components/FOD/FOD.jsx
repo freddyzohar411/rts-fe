@@ -296,9 +296,7 @@ function FOD() {
                         <div className="mb-2 d-flex justify-content-between align-items-center">
                           Select All
                           <Label check className="mb-0 ms-2">
-                            <Input
-                              type="checkbox"
-                            />
+                            <Input type="checkbox" />
                           </Label>
                         </div>
 
@@ -309,9 +307,7 @@ function FOD() {
                           >
                             {post}
                             <Label check className="mb-0 ms-2">
-                              <Input
-                                type="checkbox"
-                              />
+                              <Input type="checkbox" />
                             </Label>
                           </div>
                         ))}
@@ -352,8 +348,6 @@ function FOD() {
     }
   }, [jobsData]);
 
-  console.log(jobsData?.jobs ?? []);
-
   return (
     <div className="page-content">
       <Container fluid>
@@ -375,9 +369,7 @@ function FOD() {
                   <Col>
                     {/* Table */}
                     <FODTableWrapper
-                      config={generateJobListConfig(
-                        customConfig
-                      )}
+                      config={generateJobListConfig(customConfig)}
                       data={jobsData?.jobs ?? []}
                       pageRequestSet={pageRequestSet}
                       pageInfo={pageInfo}

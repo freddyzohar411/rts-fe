@@ -270,7 +270,7 @@ const EditCandidate = () => {
     formStateHook,
     rerenderTable
   ) => {
-    console.log("IN SUBMIT")
+    
     // Check if form is edited. If updated, update in db
     const isFormChanged = await isFormEdited(formSubmissionData, newValues);
 
@@ -435,7 +435,6 @@ const EditCandidate = () => {
 
     // Work Experience
     if (step === 2) {
-      console.log("I am in")
       // Add contact
       if (buttonName === "add") {
         setErrorMessage(null);
@@ -476,7 +475,6 @@ const EditCandidate = () => {
 
       // Cancel add contact and reset form
       if (buttonName === "cancel" && !editData) {
-        console.log("BOO")
         setButtonName("");
         resetForm([], "create");
         return;

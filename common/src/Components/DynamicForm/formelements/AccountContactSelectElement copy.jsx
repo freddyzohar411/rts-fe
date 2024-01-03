@@ -7,8 +7,7 @@ const AccountContactSelectElement = ({ formik, field, formStateHook }) => {
     (state) => state.AccountContactReducer.accountContacts
   );
   const [fetchData, setFetchData] = useState([]);
-  console.log("ACCOUNT CONTACT", data);
-
+ 
   useEffect(() => {
     if (data) {
       setFetchData(data);
