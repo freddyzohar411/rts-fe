@@ -4,22 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 // import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Ckeditor as ClassicEditor } from "@workspace/common";
+import { Editor } from "@tinymce/tinymce-react";
 
 import ReactHtmlParser from "react-html-parser";
 import { fetchAccountData } from "../../../../account/src/store/account/action";
 import { fetchJobListsFields } from "../../../../job/src/store/jobList/action";
 import { fetchCandidatesFields } from "../../../../candidate/src/store/candidate/action";
-import "./TemplateDisplay.scss";
+// import "./TemplateDisplay.scss";
 // import "./CkCss.scss";
-
+import "./TinyCME.scss";
+import EditorElement2 from "../TemplateBuilder/EditorElement2";
 
 const TemplateDisplay = ({ content, allData, isView }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || {});
   const [parsedContent, setParsedContent] = useState("");
-  //   const [isView, setIsView] = useState(true);
-  const dispatch = useDispatch();
-  const accountData = useSelector((state) => state.AccountReducer.accountData);
-
   const [htmlWithInlineStyles, setHtmlWithInlineStyles] = useState("");
 
   useEffect(() => {
@@ -56,16 +54,11 @@ const TemplateDisplay = ({ content, allData, isView }) => {
     }
   }, [parsedContent]);
 
-  console.log("htmlWithInlineStyles", htmlWithInlineStyles);
-
   useEffect(() => {
     if (allData) {
       setMappedVariableData(allData);
     }
   }, [allData, content]);
-
-  console.log("mappedVariableData FF", mappedVariableData);
-  console.log("Content FF", content);
 
   function replaceVariables(html, variableData) {
     return html?.replace(/\${(.*?)}/g, (match, variableName) => {
@@ -83,44 +76,87 @@ const TemplateDisplay = ({ content, allData, isView }) => {
     }
   }, [mappedVariableData, content]);
 
+  console.log("parsedContent", parsedContent);
+
   return (
     <div>
       {isView ? (
-        <div className="ck-content">{ReactHtmlParser(parsedContent)}</div>
+        <div className="tinyCME">{ReactHtmlParser(parsedContent)}</div>
       ) : (
-        <CKEditor
-          id="editor"
-          editor={ClassicEditor}
-          config={{
-            toolbar: [
-              "undo",
-              "redo",
-              "|",
-              "heading",
-              "|",
-              "bold",
-              "italic",
+        // <CKEditor
+        //   id="editor"
+        //   editor={ClassicEditor}
+        //   config={{
+        //     toolbar: [
+        //       "undo",
+        //       "redo",
+        //       "|",
+        //       "heading",
+        //       "|",
+        //       "bold",
+        //       "italic",
+        //       "link",
+        //       "|",
+        //       "bulletedList",
+        //       "numberedList",
+        //       "|",
+        //       "blockQuote",
+        //       "insertTable",
+        //       "|",
+        //       "indent",
+        //       "outdent",
+        //     ],
+        //   }}
+        //   data={parsedContent || ""}
+        //   onReady={(editor) => {}}
+        //   //   ref={editorRef}
+        //   onChange={(event, editor) => {
+        //     const data = editor?.getData();
+        //     setParsedContent(data);
+        //   }}
+        //   onError={(error) => console.error("CKEditor Error:", error)}
+        //   // disabled={formState === "view" ? true : false}
+        // />
+        <Editor
+          tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
+          // onInit={(evt, editor) => (editorRef.current = editor)}
+          value={parsedContent}
+          init={{
+            height: 500,
+            menubar: false,
+            plugins: [
+              "advlist",
+              "autolink",
+              "lists",
               "link",
-              "|",
-              "bulletedList",
-              "numberedList",
-              "|",
-              "blockQuote",
-              "insertTable",
-              "|",
-              "indent",
-              "outdent",
+              "image",
+              "charmap",
+              "anchor",
+              "searchreplace",
+              "visualblocks",
+              "code",
+              "fullscreen",
+              "insertdatetime",
+              "media",
+              "table",
+              "preview",
+              "help",
+              "wordcount",
+              "table",
+              "emoticons",
             ],
+            toolbar:
+              "undo redo | blocks | " +
+              "bold italic forecolor | alignleft aligncenter " +
+              "alignright alignjustify | bullist numlist outdent indent | " +
+              "removeformat | help |" +
+              "table | emoticons | code | fullscreen | preview",
+            content_style:
+              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
-          data={parsedContent || ""}
-          onReady={(editor) => {}}
-          //   ref={editorRef}
-          onChange={(event, editor) => {
-            const data = editor?.getData();
-            setParsedContent(data);
+          onEditorChange={(value) => {
+            setParsedContent(value);
           }}
-          onError={(error) => console.error("CKEditor Error:", error)}
-          // disabled={formState === "view" ? true : false}
         />
       )}
     </div>

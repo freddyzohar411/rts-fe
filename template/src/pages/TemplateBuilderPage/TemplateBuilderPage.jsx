@@ -79,7 +79,7 @@ const TemplateBuilderPage = () => {
                   <Link to="/settings/access">Settings</Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
-                  <Link to="/settings/access">Templates</Link>
+                  <Link to="/settings/templates">Templates</Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem active>
                   {type === "create" ? "Create" : "Edit"}

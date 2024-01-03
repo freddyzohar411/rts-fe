@@ -12,6 +12,7 @@ import SelectElement from "./SelectElement";
 import EditorElement from "./EditorElement";
 import TemplateDisplay from "../TemplateDisplay/TemplateDisplay";
 import SelectAPIElement from "./SelectAPIElement";
+import EditorElement2 from "./EditorElement2";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -187,11 +188,17 @@ const TemplateBuilder = forwardRef(
             </Row>
             <Row>
               <Col>
-                <EditorElement
+                {/* <EditorElement
                   name="content"
                   formik={formik}
                   injectVariable={injectVariable}
                   setEditorRef={setEditorRef}
+                /> */}
+                <EditorElement2
+                  name="content"
+                  formik={formik}
+                  injectVariable={injectVariable}
+                  // setEditorRef={setEditorRef}
                 />
                 <div style={{ minHeight: "25px" }}>
                   {formik.errors["content"] && formik.touched["content"] ? (
