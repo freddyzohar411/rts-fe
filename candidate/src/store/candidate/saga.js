@@ -9,6 +9,7 @@ import {
   FETCH_CANDIDATES,
   FETCH_CANDIDATES_FIELDS,
   PUT_CANDIDATE_DRAFT_STATUS,
+  FETCH_CANDIDATE_DATA,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -26,6 +27,8 @@ import {
   putCandidateDraftStatusSuccess,
   putCandidateDraftStatusFailure,
   putCandidateDraftStatus,
+  fetchCandidateDataSuccess,
+  fetchCandidateDataFailure,
 } from "./action";
 import {
   getCandidates,
@@ -34,7 +37,8 @@ import {
   deleteCandidate,
   getCandidatesFields,
   getCandidateById,
-  completeCandidateRegistration
+  completeCandidateRegistration,
+  getCandidateDataById
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -157,6 +161,17 @@ function* workPutCandidateDraftStatus(action) {
   }
 }
 
+// Fetch candidate data by id
+function* workFetchCandidateData(action) {
+  try {
+    const response = yield call(getCandidateDataById, action.payload);
+    yield put(fetchCandidateDataSuccess(response.data));
+  } catch (error) {
+    toast.error("Error fetching candidate data");
+    yield put(fetchCandidateDataFailure(error));
+  }
+}
+
 
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
@@ -166,4 +181,5 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATES_FIELDS, workFetchCandidatesFields);
   yield takeEvery(FETCH_CANDIDATE, workFetchCandidate);
   yield takeEvery(PUT_CANDIDATE_DRAFT_STATUS, workPutCandidateDraftStatus);
+  yield takeEvery(FETCH_CANDIDATE_DATA, workFetchCandidateData);
 }

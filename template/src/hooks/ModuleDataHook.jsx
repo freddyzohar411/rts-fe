@@ -1,10 +1,12 @@
 import react, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAccountData } from "../../../account/src/store/account/action";
+import { fetchCandidateData } from "../../../candidate/src/store/candidate/action";
 
 const useModuleData = (props) => {
   const dispatch = useDispatch();
   const accountData = useSelector((state) => state.AccountReducer.accountData);
+  const candidateData = useSelector((state) => state.CandidateReducer.candidateData);
   const [accountId, setAccountId] = useState(null);
   const [jobId, setJobId] = useState(null);
   const [candidateId, setCandidateId] = useState(null);
@@ -55,6 +57,14 @@ const useModuleData = (props) => {
     }
   }, [accountData]);
 
+  useEffect(() => {
+    if (candidateData) {
+      const obj = JSON.parse(JSON.stringify(allModuleData));
+      obj["Candidates"] = flattenObject(candidateData);
+      setAllModuleData(obj);
+    }
+  }, [candidateData]);
+
   // Dispatch accordingly of accountId, jobId, candidateId changes
   useEffect(() => {
     if (accountId) {
@@ -63,9 +73,9 @@ const useModuleData = (props) => {
     // if (jobId) {
     //   dispatch(fetchJobData(jobId));
     // }
-    // if (candidateId) {
-    //   dispatch(fetchCandidateData(candidateId));
-    // }
+    if (candidateId) {
+      dispatch(fetchCandidateData(candidateId));
+    }
   }, [allIds]);
 
   return {
