@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import juice from "juice";
 import { useDispatch, useSelector } from "react-redux";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Ckeditor as ClassicEditor } from "@workspace/common";
+
 import ReactHtmlParser from "react-html-parser";
 import { fetchAccountData } from "../../../../account/src/store/account/action";
 import { fetchJobListsFields } from "../../../../job/src/store/jobList/action";
 import { fetchCandidatesFields } from "../../../../candidate/src/store/candidate/action";
 import "./TemplateDisplay.scss";
+// import "./CkCss.scss";
 
 
 const TemplateDisplay = ({ content, allData, isView }) => {
@@ -64,41 +67,6 @@ const TemplateDisplay = ({ content, allData, isView }) => {
   console.log("mappedVariableData FF", mappedVariableData);
   console.log("Content FF", content);
 
-  //   useEffect(() => {
-  //     if (accountData) {
-  //       const obj = JSON.parse(JSON.stringify(mappedVariableData2));
-  //       obj["Accounts"] = flattenObject(accountData);
-  //       setMappedVariableData2(obj);
-  //     }
-  //   }, [accountData]);
-
-  //   console.log("mappedVariableData2", mappedVariableData2);
-
-  //   function flattenObject(obj) {
-  //     let flattened = {};
-
-  //     function recursiveFlatten(currentObj) {
-  //       for (const key in currentObj) {
-  //         if (currentObj.hasOwnProperty(key)) {
-  //           if (typeof currentObj[key] === "object" && currentObj[key] !== null) {
-  //             // Recursively flatten nested objects
-  //             recursiveFlatten(currentObj[key]);
-  //           } else {
-  //             flattened[key] = currentObj[key];
-  //           }
-  //         }
-  //       }
-  //     }
-
-  //     recursiveFlatten(obj);
-  //     return flattened;
-  //   }
-
-  //   useEffect(() => {
-  //     dispatch(fetchAccountData(1001));
-  //   }, []);
-  // Function to replace variables with actual values
-
   function replaceVariables(html, variableData) {
     return html?.replace(/\${(.*?)}/g, (match, variableName) => {
       const keys = variableName.split(".");
@@ -118,7 +86,7 @@ const TemplateDisplay = ({ content, allData, isView }) => {
   return (
     <div>
       {isView ? (
-        <div>{ReactHtmlParser(parsedContent)}</div>
+        <div className="ck-content">{ReactHtmlParser(parsedContent)}</div>
       ) : (
         <CKEditor
           id="editor"

@@ -77,6 +77,9 @@ import GeneralModal from "./GeneralModal/GeneralModal";
 // Import Custom Nav
 import CustomNav from "./CustomNav/CustomNav";
 
+// Import Ckeditor
+import Ckeditor from "./ckeditor/build/ckeditor";
+
 export {
   BreadCrumb,
   getChartColorsArray,
@@ -144,5 +147,8 @@ export {
   GeneralModal,
 
   // Export Custom Nav
-  CustomNav
+  CustomNav,
+
+  // Export Ckeditor (More Features)
+  Ckeditor
 };

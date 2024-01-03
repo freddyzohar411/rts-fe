@@ -1,9 +1,16 @@
 import React, { useRef, useEffect } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import { Alignment } from '@ckeditor/ckeditor5-alignment';
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Ckeditor as ClassicEditor } from "@workspace/common";
+import "./CkCss.scss";
 
-const EditorElement = ({ name, formik, injectVariable, setEditorRef, setEditorContent }) => {
+const EditorElement = ({
+  name,
+  formik,
+  injectVariable,
+  setEditorRef,
+  setEditorContent,
+}) => {
   const editorRef = useRef();
   useEffect(() => {
     // Get the CKEditor instance from the editorRef
@@ -29,53 +36,76 @@ const EditorElement = ({ name, formik, injectVariable, setEditorRef, setEditorCo
   }, [setEditorRef]);
 
   return (
-    <CKEditor
-      id="editor"
-      editor={ClassicEditor}
-      config={{
-        toolbar: [
-          "undo",
-          "redo",
-          "|",
-          "heading",
-          "|",
-          "bold",
-          "italic",
-          "link",
-          "|",
-          "bulletedList",
-          "numberedList",
-          "|",
-          "blockQuote",
-          "insertTable",
-          "|",
-          "indent",
-          "outdent",
-          "|",
-          "alignment:left",
-          "alignment:right",
-          "alignment:center",
-          "alignment:justify",
-        ],
-      }}
-      // plugins={[Alignment]}
-      data={formik?.values?.[name] || ""}
-      onReady={(editor) => {}}
-      ref={editorRef}
-      onChange={(event, editor) => {
-        const data = editor?.getData();
-        if (name != null) {
-          try {
-            formik?.setFieldValue(name, data);
-          } catch (error) {}
-        }
-      }}
-      onBlur={() => {
-        formik.handleBlur({ target: { name } });
-      }}
-      onError={(error) => console.error("CKEditor Error:", error)}
-      // disabled={formState === "view" ? true : false}
-    />
+    <div className="ck-content">
+      <CKEditor
+        id="editor"
+        editor={ClassicEditor}
+        config={{
+          toolbar: [
+            // 'ckbox',
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "|",
+            "outdent",
+            "indent",
+            "|",
+            // 'imageUpload',
+            "blockQuote",
+            "insertTable",
+            "mediaEmbed",
+            "undo",
+            "redo",
+            "codeBlock",
+            "code",
+            "findAndReplace",
+            "fontFamily",
+            "fontColor",
+            "fontBackgroundColor",
+            "horizontalLine",
+            "fontSize",
+            "highlight",
+            "htmlEmbed",
+            // 'imageInsert',
+            "pageBreak",
+            "removeFormat",
+            "selectAll",
+            "showBlocks",
+            "specialCharacters",
+            "strikethrough",
+            "style",
+            "subscript",
+            "superscript",
+            "textPartLanguage",
+            "todoList",
+            "underline",
+            "alignment",
+          ],
+          removePlugins: ["Title", "UploadImage"],
+        }}
+        // plugins={[Alignment]}
+        data={formik?.values?.[name] || ""}
+        onReady={(editor) => {}}
+        ref={editorRef}
+        onChange={(event, editor) => {
+          const data = editor?.getData();
+          if (name != null) {
+            try {
+              formik?.setFieldValue(name, data);
+            } catch (error) {}
+          }
+        }}
+        onBlur={() => {
+          formik.handleBlur({ target: { name } });
+        }}
+        onError={(error) => console.error("CKEditor Error:", error)}
+        // disabled={formState === "view" ? true : false}
+      />
+    </div>
   );
 };
 
