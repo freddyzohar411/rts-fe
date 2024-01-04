@@ -509,14 +509,21 @@ const EditAccount = () => {
   /**
    * Check if form edited
    */
+  // const isFormEdited = async (oldFormValues, newFormValues) => {
+  //   const oldFormValuesString = await CryptoHelper.computeHash(
+  //     JSON.stringify(oldFormValues)
+  //   );
+  //   const newFormValuesString = await CryptoHelper.computeHash(
+  //     JSON.stringify(newFormValues)
+  //   );
+  //   if (oldFormValuesString === newFormValuesString) {
+  //     return false;
+  //   }
+  //   return true;
+  // };
+
   const isFormEdited = async (oldFormValues, newFormValues) => {
-    const oldFormValuesString = await CryptoHelper.computeHash(
-      JSON.stringify(oldFormValues)
-    );
-    const newFormValuesString = await CryptoHelper.computeHash(
-      JSON.stringify(newFormValues)
-    );
-    if (oldFormValuesString === newFormValuesString) {
+    if (JSON.stringify(oldFormValues) === JSON.stringify(newFormValues)) {
       return false;
     }
     return true;
