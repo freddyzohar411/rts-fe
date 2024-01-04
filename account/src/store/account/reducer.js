@@ -35,7 +35,7 @@ import {
 
 const initialState = {
   account: {},
-  accountData:{},
+  accountData: null,
   accounts: [],
   accountsFields: [],
   meta: {},

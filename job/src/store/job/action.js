@@ -12,6 +12,9 @@ import {
   CREATE_JOB_DOCUMENTS,
   CREATE_JOB_DOCUMENTS_FAILURE,
   CREATE_JOB_DOCUMENTS_SUCCESS,
+  FETCH_JOB_DATA,
+  FETCH_JOB_DATA_FAILURE,
+  FETCH_JOB_DATA_SUCCESS,
 } from "./actionTypes";
 
 // Fetch Account
@@ -81,3 +84,20 @@ export const createJobDocumentsFailure = (error) => ({
   type: CREATE_JOB_DOCUMENTS_FAILURE,
   payload: error,
 });
+
+// Fetch Job Data
+export const fetchJobData = (params) => ({
+  type: FETCH_JOB_DATA,
+  payload: params,
+});
+
+export const fetchJobDataSuccess = (job) => ({
+  type: FETCH_JOB_DATA_SUCCESS,
+  payload: job,
+});
+
+export const fetchJobDataFailure = (error) => ({
+  type: FETCH_JOB_DATA_FAILURE,
+  payload: error,
+});
+

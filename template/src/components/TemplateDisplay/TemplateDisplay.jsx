@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import juice from "juice";
-import { useDispatch, useSelector } from "react-redux";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Ckeditor as ClassicEditor } from "@workspace/common";
 import { Editor } from "@tinymce/tinymce-react";
 
@@ -18,41 +15,6 @@ import EditorElement2 from "../TemplateBuilder/EditorElement2";
 const TemplateDisplay = ({ content, allData, isView }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || {});
   const [parsedContent, setParsedContent] = useState("");
-  const [htmlWithInlineStyles, setHtmlWithInlineStyles] = useState("");
-
-  useEffect(() => {
-    const inlineStyles = async () => {
-      const cssStyles = `
-        p, span, h1, h2, h3, h4, h5, h6 {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        th, td {
-          border: 1px solid #ddd;
-          padding: 8px;
-          text-align: left;
-        }
-
-        th {
-          background-color: #f2f2f2;
-        }
-      `;
-      const inlinedHtml = await juice(parsedContent ?? "", {
-        extraCss: cssStyles,
-      });
-      setHtmlWithInlineStyles(inlinedHtml);
-    };
-    if (parsedContent) {
-      inlineStyles();
-    }
-  }, [parsedContent]);
 
   useEffect(() => {
     if (allData) {

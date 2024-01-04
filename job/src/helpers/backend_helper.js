@@ -56,3 +56,8 @@ export const updateJobDocument = (id, data, config) =>
 
 export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
   `${DOCUMENT_BASE_URL}/entity/user/${entityType}/${entityId}`;
+
+  // Get job data by Id
+export const getJobDataById = (id) =>
+api.get(`${JOB_URL}${BASE_JOBS}/${id}/data`);
+

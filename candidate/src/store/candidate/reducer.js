@@ -39,7 +39,7 @@ import {
 const initialState = {
   candidate: {},
   candidates: [],
-  candidateData: {},
+  candidateData: null,
   candidatesFields: [],
   meta: {},
   createMeta: {},

@@ -2,11 +2,15 @@ import react, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAccountData } from "../../../account/src/store/account/action";
 import { fetchCandidateData } from "../../../candidate/src/store/candidate/action";
+import { fetchJobData } from "../../../job/src/store/job/action";
 
 const useModuleData = (props) => {
   const dispatch = useDispatch();
   const accountData = useSelector((state) => state.AccountReducer.accountData);
-  const candidateData = useSelector((state) => state.CandidateReducer.candidateData);
+  const candidateData = useSelector(
+    (state) => state.CandidateReducer.candidateData
+  );
+  const jobData = useSelector((state) => state.JobReducer.jobData);
   const [accountId, setAccountId] = useState(null);
   const [jobId, setJobId] = useState(null);
   const [candidateId, setCandidateId] = useState(null);
@@ -17,17 +21,13 @@ const useModuleData = (props) => {
   });
   const [allModuleData, setAllModuleData] = useState({});
 
-//   console.log("accountId", accountId);
-//   console.log("jobId", jobId);
-//   console.log("candidateId", candidateId);
-
   const setAllIdsHandler = () => {
     setAllIds({
-        accountId: accountId,
-        jobId: jobId,
-        candidateId: candidateId,
-    })
-};
+      accountId: accountId,
+      jobId: jobId,
+      candidateId: candidateId,
+    });
+  };
 
   function flattenObject(obj) {
     let flattened = {};
@@ -50,29 +50,34 @@ const useModuleData = (props) => {
   }
 
   useEffect(() => {
-    if (accountData) {
-      const obj = JSON.parse(JSON.stringify(allModuleData));
-      obj["Accounts"] = flattenObject(accountData);
-      setAllModuleData(obj);
-    }
-  }, [accountData]);
+    setAllModuleData((prevData) => {
+      const obj = { ...prevData };
 
-  useEffect(() => {
-    if (candidateData) {
-      const obj = JSON.parse(JSON.stringify(allModuleData));
-      obj["Candidates"] = flattenObject(candidateData);
-      setAllModuleData(obj);
-    }
-  }, [candidateData]);
+      if (accountData) {
+        obj["Accounts"] = flattenObject(accountData);
+      }
+
+      if (candidateData) {
+        obj["Candidates"] = flattenObject(candidateData);
+      }
+
+      if (jobData) {
+        obj["Jobs"] = flattenObject(jobData);
+      }
+
+      return obj;
+    });
+  }, [accountData, candidateData, jobData]);
 
   // Dispatch accordingly of accountId, jobId, candidateId changes
   useEffect(() => {
+    console.log("allIds", allIds);
     if (accountId) {
       dispatch(fetchAccountData(accountId));
     }
-    // if (jobId) {
-    //   dispatch(fetchJobData(jobId));
-    // }
+    if (jobId) {
+      dispatch(fetchJobData(jobId));
+    }
     if (candidateId) {
       dispatch(fetchCandidateData(candidateId));
     }
@@ -83,7 +88,7 @@ const useModuleData = (props) => {
     setAccountId,
     setJobId,
     setCandidateId,
-    setAllIdsHandler
+    setAllIdsHandler,
   };
 };
 

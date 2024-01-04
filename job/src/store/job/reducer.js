@@ -12,11 +12,15 @@ import {
   CREATE_JOB_DOCUMENTS,
   CREATE_JOB_DOCUMENTS_SUCCESS,
   CREATE_JOB_DOCUMENTS_FAILURE,
+  FETCH_JOB_DATA,
+  FETCH_JOB_DATA_SUCCESS,
+  FETCH_JOB_DATA_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
   job: {},
   jobDocuments: {},
+  jobData: null,
   jobs: [],
   errorMsg: "",
   loading: false,
@@ -108,6 +112,25 @@ const JobReducer = (state = initialState, action) => {
         jobDocuments: action.payload,
       };
     case CREATE_JOB_DOCUMENTS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case FETCH_JOB_DATA:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_JOB_DATA_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        jobData: action.payload,
+      };
+    case FETCH_JOB_DATA_FAILURE:
       return {
         ...state,
         loading: false,
