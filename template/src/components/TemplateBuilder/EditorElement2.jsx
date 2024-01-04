@@ -31,7 +31,6 @@ const EditorElement2 = ({
       <Editor
         tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
         onInit={(evt, editor) => (editorRef.current = editor)}
-        // initialValue={formik?.values?.[name] || ""}
         value={formik?.values?.[name]}
         init={{
           height: 500,
@@ -60,9 +59,9 @@ const EditorElement2 = ({
           toolbar:
             "undo redo | blocks | " +
             "bold italic forecolor | alignleft aligncenter " +
-            "alignright alignjustify | bullist numlist outdent indent | " +
-            "removeformat | help |" +
-            "table | emoticons | code | fullscreen | preview",
+            "alignright alignjustify | bullist numlist outdent indent | hr |" +
+            "removeformat | " +
+            "table | emoticons | code | charmap | fullscreen | preview | help",
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
         }}

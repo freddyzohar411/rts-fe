@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { Ckeditor as ClassicEditor } from "@workspace/common";
 import { Editor } from "@tinymce/tinymce-react";
 
 import ReactHtmlParser from "react-html-parser";
-import { fetchAccountData } from "../../../../account/src/store/account/action";
-import { fetchJobListsFields } from "../../../../job/src/store/jobList/action";
-import { fetchCandidatesFields } from "../../../../candidate/src/store/candidate/action";
 // import "./TemplateDisplay.scss";
 // import "./CkCss.scss";
 import "./TinyCME.scss";
