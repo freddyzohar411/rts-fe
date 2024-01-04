@@ -52,7 +52,7 @@ export const createUser = (data) =>
 export const updateUser = (data) => api.put(`${API_URL}${UPDATE_USER}/edit`, data);
 // Delete User
 export const deleteUser = (data) =>
-  api.delete(`${API_URL}${DELETE_USER}/${data}`);
+  api.delete(`${API_URL}${DELETE_USER}/${data}/delete`);
 // List Users
 export const listUsers = (data) => api.create(`${API_URL}${LIST_USERS}`, data);
 
@@ -96,7 +96,7 @@ export const updateGroup = (data) =>
   api.put(`${GROUP_URL}${GET_USER_GROUP}/edit`, data);
 // Delete Group
 export const deleteGroup = (id) =>
-  api.delete(`${GROUP_URL}${GET_USER_GROUP}/${id}`);
+  api.delete(`${GROUP_URL}${GET_USER_GROUP}/${id}/delete`);
   // List Groups
 export const listGroups = (data) =>
   api.create(`${GROUP_URL}${LIST_GROUPS}`, data);
