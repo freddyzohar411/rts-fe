@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import axios from "axios";
 // import "./EditorElement2.scss";
 
 const EditorElement2 = ({
@@ -8,6 +9,7 @@ const EditorElement2 = ({
   injectVariable,
   setEditorRef,
   setEditorContent,
+  setDeletedImagesURL
 }) => {
   const editorRef = useRef(null);
 
@@ -26,9 +28,96 @@ const EditorElement2 = ({
     }
   }, [injectVariable]);
 
-  const handleFileUpload = (file) => {
-    console.log("File", file);
+  // Clear all previous draft images on mount and unmount
+  useEffect(() => {
+    deleteDraftImages();
+    return () => {
+      // Remove all draft by this person
+      deleteDraftImages();
+    };
+  }, []);
+
+  // Delete all draft images
+  const deleteDraftImages = () => {
+    axios
+      .delete(`http://localhost:8181/images/delete/user-draft`)
+      .then((res) => {
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
+
+  // Upload image handler
+  const image_upload_handler = (blobInfo, progress) =>
+    new Promise((resolve, reject) => {
+      // console.log("blobInfo", blobInfo);
+      // console.log("progress", progress);
+      // console.log("blobInfo.blob", blobInfo.blob());
+
+      // Check if file exist
+      if (!blobInfo.blob()) {
+        reject("No file received");
+        return;
+      }
+      // Check if the file is an image.
+      if (blobInfo.blob().type.indexOf("image") === -1) {
+        reject("Unsupported file type");
+        return;
+      }
+
+      // Create a new FormData object.
+      const formData = new FormData();
+      formData.append("imageName", blobInfo.filename());
+      formData.append("imageFile", blobInfo.blob());
+
+      // Send the formData to your server. Axios call
+      axios
+        .post("http://localhost:8181/images/add", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          resolve(res.data.imageUrl);
+        })
+        .catch((err) => {
+          console.log("err", err);
+          reject("Upload failed");
+        });
+    });
+
+
+  //   // Get the selected node and the pressed key
+  //   const selectedNode = e.element;
+  //   const pressedKey = e;
+  //   // console.log("imageSrc", selectedNode.src);
+  //   // console.log("pressedKey",  e);
+  //   // Check if the selected node is an image and the pressed key is delete or backspace
+  //   console.log("e", e.lastRng)
+  //   if (e.lastRng){
+  //     console.log("e.lastRng", "IN");
+  //   }
+  //   if (
+  //     selectedNode &&
+  //     selectedNode.nodeName === "IMG" &&
+  //     (pressedKey === "Delete" || pressedKey === "Backspace")
+  //   ) {
+  //     // Get the image source
+  //     const imageSrc = selectedNode.src;
+
+  //     // // Use axios to send a DELETE request to your server or storage service
+  //     // axios.delete('deleteImage.php', {data: {src: imageSrc}})
+  //     //   .then(function (response) {
+  //     //     // Handle success
+  //     //     console.log('Image deleted:', response.data);
+  //     //   })
+  //     //   .catch(function (error) {
+  //     //     // Handle error
+  //     //     console.log('Image deletion failed:', error.message);
+  //     //   });
+  //   }
+  // };
 
   return (
     <>
@@ -37,6 +126,29 @@ const EditorElement2 = ({
         onInit={(evt, editor) => (editorRef.current = editor)}
         value={formik?.values?.[name]}
         init={{
+          setup: (editor) => {
+            editor.on("keydown", (e) => {
+              console.log("Key down event", e.keyCode);
+              let node = editor.selection.getNode();
+              console.log("Node", node);
+              console.log("Node Name", node.nodeName);
+              // Check if the selected node is an image
+              if (node.nodeName === "IMG") {
+                console.log("Selected node is an image");
+
+                // Handle Delete (Backspace or Delete key)
+                if (e.keyCode === 8 || e.keyCode === 46) {
+                  // Handle delete logic for the selected image
+                  setDeletedImagesURL(prev => [...prev, node.src]);
+                } else {
+                  // Prevent TinyMCE default behavior for non-delete keys when an image is selected
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }
+            });
+          },
           height: 500,
           menubar: false,
           plugins: [
@@ -99,12 +211,14 @@ const EditorElement2 = ({
 
           //   input.click();
           // },
-          // file_picker_types: "image",
+          images_upload_handler: image_upload_handler,
+          file_picker_types: "image",
         }}
         onEditorChange={(value) => {
           console.log("Value", value);
           formik.setFieldValue(name, value);
         }}
+        // onNodeChange={handleNodeChange} // This is for deleting image
         onBlur={(event, editor) => {
           formik.handleBlur({ target: { name } });
         }}

@@ -13,6 +13,7 @@ import EditorElement from "./EditorElement";
 import TemplateDisplay from "../TemplateDisplay/TemplateDisplay";
 import SelectAPIElement from "./SelectAPIElement";
 import EditorElement2 from "./EditorElement2";
+import axios from "axios";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -22,9 +23,10 @@ const TemplateBuilder = forwardRef(
     const [editorRef, setEditorRef] = useState(null);
     const [formInitialValues, setFormInitialValues] = useState(initialValues);
     const [formSchema, setFormSchema] = useState(schema);
+    const [deletedImagesURL, setDeletedImagesURL] = useState([]);
 
     const handleFormSubmit = async (values) => {
-      await onSubmit(values);
+      await onSubmit(values, deletedImagesURL );
     };
 
     /**
@@ -64,6 +66,15 @@ const TemplateBuilder = forwardRef(
       }),
       [formik]
     );
+
+    // Handle update images removal
+    const handleUpdateImagesRemoval = (imageURL) => {
+      axios
+        .delete(`http://localhost:8181/images/delete`, imagesURL)
+        .then((res) => {
+          console.log("res", res);
+        });
+    };
 
     return (
       <div className="d-flex flex-column gap-2">
@@ -198,6 +209,7 @@ const TemplateBuilder = forwardRef(
                   name="content"
                   formik={formik}
                   injectVariable={injectVariable}
+                  setDeletedImagesURL={setDeletedImagesURL}
                   // setEditorRef={setEditorRef}
                 />
                 <div style={{ minHeight: "25px" }}>

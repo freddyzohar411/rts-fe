@@ -24,6 +24,7 @@ import {
 } from "../../store/template/action";
 import { TemplateBuilder } from "../../components";
 import TemplateDisplay from "../../components/TemplateDisplay/TemplateDisplay";
+import axios from "axios";
 
 const TemplateBuilderPage = () => {
   const { templateId } = useParams();
@@ -38,7 +39,7 @@ const TemplateBuilderPage = () => {
     (state) => state.TemplateReducer.template
   );
   console.log("templateEditData", templateEditData);
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values, deletedImagesURL) => {
     console.log(values);
     if (type === "create") {
       dispatch(
@@ -59,6 +60,11 @@ const TemplateBuilderPage = () => {
           path: "/settings/templates",
         })
       );
+
+      console.log("deletedImagesURL", deletedImagesURL);
+      axios.delete(`http://localhost:8181/images/delete`, {
+        data: deletedImagesURL,
+      });
     }
   };
 
