@@ -9,7 +9,7 @@ const EditorElement2 = ({
   injectVariable,
   setEditorRef,
   setEditorContent,
-  setDeletedImagesURL
+  setDeletedImagesURL,
 }) => {
   const editorRef = useRef(null);
 
@@ -41,8 +41,7 @@ const EditorElement2 = ({
   const deleteDraftImages = () => {
     axios
       .delete(`http://localhost:8181/images/delete/user-draft`)
-      .then((res) => {
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log("err", err);
       });
@@ -87,6 +86,39 @@ const EditorElement2 = ({
         });
     });
 
+  const handleVideoUpload = (blobInfo) =>
+    new Promise((resolve, reject) => {
+      // Check if file exist
+      if (!blobInfo.blob()) {
+        reject("No file received");
+        return;
+      }
+      // Check if the file is an image.
+      if (blobInfo.blob().type.indexOf("video") === -1) {
+        reject("Unsupported file type");
+        return;
+      }
+
+      // Create a new FormData object.
+      const formData = new FormData();
+      formData.append("imageName", blobInfo.filename());
+      formData.append("imageFile", blobInfo.blob());
+
+      // Send the formData to your server. Axios call
+      axios
+        .post("http://localhost:8181/images/add", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          resolve(res.data.imageUrl);
+        })
+        .catch((err) => {
+          console.log("err", err);
+          reject("Upload failed");
+        });
+    });
 
   //   // Get the selected node and the pressed key
   //   const selectedNode = e.element;
@@ -133,18 +165,36 @@ const EditorElement2 = ({
               console.log("Node", node);
               console.log("Node Name", node.nodeName);
               // Check if the selected node is an image
-              if (node.nodeName === "IMG") {
-                console.log("Selected node is an image");
 
+              if (node.nodeName === "IMG") {
                 // Handle Delete (Backspace or Delete key)
                 if (e.keyCode === 8 || e.keyCode === 46) {
                   // Handle delete logic for the selected image
-                  setDeletedImagesURL(prev => [...prev, node.src]);
+                  setDeletedImagesURL((prev) => [...prev, node.src]);
                 } else {
                   // Prevent TinyMCE default behavior for non-delete keys when an image is selected
                   e.preventDefault();
                   e.stopPropagation();
                   return false;
+                }
+              }
+
+              if (node.nodeName === "SPAN") {
+                // Check if the span contains a video element
+                const videoElement = node.querySelector("video");
+                console.log("videoElement", videoElement);
+                if (videoElement) {
+                  if (e.keyCode === 8 || e.keyCode === 46) {
+                    // Handle delete logic for the selected image
+                    let sourceElement = videoElement.querySelector('source');
+                    console.log("sourceElement", sourceElement.src);
+                    setDeletedImagesURL((prev) => [...prev, sourceElement.src]);
+                  } else {
+                    // Prevent TinyMCE default behavior for non-delete keys when an image is selected
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
                 }
               }
             });
@@ -180,39 +230,41 @@ const EditorElement2 = ({
             "table | emoticons | code | charmap | image | media | fullscreen | preview | help",
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-          // file_picker_callback: (cb, value, meta) => {
-          //   const input = document.createElement("input");
-          //   input.setAttribute("type", "file");
-          //   input.setAttribute("accept", "image/*");
+          file_picker_callback: (cb, value, meta) => {
+            const input = document.createElement("input");
+            input.setAttribute("type", "file");
+            input.setAttribute("accept", "image/*");
 
-          //   input.addEventListener("change", (e) => {
-          //     const file = e.target.files[0];
-          //     console.log("File In Event", file)
+            input.addEventListener("change", (e) => {
+              const file = e.target.files[0];
+              console.log("File In Event", file);
 
-          //     const reader = new FileReader();
-          //     reader.addEventListener("load", () => {
-          //       /*
-          //           Note: Now we need to register the blob in TinyMCEs image blob
-          //           registry. In the next release this part hopefully won't be
-          //           necessary, as we are looking to handle it internally.
-          //         */
-          //       const id = "blobid" + new Date().getTime();
-          //       const blobCache = tinymce.activeEditor.editorUpload.blobCache;
-          //       const base64 = reader.result.split(",")[1];
-          //       const blobInfo = blobCache.create(id, file, base64);
-          //       blobCache.add(blobInfo);
+              const reader = new FileReader();
+              reader.addEventListener("load", () => {
+                /*
+                    Note: Now we need to register the blob in TinyMCEs image blob
+                    registry. In the next release this part hopefully won't be
+                    necessary, as we are looking to handle it internally.
+                  */
+                const id = "blobid" + new Date().getTime();
+                const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                const base64 = reader.result.split(",")[1];
+                const blobInfo = blobCache.create(id, file, base64);
+                blobCache.add(blobInfo);
 
-          //       /* call the callback and populate the Title field with the file name */
-          //       // cb(blobInfo.blobUri(), { title: file.name });
-          //       handleFileUpload(file);
-          //     });
-          //     reader.readAsDataURL(file);
-          //   });
+                console.log("Blob Info", blobInfo.blob().type);
+                // Handle Video Upload
+                handleVideoUpload(blobInfo).then((res) => {
+                  cb(res, { title: file.name });
+                });
+              });
+              reader.readAsDataURL(file);
+            });
 
-          //   input.click();
-          // },
+            input.click();
+          },
           images_upload_handler: image_upload_handler,
-          file_picker_types: "image",
+          file_picker_types: "media",
         }}
         onEditorChange={(value) => {
           console.log("Value", value);
