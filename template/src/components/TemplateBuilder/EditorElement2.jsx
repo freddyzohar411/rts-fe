@@ -9,7 +9,7 @@ const EditorElement2 = ({
   injectVariable,
   setEditorRef,
   setEditorContent,
-  setDeletedImagesURL,
+  setDeletedMediaURL,
 }) => {
   const editorRef = useRef(null);
 
@@ -30,17 +30,17 @@ const EditorElement2 = ({
 
   // Clear all previous draft images on mount and unmount
   useEffect(() => {
-    deleteDraftImages();
+    deleteDraftMedia();
     return () => {
       // Remove all draft by this person
-      deleteDraftImages();
+      deleteDraftMedia();
     };
   }, []);
 
-  // Delete all draft images
-  const deleteDraftImages = () => {
+  // Delete all draft media
+  const deleteDraftMedia = () => {
     axios
-      .delete(`http://localhost:8181/images/delete/user-draft`)
+      .delete(`http://localhost:8181/media/delete/user-draft`)
       .then((res) => {})
       .catch((err) => {
         console.log("err", err);
@@ -67,18 +67,18 @@ const EditorElement2 = ({
 
       // Create a new FormData object.
       const formData = new FormData();
-      formData.append("imageName", blobInfo.filename());
-      formData.append("imageFile", blobInfo.blob());
+      formData.append("mediaName", blobInfo.filename());
+      formData.append("mediaFile", blobInfo.blob());
 
       // Send the formData to your server. Axios call
       axios
-        .post("http://localhost:8181/images/add", formData, {
+        .post("http://localhost:8181/media/add", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
         .then((res) => {
-          resolve(res.data.imageUrl);
+          resolve(res.data.mediaUrl);
         })
         .catch((err) => {
           console.log("err", err);
@@ -101,26 +101,24 @@ const EditorElement2 = ({
 
       // Create a new FormData object.
       const formData = new FormData();
-      formData.append("imageName", blobInfo.filename());
-      formData.append("imageFile", blobInfo.blob());
+      formData.append("mediaName", blobInfo.filename());
+      formData.append("mediaFile", blobInfo.blob());
 
       // Send the formData to your server. Axios call
       axios
-        .post("http://localhost:8181/images/add", formData, {
+        .post("http://localhost:8181/media/add", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
         .then((res) => {
-          resolve(res.data.imageUrl);
+          resolve(res.data.mediaUrl);
         })
         .catch((err) => {
           console.log("err", err);
           reject("Upload failed");
         });
     });
-
-  //   // Get the selected node and the pressed key
   //   const selectedNode = e.element;
   //   const pressedKey = e;
   //   // console.log("imageSrc", selectedNode.src);
@@ -170,7 +168,7 @@ const EditorElement2 = ({
                 // Handle Delete (Backspace or Delete key)
                 if (e.keyCode === 8 || e.keyCode === 46) {
                   // Handle delete logic for the selected image
-                  setDeletedImagesURL((prev) => [...prev, node.src]);
+                  setDeletedMediaURL((prev) => [...prev, node.src]);
                 } else {
                   // Prevent TinyMCE default behavior for non-delete keys when an image is selected
                   e.preventDefault();
@@ -182,13 +180,11 @@ const EditorElement2 = ({
               if (node.nodeName === "SPAN") {
                 // Check if the span contains a video element
                 const videoElement = node.querySelector("video");
-                console.log("videoElement", videoElement);
                 if (videoElement) {
                   if (e.keyCode === 8 || e.keyCode === 46) {
                     // Handle delete logic for the selected image
                     let sourceElement = videoElement.querySelector('source');
-                    console.log("sourceElement", sourceElement.src);
-                    setDeletedImagesURL((prev) => [...prev, sourceElement.src]);
+                    setDeletedMediaURL((prev) => [...prev, sourceElement.src]);
                   } else {
                     // Prevent TinyMCE default behavior for non-delete keys when an image is selected
                     e.preventDefault();
@@ -267,7 +263,6 @@ const EditorElement2 = ({
           file_picker_types: "media",
         }}
         onEditorChange={(value) => {
-          console.log("Value", value);
           formik.setFieldValue(name, value);
         }}
         // onNodeChange={handleNodeChange} // This is for deleting image

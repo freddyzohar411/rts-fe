@@ -13,7 +13,6 @@ import EditorElement from "./EditorElement";
 import TemplateDisplay from "../TemplateDisplay/TemplateDisplay";
 import SelectAPIElement from "./SelectAPIElement";
 import EditorElement2 from "./EditorElement2";
-import axios from "axios";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -23,10 +22,10 @@ const TemplateBuilder = forwardRef(
     const [editorRef, setEditorRef] = useState(null);
     const [formInitialValues, setFormInitialValues] = useState(initialValues);
     const [formSchema, setFormSchema] = useState(schema);
-    const [deletedImagesURL, setDeletedImagesURL] = useState([]);
+    const [deletedMediaURL, setDeletedMediaURL] = useState([]);
 
     const handleFormSubmit = async (values) => {
-      await onSubmit(values, deletedImagesURL );
+      await onSubmit(values, deletedMediaURL);
     };
 
     /**
@@ -209,7 +208,7 @@ const TemplateBuilder = forwardRef(
                   name="content"
                   formik={formik}
                   injectVariable={injectVariable}
-                  setDeletedImagesURL={setDeletedImagesURL}
+                  setDeletedMediaURL={setDeletedMediaURL}
                   // setEditorRef={setEditorRef}
                 />
                 <div style={{ minHeight: "25px" }}>

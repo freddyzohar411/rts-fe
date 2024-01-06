@@ -39,7 +39,7 @@ const TemplateBuilderPage = () => {
     (state) => state.TemplateReducer.template
   );
   console.log("templateEditData", templateEditData);
-  const handleFormSubmit = async (values, deletedImagesURL) => {
+  const handleFormSubmit = async (values, deletedMediaURL) => {
     console.log(values);
     if (type === "create") {
       dispatch(
@@ -61,9 +61,9 @@ const TemplateBuilderPage = () => {
         })
       );
 
-      console.log("deletedImagesURL", deletedImagesURL);
-      axios.delete(`http://localhost:8181/images/delete`, {
-        data: deletedImagesURL,
+      console.log("deletedMediaURL", deletedMediaURL);
+      axios.delete(`http://localhost:8181/media/delete`, {
+        data: deletedMediaURL,
       });
     }
   };
