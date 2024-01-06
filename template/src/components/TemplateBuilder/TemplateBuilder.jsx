@@ -209,6 +209,11 @@ const TemplateBuilder = forwardRef(
                   formik={formik}
                   injectVariable={injectVariable}
                   setDeletedMediaURL={setDeletedMediaURL}
+                  API={{
+                    addMedia: "http://localhost:8181/media/add",
+                    deleteDraftMedia:
+                      "http://localhost:8181/media/delete/user-draft",
+                  }}
                   // setEditorRef={setEditorRef}
                 />
                 <div style={{ minHeight: "25px" }}>

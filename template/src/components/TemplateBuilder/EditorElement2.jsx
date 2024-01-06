@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
-// import "./EditorElement2.scss";
 
 const EditorElement2 = ({
   name,
   formik,
   injectVariable,
-  setEditorRef,
+  setEditorRef=null,
   setEditorContent,
   setDeletedMediaURL,
+  API = {
+    addMedia: null,
+    deleteDraftMedia: null,
+  },
 }) => {
   const editorRef = useRef(null);
 
@@ -40,7 +43,7 @@ const EditorElement2 = ({
   // Delete all draft media
   const deleteDraftMedia = () => {
     axios
-      .delete(`http://localhost:8181/media/delete/user-draft`)
+      .delete(API.deleteDraftMedia)
       .then((res) => {})
       .catch((err) => {
         console.log("err", err);
@@ -48,12 +51,8 @@ const EditorElement2 = ({
   };
 
   // Upload image handler
-  const image_upload_handler = (blobInfo, progress) =>
+  const imageUploadHandler = (blobInfo, progress) =>
     new Promise((resolve, reject) => {
-      // console.log("blobInfo", blobInfo);
-      // console.log("progress", progress);
-      // console.log("blobInfo.blob", blobInfo.blob());
-
       // Check if file exist
       if (!blobInfo.blob()) {
         reject("No file received");
@@ -72,7 +71,7 @@ const EditorElement2 = ({
 
       // Send the formData to your server. Axios call
       axios
-        .post("http://localhost:8181/media/add", formData, {
+        .post(API.addMedia, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -86,7 +85,7 @@ const EditorElement2 = ({
         });
     });
 
-  const handleVideoUpload = (blobInfo) =>
+  const videoUploadHandler = (blobInfo, file) =>
     new Promise((resolve, reject) => {
       // Check if file exist
       if (!blobInfo.blob()) {
@@ -101,7 +100,7 @@ const EditorElement2 = ({
 
       // Create a new FormData object.
       const formData = new FormData();
-      formData.append("mediaName", blobInfo.filename());
+      formData.append("mediaName", file.name);
       formData.append("mediaFile", blobInfo.blob());
 
       // Send the formData to your server. Axios call
@@ -119,35 +118,69 @@ const EditorElement2 = ({
           reject("Upload failed");
         });
     });
-  //   const selectedNode = e.element;
-  //   const pressedKey = e;
-  //   // console.log("imageSrc", selectedNode.src);
-  //   // console.log("pressedKey",  e);
-  //   // Check if the selected node is an image and the pressed key is delete or backspace
-  //   console.log("e", e.lastRng)
-  //   if (e.lastRng){
-  //     console.log("e.lastRng", "IN");
-  //   }
-  //   if (
-  //     selectedNode &&
-  //     selectedNode.nodeName === "IMG" &&
-  //     (pressedKey === "Delete" || pressedKey === "Backspace")
-  //   ) {
-  //     // Get the image source
-  //     const imageSrc = selectedNode.src;
 
-  //     // // Use axios to send a DELETE request to your server or storage service
-  //     // axios.delete('deleteImage.php', {data: {src: imageSrc}})
-  //     //   .then(function (response) {
-  //     //     // Handle success
-  //     //     console.log('Image deleted:', response.data);
-  //     //   })
-  //     //   .catch(function (error) {
-  //     //     // Handle error
-  //     //     console.log('Image deletion failed:', error.message);
-  //     //   });
-  //   }
-  // };
+  // Delete media handler
+  const handleDelete = (node, setDeletedMediaURL) => {
+    if (node.nodeName === "IMG") {
+      setDeletedMediaURL((prev) => [...prev, node.src]);
+    } else if (node.nodeName === "SPAN") {
+      const videoElement = node.querySelector("video");
+      if (videoElement) {
+        const sourceElement = videoElement.querySelector("source");
+        setDeletedMediaURL((prev) => [...prev, sourceElement.src]);
+      }
+    }
+  };
+
+  const handleNodeChange = (e, editor) => {
+    const node = editor.selection.getNode();
+    if (
+      node.nodeName === "IMG" ||
+      (node.nodeName === "SPAN" && node.querySelector("video"))
+    ) {
+      if (e.keyCode === 8 || e.keyCode === 46) {
+        handleDelete(node, setDeletedMediaURL);
+      } else {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    }
+  };
+
+  // Handle file Picker callback
+  const handleFilePickerCallback = (cb, value, meta) => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+
+    input.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          const id = "blobid" + new Date().getTime();
+          const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+          const base64 = reader.result.split(",")[1];
+          const blobInfo = blobCache.create(id, file, base64);
+          blobCache.add(blobInfo);
+
+          videoUploadHandler(blobInfo, file).then((res) => {
+            cb(res, { title: file.name });
+          });
+        });
+        reader.readAsDataURL(file);
+      }
+    });
+    input.click();
+  };
+
+  // Set editor ref
+  useEffect(() => {
+    if (!setEditorRef) return 
+    setEditorRef(editorRef);
+  }, [setEditorRef]);
 
   return (
     <>
@@ -157,43 +190,7 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
-            editor.on("keydown", (e) => {
-              console.log("Key down event", e.keyCode);
-              let node = editor.selection.getNode();
-              console.log("Node", node);
-              console.log("Node Name", node.nodeName);
-              // Check if the selected node is an image
-
-              if (node.nodeName === "IMG") {
-                // Handle Delete (Backspace or Delete key)
-                if (e.keyCode === 8 || e.keyCode === 46) {
-                  // Handle delete logic for the selected image
-                  setDeletedMediaURL((prev) => [...prev, node.src]);
-                } else {
-                  // Prevent TinyMCE default behavior for non-delete keys when an image is selected
-                  e.preventDefault();
-                  e.stopPropagation();
-                  return false;
-                }
-              }
-
-              if (node.nodeName === "SPAN") {
-                // Check if the span contains a video element
-                const videoElement = node.querySelector("video");
-                if (videoElement) {
-                  if (e.keyCode === 8 || e.keyCode === 46) {
-                    // Handle delete logic for the selected image
-                    let sourceElement = videoElement.querySelector('source');
-                    setDeletedMediaURL((prev) => [...prev, sourceElement.src]);
-                  } else {
-                    // Prevent TinyMCE default behavior for non-delete keys when an image is selected
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                  }
-                }
-              }
-            });
+            editor.on("keydown", (event) => handleNodeChange(event, editor));
           },
           height: 500,
           menubar: false,
@@ -226,46 +223,14 @@ const EditorElement2 = ({
             "table | emoticons | code | charmap | image | media | fullscreen | preview | help",
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-          file_picker_callback: (cb, value, meta) => {
-            const input = document.createElement("input");
-            input.setAttribute("type", "file");
-            input.setAttribute("accept", "image/*");
-
-            input.addEventListener("change", (e) => {
-              const file = e.target.files[0];
-              console.log("File In Event", file);
-
-              const reader = new FileReader();
-              reader.addEventListener("load", () => {
-                /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
-                    registry. In the next release this part hopefully won't be
-                    necessary, as we are looking to handle it internally.
-                  */
-                const id = "blobid" + new Date().getTime();
-                const blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                const base64 = reader.result.split(",")[1];
-                const blobInfo = blobCache.create(id, file, base64);
-                blobCache.add(blobInfo);
-
-                console.log("Blob Info", blobInfo.blob().type);
-                // Handle Video Upload
-                handleVideoUpload(blobInfo).then((res) => {
-                  cb(res, { title: file.name });
-                });
-              });
-              reader.readAsDataURL(file);
-            });
-
-            input.click();
-          },
-          images_upload_handler: image_upload_handler,
+          file_picker_callback: handleFilePickerCallback,
+          images_upload_handler: imageUploadHandler,
           file_picker_types: "media",
         }}
         onEditorChange={(value) => {
           formik.setFieldValue(name, value);
+          setEditorContent(value);
         }}
-        // onNodeChange={handleNodeChange} // This is for deleting image
         onBlur={(event, editor) => {
           formik.handleBlur({ target: { name } });
         }}
