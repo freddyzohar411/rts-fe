@@ -24,8 +24,12 @@ import TemplateDisplay from "../../components/TemplateDisplay/TemplateDisplay";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
 import useModuleData from "../../hooks/ModuleDataHook";
+import generatePDF, { Resolution, Margin, usePDF } from "react-to-pdf";
+import { generateOptions } from "../../components/TemplateDisplay/pdfOption";
+import HiddenPDFDownloadElement from "../../components/TemplateDisplay/HiddenPDFDownloadElement";
 
 const TemplateBuilderPage = () => {
+  console.log("UsePDF", usePDF);
   const dispatch = useDispatch();
   const { templates } = useSelector((state) => state.TemplateReducer);
   const [categories, setCategories] = useState([]);
@@ -33,6 +37,7 @@ const TemplateBuilderPage = () => {
   const [filterTemplates, setFilterTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [isView, setIsView] = useState(true);
+  const [newContent, setNewContent] = useState("");
   const templateData = useSelector((state) => state.TemplateReducer.template);
   const {
     allModuleData,
@@ -41,8 +46,6 @@ const TemplateBuilderPage = () => {
     setCandidateId,
     setAllIdsHandler,
   } = useModuleData();
-  console.log("template Data", templateData);
-  console.log("allModuleData", allModuleData);
 
   useEffect(() => {
     dispatch(
@@ -88,6 +91,13 @@ const TemplateBuilderPage = () => {
   const handleSetHandler = () => {
     dispatch(fetchTemplate(selectedTemplate?.value));
   };
+
+  const getNewContent = (content) => {
+    setNewContent(content);
+  };
+
+  // Set up generate PDF hook
+  const { toPDF, targetRef } = usePDF();
 
   return (
     <React.Fragment>
@@ -220,8 +230,25 @@ const TemplateBuilderPage = () => {
                         content={templateData?.content}
                         allData={allModuleData}
                         isView={isView}
+                        getNewContent={getNewContent}
                       />
                     </Container>
+                  </Row>
+                  <Row className="mb-3 mt-3 center d-flex justify-content-center">
+                    <Button
+                      className="w-25 mx-2"
+                      onClick={() =>
+                        generatePDF(
+                          targetRef,
+                          generateOptions({
+                            filename: "test.pdf",
+                          })
+                        )
+                      }
+                      disabled={!templateData?.content}
+                    >
+                      Download as PDF
+                    </Button>
                   </Row>
                 </CardBody>
                 <CardFooter>
@@ -244,8 +271,9 @@ const TemplateBuilderPage = () => {
               </Card>
             </Col>
           </Row>
-
         </Container>
+        {/* // Set up hidden PDF download element */}
+        <HiddenPDFDownloadElement content={newContent} targetRef={targetRef} />
       </div>
     </React.Fragment>
   );

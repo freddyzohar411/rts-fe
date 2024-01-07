@@ -6,8 +6,8 @@ const EditorElement2 = ({
   name,
   formik,
   injectVariable,
-  setEditorRef=null,
-  setEditorContent,
+  setEditorRef = null,
+  setEditorContent = null,
   setDeletedMediaURL,
   API = {
     addMedia: null,
@@ -178,7 +178,7 @@ const EditorElement2 = ({
 
   // Set editor ref
   useEffect(() => {
-    if (!setEditorRef) return 
+    if (!setEditorRef) return;
     setEditorRef(editorRef);
   }, [setEditorRef]);
 
@@ -229,7 +229,7 @@ const EditorElement2 = ({
         }}
         onEditorChange={(value) => {
           formik.setFieldValue(name, value);
-          setEditorContent(value);
+          if (setEditorContent) setEditorContent(value);
         }}
         onBlur={(event, editor) => {
           formik.handleBlur({ target: { name } });

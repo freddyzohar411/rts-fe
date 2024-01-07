@@ -8,7 +8,7 @@ import ReactHtmlParser from "react-html-parser";
 import "./TinyCME.scss";
 import EditorElement2 from "../TemplateBuilder/EditorElement2";
 
-const TemplateDisplay = ({ content, allData, isView }) => {
+const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || {});
   const [parsedContent, setParsedContent] = useState("");
 
@@ -31,6 +31,7 @@ const TemplateDisplay = ({ content, allData, isView }) => {
   useEffect(() => {
     if (mappedVariableData) {
       setParsedContent(replaceVariables(content, mappedVariableData));
+      getNewContent(replaceVariables(content, mappedVariableData));
     }
   }, [mappedVariableData, content]);
 
@@ -114,6 +115,7 @@ const TemplateDisplay = ({ content, allData, isView }) => {
           }}
           onEditorChange={(value) => {
             setParsedContent(value);
+            getNewContent(value);
           }}
         />
       )}
