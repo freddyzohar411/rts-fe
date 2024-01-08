@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Input } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 import Widget from "./Widgets";
 import { useUserAuth } from "@workspace/login";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchJobCounts } from "../../store/dashboardEcommerce/action";
+import {
+  fetchActiveJobsCount,
+  fetchAllJobsCount,
+  fetchAssignedJobsCount,
+  fetchClosedJobsCount,
+  fetchFODCount,
+  fetchInactiveJobsCount,
+  fetchNewJobsCount,
+  fetchTotalAssignedJobsCount,
+  fetchTotalFODCount,
+} from "../../store/jobsCount/action";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -13,7 +23,15 @@ const Dashboard = () => {
   const [rightColumn, setRightColumn] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchJobCounts());
+    dispatch(fetchNewJobsCount());
+    dispatch(fetchActiveJobsCount());
+    dispatch(fetchInactiveJobsCount());
+    dispatch(fetchClosedJobsCount());
+    dispatch(fetchAssignedJobsCount());
+    dispatch(fetchFODCount());
+    dispatch(fetchAllJobsCount());
+    dispatch(fetchTotalAssignedJobsCount());
+    dispatch(fetchTotalFODCount());
   }, []);
 
   const toggleRightColumn = () => {
