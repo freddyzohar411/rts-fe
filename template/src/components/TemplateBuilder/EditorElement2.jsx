@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const EditorElement2 = ({
   name,
@@ -53,6 +54,7 @@ const EditorElement2 = ({
   // Upload image handler
   const imageUploadHandler = (blobInfo, progress) =>
     new Promise((resolve, reject) => {
+      const cancelBtnEl = document.querySelector('[title="Cancel"]');
       // Check if file exist
       if (!blobInfo.blob()) {
         reject("No file received");
@@ -60,7 +62,8 @@ const EditorElement2 = ({
       }
       // Check if the file is an image.
       if (blobInfo.blob().type.indexOf("image") === -1) {
-        reject("Unsupported file type");
+        toast.error("Unsupported file type. Please upload an image file")
+        // reject("Unsupported file type");
         return;
       }
 
@@ -77,6 +80,7 @@ const EditorElement2 = ({
           },
         })
         .then((res) => {
+          cancelBtnEl.setAttribute("disabled", "disabled");
           resolve(res.data.mediaUrl);
         })
         .catch((err) => {
@@ -85,7 +89,14 @@ const EditorElement2 = ({
         });
     });
 
-  const videoUploadHandler = (blobInfo, file) =>
+  const videoUploadHandler = (
+    blobInfo,
+    file,
+    cancelBtnEl,
+    saveBtnEl,
+    dialogEl
+  ) =>
+    // Disable save button
     new Promise((resolve, reject) => {
       // Check if file exist
       if (!blobInfo.blob()) {
@@ -94,27 +105,41 @@ const EditorElement2 = ({
       }
       // Check if the file is an image.
       if (blobInfo.blob().type.indexOf("video") === -1) {
-        reject("Unsupported file type");
+        toast.error("Unsupported file type. Please upload a video file")
         return;
       }
+      // Set button text save to saving... and disabled
+      saveBtnEl.setAttribute("disabled", "disabled");
+      saveBtnEl.innerHTML = "Saving...";
+      // Disable cancel button
+      cancelBtnEl.setAttribute("disabled", "disabled");
+      // Set Div opacity to 0.5 and pointer-events to none
+      dialogEl.style.pointerEvents = "none";
 
       // Create a new FormData object.
       const formData = new FormData();
       formData.append("mediaName", file.name);
       formData.append("mediaFile", blobInfo.blob());
-
       // Send the formData to your server. Axios call
       axios
-        .post("http://localhost:8181/media/add", formData, {
+        .post(API.addMedia, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
         .then((res) => {
+          // Set Save button enabled and set text to save
+          saveBtnEl.removeAttribute("disabled");
+          saveBtnEl.innerHTML = "Save";
+          // Set dialog div opacity to 1 and pointer-events to auto
+          dialogEl.style.pointerEvents = "auto";
           resolve(res.data.mediaUrl);
         })
         .catch((err) => {
           console.log("err", err);
+          // Set dialog div opacity to 1 and pointer-events to auto
+          dialogEl.style.pointerEvents = "auto";
+          cancelBtnEl.removeAttribute("disabled");
           reject("Upload failed");
         });
     });
@@ -150,9 +175,15 @@ const EditorElement2 = ({
 
   // Handle file Picker callback
   const handleFilePickerCallback = (cb, value, meta) => {
+    const cancelBtnEl = document.querySelector('[title="Cancel"]');
+    const saveBtnEl = document.querySelector('[title="Save"]');
+    const dialogEl = document.querySelector('[role="dialog"]');
+    // console.log("dialogEl Div: ", dialogEl);
+    // return;
+
     const input = document.createElement("input");
     input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
+    input.setAttribute("accept", "video/*");
 
     input.addEventListener("change", (e) => {
       const file = e.target.files[0];
@@ -166,7 +197,13 @@ const EditorElement2 = ({
           const blobInfo = blobCache.create(id, file, base64);
           blobCache.add(blobInfo);
 
-          videoUploadHandler(blobInfo, file).then((res) => {
+          videoUploadHandler(
+            blobInfo,
+            file,
+            cancelBtnEl,
+            saveBtnEl,
+            dialogEl
+          ).then((res) => {
             cb(res, { title: file.name });
           });
         });
