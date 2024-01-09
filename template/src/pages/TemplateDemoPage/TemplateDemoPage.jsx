@@ -15,9 +15,7 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import {
-  fetchTemplate,
-} from "../../store/template/action";
+import { fetchTemplate } from "../../store/template/action";
 import { TemplateDisplay } from "@workspace/common";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
@@ -95,6 +93,27 @@ const TemplateBuilderPage = () => {
 
   // Set up generate PDF hook
   const { toPDF, targetRef } = usePDF();
+
+  // Set up export docx
+  const exportDocx = () => {
+    var header =
+      "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+      "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+      "xmlns='http://www.w3.org/TR/REC-html40'>" +
+      "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+    const footer = "</body></html>";
+    const sourceHTML = header + newContent + footer;
+
+    const source =
+      "data:application/vnd.ms-word;charset=utf-8," +
+      encodeURIComponent(sourceHTML);
+    var fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = source;
+    fileDownload.download = "document.doc";
+    fileDownload.click();
+    document.body.removeChild(fileDownload);
+  };
 
   return (
     <React.Fragment>
@@ -246,15 +265,13 @@ const TemplateBuilderPage = () => {
                     >
                       Download as PDF
                     </Button>
-                    {/* <Button
+                    <Button
                       className="w-25 mx-2"
-                      onClick={() =>
-                        exportDocx()
-                      }
+                      onClick={() => exportDocx()}
                       disabled={!templateData?.content}
                     >
-                      Download as PDF
-                    </Button> */}
+                      Download as Docx
+                    </Button>
                   </Row>
                 </CardBody>
                 <CardFooter>
