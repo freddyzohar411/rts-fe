@@ -5,7 +5,18 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { FormikProvider, useFormik } from "formik";
-import { Col, Row, Label, Input, Button } from "reactstrap";
+import {
+  Col,
+  Row,
+  Label,
+  Input,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Container,
+} from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { moduleConstants, moduleFields } from "./constants";
 import SelectElement from "./SelectElement";
@@ -29,6 +40,8 @@ const TemplateBuilder = forwardRef(
     const [categorySelected, setCategorySelected] = useState("");
     const [templateList, setTemplateList] = useState([]);
     const [templateSelected, setTemplateSelected] = useState("");
+    const [showInsertModal, setShowInsertModal] = useState(false);
+    const [templateContentPreview, setTemplateContentPreview] = useState("");
 
     const templateCategories = useSelector(
       (state) => state.TemplateReducer.templateCategories
@@ -37,7 +50,6 @@ const TemplateBuilder = forwardRef(
     const templatesByCategory = useSelector(
       (state) => state.TemplateReducer.templatesByCategory
     );
-
 
     // Get all categories
     useEffect(() => {
@@ -76,7 +88,6 @@ const TemplateBuilder = forwardRef(
      */
     const handleFormSubmit = async (values) => {
       console.log("values", values);
-      return
       await onSubmit(values, deletedMediaURL);
     };
 
@@ -117,6 +128,16 @@ const TemplateBuilder = forwardRef(
       }),
       [formik]
     );
+
+    console.log("templateContentPreview", templateContentPreview);
+
+    useEffect(() => {
+      if (!showInsertModal) {
+        setTemplateSelected("");
+        setCategorySelected("");
+        setTemplateContentPreview("");
+      }
+    }, [showInsertModal]);
 
     return (
       <div className="d-flex flex-column gap-2">
@@ -187,7 +208,7 @@ const TemplateBuilder = forwardRef(
                 </div>
               </Col>
             </Row>
-            <Row className="align-items-end mb-3">
+            {/* <Row className="align-items-end mb-3">
               <Col>
                 <Label>Category</Label>
                 <SelectElement
@@ -221,9 +242,7 @@ const TemplateBuilder = forwardRef(
                     const template = templatesByCategory.filter(
                       (template) => template.id === templateSelected.value
                     )[0];
-                    // formik.setFieldValue("content", template.content);
                     editorRef.current.setContent(template.content);
-                    // console.log("template To Inject", template);
                     setTemplateSelected("");
                     setCategorySelected("");
                   }}
@@ -231,7 +250,7 @@ const TemplateBuilder = forwardRef(
                   Insert Template
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
             <Row className="align-items-end">
               <Col>
                 <Label>Module Type</Label>
@@ -281,7 +300,16 @@ const TemplateBuilder = forwardRef(
           <Col>
             <Row className="mb-3">
               <Col>
-                <span className="h6 fw-bold">Template</span>
+                <div className="d-flex align-items-center justify-content-between">
+                  <span className="h6 fw-bold">Template</span>
+                  <Button
+                    className="btn-custom-primary"
+                    style={{ padding: "5px 10px 5px 10px" }}
+                    onClick={() => setShowInsertModal(true)}
+                  >
+                    + Insert Template
+                  </Button>
+                </div>
               </Col>
             </Row>
             <Row>
@@ -309,6 +337,102 @@ const TemplateBuilder = forwardRef(
             </Row>
           </Col>
         </Row>
+        <Modal
+          isOpen={showInsertModal}
+          closeModal={() => {
+            setShowInsertModal(false);
+          }}
+          centered
+          scrollable
+          size="xl"
+        >
+          <ModalHeader
+            className="bg-primary pb-3"
+            toggle={() => setShowInsertModal(!showInsertModal)}
+          >
+            <div className="d-flex flex-column text-dark">
+              <span className="h5 fw-bold">Template Preview</span>
+            </div>
+          </ModalHeader>
+          <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
+            <div>
+              <Row className="align-items-end mb-5">
+                <Col>
+                  <Label>Category</Label>
+                  <SelectElement
+                    optionsData={templateCategories.map((category) => ({
+                      label: category,
+                      value: category,
+                    }))}
+                    setSelectedOptionData={setCategorySelected}
+                    placeholder="Select a category"
+                    value={categorySelected}
+                    // editorRef={editorRef}
+                  />
+                </Col>
+                <Col>
+                  <Label>Template</Label>
+                  <SelectElement
+                    optionsData={templateList}
+                    value={templateSelected}
+                    placeholder="Select a field"
+                    setSelectedOptionData={setTemplateSelected}
+                    module={typeData}
+                    // editorRef={editorRef}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    type="button"
+                    className="self-end btn-custom-primary"
+                    disabled={!templateSelected || !categorySelected}
+                    onClick={() => {
+                      const template = templatesByCategory.filter(
+                        (template) => template.id === templateSelected.value
+                      )[0];
+                      setTemplateContentPreview(template.content);
+                      setTemplateSelected("");
+                      setCategorySelected("");
+                    }}
+                  >
+                    Preview
+                  </Button>
+                </Col>
+              </Row>
+              <Container
+                className="border pt-3 rounded"
+                style={{
+                  width: "850px",
+                  height: "800px",
+                  borderColor: "#8AAED6",
+                }}
+              >
+                <TemplateDisplay
+                  content={templateContentPreview}
+                  isView={true}
+                />
+              </Container>
+              <hr />
+              <div className="d-flex justify-content-end gap-3">
+                <Button
+                  className="btn-danger"
+                  onClick={() => setShowInsertModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="btn-custom-primary"
+                  onClick={() => {
+                    editorRef.current.setContent(templateContentPreview);
+                    setShowInsertModal(false);
+                  }}
+                >
+                  Insert
+                </Button>
+              </div>
+            </div>
+          </ModalBody>
+        </Modal>
       </div>
     );
   }

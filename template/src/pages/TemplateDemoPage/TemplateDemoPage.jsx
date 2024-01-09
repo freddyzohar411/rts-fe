@@ -267,10 +267,10 @@ const TemplateBuilderPage = () => {
                       </Button>
                     </Link>
                     <div className="d-flex flex-row gap-2">
-                      <Button type="button" className="btn btn-custom-primary">
+                      {/* <Button type="button" className="btn btn-custom-primary">
                         Reset
-                      </Button>
-                      <Button type="submit" className="btn btn-custom-primary">
+                      </Button> */}
+                      <Button type="button" className="btn btn-custom-primary">
                         Submit
                       </Button>
                     </div>

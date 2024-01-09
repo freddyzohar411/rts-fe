@@ -3,14 +3,18 @@ import { Ckeditor as ClassicEditor } from "@workspace/common";
 import { Editor } from "@tinymce/tinymce-react";
 
 import ReactHtmlParser from "react-html-parser";
-// import "./TemplateDisplay.scss";
-// import "./CkCss.scss";
 import "./TinyCME.scss";
-import EditorElement2 from "../TemplateBuilder/EditorElement2";
+
 
 const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
-  const [mappedVariableData, setMappedVariableData] = useState(allData || {});
-  const [parsedContent, setParsedContent] = useState("");
+  const [mappedVariableData, setMappedVariableData] = useState(allData || null);
+  const [parsedContent, setParsedContent] = useState(content|| "");
+
+  useEffect(() => {
+    if (content) {
+      setParsedContent(content);
+    }
+  },[content])
 
   useEffect(() => {
     if (allData) {
@@ -22,7 +26,6 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
     return html?.replace(/\${(.*?)}/g, (match, variableName) => {
       const keys = variableName.split(".");
       let value = variableData;
-      console.log("keys", keys);
       value = variableData?.[keys[0]]?.[keys[1]] || "-";
       return value;
     });
@@ -31,7 +34,8 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
   useEffect(() => {
     if (mappedVariableData) {
       setParsedContent(replaceVariables(content, mappedVariableData));
-      getNewContent(replaceVariables(content, mappedVariableData));
+      if (getNewContent)
+        getNewContent(replaceVariables(content, mappedVariableData));
     }
   }, [mappedVariableData, content]);
 
@@ -40,40 +44,6 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
       {isView ? (
         <div className="tinyCME">{ReactHtmlParser(parsedContent)}</div>
       ) : (
-        // <CKEditor
-        //   id="editor"
-        //   editor={ClassicEditor}
-        //   config={{
-        //     toolbar: [
-        //       "undo",
-        //       "redo",
-        //       "|",
-        //       "heading",
-        //       "|",
-        //       "bold",
-        //       "italic",
-        //       "link",
-        //       "|",
-        //       "bulletedList",
-        //       "numberedList",
-        //       "|",
-        //       "blockQuote",
-        //       "insertTable",
-        //       "|",
-        //       "indent",
-        //       "outdent",
-        //     ],
-        //   }}
-        //   data={parsedContent || ""}
-        //   onReady={(editor) => {}}
-        //   //   ref={editorRef}
-        //   onChange={(event, editor) => {
-        //     const data = editor?.getData();
-        //     setParsedContent(data);
-        //   }}
-        //   onError={(error) => console.error("CKEditor Error:", error)}
-        //   // disabled={formState === "view" ? true : false}
-        // />
         <Editor
           tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
           value={parsedContent}
@@ -112,7 +82,7 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
           }}
           onEditorChange={(value) => {
             setParsedContent(value);
-            getNewContent(value);
+            if (getNewContent) getNewContent(value);
           }}
         />
       )}
