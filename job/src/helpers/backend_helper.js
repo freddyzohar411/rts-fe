@@ -27,7 +27,7 @@ export const getJobById = (id) => api.get(`${JOB_URL}${BASE_JOBS}/${id}`);
 export const getJobs = (data) =>
   api.create(`${JOB_URL}${BASE_JOBS}/listing`, data);
 
-export const createJob = (data) => api.create(`${JOB_URL}${BASE_JOBS}`, data);
+export const createJob = (data) => api.create(`${JOB_URL}${BASE_JOBS}/add`, data);
 
 export const updateJob = (id, data) =>
   api.put(`${JOB_URL}${BASE_JOBS}/${id}`, data);
@@ -49,7 +49,7 @@ export const getUserGroupByName = (name) =>
 
 export const DOCUMENT_BASE_URL = `${DOCUMENT_URL}${BASE_DOCUMENTS}`;
 export const createJobDocument = (data, config) =>
-  api.create(`${DOCUMENT_BASE_URL}`, data, config);
+  api.create(`${DOCUMENT_BASE_URL}/add`, data, config);
 
 export const updateJobDocument = (id, data, config) =>
   api.put(`${DOCUMENT_BASE_URL}/${id}`, data, config);

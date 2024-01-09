@@ -46,7 +46,7 @@ export const getFormByFormName = (formName) =>
  */
 // Create a new account
 export const createAccount = (entity, id, data, config) =>
-  api.create(generateAccountModuleURL(entity, id), data, config);
+  api.create(`${generateAccountModuleURL(entity, id)}/add`, data, config);
 
 // Update an account
 export const updateAccount = (entity, id, data, config) =>

@@ -5,7 +5,7 @@ import DroppableList from "./DroppableList";
 import { useNavigate } from "react-router-dom";
 import "./FormBuilder.scss";
 import "@workspace/common/src/assets/scss/components/simplebar.min.css";
-// import Modal from "../modal/Modal";
+
 import {
   Button,
   Card,
@@ -35,14 +35,6 @@ import {
 } from "../../formelements/formElements_helper";
 import BaseFormSelectElement from "./BaseFormSelectElement";
 import SimpleBar from "simplebar-react";
-
-// Import JSON
-// import JSON1 from "../../formjson/Candidate_education_details.json"
-// import JSON1 from "../../formjson/job_form_base.json"
-// import JSON1 from "../../formjson/job_form.json"
-// import JSON1 from "../../formjson/job_document.json"
-// console.log("JSON1", JSON1)
-// JSON1 = null;
 
 const FormBuilder = ({
   onSubmit,
@@ -84,30 +76,9 @@ const FormBuilder = ({
   const [jsonData, setJsonData] = useState(null);
   const [showJsonModal, setShowJsonModal] = useState(false);
 
-  // =====================================================
-  // Populate form with json
-  // useEffect(() => {
-  //   if (JSON1) {
-  //     console.log("JSON1 IN", JSON1)
-  //     setFormFields(JSON1.formFieldsList);
-  //     setFormLayoutSchema(JSON1.formSchemaList);
-  //     setFormName(JSON1.formName);
-  //     setFormOptions({
-  //       formType: JSON1.formType,
-  //       entityType: JSON1.entityType,
-  //       baseFormId: JSON1.baseFormId,
-  //       stepperNumber: JSON1.stepperNumber,
-  //       formCategory: JSON1.formCategory,
-  //     });
-  //   }
-  // }, [JSON1]);
-
-  // console.log("formFields Check 1", formFields);
-
   /**
    * Set form state
    */
-
   useEffect(() => {
     if (template) {
       setFormState("update");
@@ -120,22 +91,6 @@ const FormBuilder = ({
    * Set template data
    */
   useEffect(() => {
-    //   // Load in JSON 1
-    //   if (JSON1) {
-    //     console.log("JSON1 IN", JSON1)
-    //     setFormFields(JSON1.formFieldsList);
-    //     setFormLayoutSchema(JSON1.formSchemaList);
-    //     setFormName(JSON1.formName);
-    //     setFormOptions({
-    //       formType: JSON1.formType,
-    //       entityType: JSON1.entityType,
-    //       baseFormId: JSON1.baseFormId,
-    //       stepperNumber: JSON1.stepperNumber,
-    //       formCategory: JSON1.formCategory,
-    //     });
-    //     return
-    //   }
-
     if (baseFormTemplate && formState === "create") {
       setFormFields(baseFormTemplate?.formSchema);
       setFormLayoutSchema(baseFormTemplate?.formLayoutSchema);
@@ -190,23 +145,6 @@ const FormBuilder = ({
   /**
    * Set unused fields
    */
-  // useEffect(() => {
-  //   if (fields && formFields) {
-  //     const newFields = [...fields];
-  //     // Let find from form fields and set isUsed to true
-  //     newFields.forEach((field) => {
-  //       const index = formFields.findIndex((formField) => {
-  //         return formField.fieldId === field.fieldId;
-  //       });
-  //       if (index !== -1 && formFields[index].isUsed) {
-  //         field.isUsed = true;
-  //       }
-  //     });
-  //     setUnusedFields(newFields);
-  //   } else {
-  //     setUnusedFields([]);
-  //   }
-  // }, [fields, formFields]);
   useEffect(() => {
     // Get all the prederfined field from form fields
     if (formFields) {
@@ -260,9 +198,6 @@ const FormBuilder = ({
    */
   const handleFormSubmit = async (values, event) => {
     const clickedButtonId = event?.nativeEvent?.submitter?.id;
-    if (clickedButtonId) {
-      console.log("Submit button clicked with id:", clickedButtonId);
-    }
     await onSubmit(values, formFields, formState);
 
     // Remove fields that are not visible or accessible
@@ -305,15 +240,12 @@ const FormBuilder = ({
       formData: newValues,
       formLayoutSchema,
     };
-
-    console.log("formData", formData);
   };
 
   /**
    * Check which field with tableData and  add it to the array
    */
   const setTableData = (formFields, values) => {
-    // const newFormFields = JSON.parse(JSON.stringify(formFields));
     formFields.forEach((field) => {
       if (field.type === "table") {
         if (!field.tableData) field.tableData = [];
@@ -567,16 +499,12 @@ const FormBuilder = ({
 
     const { source, destination, draggableId } = result;
     const { droppableId } = destination;
-    console.log("=========================");
-    console.log("Drag End", result);
-    console.log("=========================");
 
     // If drag into sidebar, return and do not allowed
     if (destination.droppableId.includes("sidebar")) return;
 
     // If drag from sidebar to the row droppable zone
     if (draggableId.includes("layout") && result.type === "row") {
-      console.log("Layout Drag and Drop");
       const layoutType = draggableId.split("-")[1];
       const destinationIndex = parseInt(destination.index);
       let row = null;
@@ -608,7 +536,6 @@ const FormBuilder = ({
 
     // If row are drag within the row droppable zone
     if (draggableId.includes("row") && result.type === "row") {
-      console.log("Row Drag and Drop");
       const sourceIndex = parseInt(source.index);
       const destinationIndex = parseInt(destination.index);
       const newFormLayoutSchema = [...formLayoutSchema];
@@ -620,7 +547,6 @@ const FormBuilder = ({
 
     // If zones are drag within zones
     if (draggableId.includes("col") && result.type.includes("col")) {
-      console.log("Column Drag and Drop");
       const sourceRowCol = source.droppableId.split("-")[1].split("_");
       const destinationRowCol = destination.droppableId
         .split("-")[1]
@@ -643,11 +569,6 @@ const FormBuilder = ({
           1
         )[0];
         // add to col from row index
-        console.log("removedCol", removedCol);
-        console.log("sourceRowCol", sourceRowCol);
-        console.log("destinationRowCol", destinationRowCol);
-        console.log("destinationRow", destinationRow);
-        console.log("destination.index", destination.index);
         newFormLayoutSchema[destinationRow].droppableZones.splice(
           destination.index,
           0,
@@ -660,8 +581,6 @@ const FormBuilder = ({
 
     // Drag element from side bar into field droppable zone
     if (draggableId.includes("element") && result.type === "field") {
-      console.log("Element Drag and Drop");
-      console.log("Droppable Id", droppableId);
       const fieldType = draggableId.split("-")[1];
       setFormLayoutId({
         zoneId: droppableId,
@@ -674,16 +593,13 @@ const FormBuilder = ({
 
     // Drag field to other field
     if (draggableId.includes("field") && result.type === "field") {
-      console.log("Field Drag and Drop");
       handleDragAndDrop(formLayoutSchema, source, destination);
       return;
     }
 
     // Drag unusedfields from sidebar to field droppable zone
     if (draggableId.includes("unused") && result.type === "field") {
-      console.log("Unused Field Drag and Drop");
       const fieldId = draggableId.split("-").slice(1).join("-");
-      console.log("fieldId", fieldId);
 
       // Go formfield array and find the field and set is in used to true
       const newFormFields = [...formFields];
@@ -831,7 +747,6 @@ const FormBuilder = ({
 
   // Save JSON file to API
   const handleSaveJsonAPI = async () => {
-    console.log("onSave", onSave);
     if (onSave) {
       await onSave(
         formName,
@@ -862,12 +777,8 @@ const FormBuilder = ({
         body: JSON.stringify(JSONData),
       })
         .then((res) => res.json())
-        .then((data) => {
-          console.log("Success:", data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+        .then((data) => {})
+        .catch((error) => {});
     }
   };
 
@@ -1197,7 +1108,6 @@ const FormBuilder = ({
                                 formLayoutSchema,
                               };
                               setJsonData(JSON.stringify(JSONData));
-                              console.log(JSON.stringify(JSONData));
                               setShowModal(true);
                             }}
                           >

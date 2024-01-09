@@ -9,7 +9,54 @@ import { useSelector } from "react-redux";
 const Widgets = () => {
   const { Permission, checkAllPermission } = useUserAuth();
 
-  const jobCounts = useSelector((state) => state.DashboardEcommerce.jobCounts);
+  const newJobs = useSelector((state) => state.JobsCount.newJobs);
+  const activeJobs = useSelector((state) => state.JobsCount.activeJobs);
+  const inactiveJobs = useSelector((state) => state.JobsCount.inactiveJobs);
+  const closedJobs = useSelector((state) => state.JobsCount.closedJobs);
+  const assignedJobs = useSelector((state) => state.JobsCount.assignedJobs);
+  const fodJobs = useSelector((state) => state.JobsCount.fodJobs);
+  const allJobs = useSelector((state) => state.JobsCount.allJobs);
+  const totalAssignedJobs = useSelector(
+    (state) => state.JobsCount.totalAssignedJobs
+  );
+  const totalFODJobs = useSelector((state) => state.JobsCount.totalFODJobs);
+
+  const getCount = (itemKey) => {
+    let jobCount = 0;
+    switch (itemKey) {
+      case "new_job":
+        jobCount = newJobs ?? 0;
+        break;
+      case "active_jobs":
+        jobCount = activeJobs ?? 0;
+        break;
+      case "inactive_jobs":
+        jobCount = inactiveJobs ?? 0;
+        break;
+      case "closed_jobs":
+        jobCount = closedJobs ?? 0;
+        break;
+      case "fod":
+        jobCount = fodJobs ?? 0;
+        break;
+      case "assigned_jobs":
+        jobCount = assignedJobs ?? 0;
+        break;
+      case "all_jobs":
+        jobCount = allJobs ?? 0;
+        break;
+      case "total_assigned_jobs":
+        jobCount = totalAssignedJobs ?? 0;
+        break;
+      case "total_fod":
+        jobCount = totalFODJobs ?? 0;
+        break;
+      default:
+        jobCount = 0;
+        break;
+    }
+    return jobCount;
+  };
 
   const renderStatusArray = (statusArray) => {
     if (!statusArray || !Array.isArray(statusArray)) {
@@ -30,12 +77,15 @@ const Widgets = () => {
       </div>
     );
   };
+
   return (
     <React.Fragment>
       {checkAllPermission([Permission.ACCOUNT_WRITE]) &&
         salesDashboard.map((item, key) => (
           <Col xl={3} md={6} key={key}>
-            <Link to={item.link}>
+            <Link
+              to={checkAllPermission([Permission.JOB_READ]) ? item.link : "#"}
+            >
               <Card className="card-animate">
                 <CardBody>
                   <div className="d-flex align-items-center">
@@ -54,7 +104,7 @@ const Widgets = () => {
                             prefix={item.prefix}
                             suffix={item.suffix}
                             separator={item.separator}
-                            end={jobCounts?.[item?.key] ?? 0}
+                            end={getCount(item?.key)}
                             decimals={item.decimals}
                             duration={4}
                           />
@@ -104,7 +154,7 @@ const Widgets = () => {
                             prefix={item.prefix}
                             suffix={item.suffix}
                             separator={item.separator}
-                            end={jobCounts?.[item?.key] ?? 0}
+                            end={getCount(item?.key)}
                             decimals={item.decimals}
                             duration={4}
                           />
