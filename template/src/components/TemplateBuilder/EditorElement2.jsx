@@ -249,13 +249,14 @@ const EditorElement2 = ({
             "wordcount",
             "table",
             "emoticons",
+            "codesample",
           ],
           toolbar:
             "undo redo | blocks fontfamily fontsizeinput | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr |" +
             "removeformat | searchreplace |" +
-            "table | code | emoticons charmap image media | fullscreen | preview | help",
+            "table | code codesample | emoticons charmap image media | fullscreen | preview | help",
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           file_picker_callback: handleFilePickerCallback,

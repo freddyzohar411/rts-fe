@@ -80,6 +80,9 @@ import CustomNav from "./CustomNav/CustomNav";
 // Import Ckeditor
 import Ckeditor from "./ckeditor/build/ckeditor";
 
+// Import Template Display
+import TemplateDisplay from "./TemplateDisplay/TemplateDisplay";
+
 export {
   BreadCrumb,
   getChartColorsArray,
@@ -150,5 +153,8 @@ export {
   CustomNav,
 
   // Export Ckeditor (More Features)
-  Ckeditor
+  Ckeditor,
+
+  // Export Template Display
+  TemplateDisplay
 };

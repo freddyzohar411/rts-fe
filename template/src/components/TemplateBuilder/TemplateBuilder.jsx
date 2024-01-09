@@ -19,7 +19,7 @@ import {
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { moduleConstants } from "./constants";
 import SelectElement from "./SelectElement";
-import TemplateDisplay from "../TemplateDisplay/TemplateDisplay";
+import { TemplateDisplay } from "@workspace/common"
 import SelectAPIElement from "./SelectAPIElement";
 import EditorElement2 from "./EditorElement2";
 import * as TemplateActions from "../../store/template/action";
@@ -308,11 +308,6 @@ const TemplateBuilder = forwardRef(
                   formik={formik}
                   injectVariable={injectVariable}
                   setDeletedMediaURL={setDeletedMediaURL}
-                  // API={{
-                  //   addMedia: "http://localhost:8181/media/add",
-                  //   deleteDraftMedia:
-                  //     "http://localhost:8181/media/delete/user-draft",
-                  // }}
                   API={{
                     addMedia: addMediaUrl,
                     deleteDraftMedia: deleteDraftMediaUrl,
@@ -344,7 +339,7 @@ const TemplateBuilder = forwardRef(
             toggle={() => setShowInsertModal(!showInsertModal)}
           >
             <div className="d-flex flex-column text-dark">
-              <span className="h5 fw-bold">Template Preview</span>
+              <span className="h5 fw-bold">Insert Template</span>
             </div>
           </ModalHeader>
           <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
@@ -360,7 +355,6 @@ const TemplateBuilder = forwardRef(
                     setSelectedOptionData={setCategorySelected}
                     placeholder="Select a category"
                     value={categorySelected}
-                    // editorRef={editorRef}
                   />
                 </Col>
                 <Col>
@@ -371,7 +365,6 @@ const TemplateBuilder = forwardRef(
                     placeholder="Select a field"
                     setSelectedOptionData={setTemplateSelected}
                     module={typeData}
-                    // editorRef={editorRef}
                   />
                 </Col>
                 <Col>

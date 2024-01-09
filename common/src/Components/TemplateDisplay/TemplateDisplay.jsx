@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Ckeditor as ClassicEditor } from "@workspace/common";
 import { Editor } from "@tinymce/tinymce-react";
 
 import ReactHtmlParser from "react-html-parser";
 import "./TinyCME.scss";
-
 
 const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
@@ -70,13 +68,14 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
               "wordcount",
               "table",
               "emoticons",
+              "codesample",
             ],
             toolbar:
               "undo redo | blocks fontfamily fontsizeinput | " +
               "bold italic underline forecolor backcolor | align lineheight |" +
               "bullist numlist outdent indent | hr |" +
               "removeformat | searchreplace |" +
-              "table | code | emoticons charmap | fullscreen | preview | help",
+              "table | code codesample | emoticons charmap | fullscreen | preview | help",
             content_style:
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}

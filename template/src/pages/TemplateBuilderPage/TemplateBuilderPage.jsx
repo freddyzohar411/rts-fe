@@ -22,7 +22,8 @@ import {
   updateTemplate,
 } from "../../store/template/action";
 import { TemplateBuilder } from "../../components";
-import TemplateDisplay from "../../components/TemplateDisplay/TemplateDisplay";
+// import TemplateDisplay from "../../components/TemplateDisplay/TemplateDisplay";
+import { TemplateDisplay } from "@workspace/common"
 import axios from "axios";
 import { deleteMediaUrls } from "../../helpers/backend_helper";
 

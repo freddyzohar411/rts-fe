@@ -16,17 +16,15 @@ import {
   Input,
 } from "reactstrap";
 import {
-  createTemplate,
   fetchTemplate,
-  updateTemplate,
 } from "../../store/template/action";
-import TemplateDisplay from "../../components/TemplateDisplay/TemplateDisplay";
+import { TemplateDisplay } from "@workspace/common";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
 import useModuleData from "../../hooks/ModuleDataHook";
 import generatePDF, { Resolution, Margin, usePDF } from "react-to-pdf";
-import { generateOptions } from "../../components/TemplateDisplay/pdfOption";
-import HiddenPDFDownloadElement from "../../components/TemplateDisplay/HiddenPDFDownloadElement";
+import { generateOptions } from "./pdfOption";
+import HiddenPDFDownloadElement from "../../components/Shared/HiddenPDFDownloadElement";
 
 const TemplateBuilderPage = () => {
   const dispatch = useDispatch();
