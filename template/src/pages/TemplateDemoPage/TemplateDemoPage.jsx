@@ -29,7 +29,6 @@ import { generateOptions } from "../../components/TemplateDisplay/pdfOption";
 import HiddenPDFDownloadElement from "../../components/TemplateDisplay/HiddenPDFDownloadElement";
 
 const TemplateBuilderPage = () => {
-  console.log("UsePDF", usePDF);
   const dispatch = useDispatch();
   const { templates } = useSelector((state) => state.TemplateReducer);
   const [categories, setCategories] = useState([]);

@@ -15,6 +15,12 @@ import {
   UPDATE_TEMPLATE_SUCCESS,
   UPDATE_TEMPLATE_FAILURE,
   CLEAR_TEMPLATE,
+  FETCH_TEMPLATE_CATEGORIES,
+  FETCH_TEMPLATE_CATEGORIES_SUCCESS,
+  FETCH_TEMPLATE_CATEGORIES_FAILURE,
+  FETCH_TEMPLATE_BY_CATEGORY,
+  FETCH_TEMPLATE_BY_CATEGORY_SUCCESS,
+  FETCH_TEMPLATE_BY_CATEGORY_FAILURE,
 } from "./actionTypes";
 
 // Fetch templates
@@ -101,3 +107,36 @@ export const updateTemplateFailure = (error) => ({
 export const clearTemplate = () => ({
   type: CLEAR_TEMPLATE,
 });
+
+// Fetch template categories
+export const fetchTemplateCategories = () => ({
+  type: FETCH_TEMPLATE_CATEGORIES,
+});
+
+export const fetchTemplateCategoriesSuccess = (templateCategories) => ({
+  type: FETCH_TEMPLATE_CATEGORIES_SUCCESS,
+  payload: templateCategories,
+});
+
+export const fetchTemplateCategoriesFailure = (error) => ({
+  type: FETCH_TEMPLATE_CATEGORIES_FAILURE,
+  payload: error,
+});
+
+// Fetch template by category
+export const fetchTemplateByCategory = (category) => ({
+  type: FETCH_TEMPLATE_BY_CATEGORY,
+  payload: category,
+});
+
+export const fetchTemplateByCategorySuccess = (templates) => ({
+  type: FETCH_TEMPLATE_BY_CATEGORY_SUCCESS,
+  payload: templates,
+});
+
+export const fetchTemplateByCategoryFailure = (error) => ({
+  type: FETCH_TEMPLATE_BY_CATEGORY_FAILURE,
+  payload: error,
+});
+
+

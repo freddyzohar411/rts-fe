@@ -180,7 +180,7 @@ const EditorElement2 = ({
   useEffect(() => {
     if (!setEditorRef) return;
     setEditorRef(editorRef);
-  }, [setEditorRef]);
+  }, [setEditorRef, editorRef]);
 
   return (
     <>

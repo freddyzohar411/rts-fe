@@ -15,10 +15,18 @@ import {
   UPDATE_TEMPLATE_SUCCESS,
   UPDATE_TEMPLATE_FAILURE,
   CLEAR_TEMPLATE,
+  FETCH_TEMPLATE_CATEGORIES,
+  FETCH_TEMPLATE_CATEGORIES_SUCCESS,
+  FETCH_TEMPLATE_CATEGORIES_FAILURE,
+  FETCH_TEMPLATE_BY_CATEGORY,
+  FETCH_TEMPLATE_BY_CATEGORY_SUCCESS,
+  FETCH_TEMPLATE_BY_CATEGORY_FAILURE,
 } from "./actionTypes";
 import { JsonHelper } from "@workspace/common";
 
 const initialState = {
+  templateCategories:[],
+  templatesByCategory: [],
   templates: [],
   template: null,
   errorMsg: "",
@@ -144,6 +152,44 @@ const TemplateReducer = (state = initialState, action) => {
       return {
         ...state,
         template: null,
+      };
+    case FETCH_TEMPLATE_CATEGORIES:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_TEMPLATE_CATEGORIES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        templateCategories: action.payload,
+      };
+    case FETCH_TEMPLATE_CATEGORIES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case FETCH_TEMPLATE_BY_CATEGORY:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_TEMPLATE_BY_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        templatesByCategory: action.payload,
+      };
+    case FETCH_TEMPLATE_BY_CATEGORY_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;

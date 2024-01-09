@@ -61,7 +61,6 @@ const TemplateBuilderPage = () => {
         })
       );
 
-      console.log("deletedMediaURL", deletedMediaURL);
       axios.delete(`http://localhost:8181/media/delete`, {
         data: deletedMediaURL,
       });

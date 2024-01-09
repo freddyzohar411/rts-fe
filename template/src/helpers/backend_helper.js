@@ -22,3 +22,11 @@ export const deleteTemplateById = (templateId) =>
 
 // Get Templates
 export const getTemplates = (data) => api.create(`${COMMON_URL}${BASE_TEMPLATE}/listing`, data);
+
+// Get Template Categories
+export const getTemplateCategories = () =>
+  api.get(`${COMMON_URL}${BASE_TEMPLATE}/categories`);
+
+// Get Templates by category
+export const getTemplatesByCategory = (category) =>
+  api.get(`${COMMON_URL}${BASE_TEMPLATE}/categories/${category}`);

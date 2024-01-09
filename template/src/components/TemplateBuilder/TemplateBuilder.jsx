@@ -13,9 +13,12 @@ import EditorElement from "./EditorElement";
 import TemplateDisplay from "../TemplateDisplay/TemplateDisplay";
 import SelectAPIElement from "./SelectAPIElement";
 import EditorElement2 from "./EditorElement2";
+import * as TemplateActions from "../../store/template/action";
+import { useDispatch, useSelector } from "react-redux";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
+    const dispatch = useDispatch();
     const [typeData, setTypeData] = useState("");
     const [fieldName, setFieldName] = useState("");
     const [injectVariable, setInjectVariable] = useState("");
@@ -23,8 +26,57 @@ const TemplateBuilder = forwardRef(
     const [formInitialValues, setFormInitialValues] = useState(initialValues);
     const [formSchema, setFormSchema] = useState(schema);
     const [deletedMediaURL, setDeletedMediaURL] = useState([]);
+    const [categorySelected, setCategorySelected] = useState("");
+    const [templateList, setTemplateList] = useState([]);
+    const [templateSelected, setTemplateSelected] = useState("");
 
+    const templateCategories = useSelector(
+      (state) => state.TemplateReducer.templateCategories
+    );
+
+    const templatesByCategory = useSelector(
+      (state) => state.TemplateReducer.templatesByCategory
+    );
+
+
+    // Get all categories
+    useEffect(() => {
+      dispatch(TemplateActions.fetchTemplateCategories());
+    }, []);
+
+    console.log("categorySelected", categorySelected);
+
+    useEffect(() => {
+      if (categorySelected == null) {
+        setTemplateList([]);
+        setTemplateSelected("");
+      }
+      if (categorySelected) {
+        setTemplateSelected("");
+        dispatch(
+          TemplateActions.fetchTemplateByCategory(categorySelected.value)
+        );
+      }
+    }, [categorySelected]);
+
+    useEffect(() => {
+      if (templatesByCategory) {
+        setTemplateList(
+          templatesByCategory.map((template) => ({
+            label: template.name,
+            value: template.id,
+          }))
+        );
+      }
+    }, [templatesByCategory]);
+
+    /**
+     * Handle form submit event (Formik)
+     * @param {*} values
+     */
     const handleFormSubmit = async (values) => {
+      console.log("values", values);
+      return
       await onSubmit(values, deletedMediaURL);
     };
 
@@ -65,15 +117,6 @@ const TemplateBuilder = forwardRef(
       }),
       [formik]
     );
-
-    // Handle update images removal
-    const handleUpdateImagesRemoval = (imageURL) => {
-      axios
-        .delete(`http://localhost:8181/images/delete`, imagesURL)
-        .then((res) => {
-          console.log("res", res);
-        });
-    };
 
     return (
       <div className="d-flex flex-column gap-2">
@@ -144,6 +187,51 @@ const TemplateBuilder = forwardRef(
                 </div>
               </Col>
             </Row>
+            <Row className="align-items-end mb-3">
+              <Col>
+                <Label>Category</Label>
+                <SelectElement
+                  optionsData={templateCategories.map((category) => ({
+                    label: category,
+                    value: category,
+                  }))}
+                  setSelectedOptionData={setCategorySelected}
+                  placeholder="Select a category"
+                  value={categorySelected}
+                  // editorRef={editorRef}
+                />
+              </Col>
+              <Col>
+                <Label>Template</Label>
+                <SelectElement
+                  optionsData={templateList}
+                  value={templateSelected}
+                  placeholder="Select a field"
+                  setSelectedOptionData={setTemplateSelected}
+                  module={typeData}
+                  // editorRef={editorRef}
+                />
+              </Col>
+              <Col>
+                <Button
+                  type="button"
+                  className="self-end"
+                  disabled={!templateSelected || !categorySelected}
+                  onClick={() => {
+                    const template = templatesByCategory.filter(
+                      (template) => template.id === templateSelected.value
+                    )[0];
+                    // formik.setFieldValue("content", template.content);
+                    editorRef.current.setContent(template.content);
+                    // console.log("template To Inject", template);
+                    setTemplateSelected("");
+                    setCategorySelected("");
+                  }}
+                >
+                  Insert Template
+                </Button>
+              </Col>
+            </Row>
             <Row className="align-items-end">
               <Col>
                 <Label>Module Type</Label>
@@ -198,12 +286,6 @@ const TemplateBuilder = forwardRef(
             </Row>
             <Row>
               <Col>
-                {/* <EditorElement
-                  name="content"
-                  formik={formik}
-                  injectVariable={injectVariable}
-                  setEditorRef={setEditorRef}
-                /> */}
                 <EditorElement2
                   name="content"
                   formik={formik}
@@ -214,7 +296,7 @@ const TemplateBuilder = forwardRef(
                     deleteDraftMedia:
                       "http://localhost:8181/media/delete/user-draft",
                   }}
-                  // setEditorRef={setEditorRef}
+                  setEditorRef={setEditorRef}
                 />
                 <div style={{ minHeight: "25px" }}>
                   {formik.errors["content"] && formik.touched["content"] ? (
@@ -225,15 +307,6 @@ const TemplateBuilder = forwardRef(
                 </div>
               </Col>
             </Row>
-            {/* // Just for checking */}
-            {/* <Row>
-              <Col>
-                <TemplateDisplay
-                  content={formik?.values?.["content"]}
-                  mappedVariableData={null}
-                />
-              </Col>
-            </Row> */}
           </Col>
         </Row>
       </div>
