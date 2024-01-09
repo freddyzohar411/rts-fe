@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { JsonHelper } from "@workspace/common";
 import axios from "axios";
+import { FORM_URL } from "../../../../config";
 
 const BaseFormSelectElement = ({
   setBaseFormTemplate,
@@ -18,7 +19,7 @@ const BaseFormSelectElement = ({
   }, [initialBaseFormId]);
 
   useEffect(() => {
-    axios(`http://localhost:9400/forms/base`)
+    axios(`${FORM_URL}/api/forms/base`)
       .then((data) => {
         setBaseFormList(data.data);
       })
@@ -27,7 +28,7 @@ const BaseFormSelectElement = ({
 
   useEffect(() => {
     if (baseFormId && baseFormId !== 0) {
-      axios(`http://localhost:9400/forms/${baseFormId}`).then((data) => {
+      axios(`${FORM_URL}/api/forms/${baseFormId}`).then((data) => {
         const newTemplate = {
           formName: data.data?.formName,
           formType: data.data?.formType,
