@@ -4,7 +4,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { FormikProvider, useFormik } from "formik";
+import { useFormik } from "formik";
 import {
   Col,
   Row,
@@ -14,18 +14,17 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Container,
 } from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
-import { moduleConstants, moduleFields } from "./constants";
+import { moduleConstants } from "./constants";
 import SelectElement from "./SelectElement";
-import EditorElement from "./EditorElement";
 import TemplateDisplay from "../TemplateDisplay/TemplateDisplay";
 import SelectAPIElement from "./SelectAPIElement";
 import EditorElement2 from "./EditorElement2";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
+import { addMediaUrl, deleteDraftMediaUrl } from "../../helpers/backend_helper";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -56,8 +55,6 @@ const TemplateBuilder = forwardRef(
       dispatch(TemplateActions.fetchTemplateCategories());
     }, []);
 
-    console.log("categorySelected", categorySelected);
-
     useEffect(() => {
       if (categorySelected == null) {
         setTemplateList([]);
@@ -87,7 +84,6 @@ const TemplateBuilder = forwardRef(
      * @param {*} values
      */
     const handleFormSubmit = async (values) => {
-      console.log("values", values);
       await onSubmit(values, deletedMediaURL);
     };
 
@@ -128,8 +124,6 @@ const TemplateBuilder = forwardRef(
       }),
       [formik]
     );
-
-    console.log("templateContentPreview", templateContentPreview);
 
     useEffect(() => {
       if (!showInsertModal) {
@@ -278,11 +272,6 @@ const TemplateBuilder = forwardRef(
                   className="self-end"
                   disabled={!typeData || !fieldName}
                   onClick={() => {
-                    console.log(
-                      "${",
-                      `${typeData.value}.${fieldName.value}`,
-                      "}"
-                    );
                     setInjectVariable(
                       "${" + `${typeData.value}.${fieldName.value}` + "}"
                     );
@@ -319,10 +308,14 @@ const TemplateBuilder = forwardRef(
                   formik={formik}
                   injectVariable={injectVariable}
                   setDeletedMediaURL={setDeletedMediaURL}
+                  // API={{
+                  //   addMedia: "http://localhost:8181/media/add",
+                  //   deleteDraftMedia:
+                  //     "http://localhost:8181/media/delete/user-draft",
+                  // }}
                   API={{
-                    addMedia: "http://localhost:8181/media/add",
-                    deleteDraftMedia:
-                      "http://localhost:8181/media/delete/user-draft",
+                    addMedia: addMediaUrl,
+                    deleteDraftMedia: deleteDraftMediaUrl,
                   }}
                   setEditorRef={setEditorRef}
                 />

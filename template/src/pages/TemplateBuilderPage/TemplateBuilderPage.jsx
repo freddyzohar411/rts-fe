@@ -15,7 +15,6 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
 } from "reactstrap";
 import {
   createTemplate,
@@ -25,6 +24,7 @@ import {
 import { TemplateBuilder } from "../../components";
 import TemplateDisplay from "../../components/TemplateDisplay/TemplateDisplay";
 import axios from "axios";
+import { deleteMediaUrls } from "../../helpers/backend_helper";
 
 const TemplateBuilderPage = () => {
   const { templateId } = useParams();
@@ -38,9 +38,8 @@ const TemplateBuilderPage = () => {
   const templateEditData = useSelector(
     (state) => state.TemplateReducer.template
   );
-  console.log("templateEditData", templateEditData);
+
   const handleFormSubmit = async (values, deletedMediaURL) => {
-    console.log(values);
     if (type === "create") {
       dispatch(
         createTemplate({
@@ -61,7 +60,7 @@ const TemplateBuilderPage = () => {
         })
       );
 
-      axios.delete(`http://localhost:8181/media/delete`, {
+      axios.delete(deleteMediaUrls(), {
         data: deletedMediaURL,
       });
     }

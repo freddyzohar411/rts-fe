@@ -1,4 +1,4 @@
-import { BASE_TEMPLATE } from "./url_helper";
+import { BASE_TEMPLATE, BASE_MEDIA } from "./url_helper";
 import { COMMON_URL } from "@workspace/common/src/config";
 import { Axios } from "@workspace/common";
 const { APIClient } = Axios;
@@ -30,3 +30,10 @@ export const getTemplateCategories = () =>
 // Get Templates by category
 export const getTemplatesByCategory = (category) =>
   api.get(`${COMMON_URL}${BASE_TEMPLATE}/categories/${category}`);
+
+// URL
+export const addMediaUrl = () => `${COMMON_URL}${BASE_MEDIA}/add`;
+
+export const deleteDraftMediaUrl = () => `${COMMON_URL}${BASE_MEDIA}/delete/user-draft`;
+
+export const deleteMediaUrls = () => `${COMMON_URL}${BASE_MEDIA}/delete`;

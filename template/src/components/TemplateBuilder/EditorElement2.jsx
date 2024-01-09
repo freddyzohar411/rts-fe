@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -44,7 +44,7 @@ const EditorElement2 = ({
   // Delete all draft media
   const deleteDraftMedia = () => {
     axios
-      .delete(API.deleteDraftMedia)
+      .delete(API.deleteDraftMedia())
       .then((res) => {})
       .catch((err) => {
         console.log("err", err);
@@ -62,7 +62,7 @@ const EditorElement2 = ({
       }
       // Check if the file is an image.
       if (blobInfo.blob().type.indexOf("image") === -1) {
-        toast.error("Unsupported file type. Please upload an image file")
+        toast.error("Unsupported file type. Please upload an image file");
         // reject("Unsupported file type");
         return;
       }
@@ -74,7 +74,7 @@ const EditorElement2 = ({
 
       // Send the formData to your server. Axios call
       axios
-        .post(API.addMedia, formData, {
+        .post(API.addMedia(), formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -105,7 +105,7 @@ const EditorElement2 = ({
       }
       // Check if the file is an image.
       if (blobInfo.blob().type.indexOf("video") === -1) {
-        toast.error("Unsupported file type. Please upload a video file")
+        toast.error("Unsupported file type. Please upload a video file");
         return;
       }
       // Set button text save to saving... and disabled
@@ -122,7 +122,7 @@ const EditorElement2 = ({
       formData.append("mediaFile", blobInfo.blob());
       // Send the formData to your server. Axios call
       axios
-        .post(API.addMedia, formData, {
+        .post(API.addMedia(), formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -178,8 +178,6 @@ const EditorElement2 = ({
     const cancelBtnEl = document.querySelector('[title="Cancel"]');
     const saveBtnEl = document.querySelector('[title="Save"]');
     const dialogEl = document.querySelector('[role="dialog"]');
-    // console.log("dialogEl Div: ", dialogEl);
-    // return;
 
     const input = document.createElement("input");
     input.setAttribute("type", "file");
