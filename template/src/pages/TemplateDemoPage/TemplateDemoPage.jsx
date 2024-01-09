@@ -249,6 +249,15 @@ const TemplateBuilderPage = () => {
                     >
                       Download as PDF
                     </Button>
+                    {/* <Button
+                      className="w-25 mx-2"
+                      onClick={() =>
+                        exportDocx()
+                      }
+                      disabled={!templateData?.content}
+                    >
+                      Download as PDF
+                    </Button> */}
                   </Row>
                 </CardBody>
                 <CardFooter>

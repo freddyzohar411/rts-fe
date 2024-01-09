@@ -216,11 +216,11 @@ const EditorElement2 = ({
             "emoticons",
           ],
           toolbar:
-            "undo redo | blocks | " +
-            "bold italic forecolor | alignleft aligncenter " +
-            "alignright alignjustify | bullist numlist outdent indent | hr |" +
-            "removeformat | " +
-            "table | emoticons | code | charmap | image | media | fullscreen | preview | help",
+            "undo redo | blocks fontfamily fontsizeinput | " +
+            "bold italic underline forecolor backcolor | align lineheight |" +
+            "bullist numlist outdent indent | hr |" +
+            "removeformat | searchreplace |" +
+            "table | code | emoticons charmap image media | fullscreen | preview | help",
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           file_picker_callback: handleFilePickerCallback,

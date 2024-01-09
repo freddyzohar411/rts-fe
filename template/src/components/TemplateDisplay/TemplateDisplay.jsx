@@ -35,8 +35,6 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
     }
   }, [mappedVariableData, content]);
 
-  console.log("parsedContent", parsedContent);
-
   return (
     <div>
       {isView ? (
@@ -78,7 +76,6 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
         // />
         <Editor
           tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
-          // onInit={(evt, editor) => (editorRef.current = editor)}
           value={parsedContent}
           init={{
             height: 500,
@@ -105,11 +102,11 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
               "emoticons",
             ],
             toolbar:
-              "undo redo | blocks | " +
-              "bold italic forecolor | alignleft aligncenter " +
-              "alignright alignjustify | bullist numlist outdent indent | " +
-              "removeformat | help |" +
-              "table | emoticons | code | fullscreen | preview",
+              "undo redo | blocks fontfamily fontsizeinput | " +
+              "bold italic underline forecolor backcolor | align lineheight |" +
+              "bullist numlist outdent indent | hr |" +
+              "removeformat | searchreplace |" +
+              "table | code | emoticons charmap | fullscreen | preview | help",
             content_style:
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
