@@ -83,7 +83,9 @@ const Widgets = () => {
       {checkAllPermission([Permission.ACCOUNT_WRITE]) &&
         salesDashboard.map((item, key) => (
           <Col xl={3} md={6} key={key}>
-            <Link to={item.link}>
+            <Link
+              to={checkAllPermission([Permission.JOB_READ]) ? item.link : "#"}
+            >
               <Card className="card-animate">
                 <CardBody>
                   <div className="d-flex align-items-center">

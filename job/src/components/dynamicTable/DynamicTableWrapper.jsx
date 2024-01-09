@@ -156,7 +156,7 @@ const DynamicTableWrapper = ({
                                 Closed Job Openings
                               </option>
                               <option value="Focus of the Day">
-                                <Link to="/jobs/fod">Focus of the Day</Link>
+                                Focus of the Day
                               </option>
                               <option value="Assigned Job Openings">
                                 Assigned Job Openings

@@ -36,23 +36,23 @@ import {
 } from "@workspace/common";
 
 const INIT_STATE = {
-  newJobs: 0,
+  newJobs: null,
   newJobsMeta: {},
-  activeJobs: 0,
+  activeJobs: null,
   activeJobsMeta: {},
-  inactiveJobs: 0,
+  inactiveJobs: null,
   inactiveJobsMeta: {},
-  closedJobs: 0,
+  closedJobs: null,
   closedJobsMeta: {},
-  assignedJobs: 0,
+  assignedJobs: null,
   assignedJobsMeta: {},
-  fodJobs: 0,
+  fodJobs: null,
   fodJobsMeta: {},
-  allJobs: 0,
+  allJobs: null,
   allJobsMeta: {},
-  totalAssignedJobs: 0,
+  totalAssignedJobs: null,
   totalAssignedJobsMeta: {},
-  totalFODJobs: 0,
+  totalFODJobs: null,
   totalFODJobsMeta: {},
 };
 

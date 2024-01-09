@@ -15,30 +15,28 @@ import {
   fetchTotalAssignedJobsCount,
   fetchTotalFODCount,
 } from "../../store/jobsCount/action";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const { Permission, checkAllPermission } = useUserAuth();
+  const newJobs = useSelector((state) => state.JobsCount.newJobs);
 
   document.title = "Dashboard | RTS";
-  const [rightColumn, setRightColumn] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchNewJobsCount());
-    dispatch(fetchActiveJobsCount());
-    dispatch(fetchInactiveJobsCount());
-    dispatch(fetchClosedJobsCount());
-    dispatch(fetchAssignedJobsCount());
-    dispatch(fetchFODCount());
-    dispatch(fetchAllJobsCount());
-    dispatch(fetchTotalAssignedJobsCount());
-    dispatch(fetchTotalFODCount());
-  }, []);
-
-  const toggleRightColumn = () => {
-    setRightColumn(!rightColumn);
-  };
-
-  const { Permission, checkAllPermission } = useUserAuth();
+    if (checkAllPermission([Permission.JOB_READ]) && !newJobs) {
+      dispatch(fetchNewJobsCount());
+      dispatch(fetchActiveJobsCount());
+      dispatch(fetchInactiveJobsCount());
+      dispatch(fetchClosedJobsCount());
+      dispatch(fetchAssignedJobsCount());
+      dispatch(fetchFODCount());
+      dispatch(fetchAllJobsCount());
+      dispatch(fetchTotalAssignedJobsCount());
+      dispatch(fetchTotalFODCount());
+    }
+  }, [checkAllPermission([Permission.JOB_READ])]);
 
   return (
     <React.Fragment>
