@@ -95,14 +95,14 @@ const TemplateBuilderPage = () => {
   const { toPDF, targetRef } = usePDF();
 
   // Set up export docx
-  const exportDocx = () => {
+  const exportDocx = (content) => {
     var header =
       "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
       "xmlns:w='urn:schemas-microsoft-com:office:word' " +
       "xmlns='http://www.w3.org/TR/REC-html40'>" +
       "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
     const footer = "</body></html>";
-    const sourceHTML = header + newContent + footer;
+    const sourceHTML = header + content + footer;
 
     const source =
       "data:application/vnd.ms-word;charset=utf-8," +
@@ -267,7 +267,7 @@ const TemplateBuilderPage = () => {
                     </Button>
                     <Button
                       className="w-25 mx-2"
-                      onClick={() => exportDocx()}
+                      onClick={() => exportDocx(newContent)}
                       disabled={!templateData?.content}
                     >
                       Download as Docx
@@ -282,9 +282,6 @@ const TemplateBuilderPage = () => {
                       </Button>
                     </Link>
                     <div className="d-flex flex-row gap-2">
-                      {/* <Button type="button" className="btn btn-custom-primary">
-                        Reset
-                      </Button> */}
                       <Button type="button" className="btn btn-custom-primary">
                         Submit
                       </Button>
