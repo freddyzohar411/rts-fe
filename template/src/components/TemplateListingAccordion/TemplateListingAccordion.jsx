@@ -14,7 +14,7 @@ const TemplateListingAccordion = ({ data, config, pageInfo, pageRequestSet }) =>
   const categories = [
     ...new Set(data?.map((item) => item.category || "No Category")),
   ];
-  console.log("Categories", categories);
+
   const [open, setOpen] = useState(false);
   const toggle = (module) => {
     setOpen(open === module ? null : module);

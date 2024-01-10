@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Breadcrumb,
@@ -22,6 +22,7 @@ import * as TemplateActions from "../../store/template/action";
 import useModuleData from "../../hooks/ModuleDataHook";
 import { generateOptions } from "./pdfOption";
 import { ExportHelper } from "@workspace/common";
+import { GeneralModal } from "@workspace/common";
 
 const TemplateBuilderPage = () => {
   const dispatch = useDispatch();
@@ -32,6 +33,10 @@ const TemplateBuilderPage = () => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [isView, setIsView] = useState(true);
   const [newContent, setNewContent] = useState("");
+  const [selectNameModalOpen, setSelectNameModalOpen] = useState(false);
+  const [templateName, setTemplateName] = useState("");
+  const [exportType, setExportType] = useState("pdf");
+
   const templateData = useSelector((state) => state.TemplateReducer.template);
   const {
     allModuleData,
@@ -228,26 +233,20 @@ const TemplateBuilderPage = () => {
                   <Row className="mb-3 mt-3 center d-flex justify-content-center">
                     <Button
                       className="w-25 mx-2 btn-custom-primary"
-                      onClick={() =>
-                        ExportHelper.generatePDFCustom(
-                          newContent,
-                          generateOptions({
-                            filename: "test",
-                          })
-                        )
-                      }
+                      onClick={() => {
+                        setExportType("pdf");
+                        setSelectNameModalOpen(true);
+                      }}
                       disabled={!templateData?.content}
                     >
                       Download as PDF
                     </Button>
                     <Button
                       className="w-25 mx-2 btn-custom-primary"
-                      onClick={() =>
-                        // exportDocx(newContent)
-                        ExportHelper.generateDocxCustom(newContent, {
-                          filename: "test",
-                        })
-                      }
+                      onClick={() => {
+                        setExportType("docx");
+                        setSelectNameModalOpen(true);
+                      }}
                       disabled={!templateData?.content}
                     >
                       Download as Docx
@@ -272,6 +271,47 @@ const TemplateBuilderPage = () => {
             </Col>
           </Row>
         </Container>
+        <GeneralModal
+          isOpen={selectNameModalOpen}
+          setIsOpen={setSelectNameModalOpen}
+          size="md"
+          height="100%"
+        >
+          <div className="d-flex flex-column">
+            <span className="fw-bold fs-5 text-dark">Template Name</span>
+            <span className="fw-medium fs-6 text-dark">
+              Please enter a template name
+            </span>
+            <Input
+              value={templateName}
+              type="text"
+              className="mb-3"
+              onChange={(e) => setTemplateName(e.target.value)}
+            />
+            <Button
+              className="form-control btn-custom-primary"
+              onClick={() => {
+                if (exportType === "pdf") {
+                  ExportHelper.generatePDFCustom(
+                    newContent,
+                    generateOptions({
+                      filename: templateName,
+                    })
+                  );
+                }
+                if (exportType === "docx") {
+                  ExportHelper.generateDocxCustom(newContent, {
+                    filename: templateName,
+                  });
+                }
+                setTemplateName("");
+                setSelectNameModalOpen(false);
+              }}
+            >
+              Export
+            </Button>
+          </div>
+        </GeneralModal>
       </div>
     </React.Fragment>
   );
