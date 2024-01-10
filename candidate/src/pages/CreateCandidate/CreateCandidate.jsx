@@ -827,7 +827,7 @@ const CreateCandidate = () => {
         );
         return;
       }
-
+      
       // Patch draft status to false
       dispatch(putCandidateDraftStatus(candidateId));
     }

@@ -1,7 +1,7 @@
 import { Resolution, Margin } from "react-to-pdf";
 export const generateOptions = (settings) => {
   return {
-    filename: settings.filename || "page.pdf",
+    filename: settings.filename + ".pdf" || "page.pdf",
     method: "save",
     // default is `save`
     // method: 'open',

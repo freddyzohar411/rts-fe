@@ -20,9 +20,8 @@ import { TemplateDisplay } from "@workspace/common";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
 import useModuleData from "../../hooks/ModuleDataHook";
-import generatePDF, { Resolution, Margin, usePDF } from "react-to-pdf";
 import { generateOptions } from "./pdfOption";
-import HiddenPDFDownloadElement from "../../components/Shared/HiddenPDFDownloadElement";
+import { ExportHelper } from "@workspace/common";
 
 const TemplateBuilderPage = () => {
   const dispatch = useDispatch();
@@ -89,30 +88,6 @@ const TemplateBuilderPage = () => {
 
   const getNewContent = (content) => {
     setNewContent(content);
-  };
-
-  // Set up generate PDF hook
-  const { toPDF, targetRef } = usePDF();
-
-  // Set up export docx
-  const exportDocx = (content) => {
-    var header =
-      "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
-      "xmlns:w='urn:schemas-microsoft-com:office:word' " +
-      "xmlns='http://www.w3.org/TR/REC-html40'>" +
-      "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
-    const footer = "</body></html>";
-    const sourceHTML = header + content + footer;
-
-    const source =
-      "data:application/vnd.ms-word;charset=utf-8," +
-      encodeURIComponent(sourceHTML);
-    var fileDownload = document.createElement("a");
-    document.body.appendChild(fileDownload);
-    fileDownload.href = source;
-    fileDownload.download = "document.doc";
-    fileDownload.click();
-    document.body.removeChild(fileDownload);
   };
 
   return (
@@ -254,10 +229,10 @@ const TemplateBuilderPage = () => {
                     <Button
                       className="w-25 mx-2 btn-custom-primary"
                       onClick={() =>
-                        generatePDF(
-                          targetRef,
+                        ExportHelper.generatePDFCustom(
+                          newContent,
                           generateOptions({
-                            filename: "test.pdf",
+                            filename: "test",
                           })
                         )
                       }
@@ -267,7 +242,12 @@ const TemplateBuilderPage = () => {
                     </Button>
                     <Button
                       className="w-25 mx-2 btn-custom-primary"
-                      onClick={() => exportDocx(newContent)}
+                      onClick={() =>
+                        // exportDocx(newContent)
+                        ExportHelper.generateDocxCustom(newContent, {
+                          filename: "test",
+                        })
+                      }
                       disabled={!templateData?.content}
                     >
                       Download as Docx
@@ -292,8 +272,6 @@ const TemplateBuilderPage = () => {
             </Col>
           </Row>
         </Container>
-        {/* // Set up hidden PDF download element */}
-        <HiddenPDFDownloadElement content={newContent} targetRef={targetRef} />
       </div>
     </React.Fragment>
   );

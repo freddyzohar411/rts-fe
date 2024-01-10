@@ -24,6 +24,8 @@ export * as CryptoHelper from "./helpers/crypto_helper";
 
 export * as StringHelper from "./helpers/string_helper";
 
+export * as ExportHelper from "./helpers/export_helper";
+
 // Redux Store
 export * as Actions from "./store/actions";
 

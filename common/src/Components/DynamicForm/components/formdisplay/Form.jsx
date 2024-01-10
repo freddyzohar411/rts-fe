@@ -53,9 +53,6 @@ const Form = forwardRef(
       setFormState("create")
     }, [formName]);
 
-    console.log("Form State: ", formState)
-    console.log("Button Name: ", buttonName)
-
     useEffect(() => {
       if (onFormFieldsChange) {
         onFormFieldsChange(formFields);
