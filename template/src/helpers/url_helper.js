@@ -1,3 +1,3 @@
-export const BASE_TEMPLATE = "/template";
-export const BASE_MEDIA = "/media";
+export const BASE_TEMPLATE = "/api/template";
+export const BASE_MEDIA = "/api/media";
 
