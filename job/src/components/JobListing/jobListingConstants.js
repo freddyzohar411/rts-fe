@@ -55,4 +55,25 @@ const JOB_INITIAL_OPTIONS = [
   },
 ];
 
-export { JOB_INITIAL_OPTIONS };
+const JOB_FILTERS = [
+  {
+    new_job: "New Job Openings",
+  },
+  {
+    active_jobs: "Active Job Openings",
+  },
+  {
+    inactive_jobs: "Inactive Job Openings",
+  },
+  {
+    closed_jobs: "Closed Job Openings",
+  },
+  {
+    fod: "Focus of the Day",
+  },
+  {
+    assigned_jobs: "Assigned Job Openings",
+  },
+];
+
+export { JOB_INITIAL_OPTIONS, JOB_FILTERS };
