@@ -47,6 +47,15 @@ const Form = forwardRef(
     const [buttonName, setButtonName] = useState("");
     const [editDataValues, setEditDataValues] = useState(null);
 
+    // Reset button name and form state when form name changes in case user did not cancel the form
+    useEffect(() => {
+      setButtonName("")
+      setFormState("create")
+    }, [formName]);
+
+    console.log("Form State: ", formState)
+    console.log("Button Name: ", buttonName)
+
     useEffect(() => {
       if (onFormFieldsChange) {
         onFormFieldsChange(formFields);
