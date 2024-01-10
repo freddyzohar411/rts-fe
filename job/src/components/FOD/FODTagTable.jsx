@@ -92,8 +92,8 @@ const FODTagTable = ({ selectedRowData }) => {
                   <Input type="checkbox" />
                 </th>
                 {tableHeaders.map((header, index) => (
-                  <th className="me-1" key={index}>
-                    <span>{header}</span>
+                  <th key={index}>
+                    <span className="me-1">{header}</span>
                     <i
                       className="mdi mdi-sort"
                       style={{ cursor: "pointer" }}
