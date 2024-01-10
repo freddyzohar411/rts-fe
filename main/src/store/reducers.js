@@ -106,12 +106,9 @@ const rootReducer = combineReducers({
   CandidateFormReducer,
   CandidateReducer,
   CandidateRegistrationReducer,
-<<<<<<< HEAD
-
+  
   // Template
   TemplateReducer,
-=======
->>>>>>> main
 });
 
 export default rootReducer;

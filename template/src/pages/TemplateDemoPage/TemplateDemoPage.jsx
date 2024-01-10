@@ -252,7 +252,7 @@ const TemplateBuilderPage = () => {
                   </Row>
                   <Row className="mb-3 mt-3 center d-flex justify-content-center">
                     <Button
-                      className="w-25 mx-2"
+                      className="w-25 mx-2 btn-custom-primary"
                       onClick={() =>
                         generatePDF(
                           targetRef,
@@ -266,7 +266,7 @@ const TemplateBuilderPage = () => {
                       Download as PDF
                     </Button>
                     <Button
-                      className="w-25 mx-2"
+                      className="w-25 mx-2 btn-custom-primary"
                       onClick={() => exportDocx(newContent)}
                       disabled={!templateData?.content}
                     >
