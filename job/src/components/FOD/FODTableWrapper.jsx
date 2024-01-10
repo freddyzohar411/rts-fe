@@ -46,9 +46,7 @@ const FODTableWrapper = ({
                   <option value="Closed Job Openings">
                     Closed Job Openings
                   </option>
-                  <option value="Focus of the Day">
-                    <Link to="/jobs/fod">Focus of the Day</Link>
-                  </option>
+                  <option value="Focus of the Day">Focus of the Day</option>
                   <option value="Assigned Job Openings">
                     Assigned Job Openings
                   </option>
