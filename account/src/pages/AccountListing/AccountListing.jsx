@@ -144,7 +144,7 @@ const AccountListing = () => {
                 type="button"
                 className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
               >
-                <i className="ri-eye-line" style={{ fontSize: "0.65rem" }}></i>
+                <i className="ri-eye-line" style={{ fontSize: "0.75rem" }}></i>
               </Button>
             </Link>
             {checkAllPermission([Permission.ACCOUNT_EDIT]) && (

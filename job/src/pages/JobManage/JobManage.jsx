@@ -41,11 +41,15 @@ const JobManage = () => {
 
         <CustomNav navContents={navContents} slug={slug}>
           {slug == "snapshot" && (
-            <div className="mt-5">
+            <div className="mt-3">
               <JobCreation />
             </div>
           )}
-          {slug == "overview" && <JobOverview />}
+          {slug == "overview" && (
+            <div className="mt-3">
+              <JobOverview />
+            </div>
+          )}
           {/* {slug == "performance" && <CandidatePerformance />}
           {slug == "email" && <CandidateEmail />}
           {slug == "task" && <CandidateTask />} */}
