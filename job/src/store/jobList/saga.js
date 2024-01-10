@@ -128,7 +128,7 @@ function* workJobFOD(action) {
     toast.success(response?.message);
   } catch (error) {
     yield put(deleteJobListFailure(error));
-    toast.error("Error deleting account");
+    toast.error("Error: Assigning FOD");
   }
 }
 

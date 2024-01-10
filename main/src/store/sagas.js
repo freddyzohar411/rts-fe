@@ -6,7 +6,7 @@ import { Sagas as CommonSaga } from "@workspace/common";
 //Auth
 import { Sagas as LoginSaga } from "@workspace/login";
 
-//Auth
+//Dashboard
 import { Sagas as DashboardSaga } from "@workspace/dashboard";
 
 //Account
@@ -40,7 +40,7 @@ const {
   FormCommonSaga,
 } = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
-const { DashboardEcommerceSaga } = DashboardSaga;
+const { DashboardEcommerceSaga, JobsCountSaga } = DashboardSaga;
 const { AccountSaga, AccountRegistrationSaga, AccountFormSaga } = AccountSagas;
 
 const { JobSaga, JobFormSaga, JobListSaga } = JobSagas;
@@ -74,6 +74,7 @@ export default function* rootSaga() {
     fork(ForgetSaga),
     fork(ProfileSaga),
     fork(DashboardEcommerceSaga),
+    fork(JobsCountSaga),
 
     //Account
     fork(IndustrySaga),

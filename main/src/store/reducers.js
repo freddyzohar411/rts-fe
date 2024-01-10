@@ -41,7 +41,7 @@ const {
 } = Reducers;
 
 const { Login, ForgetPassword, Profile } = LoginReducers;
-const { DashboardEcommerce } = DashboardReducers;
+const { DashboardEcommerce, JobsCount } = DashboardReducers;
 const { AccountReducer, AccountRegistrationReducer, AccountFormReducer } =
   AccountReducers;
 
@@ -57,10 +57,8 @@ const {
   GroupReducer,
 } = SettingReducers;
 
-const { CandidateFormReducer,
-  CandidateReducer,
-  CandidateRegistrationReducer
-} = CandidateReducers;
+const { CandidateFormReducer, CandidateReducer, CandidateRegistrationReducer } =
+  CandidateReducers;
 
 const { TemplateReducer } = TemplateReducers;
 
@@ -82,6 +80,7 @@ const rootReducer = combineReducers({
   ForgetPassword,
   Profile,
   DashboardEcommerce,
+  JobsCount,
 
   // account
   AccountReducer,
@@ -107,9 +106,12 @@ const rootReducer = combineReducers({
   CandidateFormReducer,
   CandidateReducer,
   CandidateRegistrationReducer,
+<<<<<<< HEAD
 
   // Template
   TemplateReducer,
+=======
+>>>>>>> main
 });
 
 export default rootReducer;
