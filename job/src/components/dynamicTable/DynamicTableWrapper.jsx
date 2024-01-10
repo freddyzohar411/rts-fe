@@ -6,7 +6,10 @@ import DualListBox from "react-dual-listbox";
 import { GeneralModal } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
-import { JOB_INITIAL_OPTIONS } from "../JobListing/jobListingConstants";
+import {
+  JOB_FILTERS,
+  JOB_INITIAL_OPTIONS,
+} from "../JobListing/jobListingConstants";
 
 const DynamicTableWrapper = ({
   data,
@@ -18,14 +21,13 @@ const DynamicTableWrapper = ({
   optGroup,
   setCustomConfigData,
   confirmDelete,
+  gridView,
+  handleTableViewChange,
 }) => {
   const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);
   const [selectedOptGroup, setSelectedOptGroup] = useState(JOB_INITIAL_OPTIONS);
-
   const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [isRefresh, setIsRefresh] = useState(false);
 
   const handleChange = (selected) => {
     const selectedObjects = selected.map((value) => {
@@ -141,26 +143,18 @@ const DynamicTableWrapper = ({
                             <Input
                               type="select"
                               className="form-select border-secondary"
+                              onChange={handleTableViewChange}
+                              value={gridView}
                             >
                               <option value="">Select View</option>
-                              <option value="New Job Openings">
-                                New Job Openings
-                              </option>
-                              <option value="Active Job Openings">
-                                Active Job Openings
-                              </option>
-                              <option value="Inactive Job Openings">
-                                Inactive Job Openings
-                              </option>
-                              <option value="Closed Job Openings">
-                                Closed Job Openings
-                              </option>
-                              <option value="Focus of the Day">
-                                Focus of the Day
-                              </option>
-                              <option value="Assigned Job Openings">
-                                Assigned Job Openings
-                              </option>
+                              {JOB_FILTERS?.map((ob, index) => {
+                                const key = Object.keys(ob);
+                                return (
+                                  <option key={index} value={key}>
+                                    {ob[key]}
+                                  </option>
+                                );
+                              })}
                             </Input>
                           </div>
                         </div>
