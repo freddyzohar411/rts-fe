@@ -33,7 +33,9 @@ const CustomNav = ({ navContents, slug, children }) => {
       <Row>
         <Col>
           <Card>
-            <CardBody> {children}</CardBody>
+            <CardBody>
+              <div className="mt-0">{children}</div>
+            </CardBody>
           </Card>
         </Col>
       </Row>
