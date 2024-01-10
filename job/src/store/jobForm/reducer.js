@@ -10,6 +10,7 @@ import {
   FETCH_JOB_DOCUMENT_FORM,
   FETCH_JOB_DOCUMENT_FORM_SUCCESS,
   FETCH_JOB_DOCUMENT_FORM_FAILURE,
+  FETCH_DRAFT_JOB,
 } from "./actionTypes";
 import { JsonHelper } from "@workspace/common";
 
@@ -31,6 +32,14 @@ const JobFormReducer = (state = initialState, action) => {
       return {
         ...state,
         formSubmission: null,
+        editId: null,
+      };
+
+    case FETCH_DRAFT_JOB:
+      return {
+        ...state,
+        loading: true,
+        error: false,
       };
 
     // Fetch Form by id
@@ -109,7 +118,7 @@ const JobFormReducer = (state = initialState, action) => {
         ...state,
         formSubmissionLoading: false,
         formSubmission: submissionData,
-        editId: parseInt(action.payload.id),
+        editId: parseInt(action?.payload?.id),
       };
     case FETCH_JOB_FORM_SUBMISSION_FAILURE:
       return {

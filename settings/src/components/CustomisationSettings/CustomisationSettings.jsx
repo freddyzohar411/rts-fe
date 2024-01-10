@@ -7,7 +7,7 @@ import CustomisationTableWrapper from "./CustomisationTableWrapper";
 import { useTableHook } from "@workspace/common";
 import { DynamicTableHelper } from "@workspace/common";
 import { CUSTOMISATION_INITIAL_OPTION } from "./customisationTableInitialOptions";
-import { DeleteCustomModal } from "@Workspace/common";
+import { DeleteCustomModal } from "@workspace/common";
 
 function CustomisationSettings() {
   // Delete modal states

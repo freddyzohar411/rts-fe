@@ -15,7 +15,7 @@ import {
 import SimpleBar from "simplebar-react";
 import { useDispatch, useSelector } from "react-redux";
 import Flag from "react-world-flags";
-import { Actions } from "@Workspace/common";
+import { Actions } from "@workspace/common";
 import { Axios } from "@workspace/common";
 const { APIClient } = Axios;
 const api = new APIClient();

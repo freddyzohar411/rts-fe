@@ -7,6 +7,8 @@ import {
   DELETE_JOB_LIST,
   FETCH_JOB_LISTS,
   FETCH_JOB_LISTS_FIELDS,
+  FETCH_USER_GROUP_BY_NAME,
+  CREATE_JOB_FOD,
 } from "./actionTypes";
 import {
   fetchJobListSuccess,
@@ -21,6 +23,10 @@ import {
   fetchJobListsFailure,
   fetchJobListsFieldsSuccess,
   fetchJobListsFieldsFailure,
+  fetchUserGroupByNameSuccess,
+  fetchUserGroupByNameFailure,
+  createJobFOD,
+  createJobFODSuccess,
 } from "./action";
 import {
   getJobs,
@@ -29,6 +35,8 @@ import {
   deleteJob,
   getJobFields,
   getJobById,
+  getUserGroupByName,
+  postJobFOD,
 } from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
@@ -58,18 +66,6 @@ function* workPostJobList(action) {
       navigate(link);
     }
 
-    // if (entity === JobListEntityConstant.JOB_LIST_JOB_LIST) {
-    //   handleNext();
-    //   yield put(setJobListId(response.data.id));
-    //   yield put(setJobListCountry(response.data.accountCountry));
-    //   return;
-    // }
-    // if (entity === JobListEntityConstant.JOB_LIST_COMMERCIAL) {
-    //   yield put(deleteJobListId());
-    //   yield put(deleteJobListCountry());
-    //   toast.success("JobList created successfully");
-    //   return;
-    // }
     if (typeof handleNext === "function") {
       handleNext();
     }
@@ -124,12 +120,27 @@ function* workFetchJobLists(action) {
   }
 }
 
+// Create JobFOD
+function* workJobFOD(action) {
+  try {
+    const response = yield call(postJobFOD, action.payload);
+    yield put(createJobFODSuccess(response?.data));
+    toast.success(response?.message);
+  } catch (error) {
+    yield put(deleteJobListFailure(error));
+    toast.error("Error: Assigning FOD");
+  }
+}
+
 // Delete JobList
 function* workDeleteJobList(action) {
   try {
-    const response = yield call(deleteJob, action.payload);
-    yield put(deleteJobListSuccess(action.payload));
-    toast.success(response?.message);
+    const { deleteId, isDraft } = action.payload;
+    const response = yield call(deleteJob, deleteId);
+    yield put(deleteJobListSuccess(deleteId));
+    if (!isDraft) {
+      toast.success(response?.message);
+    }
   } catch (error) {
     yield put(deleteJobListFailure(error));
     toast.error("Error deleting account");
@@ -158,6 +169,16 @@ function* workFetchJobList(action) {
   }
 }
 
+// Fetch user group by name
+function* workFetchUserGroupByName(action) {
+  try {
+    const response = yield call(getUserGroupByName, action.payload);
+    yield put(fetchUserGroupByNameSuccess(response.data));
+  } catch (error) {
+    yield put(fetchUserGroupByNameFailure(error));
+  }
+}
+
 export default function* watchFetchJobListSaga() {
   yield takeEvery(POST_JOB_LIST, workPostJobList);
   yield takeEvery(PUT_JOB_LIST, workPutJobList);
@@ -165,4 +186,6 @@ export default function* watchFetchJobListSaga() {
   yield takeEvery(DELETE_JOB_LIST, workDeleteJobList);
   yield takeEvery(FETCH_JOB_LISTS_FIELDS, workFetchJobListsFields);
   yield takeEvery(FETCH_JOB_LIST, workFetchJobList);
+  yield takeEvery(FETCH_USER_GROUP_BY_NAME, workFetchUserGroupByName);
+  yield takeEvery(CREATE_JOB_FOD, workJobFOD);
 }

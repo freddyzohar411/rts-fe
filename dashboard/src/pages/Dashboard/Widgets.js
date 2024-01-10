@@ -4,9 +4,60 @@ import { Row, Badge, Card, CardBody, Col, Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import { recruiterDashboard, salesDashboard } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
+import { useSelector } from "react-redux";
 
 const Widgets = () => {
   const { Permission, checkAllPermission } = useUserAuth();
+
+  const newJobs = useSelector((state) => state.JobsCount.newJobs);
+  const activeJobs = useSelector((state) => state.JobsCount.activeJobs);
+  const inactiveJobs = useSelector((state) => state.JobsCount.inactiveJobs);
+  const closedJobs = useSelector((state) => state.JobsCount.closedJobs);
+  const assignedJobs = useSelector((state) => state.JobsCount.assignedJobs);
+  const fodJobs = useSelector((state) => state.JobsCount.fodJobs);
+  const allJobs = useSelector((state) => state.JobsCount.allJobs);
+  const totalAssignedJobs = useSelector(
+    (state) => state.JobsCount.totalAssignedJobs
+  );
+  const totalFODJobs = useSelector((state) => state.JobsCount.totalFODJobs);
+
+  const getCount = (itemKey) => {
+    let jobCount = 0;
+    switch (itemKey) {
+      case "new_job":
+        jobCount = newJobs ?? 0;
+        break;
+      case "active_jobs":
+        jobCount = activeJobs ?? 0;
+        break;
+      case "inactive_jobs":
+        jobCount = inactiveJobs ?? 0;
+        break;
+      case "closed_jobs":
+        jobCount = closedJobs ?? 0;
+        break;
+      case "fod":
+        jobCount = fodJobs ?? 0;
+        break;
+      case "assigned_jobs":
+        jobCount = assignedJobs ?? 0;
+        break;
+      case "all_jobs":
+        jobCount = allJobs ?? 0;
+        break;
+      case "total_assigned_jobs":
+        jobCount = totalAssignedJobs ?? 0;
+        break;
+      case "total_fod":
+        jobCount = totalFODJobs ?? 0;
+        break;
+      default:
+        jobCount = 0;
+        break;
+    }
+    return jobCount;
+  };
+
   const renderStatusArray = (statusArray) => {
     if (!statusArray || !Array.isArray(statusArray)) {
       return null;
@@ -33,6 +84,7 @@ const Widgets = () => {
       </div>
     );
   };
+
   return (
     <React.Fragment>
       <Row className="ms-1">
@@ -45,7 +97,9 @@ const Widgets = () => {
               className="mb-4"
               style={{ height: "220px" }}
             >
-              <Link to={item.link}>
+              <Link
+                to={checkAllPermission([Permission.JOB_READ]) ? item.link : "#"}
+              >
                 <Card className="card-animate d-flex flex-column h-100">
                   <CardBody className="p-4 d-flex flex-column justify-content-between">
                     <div className="d-flex flex-row justify-content-between align-items-start">
@@ -85,13 +139,13 @@ const Widgets = () => {
                       <div>
                         <h4 className="fs-1 fw-bold ff-secondary">
                           <span className="counter-value" data-target="559.25">
-                            {item.counter > 0 && (
+                            {item?.key !== "offer_status" && (
                               <CountUp
                                 start={0}
                                 prefix={item.prefix}
                                 suffix={item.suffix}
                                 separator={item.separator}
-                                end={item.counter}
+                                end={getCount(item?.key)}
                                 decimals={item.decimals}
                                 duration={4}
                               />
@@ -167,13 +221,13 @@ const Widgets = () => {
                       <div>
                         <h4 className="fs-1 fw-bold ff-secondary">
                           <span className="counter-value" data-target="559.25">
-                            {item.counter > 0 && (
+                            {item?.key !== "offer_status" && (
                               <CountUp
                                 start={0}
                                 prefix={item.prefix}
                                 suffix={item.suffix}
                                 separator={item.separator}
-                                end={item.counter}
+                                end={getCount(item?.key)}
                                 decimals={item.decimals}
                                 duration={4}
                               />

@@ -36,7 +36,7 @@ function UserDetails() {
   }, [userId]);
 
   const user = useSelector((state) => state.UserReducer.user);
-  console.log("User", user);
+
   // Document Title
   useEffect(() => {
     if (user) {

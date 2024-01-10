@@ -7,7 +7,7 @@ import { useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper, DateHelper } from "@workspace/common";
 import { CANDIDATE_INITIAL_OPTIONS } from "./candidateListingConstants";
-import { DeleteCustomModal } from "@Workspace/common";
+import { DeleteCustomModal } from "@workspace/common";
 import {
   deleteCandidate,
   fetchCandidates,

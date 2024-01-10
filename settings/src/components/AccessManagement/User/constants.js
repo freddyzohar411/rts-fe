@@ -1,7 +1,6 @@
 import * as yup from "yup";
 
 export const populateForm = (value) => {
-  console.log("Update Value", value)
   return {
     id: value.id,
     keycloackId: value.keycloackId,

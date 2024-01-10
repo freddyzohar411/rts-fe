@@ -9,7 +9,13 @@ import {
   SET_FORM_SUBMISSION,
   FETCH_JOB_DOCUMENT_FORM,
   FETCH_JOB_DOCUMENT_FORM_SUCCESS,
+  FETCH_DRAFT_JOB,
 } from "./actionTypes";
+
+export const fetchDraftJob = (params) => ({
+  type: FETCH_DRAFT_JOB,
+  payload: params,
+});
 
 // Fetch form by id
 export const fetchJobForm = (formName) => ({

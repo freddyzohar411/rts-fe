@@ -48,7 +48,7 @@ export const getFormByFormName = (formName) =>
  */
 // Create a new candidate 
 export const createCandidate = (entity, id, data, config) =>
-  api.create(generateCandidateModuleURL(entity, id), data, config);
+  api.create(`${generateCandidateModuleURL(entity, id)}/add`, data, config);
 
 // Update an candidate
 export const updateCandidate = (entity, id, data, config) =>

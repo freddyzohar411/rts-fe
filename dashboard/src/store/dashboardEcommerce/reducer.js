@@ -6,7 +6,8 @@ import {
 
 const INIT_STATE = {
   revenueData: [],
-  error: {}
+  error: {},
+  loading: false,
 };
 
 const DashboardEcommerce = (state = INIT_STATE, action) => {
@@ -16,7 +17,7 @@ const DashboardEcommerce = (state = INIT_STATE, action) => {
         case GET_REVENUE_CHARTS_DATA:
           return {
             ...state,
-            revenueData: action.payload.data
+            revenueData: action.payload.data,
           };
         default:
           return state;
@@ -26,11 +27,12 @@ const DashboardEcommerce = (state = INIT_STATE, action) => {
         case GET_REVENUE_CHARTS_DATA:
           return {
             ...state,
-            error: action.payload.error
+            error: action.payload.error,
           };
         default:
           return state;
       }
+
     default:
       return state;
   }

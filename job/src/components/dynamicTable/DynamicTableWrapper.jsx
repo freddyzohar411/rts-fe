@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
 import { Link } from "react-router-dom";
-import { DynamicTable } from "@Workspace/common";
+import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
-import { GeneralModal } from "@Workspace/common";
+import { GeneralModal } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { JOB_INITIAL_OPTIONS } from "../JobListing/jobListingConstants";
@@ -34,8 +34,6 @@ const DynamicTableWrapper = ({
     setSelectedOptGroup(selectedObjects);
   };
 
-  console.log("JOB config", config)
-
   return (
     <React.Fragment>
       <div className="page-content">
@@ -61,7 +59,9 @@ const DynamicTableWrapper = ({
                     }}
                     filterPlaceholder="Search..."
                     options={optGroup ?? []}
-                    selected={selectedOptGroup.map((option) => option?.value) ?? []}
+                    selected={
+                      selectedOptGroup.map((option) => option?.value) ?? []
+                    }
                     onChange={handleChange}
                     icons={{
                       moveLeft: (
@@ -120,23 +120,51 @@ const DynamicTableWrapper = ({
                 <CardBody>
                   <div className="listjs-table">
                     <Row className="d-flex column-gap-1 mb-3">
-                      {setSearch && (
-                        <Col>
-                          <div className="search-box">
-                            <form onSubmit={pageRequestSet.setSearchTerm}>
-                              <Input
-                                type="text"
-                                placeholder="Search"
-                                className="form-control search bg-light border-light"
-                                value={search}
-                                style={{ width: "350px" }}
-                                onChange={(e) => setSearch(e.target.value)}
-                              />
-                            </form>
-                            <i className="ri-search-line search-icon"></i>
+                      <Col>
+                        <div className="d-flex justify-content-center align-items-center">
+                          {setSearch && (
+                            <div className="search-box">
+                              <form onSubmit={pageRequestSet.setSearchTerm}>
+                                <Input
+                                  type="text"
+                                  placeholder="Search"
+                                  className="form-control search bg-light border-light"
+                                  value={search}
+                                  style={{ width: "280px" }}
+                                  onChange={(e) => setSearch(e.target.value)}
+                                />
+                              </form>
+                              <i className="ri-search-line search-icon"></i>
+                            </div>
+                          )}
+                          <div className="select-width">
+                            <Input
+                              type="select"
+                              className="form-select border-secondary"
+                            >
+                              <option value="">Select View</option>
+                              <option value="New Job Openings">
+                                New Job Openings
+                              </option>
+                              <option value="Active Job Openings">
+                                Active Job Openings
+                              </option>
+                              <option value="Inactive Job Openings">
+                                Inactive Job Openings
+                              </option>
+                              <option value="Closed Job Openings">
+                                Closed Job Openings
+                              </option>
+                              <option value="Focus of the Day">
+                                Focus of the Day
+                              </option>
+                              <option value="Assigned Job Openings">
+                                Assigned Job Openings
+                              </option>
+                            </Input>
                           </div>
-                        </Col>
-                      )}
+                        </div>
+                      </Col>
                       <Col>
                         <div className="d-flex column-gap-2 justify-content-end">
                           <Button

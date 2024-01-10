@@ -20,12 +20,20 @@ import {
   FETCH_JOB_LISTS_FIELDS,
   FETCH_JOB_LISTS_FIELDS_SUCCESS,
   FETCH_JOB_LISTS_FIELDS_FAILURE,
+  FETCH_USER_GROUP_BY_NAME,
+  FETCH_USER_GROUP_BY_NAME_SUCCESS,
+  FETCH_USER_GROUP_BY_NAME_FAILURE,
+  CREATE_JOB_FOD,
+  CREATE_JOB_FOD_SUCCESS,
+  CREATE_JOB_FOD_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
   job: {},
+  jobFOD: {},
   jobs: [],
   jobsFields: [],
+  recruiterGroup: null,
   errorMsg: "",
   loading: false,
   error: false,
@@ -34,6 +42,28 @@ const initialState = {
 
 const JobListReducer = (state = initialState, action) => {
   switch (action.type) {
+    // Fetch Recruiter Group
+    case FETCH_USER_GROUP_BY_NAME:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_USER_GROUP_BY_NAME_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        recruiterGroup: action.payload,
+      };
+    case FETCH_USER_GROUP_BY_NAME_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        recruiterGroup: null,
+        error: true,
+        errorMsg: action.payload,
+      };
+
     // Fetch JobList
     case FETCH_JOB_LIST:
       return {
@@ -90,6 +120,27 @@ const JobListReducer = (state = initialState, action) => {
         job: action.payload,
       };
     case CREATE_JOB_LIST_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+
+    // Create JobFOD
+    case CREATE_JOB_FOD:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case CREATE_JOB_FOD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        jobFOD: action.payload,
+      };
+    case CREATE_JOB_FOD_FAILURE:
       return {
         ...state,
         loading: false,

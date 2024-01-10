@@ -19,5 +19,5 @@ export const dashboardEcommerceApiError = (actionType, error) => ({
 // revenue
 export const getRevenueChartsData = (revenueData) => ({
   type: GET_REVENUE_CHARTS_DATA,
-  payload: revenueData
+  payload: revenueData,
 });

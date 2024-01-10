@@ -268,7 +268,6 @@ function CreateUser() {
                                 name="managerId"
                                 value={sortBy}
                                 onChange={(selectedOption) => {
-                                  console.log("SS options", selectedOption);
                                   setSortBy(selectedOption);
                                   if (!selectedOption) {
                                     handleChange("managerId")("");

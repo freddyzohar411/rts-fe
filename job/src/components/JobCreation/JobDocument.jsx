@@ -1,13 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Form } from "@workspace/common";
 import { DOCUMENT_LIST, JOB_DOCUMENT_NAME } from "./constants";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearJobFormSubmission,
-  createJobDocuments,
-  fetchJobDocumentForm,
-} from "../../store/actions";
+import { createJobDocuments, fetchJobDocumentForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { ObjectHelper } from "@workspace/common";
 import {
@@ -19,8 +14,6 @@ const JobDocument = ({ jobId, view }) => {
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
   const formikRef = useRef(null);
-  const { type } = useParams();
-  // const isView = type === "view";
 
   const documentForm = useSelector(
     (state) => state.JobFormReducer.documentForm
@@ -60,7 +53,7 @@ const JobDocument = ({ jobId, view }) => {
 
   useEffect(() => {
     setEditData(null);
-    if (documentForm) {
+    if (documentForm && jobId) {
       const formEdited = setTableAPI(
         documentForm,
         DOCUMENT_LIST,
@@ -69,7 +62,7 @@ const JobDocument = ({ jobId, view }) => {
       );
       setFormTemplate(formEdited);
     }
-  }, [documentForm, view]);
+  }, [documentForm, view, jobId]);
 
   /**
    * Get Form field data from Form component

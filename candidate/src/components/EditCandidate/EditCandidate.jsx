@@ -9,7 +9,6 @@ import {
   putCandidate,
   resetMetaData,
 } from "../../store/candidate/action";
-import { deleteCandidateCountry } from "../../store/candidateregistration/action";
 import { fetchCandidateForm } from "../../store/candidateForm/action";
 import {
   CandidateFormConstant,
@@ -21,7 +20,6 @@ import {
   clearCandidateFormSubmission,
 } from "../../store/candidateForm/action";
 import { ObjectHelper } from "@workspace/common";
-import { CryptoHelper } from "@workspace/common";
 import {
   DOCUMENT_BASE_URL,
   GET_DOCUMENT_BY_ENTITY_URL,
@@ -270,7 +268,6 @@ const EditCandidate = () => {
     formStateHook,
     rerenderTable
   ) => {
-    console.log("IN SUBMIT")
     // Check if form is edited. If updated, update in db
     const isFormChanged = await isFormEdited(formSubmissionData, newValues);
 
@@ -435,7 +432,6 @@ const EditCandidate = () => {
 
     // Work Experience
     if (step === 2) {
-      console.log("I am in")
       // Add contact
       if (buttonName === "add") {
         setErrorMessage(null);
@@ -476,7 +472,6 @@ const EditCandidate = () => {
 
       // Cancel add contact and reset form
       if (buttonName === "cancel" && !editData) {
-        console.log("BOO")
         setButtonName("");
         resetForm([], "create");
         return;
@@ -792,13 +787,7 @@ const EditCandidate = () => {
    * Check if form edited
    */
   const isFormEdited = async (oldFormValues, newFormValues) => {
-    const oldFormValuesString = await CryptoHelper.computeHash(
-      JSON.stringify(oldFormValues)
-    );
-    const newFormValuesString = await CryptoHelper.computeHash(
-      JSON.stringify(newFormValues)
-    );
-    if (oldFormValuesString === newFormValuesString) {
+    if (JSON.stringify(oldFormValues) === JSON.stringify(newFormValues)) {
       return false;
     }
     return true;
@@ -877,35 +866,31 @@ const EditCandidate = () => {
   }
 
   return (
-    <>
-      {/* <Container className="page-content"> */}
-      <FormStepper
-        activeStep={step}
-        handleBack={handleBack}
-        handleNext={handleNext}
-        formikRef={formikRef}
-        formFieldsData={formFieldsData}
-        setErrorMessage={setErrorMessage}
-        candidateId={candidateId}
-        resetStepper={resetStepper}
-        toggleFormViewState={toggleFormViewState}
-        viewState={view}
-        setStep={setStep}
-      >
-        <Form
-          template={formTemplate}
-          userDetails={getAllUserGroups()}
-          country={candidateCountry}
-          editData={formSubmissionData}
-          onSubmit={handleFormSubmit}
-          onFormFieldsChange={handleFormFieldChange}
-          errorMessage={errorMessage}
-          view={view}
-          ref={formikRef}
-        />
-      </FormStepper>
-      {/* </Container> */}
-    </>
+    <FormStepper
+      activeStep={step}
+      handleBack={handleBack}
+      handleNext={handleNext}
+      formikRef={formikRef}
+      formFieldsData={formFieldsData}
+      setErrorMessage={setErrorMessage}
+      candidateId={candidateId}
+      resetStepper={resetStepper}
+      toggleFormViewState={toggleFormViewState}
+      viewState={view}
+      setStep={setStep}
+    >
+      <Form
+        template={formTemplate}
+        userDetails={getAllUserGroups()}
+        country={candidateCountry}
+        editData={formSubmissionData}
+        onSubmit={handleFormSubmit}
+        onFormFieldsChange={handleFormFieldChange}
+        errorMessage={errorMessage}
+        view={view}
+        ref={formikRef}
+      />
+    </FormStepper>
   );
 };
 
