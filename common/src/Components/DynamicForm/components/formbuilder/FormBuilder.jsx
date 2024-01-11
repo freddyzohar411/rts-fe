@@ -699,10 +699,11 @@ const FormBuilder = ({
     const JSONData = {
       formName: formName,
       formType: formOptions.formType,
+      formCategory: formOptions.formCategory,
+      baseFormId: parseInt(formOptions.baseFormId),
       entityType: formOptions.entityType,
-      baseFormId: formOptions.baseFormId,
-      stepperNumber: formOptions.stepperNumber,
-      formFieldsList: formFields,
+      formStepperNumber: formOptions.stepperNumber,
+      formFieldsList: stringifyObj(formFields),
       formSchemaList: formLayoutSchema,
     };
     const element = document.createElement("a");
@@ -1138,6 +1139,14 @@ const FormBuilder = ({
                             Save to API
                           </Button>
                         )} */}
+                        {formFields.length > 0 && (
+                          <Button
+                            className="btn btn-custom-primary mt-3 ms-3"
+                            onClick={handleSaveJSONData}
+                          >
+                            Save JSON File
+                          </Button>
+                        )}
                       </form>
                     </div>
                     {/* User Buttons */}
@@ -1229,7 +1238,6 @@ const FormBuilder = ({
           centered
           scrollable
           size="xl"
-
         >
           <ModalHeader>
             <span className="modal-title">JSON Data</span>
