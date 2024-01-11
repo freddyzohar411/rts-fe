@@ -76,7 +76,6 @@ const DroppableList = ({
                   const field = formFields.find(
                     (field) => field.fieldId === fieldId
                   );
-                  console.log("Field Information", field.information);
                   if (
                     !showAll
                       ? checkVisibleConditions(field, formik) &&

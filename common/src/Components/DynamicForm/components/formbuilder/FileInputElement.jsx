@@ -1,26 +1,28 @@
 import React, { useRef } from "react";
 import { toast } from "react-toastify";
 
-const FileInputElement = ({ setFile, placeholder, fileSelected, disabled, width}) => {
-  console.log("fileSelected", fileSelected)
+const FileInputElement = ({
+  setFile,
+  placeholder,
+  fileSelected,
+  disabled,
+  width,
+}) => {
   const fileInputRef = useRef();
   const truncateString = (str, num) => {
     if (str?.length <= num) {
       return str;
     }
-    return str.slice(0, num) + "...";
+    return str?.slice(0, num) + "...";
   };
 
   const handleFileChange = (e) => {
     if (!e.target.files[0]) {
       return;
     }
-    // Check if file is a docx file type
-    if (
-      e.target.files[0].type !==
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ) {
-      toast.error("Please upload a valid docx file");
+    // Check for Json file type
+    if (e.target.files[0].type !== "application/json") {
+      toast.error("Please upload a JSON file type");
       return;
     }
     setFile(e.target.files[0]);
@@ -52,7 +54,7 @@ const FileInputElement = ({ setFile, placeholder, fileSelected, disabled, width}
           }}
           disabled={disabled}
         >
-          Add File
+          {placeholder}
         </button>
         <div
           className={`w-100 border-primary border border-1 ${
@@ -66,11 +68,11 @@ const FileInputElement = ({ setFile, placeholder, fileSelected, disabled, width}
             maxHeight: "38px",
             overflow: "hidden",
             backgroundColor: disabled ? "#EFF2F7" : "",
-            width: width ? width : "100%"
+            minWidth: width ? width : "100%",
           }}
         >
           {fileSelected
-            ? truncateString(fileSelected.name, 15)
+            ? truncateString(fileSelected.name, 40)
             : "No file chosen"}
           {fileSelected && !disabled && (
             <span

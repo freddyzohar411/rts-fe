@@ -3,6 +3,7 @@ import { FormikProvider, useFormik } from "formik";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DroppableList from "./DroppableList";
 import { useNavigate } from "react-router-dom";
+import * as JsonHelper from "../../../../helpers/json_helper";
 import "./FormBuilder.scss";
 import "@workspace/common/src/assets/scss/components/simplebar.min.css";
 
@@ -35,6 +36,8 @@ import {
 } from "../../formelements/formElements_helper";
 import BaseFormSelectElement from "./BaseFormSelectElement";
 import SimpleBar from "simplebar-react";
+import FileInputElement from "./FileInputElement";
+import * as FileHelper from "../../../../helpers/file_helper";
 
 const FormBuilder = ({
   onSubmit,
@@ -75,6 +78,49 @@ const FormBuilder = ({
   const [showModalSchema, setShowModalSchema] = useState(false);
   const [jsonData, setJsonData] = useState(null);
   const [showJsonModal, setShowJsonModal] = useState(false);
+  const [jsonFile, setJsonFile] = useState(null);
+  const [loadedJSON, setLoadedJSON] = useState(null);
+
+  console.log("loadedJSON", loadedJSON);  
+
+  useEffect(() => {
+    if (jsonFile) {
+      FileHelper.convertJSONFileToJSONObject(jsonFile).then((data) => {
+        setLoadedJSON(data);
+      });
+    }
+    if (jsonFile === null) {
+      setLoadedJSON(null);
+      // Reset Everything
+      setFormName("");
+      setFormOptions({
+        formType: "",
+        entityType: "",
+        baseFormId: 0,
+        stepperNumber: 0,
+        formCategory: "",
+      });
+      setFormFields([]);
+      setFormLayoutSchema([]);
+    }
+  }, [jsonFile]);
+
+  useEffect(() => {
+    if (loadedJSON) {
+      setFormName(loadedJSON.formName);
+      setFormOptions({
+        formType: loadedJSON.formType,
+        entityType: loadedJSON.entityType,
+        baseFormId: loadedJSON.baseFormId || 0,
+        stepperNumber: parseInt(loadedJSON.stepperNumber),
+        formCategory: loadedJSON.formCategory,
+      });
+      setFormFields(
+        JsonHelper.parseArrayObjectValues(loadedJSON.formFieldsList)
+      );
+      setFormLayoutSchema(loadedJSON.formSchemaList);
+    }
+  }, [loadedJSON]);
 
   /**
    * Set form state
@@ -700,10 +746,10 @@ const FormBuilder = ({
       formName: formName,
       formType: formOptions.formType,
       formCategory: formOptions.formCategory,
-      baseFormId: parseInt(formOptions.baseFormId),
+      baseFormId: formOptions.baseFormId,
       entityType: formOptions.entityType,
-      formStepperNumber: formOptions.stepperNumber,
-      formFieldsList: stringifyObj(formFields),
+      stepperNumber: formOptions.stepperNumber,
+      formFieldsList: JsonHelper.stringifyArrayObjectValues(formFields),
       formSchemaList: formLayoutSchema,
     };
     const element = document.createElement("a");
@@ -865,16 +911,25 @@ const FormBuilder = ({
                   style={{ color: "#405189" }}
                 >{`Form Builder (Total Fields: ${formFields?.length})`}</span>
                 {/* Dev hide field button */}
-                <Button
-                  type="button"
-                  onClick={() => setShowAll((prev) => !prev)}
-                  style={{
-                    border: "1px solid #405189",
-                    color: "#405189",
-                  }}
-                >
-                  {showAll ? "Hide Fields" : "Show All Fields"}
-                </Button>
+                <div className="d-flex gap-2">
+                  <FileInputElement
+                    width="400px"
+                    placeholder="Add JSON"
+                    setFile={setJsonFile}
+                    fileSelected={jsonFile}
+                  />
+                  <Button
+                    type="button"
+                    onClick={() => setShowAll((prev) => !prev)}
+                    style={{
+                      border: "1px solid #405189",
+                      color: "#405189",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {showAll ? "Hide Fields" : "Show All Fields"}
+                  </Button>
+                </div>
               </div>
 
               <Container fluid>
