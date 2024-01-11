@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Progress, Popover, PopoverBody } from "reactstrap";
+import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
+import "./StepComponent.scss";
 
 function StepComponent({ step, timelineState, index }) {
   const [startProgressBarValue, setStartProgressBarValue] = useState(0);
@@ -21,8 +23,9 @@ function StepComponent({ step, timelineState, index }) {
 
   return (
     <React.Fragment>
-      <div className="step-component">
+      <div id={`Popover-${index}`} className="step-component">
         <div className="d-flex gap-2 flex-column justify-content-center align-items-center">
+          {step && (<span className="text-center">{step}</span>)}
           <div className="d-flex flex-row justify-content-center align-items-center w-100">
             {index !== 0 ? (
               <Progress
@@ -75,6 +78,20 @@ function StepComponent({ step, timelineState, index }) {
           </div>
         </div>
       </div>
+      {/* Interview Schedule Pop Up */}
+      {index === 6 && (
+        <Popover
+          className="custom-popover"
+          placement="bottom"
+          isOpen={toggleInterview}
+          target={`Popover-${index}`}
+          toggle={() => setToggleInterview(!toggleInterview)}
+        >
+          <PopoverBody>
+            <InterviewPopUp />
+          </PopoverBody>
+        </Popover>
+      )}
     </React.Fragment>
   );
 }

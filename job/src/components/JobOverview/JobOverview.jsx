@@ -64,6 +64,8 @@ function JobOverview() {
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
+
+  console.log(formSubmissionData);
   const [formTemplate, setFormTemplate] = useState(null);
 
   // Fetch all the countries and account names
@@ -207,11 +209,18 @@ function JobOverview() {
         <Row className="mb-3">
           <Col>
             <div className="d-flex flex-row justify-content-between align-items-center">
-              <div className="h5 fw-bold">
-                {formSubmissionData?.accountName} |{" "}
-                {formSubmissionData?.jobTitle} |{" "}
-                {formSubmissionData?.clientJobId} |{" "}
-                {formSubmissionData?.accountContact} | Ganesh, Priya, Vinod
+              <div className="d-flex flex-row h5 fw-bold align-items-end gap-1">
+                <span>{formSubmissionData?.accountName} | </span>
+                <span>{formSubmissionData?.jobTitle} | </span>
+                <span>{formSubmissionData?.clientJobId} | </span>
+                <div className="d-flex flex-column">
+                  <span className="fw-medium h6 text-muted">Sales</span>
+                  <span>{formSubmissionData?.salesManager} | </span>
+                </div>
+                <div className="d-flex flex-column">
+                  <span className="fw-medium h6 text-muted">Delivery</span>
+                  <span>Ganesh, Priya, Vinod</span>
+                </div>
               </div>
 
               <div className="d-flex flex-row gap-2 align-items-center">
@@ -288,13 +297,9 @@ function JobOverview() {
                         <StepComponent
                           timelineState={activeStep}
                           index={index}
-                          setActiveStep={setActiveStep}
                         />
                       </td>
                     ))}
-                    {/* <td colSpan={8} className="px-4">
-                      <TimelineStepper step={activeStep} />
-                    </td> */}
                     <td>
                       <div className="d-flex flex-row gap-3 align-items-center">
                         <Input
@@ -339,26 +344,46 @@ function JobOverview() {
                   {formSubmissionData?.accountName.charAt(0)}
                 </div>
               </div>
-              <div>
-                <Row>
-                  <span className="h4 fw-bold">
-                    {formSubmissionData?.accountName}
-                  </span>
-                </Row>
-                <Row>
-                  <div className="d-flex flex-row gap-4">
-                    <span className="h6 fw-semibold">
-                      Job ID - {formSubmissionData?.clientJobId}
+              <Row className="d-flex flex-row justify-content-between align-items-end gap-5">
+                <Col>
+                  <Row>
+                    <span className="h4 fw-bold">
+                      {formSubmissionData?.accountName}
                     </span>
-                    <span className="h6 fw-semibold">
-                      Job Title - {formSubmissionData?.jobTitle}
+                  </Row>
+                  <Row>
+                    <div className="d-flex flex-row gap-4">
+                      <span className="h6 fw-semibold text-nowrap">
+                        Job ID - {formSubmissionData?.clientJobId}
+                      </span>
+                      <span className="h6 fw-semibold text-nowrap">
+                        Job Title - {formSubmissionData?.jobTitle}
+                      </span>
+                    </div>
+                  </Row>
+                  <Row>
+                    <span className="h6 text-muted fw-bold">
+                      {stepperState}
                     </span>
-                  </div>
-                </Row>
-                <Row>
-                  <span className="h6 text-muted fw-bold">{stepperState}</span>
-                </Row>
-              </div>
+                  </Row>
+                </Col>
+                {activeStep === 6 && (
+                  <Col>
+                    <div>
+                      <Input
+                        type="select"
+                        className="form-select form-select-md"
+                      >
+                        <option value="">
+                          Selected Conditional Offer Template
+                        </option>
+                        <option value="">Template 1</option>
+                        <option value="">Template 2</option>
+                      </Input>
+                    </div>
+                  </Col>
+                )}
+              </Row>
             </div>
           </OffcanvasHeader>
           <OffcanvasBody>
