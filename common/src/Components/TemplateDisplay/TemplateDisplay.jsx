@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import ReactDOMServer from "react-dom/server";
 import { Editor } from "@tinymce/tinymce-react";
 
 import ReactHtmlParser from "react-html-parser";
@@ -7,6 +8,32 @@ import "./TinyCME.scss";
 const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
+  const [fullHtmlString, setFullHtmlString] = useState("");
+  const displayRef = useRef(null);
+  const observer = useRef(null);
+
+  useEffect(() => {
+    if (displayRef.current) {
+      observer.current = new MutationObserver((mutations) => {
+        const htmlString = displayRef.current.innerHTML;
+        setFullHtmlString(removeContentEditableAndStyles(htmlString));
+        getNewContent(removeContentEditableAndStyles(htmlString));
+      });
+
+      observer.current.observe(displayRef.current, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
+    }
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, [displayRef.current, parsedContent]);
 
   useEffect(() => {
     if (content) {
@@ -29,22 +56,28 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
     });
   }
 
+  // Remove contenteditable attribute and style attribute from HTML string
   function removeContentEditableAndStyles(htmlString) {
+    // Identify elements with contenteditable attribute
+    const contentEditableRegex = /<([a-z][a-z0-9]*)([^>]*contenteditable="[^"]*"[^>]*)>/gi;
+    let match;
+    if (!htmlString) return;
+    while ((match = contentEditableRegex.exec(htmlString)) !== null) {
+      // For each matched element, remove the style attribute
+      const styleRegex = new RegExp(` style="[^"]*"`, 'g');
+      const elementWithoutStyle = match[0].replace(styleRegex, '');
+      // Replace the original element with the element without style in the HTML string
+      const elementRegex = new RegExp(match[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+      htmlString = htmlString.replace(elementRegex, elementWithoutStyle);
+    }
+  
     // Remove contenteditable attribute
-    const withoutContentEditable = htmlString?.replace(
+    const withoutContentEditable = htmlString.replace(
       / contenteditable="true"| contenteditable="false"/g,
-      ""
+      ''
     );
-
-    // const withoutContentEditable = htmlString;
-
-    // Remove styles added when contenteditable is true
-    const withoutStyles = withoutContentEditable?.replace(
-      / style="border: 1px solid #2196F3; background-color: #e3f2fd;"/g,
-      ""
-    );
-
-    return withoutStyles;
+  
+    return withoutContentEditable;
   }
 
   useEffect(() => {
@@ -57,13 +90,15 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
       );
       return;
     }
-    getNewContent(removeContentEditableAndStyles(content));
+    // getNewContent(removeContentEditableAndStyles(content));
   }, [mappedVariableData, content]);
 
   return (
     <div>
       {isView ? (
-        <div className="tinyCME">{ReactHtmlParser(parsedContent)}</div>
+        <div className="tinyCME">
+          <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
+        </div>
       ) : (
         <Editor
           tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
@@ -104,10 +139,10 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
           }}
           onEditorChange={(value) => {
             setParsedContent(value);
-            if (getNewContent){
-              const cleanHTML = removeContentEditableAndStyles(value);
-              getNewContent(removeContentEditableAndStyles(value));
-            }
+            // if (getNewContent) {
+            //   const cleanHTML = removeContentEditableAndStyles(value);
+            //   getNewContent(removeContentEditableAndStyles(value));
+            // }
           }}
         />
       )}

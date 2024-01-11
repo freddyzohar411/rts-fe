@@ -95,8 +95,6 @@ const TemplateBuilderPage = () => {
     setNewContent(content);
   };
 
-  console.log("Content!!", newContent)
-
   return (
     <React.Fragment>
       <div className="page-content">

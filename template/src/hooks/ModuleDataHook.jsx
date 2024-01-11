@@ -71,7 +71,6 @@ const useModuleData = (props) => {
 
   // Dispatch accordingly of accountId, jobId, candidateId changes
   useEffect(() => {
-    console.log("allIds", allIds);
     if (accountId) {
       dispatch(fetchAccountData(accountId));
     }
