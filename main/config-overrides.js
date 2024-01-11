@@ -12,6 +12,14 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
 module.exports = function override(config, env) {
+  // Add resolve.fallback configuration
+  config.resolve = {
+    ...config.resolve,
+    fallback: {
+      ...config.resolve.fallback,
+      path: require.resolve("path-browserify"),
+    },
+  };
   // white-list some npm modules to the babel-loader pipeline
   // see: https://webpack.js.org/configuration/module/#rule-include
 
@@ -26,7 +34,7 @@ module.exports = function override(config, env) {
     resolveApp("../job"),
     resolveApp("../settings"),
     resolveApp("../formbuilder"),
-    resolveApp("../template"),
+    resolveApp("../template")
   );
 
   // black-list some modules from the babel-loader pipeline

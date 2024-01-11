@@ -19,13 +19,12 @@ import {
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { moduleConstants } from "./constants";
 import SelectElement from "./SelectElement";
-import { TemplateDisplay } from "@workspace/common";
+import { TemplateDisplay } from "@workspace/common"
 import SelectAPIElement from "./SelectAPIElement";
 import EditorElement2 from "./EditorElement2";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
 import { addMediaUrl, deleteDraftMediaUrl } from "../../helpers/backend_helper";
-import FileInputElement from "./FileInputElement";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -42,7 +41,6 @@ const TemplateBuilder = forwardRef(
     const [templateSelected, setTemplateSelected] = useState("");
     const [showInsertModal, setShowInsertModal] = useState(false);
     const [templateContentPreview, setTemplateContentPreview] = useState("");
-    const [file, setFile] = useState(null);
 
     const templateCategories = useSelector(
       (state) => state.TemplateReducer.templateCategories
@@ -51,26 +49,6 @@ const TemplateBuilder = forwardRef(
     const templatesByCategory = useSelector(
       (state) => state.TemplateReducer.templatesByCategory
     );
-
-    const [docxFile, setDocxFile] = useState(null);
-    const [htmlContent, setHtmlContent] = useState("");
-
-    const handleFileChange = async (event) => {
-      const file = event.target.files[0];
-      // setDocxFile(file);
-      // await convertToHtml();
-    };
-
-    // console.log("htmlContent File", htmlContent)
-
-    // const convertToHtml = async (file) => {
-    //   try {
-    //     const result = await mammoth.extract({ arrayBuffer: await file.arrayBuffer() });
-    //     setHtmlContent(result.value);
-    //   } catch (error) {
-    //     console.error('Error converting Word to HTML:', error);
-    //   }
-    // };
 
     // Get all categories
     useEffect(() => {
@@ -389,14 +367,6 @@ const TemplateBuilder = forwardRef(
                     module={typeData}
                   />
                 </Col>
-                {/* <Col>
-                  <FileInputElement
-                    setFile={setFile}
-                    placeholder="Select a docx template"
-                    fileSelected={file}
-                    disabled={templateSelected}
-                  />
-                </Col> */}
                 <Col>
                   <Button
                     type="button"

@@ -1,4 +1,5 @@
 import generatePDF from "react-to-pdf";
+import htmlDocx from "html-docx-js/dist/html-docx";
 import React from "react";
 
 /**
@@ -41,7 +42,7 @@ export function generatePDFCustom(content, options = {}) {
  * @param {*} content 
  * @param {*} options 
  */
-export function generateDocxCustom(content, options = {
+export function generateDocCustom(content, options = {
   filename: "document.doc",
 }) {
   const header =
@@ -61,4 +62,30 @@ export function generateDocxCustom(content, options = {
   fileDownload.download = options.filename + ".doc";
   fileDownload.click();
   document.body.removeChild(fileDownload);
+}
+
+/**
+ * Helper Function to generate Docx from PDF
+ * @param {*} htmlContent 
+ * @param {*} options 
+ */
+export function generateDocxCustom(htmlContent, options = { filename: 'document' }) {
+  const header =
+  "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+  "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+  "xmlns='http://www.w3.org/TR/REC-html40'>" +
+  "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+const footer = "</body></html>";
+const sourceHTML = header + htmlContent + footer;
+  const buffer = htmlDocx.asBlob(sourceHTML);
+  const blob = new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  });
+  const filename = options.filename+'.docx';
+  const downloadLink = document.createElement("a");
+  document.body.appendChild(downloadLink);
+  downloadLink.href = URL.createObjectURL(blob);
+  downloadLink.download = filename;
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
 }

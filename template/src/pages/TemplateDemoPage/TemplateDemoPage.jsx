@@ -290,7 +290,7 @@ const TemplateBuilderPage = () => {
             />
             <Button
               className="form-control btn-custom-primary"
-              onClick={() => {
+              onClick={async () => {
                 if (exportType === "pdf") {
                   ExportHelper.generatePDFCustom(
                     newContent,
@@ -300,7 +300,7 @@ const TemplateBuilderPage = () => {
                   );
                 }
                 if (exportType === "docx") {
-                  ExportHelper.generateDocxCustom(newContent, {
+                  await ExportHelper.generateDocxCustom(newContent, {
                     filename: templateName,
                   });
                 }
