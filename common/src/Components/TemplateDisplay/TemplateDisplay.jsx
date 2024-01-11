@@ -6,13 +6,13 @@ import "./TinyCME.scss";
 
 const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
-  const [parsedContent, setParsedContent] = useState(content|| "");
+  const [parsedContent, setParsedContent] = useState(content || "");
 
   useEffect(() => {
     if (content) {
       setParsedContent(content);
     }
-  },[content])
+  }, [content]);
 
   useEffect(() => {
     if (allData) {
@@ -29,12 +29,35 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
     });
   }
 
+  function removeContentEditableAndStyles(htmlString) {
+    // Remove contenteditable attribute
+    const withoutContentEditable = htmlString?.replace(
+      / contenteditable="true"| contenteditable="false"/g,
+      ""
+    );
+
+    // const withoutContentEditable = htmlString;
+
+    // Remove styles added when contenteditable is true
+    const withoutStyles = withoutContentEditable?.replace(
+      / style="border: 1px solid #2196F3; background-color: #e3f2fd;"/g,
+      ""
+    );
+
+    return withoutStyles;
+  }
+
   useEffect(() => {
     if (mappedVariableData) {
       setParsedContent(replaceVariables(content, mappedVariableData));
-      if (getNewContent)
-        getNewContent(replaceVariables(content, mappedVariableData));
+      getNewContent(
+        removeContentEditableAndStyles(
+          replaceVariables(content, mappedVariableData)
+        )
+      );
+      return;
     }
+    getNewContent(removeContentEditableAndStyles(content));
   }, [mappedVariableData, content]);
 
   return (
@@ -81,7 +104,10 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
           }}
           onEditorChange={(value) => {
             setParsedContent(value);
-            if (getNewContent) getNewContent(value);
+            if (getNewContent){
+              const cleanHTML = removeContentEditableAndStyles(value);
+              getNewContent(removeContentEditableAndStyles(value));
+            }
           }}
         />
       )}

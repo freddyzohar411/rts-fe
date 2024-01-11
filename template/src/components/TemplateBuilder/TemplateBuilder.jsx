@@ -18,14 +18,16 @@ import {
 } from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { moduleConstants } from "./constants";
-import SelectElement from "./SelectElement";
 import { TemplateDisplay } from "@workspace/common";
-import SelectAPIElement from "./SelectAPIElement";
-import EditorElement2 from "./EditorElement2";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
 import { addMediaUrl, deleteDraftMediaUrl } from "../../helpers/backend_helper";
+import mammoth from "mammoth";
+
+import SelectElement from "./SelectElement";
 import FileInputElement from "./FileInputElement";
+import SelectAPIElement from "./SelectAPIElement";
+import EditorElement2 from "./EditorElement2";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -52,25 +54,17 @@ const TemplateBuilder = forwardRef(
       (state) => state.TemplateReducer.templatesByCategory
     );
 
-    const [docxFile, setDocxFile] = useState(null);
-    const [htmlContent, setHtmlContent] = useState("");
-
-    const handleFileChange = async (event) => {
-      const file = event.target.files[0];
-      // setDocxFile(file);
-      // await convertToHtml();
+    const convertToHtml = async (file, setTemplateContent) => {
+      try {
+        const result = await mammoth.convertToHtml({
+          arrayBuffer: await file.arrayBuffer(),
+        });
+        console.log("result", result)
+        setTemplateContent(result.value);
+      } catch (error) {
+        console.error("Error converting Word to HTML:", error);
+      }
     };
-
-    // console.log("htmlContent File", htmlContent)
-
-    // const convertToHtml = async (file) => {
-    //   try {
-    //     const result = await mammoth.extract({ arrayBuffer: await file.arrayBuffer() });
-    //     setHtmlContent(result.value);
-    //   } catch (error) {
-    //     console.error('Error converting Word to HTML:', error);
-    //   }
-    // };
 
     // Get all categories
     useEffect(() => {
@@ -100,6 +94,12 @@ const TemplateBuilder = forwardRef(
         );
       }
     }, [templatesByCategory]);
+
+    useEffect(() => {
+      if (templateSelected) {
+        setFile(null);
+      }
+    }, [templateSelected]);
 
     /**
      * Handle form submit event (Formik)
@@ -389,26 +389,30 @@ const TemplateBuilder = forwardRef(
                     module={typeData}
                   />
                 </Col>
-                {/* <Col>
+                <Col>
                   <FileInputElement
                     setFile={setFile}
                     placeholder="Select a docx template"
                     fileSelected={file}
                     disabled={templateSelected}
                   />
-                </Col> */}
+                </Col>
                 <Col>
                   <Button
                     type="button"
                     className="self-end btn-custom-primary"
-                    disabled={!templateSelected || !categorySelected}
-                    onClick={() => {
-                      const template = templatesByCategory.filter(
-                        (template) => template.id === templateSelected.value
-                      )[0];
-                      setTemplateContentPreview(template.content);
-                      setTemplateSelected("");
-                      setCategorySelected("");
+                    disabled={(!templateSelected || !categorySelected) && !file}
+                    onClick={async () => {
+                      if (file) {
+                        await convertToHtml(file, setTemplateContentPreview);
+                      } else {
+                        const template = templatesByCategory.filter(
+                          (template) => template.id === templateSelected.value
+                        )[0];
+                        setTemplateContentPreview(template.content);
+                        setTemplateSelected("");
+                        setCategorySelected("");
+                      }
                     }}
                   >
                     Preview
@@ -421,6 +425,7 @@ const TemplateBuilder = forwardRef(
                   width: "850px",
                   height: "800px",
                   borderColor: "#8AAED6",
+                  overflow: "auto",
                 }}
               >
                 <TemplateDisplay

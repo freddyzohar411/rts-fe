@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -226,6 +226,132 @@ const EditorElement2 = ({
         init={{
           setup: (editor) => {
             editor.on("keydown", (event) => handleNodeChange(event, editor));
+            // Register Icons
+            editor.ui.registry.addIcon(
+              "edit",
+              '<i class="ri-pencil-line"></i>'
+            );
+
+            // // Add Buttons
+            // editor.ui.registry.addToggleButton("myEditableButton", {
+            //   icon: "edit", // Use the custom icon
+            //   tooltip: "Make Editable",
+            //   onAction: function (buttonAPI) {
+            //     var selectedText = editor.selection.getContent();
+            //     var range = editor.selection.getRng();
+            //     console.log("BTN Active: ", buttonAPI.isActive());
+            //     if (buttonAPI.isActive()) {
+            //       console.log("DISABLING");
+            //       const span = editor.selection.getNode();
+            //       if (span && span.tagName === "SPAN") {
+            //         const selectedRange = editor.selection.getRng();
+            //         const selectedText = selectedRange.cloneContents().textContent;
+                
+            //         // Create a new span for the selected text
+            //         const nonEditableSpan = document.createElement("span");
+            //         nonEditableSpan.textContent = selectedText;
+            //         // nonEditableSpan.contentEditable = "false";
+            //         nonEditableSpan.style = "border: none; background-color: initial;"; // Override the parent style
+                
+            //         // Split the span into three parts: before, selected, and after
+            //         const before = span.textContent.substring(0, selectedRange.startOffset);
+            //         const after = span.textContent.substring(selectedRange.endOffset);
+                
+            //         // Create a new span for the third section (the text after the selection)
+            //         const afterSpan = document.createElement("span");
+            //         afterSpan.textContent = after;
+            //         afterSpan.style = span.style.cssText; // Match the style of the first section
+            //         afterSpan.contentEditable = "true"; // Set contenteditable to true
+                
+            //         // Replace the original span with the three new parts
+            //         span.textContent = before;
+            //         span.after(nonEditableSpan);
+            //         nonEditableSpan.after(afterSpan);
+                
+            //         // Move the cursor to the end of the inserted content
+            //         range.setStartAfter(nonEditableSpan);
+            //         range.collapse(true);
+            //         editor.selection.setRng(range);
+            //       }
+            //     } else {
+            //       // If currently non-editable, wrap the selected text with a span and apply a class
+            //       editor.selection.setContent(
+            //         `<span style="border: 1px solid #2196F3; background-color: #E3F2FD;" contenteditable="true">${selectedText}</span>`
+            //       );
+
+            //       // Move the cursor to the end of the inserted content
+            //       range.setStartAfter(range.endContainer);
+            //       range.collapse(true);
+            //       editor.selection.setRng(range);
+            //     }
+
+            //     buttonAPI.setActive(!buttonAPI.isActive());
+            //   },
+            // });
+
+            // Add a button for enabling
+editor.ui.registry.addButton("myEnableButton", {
+  icon: "edit", // Use the custom icon
+  tooltip: "Make Editable",
+  onAction: function () {
+    var selectedText = editor.selection.getContent();
+    var range = editor.selection.getRng();
+
+    // If currently non-editable, wrap the selected text with a span and apply a class
+    editor.selection.setContent(
+      `<span style="border: 1px solid #2196F3; background-color: #E3F2FD;" contenteditable="true">${selectedText}</span>`
+    );
+
+    // Move the cursor to the end of the inserted content
+    range.setStartAfter(range.endContainer);
+    range.collapse(true);
+    editor.selection.setRng(range);
+  },
+});
+
+// Add a button for disabling
+editor.ui.registry.addButton("myDisableButton", {
+  text: "Disable",
+  // icon: "edit", // Use the custom icon
+  tooltip: "Make Non-Editable",
+  onAction: function () {
+    var selectedText = editor.selection.getContent();
+    var range = editor.selection.getRng();
+
+    const span = editor.selection.getNode();
+    if (span && span.tagName === "SPAN") {
+      const selectedRange = editor.selection.getRng();
+      const selectedText = selectedRange.cloneContents().textContent;
+
+      // Create a new span for the selected text
+      const nonEditableSpan = document.createElement("span");
+      nonEditableSpan.textContent = selectedText;
+      nonEditableSpan.style = "border: none; background-color: initial;"; // Override the parent style
+
+      // Split the span into three parts: before, selected, and after
+      const before = span.textContent.substring(0, selectedRange.startOffset);
+      const after = span.textContent.substring(selectedRange.endOffset);
+
+      // Create a new span for the third section (the text after the selection)
+      const afterSpan = document.createElement("span");
+      afterSpan.textContent = after;
+      afterSpan.style = span.style.cssText; // Match the style of the first section
+      afterSpan.contentEditable = "true"; // Set contenteditable to true
+
+      // Replace the original span with the three new parts
+      span.textContent = before;
+      span.after(nonEditableSpan);
+      nonEditableSpan.after(afterSpan);
+
+      // Move the cursor to the end of the inserted content
+      range.setStartAfter(nonEditableSpan);
+      range.collapse(true);
+      editor.selection.setRng(range);
+    }
+  },
+});
+
+
           },
           height: 500,
           menubar: false,
@@ -252,7 +378,7 @@ const EditorElement2 = ({
             "codesample",
           ],
           toolbar:
-            "undo redo | blocks fontfamily fontsizeinput | " +
+            "undo redo | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsizeinput | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr |" +
             "removeformat | searchreplace |" +

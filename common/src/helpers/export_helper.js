@@ -4,8 +4,8 @@ import React from "react";
 
 /**
  * Helper function to generate PDF from HTML
- * @param {*} content 
- * @param {*} options 
+ * @param {*} content
+ * @param {*} options
  */
 export function generatePDFCustom(content, options = {}) {
   // Create a ref for the target element
@@ -39,12 +39,15 @@ export function generatePDFCustom(content, options = {}) {
 
 /**
  * Helper function to generate Word docx from HTML
- * @param {*} content 
- * @param {*} options 
+ * @param {*} content
+ * @param {*} options
  */
-export function generateDocCustom(content, options = {
-  filename: "document.doc",
-}) {
+export function generateDocCustom(
+  content,
+  options = {
+    filename: "document.doc",
+  }
+) {
   const header =
     "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
     "xmlns:w='urn:schemas-microsoft-com:office:word' " +
@@ -66,22 +69,26 @@ export function generateDocCustom(content, options = {
 
 /**
  * Helper Function to generate Docx from PDF
- * @param {*} htmlContent 
- * @param {*} options 
+ * @param {*} htmlContent
+ * @param {*} options
  */
-export function generateDocxCustom(htmlContent, options = { filename: 'document' }) {
+export function generateDocxCustom(
+  htmlContent,
+  options = { filename: "document" }
+) {
   const header =
-  "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
-  "xmlns:w='urn:schemas-microsoft-com:office:word' " +
-  "xmlns='http://www.w3.org/TR/REC-html40'>" +
-  "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
-const footer = "</body></html>";
-const sourceHTML = header + htmlContent + footer;
+    "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+    "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+    "xmlns='http://www.w3.org/TR/REC-html40'>" +
+    "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+  const footer = "</body></html>";
+  const sourceHTML = header + htmlContent + footer;
+
   const buffer = htmlDocx.asBlob(sourceHTML);
   const blob = new Blob([buffer], {
-    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
-  const filename = options.filename+'.docx';
+  const filename = options.filename + ".docx";
   const downloadLink = document.createElement("a");
   document.body.appendChild(downloadLink);
   downloadLink.href = URL.createObjectURL(blob);
@@ -89,3 +96,5 @@ const sourceHTML = header + htmlContent + footer;
   downloadLink.click();
   document.body.removeChild(downloadLink);
 }
+
+
