@@ -81,8 +81,9 @@ const FormBuilder = ({
   const [jsonFile, setJsonFile] = useState(null);
   const [loadedJSON, setLoadedJSON] = useState(null);
 
-  console.log("loadedJSON", loadedJSON);  
-
+  /**
+   * If json file is selected, convert it to json object
+   */
   useEffect(() => {
     if (jsonFile) {
       FileHelper.convertJSONFileToJSONObject(jsonFile).then((data) => {
@@ -105,6 +106,9 @@ const FormBuilder = ({
     }
   }, [jsonFile]);
 
+  /**
+   * Set form data from loaded json if exist
+   */
   useEffect(() => {
     if (loadedJSON) {
       setFormName(loadedJSON.formName);
@@ -912,12 +916,14 @@ const FormBuilder = ({
                 >{`Form Builder (Total Fields: ${formFields?.length})`}</span>
                 {/* Dev hide field button */}
                 <div className="d-flex gap-2">
-                  <FileInputElement
-                    width="400px"
-                    placeholder="Add JSON"
-                    setFile={setJsonFile}
-                    fileSelected={jsonFile}
-                  />
+                  {!template && (
+                    <FileInputElement
+                      width="400px"
+                      placeholder="Add JSON"
+                      setFile={setJsonFile}
+                      fileSelected={jsonFile}
+                    />
+                  )}
                   <Button
                     type="button"
                     onClick={() => setShowAll((prev) => !prev)}
