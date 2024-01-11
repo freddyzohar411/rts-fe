@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { ExportHelper } from "@workspace/common";
+import { generateOptions } from "./pdfOption";
 
 const EditorElement2 = ({
   name,
@@ -236,6 +238,41 @@ const EditorElement2 = ({
               '<i style="font-size:1.2rem": class="ri-edit-box-fill"></i>'
             );
 
+            editor.ui.registry.addIcon(
+              "exportDocxIcon",
+              '<i style="font-size:1.2rem": class="ri-file-word-line"></i>'
+            );
+
+            editor.ui.registry.addIcon(
+              "exportPDFIcon",
+              '<i style="font-size:1.2rem": class="bx bxs-file-pdf"></i>'
+            );
+
+            editor.ui.registry.addButton("exportPDFButton", {
+              icon: "exportPDFIcon", // Use the custom icon
+              tooltip: "Export to PDF",
+              onAction: function () {
+                const content = editor.getContent();
+                ExportHelper.generatePDFCustom(
+                  content,
+                  generateOptions({
+                    filename: "test.pdf",
+                  })
+                );
+              },
+            });
+
+            editor.ui.registry.addButton("exportDocxButton", {
+              icon: "exportDocxIcon", // Use the custom icon
+              tooltip: "Export to Docx",
+              onAction: function () {
+                const content = editor.getContent();
+                ExportHelper.generateDocxCustom(content, {
+                  filename: "test.docx",
+                });
+              },
+            });
+
             // Add a button for enabling
             editor.ui.registry.addButton("myEnableButton", {
               icon: "addEditIcon", // Use the custom icon
@@ -334,7 +371,7 @@ const EditorElement2 = ({
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr |" +
             "removeformat | searchreplace |" +
-            "table | code codesample | emoticons charmap image media | fullscreen | preview | help",
+            "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPDFButton exportDocxButton |  help",
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           file_picker_callback: handleFilePickerCallback,

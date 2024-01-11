@@ -1,5 +1,6 @@
 import generatePDF from "react-to-pdf";
 import htmlDocx from "html-docx-js/dist/html-docx";
+import FileSaver from 'file-saver';
 import React from "react";
 
 /**
@@ -89,12 +90,7 @@ export function generateDocxCustom(
     type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
   const filename = options.filename + ".docx";
-  const downloadLink = document.createElement("a");
-  document.body.appendChild(downloadLink);
-  downloadLink.href = URL.createObjectURL(blob);
-  downloadLink.download = filename;
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
+  FileSaver.saveAs(blob, filename);
 }
 
 
