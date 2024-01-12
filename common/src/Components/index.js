@@ -83,6 +83,9 @@ import Ckeditor from "./ckeditor/build/ckeditor";
 // Import Template Display
 import TemplateDisplay from "./TemplateDisplay/TemplateDisplay";
 
+// Import Elements
+import SelectElement from "./Elements/SelectElement";
+
 export {
   BreadCrumb,
   getChartColorsArray,
@@ -156,5 +159,8 @@ export {
   Ckeditor,
 
   // Export Template Display
-  TemplateDisplay
+  TemplateDisplay,
+
+  // Export Elements
+  SelectElement,
 };

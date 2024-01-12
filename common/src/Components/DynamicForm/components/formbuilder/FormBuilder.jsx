@@ -47,6 +47,9 @@ const FormBuilder = ({
   onSave,
   initialFormState,
 }) => {
+  // ========================= Dev Settings =========================
+  const loadJSONFlag = false;
+  // ================================================================
   const navigate = useNavigate();
   const [buttonName, setButtonName] = useState("");
   const [baseFormTemplate, setBaseFormTemplate] = useState(null);
@@ -917,7 +920,7 @@ const FormBuilder = ({
                 >{`Form Builder (Total Fields: ${formFields?.length})`}</span>
                 {/* Dev hide field button */}
                 <div className="d-flex gap-2">
-                  {!template && (
+                  {!template && loadJSONFlag && (
                     <FileInputElement
                       width="400px"
                       placeholder="Add JSON"
@@ -1201,14 +1204,6 @@ const FormBuilder = ({
                             Save to API
                           </Button>
                         )} */}
-                        {formFields.length > 0 && (
-                          <Button
-                            className="btn btn-custom-primary mt-3 ms-3"
-                            onClick={handleSaveJSONData}
-                          >
-                            Save JSON File
-                          </Button>
-                        )}
                       </form>
                     </div>
                     {/* User Buttons */}
@@ -1220,6 +1215,14 @@ const FormBuilder = ({
                         Back
                       </Button>
                       <div>
+                        {formFields.length > 0 && loadJSONFlag && (
+                          <Button
+                            className="btn btn-custom-primary mt-3 ms-3"
+                            onClick={handleSaveJSONData}
+                          >
+                            Save JSON File
+                          </Button>
+                        )}
                         {formFields.length > 0 && (
                           <Button
                             className="btn btn-danger mt-3 ms-3"

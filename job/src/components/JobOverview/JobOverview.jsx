@@ -26,6 +26,9 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 import { useUserAuth } from "@workspace/login";
 
+// Elements
+import { SelectElement } from "@workspace/common";
+
 // Stepper
 import { TimelineStepper } from "../TimelineStepper";
 // Forms
@@ -45,6 +48,7 @@ function JobOverview() {
   const [stepperState, setStepperState] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
+  const [selectedOfferTemplate, setSelectedOfferTemplate] = useState(null);
 
   const steps = [0, 1, 2, 3, 4, 5, 6, 7];
 
@@ -331,6 +335,7 @@ function JobOverview() {
             <TabPane tabId="2"></TabPane>
           </TabContent>
         </Row>
+
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
@@ -367,10 +372,17 @@ function JobOverview() {
                     </span>
                   </Row>
                 </Col>
+                {/* koh */}
                 {activeStep === 6 && (
                   <Col>
                     <div>
-                      <Input
+                      <SelectElement
+                        optionsData={conditionOfferTemplates}
+                        setSelectedOptionData={setSelectedOfferTemplate}
+                        placeholder="Select a template"
+                        value={selectedOfferTemplate}
+                      />
+                      {/* <Input
                         type="select"
                         className="form-select form-select-md"
                       >
@@ -379,7 +391,7 @@ function JobOverview() {
                         </option>
                         <option value="">Template 1</option>
                         <option value="">Template 2</option>
-                      </Input>
+                      </Input> */}
                     </div>
                   </Col>
                 )}
