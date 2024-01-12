@@ -111,6 +111,7 @@ const FormBuilder = ({
    */
   useEffect(() => {
     if (loadedJSON) {
+      console.log(loadedJSON);
       setFormName(loadedJSON.formName);
       setFormOptions({
         formType: loadedJSON.formType,
