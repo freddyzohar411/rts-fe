@@ -16,7 +16,8 @@ import {
   Input,
 } from "reactstrap";
 import { fetchTemplate } from "../../store/template/action";
-import { TemplateDisplay } from "@workspace/common";
+// import { TemplateDisplay } from "@workspace/common";
+import { TemplateDisplayV2 } from "@workspace/common";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
 import useModuleData from "../../hooks/ModuleDataHook";
@@ -220,9 +221,16 @@ const TemplateBuilderPage = () => {
                         width: "850px",
                         height: "1000px",
                         borderColor: "#000000",
+                        overflow: "auto",
                       }}
                     >
-                      <TemplateDisplay
+                      {/* <TemplateDisplay
+                        content={templateData?.content}
+                        allData={allModuleData}
+                        isView={isView}
+                        getNewContent={getNewContent}
+                      /> */}
+                       <TemplateDisplayV2
                         content={templateData?.content}
                         allData={allModuleData}
                         isView={isView}

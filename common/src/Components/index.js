@@ -82,6 +82,7 @@ import Ckeditor from "./ckeditor/build/ckeditor";
 
 // Import Template Display
 import TemplateDisplay from "./TemplateDisplay/TemplateDisplay";
+import TemplateDisplayV2 from "./TemplateDisplay/TemplateDisplayV2";
 
 // Import Elements
 import SelectElement from "./Elements/SelectElement";
@@ -160,6 +161,7 @@ export {
 
   // Export Template Display
   TemplateDisplay,
+  TemplateDisplayV2,
 
   // Export Elements
   SelectElement,

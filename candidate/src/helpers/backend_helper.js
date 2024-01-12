@@ -107,7 +107,7 @@ export const GET_CANDIDATE_EMPLOYER_DETAILS_BY_ENTITY_URL = (entityType, entityI
 
 // Get candidate data by Id
 export const getCandidateDataById = (id) =>
-  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/${id}/data`);
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/${id}/data/all`);
 
 // Get candidate field All
 export const getCandidateFieldAll = () =>

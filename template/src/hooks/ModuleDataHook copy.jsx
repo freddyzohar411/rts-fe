@@ -20,7 +20,6 @@ const useModuleData = (props) => {
     candidateId: null,
   });
   const [allModuleData, setAllModuleData] = useState({});
-  console.log("allModuleData", allModuleData);
 
   const setAllIdsHandler = () => {
     setAllIds({
@@ -59,7 +58,7 @@ const useModuleData = (props) => {
       }
 
       if (candidateData) {
-        obj["Candidates"] = candidateData;
+        obj["Candidates"] = flattenObject(candidateData);
       }
 
       if (jobData) {

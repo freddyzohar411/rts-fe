@@ -427,16 +427,18 @@ const TemplateBuilder = forwardRef(
                   editorRef={editorRef}
                 />
               </Col>
-              <Col>
-                <Label>Module Field</Label>
-                <SelectElement
-                  value={selectedField}
-                  placeholder="Select a field"
-                  setSelectedOptionData={setSelectedField}
-                  optionsData={fields}
-                  editorRef={editorRef}
-                />
-              </Col>
+              {!checkTemplateSelected() && (
+                <Col>
+                  <Label>Module Field</Label>
+                  <SelectElement
+                    value={selectedField}
+                    placeholder="Select a field"
+                    setSelectedOptionData={setSelectedField}
+                    optionsData={fields}
+                    editorRef={editorRef}
+                  />
+                </Col>
+              )}
               <Col>
                 <Button
                   type="button"
@@ -461,11 +463,11 @@ const TemplateBuilder = forwardRef(
                 <Button
                   type="button"
                   className="self-end"
-                  disabled={(!checkFieldSelected() || !checkTemplateSelected())}
+                  disabled={(!typeData || !selectedSection) || !checkTemplateSelected()}
                   onClick={() => {
                     setInjectVariable(
                       "{{" +
-                        `${categorySelected.value}.${templateSelected.value}:${typeData.value}.${selectedSection.value}.${selectedField.value}` +
+                        `${categorySelected.value}.${templateSelected.value}:${typeData.value}.${selectedSection.value}` +
                         "}}"
                     );
                     setFieldName("");
