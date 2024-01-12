@@ -48,7 +48,7 @@ const FormBuilder = ({
   initialFormState,
 }) => {
   // ========================= Dev Settings =========================
-  const loadJSONFlag = false;
+  const loadJSONFlag = true;
   // ================================================================
   const navigate = useNavigate();
   const [buttonName, setButtonName] = useState("");
