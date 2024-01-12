@@ -23,6 +23,7 @@ import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
 import { addMediaUrl, deleteDraftMediaUrl } from "../../helpers/backend_helper";
 import mammoth from "mammoth";
+import { moduleActions } from "./moduleAction";
 
 import SelectElement from "./SelectElement";
 import FileInputElement from "./FileInputElement";
@@ -45,7 +46,15 @@ const TemplateBuilder = forwardRef(
     const [showInsertModal, setShowInsertModal] = useState(false);
     const [templateContentPreview, setTemplateContentPreview] = useState("");
     const [file, setFile] = useState(null);
+    const [sections, setSections] = useState([]);
+    const [selectedSection, setSelectedSection] = useState("");
+    const [fields, setFields] = useState([]);
+    const [selectedField, setSelectedField] = useState("");
 
+    // const [categories, setCategories] = useState([]);
+    // const [selectedCategory, setSelectedCategory] = useState(null);
+    // const [filterTemplates, setFilterTemplates] = useState([]);
+    // const [selectedTemplate, setSelectedTemplate] = useState(null);
     const templateCategories = useSelector(
       (state) => state.TemplateReducer.templateCategories
     );
@@ -54,12 +63,57 @@ const TemplateBuilder = forwardRef(
       (state) => state.TemplateReducer.templatesByCategory
     );
 
+    const sectionData = useSelector((state) => {
+      if (typeData?.label === "Accounts") {
+        return state.AccountReducer.accountsFields;
+      }
+      if (typeData?.label === "Jobs") {
+        return state.JobListReducer.jobsFields;
+      }
+      if (typeData?.label === "Candidates") {
+        return state.CandidateReducer.candidatesFieldsAll;
+      }
+    });
+
+    // Get field All if type exist
+    useEffect(() => {
+      if (typeData === "" || typeData === null) {
+        setSections([]);
+        setFields([]);
+        setSelectedSection("");
+        setSelectedField("");
+      }
+      if (typeData) {
+        dispatch(moduleActions[typeData.label]());
+      }
+    }, [typeData]);
+
+    // Check section data
+    useEffect(() => {
+      if (sectionData) {
+        if (typeData?.label === "Candidates") {
+          setSections(sectionData);
+        }
+      }
+    }, [sectionData]);
+
+    // Check Selected Section
+    useEffect(() => {
+      if (selectedSection === "" || selectedSection === null) {
+        setFields([]);
+        setSelectedField("");
+      }
+      if (selectedSection) {
+        setFields(sectionData[selectedSection.value]);
+      }
+    }, [selectedSection]);
+
     const convertToHtml = async (file, setTemplateContent) => {
       try {
         const result = await mammoth.convertToHtml({
           arrayBuffer: await file.arrayBuffer(),
         });
-        console.log("result", result)
+        console.log("result", result);
         setTemplateContent(result.value);
       } catch (error) {
         console.error("Error converting Word to HTML:", error);
@@ -89,7 +143,7 @@ const TemplateBuilder = forwardRef(
         setTemplateList(
           templatesByCategory.map((template) => ({
             label: template.name,
-            value: template.id,
+            value: template.name,
           }))
         );
       }
@@ -154,6 +208,43 @@ const TemplateBuilder = forwardRef(
         setTemplateContentPreview("");
       }
     }, [showInsertModal]);
+
+    function convertToTitleCase(str) {
+      return str.replace(/([A-Z])/g, " $1").replace(/^./, function (s) {
+        return s.toUpperCase();
+      });
+    }
+
+    function convertObjectKeyToArrayOption(obj) {
+      const keys = Object.keys(obj);
+      const options = keys.map((key) => ({
+        label: convertToTitleCase(key),
+        value: key,
+      }));
+      return options;
+    }
+
+    const checkFieldSelected = () => {
+      if (typeData) {
+        if (selectedSection && fields.length === 0) {
+          return true;
+        }
+        if (selectedSection && selectedField) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const checkTemplateSelected = () => {
+      if (categorySelected && templateSelected) {
+        return true;
+      }
+      return false;
+    };
+
+    // console.log("Selected Template", selectedTemplate)
+    // console.log("Selected Category", selectedCategory)
 
     return (
       <div className="d-flex flex-column gap-2">
@@ -224,49 +315,12 @@ const TemplateBuilder = forwardRef(
                 </div>
               </Col>
             </Row>
-            {/* <Row className="align-items-end mb-3">
+            {/* <hr />
+            <Row className="mb-1">
               <Col>
-                <Label>Category</Label>
-                <SelectElement
-                  optionsData={templateCategories.map((category) => ({
-                    label: category,
-                    value: category,
-                  }))}
-                  setSelectedOptionData={setCategorySelected}
-                  placeholder="Select a category"
-                  value={categorySelected}
-                  // editorRef={editorRef}
-                />
+                <span className="h6 fw-bold">Variable Injection</span>
               </Col>
-              <Col>
-                <Label>Template</Label>
-                <SelectElement
-                  optionsData={templateList}
-                  value={templateSelected}
-                  placeholder="Select a field"
-                  setSelectedOptionData={setTemplateSelected}
-                  module={typeData}
-                  // editorRef={editorRef}
-                />
-              </Col>
-              <Col>
-                <Button
-                  type="button"
-                  className="self-end"
-                  disabled={!templateSelected || !categorySelected}
-                  onClick={() => {
-                    const template = templatesByCategory.filter(
-                      (template) => template.id === templateSelected.value
-                    )[0];
-                    editorRef.current.setContent(template.content);
-                    setTemplateSelected("");
-                    setCategorySelected("");
-                  }}
-                >
-                  Insert Template
-                </Button>
-              </Col>
-            </Row> */}
+            </Row>
             <Row className="align-items-end">
               <Col>
                 <Label>Module Type</Label>
@@ -304,7 +358,125 @@ const TemplateBuilder = forwardRef(
                   Add
                 </Button>
               </Col>
+            </Row> */}
+            <hr className="" />
+            <Row className="mb-1 mt-2">
+              <Col>
+                <span className="h6 fw-bold">Template Injection</span>
+              </Col>
             </Row>
+            <Row className="align-items-end mb-3">
+              <Col>
+                <Label>Category</Label>
+                <SelectElement
+                  optionsData={templateCategories.map((category) => ({
+                    label: category,
+                    value: category,
+                  }))}
+                  setSelectedOptionData={setCategorySelected}
+                  placeholder="Select a category"
+                  value={categorySelected}
+                />
+              </Col>
+              <Col>
+                <Label>Template</Label>
+                <SelectElement
+                  optionsData={templateList}
+                  value={templateSelected}
+                  placeholder="Select a field"
+                  setSelectedOptionData={setTemplateSelected}
+                />
+              </Col>
+              <Col>
+                <Button
+                  type="button"
+                  className="self-end"
+                  disabled={!checkTemplateSelected()}
+                  onClick={() => {
+                    setInjectVariable(
+                      "{{" +
+                        `${categorySelected.value}.${templateSelected.value}` +
+                        "}}"
+                    );
+                    setFieldName("");
+                    setTypeData("");
+                  }}
+                >
+                  Add Template
+                </Button>
+              </Col>
+            </Row>
+            <Row className="align-items-end">
+              <Col>
+                <Label>Module Type</Label>
+                <SelectElement
+                  optionsData={moduleConstants}
+                  setSelectedOptionData={setTypeData}
+                  placeholder="Select a type"
+                  value={typeData}
+                  editorRef={editorRef}
+                />
+              </Col>
+              <Col>
+                <Label>Module Section</Label>
+                <SelectElement
+                  value={selectedSection}
+                  placeholder="Select a section"
+                  setSelectedOptionData={setSelectedSection}
+                  optionsData={convertObjectKeyToArrayOption(sections)}
+                  editorRef={editorRef}
+                />
+              </Col>
+              <Col>
+                <Label>Module Field</Label>
+                <SelectElement
+                  value={selectedField}
+                  placeholder="Select a field"
+                  setSelectedOptionData={setSelectedField}
+                  optionsData={fields}
+                  editorRef={editorRef}
+                />
+              </Col>
+              <Col>
+                <Button
+                  type="button"
+                  className="self-end"
+                  disabled={!checkFieldSelected()}
+                  onClick={() => {
+                    setInjectVariable(
+                      "${" +
+                        `${typeData.value}.${selectedSection.value}.${selectedField.value}` +
+                        "}"
+                    );
+                    setFieldName("");
+                    setTypeData("");
+                  }}
+                >
+                  Add Variable
+                </Button>
+              </Col>
+            </Row>
+            <Row className="mt-3">
+              <Col>
+                <Button
+                  type="button"
+                  className="self-end"
+                  disabled={(!checkFieldSelected() || !checkTemplateSelected())}
+                  onClick={() => {
+                    setInjectVariable(
+                      "{{" +
+                        `${categorySelected.value}.${templateSelected.value}:${typeData.value}.${selectedSection.value}.${selectedField.value}` +
+                        "}}"
+                    );
+                    setFieldName("");
+                    setTypeData("");
+                  }}
+                >
+                  Add template + Variable
+                </Button>
+              </Col>
+            </Row>
+            <hr className="mt-4" />
           </Col>
         </Row>
         <Row className="mb-3">
@@ -316,7 +488,11 @@ const TemplateBuilder = forwardRef(
                   <Button
                     className="btn-custom-primary"
                     style={{ padding: "5px 10px 5px 10px" }}
-                    onClick={() => setShowInsertModal(true)}
+                    onClick={() => {
+                      setTemplateSelected("");
+                      setCategorySelected("");
+                      setShowInsertModal(true);
+                    }}
                   >
                     + Insert Template
                   </Button>
@@ -407,7 +583,10 @@ const TemplateBuilder = forwardRef(
                         await convertToHtml(file, setTemplateContentPreview);
                       } else {
                         const template = templatesByCategory.filter(
-                          (template) => template.id === templateSelected.value
+                          (template) =>
+                            (template.name =
+                              templateSelected.value &&
+                              template.category === categorySelected.value)
                         )[0];
                         setTemplateContentPreview(template.content);
                         setTemplateSelected("");

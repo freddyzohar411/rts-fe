@@ -27,6 +27,9 @@ import {
   FETCH_CANDIDATE_DATA,
   FETCH_CANDIDATE_DATA_SUCCESS,
   FETCH_CANDIDATE_DATA_FAILURE,
+  FETCH_CANDIDATES_FIELDS_ALL,
+  FETCH_CANDIDATES_FIELDS_ALL_SUCCESS,
+  FETCH_CANDIDATES_FIELDS_ALL_FAILURE,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -174,6 +177,23 @@ export const fetchCandidateDataFailure = (error) => ({
   type: FETCH_CANDIDATE_DATA_FAILURE,
   payload: error,
 });
+
+// Fetch Candidates Fields All
+export const fetchCandidatesFieldsAll = () => ({
+  type: FETCH_CANDIDATES_FIELDS_ALL,
+});
+
+export const fetchCandidatesFieldsAllSuccess = (candidatesFields) => ({
+  type: FETCH_CANDIDATES_FIELDS_ALL_SUCCESS,
+  payload: candidatesFields,
+});
+
+export const fetchCandidatesFieldsAllFailure = (error) => ({
+  type: FETCH_CANDIDATES_FIELDS_ALL_FAILURE,
+  payload: error,
+});
+
+
 
 
 

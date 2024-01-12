@@ -17,7 +17,8 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
       observer.current = new MutationObserver((mutations) => {
         const htmlString = displayRef.current.innerHTML;
         setFullHtmlString(removeContentEditableAndStyles(htmlString));
-        getNewContent(removeContentEditableAndStyles(htmlString));
+        if (getNewContent)
+          getNewContent(removeContentEditableAndStyles(htmlString));
       });
 
       observer.current.observe(displayRef.current, {
@@ -59,24 +60,28 @@ const TemplateDisplay = ({ content, allData, isView, getNewContent }) => {
   // Remove contenteditable attribute and style attribute from HTML string
   function removeContentEditableAndStyles(htmlString) {
     // Identify elements with contenteditable attribute
-    const contentEditableRegex = /<([a-z][a-z0-9]*)([^>]*contenteditable="[^"]*"[^>]*)>/gi;
+    const contentEditableRegex =
+      /<([a-z][a-z0-9]*)([^>]*contenteditable="[^"]*"[^>]*)>/gi;
     let match;
     if (!htmlString) return;
     while ((match = contentEditableRegex.exec(htmlString)) !== null) {
       // For each matched element, remove the style attribute
-      const styleRegex = new RegExp(` style="[^"]*"`, 'g');
-      const elementWithoutStyle = match[0].replace(styleRegex, '');
+      const styleRegex = new RegExp(` style="[^"]*"`, "g");
+      const elementWithoutStyle = match[0].replace(styleRegex, "");
       // Replace the original element with the element without style in the HTML string
-      const elementRegex = new RegExp(match[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+      const elementRegex = new RegExp(
+        match[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+        "g"
+      );
       htmlString = htmlString.replace(elementRegex, elementWithoutStyle);
     }
-  
+
     // Remove contenteditable attribute
     const withoutContentEditable = htmlString.replace(
       / contenteditable="true"| contenteditable="false"/g,
-      ''
+      ""
     );
-  
+
     return withoutContentEditable;
   }
 
