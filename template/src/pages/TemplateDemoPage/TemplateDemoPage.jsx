@@ -17,7 +17,8 @@ import {
 } from "reactstrap";
 import { fetchTemplate } from "../../store/template/action";
 // import { TemplateDisplay } from "@workspace/common";
-import { TemplateDisplayV2 } from "@workspace/common";
+// import { TemplateDisplayV2 } from "@workspace/common";
+import { TemplateDisplayV3 } from "@workspace/common";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
 import useModuleData from "../../hooks/ModuleDataHook";
@@ -230,11 +231,12 @@ const TemplateBuilderPage = () => {
                         isView={isView}
                         getNewContent={getNewContent}
                       /> */}
-                       <TemplateDisplayV2
+                       <TemplateDisplayV3
                         content={templateData?.content}
                         allData={allModuleData}
                         isView={isView}
                         getNewContent={getNewContent}
+                        recursive={true}
                       />
                     </Container>
                   </Row>

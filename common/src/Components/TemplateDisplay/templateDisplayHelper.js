@@ -1,3 +1,5 @@
+import axios from "axios";
+
 /**
  * Replace variables placeholders( ${xxx.yyy.zzz} in html with variabledata
  * @param {*} html
@@ -19,36 +21,6 @@ export function replaceVariables(html, variableData) {
   });
 }
 
-// /**
-//  * Replace template placeholders {{xxx.yyy}} in html with templateData
-//  * Within template data, if there is a variable placeholder ${xxx.yyy.zzz} then replace it with variableData
-//  * @param {*} htmlString
-//  * @param {*} templateData
-//  * @returns
-//  */
-// export function replaceTemplate(htmlString, templateData, mappedVariableData) {
-//   // find those with {{xxx.yyy}} not {{xxx.yyy:zzz}} and replace them with the content in templateData[xxx][yyy]
-//   // return back the html that has been replaced with the data
-//   const pattern = /{{([^:]*?)}}/g;
-//   const matches = htmlString?.match(pattern) || [];
-//   let result = htmlString;
-//   matches.forEach((match) => {
-//     const key = match.replace("{{", "").replace("}}", "");
-//     const keys = key.split(".");
-//     const value = templateData?.[keys[0]]?.[keys[1]] || "-";
-//     // In this Value find ${xxx.yyy.zzz} and replace them with the content in variableData[xxx][yyy][zzz]
-//     const valueMatches = value.match(/\${(.*?)}/g);
-//     let replacedValue = value;
-//     valueMatches?.forEach((match) => {
-//       const key = match.replace("${", "").replace("}", "");
-//       const keys = key.split(".");
-//       const value = mappedVariableData?.[keys[0]]?.[keys[1]]?.[keys[2]] || "-";
-//       replacedValue = replacedValue.replace(match, value);
-//     });
-//     result = result.replace(match, replacedValue);
-//   });
-//   return result;
-// }
 
 /**
  * Replace template placeholders {{xxx.yyy}} in html with templateData
@@ -57,7 +29,9 @@ export function replaceVariables(html, variableData) {
  * @param {*} templateData
  * @returns
  */
-export function replaceTemplate(htmlString, templateData, mappedVariableData) {
+export async function replaceTemplate(htmlString, mappedVariableData) {
+  if (!htmlString) return;
+  const templateData = await getTemplateData(htmlString);
   const pattern = /{{([^:]*?)}}/g;
   const matches = htmlString?.match(pattern) || [];
   let result = htmlString;
@@ -80,7 +54,9 @@ export function replaceTemplate(htmlString, templateData, mappedVariableData) {
  * @param {*} variableData
  * @returns
  */
-export function replaceTemplateArray(htmlString, templateData, variableData) {
+export async function replaceTemplateArray(htmlString, variableData) {
+  if (!htmlString) return;
+  const templateData = await getTemplateData(htmlString);
   const pattern = /{{(.*?):(.*?)}}/g;
   const matches = htmlString?.match(pattern) || [];
   let result = htmlString;
@@ -127,6 +103,7 @@ export function getAllTemplatesToRenderFromHTML(htmlString) {
  * @returns
  */
 export function removeContentEditableAndStyles(htmlString) {
+  if (!htmlString) return;
   // Identify elements with contenteditable attribute
   const contentEditableRegex =
     /<([a-z][a-z0-9]*)([^>]*contenteditable="[^"]*"[^>]*)>/gi;
@@ -156,6 +133,7 @@ export function removeContentEditableAndStyles(htmlString) {
 // Private function helpers ===============================================
 
 function extractStringLiteralsDoubleBracketsToList(htmlString) {
+  if (!htmlString) return;
   var pattern = /{{(.*?)(?:\..*?)?}}/g;
   var matches = htmlString.match(pattern) || [];
 
@@ -171,6 +149,7 @@ function extractStringLiteralsDoubleBracketsToList(htmlString) {
 }
 
 function getTemplateListCriteriaByCategoryAndNameToList(extractedList) {
+  if (!extractedList) return;
   // Split by :
   const splitList = extractedList
     .map((item) => {
@@ -188,6 +167,7 @@ function getTemplateListCriteriaByCategoryAndNameToList(extractedList) {
 }
 
 function replaceVariablesArray(htmlString, variableData) {
+  if (!htmlString) return;
   let replacedTemplateContent = htmlString;
   const templateContentMatches = replacedTemplateContent.match(/\${(.*?)}/g);
   templateContentMatches?.forEach((match) => {
@@ -197,4 +177,35 @@ function replaceVariablesArray(htmlString, variableData) {
     replacedTemplateContent = replacedTemplateContent.replace(match, value);
   });
   return replacedTemplateContent;
+}
+
+export function getTemplateData(htmlString) {
+  if (!htmlString) return;
+  return new Promise((resolve, reject) => {
+    const templateCriteriaList = getAllTemplatesToRenderFromHTML(htmlString);
+    if (templateCriteriaList.length > 0) {
+      const templateData = {};
+      axios
+        .post(
+          "http://localhost:8181/api/template/categories-names",
+          templateCriteriaList
+        )
+        .then((res) => {
+          const { data } = res;
+          const mappedData = {};
+          data.forEach((item) => {
+            mappedData[item.category] = {
+              ...mappedData[item.category],
+              [item.name]: item.content,
+            };
+          });
+          resolve(mappedData);
+        })
+        .catch((err) => {
+          reject([]);
+        });
+    } else {
+      resolve([]);
+    }
+  });
 }
