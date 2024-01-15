@@ -85,19 +85,18 @@ const TemplateDisplayV3 = ({
     }
   }, [content]);
 
-  /**
-   * Effects used for processing the content to replace the variables and templates
-   */
   // useEffect(() => {
-  //   const runEffects = async () => {
+  //   const runEffects = async (htmlString) => {
+  //     if (!htmlString) {
+  //       return;
+  //     }
   //     // Effect 1: Replace variables with mappedVariableData
-  //     let updatedContent = content;
+  //     let updatedContent = htmlString;
   //     if (mappedVariableData) {
-  //       const replacedContent = TemplateDisplayHelper.replaceVariables(
-  //         content,
+  //       updatedContent = TemplateDisplayHelper.replaceVariables(
+  //         htmlString,
   //         mappedVariableData
   //       );
-  //       updatedContent = replacedContent;
   //     }
 
   //     // Effect 2: Replace templateListCriteria without data
@@ -122,13 +121,26 @@ const TemplateDisplayV3 = ({
   //       }
   //       return prevContent;
   //     });
+
+  //     // Recursive call for nested templates (Remove this if it is too dangerous)
+  //     if (recursive) {
+  //       const nestedTemplates =
+  //         TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(updatedContent);
+  //       if (nestedTemplates.length > 0) {
+  //         nestedTemplates.forEach(async (template) => {
+  //           runEffects(updatedContent);
+  //         });
+  //       }
+  //     }
   //   };
 
-  //   runEffects();
+  //   if (content) {
+  //     runEffects(content);
+  //   }
   // }, [mappedVariableData, content, templateData]);
 
   useEffect(() => {
-    const runEffects = async (htmlString) => {
+    const runEffects = async (htmlString, templates) => {
       if (!htmlString) {
         return;
       }
@@ -137,7 +149,7 @@ const TemplateDisplayV3 = ({
       if (mappedVariableData) {
         updatedContent = TemplateDisplayHelper.replaceVariables(
           htmlString,
-          mappedVariableData
+          mappedVariableData,
         );
       }
 
@@ -170,14 +182,15 @@ const TemplateDisplayV3 = ({
           TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(updatedContent);
         if (nestedTemplates.length > 0) {
           nestedTemplates.forEach(async (template) => {
-            runEffects(updatedContent);
+            runEffects(updatedContent, nestedTemplates);
           });
         }
       }
     };
 
     if (content) {
-      runEffects(content);
+      const templates = TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(content);
+      runEffects(content, templates);
     }
   }, [mappedVariableData, content, templateData]);
 

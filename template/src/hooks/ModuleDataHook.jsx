@@ -20,7 +20,6 @@ const useModuleData = (props) => {
     candidateId: null,
   });
   const [allModuleData, setAllModuleData] = useState({});
-  console.log("allModuleData", allModuleData);
 
   const setAllIdsHandler = () => {
     setAllIds({
