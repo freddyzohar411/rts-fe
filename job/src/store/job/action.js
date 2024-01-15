@@ -15,6 +15,9 @@ import {
   FETCH_JOB_DATA,
   FETCH_JOB_DATA_FAILURE,
   FETCH_JOB_DATA_SUCCESS,
+  FETCH_JOBS_FIELDS_ALL,
+  FETCH_JOBS_FIELDS_ALL_FAILURE,
+  FETCH_JOBS_FIELDS_ALL_SUCCESS,
 } from "./actionTypes";
 
 // Fetch Account
@@ -100,4 +103,20 @@ export const fetchJobDataFailure = (error) => ({
   type: FETCH_JOB_DATA_FAILURE,
   payload: error,
 });
+
+export const fetchJobsFieldsAll = () => ({
+  type: FETCH_JOBS_FIELDS_ALL,
+});
+
+export const fetchJobsFieldsAllSuccess = (fields) => ({
+  type: FETCH_JOBS_FIELDS_ALL_SUCCESS,
+  payload: fields,
+});
+
+export const fetchJobsFieldsAllFailure = (error) => ({
+  type: FETCH_JOBS_FIELDS_ALL_FAILURE,
+  payload: error,
+});
+
+
 

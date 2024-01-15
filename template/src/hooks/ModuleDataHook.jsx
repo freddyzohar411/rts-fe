@@ -55,7 +55,7 @@ const useModuleData = (props) => {
       const obj = { ...prevData };
 
       if (accountData) {
-        obj["Accounts"] = flattenObject(accountData);
+        obj["Accounts"] = accountData;
       }
 
       if (candidateData) {
@@ -63,7 +63,7 @@ const useModuleData = (props) => {
       }
 
       if (jobData) {
-        obj["Jobs"] = flattenObject(jobData);
+        obj["Jobs"] = jobData;
       }
 
       return obj;

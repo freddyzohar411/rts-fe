@@ -27,7 +27,6 @@ import { moduleActions } from "./moduleAction";
 
 import SelectElement from "./SelectElement";
 import FileInputElement from "./FileInputElement";
-import SelectAPIElement from "./SelectAPIElement";
 import EditorElement2 from "./EditorElement2";
 
 const TemplateBuilder = forwardRef(
@@ -51,10 +50,6 @@ const TemplateBuilder = forwardRef(
     const [fields, setFields] = useState([]);
     const [selectedField, setSelectedField] = useState("");
 
-    // const [categories, setCategories] = useState([]);
-    // const [selectedCategory, setSelectedCategory] = useState(null);
-    // const [filterTemplates, setFilterTemplates] = useState([]);
-    // const [selectedTemplate, setSelectedTemplate] = useState(null);
     const templateCategories = useSelector(
       (state) => state.TemplateReducer.templateCategories
     );
@@ -65,10 +60,10 @@ const TemplateBuilder = forwardRef(
 
     const sectionData = useSelector((state) => {
       if (typeData?.label === "Accounts") {
-        return state.AccountReducer.accountsFields;
+        return state.AccountReducer.accountsFieldsAll;
       }
       if (typeData?.label === "Jobs") {
-        return state.JobListReducer.jobsFields;
+        return state.JobReducer.jobsFieldsAll;
       }
       if (typeData?.label === "Candidates") {
         return state.CandidateReducer.candidatesFieldsAll;
@@ -91,7 +86,11 @@ const TemplateBuilder = forwardRef(
     // Check section data
     useEffect(() => {
       if (sectionData) {
-        if (typeData?.label === "Candidates") {
+        if (
+          typeData?.label === "Candidates" ||
+          typeData?.label === "Accounts" ||
+          typeData?.label === "Jobs"
+        ) {
           setSections(sectionData);
         }
       }
@@ -113,7 +112,6 @@ const TemplateBuilder = forwardRef(
         const result = await mammoth.convertToHtml({
           arrayBuffer: await file.arrayBuffer(),
         });
-        console.log("result", result);
         setTemplateContent(result.value);
       } catch (error) {
         console.error("Error converting Word to HTML:", error);
@@ -242,9 +240,6 @@ const TemplateBuilder = forwardRef(
       }
       return false;
     };
-
-    // console.log("Selected Template", selectedTemplate)
-    // console.log("Selected Category", selectedCategory)
 
     return (
       <div className="d-flex flex-column gap-2">
@@ -463,7 +458,9 @@ const TemplateBuilder = forwardRef(
                 <Button
                   type="button"
                   className="self-end"
-                  disabled={(!typeData || !selectedSection) || !checkTemplateSelected()}
+                  disabled={
+                    !typeData || !selectedSection || !checkTemplateSelected()
+                  }
                   onClick={() => {
                     setInjectVariable(
                       "{{" +

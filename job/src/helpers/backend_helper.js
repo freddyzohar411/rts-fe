@@ -27,7 +27,8 @@ export const getJobById = (id) => api.get(`${JOB_URL}${BASE_JOBS}/${id}`);
 export const getJobs = (data) =>
   api.create(`${JOB_URL}${BASE_JOBS}/listing`, data);
 
-export const createJob = (data) => api.create(`${JOB_URL}${BASE_JOBS}/add`, data);
+export const createJob = (data) =>
+  api.create(`${JOB_URL}${BASE_JOBS}/add`, data);
 
 export const updateJob = (id, data) =>
   api.put(`${JOB_URL}${BASE_JOBS}/${id}`, data);
@@ -57,7 +58,10 @@ export const updateJobDocument = (id, data, config) =>
 export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
   `${DOCUMENT_BASE_URL}/entity/user/${entityType}/${entityId}`;
 
-  // Get job data by Id
+// Get job data by Id
 export const getJobDataById = (id) =>
-api.get(`${JOB_URL}${BASE_JOBS}/${id}/data`);
+  api.get(`${JOB_URL}${BASE_JOBS}/${id}/data/all`);
 
+// Get job fields all
+export const getJobsFieldsAll = () =>
+  api.get(`${JOB_URL}${BASE_JOBS}/fields/all`);

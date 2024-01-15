@@ -217,22 +217,6 @@ const TemplateDisplayV2 = ({ content, allData, isView, getNewContent }) => {
 
   console.log(templateData);
 
-  // Let find those with {{xxx.yyy}} and replace them with the content
-  // function replaceTemplateListCriteriaWithoutData(htmlString, templateData) {
-  //   // find those with {{xxx.yyy}} not {{xxx.yyy:zzz}} and replace them with the content in templateData[xxx][yyy]
-  //   // return back the html that has been replaced with the data
-  //   const pattern = /{{([^:]*?)}}/g;
-  //   const matches = htmlString?.match(pattern) || [];
-  //   let result = htmlString;
-  //   matches.forEach((match) => {
-  //     const key = match.replace("{{", "").replace("}}", "");
-  //     const keys = key.split(".");
-  //     const value = templateData?.[keys[0]]?.[keys[1]] || "-";
-  //     result = result.replace(match, value);
-  //   });
-  //   return result;
-  // }
-
   function replaceTemplateListCriteriaWithoutData(htmlString, templateData) {
     // find those with {{xxx.yyy}} not {{xxx.yyy:zzz}} and replace them with the content in templateData[xxx][yyy]
     // return back the html that has been replaced with the data
@@ -256,40 +240,6 @@ const TemplateDisplayV2 = ({ content, allData, isView, getNewContent }) => {
     });
     return result;
   }
-
-  // useEffect(() => {
-  //   if (mappedVariableData) {
-  //     setParsedContent(replaceVariables(content, mappedVariableData));
-  //     getNewContent(
-  //       removeContentEditableAndStyles(
-  //         replaceVariables(content, mappedVariableData)
-  //       )
-  //     );
-  //     return;
-  //   }
-  //   // getNewContent(removeContentEditableAndStyles(content));
-  // }, [mappedVariableData, content, parsedContent]);
-
-  // useEffect(() => {
-  //   if (templateData) {
-  //     setParsedContent(
-  //       replaceTemplateListCriteriaWithoutData(parsedContent, templateData)
-  //     );
-  //   }
-  // }, [templateData, parsedContent]);
-
-  // useEffect(() => {
-  //   if (templateData && mappedVariableData) {
-  //     setParsedContent(
-  //       replaceTemplateListCriteriaWithData(
-  //         parsedContent,
-  //         templateData,
-  //         mappedVariableData
-  //       )
-  //     );
-  //   }
-  // }, [templateData, parsedContent, mappedVariableData]);
-
   
   useEffect(() => {
     const runEffects = async () => {
@@ -307,12 +257,14 @@ const TemplateDisplayV2 = ({ content, allData, isView, getNewContent }) => {
       if (templateData) {
         updatedContent = replaceTemplateListCriteriaWithoutData(updatedContent, templateData);
         setParsedContent(updatedContent);
+        getNewContent(updatedContent);
       }
   
       // Effect 3: Replace templateListCriteria with data
       if (templateData && mappedVariableData) {
         updatedContent = replaceTemplateListCriteriaWithData(updatedContent, templateData, mappedVariableData);
         setParsedContent(updatedContent);
+        getNewContent(updatedContent);
       }
     };
   
@@ -320,7 +272,7 @@ const TemplateDisplayV2 = ({ content, allData, isView, getNewContent }) => {
   }, [mappedVariableData, content, templateData]);
   
 
-  console.log("parsedContent", parsedContent);
+  // console.log("parsedContent", parsedContent);
 
   return (
     <div>

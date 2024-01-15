@@ -15,6 +15,9 @@ import {
   FETCH_JOB_DATA,
   FETCH_JOB_DATA_SUCCESS,
   FETCH_JOB_DATA_FAILURE,
+  FETCH_JOBS_FIELDS_ALL,
+  FETCH_JOBS_FIELDS_ALL_SUCCESS,
+  FETCH_JOBS_FIELDS_ALL_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
@@ -22,6 +25,7 @@ const initialState = {
   jobDocuments: {},
   jobData: null,
   jobs: [],
+  jobsFieldsAll: [],
   errorMsg: "",
   loading: false,
   error: false,
@@ -131,6 +135,25 @@ const JobReducer = (state = initialState, action) => {
         jobData: action.payload,
       };
     case FETCH_JOB_DATA_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case FETCH_JOBS_FIELDS_ALL:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_JOBS_FIELDS_ALL_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        jobsFieldsAll: action.payload,
+      };
+    case FETCH_JOBS_FIELDS_ALL_FAILURE:
       return {
         ...state,
         loading: false,

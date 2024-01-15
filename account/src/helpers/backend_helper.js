@@ -79,4 +79,8 @@ export const getAccountCommercialById = (id) =>
 
 // Get account data by Id
 export const getAccountDataById = (id) =>
-  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/${id}/data`);
+  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/${id}/data/all`);
+
+// Get account fields all
+export const getAccountsFieldsAll = () =>
+  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields/all`);
