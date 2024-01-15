@@ -7,7 +7,13 @@ import * as TemplateDisplayHelper from "./templateDisplayHelper";
 
 import "./TinyCME.scss";
 
-const TemplateDisplayV2 = ({ content, allData, isView, getNewContent }) => {
+const TemplateDisplayV2 = ({
+  content,
+  allData,
+  isView,
+  getNewContent,
+  cleanContent = true,
+}) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
   const [fullHtmlString, setFullHtmlString] = useState("");
@@ -41,16 +47,16 @@ const TemplateDisplayV2 = ({ content, allData, isView, getNewContent }) => {
     displayRef,
     () => {
       const htmlString = displayRef.current.innerHTML;
-      setFullHtmlString(TemplateDisplayHelper.removeContentEditableAndStyles(htmlString));
-      if (getNewContent)
-        getNewContent(TemplateDisplayHelper.removeContentEditableAndStyles(htmlString));
+      setFullHtmlString(
+        TemplateDisplayHelper.removeContentEditableAndStyles(htmlString)
+      );
+      setNewContent(htmlString);
     },
     { attributes: true, childList: true, subtree: true, characterData: true }
   );
 
-
   /**
-   * Get all the template list to render from the HTML string and make a 
+   * Get all the template list to render from the HTML string and make a
    * POST request to get the data
    */
   useEffect(() => {
@@ -92,7 +98,7 @@ const TemplateDisplayV2 = ({ content, allData, isView, getNewContent }) => {
         );
         updatedContent = replacedContent;
         setParsedContent(updatedContent);
-        getNewContent(updatedContent);
+        // getNewContent(updatedContent);
       }
 
       // Effect 2: Replace templateListCriteria without data
@@ -103,7 +109,7 @@ const TemplateDisplayV2 = ({ content, allData, isView, getNewContent }) => {
           mappedVariableData
         );
         setParsedContent(updatedContent);
-        getNewContent(updatedContent);
+        // getNewContent(updatedContent);
       }
 
       // Effect 3: Replace templateListCriteria with data
@@ -114,12 +120,32 @@ const TemplateDisplayV2 = ({ content, allData, isView, getNewContent }) => {
           mappedVariableData
         );
         setParsedContent(updatedContent);
-        getNewContent(updatedContent);
+        // getNewContent(updatedContent);
       }
     };
 
     runEffects();
   }, [mappedVariableData, content, templateData]);
+
+  /**
+   * Set Get new content everytime parsedContent changes
+   */
+  useEffect(() => {
+    setNewContent(parsedContent);
+  }, [parsedContent]);
+
+  // Set New content to be outputted
+  function setNewContent(content) {
+    if (getNewContent) {
+      if (cleanContent) {
+        getNewContent(
+          TemplateDisplayHelper.removeContentEditableAndStyles(content)
+        );
+      } else {
+        getNewContent(parsedContent);
+      }
+    }
+  }
 
   return (
     <div>

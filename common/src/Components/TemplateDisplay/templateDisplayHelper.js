@@ -19,6 +19,37 @@ export function replaceVariables(html, variableData) {
   });
 }
 
+// /**
+//  * Replace template placeholders {{xxx.yyy}} in html with templateData
+//  * Within template data, if there is a variable placeholder ${xxx.yyy.zzz} then replace it with variableData
+//  * @param {*} htmlString
+//  * @param {*} templateData
+//  * @returns
+//  */
+// export function replaceTemplate(htmlString, templateData, mappedVariableData) {
+//   // find those with {{xxx.yyy}} not {{xxx.yyy:zzz}} and replace them with the content in templateData[xxx][yyy]
+//   // return back the html that has been replaced with the data
+//   const pattern = /{{([^:]*?)}}/g;
+//   const matches = htmlString?.match(pattern) || [];
+//   let result = htmlString;
+//   matches.forEach((match) => {
+//     const key = match.replace("{{", "").replace("}}", "");
+//     const keys = key.split(".");
+//     const value = templateData?.[keys[0]]?.[keys[1]] || "-";
+//     // In this Value find ${xxx.yyy.zzz} and replace them with the content in variableData[xxx][yyy][zzz]
+//     const valueMatches = value.match(/\${(.*?)}/g);
+//     let replacedValue = value;
+//     valueMatches?.forEach((match) => {
+//       const key = match.replace("${", "").replace("}", "");
+//       const keys = key.split(".");
+//       const value = mappedVariableData?.[keys[0]]?.[keys[1]]?.[keys[2]] || "-";
+//       replacedValue = replacedValue.replace(match, value);
+//     });
+//     result = result.replace(match, replacedValue);
+//   });
+//   return result;
+// }
+
 /**
  * Replace template placeholders {{xxx.yyy}} in html with templateData
  * Within template data, if there is a variable placeholder ${xxx.yyy.zzz} then replace it with variableData
@@ -27,8 +58,6 @@ export function replaceVariables(html, variableData) {
  * @returns
  */
 export function replaceTemplate(htmlString, templateData, mappedVariableData) {
-  // find those with {{xxx.yyy}} not {{xxx.yyy:zzz}} and replace them with the content in templateData[xxx][yyy]
-  // return back the html that has been replaced with the data
   const pattern = /{{([^:]*?)}}/g;
   const matches = htmlString?.match(pattern) || [];
   let result = htmlString;
@@ -36,15 +65,7 @@ export function replaceTemplate(htmlString, templateData, mappedVariableData) {
     const key = match.replace("{{", "").replace("}}", "");
     const keys = key.split(".");
     const value = templateData?.[keys[0]]?.[keys[1]] || "-";
-    // In this Value find ${xxx.yyy.zzz} and replace them with the content in variableData[xxx][yyy][zzz]
-    const valueMatches = value.match(/\${(.*?)}/g);
-    let replacedValue = value;
-    valueMatches?.forEach((match) => {
-      const key = match.replace("${", "").replace("}", "");
-      const keys = key.split(".");
-      const value = mappedVariableData?.[keys[0]]?.[keys[1]]?.[keys[2]] || "-";
-      replacedValue = replacedValue.replace(match, value);
-    });
+    const replacedValue = replaceVariables(value, mappedVariableData);
     result = result.replace(match, replacedValue);
   });
   return result;
@@ -82,28 +103,29 @@ export function replaceTemplateArray(htmlString, templateData, variableData) {
     // Loop through array and replace
     let value = "";
     variableContent.forEach((item) => {
-      let replacedTemplateContent = templateContent;
-      const templateContentMatches =
-        replacedTemplateContent.match(/\${(.*?)}/g);
-      templateContentMatches?.forEach((match) => {
-        const key = match.replace("${", "").replace("}", "");
-        const keys = key.split(".");
-        const value = item?.[keys[2]] || "-";
-        replacedTemplateContent = replacedTemplateContent.replace(match, value);
-      });
-      value += replacedTemplateContent;
+      value += replaceVariablesArray(templateContent, item);
     });
     result = result.replace(match, value);
   });
   return result;
 }
 
+/**
+ * Get all the templates to render from the html string ({{xxx.yyy}} and {{xxx.yyy:zzz}})
+ * @param {*} htmlString
+ * @returns
+ */
 export function getAllTemplatesToRenderFromHTML(htmlString) {
   return getTemplateListCriteriaByCategoryAndNameToList(
     extractStringLiteralsDoubleBracketsToList(htmlString)
   );
 }
 
+/**
+ * Remove contenteditable attribute and style attribute from html string for output
+ * @param {*} htmlString
+ * @returns
+ */
 export function removeContentEditableAndStyles(htmlString) {
   // Identify elements with contenteditable attribute
   const contentEditableRegex =
@@ -163,4 +185,16 @@ function getTemplateListCriteriaByCategoryAndNameToList(extractedList) {
       name: item.split(".")[1],
     }));
   return splitList;
+}
+
+function replaceVariablesArray(htmlString, variableData) {
+  let replacedTemplateContent = htmlString;
+  const templateContentMatches = replacedTemplateContent.match(/\${(.*?)}/g);
+  templateContentMatches?.forEach((match) => {
+    const key = match.replace("${", "").replace("}", "");
+    const keys = key.split(".");
+    const value = variableData?.[keys[2]] || "-";
+    replacedTemplateContent = replacedTemplateContent.replace(match, value);
+  });
+  return replacedTemplateContent;
 }
