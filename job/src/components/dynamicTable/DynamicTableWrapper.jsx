@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
 import { GeneralModal } from "@workspace/common";
@@ -9,7 +9,7 @@ import { useUserAuth } from "@workspace/login";
 import {
   JOB_FILTERS,
   JOB_INITIAL_OPTIONS,
-} from "../JobListing/jobListingConstants";
+} from "../JobListing/JobListingConstants";
 
 const DynamicTableWrapper = ({
   data,
@@ -24,6 +24,7 @@ const DynamicTableWrapper = ({
   gridView,
   handleTableViewChange,
 }) => {
+  const { jobType } = useParams();
   const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);
   const [selectedOptGroup, setSelectedOptGroup] = useState(JOB_INITIAL_OPTIONS);
@@ -123,7 +124,7 @@ const DynamicTableWrapper = ({
                   <div className="listjs-table">
                     <Row className="d-flex column-gap-1 mb-3">
                       <Col>
-                        <div className="d-flex justify-content-center align-items-center">
+                        <div className="d-flex justify-content-start align-items-center">
                           {setSearch && (
                             <div className="search-box">
                               <form onSubmit={pageRequestSet.setSearchTerm}>
@@ -139,24 +140,26 @@ const DynamicTableWrapper = ({
                               <i className="ri-search-line search-icon"></i>
                             </div>
                           )}
-                          <div className="select-width">
-                            <Input
-                              type="select"
-                              className="form-select border-secondary"
-                              onChange={handleTableViewChange}
-                              value={gridView}
-                            >
-                              <option value="">Select View</option>
-                              {JOB_FILTERS?.map((ob, index) => {
-                                const key = Object.keys(ob);
-                                return (
-                                  <option key={index} value={key}>
-                                    {ob[key]}
-                                  </option>
-                                );
-                              })}
-                            </Input>
-                          </div>
+                          {jobType && (
+                            <div className="select-width">
+                              <Input
+                                type="select"
+                                className="form-select border-secondary"
+                                onChange={handleTableViewChange}
+                                value={gridView}
+                              >
+                                <option value="">Select View</option>
+                                {JOB_FILTERS?.map((ob, index) => {
+                                  const key = Object.keys(ob);
+                                  return (
+                                    <option key={index} value={key}>
+                                      {ob[key]}
+                                    </option>
+                                  );
+                                })}
+                              </Input>
+                            </div>
+                          )}
                         </div>
                       </Col>
                       <Col>

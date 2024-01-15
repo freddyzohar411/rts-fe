@@ -110,8 +110,6 @@ const JobOverview = () => {
 
   const [associateCandidateOC, setAssociatCandidateOC] = useState(false);
 
-  console.log(formSubmissionData);
-
   return (
     <div>
       <Row className="mb-3">
@@ -140,10 +138,7 @@ const JobOverview = () => {
           <Row className="mb-3">
             <Col>
               <div className="d-flex flex-row justify-content-between">
-                <div>
-                  {console.log("Test", formSubmissionData)}
-                  | Java Dev | 165937 | Diptii | Ganesh, Priya, Vinod
-                </div>
+                <div>| Java Dev | 165937 | Diptii | Ganesh, Priya, Vinod</div>
 
                 <div className="d-flex flex-row gap-2 align-items-center">
                   <div className="search-box" style={{ width: "500px" }}>
@@ -270,7 +265,7 @@ const JobOverview = () => {
                       </tbody>
                     </Table>
                   </div>
-                  <TimelineProgressBar/>
+                  <TimelineProgressBar />
                 </TabPane>
 
                 <TabPane tabId="2">
