@@ -60,3 +60,6 @@ export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
 
 export const tagJob = (data, config) =>
   api.create(`${JOB_URL}/api/jobcandidatestage`, data, config);
+
+export const tagAllJob = (data, config) =>
+  api.create(`${JOB_URL}/api/jobcandidatestage/createAll`, data, config);
