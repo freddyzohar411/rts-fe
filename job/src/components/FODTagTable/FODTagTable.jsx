@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchCandidates,
@@ -9,7 +10,7 @@ import {
 import { useTableHook, DynamicTableHelper } from "@Workspace/common";
 import { CANDIDATE_INITIAL_OPTIONS } from "./FODCandidateListingConstants";
 import DynamicTableWrapper from "../CandidateDynamicTableWrapper/DynamicTableWrapper";
-import { tagJob } from "../../store/jobStage/action";
+import { tagJob, tagJobAll } from "../../store/jobStage/action";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
@@ -25,6 +26,30 @@ const FODTagTable = ({ selectedRowData }) => {
   const candidatesFields = useSelector(
     (state) => state.CandidateReducer.candidatesFields
   );
+
+  const [selected, setSelected] = useState([]);
+
+  const handleSelect = (id, isChecked) => {
+    if (isChecked) {
+      setSelected([...selected, id]);
+    } else {
+      setSelected(selected.filter((item) => item !== id));
+    }
+  };
+
+  const selectAll = (isChecked) => {
+    if (isChecked) {
+      if (candidatesData?.candidates) {
+        const ids = [];
+        candidatesData?.candidates?.forEach((item) => {
+          ids.push(item?.id);
+        });
+        setSelected(ids);
+      }
+    } else {
+      setSelected([]);
+    }
+  };
 
   // Table Hooks
   const {
@@ -54,10 +79,27 @@ const FODTagTable = ({ selectedRowData }) => {
     const payload = {
       jobId: selectedRowData?.id,
       jobStageId: JOB_STAGE_IDS?.TAG,
-      status: JOB_STAGE_STATUS?.IN_PROGRESS,
+      status: JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
     };
     dispatch(tagJob({ payload, navigate }));
+  };
+
+  const handleTagAll = () => {
+    const payload = [];
+    if (selected?.length > 0) {
+      selected?.forEach((itemId) => {
+        payload.push({
+          jobId: selectedRowData?.id,
+          jobStageId: JOB_STAGE_IDS?.TAG,
+          status: JOB_STAGE_STATUS?.COMPLETED,
+          candidateId: itemId,
+        });
+      });
+      dispatch(tagJobAll({ payload, navigate }));
+    } else {
+      toast.error("Please select at least one checkbox.");
+    }
   };
 
   // Candidate Config
@@ -69,22 +111,24 @@ const FODTagTable = ({ selectedRowData }) => {
             <Input
               className="form-check-input"
               type="checkbox"
-              id="checkbox"
-              value="option"
+              id="fodTable"
+              checked={selected?.length === candidatesData?.candidates?.length}
+              onChange={(e) => selectAll(e?.target?.checked)}
             />
           </div>
         ),
         name: "checkbox",
         sort: false,
         sortValue: "checkbox",
-        render: () => {
+        render: (data) => {
           return (
             <div className="form-check">
               <Input
                 className="form-check-input"
                 type="checkbox"
                 name="chk_child"
-                value="option1"
+                onChange={(e) => handleSelect(data?.id, e?.target?.checked)}
+                checked={selected?.includes(data?.id)}
               />
             </div>
           );
@@ -127,7 +171,7 @@ const FODTagTable = ({ selectedRowData }) => {
 
   return (
     <DynamicTableWrapper
-      data={candidatesData.candidates}
+      data={candidatesData?.candidates}
       config={generateCandidateConfig(customConfig)}
       pageInfo={pageInfo}
       pageRequest={pageRequest}
@@ -136,6 +180,7 @@ const FODTagTable = ({ selectedRowData }) => {
       setSearch={setSearch}
       optGroup={candidatesFields}
       setCustomConfigData={setCustomConfigData}
+      handleTagAll={handleTagAll}
     />
   );
 };

@@ -14,6 +14,7 @@ const DynamicTableWrapper = ({
   optGroup,
   setCustomConfigData,
   confirmDelete,
+  handleTagAll,
 }) => {
   const candidatesData = useSelector(
     (state) => state.CandidateReducer.candidates
@@ -51,7 +52,10 @@ const DynamicTableWrapper = ({
                         )}
                       </div>
                       <div>
-                        <Button className="btn btn-custom-primary">
+                        <Button
+                          className="btn btn-custom-primary"
+                          onClick={() => handleTagAll()}
+                        >
                           Tag Selected Candidates
                         </Button>
                       </div>
