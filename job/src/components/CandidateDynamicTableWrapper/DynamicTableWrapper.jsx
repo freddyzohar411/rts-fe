@@ -1,13 +1,8 @@
-import React, { useState } from "react";
-import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
-import { Link } from "react-router-dom";
-// import DynamicTable from "./DynamicTable";
+import React from "react";
+import { Button, Col, Input, Row } from "reactstrap";
+import { useSelector } from "react-redux";
 import { DynamicTable } from "@Workspace/common";
-import DualListBox from "react-dual-listbox";
-import { GeneralModal } from "@Workspace/common";
-import { CANDIDATE_INITIAL_OPTIONS } from "../../../../candidate/src/pages/CandidateListing/candidateListingConstants";
 import "./DynamicTableWrapper.scss";
-import { useUserAuth } from "@workspace/login";
 
 const DynamicTableWrapper = ({
   data,
@@ -20,6 +15,10 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   confirmDelete,
 }) => {
+  const candidatesData = useSelector(
+    (state) => state.CandidateReducer.candidates
+  );
+
   return (
     <React.Fragment>
       <div>
@@ -31,7 +30,9 @@ const DynamicTableWrapper = ({
                   <div className="d-flex flex-row justify-content-between align-items-baseline">
                     <div className="text-decoration-underline">
                       <span>Suitable Candidates </span>
-                      <span className="fw-semibold">(20)</span>
+                      <span className="fw-semibold">
+                        ({candidatesData?.totalElements ?? 0})
+                      </span>
                     </div>
                     <div className="d-flex flex-row gap-3 align-items-baseline">
                       <div className="search-box">

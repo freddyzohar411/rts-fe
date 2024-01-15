@@ -19,7 +19,13 @@ import {
 } from "@workspace/candidate";
 
 // Job
-import { JobCreation, JobListing, JobManage, JobCreate } from "@workspace/job";
+import {
+  JobCreation,
+  JobListing,
+  JobManage,
+  JobCreate,
+  FOD,
+} from "@workspace/job";
 
 // Settings
 import {
@@ -107,6 +113,8 @@ const authProtectedRoutes = [
     component: <JobManage />,
     requiredPermissions: [Permission.JOB_READ],
   },
+
+  { path: "/jobs/fod", component: <FOD /> },
 
   // Settings
   { path: "/settings/general", component: <MainSettings /> },

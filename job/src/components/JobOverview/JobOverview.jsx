@@ -361,10 +361,7 @@ function JobOverview() {
               </div>
             </div>
           </OffcanvasHeader>
-          <OffcanvasBody>
-            {getFormComponent(activeStep)}
-            {console.log("Active Step: OffCanvasBody", activeStep)}
-          </OffcanvasBody>
+          <OffcanvasBody>{getFormComponent(activeStep)}</OffcanvasBody>
         </Offcanvas>
         <Tooltip
           target="next-step"
