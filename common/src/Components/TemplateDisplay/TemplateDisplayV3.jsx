@@ -18,7 +18,6 @@ const TemplateDisplayV3 = ({
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
   const [fullHtmlString, setFullHtmlString] = useState("");
-  const [templateData, setTemplateData] = useState({});
   const displayRef = useRef(null);
 
   /**
@@ -55,118 +54,60 @@ const TemplateDisplayV3 = ({
     },
     { attributes: true, childList: true, subtree: true, characterData: true }
   );
-
-  /**
-   * Get all the template list to render from the HTML string and make a
-   * POST request to get the data
-   */
-  useEffect(() => {
-    if (content) {
-      const templateCriteriaList =
-        TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(content);
-      if (templateCriteriaList.length > 0) {
-        axios
-          .post(
-            "http://localhost:8181/api/template/categories-names",
-            templateCriteriaList
-          )
-          .then((res) => {
-            const { data } = res;
-            const mappedData = {};
-            data.forEach((item) => {
-              mappedData[item.category] = {
-                ...mappedData[item.category],
-                [item.name]: item.content,
-              };
-            });
-            setTemplateData(mappedData);
-          });
-      }
-    }
-  }, [content]);
-
-  // useEffect(() => {
-  //   const runEffects = async (htmlString) => {
-  //     if (!htmlString) {
-  //       return;
-  //     }
-  //     // Effect 1: Replace variables with mappedVariableData
-  //     let updatedContent = htmlString;
-  //     if (mappedVariableData) {
-  //       updatedContent = TemplateDisplayHelper.replaceVariables(
-  //         htmlString,
-  //         mappedVariableData
-  //       );
-  //     }
-
-  //     // Effect 2: Replace templateListCriteria without data
-  //     if (templateData) {
-  //       updatedContent = await TemplateDisplayHelper.replaceTemplate(
-  //         updatedContent,
-  //         mappedVariableData
-  //       );
-  //     }
-
-  //     // Effect 3: Replace templateListCriteria with data
-  //     if (templateData && mappedVariableData) {
-  //       updatedContent = await TemplateDisplayHelper.replaceTemplateArray(
-  //         updatedContent,
-  //         mappedVariableData
-  //       );
-  //     }
-
-  //     setParsedContent((prevContent) => {
-  //       if (prevContent !== updatedContent) {
-  //         return updatedContent;
-  //       }
-  //       return prevContent;
-  //     });
-
-  //     // Recursive call for nested templates (Remove this if it is too dangerous)
-  //     if (recursive) {
-  //       const nestedTemplates =
-  //         TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(updatedContent);
-  //       if (nestedTemplates.length > 0) {
-  //         nestedTemplates.forEach(async (template) => {
-  //           runEffects(updatedContent);
+  //     const templateCriteriaList =
+  //       TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(content);
+  //     if (templateCriteriaList.length > 0) {
+  //       axios
+  //         .post(
+  //           "http://localhost:8181/api/template/categories-names",
+  //           templateCriteriaList
+  //         )
+  //         .then((res) => {
+  //           const { data } = res;
+  //           const mappedData = {};
+  //           data.forEach((item) => {
+  //             mappedData[item.category] = {
+  //               ...mappedData[item.category],
+  //               [item.name]: item.content,
+  //             };
+  //           });
+  //           setTemplateData(mappedData);
   //         });
-  //       }
   //     }
-  //   };
-
-  //   if (content) {
-  //     runEffects(content);
   //   }
-  // }, [mappedVariableData, content, templateData]);
+  // }, [content]);
 
   useEffect(() => {
-    const runEffects = async (htmlString, templates) => {
+    const runEffects = async (htmlString) => {
       if (!htmlString) {
         return;
       }
+      const templateListCriteria =
+        TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(htmlString);
+
       // Effect 1: Replace variables with mappedVariableData
       let updatedContent = htmlString;
       if (mappedVariableData) {
         updatedContent = TemplateDisplayHelper.replaceVariables(
           htmlString,
-          mappedVariableData,
+          mappedVariableData
         );
       }
 
-      // Effect 2: Replace templateListCriteria without data
-      if (templateData) {
+      if (templateListCriteria.length > 0) {
+        // Effect 2: Replace templateListCriteria without data
         updatedContent = await TemplateDisplayHelper.replaceTemplate(
           updatedContent,
           mappedVariableData
         );
-      }
 
-      // Effect 3: Replace templateListCriteria with data
-      if (templateData && mappedVariableData) {
-        updatedContent = await TemplateDisplayHelper.replaceTemplateArray(
-          updatedContent,
-          mappedVariableData
-        );
+        // Effect 3: Replace templateListCriteria with data
+        if (mappedVariableData) {
+          updatedContent = await TemplateDisplayHelper.replaceTemplateArray(
+            updatedContent,
+            mappedVariableData
+          );
+        }
       }
 
       setParsedContent((prevContent) => {
@@ -181,18 +122,15 @@ const TemplateDisplayV3 = ({
         const nestedTemplates =
           TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(updatedContent);
         if (nestedTemplates.length > 0) {
-          nestedTemplates.forEach(async (template) => {
-            runEffects(updatedContent, nestedTemplates);
-          });
+          runEffects(updatedContent);
         }
       }
     };
 
     if (content) {
-      const templates = TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(content);
-      runEffects(content, templates);
+      runEffects(content);
     }
-  }, [mappedVariableData, content, templateData]);
+  }, [mappedVariableData, content]);
 
   /**
    * Set Get new content everytime parsedContent changes
