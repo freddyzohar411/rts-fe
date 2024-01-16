@@ -356,69 +356,61 @@ function JobOverview() {
           </TabContent>
         </Row>
 
-        <div style={{ width: "100% !important" }}>
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
           style={{ width: "75vw", border: "2px solid green" }}
-    
         >
-
-            <div className="offcanvas-header border-bottom border-bottom-dashed border d-flex flex-row gap-4 align-items-center">
-                <div className="avatar-md flex-shrink-0">
-                  <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
-                    {formSubmissionData?.accountName.charAt(0)}
-                  </div>
-                </div>
-                <Row className="d-flex flex-row justify-content-between align-items-end gap-5 flex-grow-1">
-                  <Col>
-                    <Row>
-                      <span className="h4 fw-bold">
-                        {formSubmissionData?.accountName}
-                      </span>
-                    </Row>
-                    <Row>
-                      <div className="d-flex flex-row gap-4">
-                        <span className="h6 fw-semibold text-nowrap">
-                          Job ID - {formSubmissionData?.clientJobId}
-                        </span>
-                        <span className="h6 fw-semibold text-nowrap">
-                          Job Title - {formSubmissionData?.jobTitle}
-                        </span>
-                      </div>
-                    </Row>
-                    <Row>
-                      <span className="h6 text-muted fw-bold">
-                        {stepperState}
-                      </span>
-                    </Row>
-                  </Col>
-                  {/* koh */}
-                  {activeStep === 6 && (
-                    <Col>
-                      <div>
-                        <TemplateSelectByCategoryElement
-                          categoryName={selectedCategory}
-                          placeholder="Select a template"
-                          onChange={(value) => {
-                            setTemplateData(value);
-                          }}
-                          defaultFirstValue
-                        />
-                      </div>
-                    </Col>
-                  )}
-                </Row>
-              
+          <div className="offcanvas-header border-bottom border-bottom-dashed border d-flex flex-row gap-4 align-items-center">
+            <div className="avatar-md flex-shrink-0">
+              <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
+                {formSubmissionData?.accountName.charAt(0)}
+              </div>
             </div>
-            <OffcanvasBody>
-              {getFormComponent(activeStep)}
-              {console.log("Active Step: OffCanvasBody", activeStep)}
-            </OffcanvasBody>
-  
+            <Row className="d-flex flex-row justify-content-between align-items-end gap-5 flex-grow-1">
+              <Col>
+                <Row>
+                  <span className="h4 fw-bold">
+                    {formSubmissionData?.accountName}
+                  </span>
+                </Row>
+                <Row>
+                  <div className="d-flex flex-row gap-4">
+                    <span className="h6 fw-semibold text-nowrap">
+                      Job ID - {formSubmissionData?.clientJobId}
+                    </span>
+                    <span className="h6 fw-semibold text-nowrap">
+                      Job Title - {formSubmissionData?.jobTitle}
+                    </span>
+                  </div>
+                </Row>
+                <Row>
+                  <span className="h6 text-muted fw-bold">{stepperState}</span>
+                </Row>
+              </Col>
+              {/* koh */}
+              {activeStep === 6 && (
+                <Col>
+                  <div>
+                    <TemplateSelectByCategoryElement
+                      categoryName={selectedCategory}
+                      placeholder="Select a template"
+                      onChange={(value) => {
+                        setTemplateData(value);
+                      }}
+                      defaultFirstValue
+                    />
+                  </div>
+                </Col>
+              )}
+            </Row>
+          </div>
+          <OffcanvasBody>
+            {getFormComponent(activeStep)}
+            {console.log("Active Step: OffCanvasBody", activeStep)}
+          </OffcanvasBody>
         </Offcanvas>
-        </div>
 
         <Tooltip
           target="next-step"
