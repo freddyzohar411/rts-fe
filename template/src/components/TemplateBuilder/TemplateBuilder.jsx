@@ -124,7 +124,7 @@ const TemplateBuilder = forwardRef(
     }, []);
 
     useEffect(() => {
-      if (categorySelected == null) {
+      if (categorySelected == null || categorySelected == "") {
         setTemplateList([]);
         setTemplateSelected("");
       }
@@ -583,14 +583,12 @@ const TemplateBuilder = forwardRef(
                       } else {
                         const template = templatesByCategory.filter(
                           (template) =>
-                            (template.name =
-                              templateSelected.value &&
-                              template.category === categorySelected.value)
+                            template.name == templateSelected.value &&
+                            template.category === categorySelected.value
                         )[0];
-                        console.log("Template Selected", template)
                         setTemplateContentPreview(template.content);
-                        // setTemplateSelected("");
-                        // setCategorySelected("");
+                        setTemplateSelected("");
+                        setCategorySelected("");
                       }
                     }}
                   >
