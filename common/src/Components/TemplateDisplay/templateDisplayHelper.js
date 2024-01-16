@@ -1,4 +1,8 @@
 import axios from "axios";
+import {
+  getTemplateFromCategoryAndName
+} from "./url_helper"
+
 
 /**
  * Replace variables placeholders( ${xxx.yyy.zzz} in html with variabledata
@@ -187,7 +191,7 @@ export function getTemplateData(htmlString) {
       const templateData = {};
       axios
         .post(
-          "http://localhost:8181/api/template/categories-names",
+          getTemplateFromCategoryAndName(),
           templateCriteriaList
         )
         .then((res) => {

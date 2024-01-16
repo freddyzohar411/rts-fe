@@ -18,13 +18,13 @@ import {
 } from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { moduleConstants } from "./constants";
-import { TemplateDisplay, TemplateDisplayV3 } from "@workspace/common";
+import { TemplateDisplayV3 } from "@workspace/common";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
 import { addMediaUrl, deleteDraftMediaUrl } from "../../helpers/backend_helper";
 import mammoth from "mammoth";
 import { moduleActions } from "./moduleAction";
-
+import { categoryConstants } from "./templateBuilderContants";
 import SelectElement from "./SelectElement";
 import FileInputElement from "./FileInputElement";
 import EditorElement2 from "./EditorElement2";
@@ -59,13 +59,13 @@ const TemplateBuilder = forwardRef(
     );
 
     const sectionData = useSelector((state) => {
-      if (typeData?.label === "Accounts") {
+      if (typeData?.label === categoryConstants.ACCOUNTS) {
         return state.AccountReducer.accountsFieldsAll;
       }
-      if (typeData?.label === "Jobs") {
+      if (typeData?.label === categoryConstants.JOBS) {
         return state.JobReducer.jobsFieldsAll;
       }
-      if (typeData?.label === "Candidates") {
+      if (typeData?.label === categoryConstants.CANDIDATES) {
         return state.CandidateReducer.candidatesFieldsAll;
       }
     });
@@ -87,9 +87,9 @@ const TemplateBuilder = forwardRef(
     useEffect(() => {
       if (sectionData) {
         if (
-          typeData?.label === "Candidates" ||
-          typeData?.label === "Accounts" ||
-          typeData?.label === "Jobs"
+          typeData?.label === categoryConstants.ACCOUNTS ||
+          typeData?.label === categoryConstants.JOBS ||
+          typeData?.label === categoryConstants.CANDIDATES
         ) {
           setSections(sectionData);
         }
@@ -222,6 +222,7 @@ const TemplateBuilder = forwardRef(
       return options;
     }
 
+    // Check for field selected to disable buttons in template builder
     const checkFieldSelected = () => {
       if (typeData) {
         if (selectedSection && fields.length === 0) {
@@ -310,50 +311,6 @@ const TemplateBuilder = forwardRef(
                 </div>
               </Col>
             </Row>
-            {/* <hr />
-            <Row className="mb-1">
-              <Col>
-                <span className="h6 fw-bold">Variable Injection</span>
-              </Col>
-            </Row>
-            <Row className="align-items-end">
-              <Col>
-                <Label>Module Type</Label>
-                <SelectElement
-                  optionsData={moduleConstants}
-                  setSelectedOptionData={setTypeData}
-                  placeholder="Select a type"
-                  value={typeData}
-                  editorRef={editorRef}
-                />
-              </Col>
-              <Col>
-                <Label>Module Field</Label>
-                <SelectAPIElement
-                  value={fieldName}
-                  placeholder="Select a field"
-                  setSelectedOptionData={setFieldName}
-                  module={typeData}
-                  editorRef={editorRef}
-                />
-              </Col>
-              <Col>
-                <Button
-                  type="button"
-                  className="self-end"
-                  disabled={!typeData || !fieldName}
-                  onClick={() => {
-                    setInjectVariable(
-                      "${" + `${typeData.value}.${fieldName.value}` + "}"
-                    );
-                    setFieldName("");
-                    setTypeData("");
-                  }}
-                >
-                  Add
-                </Button>
-              </Col>
-            </Row> */}
             <hr className="" />
             <Row className="mb-1 mt-2">
               <Col>

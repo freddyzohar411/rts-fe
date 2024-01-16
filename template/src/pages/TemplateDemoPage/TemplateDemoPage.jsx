@@ -16,8 +16,6 @@ import {
   Input,
 } from "reactstrap";
 import { fetchTemplate } from "../../store/template/action";
-// import { TemplateDisplay } from "@workspace/common";
-// import { TemplateDisplayV2 } from "@workspace/common";
 import { TemplateDisplayV3 } from "@workspace/common";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
@@ -217,7 +215,7 @@ const TemplateBuilderPage = () => {
                   <hr />
                   <Row className="">
                     <Container
-                      className="border pt-3"
+                      className="border pt-3 pb-3"
                       style={{
                         width: "850px",
                         height: "1000px",
@@ -225,13 +223,7 @@ const TemplateBuilderPage = () => {
                         overflow: "auto",
                       }}
                     >
-                      {/* <TemplateDisplay
-                        content={templateData?.content}
-                        allData={allModuleData}
-                        isView={isView}
-                        getNewContent={getNewContent}
-                      /> */}
-                       <TemplateDisplayV3
+                      <TemplateDisplayV3
                         content={templateData?.content}
                         allData={allModuleData}
                         isView={isView}

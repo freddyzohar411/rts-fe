@@ -54,28 +54,6 @@ const TemplateDisplayV3 = ({
     },
     { attributes: true, childList: true, subtree: true, characterData: true }
   );
-  //     const templateCriteriaList =
-  //       TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(content);
-  //     if (templateCriteriaList.length > 0) {
-  //       axios
-  //         .post(
-  //           "http://localhost:8181/api/template/categories-names",
-  //           templateCriteriaList
-  //         )
-  //         .then((res) => {
-  //           const { data } = res;
-  //           const mappedData = {};
-  //           data.forEach((item) => {
-  //             mappedData[item.category] = {
-  //               ...mappedData[item.category],
-  //               [item.name]: item.content,
-  //             };
-  //           });
-  //           setTemplateData(mappedData);
-  //         });
-  //     }
-  //   }
-  // }, [content]);
 
   /**
    * Run effects to process the content and replace variables and templates
@@ -156,7 +134,7 @@ const TemplateDisplayV3 = ({
   }
 
   return (
-    <div>
+    <>
       {isView ? (
         <div className="tinyCME">
           <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
@@ -166,7 +144,8 @@ const TemplateDisplayV3 = ({
           tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
           value={parsedContent}
           init={{
-            height: 950,
+            height: "100%", // Set the initial height to 100% of the parent container
+            botton_margin: 10,
             menubar: false,
             plugins: [
               "advlist",
@@ -204,7 +183,7 @@ const TemplateDisplayV3 = ({
           }}
         />
       )}
-    </div>
+    </>
   );
 };
 
