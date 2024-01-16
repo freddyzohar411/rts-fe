@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import axios from "axios";
 import useMutationObserver from "./useMutationObserverHook";
 import ReactHtmlParser from "react-html-parser";
 import * as TemplateDisplayHelper from "./templateDisplayHelper";
@@ -77,6 +76,9 @@ const TemplateDisplayV3 = ({
   //   }
   // }, [content]);
 
+  /**
+   * Run effects to process the content and replace variables and templates
+   */
   useEffect(() => {
     const runEffects = async (htmlString) => {
       if (!htmlString) {
