@@ -113,6 +113,11 @@ const authProtectedRoutes = [
     component: <JobManage />,
     requiredPermissions: [Permission.JOB_READ],
   },
+  {
+    path: "/jobs/fodtest",
+    component: <FOD />,
+    requiredPermissions: [Permission.JOB_READ],
+  },
 
   { path: "/jobs/fod", component: <FOD /> },
 
