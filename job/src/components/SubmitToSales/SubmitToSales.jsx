@@ -9,7 +9,7 @@ import { Row, Col, Input, Button, Tooltip } from "reactstrap";
 import { CVPreview } from "../CVPreview";
 import { EmailComponent } from "../EmailComponent";
 
-function SubmitToSales({ closeOffcanvas }) {
+function SubmitToSales({ closeOffcanvas, templateData }) {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -105,7 +105,11 @@ function SubmitToSales({ closeOffcanvas }) {
                   </Tooltip>
                   <EmailComponent
                     isOpen={sendEmailModal}
-                    toggle={() => {setSendEmailModal(!sendEmailModal); closeOffcanvas}}
+                    toggle={() => {
+                      setSendEmailModal(!sendEmailModal);
+                      closeOffcanvas;
+                    }}
+                    templateData={templateData}
                   />
                 </div>
               </div>

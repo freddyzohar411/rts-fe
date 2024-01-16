@@ -11,12 +11,12 @@ import {
   DropdownToggle,
   DropdownMenu,
 } from "reactstrap";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { TemplateDisplayV3 } from "@workspace/common";
 
-function EmailComponent({ isOpen, toggle }) {
+function EmailComponent({ isOpen, toggle, templateData }) {
   const [modal, setModal] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [emailContent, setEmailContent] = useState("");
   const toggleFullscreen = () => setIsFullscreen(!isFullscreen);
 
   return (
@@ -123,7 +123,14 @@ function EmailComponent({ isOpen, toggle }) {
               </div>
             </div>
             <div className="ck-editor-reverse mb-3">
-              <CKEditor editor={ClassicEditor} onReady={(editor) => {}} />
+              <TemplateDisplayV3
+                content={templateData?.content ?? null}
+                allData={null}
+                isView={false}
+                handleOutputContent={setEmailContent}
+                autoResize={false}
+                height={300}
+              />
             </div>
             <ModalFooter className="p-0">
               <div className="d-flex flex-row gap-3 justify-content-end">

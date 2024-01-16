@@ -14,7 +14,9 @@ const TemplateDisplayV3 = ({
   processContent = true,
   cleanContent = true,
   recursive = false,
-  minHeight = 400,
+  minHeight,
+  height = "100%",
+  autoResize = false,
 }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
@@ -137,6 +139,34 @@ const TemplateDisplayV3 = ({
     }
   }
 
+  // Set Plugin
+  let plugins = [
+    "advlist",
+    "autolink",
+    "lists",
+    "link",
+    "image",
+    "charmap",
+    "anchor",
+    "searchreplace",
+    "visualblocks",
+    "code",
+    "fullscreen",
+    "insertdatetime",
+    "media",
+    "table",
+    "preview",
+    "help",
+    "wordcount",
+    "table",
+    "emoticons",
+    "codesample",
+  ];
+
+  if (autoResize) {
+    plugins = [...plugins, "autoresize"];
+  }
+
   return (
     <>
       {isView ? (
@@ -148,33 +178,11 @@ const TemplateDisplayV3 = ({
           tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
           value={parsedContent}
           init={{
-            height: "100%", // Set the initial height to 100% of the parent container
+            height: height, // Set the initial height to 100% of the parent container
             min_height: minHeight,
             botton_margin: 10,
             menubar: false,
-            plugins: [
-              "advlist",
-              "autolink",
-              "lists",
-              "link",
-              "image",
-              "charmap",
-              "anchor",
-              "searchreplace",
-              "visualblocks",
-              "code",
-              "fullscreen",
-              "insertdatetime",
-              "media",
-              "table",
-              "preview",
-              "help",
-              "wordcount",
-              "table",
-              "emoticons",
-              "codesample",
-              "autoresize",
-            ],
+            plugins: plugins,
             toolbar:
               "undo redo | blocks fontfamily fontsizeinput | " +
               "bold italic underline forecolor backcolor | align lineheight |" +

@@ -4,7 +4,6 @@ import {
   Row,
   Col,
   Container,
-  Button,
   Input,
   Nav,
   NavItem,
@@ -12,13 +11,12 @@ import {
   TabContent,
   TabPane,
   Button,
-  Input,
 } from "reactstrap";
 import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
 import { TemplateDisplayV3 } from "@workspace/common";
 
-function ConditionalOffer({ templateData, setOffcanvasForm }) {
+function ConditionalOffer({ templateData, closeOffcanvas }) {
   const [activeTab, setActiveTab] = useState("1");
   const [conditionalOfferContent, setConditionalOfferContent] = useState("");
   const [releaseValue, setReleaseValue] = useState("");
@@ -28,7 +26,7 @@ function ConditionalOffer({ templateData, setOffcanvasForm }) {
     if (releaseValue) {
       // Release conditional offer logic
     } else {
-      setOffcanvasForm(false);
+      closeOffcanvas();
     }
   };
 
@@ -70,8 +68,9 @@ function ConditionalOffer({ templateData, setOffcanvasForm }) {
               <TemplateDisplayV3
                 content={templateData?.content ?? null}
                 allData={null}
-                isView={true}
+                isView={false}
                 handleOutputContent={setConditionalOfferContent}
+                autoResize={true}
               />
             </Container>
           </TabPane>

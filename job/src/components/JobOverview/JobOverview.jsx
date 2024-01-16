@@ -140,15 +140,15 @@ function JobOverview() {
       case 1:
         return <AssociateCandidate closeOffcanvas={closeOffcanvas} />;
       case 2:
-        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
+        return <SubmitToSales closeOffcanvas={closeOffcanvas} templateData={templateData}/>;
       case 3:
-        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
+        return <SubmitToSales closeOffcanvas={closeOffcanvas} templateData={templateData}/>;
       case 4:
         return <ProfileFeedbackPending closeOffcanvas={closeOffcanvas} />;
       case 5:
         return <ScheduleInterview closeOffcanvas={closeOffcanvas} />;
       case 6:
-        return <ConditionalOffer templateData={templateData} setOffcanvasForm={setOffcanvasForm}/>;
+        return <ConditionalOffer templateData={templateData} closeOffcanvas={closeOffcanvas}/>;
       case 7:
         return <ConditionalOfferStatus closeOffcanvas={closeOffcanvas} />;
       default:
@@ -408,7 +408,7 @@ function JobOverview() {
           </div>
           <OffcanvasBody>
             {getFormComponent(activeStep, () =>
-              setOffcanvasForm(!offcanvasForm)
+              setOffcanvasForm(false)
             )}
           </OffcanvasBody>
         </Offcanvas>
