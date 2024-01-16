@@ -36,6 +36,7 @@ import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import StepComponent from "./StepComponent";
+import { TimelineHeader } from "../TimelineHeader";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
@@ -185,25 +186,8 @@ function JobOverview() {
   return (
     <React.Fragment>
       <div>
-        <Row className="mb-3">
-          <Col>
-            <div className="d-flex flex-row justify-content-between text-center">
-              {jobHeaders.map((job) => (
-                <div
-                  key={job}
-                  className="d-flex flex-column align-items-center gap-2"
-                >
-                  <span
-                    className="bg-dark rounded-circle text-white"
-                    style={{ height: "20px", width: "20px" }}
-                  >
-                    1
-                  </span>
-                  <span>{job}</span>
-                </div>
-              ))}
-            </div>
-          </Col>
+        <Row>
+          <TimelineHeader data={jobHeaders}/>
         </Row>
         <hr className="border border-dashed border-dark" />
         <Row className="mb-3">
@@ -224,7 +208,7 @@ function JobOverview() {
               </div>
 
               <div className="d-flex flex-row gap-2 align-items-center">
-                <div className="search-box" style={{ width: "500px" }}>
+                <div className="search-box" style={{ width: "300px" }}>
                   <Input placeholder="Search.." className="form-control" />
                   <i className="ri-search-eye-line search-icon"></i>
                 </div>
@@ -260,73 +244,85 @@ function JobOverview() {
                 BSG Status
               </NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink>
+                <div className="d-flex flex-row gap-2 fw-semibold">
+                  <span>Status Overview</span>
+                  <span>|</span>
+                  <span>Overall Man Days: 30</span>
+                </div>
+              </NavLink>
+            </NavItem>
           </Nav>
         </Row>
         <Row>
           <TabContent activeTab={timelineTab} className="p-0">
             <TabPane tabId="1">
-              <Table
-                className="table table-striped align-middle"
-                style={{ tableLayout: "fixed", wordWrap: "break-word" }}
-              >
-                <thead className="table-light">
-                  <tr>
-                    {rtsStatusHeaders.map((header, index) => (
+              <div className="overflow-auto">
+                <Table
+                  className="table table-striped align-middle"
+                  style={{ tableLayout: "fixed", wordWrap: "break-word" }}
+                >
+                  <thead className="table-light">
+                    <tr>
+                      {rtsStatusHeaders.map((header, index) => (
+                        <th
+                          className="text-center align-middle"
+                          key={header}
+                          style={{
+                            width:
+                              index === 0 || index === 1 ? "90px" : "130px",
+                          }}
+                        >
+                          {header}
+                        </th>
+                      ))}
                       <th
                         className="text-center align-middle"
-                        key={header}
-                        style={{
-                          width: index === 0 || index === 1 ? "80px" : "120px",
-                        }}
-                      >
-                        {header}
-                      </th>
-                    ))}
-                    <th
-                      className="text-center align-middle"
-                      style={{ width: "150px" }}
-                    ></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-center">
-                    <td>Jane Lee</td>
-                    <td>Aaron Loo</td>
-                    {steps.map((step, index) => (
-                      <td key={index} className="p-0">
-                        <StepComponent
-                          timelineState={activeStep}
-                          index={index}
-                        />
-                      </td>
-                    ))}
-                    <td>
-                      <div className="d-flex flex-row gap-3 align-items-center">
-                        <Input
-                          type="select"
-                          value={activeStep}
-                          onChange={(e) =>
-                            setActiveStep(parseInt(e.target.value))
-                          }
-                        >
-                          <option value="">Select</option>
-                          {timelineSkip.map((item, index) => (
-                            <option key={index} value={index + 1}>
-                              {Object.values(item)[0]}
-                            </option>
-                          ))}
-                        </Input>
+                        style={{ width: "150px" }}
+                      ></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="text-center align-top">
+                      <td className="pt-4">Jane Lee</td>
+                      <td className="pt-4">Aaron Loo (7hrs)</td>
+                      {steps.map((step, index) => (
+                        <td key={index} className="px-0">
+                          <StepComponent
+                            timelineState={activeStep}
+                            index={index}
+                          />
+                        </td>
+                      ))}
+                      <td>
+                        <div className="d-flex flex-row gap-3 align-items-center">
+                          <Input
+                            type="select"
+                            value={activeStep}
+                            onChange={(e) =>
+                              setActiveStep(parseInt(e.target.value))
+                            }
+                          >
+                            <option value="">Select</option>
+                            {timelineSkip.map((item, index) => (
+                              <option key={index} value={index + 1}>
+                                {Object.values(item)[0]}
+                              </option>
+                            ))}
+                          </Input>
 
-                        <i
-                          onClick={() => setOffcanvasForm(!offcanvasForm)}
-                          id="next-step"
-                          className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
-                        ></i>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
+                          <i
+                            onClick={() => setOffcanvasForm(!offcanvasForm)}
+                            id="next-step"
+                            className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
+                          ></i>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </div>
             </TabPane>
             <TabPane tabId="2"></TabPane>
           </TabContent>

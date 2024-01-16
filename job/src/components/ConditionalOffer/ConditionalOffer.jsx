@@ -4,6 +4,8 @@ import {
   Row,
   Col,
   Container,
+  Button,
+  Input,
   Nav,
   NavItem,
   NavLink,
@@ -47,13 +49,33 @@ function ConditionalOffer() {
         </Nav>
         <TabContent activeTab={activeTab}>
           <TabPane tabId="1">
-            <div>Conditional Offer</div>
+            <div className="d-flex flex-column gap-5 mt-4">
+              <span className="h6 ">Conditional Offer</span>
+              <div className="d-flex flex-row gap-2 justify-content-end align-items-end">
+                <div className="d-flex flex-column gap-1">
+                  <span>Time to Take Action*</span>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    placeholder="30 Min"
+                  />
+                </div>
+                <Button className="btn btn-custom-primary">Release</Button>
+              </div>
+            </div>
           </TabPane>
           <TabPane tabId="2">
-            <ReviewTos />
+            <div className="mt-4">
+              <ReviewTos />
+            </div>
           </TabPane>
           <TabPane tabId="3">
-            <div>Preview Conditional Offer</div>
+            <div className="d-flex flex-column gap-5 mt-4">
+              <span className="h6">Preview Conditional Offer</span>
+              <div className="d-flex justify-content-end">
+                <Button className="btn btn-custom-primary">Release</Button>
+              </div>
+            </div>
           </TabPane>
         </TabContent>
       </div>
