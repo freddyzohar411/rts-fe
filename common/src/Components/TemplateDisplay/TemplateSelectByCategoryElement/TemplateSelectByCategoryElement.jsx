@@ -6,6 +6,8 @@ import Select from "react-select";
 const TemplateSelectByCategoryElement = ({
   categoryName = null,
   defaultFirstValue,
+  width = "auto",
+  end,
   ...props
 }) => {
   const dispatch = useDispatch();
@@ -61,6 +63,7 @@ const TemplateSelectByCategoryElement = ({
         borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       },
       backgroundColor: state.isDisabled ? "#EFF2F7" : base.backgroundColor,
+      width: width,
     }),
     singleValue: (provided, state) => ({
       ...provided,
@@ -82,7 +85,7 @@ const TemplateSelectByCategoryElement = ({
   };
 
   return (
-    <div>
+    <div className={`w-100 d-flex ${end ? "justify-content-end" : ""}`}>
       {props?.label && (
         <Label className="form-label" htmlFor={props?.htmlFor ?? "input-field"}>
           {props?.label}

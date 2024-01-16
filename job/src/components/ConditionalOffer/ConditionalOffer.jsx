@@ -10,14 +10,26 @@ import {
   TabContent,
   TabPane,
   Button,
+  Input,
 } from "reactstrap";
 import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
 import { TemplateDisplayV3 } from "@workspace/common";
 
-function ConditionalOffer({ templateData }) {
+function ConditionalOffer({ templateData, setOffcanvasForm }) {
   const [activeTab, setActiveTab] = useState("1");
   const [conditionalOfferContent, setConditionalOfferContent] = useState("");
+  const [releaseValue, setReleaseValue] = useState("");
+
+  // Handle realease event
+  const handleRelease = () => {
+    if (releaseValue) {
+      // Release conditional offer logic
+      
+    } else {
+      setOffcanvasForm(false)
+    }
+  };
 
   return (
     <React.Fragment>
@@ -75,12 +87,24 @@ function ConditionalOffer({ templateData }) {
                 allData={null}
                 isView={true}
               />
-              <div className="d-flex justify-content-end">
-                <Button className="btn btn-custom-primary">Release</Button>
-              </div>
             </Container>
           </TabPane>
         </TabContent>
+        <div className="d-flex justify-content-end gap-3">
+          {activeTab == "1" && (
+            <Input
+              type="number"
+              className="mr-2"
+              style={{ width: "200px" }}
+              placeholder="Time in minutes"
+              value={releaseValue}
+              onChange={(e) => setReleaseValue(e.target.value)}
+            />
+          )}
+          <Button className="btn btn-custom-primary" onClick={handleRelease}>
+            Release
+          </Button>
+        </div>
       </div>
     </React.Fragment>
   );

@@ -147,7 +147,7 @@ function JobOverview() {
       case 5:
         return <ScheduleInterview />;
       case 6:
-        return <ConditionalOffer templateData={templateData} />;
+        return <ConditionalOffer templateData={templateData} setOffcanvasForm={setOffcanvasForm}/>;
       case 7:
         return <ConditionalOfferStatus />;
       default:
@@ -360,9 +360,9 @@ function JobOverview() {
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
-          style={{ width: "75vw", border: "2px solid green" }}
+          style={{ width: "75vw" }}
         >
-          <div className="offcanvas-header border-bottom border-bottom-dashed border d-flex flex-row gap-4 align-items-center">
+          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
             <div className="avatar-md flex-shrink-0">
               <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
                 {formSubmissionData?.accountName.charAt(0)}
@@ -400,6 +400,8 @@ function JobOverview() {
                         setTemplateData(value);
                       }}
                       defaultFirstValue
+                      width="300px"
+                      end
                     />
                   </div>
                 </Col>
