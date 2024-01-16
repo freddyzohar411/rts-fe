@@ -3,3 +3,11 @@
     width: 500px !important;
     border-radius: 2em;
 }
+
+.progress-transition {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    -ms-transition: none !important;
+    transition: none !important;
+}

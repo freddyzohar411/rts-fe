@@ -23,23 +23,25 @@ function StepComponent({ step, timelineState, index }) {
 
   return (
     <React.Fragment>
-      <div id={`Popover-${index}`} className="step-component">
-        <div className="d-flex gap-2 flex-column justify-content-center align-items-center">
-          {step && (<span className="text-center">{step}</span>)}
+      <div id={`Popover-${index}`} className="step-component pt-2">
+        <div className="d-flex gap-2 flex-column justify-content-center align-items-center gap-1">
+          {step && <span className="text-center">{step}</span>}
           <div className="d-flex flex-row justify-content-center align-items-center w-100">
             {index !== 0 ? (
               <Progress
+                animated={false}
                 value={startProgressBarValue}
                 style={{ height: "1px", width: "100%" }}
                 color="custom-button"
+                className="no-transition"
               />
             ) : (
               <div style={{ height: "1px", width: "100%" }}></div>
             )}
             <div
-              className={`rounded-pill border border-light ${
-                timelineState === index && "bg-warning"
-              } ${timelineState > index && "bg-primary"}`}
+              className={`rounded-pill border border-primary ${
+                timelineState === index && "bg-warning border-light"
+              } ${timelineState > index && "bg-primary border-light"}`}
               color="custom-button"
               style={{
                 width: "18px",
@@ -52,12 +54,13 @@ function StepComponent({ step, timelineState, index }) {
                 setToggleInterview(!toggleInterview);
               }}
             >
-              {index === 6 && (
+              {index === 5 && (
                 <span>
                   <i
                     className="ri-add-fill text-dark fw-bold cursor-pointer"
                     onClick={() => {
                       setToggleInterview(!toggleInterview);
+                      console.log("clicked", toggleInterview);
                     }}
                   ></i>
                 </span>
@@ -65,26 +68,30 @@ function StepComponent({ step, timelineState, index }) {
             </div>
             {index !== 7 ? (
               <Progress
+                animated={false}
                 value={endProgressBarValue}
                 style={{ height: "1px", width: "100%" }}
                 color="custom-button"
+                className="no-transition"
               />
             ) : (
               <div style={{ height: "1px", width: "100%" }}></div>
             )}
           </div>
-          <div>
+          <div className="d-flex flex-column align-items-center justify-content-center">
             <span>19/11/2023</span>
+            <span>- (4)</span>
           </div>
         </div>
       </div>
       {/* Interview Schedule Pop Up */}
-      {index === 6 && (
+      {index === 5 && (
         <Popover
           className="custom-popover"
           placement="bottom"
           isOpen={toggleInterview}
           target={`Popover-${index}`}
+          trigger="legacy"
           toggle={() => setToggleInterview(!toggleInterview)}
         >
           <PopoverBody>

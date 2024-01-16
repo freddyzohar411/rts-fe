@@ -17,7 +17,7 @@ import "react-dual-listbox/lib/react-dual-listbox.css";
 import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
-import { JOB_INITIAL_OPTIONS } from "./jobListingConstants";
+import { JOB_INITIAL_OPTIONS } from "./JobListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
 import {
   createJobFOD,
@@ -28,6 +28,7 @@ import {
 } from "../../store/jobList/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
+import JobTagCanvas from "./JobTagCanvas";
 
 const JobListing = () => {
   const { Permission, checkAllPermission } = useUserAuth();
@@ -51,6 +52,8 @@ const JobListing = () => {
   const [deleteId, setDeleteId] = useState(null);
   // Placeholder Recruiter Name List
   const [nestedVisible, setNestedVisible] = useState([]);
+  const [tagOffcanvas, setTagOffcanvas] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
 
   // Custom renders
   const customRenderList = [
@@ -116,7 +119,6 @@ const JobListing = () => {
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     const request = { ...pageRequest, jobType };
-    console.log();
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
   }, [pageRequest]);
 
@@ -129,11 +131,7 @@ const JobListing = () => {
 
   const handleTableViewChange = (e) => {
     setGridView(e.target.value);
-    console.log("test page", pageRequest);
-
     const request = { ...pageRequest, page: 0, jobType: e.target.value };
-    console.log("test request", request);
-
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
   };
 
@@ -311,6 +309,18 @@ const JobListing = () => {
                 </Row>
               </DropdownMenu>
             </Dropdown>
+            {checkAllPermission([Permission.JOB_EDIT]) && (
+              <Button
+                tag="button"
+                className="btn btn-sm btn-custom-primary"
+                onClick={() => {
+                  setSelectedRowData(data);
+                  setTagOffcanvas(!tagOffcanvas);
+                }}
+              >
+                <i className="ri-parent-fill"></i>
+              </Button>
+            )}
 
             <Link
               to={`/jobs/${data.id}/snapshot`}
@@ -388,6 +398,11 @@ const JobListing = () => {
         setCustomConfigData={setCustomConfigData}
         gridView={gridView}
         handleTableViewChange={handleTableViewChange}
+      />
+      <JobTagCanvas
+        tagOffcanvas={tagOffcanvas}
+        setTagOffcanvas={setTagOffcanvas}
+        selectedRowData={selectedRowData}
       />
     </>
   );

@@ -4,6 +4,8 @@ import {
   Row,
   Col,
   Container,
+  Button,
+  Input,
   Nav,
   NavItem,
   NavLink,
@@ -25,9 +27,8 @@ function ConditionalOffer({ templateData, setOffcanvasForm }) {
   const handleRelease = () => {
     if (releaseValue) {
       // Release conditional offer logic
-      
     } else {
-      setOffcanvasForm(false)
+      setOffcanvasForm(false);
     }
   };
 
@@ -75,7 +76,9 @@ function ConditionalOffer({ templateData, setOffcanvasForm }) {
             </Container>
           </TabPane>
           <TabPane tabId="2">
-            <ReviewTos />
+            <div className="mt-4">
+              <ReviewTos />
+            </div>
           </TabPane>
           <TabPane tabId="3">
             <Container

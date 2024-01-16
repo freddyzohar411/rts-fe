@@ -65,3 +65,10 @@ export const getJobDataById = (id) =>
 // Get job fields all
 export const getJobsFieldsAll = () =>
   api.get(`${JOB_URL}${BASE_JOBS}/fields/all`);
+
+export const tagJob = (data, config) =>
+  api.create(`${JOB_URL}/api/jobcandidatestage`, data, config);
+
+export const tagAllJob = (data, config) =>
+  api.create(`${JOB_URL}/api/jobcandidatestage/createAll`, data, config);
+

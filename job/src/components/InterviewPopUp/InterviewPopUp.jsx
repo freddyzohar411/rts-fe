@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Progress } from "reactstrap";
 import StepComponent from "../JobOverview/StepComponent";
 
-const InterviewPopUp = ({ step, setStep }) => {
+const InterviewPopUp = ({ timelineState, step, setStep }) => {
   const [activeStep, setActiveStep] = useState(1);
   const [stepperState, setStepperState] = useState("");
   useEffect(() => {
@@ -41,8 +41,6 @@ const InterviewPopUp = ({ step, setStep }) => {
             <StepComponent
               key={index}
               step={step}
-              setStep={setStep}
-              timelineState={activeStep}
             />
           ))}
         </div>

@@ -1204,6 +1204,14 @@ const FormBuilder = ({
                             Save to API
                           </Button>
                         )} */}
+                        {formFields.length > 0 && (
+                          <Button
+                            className="btn btn-custom-primary mt-3 ms-3"
+                            onClick={handleSaveJSONData}
+                          >
+                            Save JSON File
+                          </Button>
+                        )}
                       </form>
                     </div>
                     {/* User Buttons */}

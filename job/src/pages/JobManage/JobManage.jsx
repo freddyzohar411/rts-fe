@@ -43,7 +43,7 @@ const JobManage = () => {
             </div>
           )}
           {slug == "overview" && (
-            <div className="mt-3">
+            <div>
               <JobOverview />
             </div>
           )}
