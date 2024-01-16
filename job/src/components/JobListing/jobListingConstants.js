@@ -55,4 +55,29 @@ const JOB_INITIAL_OPTIONS = [
   },
 ];
 
-export { JOB_INITIAL_OPTIONS };
+const JOB_FILTERS = [
+  {
+    new_job: "New Job Openings",
+  },
+  {
+    active_jobs: "Active Job Openings",
+  },
+  {
+    inactive_jobs: "Inactive Job Openings",
+  },
+  {
+    closed_jobs: "Closed Job Openings",
+  },
+  {
+    fod: "Focus of the Day",
+  },
+  {
+    assigned_jobs: "Assigned Job Openings",
+  },
+];
+
+const JOB_STAGE_IDS = { TAG: 1, ASSOCIATE: 2 };
+
+const JOB_STAGE_STATUS = { IN_PROGRESS: "IN PROGRESS", COMPLETED: "COMPLETED" };
+
+export { JOB_INITIAL_OPTIONS, JOB_FILTERS, JOB_STAGE_IDS, JOB_STAGE_STATUS };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   Badge,
@@ -17,7 +17,7 @@ import "react-dual-listbox/lib/react-dual-listbox.css";
 import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
-import { JOB_INITIAL_OPTIONS } from "./jobListingConstants";
+import { JOB_INITIAL_OPTIONS } from "./JobListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
 import {
   createJobFOD,
@@ -28,10 +28,13 @@ import {
 } from "../../store/jobList/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
+import JobTagCanvas from "./JobTagCanvas";
 
 const JobListing = () => {
   const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
+  const { jobType } = useParams();
+
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
   const recruiterGroup = useSelector(
@@ -43,51 +46,14 @@ const JobListing = () => {
   const [namesData, setNamesData] = useState([]);
   const [activeJob, setActiveJob] = useState(-1);
   const [selectedRecruiter, setSelectedRecruiter] = useState();
-
-  useEffect(() => {
-    if (recruiterGroup?.users?.length > 0) {
-      const users = [];
-
-      recruiterGroup?.users?.map((user) => {
-        users?.push(user?.id + "@" + user?.firstName + " " + user?.lastName);
-      });
-      const data = [{ name: recruiterGroup?.userGroupName, subNames: users }];
-      setNamesData(data);
-    }
-  }, [recruiterGroup]);
-
-  const handleFodAssignDropdown = (dataId) => {
-    setFodAssign((prevStates) => ({
-      ...prevStates,
-      [dataId]: !prevStates[dataId],
-    }));
-  };
-
-  // Placeholder Recruiter Name List
-  const [nestedVisible, setNestedVisible] = useState([]);
-
-  const toggleNested = (index) => {
-    setNestedVisible((prev) => {
-      const updatedVisibility = [...prev];
-      updatedVisibility[index] = !updatedVisibility[index];
-      return updatedVisibility;
-    });
-  };
-
-  const handleFODAssign = () => {
-    if (selectedRecruiter) {
-      dispatch(
-        createJobFOD({ jobId: activeJob, recruiterId: selectedRecruiter })
-      );
-      setFodAssign({});
-    } else {
-      toast.error("Please select a recruiter.");
-    }
-  };
-
+  const [gridView, setGridView] = useState(jobType);
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  // Placeholder Recruiter Name List
+  const [nestedVisible, setNestedVisible] = useState([]);
+  const [tagOffcanvas, setTagOffcanvas] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
 
   // Custom renders
   const customRenderList = [
@@ -131,6 +97,75 @@ const JobListing = () => {
     JOB_INITIAL_OPTIONS,
     customRenderList
   );
+
+  useEffect(() => {
+    if (recruiterGroup?.users?.length > 0) {
+      const users = [];
+
+      recruiterGroup?.users?.map((user) => {
+        users?.push(user?.id + "@" + user?.firstName + " " + user?.lastName);
+      });
+      const data = [{ name: recruiterGroup?.userGroupName, subNames: users }];
+      setNamesData(data);
+    }
+  }, [recruiterGroup]);
+
+  // Get all the option groups
+  useEffect(() => {
+    dispatch(fetchJobListsFields());
+    dispatch(fetchUserGroupByName(RECRUITER_GROUP));
+  }, []);
+
+  // Fetch the job when the pageRequest changes
+  useEffect(() => {
+    const request = { ...pageRequest, jobType };
+    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+  }, [pageRequest]);
+
+  // Update the page info when job Data changes
+  useEffect(() => {
+    if (jobsData) {
+      setPageInfoData(jobsData);
+    }
+  }, [jobsData]);
+
+  const handleTableViewChange = (e) => {
+    setGridView(e.target.value);
+    const request = { ...pageRequest, page: 0, jobType: e.target.value };
+    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+  };
+
+  const handleFodAssignDropdown = (dataId) => {
+    setFodAssign((prevStates) => ({
+      ...prevStates,
+      [dataId]: !prevStates[dataId],
+    }));
+  };
+
+  const toggleNested = (index) => {
+    setNestedVisible((prev) => {
+      const updatedVisibility = [...prev];
+      updatedVisibility[index] = !updatedVisibility[index];
+      return updatedVisibility;
+    });
+  };
+
+  const handleFODAssign = () => {
+    if (selectedRecruiter) {
+      dispatch(
+        createJobFOD({ jobId: activeJob, recruiterId: selectedRecruiter })
+      );
+      setFodAssign({});
+    } else {
+      toast.error("Please select a recruiter.");
+    }
+  };
+
+  // Modal Delete
+  const confirmDelete = () => {
+    dispatch(deleteJobList({ deleteId, isDraft: false }));
+    setIsDeleteModalOpen(false);
+  };
 
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
@@ -274,6 +309,18 @@ const JobListing = () => {
                 </Row>
               </DropdownMenu>
             </Dropdown>
+            {checkAllPermission([Permission.JOB_EDIT]) && (
+              <Button
+                tag="button"
+                className="btn btn-sm btn-custom-primary"
+                onClick={() => {
+                  setSelectedRowData(data);
+                  setTagOffcanvas(!tagOffcanvas);
+                }}
+              >
+                <i className="ri-parent-fill"></i>
+              </Button>
+            )}
 
             <Link
               to={`/jobs/${data.id}/snapshot`}
@@ -284,7 +331,7 @@ const JobListing = () => {
                 type="button"
                 className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
               >
-                <i className="ri-eye-line" style={{ fontSize: "0.65rem" }}></i>
+                <i className="ri-eye-line" style={{ fontSize: "0.75rem" }}></i>
               </Button>
             </Link>
 
@@ -330,30 +377,6 @@ const JobListing = () => {
   };
   // ==================================================================
 
-  // Modal Delete
-  const confirmDelete = () => {
-    dispatch(deleteJobList({ deleteId, isDraft: false }));
-    setIsDeleteModalOpen(false);
-  };
-
-  // Get all the option groups
-  useEffect(() => {
-    dispatch(fetchJobListsFields());
-    dispatch(fetchUserGroupByName(RECRUITER_GROUP));
-  }, []);
-
-  // Fetch the job when the pageRequest changes
-  useEffect(() => {
-    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(pageRequest)));
-  }, [pageRequest]);
-
-  // Update the page info when job Data changes
-  useEffect(() => {
-    if (jobsData) {
-      setPageInfoData(jobsData);
-    }
-  }, [jobsData]);
-
   return (
     <>
       <DeleteCustomModal
@@ -373,6 +396,13 @@ const JobListing = () => {
         setSearch={setSearch}
         optGroup={jobsFields}
         setCustomConfigData={setCustomConfigData}
+        gridView={gridView}
+        handleTableViewChange={handleTableViewChange}
+      />
+      <JobTagCanvas
+        tagOffcanvas={tagOffcanvas}
+        setTagOffcanvas={setTagOffcanvas}
+        selectedRowData={selectedRowData}
       />
     </>
   );

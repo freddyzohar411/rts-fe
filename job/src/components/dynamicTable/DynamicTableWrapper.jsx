@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
 import { GeneralModal } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
-import { JOB_INITIAL_OPTIONS } from "../JobListing/jobListingConstants";
+import {
+  JOB_FILTERS,
+  JOB_INITIAL_OPTIONS,
+} from "../JobListing/JobListingConstants";
 
 const DynamicTableWrapper = ({
   data,
@@ -18,14 +21,14 @@ const DynamicTableWrapper = ({
   optGroup,
   setCustomConfigData,
   confirmDelete,
+  gridView,
+  handleTableViewChange,
 }) => {
+  const { jobType } = useParams();
   const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);
   const [selectedOptGroup, setSelectedOptGroup] = useState(JOB_INITIAL_OPTIONS);
-
   const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [isRefresh, setIsRefresh] = useState(false);
 
   const handleChange = (selected) => {
     const selectedObjects = selected.map((value) => {
@@ -121,7 +124,7 @@ const DynamicTableWrapper = ({
                   <div className="listjs-table">
                     <Row className="d-flex column-gap-1 mb-3">
                       <Col>
-                        <div className="d-flex justify-content-center align-items-center">
+                        <div className="d-flex justify-content-start align-items-center">
                           {setSearch && (
                             <div className="search-box">
                               <form onSubmit={pageRequestSet.setSearchTerm}>
@@ -137,32 +140,26 @@ const DynamicTableWrapper = ({
                               <i className="ri-search-line search-icon"></i>
                             </div>
                           )}
-                          <div className="select-width">
-                            <Input
-                              type="select"
-                              className="form-select border-secondary"
-                            >
-                              <option value="">Select View</option>
-                              <option value="New Job Openings">
-                                New Job Openings
-                              </option>
-                              <option value="Active Job Openings">
-                                Active Job Openings
-                              </option>
-                              <option value="Inactive Job Openings">
-                                Inactive Job Openings
-                              </option>
-                              <option value="Closed Job Openings">
-                                Closed Job Openings
-                              </option>
-                              <option value="Focus of the Day">
-                                Focus of the Day
-                              </option>
-                              <option value="Assigned Job Openings">
-                                Assigned Job Openings
-                              </option>
-                            </Input>
-                          </div>
+                          {jobType && (
+                            <div className="select-width">
+                              <Input
+                                type="select"
+                                className="form-select border-secondary"
+                                onChange={handleTableViewChange}
+                                value={gridView}
+                              >
+                                <option value="">Select View</option>
+                                {JOB_FILTERS?.map((ob, index) => {
+                                  const key = Object.keys(ob);
+                                  return (
+                                    <option key={index} value={key}>
+                                      {ob[key]}
+                                    </option>
+                                  );
+                                })}
+                              </Input>
+                            </div>
+                          )}
                         </div>
                       </Col>
                       <Col>
