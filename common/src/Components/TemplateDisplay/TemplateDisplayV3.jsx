@@ -17,6 +17,9 @@ const TemplateDisplayV3 = ({
   minHeight,
   height = "100%",
   autoResize = false,
+  onChange,
+  value,
+  initialValues,
 }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
@@ -176,7 +179,8 @@ const TemplateDisplayV3 = ({
       ) : (
         <Editor
           tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
-          value={parsedContent}
+          initialValue={initialValues && parsedContent}
+          value={value}
           init={{
             height: height, // Set the initial height to 100% of the parent container
             min_height: minHeight,
@@ -193,7 +197,13 @@ const TemplateDisplayV3 = ({
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
           onEditorChange={(value) => {
-            setParsedContent(value);
+            // setParsedContent(value);
+            handleOutputContent(value)
+            if (onChange) {
+              // console.log("Setting on Change", value);
+              onChange(value);
+              
+            }
           }}
         />
       )}

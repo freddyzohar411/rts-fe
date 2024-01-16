@@ -227,9 +227,10 @@ const TemplateBuilderPage = () => {
                         content={templateData?.content}
                         allData={allModuleData}
                         isView={isView}
-                        getNewContent={getNewContent}
+                        handleOutputContent={getNewContent}
                         recursive={true}
                         minHeight={950}
+                        initialValues
                       />
                     </Container>
                   </Row>

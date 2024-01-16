@@ -8,15 +8,29 @@ const TemplateSelectByCategoryElement = ({
   defaultFirstValue,
   width = "auto",
   end,
+  value,
   ...props
 }) => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [templateList, setTemplateList] = useState([]);
-  const [templateSelected, setTemplateSelected] = useState("");
+  const [templateSelected, setTemplateSelected] = useState(value ?? null);
   const templatesByCategory = useSelector(
     (state) => state.TemplateReducer.templatesByCategory
   );
+
+  useEffect(() => {
+    if (value == null) {
+      setTemplateSelected("");
+    }
+    if (value) {
+      setTemplateSelected({
+        value: value.id,
+        label: value.name,
+      });
+    } 
+  }, [value, categoryName, templatesByCategory]);
+
 
   useEffect(() => {
     if (categoryName == null || categoryName == "") {

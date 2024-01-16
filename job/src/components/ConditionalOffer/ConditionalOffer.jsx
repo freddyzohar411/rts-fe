@@ -71,6 +71,7 @@ function ConditionalOffer({ templateData, closeOffcanvas }) {
                 isView={false}
                 handleOutputContent={setConditionalOfferContent}
                 autoResize={true}
+                initialValues
               />
             </Container>
           </TabPane>
@@ -88,6 +89,7 @@ function ConditionalOffer({ templateData, closeOffcanvas }) {
                 content={conditionalOfferContent ?? null}
                 allData={null}
                 isView={true}
+                initialValues
               />
             </Container>
           </TabPane>
