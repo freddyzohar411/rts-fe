@@ -36,6 +36,7 @@ import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import StepComponent from "./StepComponent";
+import { TimelineHeader } from "../TimelineHeader";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
@@ -64,6 +65,8 @@ function JobOverview() {
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
+
+  console.log(formSubmissionData);
   const [formTemplate, setFormTemplate] = useState(null);
 
   // Fetch all the countries and account names
@@ -125,22 +128,22 @@ function JobOverview() {
     }
   }, [activeStep]);
 
-  const getFormComponent = (step) => {
+  const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
       case 1:
-        return <AssociateCandidate />;
+        return <AssociateCandidate closeOffcanvas={closeOffcanvas} />;
       case 2:
-        return <SubmitToSales />;
+        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
       case 3:
-        return <SubmitToSales />;
+        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
       case 4:
-        return <ProfileFeedbackPending />;
+        return <ProfileFeedbackPending closeOffcanvas={closeOffcanvas} />;
       case 5:
-        return <ScheduleInterview />;
+        return <ScheduleInterview closeOffcanvas={closeOffcanvas} />;
       case 6:
-        return <ConditionalOffer />;
+        return <ConditionalOffer closeOffcanvas={closeOffcanvas} />;
       case 7:
-        return <ConditionalOfferStatus />;
+        return <ConditionalOfferStatus closeOffcanvas={closeOffcanvas} />;
       default:
         return null;
     }
@@ -183,39 +186,29 @@ function JobOverview() {
   return (
     <React.Fragment>
       <div>
-        <Row className="mb-3">
-          <Col>
-            <div className="d-flex flex-row justify-content-between text-center">
-              {jobHeaders.map((job) => (
-                <div
-                  key={job}
-                  className="d-flex flex-column align-items-center gap-2"
-                >
-                  <span
-                    className="bg-dark rounded-circle text-white"
-                    style={{ height: "20px", width: "20px" }}
-                  >
-                    1
-                  </span>
-                  <span>{job}</span>
-                </div>
-              ))}
-            </div>
-          </Col>
+        <Row>
+          <TimelineHeader data={jobHeaders} />
         </Row>
         <hr className="border border-dashed border-dark" />
         <Row className="mb-3">
           <Col>
             <div className="d-flex flex-row justify-content-between align-items-center">
-              <div className="h5 fw-bold">
-                {formSubmissionData?.accountName} |{" "}
-                {formSubmissionData?.jobTitle} |{" "}
-                {formSubmissionData?.clientJobId} |{" "}
-                {formSubmissionData?.accountContact} | Ganesh, Priya, Vinod
+              <div className="d-flex flex-row h5 fw-bold align-items-end gap-1">
+                <span>{formSubmissionData?.accountName} | </span>
+                <span>{formSubmissionData?.jobTitle} | </span>
+                <span>{formSubmissionData?.clientJobId} | </span>
+                <div className="d-flex flex-column">
+                  <span className="fw-medium h6 text-muted">Sales</span>
+                  <span>{formSubmissionData?.salesManager} | </span>
+                </div>
+                <div className="d-flex flex-column">
+                  <span className="fw-medium h6 text-muted">Delivery</span>
+                  <span>Ganesh, Priya, Vinod</span>
+                </div>
               </div>
 
               <div className="d-flex flex-row gap-2 align-items-center">
-                <div className="search-box" style={{ width: "500px" }}>
+                <div className="search-box" style={{ width: "300px" }}>
                   <Input placeholder="Search.." className="form-control" />
                   <i className="ri-search-eye-line search-icon"></i>
                 </div>
@@ -251,77 +244,85 @@ function JobOverview() {
                 BSG Status
               </NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink>
+                <div className="d-flex flex-row gap-2 fw-semibold">
+                  <span>Status Overview</span>
+                  <span>|</span>
+                  <span>Overall Man Days: 30</span>
+                </div>
+              </NavLink>
+            </NavItem>
           </Nav>
         </Row>
         <Row>
           <TabContent activeTab={timelineTab} className="p-0">
             <TabPane tabId="1">
-              <Table
-                className="table table-striped align-middle"
-                style={{ tableLayout: "fixed", wordWrap: "break-word" }}
-              >
-                <thead className="table-light">
-                  <tr>
-                    {rtsStatusHeaders.map((header, index) => (
+              <div className="overflow-auto">
+                <Table
+                  className="table table-striped align-middle"
+                  style={{ tableLayout: "fixed", wordWrap: "break-word" }}
+                >
+                  <thead className="table-light">
+                    <tr>
+                      {rtsStatusHeaders.map((header, index) => (
+                        <th
+                          className="text-center align-middle"
+                          key={header}
+                          style={{
+                            width:
+                              index === 0 || index === 1 ? "90px" : "150px",
+                          }}
+                        >
+                          {header}
+                        </th>
+                      ))}
                       <th
                         className="text-center align-middle"
-                        key={header}
-                        style={{
-                          width: index === 0 || index === 1 ? "80px" : "120px",
-                        }}
-                      >
-                        {header}
-                      </th>
-                    ))}
-                    <th
-                      className="text-center align-middle"
-                      style={{ width: "150px" }}
-                    ></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-center">
-                    <td>Jane Lee</td>
-                    <td>Aaron Loo</td>
-                    {steps.map((step, index) => (
-                      <td key={index} className="p-0">
-                        <StepComponent
-                          timelineState={activeStep}
-                          index={index}
-                          setActiveStep={setActiveStep}
-                        />
-                      </td>
-                    ))}
-                    {/* <td colSpan={8} className="px-4">
-                      <TimelineStepper step={activeStep} />
-                    </td> */}
-                    <td>
-                      <div className="d-flex flex-row gap-3 align-items-center">
-                        <Input
-                          type="select"
-                          value={activeStep}
-                          onChange={(e) =>
-                            setActiveStep(parseInt(e.target.value))
-                          }
-                        >
-                          <option value="">Select</option>
-                          {timelineSkip.map((item, index) => (
-                            <option key={index} value={index + 1}>
-                              {Object.values(item)[0]}
-                            </option>
-                          ))}
-                        </Input>
+                        style={{ width: "150px" }}
+                      ></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="text-center align-top">
+                      <td className="pt-4">Jane Lee</td>
+                      <td className="pt-4">Aaron Loo (7hrs)</td>
+                      {steps.map((step, index) => (
+                        <td key={index} className="px-0">
+                          <StepComponent
+                            timelineState={activeStep}
+                            index={index}
+                          />
+                        </td>
+                      ))}
+                      <td>
+                        <div className="d-flex flex-row gap-3 align-items-center">
+                          <Input
+                            type="select"
+                            value={activeStep}
+                            onChange={(e) =>
+                              setActiveStep(parseInt(e.target.value))
+                            }
+                          >
+                            <option value="">Select</option>
+                            {timelineSkip.map((item, index) => (
+                              <option key={index} value={index + 1}>
+                                {Object.values(item)[0]}
+                              </option>
+                            ))}
+                          </Input>
 
-                        <i
-                          onClick={() => setOffcanvasForm(!offcanvasForm)}
-                          id="next-step"
-                          className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
-                        ></i>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
+                          <i
+                            onClick={() => setOffcanvasForm(!offcanvasForm)}
+                            id="next-step"
+                            className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
+                          ></i>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </div>
             </TabPane>
             <TabPane tabId="2"></TabPane>
           </TabContent>
@@ -332,36 +333,62 @@ function JobOverview() {
           direction="end"
           style={{ width: "75vw" }}
         >
-          <OffcanvasHeader className="border-bottom border-bottom-dashed">
+          <div className="offcanvas-header border-bottom border-bottom-dashed">
             <div className="d-flex flex-row gap-4 align-items-center offcanvas-title">
               <div className="avatar-md flex-shrink-0">
                 <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
                   {formSubmissionData?.accountName.charAt(0)}
                 </div>
               </div>
-              <div>
-                <Row>
-                  <span className="h4 fw-bold">
-                    {formSubmissionData?.accountName}
-                  </span>
-                </Row>
-                <Row>
-                  <div className="d-flex flex-row gap-4">
-                    <span className="h6 fw-semibold">
-                      Job ID - {formSubmissionData?.clientJobId}
+              <Row className="d-flex flex-row justify-content-between align-items-end gap-5">
+                <Col>
+                  <Row>
+                    <span className="h4 fw-bold">
+                      {formSubmissionData?.accountName}
                     </span>
-                    <span className="h6 fw-semibold">
-                      Job Title - {formSubmissionData?.jobTitle}
+                  </Row>
+                  <Row>
+                    <div className="d-flex flex-row gap-4">
+                      <span className="h6 fw-semibold text-nowrap">
+                        Job ID - {formSubmissionData?.clientJobId}
+                      </span>
+                      <span className="h6 fw-semibold text-nowrap">
+                        Job Title - {formSubmissionData?.jobTitle}
+                      </span>
+                    </div>
+                  </Row>
+                  <Row>
+                    <span className="h6 text-muted fw-bold">
+                      {stepperState}
                     </span>
-                  </div>
-                </Row>
-                <Row>
-                  <span className="h6 text-muted fw-bold">{stepperState}</span>
-                </Row>
-              </div>
+                  </Row>
+                </Col>
+                {activeStep === 6 ||
+                  activeStep === 2 ||
+                  (activeStep === 3 && (
+                    <Col>
+                      <div>
+                        <Input
+                          type="select"
+                          className="form-select form-select-md"
+                        >
+                          <option value="">
+                            Selected Conditional Offer Template
+                          </option>
+                          <option value="">Template 1</option>
+                          <option value="">Template 2</option>
+                        </Input>
+                      </div>
+                    </Col>
+                  ))}
+              </Row>
             </div>
-          </OffcanvasHeader>
-          <OffcanvasBody>{getFormComponent(activeStep)}</OffcanvasBody>
+          </div>
+          <OffcanvasBody>
+            {getFormComponent(activeStep, () =>
+              setOffcanvasForm(!offcanvasForm)
+            )}
+          </OffcanvasBody>
         </Offcanvas>
         <Tooltip
           target="next-step"

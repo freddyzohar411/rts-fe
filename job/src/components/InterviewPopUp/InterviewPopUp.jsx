@@ -1,100 +1,49 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  CardBody,
-  Row,
-  Nav,
-  NavItem,
-  NavLink,
-  Progress,
-} from "reactstrap";
-import classnames from "classnames";
+import { Progress } from "reactstrap";
+import StepComponent from "../JobOverview/StepComponent";
 
-const InterviewPopUp = ({ step, setStep }) => {
-  const [progressBarValue, setProgressBarValue] = useState(0);
+const InterviewPopUp = ({ timelineState, step, setStep }) => {
+  const [activeStep, setActiveStep] = useState(1);
+  const [stepperState, setStepperState] = useState("");
   useEffect(() => {
-    setProgressBarValue(step * (100 / 3));
-  }, [step]);
+    switch (activeStep) {
+      case 1:
+        setStepperState("First Interview Scheduled");
+        break;
+      case 2:
+        setStepperState("Second Interview Scheduled");
+        break;
+
+      case 3:
+        setStepperState("Third Interview Scheduled");
+        break;
+
+      case 4:
+        setStepperState("Interview Completed");
+        break;
+      default:
+        setStepperState("");
+    }
+  }, [activeStep]);
+
+  const steps = [
+    "First Interview Scheduled",
+    "Second Interview Scheduled",
+    "Third Interview Scheduled",
+    "Interview Completed",
+  ];
 
   return (
     <React.Fragment>
-      <div className="p-1">
-        <Row>
-          <div>
-            <div className="progress-nav">
-              <Progress value={progressBarValue} style={{ height: "1px" }} />
-              <Nav>
-                <NavItem>
-                  <div className="d-flex flex-column gap-3 justify-content-top">
-                    <NavLink
-                      onClick={() => setStep && setStep(0)}
-                      id="pills-gen-info-tab-0"
-                      className={classnames(
-                        {
-                          active: step === 0,
-                          done: step <= 3 && step >= 0,
-                        },
-                        "rounded-pill small-circle"
-                      )}
-                      style={{ width: "18px", height: "18px" }}
-                      color="custom-button"
-                      tag="button"
-                    ></NavLink>
-                    <span>First Interview Scheduled</span>
-                  </div>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    onClick={() => setStep && setStep(1)}
-                    id="pills-gen-info-tab-2"
-                    className={classnames(
-                      {
-                        active: step === 1,
-                        done: step <= 3 && step >= 1,
-                      },
-                      "rounded-pill small-circle"
-                    )}
-                    style={{ width: "18px", height: "18px" }}
-                    color="custom-button"
-                    tag="button"
-                  ></NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    onClick={() => setStep && setStep(2)}
-                    id="pills-gen-info-tab-2"
-                    className={classnames(
-                      {
-                        active: step === 2,
-                        done: step <= 3 && step >= 2,
-                      },
-                      "rounded-pill small-circle"
-                    )}
-                    style={{ width: "18px", height: "18px" }}
-                    color="custom-button"
-                    tag="button"
-                  ></NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    onClick={() => setStep && setStep(3)}
-                    id="pills-gen-info-tab-3"
-                    className={classnames(
-                      {
-                        active: step === 3,
-                        done: step <= 3 && step >= 3,
-                      },
-                      "rounded-pill small-circle"
-                    )}
-                    style={{ width: "18px", height: "18px" }}
-                    color="custom-button"
-                    tag="button"
-                  ></NavLink>
-                </NavItem>
-              </Nav>
-            </div>
-          </div>
-        </Row>
+      <div className="interview-popover">
+        <div className="d-flex flex-row">
+          {steps.map((step, index) => (
+            <StepComponent
+              key={index}
+              step={step}
+            />
+          ))}
+        </div>
       </div>
     </React.Fragment>
   );
