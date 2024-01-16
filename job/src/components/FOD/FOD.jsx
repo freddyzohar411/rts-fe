@@ -21,7 +21,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { fetchJobLists } from "../../store/actions";
 import { useTableHook, DynamicTableHelper } from "@workspace/common";
-import { JOB_INITIAL_OPTIONS } from "../JobListing/jobListingConstants";
+import { JOB_INITIAL_OPTIONS } from "../JobListing/JobListingConstants";
 import FODTableWrapper from "./FODTableWrapper";
 import { FODTagTable } from "../FODTagTable";
 import { useUserAuth } from "@workspace/login";

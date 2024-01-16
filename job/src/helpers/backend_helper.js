@@ -27,7 +27,8 @@ export const getJobById = (id) => api.get(`${JOB_URL}${BASE_JOBS}/${id}`);
 export const getJobs = (data) =>
   api.create(`${JOB_URL}${BASE_JOBS}/listing`, data);
 
-export const createJob = (data) => api.create(`${JOB_URL}${BASE_JOBS}/add`, data);
+export const createJob = (data) =>
+  api.create(`${JOB_URL}${BASE_JOBS}/add`, data);
 
 export const updateJob = (id, data) =>
   api.put(`${JOB_URL}${BASE_JOBS}/${id}`, data);
@@ -56,3 +57,9 @@ export const updateJobDocument = (id, data, config) =>
 
 export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
   `${DOCUMENT_BASE_URL}/entity/user/${entityType}/${entityId}`;
+
+export const tagJob = (data, config) =>
+  api.create(`${JOB_URL}/api/jobcandidatestage`, data, config);
+
+export const tagAllJob = (data, config) =>
+  api.create(`${JOB_URL}/api/jobcandidatestage/createAll`, data, config);
