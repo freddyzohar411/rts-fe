@@ -128,22 +128,22 @@ function JobOverview() {
     }
   }, [activeStep]);
 
-  const getFormComponent = (step) => {
+  const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
       case 1:
-        return <AssociateCandidate />;
+        return <AssociateCandidate closeOffcanvas={closeOffcanvas} />;
       case 2:
-        return <SubmitToSales />;
+        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
       case 3:
-        return <SubmitToSales />;
+        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
       case 4:
-        return <ProfileFeedbackPending />;
+        return <ProfileFeedbackPending closeOffcanvas={closeOffcanvas} />;
       case 5:
-        return <ScheduleInterview />;
+        return <ScheduleInterview closeOffcanvas={closeOffcanvas} />;
       case 6:
-        return <ConditionalOffer />;
+        return <ConditionalOffer closeOffcanvas={closeOffcanvas} />;
       case 7:
-        return <ConditionalOfferStatus />;
+        return <ConditionalOfferStatus closeOffcanvas={closeOffcanvas} />;
       default:
         return null;
     }
@@ -187,7 +187,7 @@ function JobOverview() {
     <React.Fragment>
       <div>
         <Row>
-          <TimelineHeader data={jobHeaders}/>
+          <TimelineHeader data={jobHeaders} />
         </Row>
         <hr className="border border-dashed border-dark" />
         <Row className="mb-3">
@@ -271,7 +271,7 @@ function JobOverview() {
                           key={header}
                           style={{
                             width:
-                              index === 0 || index === 1 ? "90px" : "130px",
+                              index === 0 || index === 1 ? "90px" : "150px",
                           }}
                         >
                           {header}
@@ -333,7 +333,7 @@ function JobOverview() {
           direction="end"
           style={{ width: "75vw" }}
         >
-          <OffcanvasHeader className="border-bottom border-bottom-dashed">
+          <div className="offcanvas-header border-bottom border-bottom-dashed">
             <div className="d-flex flex-row gap-4 align-items-center offcanvas-title">
               <div className="avatar-md flex-shrink-0">
                 <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
@@ -363,26 +363,32 @@ function JobOverview() {
                     </span>
                   </Row>
                 </Col>
-                {activeStep === 6 && (
-                  <Col>
-                    <div>
-                      <Input
-                        type="select"
-                        className="form-select form-select-md"
-                      >
-                        <option value="">
-                          Selected Conditional Offer Template
-                        </option>
-                        <option value="">Template 1</option>
-                        <option value="">Template 2</option>
-                      </Input>
-                    </div>
-                  </Col>
-                )}
+                {activeStep === 6 ||
+                  activeStep === 2 ||
+                  (activeStep === 3 && (
+                    <Col>
+                      <div>
+                        <Input
+                          type="select"
+                          className="form-select form-select-md"
+                        >
+                          <option value="">
+                            Selected Conditional Offer Template
+                          </option>
+                          <option value="">Template 1</option>
+                          <option value="">Template 2</option>
+                        </Input>
+                      </div>
+                    </Col>
+                  ))}
               </Row>
             </div>
-          </OffcanvasHeader>
-          <OffcanvasBody>{getFormComponent(activeStep)}</OffcanvasBody>
+          </div>
+          <OffcanvasBody>
+            {getFormComponent(activeStep, () =>
+              setOffcanvasForm(!offcanvasForm)
+            )}
+          </OffcanvasBody>
         </Offcanvas>
         <Tooltip
           target="next-step"

@@ -41,7 +41,6 @@ const InterviewPopUp = ({ timelineState, step, setStep }) => {
             <StepComponent
               key={index}
               step={step}
-              setStep={setStep}
             />
           ))}
         </div>

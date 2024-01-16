@@ -33,6 +33,7 @@ function StepComponent({ step, timelineState, index }) {
                 value={startProgressBarValue}
                 style={{ height: "1px", width: "100%" }}
                 color="custom-button"
+                className="no-transition"
               />
             ) : (
               <div style={{ height: "1px", width: "100%" }}></div>
@@ -58,7 +59,8 @@ function StepComponent({ step, timelineState, index }) {
                   <i
                     className="ri-add-fill text-dark fw-bold cursor-pointer"
                     onClick={() => {
-                      setToggleInterview(!toggleInterview); console.log("clicked", toggleInterview)
+                      setToggleInterview(!toggleInterview);
+                      console.log("clicked", toggleInterview);
                     }}
                   ></i>
                 </span>
@@ -70,6 +72,7 @@ function StepComponent({ step, timelineState, index }) {
                 value={endProgressBarValue}
                 style={{ height: "1px", width: "100%" }}
                 color="custom-button"
+                className="no-transition"
               />
             ) : (
               <div style={{ height: "1px", width: "100%" }}></div>
@@ -88,6 +91,7 @@ function StepComponent({ step, timelineState, index }) {
           placement="bottom"
           isOpen={toggleInterview}
           target={`Popover-${index}`}
+          trigger="legacy"
           toggle={() => setToggleInterview(!toggleInterview)}
         >
           <PopoverBody>
