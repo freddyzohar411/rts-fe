@@ -10,10 +10,11 @@ const TemplateDisplayV3 = ({
   content,
   allData,
   isView,
-  getNewContent,
+  handleOutputContent,
   processContent = true,
   cleanContent = true,
   recursive = false,
+  minHeight = 400,
 }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
@@ -26,6 +27,9 @@ const TemplateDisplayV3 = ({
   useEffect(() => {
     if (content) {
       setParsedContent(content);
+    }
+    if (content === null || content === "") {
+      setParsedContent("");
     }
   }, [content]);
 
@@ -122,13 +126,13 @@ const TemplateDisplayV3 = ({
 
   // Set New content to be outputted
   function setNewContent(content) {
-    if (getNewContent) {
+    if (handleOutputContent) {
       if (cleanContent) {
-        getNewContent(
+        handleOutputContent(
           TemplateDisplayHelper.removeContentEditableAndStyles(content)
         );
       } else {
-        getNewContent(parsedContent);
+        handleOutputContent(parsedContent);
       }
     }
   }
@@ -145,6 +149,7 @@ const TemplateDisplayV3 = ({
           value={parsedContent}
           init={{
             height: "100%", // Set the initial height to 100% of the parent container
+            min_height: minHeight,
             botton_margin: 10,
             menubar: false,
             plugins: [
@@ -168,6 +173,7 @@ const TemplateDisplayV3 = ({
               "table",
               "emoticons",
               "codesample",
+              "autoresize",
             ],
             toolbar:
               "undo redo | blocks fontfamily fontsizeinput | " +

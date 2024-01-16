@@ -27,7 +27,8 @@ import { JOB_FORM_NAME } from "../JobCreation/constants";
 import { useUserAuth } from "@workspace/login";
 
 // Elements
-import { SelectElement } from "@workspace/common";
+// import { SelectElement } from "@workspace/common";
+import { TemplateSelectByCategoryElement } from "@workspace/common";
 
 // Stepper
 import { TimelineStepper } from "../TimelineStepper";
@@ -49,6 +50,8 @@ function JobOverview() {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const [selectedOfferTemplate, setSelectedOfferTemplate] = useState(null);
+  const [templateData, setTemplateData] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const steps = [0, 1, 2, 3, 4, 5, 6, 7];
 
@@ -144,13 +147,30 @@ function JobOverview() {
       case 5:
         return <ScheduleInterview />;
       case 6:
-        return <ConditionalOffer />;
+        return <ConditionalOffer templateData={templateData}/>;
       case 7:
         return <ConditionalOfferStatus />;
       default:
         return null;
     }
   };
+
+  useEffect(() => {
+    // Set Category for Template
+    switch (activeStep) {
+      case 2:
+        setSelectedCategory("Email Templates");
+        break;
+      case 3:
+        setSelectedCategory("Email Templates");
+        break;
+      case 6:
+        setSelectedCategory("Conditional Offer");
+        break;
+      default:
+        setSelectedCategory(null);
+    }
+  }, [activeStep]);
 
   const jobHeaders = [
     "Submitted to Sales",
@@ -376,22 +396,15 @@ function JobOverview() {
                 {activeStep === 6 && (
                   <Col>
                     <div>
-                      <SelectElement
-                        optionsData={conditionOfferTemplates}
-                        setSelectedOptionData={setSelectedOfferTemplate}
+                      <TemplateSelectByCategoryElement
+                        categoryName={selectedCategory}
                         placeholder="Select a template"
-                        value={selectedOfferTemplate}
+                        onChange={(value) => {
+                          setTemplateData(value);
+                          console.log("Template Data", value);
+                        }}
+                        defaultFirstValue
                       />
-                      {/* <Input
-                        type="select"
-                        className="form-select form-select-md"
-                      >
-                        <option value="">
-                          Selected Conditional Offer Template
-                        </option>
-                        <option value="">Template 1</option>
-                        <option value="">Template 2</option>
-                      </Input> */}
                     </div>
                   </Col>
                 )}

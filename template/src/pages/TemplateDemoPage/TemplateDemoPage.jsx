@@ -229,6 +229,7 @@ const TemplateBuilderPage = () => {
                         isView={isView}
                         getNewContent={getNewContent}
                         recursive={true}
+                        minHeight={950}
                       />
                     </Container>
                   </Row>

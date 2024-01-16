@@ -3,7 +3,6 @@ import {
   getTemplateFromCategoryAndName
 } from "./url_helper"
 
-
 /**
  * Replace variables placeholders( ${xxx.yyy.zzz} in html with variabledata
  * @param {*} html

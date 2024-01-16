@@ -12,9 +12,11 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
+import { TemplateDisplayV3 } from "@workspace/common";
 
-function ConditionalOffer() {
+function ConditionalOffer({ templateData }) {
   const [activeTab, setActiveTab] = useState("1");
+  const [conditionalOfferContent, setConditionalOfferContent] = useState("");
 
   return (
     <React.Fragment>
@@ -47,13 +49,26 @@ function ConditionalOffer() {
         </Nav>
         <TabContent activeTab={activeTab}>
           <TabPane tabId="1">
-            <div>Conditional Offer</div>
+            <Container className="p-3 mt-3" style={{  height: "100%", minWidth:"100%" }}>
+              <TemplateDisplayV3
+                content={templateData?.content ?? null}
+                allData={null}
+                isView={true}
+                handleOutputContent={setConditionalOfferContent}
+              />
+            </Container>
           </TabPane>
           <TabPane tabId="2">
             <ReviewTos />
           </TabPane>
           <TabPane tabId="3">
-            <div>Preview Conditional Offer</div>
+            <Container className="p-3 mt-3" style={{  height: "100%", minWidth:"100%" }}>
+              <TemplateDisplayV3
+                content={conditionalOfferContent ?? null}
+                allData={null}
+                isView={true}
+              />
+            </Container>
           </TabPane>
         </TabContent>
       </div>
