@@ -147,7 +147,7 @@ function JobOverview() {
       case 5:
         return <ScheduleInterview />;
       case 6:
-        return <ConditionalOffer templateData={templateData}/>;
+        return <ConditionalOffer templateData={templateData} />;
       case 7:
         return <ConditionalOfferStatus />;
       default:
@@ -356,66 +356,70 @@ function JobOverview() {
           </TabContent>
         </Row>
 
+        <div style={{ width: "100% !important" }}>
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
-          style={{ width: "75vw" }}
+          style={{ width: "75vw", border: "2px solid green" }}
+    
         >
-          <OffcanvasHeader className="border-bottom border-bottom-dashed">
-            <div className="d-flex flex-row gap-4 align-items-center offcanvas-title">
-              <div className="avatar-md flex-shrink-0">
-                <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
-                  {formSubmissionData?.accountName.charAt(0)}
+
+            <div className="offcanvas-header border-bottom border-bottom-dashed border d-flex flex-row gap-4 align-items-center">
+                <div className="avatar-md flex-shrink-0">
+                  <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
+                    {formSubmissionData?.accountName.charAt(0)}
+                  </div>
                 </div>
-              </div>
-              <Row className="d-flex flex-row justify-content-between align-items-end gap-5">
-                <Col>
-                  <Row>
-                    <span className="h4 fw-bold">
-                      {formSubmissionData?.accountName}
-                    </span>
-                  </Row>
-                  <Row>
-                    <div className="d-flex flex-row gap-4">
-                      <span className="h6 fw-semibold text-nowrap">
-                        Job ID - {formSubmissionData?.clientJobId}
-                      </span>
-                      <span className="h6 fw-semibold text-nowrap">
-                        Job Title - {formSubmissionData?.jobTitle}
-                      </span>
-                    </div>
-                  </Row>
-                  <Row>
-                    <span className="h6 text-muted fw-bold">
-                      {stepperState}
-                    </span>
-                  </Row>
-                </Col>
-                {/* koh */}
-                {activeStep === 6 && (
+                <Row className="d-flex flex-row justify-content-between align-items-end gap-5 flex-grow-1">
                   <Col>
-                    <div>
-                      <TemplateSelectByCategoryElement
-                        categoryName={selectedCategory}
-                        placeholder="Select a template"
-                        onChange={(value) => {
-                          setTemplateData(value);
-                          console.log("Template Data", value);
-                        }}
-                        defaultFirstValue
-                      />
-                    </div>
+                    <Row>
+                      <span className="h4 fw-bold">
+                        {formSubmissionData?.accountName}
+                      </span>
+                    </Row>
+                    <Row>
+                      <div className="d-flex flex-row gap-4">
+                        <span className="h6 fw-semibold text-nowrap">
+                          Job ID - {formSubmissionData?.clientJobId}
+                        </span>
+                        <span className="h6 fw-semibold text-nowrap">
+                          Job Title - {formSubmissionData?.jobTitle}
+                        </span>
+                      </div>
+                    </Row>
+                    <Row>
+                      <span className="h6 text-muted fw-bold">
+                        {stepperState}
+                      </span>
+                    </Row>
                   </Col>
-                )}
-              </Row>
+                  {/* koh */}
+                  {activeStep === 6 && (
+                    <Col>
+                      <div>
+                        <TemplateSelectByCategoryElement
+                          categoryName={selectedCategory}
+                          placeholder="Select a template"
+                          onChange={(value) => {
+                            setTemplateData(value);
+                          }}
+                          defaultFirstValue
+                        />
+                      </div>
+                    </Col>
+                  )}
+                </Row>
+              
             </div>
-          </OffcanvasHeader>
-          <OffcanvasBody>
-            {getFormComponent(activeStep)}
-            {console.log("Active Step: OffCanvasBody", activeStep)}
-          </OffcanvasBody>
+            <OffcanvasBody>
+              {getFormComponent(activeStep)}
+              {console.log("Active Step: OffCanvasBody", activeStep)}
+            </OffcanvasBody>
+  
         </Offcanvas>
+        </div>
+
         <Tooltip
           target="next-step"
           isOpen={tooltipOpen}

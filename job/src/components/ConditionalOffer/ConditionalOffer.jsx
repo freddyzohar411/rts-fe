@@ -9,6 +9,7 @@ import {
   NavLink,
   TabContent,
   TabPane,
+  Button,
 } from "reactstrap";
 import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
@@ -49,7 +50,10 @@ function ConditionalOffer({ templateData }) {
         </Nav>
         <TabContent activeTab={activeTab}>
           <TabPane tabId="1">
-            <Container className="p-3 mt-3" style={{  height: "100%", minWidth:"100%" }}>
+            <Container
+              className="p-3 mt-3"
+              style={{ height: "100%", minWidth: "100%" }}
+            >
               <TemplateDisplayV3
                 content={templateData?.content ?? null}
                 allData={null}
@@ -62,12 +66,18 @@ function ConditionalOffer({ templateData }) {
             <ReviewTos />
           </TabPane>
           <TabPane tabId="3">
-            <Container className="p-3 mt-3" style={{  height: "100%", minWidth:"100%" }}>
+            <Container
+              className="p-3 mt-3"
+              style={{ height: "100%", minWidth: "100%" }}
+            >
               <TemplateDisplayV3
                 content={conditionalOfferContent ?? null}
                 allData={null}
                 isView={true}
               />
+              <div className="d-flex justify-content-end">
+                <Button className="btn btn-custom-primary">Release</Button>
+              </div>
             </Container>
           </TabPane>
         </TabContent>
