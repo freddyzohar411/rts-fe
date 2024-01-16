@@ -165,7 +165,7 @@ const TemplateDisplayV3 = ({
           tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
           value={parsedContent}
           init={{
-            height: 500,
+            height: 950,
             menubar: false,
             plugins: [
               "advlist",
