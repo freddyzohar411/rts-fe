@@ -11,6 +11,7 @@ const TemplateDisplayV3 = ({
   allData,
   isView,
   getNewContent,
+  processContent = true,
   cleanContent = true,
   recursive = false,
 }) => {
@@ -129,7 +130,7 @@ const TemplateDisplayV3 = ({
       }
     };
 
-    if (content) {
+    if (content && processContent) {
       runEffects(content);
     }
   }, [mappedVariableData, content]);

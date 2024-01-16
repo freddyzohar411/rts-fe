@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { moduleConstants } from "./constants";
-import { TemplateDisplay } from "@workspace/common";
+import { TemplateDisplay, TemplateDisplayV3 } from "@workspace/common";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
 import { addMediaUrl, deleteDraftMediaUrl } from "../../helpers/backend_helper";
@@ -587,9 +587,10 @@ const TemplateBuilder = forwardRef(
                               templateSelected.value &&
                               template.category === categorySelected.value)
                         )[0];
+                        console.log("Template Selected", template)
                         setTemplateContentPreview(template.content);
-                        setTemplateSelected("");
-                        setCategorySelected("");
+                        // setTemplateSelected("");
+                        // setCategorySelected("");
                       }
                     }}
                   >
@@ -606,9 +607,10 @@ const TemplateBuilder = forwardRef(
                   overflow: "auto",
                 }}
               >
-                <TemplateDisplay
+                <TemplateDisplayV3
                   content={templateContentPreview}
                   isView={true}
+                  processContent={false}
                 />
               </Container>
               <hr />
