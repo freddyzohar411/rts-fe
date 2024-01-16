@@ -106,7 +106,7 @@ function SubmitToSales({ closeOffcanvas, templateData }) {
                   <EmailComponent
                     isOpen={sendEmailModal}
                     toggle={() => {
-                      setSendEmailModal(!sendEmailModal);
+                      setSendEmailModal(false);
                       closeOffcanvas;
                     }}
                     templateData={templateData}

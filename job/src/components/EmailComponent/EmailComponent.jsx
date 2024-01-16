@@ -12,12 +12,20 @@ import {
   DropdownMenu,
 } from "reactstrap";
 import { TemplateDisplayV3 } from "@workspace/common";
+import { useEffect } from "react";
 
 function EmailComponent({ isOpen, toggle, templateData }) {
   const [modal, setModal] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [emailContent, setEmailContent] = useState("");
-  const toggleFullscreen = () => setIsFullscreen(!isFullscreen);
+
+  useEffect(() => {
+    return () => {
+      setTimeout(() => {
+        setIsFullscreen(false);
+      }, 300);
+    };
+  }, [isOpen]);
 
   return (
     <React.Fragment>
@@ -32,16 +40,30 @@ function EmailComponent({ isOpen, toggle, templateData }) {
           <div className="modal-header py-2 d-flex flex-row justify-content-between align-items-center">
             <span className="modal-title h5">New Message</span>
             <div className="d-flex flex-row gap-2" onClick={toggle}>
-              <button className="btn">
+              <button
+                className="btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
                 <i className="ri-subtract-line fs-4"></i>
               </button>
               <button
                 className="btn"
-                onClick={() => setIsFullscreen(!isFullscreen)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsFullscreen(!isFullscreen);
+                }}
               >
                 <i className="ri-fullscreen-line fs-5"></i>
               </button>
-              <button className="btn" onClick={toggle}>
+              <button
+                className="btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggle();
+                }}
+              >
                 <i className="ri-close-line fs-4"></i>
               </button>
             </div>
@@ -122,17 +144,15 @@ function EmailComponent({ isOpen, toggle, templateData }) {
                 />
               </div>
             </div>
-            <div className="ck-editor-reverse mb-3">
-              <TemplateDisplayV3
-                content={templateData?.content ?? null}
-                allData={null}
-                isView={false}
-                handleOutputContent={setEmailContent}
-                autoResize={false}
-                height={300}
-              />
-            </div>
-            <ModalFooter className="p-0">
+            <TemplateDisplayV3
+              content={templateData?.content ?? null}
+              allData={null}
+              isView={false}
+              handleOutputContent={setEmailContent}
+              autoResize={false}
+              height={350}
+            />
+            <ModalFooter className="p-0 mt-3">
               <div className="d-flex flex-row gap-3 justify-content-end">
                 <Button
                   type="button"
