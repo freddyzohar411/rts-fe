@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Button, Input } from "reactstrap";
 import { fetchJobForm } from "../../store/actions";
-import { CONDITIONAL_OFFER } from "./constants";
+import { CONDITIONAL_OFFER, REVIEW_TOS } from "./constants";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUserAuth } from "@workspace/login";
 import { Form } from "@workspace/common";
@@ -29,7 +29,7 @@ function ReviewTos() {
   const [formTemplate, setFormTemplate] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchJobForm(CONDITIONAL_OFFER));
+    dispatch(fetchJobForm(REVIEW_TOS));
   }, []);
 
   useEffect(() => {

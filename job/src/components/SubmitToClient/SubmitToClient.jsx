@@ -5,9 +5,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { SUBMIT_TO_SALES } from "./constants";
 import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
-import { Row, Col, Input, Button } from "reactstrap";
+import { Row, Col, Input, Button, Tooltip } from "reactstrap";
+import CVPreview from "./CVPreview";
+import STSEmail from "./STSEmail";
 
 function SubmitToClient() {
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -75,9 +78,21 @@ function SubmitToClient() {
                   <Button type="button" className="btn btn-custom-primary">
                     Send Email
                   </Button>
-                  <Button type="button" className="btn btn-danger">
-                    Cancel
+                  <Button
+                    type="button"
+                    className="btn btn-custom-primary"
+                    id="update-btn"
+                  >
+                    Update
                   </Button>
+                  <Tooltip
+                    target="update-btn"
+                    isOpen={tooltipOpen}
+                    toggle={() => setTooltipOpen(!tooltipOpen)}
+                    placement="bottom"
+                  >
+                    <span>Update without Email</span>
+                  </Tooltip>
                 </div>
               </div>
             </div>

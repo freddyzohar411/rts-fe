@@ -5,9 +5,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { SUBMIT_TO_SALES } from "./constants";
 import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
-import { Row, Col, Input, Button } from "reactstrap";
+import { Row, Col, Input, Button, Tooltip } from "reactstrap";
+import { CVPreview } from "../CVPreview";
+import { EmailComponent } from "../EmailComponent";
 
-function SubmitToSales() {
+function SubmitToSales({ closeOffcanvas }) {
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -37,6 +40,8 @@ function SubmitToSales() {
       setFormTemplate(JSON.parse(JSON.stringify(form)));
     }
   }, [form]);
+
+  const [sendEmailModal, setSendEmailModal] = useState(false);
 
   return (
     <React.Fragment>
@@ -72,12 +77,36 @@ function SubmitToSales() {
                   <Button type="button" className="btn btn-custom-primary">
                     Preview CV
                   </Button>
-                  <Button type="button" className="btn btn-custom-primary">
+                  <Button
+                    type="button"
+                    className="btn btn-custom-primary"
+                    onClick={() => {
+                      setSendEmailModal(true);
+                      console.log("CLicked!", sendEmailModal);
+                    }}
+                  >
                     Send Email
                   </Button>
-                  <Button type="button" className="btn btn-danger">
-                    Cancel
+                  <Button
+                    type="button"
+                    className="btn btn-custom-primary"
+                    id="update-btn"
+                    onClick={closeOffcanvas}
+                  >
+                    Update
                   </Button>
+                  <Tooltip
+                    target="update-btn"
+                    isOpen={tooltipOpen}
+                    toggle={() => setTooltipOpen(!tooltipOpen)}
+                    placement="bottom"
+                  >
+                    <span>Update without Email</span>
+                  </Tooltip>
+                  <EmailComponent
+                    isOpen={sendEmailModal}
+                    toggle={() => {setSendEmailModal(!sendEmailModal); closeOffcanvas}}
+                  />
                 </div>
               </div>
             </div>
