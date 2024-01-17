@@ -3,7 +3,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import useMutationObserver from "./useMutationObserverHook";
 import ReactHtmlParser from "react-html-parser";
 import * as TemplateDisplayHelper from "./templateDisplayHelper";
-// import { runEffects } from "./templateDisplayHelper";
 import { ExportHelper } from "@workspace/common";
 import { generateOptions } from "./pdfOption";
 
@@ -71,15 +70,116 @@ const TemplateDisplayV3 = ({
    * Run effects to process the content and replace variables and templates
    */
   useEffect(() => {
-    const applyEffects = async () => {
-      if (!content) return;
-      try {
-        const result = await TemplateDisplayHelper.runEffects(
-          content,
-          null,
-          mappedVariableData,
-          recursive
+    // const runEffects = async (htmlString) => {
+    //   if (!htmlString) {
+    //     return;
+    //   }
+    //   const templateListCriteria =
+    //     TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(htmlString);
+
+    //   // Effect 1: Replace variables with mappedVariableData
+    //   let updatedContent = htmlString;
+    //   if (mappedVariableData) {
+    //     updatedContent = TemplateDisplayHelper.replaceVariables(
+    //       htmlString,
+    //       mappedVariableData
+    //     );
+    //   }
+
+    //   if (templateListCriteria.length > 0) {
+    //     // Effect 2: Replace templateListCriteria without data
+    //     updatedContent = await TemplateDisplayHelper.replaceTemplate(
+    //       updatedContent,
+    //       mappedVariableData
+    //     );
+
+    //     // Effect 3: Replace templateListCriteria with data
+    //     if (mappedVariableData) {
+    //       updatedContent = await TemplateDisplayHelper.replaceTemplateArray(
+    //         updatedContent,
+    //         mappedVariableData
+    //       );
+    //     }
+    //   }
+
+    //   setParsedContent((prevContent) => {
+    //     if (prevContent !== updatedContent) {
+    //       return updatedContent;
+    //     }
+    //     return prevContent;
+    //   });
+
+    //   // Recursive call for nested templates (Remove this if it is too dangerous)
+    //   if (recursive) {
+    //     const nestedTemplates =
+    //       TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(updatedContent);
+    //     if (nestedTemplates.length > 0) {
+    //       runEffects(updatedContent);
+    //     }
+    //   }
+
+    //   return updatedContent;
+    // };
+
+    // if (content && processContent && mappedVariableData) {
+    //   console.log(runEffects(content))
+    //   // setParsedContent(runEffects(content));
+    //   // runEffects(content);
+    //   // setParsedContent(TemplateDisplayHelper.runEffects(content, mappedVariableData))
+    // }
+
+    const runEffects = async (htmlString, currentContent = null) => {
+      if (!htmlString) {
+        return currentContent;
+      }
+
+      const templateListCriteria =
+        TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(htmlString);
+
+      // Effect 1: Replace variables with mappedVariableData
+      let updatedContent = htmlString;
+      if (mappedVariableData) {
+        updatedContent = TemplateDisplayHelper.replaceVariables(
+          htmlString,
+          mappedVariableData
         );
+      }
+
+      if (templateListCriteria.length > 0) {
+        // Effect 2: Replace templateListCriteria without data
+        updatedContent = await TemplateDisplayHelper.replaceTemplate(
+          updatedContent,
+          mappedVariableData
+        );
+
+        // Effect 3: Replace templateListCriteria with data
+        if (mappedVariableData) {
+          updatedContent = await TemplateDisplayHelper.replaceTemplateArray(
+            updatedContent,
+            mappedVariableData
+          );
+        }
+      }
+
+      // Check if the content has been updated
+      if (currentContent !== updatedContent) {
+        // Recursive call for nested templates
+        const nestedTemplates =
+          TemplateDisplayHelper.getAllTemplatesToRenderFromHTML(updatedContent);
+        if (nestedTemplates.length > 0) {
+          // Pass the updatedContent as an argument for the recursive call
+          return runEffects(updatedContent, updatedContent);
+        }
+      }
+
+      // If no recursion is needed or the recursion is complete, return the final result
+      return updatedContent;
+    };
+
+    const applyEffects = async () => {
+      if (!content) return
+      try {
+        const result = await runEffects(content);
         setParsedContent(result);
       } catch (error) {
         console.error("Error applying effects:", error);

@@ -207,10 +207,16 @@ export function getTemplateData(htmlString) {
   });
 }
 
-async function preProcessDataEffect(htmlString, mappedVariableData) {
+export async function runEffects(
+  htmlString,
+  currentContent = null,
+  mappedVariableData,
+  recursive
+) {
   if (!htmlString) {
-    return null;
+    return currentContent;
   }
+
   const templateListCriteria = getAllTemplatesToRenderFromHTML(htmlString);
 
   // Effect 1: Replace variables with mappedVariableData
@@ -232,24 +238,21 @@ async function preProcessDataEffect(htmlString, mappedVariableData) {
     }
   }
 
-  // Recursive call for nested templates (Remove this if it is too dangerous)
-  const nestedTemplates = getAllTemplatesToRenderFromHTML(updatedContent);
-  if (nestedTemplates.length > 0) {
-    const nestedResult = await preProcessDataEffect(
-      updatedContent,
-      mappedVariableData
-    );
-    updatedContent = nestedResult || updatedContent;
+  // Check if the content has been updated
+  if (currentContent !== updatedContent && recursive) {
+    // Recursive call for nested templates
+    const nestedTemplates = getAllTemplatesToRenderFromHTML(updatedContent);
+    if (nestedTemplates.length > 0) {
+      // Pass the updatedContent as an argument for the recursive call
+      return runEffects(
+        updatedContent,
+        updatedContent,
+        mappedVariableData,
+        recursive
+      );
+    }
   }
 
+  // If no recursion is needed or the recursion is complete, return the final result
   return updatedContent;
-}
-
-export async function runEffects(htmlString, mappedVariableData) {
-  let result = null;
-  if (htmlString && mappedVariableData) {
-    result = await preProcessDataEffect(htmlString, mappedVariableData);
-    // Use the 'result' as needed
-  }
-  console.log(result);
 }
