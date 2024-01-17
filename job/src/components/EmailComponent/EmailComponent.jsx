@@ -57,7 +57,6 @@ function EmailComponent({ isOpen, toggle }) {
   }, [isOpen]);
 
   const minimizeModal = () => {
-    console.log("minimize");
     setIsMinimized(true);
   };
 
@@ -116,7 +115,7 @@ function EmailComponent({ isOpen, toggle }) {
             <ModalBody>
               <div>
                 <div className="d-flex gap-3">
-                  <div className="mb-3 input-group text-center">
+                  <div className="mb-3 input-group text-center d-flex flex-nowrap">
                     <span
                       className="input-group-text"
                       id="to-input"
@@ -138,26 +137,13 @@ function EmailComponent({ isOpen, toggle }) {
                       placeholder="Enter email address"
                     />
                   </div>
-                  {/* <div className="position-absolute top-0 end-0">
-                    <div className="d-flex">
-                      <Input
-                        type="select"
-                        className="form-select"
-                        style={{ width: "200px" }}
-                      >
-                        <option value="">Select</option>
-                        <option value="">Template 1</option>
-                        <option value="">Template 2</option>
-                      </Input>
-                    </div>
-                  </div> */}
                   <TemplateSelectByCategoryElement
                     categoryName="Email Templates"
                     placeholder="Select a template"
                     onChange={(value) => {
                       setTemplateData(value);
                     }}
-                    width="300px"
+                    width="280px"
                     end
                     value={templateData}
                   />
@@ -169,7 +155,7 @@ function EmailComponent({ isOpen, toggle }) {
                       id="cc-input"
                       style={{ width: "50px" }}
                     >
-                      CC
+                      Cc
                     </span>
                     <Input
                       type="text"
@@ -191,7 +177,7 @@ function EmailComponent({ isOpen, toggle }) {
                       id="bcc-input"
                       style={{ width: "50px" }}
                     >
-                      BCC
+                      Bcc
                     </span>
                     <Input
                       type="text"
@@ -287,17 +273,32 @@ function EmailComponent({ isOpen, toggle }) {
               padding: "6px 20px 6px 20px",
               fontWeight: "bolder",
               boxShadow: "0 0 10px rgba(0,0,0,0.2)",
-              width: "200px",
+              width: "250px",
               backgroundColor: "#fff",
               borderRadius: "4px 0 0 0",
               fontSize: "1rem",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              setIsMinimized(false);
             }}
           >
-            Email
+            <div className="d-flex justify-content-between">
+              <span> {formik?.values?.["subject"] || "New Message"}</span>
+              <span className="d-flex gap-3">
+                <i
+                  className=" ri-fullscreen-fill cursor-pointer"
+                  onClick={() => {
+                    setIsMinimized(false);
+                  }}
+                ></i>
+                <i
+                  className=" ri-close-fill cursor-pointer"
+                  onClick={() => {
+                    formik.resetForm();
+                    setTemplateData(null);
+                    setIsMinimized(false);
+                    toggle();
+                  }}
+                ></i>
+              </span>
+            </div>
           </div>
         )}
       </div>

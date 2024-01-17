@@ -98,7 +98,7 @@ const TemplateSelectByCategoryElement = ({
   };
 
   return (
-    <div className={`w-100 d-flex ${end ? "justify-content-end" : ""}`}>
+    <div className={` d-flex ${end ? "justify-content-end" : ""}`}>
       {props?.label && (
         <Label className="form-label" htmlFor={props?.htmlFor ?? "input-field"}>
           {props?.label}
