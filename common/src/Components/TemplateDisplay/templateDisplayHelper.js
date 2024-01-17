@@ -1,7 +1,5 @@
 import axios from "axios";
-import {
-  getTemplateFromCategoryAndName
-} from "./url_helper"
+import { getTemplateFromCategoryAndName } from "./url_helper";
 
 /**
  * Replace variables placeholders( ${xxx.yyy.zzz} in html with variabledata
@@ -23,7 +21,6 @@ export function replaceVariables(html, variableData) {
     return value;
   });
 }
-
 
 /**
  * Replace template placeholders {{xxx.yyy}} in html with templateData
@@ -121,11 +118,11 @@ export function removeContentEditableAndStyles(htmlString) {
       match[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
       "g"
     );
-    htmlString = htmlString.replace(elementRegex, elementWithoutStyle);
+    htmlString = htmlString?.replace(elementRegex, elementWithoutStyle);
   }
 
   // Remove contenteditable attribute
-  const withoutContentEditable = htmlString.replace(
+  const withoutContentEditable = htmlString?.replace(
     / contenteditable="true"| contenteditable="false"/g,
     ""
   );
@@ -189,10 +186,7 @@ export function getTemplateData(htmlString) {
     if (templateCriteriaList.length > 0) {
       const templateData = {};
       axios
-        .post(
-          getTemplateFromCategoryAndName(),
-          templateCriteriaList
-        )
+        .post(getTemplateFromCategoryAndName(), templateCriteriaList)
         .then((res) => {
           const { data } = res;
           const mappedData = {};
@@ -211,4 +205,51 @@ export function getTemplateData(htmlString) {
       resolve([]);
     }
   });
+}
+
+async function preProcessDataEffect(htmlString, mappedVariableData) {
+  if (!htmlString) {
+    return null;
+  }
+  const templateListCriteria = getAllTemplatesToRenderFromHTML(htmlString);
+
+  // Effect 1: Replace variables with mappedVariableData
+  let updatedContent = htmlString;
+  if (mappedVariableData) {
+    updatedContent = replaceVariables(htmlString, mappedVariableData);
+  }
+
+  if (templateListCriteria.length > 0) {
+    // Effect 2: Replace templateListCriteria without data
+    updatedContent = await replaceTemplate(updatedContent, mappedVariableData);
+
+    // Effect 3: Replace templateListCriteria with data
+    if (mappedVariableData) {
+      updatedContent = await replaceTemplateArray(
+        updatedContent,
+        mappedVariableData
+      );
+    }
+  }
+
+  // Recursive call for nested templates (Remove this if it is too dangerous)
+  const nestedTemplates = getAllTemplatesToRenderFromHTML(updatedContent);
+  if (nestedTemplates.length > 0) {
+    const nestedResult = await preProcessDataEffect(
+      updatedContent,
+      mappedVariableData
+    );
+    updatedContent = nestedResult || updatedContent;
+  }
+
+  return updatedContent;
+}
+
+export async function runEffects(htmlString, mappedVariableData) {
+  let result = null;
+  if (htmlString && mappedVariableData) {
+    result = await preProcessDataEffect(htmlString, mappedVariableData);
+    // Use the 'result' as needed
+  }
+  console.log(result);
 }

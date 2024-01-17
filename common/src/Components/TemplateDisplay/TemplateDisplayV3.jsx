@@ -119,8 +119,9 @@ const TemplateDisplayV3 = ({
       }
     };
 
-    if (content && processContent) {
+    if (content && processContent && mappedVariableData) {
       runEffects(content);
+      // setParsedContent(TemplateDisplayHelper.runEffects(content, mappedVariableData))
     }
   }, [mappedVariableData, content]);
 

@@ -73,7 +73,9 @@ function JobOverview() {
     (state) => state.JobFormReducer.formSubmission
   );
 
-  console.log(formSubmissionData);
+  // Switch to redux state in the future
+  const [selectCandidateId, setSelectCandidateId] = useState(null);
+
   const [formTemplate, setFormTemplate] = useState(null);
 
   // Fetch all the countries and account names
@@ -140,15 +142,33 @@ function JobOverview() {
       case 1:
         return <AssociateCandidate closeOffcanvas={closeOffcanvas} />;
       case 2:
-        return <SubmitToSales closeOffcanvas={closeOffcanvas} templateData={templateData}/>;
+        return (
+          <SubmitToSales
+            closeOffcanvas={closeOffcanvas}
+            templateData={templateData}
+            candidateId={selectCandidateId}
+          />
+        );
       case 3:
-        return <SubmitToSales closeOffcanvas={closeOffcanvas} templateData={templateData}/>;
+        return (
+          <SubmitToSales
+            closeOffcanvas={closeOffcanvas}
+            templateData={templateData}
+            candidateId={selectCandidateId}
+          />
+        );
       case 4:
         return <ProfileFeedbackPending closeOffcanvas={closeOffcanvas} />;
       case 5:
         return <ScheduleInterview closeOffcanvas={closeOffcanvas} />;
       case 6:
-        return <ConditionalOffer templateData={templateData} closeOffcanvas={closeOffcanvas}/>;
+        return (
+          <ConditionalOffer
+            templateData={templateData}
+            closeOffcanvas={closeOffcanvas}
+            candidateId={selectCandidateId}
+          />
+        );
       case 7:
         return <ConditionalOfferStatus closeOffcanvas={closeOffcanvas} />;
       default:
@@ -308,6 +328,7 @@ function JobOverview() {
                     </tr>
                   </thead>
                   <tbody>
+                    {/* Loop here */}
                     <tr className="text-center align-top">
                       <td className="pt-4">Jane Lee</td>
                       <td className="pt-4">Aaron Loo (7hrs)</td>
@@ -337,7 +358,50 @@ function JobOverview() {
                           </Input>
 
                           <i
-                            onClick={() => setOffcanvasForm(!offcanvasForm)}
+                            onClick={() => {
+                              setSelectCandidateId(1) 
+                              setOffcanvasForm(!offcanvasForm);
+                            }}
+                            id="next-step"
+                            className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
+                          ></i>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr className="text-center align-top">
+                      <td className="pt-4">Hx Koh</td>
+                      <td className="pt-4">Sabrina (7hrs)</td>
+                      {steps.map((step, index) => (
+                        <td key={index} className="px-0">
+                          <StepComponent
+                            timelineState={activeStep}
+                            index={index}
+                          />
+                        </td>
+                      ))}
+                      <td>
+                        <div className="d-flex flex-row gap-3 align-items-center">
+                          <Input
+                            type="select"
+                            value={activeStep}
+                            onChange={(e) =>
+                              setActiveStep(parseInt(e.target.value))
+                            }
+                          >
+                            <option value="">Select</option>
+                            {timelineSkip.map((item, index) => (
+                              <option key={index} value={index + 1}>
+                                {Object.values(item)[0]}
+                              </option>
+                            ))}
+                          </Input>
+
+                          <i
+                            onClick={() => {
+                              setSelectCandidateId(5); //  hardcoded for now
+                              setOffcanvasForm(!offcanvasForm);
+                            }}
                             id="next-step"
                             className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
                           ></i>
@@ -358,7 +422,6 @@ function JobOverview() {
           direction="end"
           style={{ width: "75vw" }}
         >
-
           <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
             <div className="avatar-md flex-shrink-0">
               <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
@@ -404,12 +467,9 @@ function JobOverview() {
                 </Col>
               )}
             </Row>
-
           </div>
           <OffcanvasBody>
-            {getFormComponent(activeStep, () =>
-              setOffcanvasForm(false)
-            )}
+            {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
         </Offcanvas>
 

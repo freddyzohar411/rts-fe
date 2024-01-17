@@ -9,7 +9,7 @@ import { Row, Col, Input, Button, Tooltip } from "reactstrap";
 import { CVPreview } from "../CVPreview";
 import { EmailComponent } from "../EmailComponent";
 
-function SubmitToSales({ closeOffcanvas, templateData }) {
+function SubmitToSales({ closeOffcanvas, templateData, candidateId }) {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -82,7 +82,6 @@ function SubmitToSales({ closeOffcanvas, templateData }) {
                     className="btn btn-custom-primary"
                     onClick={() => {
                       setSendEmailModal(true);
-                      console.log("CLicked!", sendEmailModal);
                     }}
                   >
                     Send Email
@@ -110,6 +109,7 @@ function SubmitToSales({ closeOffcanvas, templateData }) {
                       closeOffcanvas;
                     }}
                     templateData={templateData}
+                    candidateId={candidateId}
                   />
                 </div>
               </div>

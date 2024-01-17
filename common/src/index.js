@@ -42,3 +42,6 @@ export * from "./common/data";
 export * as AuthConstant from "./constants/authConstant";
 
 export * from "./metadata";
+
+// Hooks
+export * as UseTemplateModuleDataHook from "./hooks/TemplateModuleDataHook";

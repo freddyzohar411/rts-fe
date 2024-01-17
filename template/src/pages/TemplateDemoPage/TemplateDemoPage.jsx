@@ -19,10 +19,11 @@ import { fetchTemplate } from "../../store/template/action";
 import { TemplateDisplayV3 } from "@workspace/common";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
-import useModuleData from "../../hooks/ModuleDataHook";
+// import useModuleData from "../../hooks/ModuleDataHook";
 import { generateOptions } from "./pdfOption";
 import { ExportHelper } from "@workspace/common";
 import { GeneralModal } from "@workspace/common";
+import { UseTemplateModuleDataHook } from "@workspace/common";
 
 const TemplateBuilderPage = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const TemplateBuilderPage = () => {
     setJobId,
     setCandidateId,
     setAllIdsHandler,
-  } = useModuleData();
+  } = UseTemplateModuleDataHook.useTemplateModuleData();
 
   useEffect(() => {
     dispatch(

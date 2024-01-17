@@ -18,8 +18,9 @@ import {
 import { useEffect } from "react";
 import { useFormik } from "formik";
 import { initialValues, schema, populateForm } from "./formikConfig";
+import { UseTemplateModuleDataHook } from "@workspace/common";
 
-function EmailComponent({ isOpen, toggle }) {
+function EmailComponent({ isOpen, toggle, candidateId }) {
   const [modal, setModal] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [emailContent, setEmailContent] = useState("");
@@ -27,6 +28,15 @@ function EmailComponent({ isOpen, toggle }) {
   const [formInitialValues, setFormInitialValues] = useState(initialValues);
   const [formSchema, setFormSchema] = useState(schema);
   const [templateData, setTemplateData] = useState(null);
+  const {
+    allModuleData,
+    setAccountId,
+    setJobId,
+    setCandidateId,
+    setAllIdsHandler,
+  } = UseTemplateModuleDataHook.useTemplateModuleData({
+    candidateId: candidateId,
+  });
 
   /**
    * Handle form submit event (Formik)
@@ -207,7 +217,7 @@ function EmailComponent({ isOpen, toggle }) {
               </div>
               <TemplateDisplayV3
                 content={templateData?.content ?? null}
-                allData={null}
+                allData={allModuleData}
                 isView={false}
                 handleOutputContent={setEmailContent}
                 autoResize={false}
