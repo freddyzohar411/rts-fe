@@ -28,9 +28,8 @@ const TemplateSelectByCategoryElement = ({
         value: value.id,
         label: value.name,
       });
-    } 
+    }
   }, [value, categoryName, templatesByCategory]);
-
 
   useEffect(() => {
     if (categoryName == null || categoryName == "") {
