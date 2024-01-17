@@ -68,7 +68,7 @@ function ConditionalOffer({ templateData, closeOffcanvas }) {
               <TemplateDisplayV3
                 content={templateData?.content ?? null}
                 allData={null}
-                isView={false}
+                isView={true}
                 handleOutputContent={setConditionalOfferContent}
                 autoResize={true}
                 initialValues
