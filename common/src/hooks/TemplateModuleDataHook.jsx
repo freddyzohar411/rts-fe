@@ -11,15 +11,17 @@ export const useTemplateModuleData = (dataId) => {
     (state) => state.CandidateReducer.candidateData
   );
   const jobData = useSelector((state) => state.JobReducer.jobData);
-  const [accountId, setAccountId] = useState(null);
-  const [jobId, setJobId] = useState(null);
-  const [candidateId, setCandidateId] = useState(null);
+  const [accountId, setAccountId] = useState(dataId?.accountId || null);
+  const [jobId, setJobId] = useState(dataId?.jobId || null);
+  const [candidateId, setCandidateId] = useState(dataId?.candidateId || null);
   const [allIds, setAllIds] = useState({
     accountId: dataId?.accountId || null,
     jobId: dataId?.jobId || null,
     candidateId: dataId?.candidateId || null,
   });
   const [allModuleData, setAllModuleData] = useState({});
+
+  console.log("allIds", allIds);
 
   const setAllIdsHandler = () => {
     setAllIds({
@@ -90,6 +92,3 @@ export const useTemplateModuleData = (dataId) => {
     setAllIdsHandler,
   };
 };
-
-
-

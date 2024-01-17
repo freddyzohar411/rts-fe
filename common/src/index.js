@@ -26,6 +26,8 @@ export * as StringHelper from "./helpers/string_helper";
 
 export * as ExportHelper from "./helpers/export_helper";
 
+export * as TemplateHelper from "./Components/TemplateDisplay/templateDisplayHelper";
+
 // Redux Store
 export * as Actions from "./store/actions";
 

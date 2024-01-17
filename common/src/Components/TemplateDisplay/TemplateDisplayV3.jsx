@@ -89,8 +89,6 @@ const TemplateDisplayV3 = ({
     applyEffects();
   }, [mappedVariableData, content]);
 
-  console.log("parsedContent", parsedContent);
-
   /**
    * Set Get new content everytime parsedContent changes
    */

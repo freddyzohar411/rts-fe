@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { useFormik } from "formik";
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { UseTemplateModuleDataHook } from "@workspace/common";
+import { TemplateHelper } from "@workspace/common";
 
 function EmailComponent({ isOpen, toggle, candidateId }) {
   const [modal, setModal] = useState(false);
@@ -71,11 +72,23 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
   };
 
   useEffect(() => {
-    if (templateData && formik) {
-      // Set Formik content value
-      formik.setFieldValue("content", templateData?.content);
+    const setContentInFormik = async () => {
+      const processedContent = await TemplateHelper.runEffects(
+        templateData.content,
+        null,
+        allModuleData,
+        true
+      );
+      formik.setFieldValue("content", processedContent);
     }
-  }, [templateData]);
+
+    if (templateData) {
+      setContentInFormik();
+    }
+
+  }, [templateData, allModuleData]);
+
+  console.log("allModuleData", allModuleData)
 
   return (
     <React.Fragment>
