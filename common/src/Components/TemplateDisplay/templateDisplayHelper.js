@@ -130,6 +130,96 @@ export function removeContentEditableAndStyles(htmlString) {
   return withoutContentEditable;
 }
 
+/**
+ * Make a call to get the template data from the server
+ * @param {*} htmlString
+ * @returns
+ */
+export function getTemplateData(htmlString) {
+  if (!htmlString) return;
+  return new Promise((resolve, reject) => {
+    const templateCriteriaList = getAllTemplatesToRenderFromHTML(htmlString);
+    if (templateCriteriaList.length > 0) {
+      const templateData = {};
+      axios
+        .post(getTemplateFromCategoryAndName(), templateCriteriaList)
+        .then((res) => {
+          const { data } = res;
+          const mappedData = {};
+          data.forEach((item) => {
+            mappedData[item.category] = {
+              ...mappedData[item.category],
+              [item.name]: item.content,
+            };
+          });
+          resolve(mappedData);
+        })
+        .catch((err) => {
+          reject([]);
+        });
+    } else {
+      resolve([]);
+    }
+  });
+}
+
+/**
+ * Recursive function to run all the effects to process the content
+ * @param {*} htmlString
+ * @param {*} currentContent
+ * @param {*} mappedVariableData
+ * @param {*} recursive
+ * @returns
+ */
+export async function runEffects(
+  htmlString,
+  currentContent = null,
+  mappedVariableData,
+  recursive
+) {
+  if (!htmlString) {
+    return currentContent;
+  }
+
+  const templateListCriteria = getAllTemplatesToRenderFromHTML(htmlString);
+
+  // Effect 1: Replace variables with mappedVariableData
+  let updatedContent = htmlString;
+  if (mappedVariableData) {
+    updatedContent = replaceVariables(htmlString, mappedVariableData);
+  }
+
+  if (templateListCriteria.length > 0) {
+    // Effect 2: Replace templateListCriteria without data
+    updatedContent = await replaceTemplate(updatedContent, mappedVariableData);
+
+    // Effect 3: Replace templateListCriteria with data
+    if (mappedVariableData) {
+      updatedContent = await replaceTemplateArray(
+        updatedContent,
+        mappedVariableData
+      );
+    }
+  }
+
+  // Check if the content has been updated and if recursive is true
+  if (currentContent !== updatedContent && recursive) {
+    // Recursive call for nested templates
+    const nestedTemplates = getAllTemplatesToRenderFromHTML(updatedContent);
+    if (nestedTemplates.length > 0) {
+      // Pass the updatedContent as an argument for the recursive call
+      return runEffects(
+        updatedContent,
+        updatedContent,
+        mappedVariableData,
+        recursive
+      );
+    }
+  }
+
+  return updatedContent;
+}
+
 // Private function helpers ===============================================
 
 function extractStringLiteralsDoubleBracketsToList(htmlString) {
@@ -177,82 +267,4 @@ function replaceVariablesArray(htmlString, variableData) {
     replacedTemplateContent = replacedTemplateContent.replace(match, value);
   });
   return replacedTemplateContent;
-}
-
-export function getTemplateData(htmlString) {
-  if (!htmlString) return;
-  return new Promise((resolve, reject) => {
-    const templateCriteriaList = getAllTemplatesToRenderFromHTML(htmlString);
-    if (templateCriteriaList.length > 0) {
-      const templateData = {};
-      axios
-        .post(getTemplateFromCategoryAndName(), templateCriteriaList)
-        .then((res) => {
-          const { data } = res;
-          const mappedData = {};
-          data.forEach((item) => {
-            mappedData[item.category] = {
-              ...mappedData[item.category],
-              [item.name]: item.content,
-            };
-          });
-          resolve(mappedData);
-        })
-        .catch((err) => {
-          reject([]);
-        });
-    } else {
-      resolve([]);
-    }
-  });
-}
-
-export async function runEffects(
-  htmlString,
-  currentContent = null,
-  mappedVariableData,
-  recursive
-) {
-  if (!htmlString) {
-    return currentContent;
-  }
-
-  const templateListCriteria = getAllTemplatesToRenderFromHTML(htmlString);
-
-  // Effect 1: Replace variables with mappedVariableData
-  let updatedContent = htmlString;
-  if (mappedVariableData) {
-    updatedContent = replaceVariables(htmlString, mappedVariableData);
-  }
-
-  if (templateListCriteria.length > 0) {
-    // Effect 2: Replace templateListCriteria without data
-    updatedContent = await replaceTemplate(updatedContent, mappedVariableData);
-
-    // Effect 3: Replace templateListCriteria with data
-    if (mappedVariableData) {
-      updatedContent = await replaceTemplateArray(
-        updatedContent,
-        mappedVariableData
-      );
-    }
-  }
-
-  // Check if the content has been updated
-  if (currentContent !== updatedContent && recursive) {
-    // Recursive call for nested templates
-    const nestedTemplates = getAllTemplatesToRenderFromHTML(updatedContent);
-    if (nestedTemplates.length > 0) {
-      // Pass the updatedContent as an argument for the recursive call
-      return runEffects(
-        updatedContent,
-        updatedContent,
-        mappedVariableData,
-        recursive
-      );
-    }
-  }
-
-  // If no recursion is needed or the recursion is complete, return the final result
-  return updatedContent;
 }

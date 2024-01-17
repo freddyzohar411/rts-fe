@@ -21,8 +21,6 @@ export const useTemplateModuleData = (dataId) => {
   });
   const [allModuleData, setAllModuleData] = useState({});
 
-  console.log("allIds", allIds);
-
   const setAllIdsHandler = () => {
     setAllIds({
       accountId: accountId,

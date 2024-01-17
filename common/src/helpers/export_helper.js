@@ -1,6 +1,6 @@
 import generatePDF from "react-to-pdf";
 import htmlDocx from "html-docx-js/dist/html-docx";
-import FileSaver from 'file-saver';
+import FileSaver from "file-saver";
 import React from "react";
 
 /**
@@ -39,7 +39,7 @@ export function generatePDFCustom(content, options = {}) {
 }
 
 /**
- * Helper function to generate Word docx from HTML
+ * Helper function to generate Word doc from HTML
  * @param {*} content
  * @param {*} options
  */
@@ -69,7 +69,7 @@ export function generateDocCustom(
 }
 
 /**
- * Helper Function to generate Docx from PDF
+ * Helper Function to generate Word docx from HTML
  * @param {*} htmlContent
  * @param {*} options
  */
@@ -92,5 +92,3 @@ export function generateDocxCustom(
   const filename = options.filename + ".docx";
   FileSaver.saveAs(blob, filename);
 }
-
-

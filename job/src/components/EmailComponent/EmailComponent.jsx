@@ -80,15 +80,12 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
         true
       );
       formik.setFieldValue("content", processedContent);
-    }
+    };
 
     if (templateData) {
       setContentInFormik();
     }
-
   }, [templateData, allModuleData]);
-
-  console.log("allModuleData", allModuleData)
 
   return (
     <React.Fragment>

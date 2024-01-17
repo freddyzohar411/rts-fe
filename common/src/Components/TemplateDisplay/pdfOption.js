@@ -41,6 +41,7 @@ export const generateOptions = (settings) => {
     },
   };
 };
+
 export const defaultOptions = {
   filename: "template.pdf",
   method: "save",

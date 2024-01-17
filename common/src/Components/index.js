@@ -81,8 +81,6 @@ import CustomNav from "./CustomNav/CustomNav";
 import Ckeditor from "./ckeditor/build/ckeditor";
 
 // Import Template Display
-import TemplateDisplay from "./TemplateDisplay/TemplateDisplay";
-import TemplateDisplayV2 from "./TemplateDisplay/TemplateDisplayV2";
 import TemplateDisplayV3 from "./TemplateDisplay/TemplateDisplayV3";
 import TemplateSelectByCategoryElement from "./TemplateDisplay/TemplateSelectByCategoryElement/TemplateSelectByCategoryElement";
 
@@ -162,8 +160,6 @@ export {
   Ckeditor,
 
   // Export Template Display
-  TemplateDisplay,
-  TemplateDisplayV2,
   TemplateDisplayV3,
   TemplateSelectByCategoryElement,
 

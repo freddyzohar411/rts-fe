@@ -32,7 +32,7 @@ import {
   updateTemplateById,
   getTemplates,
   getTemplateCategories,
-  getTemplatesByCategory
+  getTemplatesByCategory,
 } from "../../helpers/backend_helper.js";
 import { toast } from "react-toastify";
 

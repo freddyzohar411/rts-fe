@@ -19,6 +19,7 @@ const EditorElement2 = ({
 }) => {
   const editorRef = useRef(null);
 
+  // Inject variable when it changes
   useEffect(() => {
     // Get the current editor instance
     const editor = editorRef?.current;
@@ -91,6 +92,7 @@ const EditorElement2 = ({
         });
     });
 
+  // Upload video handler
   const videoUploadHandler = (
     blobInfo,
     file,

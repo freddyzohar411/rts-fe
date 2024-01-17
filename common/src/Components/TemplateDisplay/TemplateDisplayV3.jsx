@@ -11,17 +11,17 @@ import "./TinyCME.scss";
 
 const TemplateDisplayV3 = ({
   content,
-  allData,
-  isView,
+  allData, // All data by TemplateModule Hook
+  isView, // If true, display only
   handleOutputContent,
-  processContent = true,
-  cleanContent = true,
+  processContent = true, // Insert variables and templates
+  cleanContent = true, // Remove contenteditable and styles
   recursive = false,
   minHeight,
   height = "100%",
   autoResize = false,
   onChange,
-  value,
+  value, // Value - Used with formik
   initialValues,
 }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
@@ -73,6 +73,7 @@ const TemplateDisplayV3 = ({
   useEffect(() => {
     const applyEffects = async () => {
       if (!content) return;
+      if (!processContent) return;
       try {
         const result = await TemplateDisplayHelper.runEffects(
           content,
@@ -96,7 +97,10 @@ const TemplateDisplayV3 = ({
     setNewContent(parsedContent);
   }, [parsedContent]);
 
-  // Set New content to be outputted
+  /**
+   * Function to set the new content (either clean or not)
+   * @param {*} content
+   */
   function setNewContent(content) {
     if (handleOutputContent) {
       if (cleanContent) {
@@ -109,7 +113,7 @@ const TemplateDisplayV3 = ({
     }
   }
 
-  // Set Plugin
+  // Set Plugins
   let plugins = [
     "advlist",
     "autolink",

@@ -21,7 +21,8 @@ export const deleteTemplateById = (templateId) =>
   api.delete(`${COMMON_URL}${BASE_TEMPLATE}/delete/${templateId}`);
 
 // Get Templates
-export const getTemplates = (data) => api.create(`${COMMON_URL}${BASE_TEMPLATE}/listing`, data);
+export const getTemplates = (data) =>
+  api.create(`${COMMON_URL}${BASE_TEMPLATE}/listing`, data);
 
 // Get Template Categories
 export const getTemplateCategories = () =>
@@ -34,6 +35,7 @@ export const getTemplatesByCategory = (category) =>
 // URL
 export const addMediaUrl = () => `${COMMON_URL}${BASE_MEDIA}/add`;
 
-export const deleteDraftMediaUrl = () => `${COMMON_URL}${BASE_MEDIA}/delete/user-draft`;
+export const deleteDraftMediaUrl = () =>
+  `${COMMON_URL}${BASE_MEDIA}/delete/user-draft`;
 
 export const deleteMediaUrls = () => `${COMMON_URL}${BASE_MEDIA}/delete`;

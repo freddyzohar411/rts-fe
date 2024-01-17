@@ -5,10 +5,10 @@ import Select from "react-select";
 
 const TemplateSelectByCategoryElement = ({
   categoryName = null,
-  defaultFirstValue,
+  defaultFirstValue, // Default first value of the option
   width = "auto",
-  end,
-  value,
+  end, // Justify content end
+  value, // Use this to set a value
   ...props
 }) => {
   const dispatch = useDispatch();
@@ -92,7 +92,7 @@ const TemplateSelectByCategoryElement = ({
       )[0];
       props.onChange(filteredTemplate ?? null);
     } else {
-      console.log("no template selected");
+      // If no template is selected
       props.onChange(null);
     }
   };

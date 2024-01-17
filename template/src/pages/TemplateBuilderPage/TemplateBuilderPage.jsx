@@ -22,8 +22,7 @@ import {
   updateTemplate,
 } from "../../store/template/action";
 import { TemplateBuilder } from "../../components";
-// import TemplateDisplay from "../../components/TemplateDisplay/TemplateDisplay";
-import { TemplateDisplay } from "@workspace/common"
+import { TemplateDisplayV3 } from "@workspace/common";
 import axios from "axios";
 import { deleteMediaUrls } from "../../helpers/backend_helper";
 
@@ -40,6 +39,11 @@ const TemplateBuilderPage = () => {
     (state) => state.TemplateReducer.template
   );
 
+  /**
+   * Form submit handler to be passed to the builder as a callback
+   * @param {*} values
+   * @param {*} deletedMediaURL
+   */
   const handleFormSubmit = async (values, deletedMediaURL) => {
     if (type === "create") {
       dispatch(
@@ -67,6 +71,9 @@ const TemplateBuilderPage = () => {
     }
   };
 
+  /**
+   * Fetch template data if templateId is present
+   */
   useEffect(() => {
     if (templateId) {
       dispatch(fetchTemplate(templateId));
@@ -171,9 +178,10 @@ const TemplateBuilderPage = () => {
             </ModalHeader>
             <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
               <div>
-                <TemplateDisplay
+                <TemplateDisplayV3
                   content={formikRef?.current?.formik.values["content"]}
                   isView={true}
+                  processContent={false}
                 />
               </div>
             </ModalBody>

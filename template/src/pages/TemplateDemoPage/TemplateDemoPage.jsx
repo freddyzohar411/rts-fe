@@ -19,11 +19,10 @@ import { fetchTemplate } from "../../store/template/action";
 import { TemplateDisplayV3 } from "@workspace/common";
 import SelectElement from "../../components/TemplateBuilder/SelectElement";
 import * as TemplateActions from "../../store/template/action";
-// import useModuleData from "../../hooks/ModuleDataHook";
 import { generateOptions } from "./pdfOption";
 import { ExportHelper } from "@workspace/common";
 import { GeneralModal } from "@workspace/common";
-import { UseTemplateModuleDataHook } from "@workspace/common";
+import { UseTemplateModuleDataHook } from "@workspace/common"; // Use this hook to get module data
 
 const TemplateBuilderPage = () => {
   const dispatch = useDispatch();

@@ -5,7 +5,7 @@ import {
   DeleteCustomModal,
   DynamicTableHelper,
   useTableHook,
-  DateHelper
+  DateHelper,
 } from "@workspace/common";
 import { CUSTOMISATION_INITIAL_OPTION } from "./customisationTableInitialOptions";
 import * as TemplateActions from "../../store/template/action";
@@ -24,8 +24,8 @@ function TemplateListingPage() {
   const { generateConfig, generateSeachFieldArray, cleanPageRequest } =
     DynamicTableHelper;
 
- // Custom renders
- const customRenderList = [
+  // Custom renders
+  const customRenderList = [
     {
       names: ["updatedAt", "createdAt"],
       render: (data, opt) =>
@@ -68,7 +68,10 @@ function TemplateListingPage() {
         render: (data) => (
           <div className="d-flex column-gap-2">
             <Link to={`/settings/templates/${data.id}/edit`}>
-              <Button type="button" className="btn btn-custom-primary px-2 py-1">
+              <Button
+                type="button"
+                className="btn btn-custom-primary px-2 py-1"
+              >
                 <i
                   className="ri-edit-2-line"
                   style={{ fontSize: "0.65rem" }}
@@ -97,7 +100,9 @@ function TemplateListingPage() {
   // Fetch Form Data
   useEffect(() => {
     dispatch(
-        TemplateActions.fetchTemplates(DynamicTableHelper.cleanPageRequest(pageRequest))
+      TemplateActions.fetchTemplates(
+        DynamicTableHelper.cleanPageRequest(pageRequest)
+      )
     );
     return () => {
       dispatch(TemplateActions.clearTemplate());

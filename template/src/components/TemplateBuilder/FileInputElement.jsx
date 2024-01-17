@@ -1,8 +1,13 @@
 import React, { useRef } from "react";
 import { toast } from "react-toastify";
 
-const FileInputElement = ({ setFile, placeholder, fileSelected, disabled, width}) => {
-  console.log("fileSelected", fileSelected)
+const FileInputElement = ({
+  setFile,
+  placeholder,
+  fileSelected,
+  disabled,
+  width,
+}) => {
   const fileInputRef = useRef();
   const truncateString = (str, num) => {
     if (str?.length <= num) {
@@ -66,7 +71,7 @@ const FileInputElement = ({ setFile, placeholder, fileSelected, disabled, width}
             maxHeight: "38px",
             overflow: "hidden",
             backgroundColor: disabled ? "#EFF2F7" : "",
-            width: width ? width : "100%"
+            width: width ? width : "100%",
           }}
         >
           {fileSelected
