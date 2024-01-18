@@ -328,7 +328,7 @@ function JobOverview() {
                       <tbody key={index}>
                         <tr className="text-center align-top">
                           <td className="pt-4">{`${data?.candidate?.firstName} ${data?.candidate?.lastName}`}</td>
-                          <td className="pt-4">{`${data?.createdBy}`}</td>
+                          <td className="pt-4">{`${data?.createdByName}`}</td>
                           {steps.map((step, index) => (
                             <td key={index} className="px-0">
                               <StepComponent

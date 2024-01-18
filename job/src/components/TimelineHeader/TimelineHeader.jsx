@@ -54,7 +54,7 @@ function TimelineHeader({ data }) {
               >
                 <div
                   className="rounded rounded-pill bg-primary text-white d-flex align-items-center justify-content-center"
-                  style={{ width: "20px", height: "20px" }}
+                  style={{ width: "30px", height: "30px" }}
                 >
                   <span>{counts?.[item] ?? 0}</span>
                 </div>
