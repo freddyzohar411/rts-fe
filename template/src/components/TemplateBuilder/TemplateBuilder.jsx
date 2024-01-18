@@ -314,7 +314,9 @@ const TemplateBuilder = forwardRef(
             <hr className="" />
             <Row className="mb-1 mt-2">
               <Col>
-                <span className="h6 fw-bold">Template Injection</span>
+                <span className="h6 fw-bold">
+                  Template and Variable Injection
+                </span>
               </Col>
             </Row>
             <Row className="align-items-end mb-3">

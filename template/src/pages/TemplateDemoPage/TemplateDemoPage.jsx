@@ -217,7 +217,7 @@ const TemplateBuilderPage = () => {
                     <Container
                       className="border pt-3 pb-3"
                       style={{
-                        width: "850px",
+                        width: "1250px",
                         height: "1000px",
                         borderColor: "#000000",
                         overflow: "auto",
