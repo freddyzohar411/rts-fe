@@ -1,6 +1,12 @@
 //Job
 export const BASE_JOBS = "/api/job";
 
+//Job
+export const BASE_JOBS_CONADIDATE_STATE = "/api/jobcandidatestage";
+
+//Job
+export const BASE_JOB_TIMELINE = "/api/jobtimeline";
+
 //Form
 export const BASE_FORMS = "/api/forms";
 

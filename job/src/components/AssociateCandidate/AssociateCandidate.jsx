@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchJobForm } from "../../store/actions";
+import { fetchJobForm, tagJob } from "../../store/actions";
 import { ASSOCIATE_CANDIDATE } from "./constants";
 import { useUserAuth } from "@workspace/login";
 import TechnicalScreening from "./TechnicalScreening";
@@ -24,7 +24,7 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-function AssociateCandidate() {
+function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -71,7 +71,20 @@ function AssociateCandidate() {
     formStateHook,
     rerenderTable
   ) => {
-    // Check files array is empty or not
+    const payload = {
+      jobId: jobId,
+      jobStageId: JOB_STAGE_IDS?.ASSOCIATE,
+      status: JOB_STAGE_STATUS?.COMPLETED,
+      candidateId,
+      formData: JSON.stringify(values),
+      formId: parseInt(form.formId),
+      jobType: "associate_candidate",
+    };
+    dispatch(tagJob({ payload, navigate }));
+  };
+
+  const handleCancel = () => {
+    closeOffcanvas();
   };
 
   return (

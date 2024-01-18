@@ -3,6 +3,8 @@ import {
   BASE_DOCUMENTS,
   BASE_FORMS,
   BASE_JOBS,
+  BASE_JOBS_CONADIDATE_STATE,
+  BASE_JOB_TIMELINE,
   BASE_USER_GROUP,
 } from "./url_helper";
 import {
@@ -59,7 +61,13 @@ export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
   `${DOCUMENT_BASE_URL}/entity/user/${entityType}/${entityId}`;
 
 export const tagJob = (data, config) =>
-  api.create(`${JOB_URL}/api/jobcandidatestage`, data, config);
+  api.create(`${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}`, data, config);
 
 export const tagAllJob = (data, config) =>
-  api.create(`${JOB_URL}/api/jobcandidatestage/createAll`, data, config);
+  api.create(`${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}/createAll`, data, config);
+
+export const getJobTimeline = (data) =>
+  api.create(`${JOB_URL}${BASE_JOB_TIMELINE}/listing`, data);
+
+export const getJobTimelineCount = (jobId) =>
+  api.get(`${JOB_URL}${BASE_JOB_TIMELINE}/jobtimelinecount/${jobId}`);

@@ -10,6 +10,12 @@ import {
   TAG_JOB_ALL,
   TAG_JOB_ALL_SUCCESS,
   TAG_JOB_ALL_FAILURE,
+  FETCH_JOB_TIMELINE_LIST,
+  FETCH_JOB_TIMELINE_LIST_SUCCESS,
+  FETCH_JOB_TIMELINE_LIST_FAILURE,
+  JOB_TIMELINE_COUNT,
+  JOB_TIMELINE_COUNT_SUCCESS,
+  JOB_TIMELINE_COUNT_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
@@ -17,6 +23,10 @@ const initialState = {
   jobTagMeta: {},
   jobAllTag: {},
   jobAllTagMeta: {},
+  jobTimeline: {},
+  jobTimelineMeta: {},
+  jobTimelineCount: {},
+  jobTimelineCountMeta: {},
 };
 
 const JobStageReducer = (state = initialState, action) => {
@@ -55,6 +65,44 @@ const JobStageReducer = (state = initialState, action) => {
       return {
         ...state,
         jobAllTagMeta: errorMetaData(action.payload),
+      };
+
+    // Fetch job timeline
+    case FETCH_JOB_TIMELINE_LIST:
+      return {
+        ...state,
+        jobTimelineMeta: pendingMetaData(),
+      };
+    case FETCH_JOB_TIMELINE_LIST_SUCCESS:
+      return {
+        ...state,
+        jobTimelineMeta: successMetaData(action.payload),
+        jobTimeline: action.payload,
+      };
+    case FETCH_JOB_TIMELINE_LIST_FAILURE:
+      return {
+        ...state,
+        jobTimeline: {},
+        jobTimelineMeta: errorMetaData(action.payload),
+      };
+
+    // Fetch job timeline count
+    case JOB_TIMELINE_COUNT:
+      return {
+        ...state,
+        jobTimelineCountMeta: pendingMetaData(),
+      };
+    case JOB_TIMELINE_COUNT_SUCCESS:
+      return {
+        ...state,
+        jobTimelineCountMeta: successMetaData(action.payload),
+        jobTimelineCount: action.payload,
+      };
+    case JOB_TIMELINE_COUNT_FAILURE:
+      return {
+        ...state,
+        jobTimelineCount: {},
+        jobTimelineCountMeta: errorMetaData(action.payload),
       };
     default:
       return state;
