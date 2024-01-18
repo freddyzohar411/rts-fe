@@ -9,7 +9,12 @@ import { Row, Col, Input, Button, Tooltip } from "reactstrap";
 import { CVPreview } from "../CVPreview";
 import { EmailComponent } from "../EmailComponent";
 
-function SubmitToSales({ closeOffcanvas, templateData, candidateId }) {
+function SubmitToSales({
+  closeOffcanvas,
+  onPreviewCVClick,
+  templateData,
+  candidateId,
+}) {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -74,7 +79,11 @@ function SubmitToSales({ closeOffcanvas, templateData, candidateId }) {
                     className="form-control"
                     style={{ width: "200px" }}
                   />
-                  <Button type="button" className="btn btn-custom-primary">
+                  <Button
+                    type="button"
+                    className="btn btn-custom-primary"
+                    onClick={onPreviewCVClick}
+                  >
                     Preview CV
                   </Button>
                   <Button

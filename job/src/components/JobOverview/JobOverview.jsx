@@ -35,12 +35,14 @@ import { TimelineStepper } from "../TimelineStepper";
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
 import SubmitToSales from "../SubmitToSales/SubmitToSales";
+import SubmitToClient from "../SubmitToClient/SubmitToClient";
 import ProfileFeedbackPending from "../ProfileFeedbackPending/ProfileFeedbackPending";
 import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import StepComponent from "./StepComponent";
 import { TimelineHeader } from "../TimelineHeader";
+import { CVPreview } from "../CVPreview";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
@@ -50,12 +52,23 @@ function JobOverview() {
   const [stepperState, setStepperState] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
+
   const [selectedOfferTemplate, setSelectedOfferTemplate] = useState(null);
   const [templateData, setTemplateData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isPreviewCV, setIsPreviewCV] = useState(false);
+
+  const handlePreviewCVClick = () => {
+    setIsPreviewCV(true);
+  };
+
+  const handleExitPreview = () => {
+    setIsPreviewCV(false);
+  };
 
   const steps = [0, 1, 2, 3, 4, 5, 6, 7];
 
+  // Retrieve Job Information (Start)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
@@ -75,10 +88,8 @@ function JobOverview() {
 
   // Switch to redux state in the future
   const [selectCandidateId, setSelectCandidateId] = useState(null);
-
   const [formTemplate, setFormTemplate] = useState(null);
 
-  // Fetch all the countries and account names
   useEffect(() => {
     dispatch(fetchJobForm(JOB_FORM_NAME));
   }, []);
@@ -107,6 +118,7 @@ function JobOverview() {
   const toggleFormViewState = () => {
     setView(!view);
   };
+  // Retrieve Job Information (End)
 
   useEffect(() => {
     // Set the stepper state based on the active step
@@ -118,7 +130,7 @@ function JobOverview() {
         setStepperState("Submit to Sales");
         break;
       case 3:
-        setStepperState("Submit to Sales");
+        setStepperState("Submit to Client");
         break;
       case 4:
         setStepperState("Profile Feedback Pending");
@@ -142,17 +154,23 @@ function JobOverview() {
       case 1:
         return <AssociateCandidate closeOffcanvas={closeOffcanvas} />;
       case 2:
-        return (
+        return isPreviewCV ? (
+          <CVPreview onExitPreview={handleExitPreview} />
+        ) : (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             candidateId={selectCandidateId}
           />
         );
       case 3:
-        return (
-          <SubmitToSales
+        return isPreviewCV ? (
+          <CVPreview onExitPreview={handleExitPreview} />
+        ) : (
+          <SubmitToClient
             closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             candidateId={selectCandidateId}
           />
@@ -193,6 +211,12 @@ function JobOverview() {
     }
   }, [activeStep]);
 
+  useEffect(() => {
+    if (offcanvasForm === false) {
+      setIsPreviewCV(false);
+    }
+  });
+
   const jobHeaders = [
     "Submitted to Sales",
     "Submitted to Client",
@@ -226,6 +250,8 @@ function JobOverview() {
     { 6: "Conditional Offer" },
     { 7: "Conditional Offer Status" },
   ];
+
+  console.log("active step", activeStep);
 
   return (
     <React.Fragment>
@@ -266,6 +292,7 @@ function JobOverview() {
             </div>
           </Col>
         </Row>
+
         <Row>
           <Nav tabs>
             <NavItem>
@@ -299,6 +326,7 @@ function JobOverview() {
             </NavItem>
           </Nav>
         </Row>
+
         <Row>
           <TabContent activeTab={timelineTab} className="p-0">
             <TabPane tabId="1">
@@ -359,7 +387,7 @@ function JobOverview() {
 
                           <i
                             onClick={() => {
-                              setSelectCandidateId(1) 
+                              setSelectCandidateId(1);
                               setOffcanvasForm(!offcanvasForm);
                             }}
                             id="next-step"
@@ -412,7 +440,11 @@ function JobOverview() {
                 </Table>
               </div>
             </TabPane>
-            <TabPane tabId="2"></TabPane>
+            <TabPane tabId="2">
+              <div className="p-4">
+                <span>BSG Status</span>
+              </div>
+            </TabPane>
           </TabContent>
         </Row>
 
@@ -450,7 +482,7 @@ function JobOverview() {
                 </Row>
               </Col>
               {/* koh */}
-              {activeStep === 6 && (
+              {(activeStep === 6) | isPreviewCV && (
                 <Col>
                   <div>
                     <TemplateSelectByCategoryElement
