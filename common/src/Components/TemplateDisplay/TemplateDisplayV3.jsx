@@ -135,6 +135,7 @@ const TemplateDisplayV3 = ({
     "table",
     "emoticons",
     "codesample",
+    "pagebreak",
   ];
 
   if (autoResize) {
@@ -276,7 +277,7 @@ const TemplateDisplayV3 = ({
             toolbar:
               "undo redo | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsizeinput | " +
               "bold italic underline forecolor backcolor | align lineheight |" +
-              "bullist numlist outdent indent | hr |" +
+              "bullist numlist outdent indent | hr | pagebreak |" +
               "removeformat | searchreplace |" +
               "table | code codesample | emoticons charmap | fullscreen | preview | help",
             content_style:

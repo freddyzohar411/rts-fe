@@ -220,6 +220,26 @@ export async function runEffects(
   return updatedContent;
 }
 
+/**
+ * Replace page breaks in html string with page break divs
+ * @param {*} htmlString 
+ * @returns 
+ */
+export function replacePageBreaks(htmlString) {
+  // Use a global regular expression to find and replace all occurrences
+  // var replacedString = htmlString.replace(/<p><!--\s*pagebreak\s*--><\/p>/gi, '<div style="break-after: page;"></div>');
+  var replacedString = htmlString.replace(/<!--\s*pagebreak\s*-->/gi, '<div style="break-after: page;"></div>');
+
+  return replacedString;
+}
+
+export function replacePageBreaks2(htmlString) {
+  // Use a global regular expression to find and replace all occurrences
+  // var replacedString = htmlString.replace(/<p><!--\s*pagebreak\s*--><\/p>/gi, '<div style="break-after: page;"></div>');
+  var replacedString = htmlString.replace(/<!--\s*pagebreak\s*-->/gi, '<div style="page-break-after: always;"></div>');
+
+  return replacedString;
+}
 // Private function helpers ===============================================
 
 function extractStringLiteralsDoubleBracketsToList(htmlString) {

@@ -23,6 +23,7 @@ import { generateOptions } from "./pdfOption";
 import { ExportHelper } from "@workspace/common";
 import { GeneralModal } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common"; // Use this hook to get module data
+import Test from "./Test";
 
 const TemplateBuilderPage = () => {
   const dispatch = useDispatch();
@@ -255,6 +256,16 @@ const TemplateBuilderPage = () => {
                     >
                       Download as Docx
                     </Button>
+                    <Button
+                      className="w-25 mx-2 btn-custom-primary"
+                      onClick={() => {
+                        setExportType("pdfMultiPage");
+                        setSelectNameModalOpen(true);
+                      }}
+                      disabled={!templateData?.content}
+                    >
+                      Download as PDF MultiPage
+                    </Button>
                   </Row>
                 </CardBody>
                 <CardFooter>
@@ -307,6 +318,14 @@ const TemplateBuilderPage = () => {
                   await ExportHelper.generateDocxCustom(newContent, {
                     filename: templateName,
                   });
+                }
+                if (exportType === "pdfMultiPage") {
+                  ExportHelper.generatePDFCustomMulti(
+                    newContent,
+                    generateOptions({
+                      filename: templateName,
+                    })
+                  );
                 }
                 setTemplateName("");
                 setSelectNameModalOpen(false);

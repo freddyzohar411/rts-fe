@@ -367,11 +367,12 @@ const EditorElement2 = ({
             "table",
             "emoticons",
             "codesample",
+            "pagebreak",
           ],
           toolbar:
             "undo redo | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsizeinput | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
-            "bullist numlist outdent indent | hr |" +
+            "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
             "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPDFButton exportDocxButton |  help",
           content_style:
