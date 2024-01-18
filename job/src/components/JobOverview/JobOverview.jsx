@@ -31,12 +31,14 @@ import { TimelineStepper } from "../TimelineStepper";
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
 import SubmitToSales from "../SubmitToSales/SubmitToSales";
+import SubmitToClient from "../SubmitToClient/SubmitToClient";
 import ProfileFeedbackPending from "../ProfileFeedbackPending/ProfileFeedbackPending";
 import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import StepComponent from "./StepComponent";
 import { TimelineHeader } from "../TimelineHeader";
+import { CVPreview } from "../CVPreview";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
@@ -46,9 +48,19 @@ function JobOverview() {
   const [stepperState, setStepperState] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
+  const [isPreviewCV, setIsPreviewCV] = useState(false);
+
+  const handlePreviewCVClick = () => {
+    setIsPreviewCV(true);
+  };
+
+  const handleExitPreview = () => {
+    setIsPreviewCV(false);
+  };
 
   const steps = [0, 1, 2, 3, 4, 5, 6, 7];
 
+  // Retrieve Job Information (Start)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
@@ -65,11 +77,8 @@ function JobOverview() {
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
-
-  console.log(formSubmissionData);
   const [formTemplate, setFormTemplate] = useState(null);
 
-  // Fetch all the countries and account names
   useEffect(() => {
     dispatch(fetchJobForm(JOB_FORM_NAME));
   }, []);
@@ -98,6 +107,7 @@ function JobOverview() {
   const toggleFormViewState = () => {
     setView(!view);
   };
+  // Retrieve Job Information (End)
 
   useEffect(() => {
     // Set the stepper state based on the active step
@@ -109,7 +119,7 @@ function JobOverview() {
         setStepperState("Submit to Sales");
         break;
       case 3:
-        setStepperState("Submit to Sales");
+        setStepperState("Submit to Client");
         break;
       case 4:
         setStepperState("Profile Feedback Pending");
@@ -133,9 +143,23 @@ function JobOverview() {
       case 1:
         return <AssociateCandidate closeOffcanvas={closeOffcanvas} />;
       case 2:
-        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
+        return isPreviewCV ? (
+          <CVPreview onExitPreview={handleExitPreview} />
+        ) : (
+          <SubmitToSales
+            closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
+          />
+        );
       case 3:
-        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
+        return isPreviewCV ? (
+          <CVPreview onExitPreview={handleExitPreview} />
+        ) : (
+          <SubmitToClient
+            closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
+          />
+        );
       case 4:
         return <ProfileFeedbackPending closeOffcanvas={closeOffcanvas} />;
       case 5:
@@ -148,6 +172,12 @@ function JobOverview() {
         return null;
     }
   };
+
+  useEffect(() => {
+    if (offcanvasForm === false) {
+      setIsPreviewCV(false);
+    }
+  });
 
   const jobHeaders = [
     "Submitted to Sales",
@@ -182,6 +212,8 @@ function JobOverview() {
     { 6: "Conditional Offer" },
     { 7: "Conditional Offer Status" },
   ];
+
+  console.log("active step", activeStep);
 
   return (
     <React.Fragment>
@@ -222,6 +254,7 @@ function JobOverview() {
             </div>
           </Col>
         </Row>
+
         <Row>
           <Nav tabs>
             <NavItem>
@@ -255,6 +288,7 @@ function JobOverview() {
             </NavItem>
           </Nav>
         </Row>
+
         <Row>
           <TabContent activeTab={timelineTab} className="p-0">
             <TabPane tabId="1">
@@ -324,65 +358,64 @@ function JobOverview() {
                 </Table>
               </div>
             </TabPane>
-            <TabPane tabId="2"></TabPane>
+            <TabPane tabId="2">
+              <div className="p-4">
+                <span>BSG Status</span>
+              </div>
+            </TabPane>
           </TabContent>
         </Row>
+
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
           style={{ width: "75vw" }}
         >
-          <div className="offcanvas-header border-bottom border-bottom-dashed">
-            <div className="d-flex flex-row gap-4 align-items-center offcanvas-title">
+          {/* Offcanvas Header */}
+          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row justify-content-between align-items-end">
+            {/* Circular Icon and Job Information */}
+            <div className="d-flex flex-row gap-4">
+              {/* Circular Icon */}
               <div className="avatar-md flex-shrink-0">
                 <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
                   {formSubmissionData?.accountName.charAt(0)}
                 </div>
               </div>
-              <Row className="d-flex flex-row justify-content-between align-items-end gap-5">
-                <Col>
-                  <Row>
-                    <span className="h4 fw-bold">
-                      {formSubmissionData?.accountName}
-                    </span>
-                  </Row>
-                  <Row>
-                    <div className="d-flex flex-row gap-4">
-                      <span className="h6 fw-semibold text-nowrap">
-                        Job ID - {formSubmissionData?.clientJobId}
-                      </span>
-                      <span className="h6 fw-semibold text-nowrap">
-                        Job Title - {formSubmissionData?.jobTitle}
-                      </span>
-                    </div>
-                  </Row>
-                  <Row>
-                    <span className="h6 text-muted fw-bold">
-                      {stepperState}
-                    </span>
-                  </Row>
-                </Col>
-                {activeStep === 6 ||
-                  activeStep === 2 ||
-                  (activeStep === 3 && (
-                    <Col>
-                      <div>
-                        <Input
-                          type="select"
-                          className="form-select form-select-md"
-                        >
-                          <option value="">
-                            Selected Conditional Offer Template
-                          </option>
-                          <option value="">Template 1</option>
-                          <option value="">Template 2</option>
-                        </Input>
-                      </div>
-                    </Col>
-                  ))}
-              </Row>
+              {/* Job Information */}
+              <div>
+                <div>
+                  <span className="h4 fw-bold">
+                    {formSubmissionData?.accountName}
+                  </span>
+                </div>
+                <div className="d-flex flex-row gap-4">
+                  <span className="h6 fw-semibold text-nowrap">
+                    Job ID - {formSubmissionData?.clientJobId}
+                  </span>
+                  <span className="h6 fw-semibold text-nowrap">
+                    Job Title - {formSubmissionData?.jobTitle}
+                  </span>
+                </div>
+                <div>
+                  <span className="h6 text-muted fw-bold">{stepperState}</span>
+                </div>
+              </div>
             </div>
+            {/* Template Selector */}
+            {(activeStep === 6) | isPreviewCV && (
+              <div>
+                <Input
+                  type="select"
+                  className="form-select form-select-md"
+                  style={{ width: "250px" }}
+                >
+                  <option value="">Select Template</option>
+                  <option value="">Template 1</option>
+                  <option value="">Template 2</option>
+                </Input>
+              </div>
+            )}
           </div>
           <OffcanvasBody>
             {getFormComponent(activeStep, () =>
@@ -390,6 +423,7 @@ function JobOverview() {
             )}
           </OffcanvasBody>
         </Offcanvas>
+
         <Tooltip
           target="next-step"
           isOpen={tooltipOpen}
