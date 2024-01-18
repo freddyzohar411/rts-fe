@@ -25,6 +25,7 @@ import {
   JobManage,
   JobCreate,
   FOD,
+  PreOfferVerification,
 } from "@workspace/job";
 
 // Settings
@@ -120,6 +121,8 @@ const authProtectedRoutes = [
   },
 
   { path: "/jobs/fod", component: <FOD /> },
+
+  { path: "/jobs/pre-offer-verification", component: <PreOfferVerification /> },
 
   // Settings
   { path: "/settings/general", component: <MainSettings /> },

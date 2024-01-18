@@ -60,7 +60,6 @@ function StepComponent({ step, timelineState, index }) {
                     className="ri-add-fill text-dark fw-bold cursor-pointer"
                     onClick={() => {
                       setToggleInterview(!toggleInterview);
-                      console.log("clicked", toggleInterview);
                     }}
                   ></i>
                 </span>
@@ -95,7 +94,7 @@ function StepComponent({ step, timelineState, index }) {
           toggle={() => setToggleInterview(!toggleInterview)}
         >
           <PopoverBody>
-            <InterviewPopUp />
+            <InterviewPopUp currentStep={0} />
           </PopoverBody>
         </Popover>
       )}

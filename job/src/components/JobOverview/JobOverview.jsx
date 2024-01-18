@@ -26,8 +26,6 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 import { useUserAuth } from "@workspace/login";
 
-// Stepper
-import { TimelineStepper } from "../TimelineStepper";
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
 import SubmitToSales from "../SubmitToSales/SubmitToSales";
@@ -173,11 +171,12 @@ function JobOverview() {
     }
   };
 
+  // Close Preview CV when OffCanvas is Closed
   useEffect(() => {
     if (offcanvasForm === false) {
       setIsPreviewCV(false);
     }
-  });
+  }, [offcanvasForm]);
 
   const jobHeaders = [
     "Submitted to Sales",
@@ -212,8 +211,6 @@ function JobOverview() {
     { 6: "Conditional Offer" },
     { 7: "Conditional Offer Status" },
   ];
-
-  console.log("active step", activeStep);
 
   return (
     <React.Fragment>
