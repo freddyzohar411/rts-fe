@@ -82,7 +82,6 @@ function SubmitToSales({ closeOffcanvas }) {
                     className="btn btn-custom-primary"
                     onClick={() => {
                       setSendEmailModal(true);
-                      console.log("CLicked!", sendEmailModal);
                     }}
                   >
                     Send Email
@@ -105,7 +104,10 @@ function SubmitToSales({ closeOffcanvas }) {
                   </Tooltip>
                   <EmailComponent
                     isOpen={sendEmailModal}
-                    toggle={() => {setSendEmailModal(!sendEmailModal); closeOffcanvas}}
+                    toggle={() => {
+                      setSendEmailModal(!sendEmailModal);
+                      closeOffcanvas;
+                    }}
                   />
                 </div>
               </div>
