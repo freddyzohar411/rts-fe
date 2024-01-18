@@ -16,8 +16,6 @@ function InterviewStepComponent({ header, currentStep, index }) {
         setEndProgressBarValue(0);
       }
   }, [currentStep, index]);
-  console.log("Current Step:", currentStep)
-  console.log("Index:", index)
 
   return (
     <React.Fragment>
