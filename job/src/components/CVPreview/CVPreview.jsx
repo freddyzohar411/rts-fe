@@ -1,7 +1,14 @@
-import React from "react";
-import { Row, Col, Button } from "reactstrap";
+import React, { useState} from "react";
+import { Row, Col, Button, Container } from "reactstrap";
+import { TemplateDisplayV3, UseTemplateModuleDataHook } from "@workspace/common";
+import { TemplateHelper } from "@workspace/common";
 
-function CVPreview({ onExitPreview }) {
+function CVPreview({ onExitPreview, templateData, candidateId }) {
+  // const [templateData, setTemplateData] = useState(null);
+  const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
+    candidateId: candidateId,
+  });
+
   const handleExitPreview = () => {
     onExitPreview();
   };
@@ -10,7 +17,17 @@ function CVPreview({ onExitPreview }) {
       <div>
         <Row>
           <Col>
-            <span className="display-6">CV Preview</span>
+            <Container
+              className="p-3 mt-3 border border-1 border-dark"
+              style={{ height: "100%", minWidth: "80%" }}
+            >
+              <TemplateDisplayV3
+                content={templateData?.content ?? null}
+                allData={allModuleData}
+                isView={true}
+                initialValues
+              />
+            </Container>
           </Col>
         </Row>
         <Row>

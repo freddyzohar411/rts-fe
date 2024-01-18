@@ -155,7 +155,11 @@ function JobOverview() {
         return <AssociateCandidate closeOffcanvas={closeOffcanvas} />;
       case 2:
         return isPreviewCV ? (
-          <CVPreview onExitPreview={handleExitPreview} />
+          <CVPreview
+            onExitPreview={handleExitPreview}
+            templateData={templateData}
+            candidateId={selectCandidateId}
+          />
         ) : (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
@@ -166,7 +170,11 @@ function JobOverview() {
         );
       case 3:
         return isPreviewCV ? (
-          <CVPreview onExitPreview={handleExitPreview} />
+          <CVPreview
+            onExitPreview={handleExitPreview}
+            templateData={templateData}
+            candidateId={selectCandidateId}
+          />
         ) : (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
@@ -198,10 +206,10 @@ function JobOverview() {
     // Set Category for Template
     switch (activeStep) {
       case 2:
-        setSelectedCategory("Email Templates");
+        setSelectedCategory("CV");
         break;
       case 3:
-        setSelectedCategory("Email Templates");
+        setSelectedCategory("CV");
         break;
       case 6:
         setSelectedCategory("Conditional Offer");
