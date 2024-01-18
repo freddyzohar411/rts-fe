@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { PREOFFER_VERIFICATION } from "./constants";
 import { fetchJobForm } from "../../store/actions";
 import { Form } from "@workspace/common";
@@ -13,6 +13,7 @@ import {
   BreadcrumbItem,
   Card,
   CardBody,
+  Container,
 } from "reactstrap";
 
 function PreOfferVerification() {
@@ -45,41 +46,50 @@ function PreOfferVerification() {
       setFormTemplate(JSON.parse(JSON.stringify(form)));
     }
   }, [form]);
+
   return (
     <React.Fragment>
       <div className="page-content">
-        <Row>
-          <Breadcrumb>
-            <BreadcrumbItem>Dashboard</BreadcrumbItem>
-            <BreadcrumbItem>Pre-Offer Verification</BreadcrumbItem>
-          </Breadcrumb>
-        </Row>
-        <Row>
-          <Col>
-            <Card>
-              <CardBody>
-                <Row>
-                  <Form
-                    template={formTemplate}
-                    userDetails={getAllUserGroups()}
-                    country={null}
-                    editData={null}
-                    onSubmit={null}
-                    onFormFieldsChange={null}
-                    errorMessage={null}
-                    view={view}
-                    ref={formikRef}
-                  />
-                </Row>
-                <Row className="d-flex justify-content-end">
-                  <Button className="btn btn-danger" type="button">
-                    Cancel
-                  </Button>
-                </Row>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
+        <Container fluid>
+          <Row className="mb-3">
+            <Breadcrumb>
+              <BreadcrumbItem>
+                <Link to="/dashboard">Dashboard </Link>
+              </BreadcrumbItem>
+              <BreadcrumbItem active>Pre-Offer Verification</BreadcrumbItem>
+            </Breadcrumb>
+          </Row>
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row className="my-3">
+                    <Form
+                      template={formTemplate}
+                      userDetails={getAllUserGroups()}
+                      country={null}
+                      editData={null}
+                      onSubmit={null}
+                      onFormFieldsChange={null}
+                      errorMessage={null}
+                      view={view}
+                      ref={formikRef}
+                    />
+                  </Row>
+                  <Row>
+                    <Col>
+                      <div className="d-flex align-items-center justify-content-end pe-2">
+                        <Button className="btn btn-danger" type="button">
+                          Cancel
+                        </Button>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </div>
     </React.Fragment>
   );

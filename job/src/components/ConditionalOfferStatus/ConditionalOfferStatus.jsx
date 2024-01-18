@@ -67,7 +67,7 @@ function ConditionalOfferStatus() {
                   placeholder="30 Min"
                   className="form-control w-25"
                 />
-                <Link to="">
+                <Link to="/jobs/pre-offer-verification">
                   <Button className="btn btn-custom-primary">
                     Preview Pre-Offer Verification
                   </Button>
