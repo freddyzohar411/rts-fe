@@ -170,10 +170,10 @@ function JobOverview() {
         setStepperState("Associate");
         break;
       case 2:
-        setStepperState("Submitted to Sales");
+        setStepperState("Submit to Sales");
         break;
       case 3:
-        setStepperState("Submitted to Sales");
+        setStepperState("Submit to Client");
         break;
       case 4:
         setStepperState("Profile Feedback Pending");
@@ -220,6 +220,8 @@ function JobOverview() {
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
             onPreviewCVClick={handlePreviewCVClick}
+            jobId={jobId}
+            candidateId={candidateId}
           />
         );
       case 4:
@@ -379,14 +381,11 @@ function JobOverview() {
                             <td key={index} className="px-0">
                               <StepComponent
                                 timelineState={
-                                  data?.timeline[step]
-                                    ? index
-                                    : index > 0
-                                    ? index - 1
-                                    : 0
+                                  data?.timeline[step] ? index : index - 1
                                 }
                                 index={index}
-                                date={data?.timeline[step]}
+                                date={data?.timeline?.[step]?.date}
+                                status={data?.timeline?.[step]?.status}
                               />
                             </td>
                           ))}
