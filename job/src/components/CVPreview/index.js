@@ -1,1 +1,1 @@
-export { default as CVPReview } from "./CVPreview";
+export { default as CVPreview } from "./CVPreview";

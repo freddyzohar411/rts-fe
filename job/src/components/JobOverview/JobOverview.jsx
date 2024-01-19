@@ -15,6 +15,7 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
+  Tooltip,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -31,12 +32,14 @@ import { JOB_FORM_NAME } from "../JobCreation/constants";
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
 import SubmitToSales from "../SubmitToSales/SubmitToSales";
+import SubmitToClient from "../SubmitToClient/SubmitToClient";
 import ProfileFeedbackPending from "../ProfileFeedbackPending/ProfileFeedbackPending";
 import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import StepComponent from "./StepComponent";
 import { TimelineHeader } from "../TimelineHeader";
+import { CVPreview } from "../CVPreview";
 import {
   JOB_TIMELINE_INITIAL_OPTIONS,
   jobHeaders,
@@ -62,6 +65,7 @@ function JobOverview() {
   const [activeStep, setActiveStep] = useState(1);
   const [formTemplate, setFormTemplate] = useState(null);
   const [candidateId, setCandidateId] = useState();
+  const [isPreviewCV, setIsPreviewCV] = useState(false);
 
   const form = useSelector((state) => state.JobFormReducer.form);
   const formSubmissionData = useSelector(
@@ -133,7 +137,6 @@ function JobOverview() {
     }
   }, [jobTimelineData]);
 
-  // Fetch all the countries and account names
   useEffect(() => {
     dispatch(fetchJobForm(JOB_FORM_NAME));
     dispatch(fetchJobtimeineCount({ jobId }));
@@ -151,6 +154,14 @@ function JobOverview() {
       dispatch(fetchJobFormSubmission(jobId));
     }
   }, [jobId]);
+
+  const handlePreviewCVClick = () => {
+    setIsPreviewCV(true);
+  };
+
+  const handleExitPreview = () => {
+    setIsPreviewCV(false);
+  };
 
   useEffect(() => {
     // Set the stepper state based on the active step
@@ -192,15 +203,25 @@ function JobOverview() {
           />
         );
       case 2:
-        return (
+        return isPreviewCV ? (
+          <CVPreview onExitPreview={handleExitPreview} />
+        ) : (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
             jobId={jobId}
             candidateId={candidateId}
           />
         );
       case 3:
-        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
+        return isPreviewCV ? (
+          <CVPreview onExitPreview={handleExitPreview} />
+        ) : (
+          <SubmitToClient
+            closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
+          />
+        );
       case 4:
         return <ProfileFeedbackPending closeOffcanvas={closeOffcanvas} />;
       case 5:
@@ -213,6 +234,13 @@ function JobOverview() {
         return null;
     }
   };
+
+  // Close Preview CV when OffCanvas is Closed
+  useEffect(() => {
+    if (offcanvasForm === false) {
+      setIsPreviewCV(false);
+    }
+  }, [offcanvasForm]);
 
   const handleSort = (index) => {
     if (index === 0 || index === 1) {
@@ -272,6 +300,7 @@ function JobOverview() {
             </div>
           </Col>
         </Row>
+
         <Row>
           <Nav tabs>
             <NavItem>
@@ -305,6 +334,7 @@ function JobOverview() {
             </NavItem>
           </Nav>
         </Row>
+
         <Row>
           <TabContent activeTab={timelineTab} className="p-0">
             <TabPane tabId="1">
@@ -392,7 +422,11 @@ function JobOverview() {
                 </Table>
               </div>
             </TabPane>
-            <TabPane tabId="2"></TabPane>
+            <TabPane tabId="2">
+              <div className="p-4">
+                <span>BSG Status</span>
+              </div>
+            </TabPane>
           </TabContent>
           {/* Table Pagination */}
           <div className="d-flex flex-row justify-content-end my-3">
@@ -442,14 +476,18 @@ function JobOverview() {
             </Pagination>
           </div>
         </Row>
+
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
           style={{ width: "75vw" }}
         >
-          <div className="offcanvas-header border-bottom border-bottom-dashed">
-            <div className="d-flex flex-row gap-4 align-items-center offcanvas-title">
+          {/* Offcanvas Header */}
+          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row justify-content-between align-items-end">
+            {/* Circular Icon and Job Information */}
+            <div className="d-flex flex-row gap-4">
+              {/* Circular Icon */}
               <div className="avatar-md flex-shrink-0">
                 <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
                   {formSubmissionData?.accountName.charAt(0)}
@@ -496,6 +534,20 @@ function JobOverview() {
                 )}
               </Row>
             </div>
+            {/* Template Selector */}
+            {(activeStep === 6) | isPreviewCV && (
+              <div>
+                <Input
+                  type="select"
+                  className="form-select form-select-md"
+                  style={{ width: "250px" }}
+                >
+                  <option value="">Select Template</option>
+                  <option value="">Template 1</option>
+                  <option value="">Template 2</option>
+                </Input>
+              </div>
+            )}
           </div>
           <OffcanvasBody>
             {getFormComponent(activeStep, () =>

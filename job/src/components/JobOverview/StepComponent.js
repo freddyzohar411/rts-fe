@@ -96,7 +96,7 @@ function StepComponent({ step, timelineState, index, date }) {
           toggle={() => setToggleInterview(!toggleInterview)}
         >
           <PopoverBody>
-            <InterviewPopUp />
+            <InterviewPopUp currentStep={0} />
           </PopoverBody>
         </Popover>
       )}

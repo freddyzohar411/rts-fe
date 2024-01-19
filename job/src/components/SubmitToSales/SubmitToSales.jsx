@@ -12,7 +12,12 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-function SubmitToSales({ closeOffcanvas, jobId, candidateId }) {
+function SubmitToSales({
+  closeOffcanvas,
+  onPreviewCVClick,
+  jobId,
+  candidateId,
+}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -94,7 +99,11 @@ function SubmitToSales({ closeOffcanvas, jobId, candidateId }) {
             <div className="d-flex flex-row justify-content-end gap-4 m-2">
               <div className="d-flex flex-column flex-nowrap">
                 <div className="d-flex flex-row gap-2 flex-nowrap">
-                  <Button type="button" className="btn btn-custom-primary">
+                  <Button
+                    type="button"
+                    className="btn btn-custom-primary"
+                    onClick={onPreviewCVClick}
+                  >
                     Preview CV
                   </Button>
                   <Button
