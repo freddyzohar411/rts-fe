@@ -77,7 +77,7 @@ function TimelineStepper({ step, setStep }) {
               </div>
             </div>
           </NavItem>
-          {/* Submit to Sales */}
+          {/* Submitted to Sales */}
           <NavItem>
             <div className="d-flex flex-column gap-2 align-items-center justify-content-center">
               <NavLink

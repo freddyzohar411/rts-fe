@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Progress, Popover, PopoverBody } from "reactstrap";
+import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
 
-function StepComponent({ step, timelineState, index }) {
+function StepComponent({ step, timelineState, index, date }) {
   const [startProgressBarValue, setStartProgressBarValue] = useState(0);
   const [endProgressBarValue, setEndProgressBarValue] = useState(0);
   const [toggleInterview, setToggleInterview] = useState(false);
@@ -31,16 +32,16 @@ function StepComponent({ step, timelineState, index }) {
               <Progress
                 animated={false}
                 value={startProgressBarValue}
-                style={{ height: "1px", width: "100%" }}
+                style={{ height: "4px", width: "100%" }}
                 color="custom-button"
                 className="no-transition"
               />
             ) : (
-              <div style={{ height: "1px", width: "100%" }}></div>
+              <div style={{ height: "4px", width: "100%" }}></div>
             )}
             <div
-              className={`rounded-pill border border-primary ${
-                timelineState === index && "bg-warning border-light"
+              className={`rounded-pill border border-primary bg-grey ${
+                timelineState === index && "bg-black border-light"
               } ${timelineState > index && "bg-primary border-light"}`}
               color="custom-button"
               style={{
@@ -77,10 +78,11 @@ function StepComponent({ step, timelineState, index }) {
               <div style={{ height: "1px", width: "100%" }}></div>
             )}
           </div>
-          <div className="d-flex flex-column align-items-center justify-content-center">
-            <span>19/11/2023</span>
-            <span>- (4)</span>
-          </div>
+          {date && (
+            <div className="d-flex flex-column align-items-center justify-content-center">
+              <Moment format="DD/MM/YYYY">{date}</Moment>
+            </div>
+          )}
         </div>
       </div>
       {/* Interview Schedule Pop Up */}

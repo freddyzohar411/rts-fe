@@ -183,7 +183,7 @@ const TableElement = ({
               return (
                 <tr key={rowIndex}>
                   {tableConfig.map((item, index) => (
-                    <td key={index}>{row.data[item.name]}</td>
+                    <td key={index}>{row?.data?.[item?.name]}</td>
                   ))}
                   {tableSetting.tableEdit === "true" ||
                     (tableSetting.tableEdit === true &&
