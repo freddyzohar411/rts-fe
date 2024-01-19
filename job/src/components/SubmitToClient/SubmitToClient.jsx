@@ -2,14 +2,13 @@ import { Form } from "@workspace/common";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SUBMIT_TO_SALES } from "./constants";
+import { SUBMIT_TO_CLIENT } from "./constants";
 import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Input, Button, Tooltip } from "reactstrap";
-import CVPreview from "./CVPreview";
-import STSEmail from "./STSEmail";
+import { EmailComponent } from "../EmailComponent";
 
-function SubmitToClient() {
+function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,7 +31,7 @@ function SubmitToClient() {
   const [formTemplate, setFormTemplate] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchJobForm(SUBMIT_TO_SALES));
+    dispatch(fetchJobForm(SUBMIT_TO_CLIENT));
   }, []);
 
   useEffect(() => {
@@ -40,6 +39,8 @@ function SubmitToClient() {
       setFormTemplate(JSON.parse(JSON.stringify(form)));
     }
   }, [form]);
+
+  const [sendEmailModal, setSendEmailModal] = useState(false);
 
   return (
     <React.Fragment>
@@ -72,16 +73,27 @@ function SubmitToClient() {
                     className="form-control"
                     style={{ width: "200px" }}
                   />
-                  <Button type="button" className="btn btn-custom-primary">
+                  <Button
+                    type="button"
+                    className="btn btn-custom-primary"
+                    onClick={onPreviewCVClick}
+                  >
                     Preview CV
                   </Button>
-                  <Button type="button" className="btn btn-custom-primary">
+                  <Button
+                    type="button"
+                    className="btn btn-custom-primary"
+                    onClick={() => {
+                      setSendEmailModal(true);
+                    }}
+                  >
                     Send Email
                   </Button>
                   <Button
                     type="button"
                     className="btn btn-custom-primary"
                     id="update-btn"
+                    onClick={closeOffcanvas}
                   >
                     Update
                   </Button>
@@ -93,6 +105,13 @@ function SubmitToClient() {
                   >
                     <span>Update without Email</span>
                   </Tooltip>
+                  <EmailComponent
+                    isOpen={sendEmailModal}
+                    toggle={() => {
+                      setSendEmailModal(!sendEmailModal);
+                      closeOffcanvas;
+                    }}
+                  />
                 </div>
               </div>
             </div>
