@@ -22,6 +22,7 @@ import {
   clearJobFormSubmission,
   fetchJobTimelineList,
   fetchJobtimeineCount,
+  tagReset,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
@@ -69,6 +70,7 @@ function JobOverview() {
   const jobTimelineData = useSelector(
     (state) => state.JobStageReducer.jobTimeline
   );
+  const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
 
   // Custom renders
   const customRenderList = [
@@ -105,6 +107,17 @@ function JobOverview() {
     JOB_TIMELINE_INITIAL_OPTIONS,
     customRenderList
   );
+
+  useEffect(() => {
+    if (jobTagMeta?.isSuccess) {
+      setOffcanvasForm(!offcanvasForm);
+      dispatch(
+        fetchJobTimelineList(DynamicTableHelper.cleanPageRequest(pageRequest))
+      );
+      dispatch(fetchJobtimeineCount({ jobId }));
+      dispatch(tagReset());
+    }
+  }, [jobTagMeta]);
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {

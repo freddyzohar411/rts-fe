@@ -29,8 +29,14 @@ function* workTagJob(action) {
     // Tag a job
     const response = yield call(tagJob, payload);
     yield put(tagJobSuccess(response.data));
-    toast.success(response?.message);
-    navigate(`/jobs/${payload?.jobId}/overview`);
+    if (payload?.jobType) {
+      if (payload?.jobType === "associate_candidate") {
+        toast.success("Job has been associated successfully.");
+      }
+    } else {
+      toast.success(response?.message);
+      navigate(`/jobs/${payload?.jobId}/overview`);
+    }
   } catch (error) {
     toast.error(error?.message);
     yield put(tagJobFailure(error));
