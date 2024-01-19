@@ -60,7 +60,7 @@ const TimelineTableRow = ({ candidateName, recruiterName, step, setStep }) => {
               </NavItem>
             </td>
             <td>
-              {/* Submit to Sales */}
+              {/* Submitted to Sales */}
               <NavItem>
                 <NavLink
                   onClick={() => setStep && setStep(index)}

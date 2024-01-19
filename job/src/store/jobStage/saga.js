@@ -32,6 +32,8 @@ function* workTagJob(action) {
     if (payload?.jobType) {
       if (payload?.jobType === "associate_candidate") {
         toast.success("Job has been associated successfully.");
+      } else if (payload?.jobType === "submit_to_sales") {
+        toast.success("Job has been submitted to sales.");
       }
     } else {
       toast.success(response?.message);

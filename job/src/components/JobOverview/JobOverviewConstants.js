@@ -33,8 +33,8 @@ export const rtsStatusHeaders = [
   "Recruiter",
   "Tag",
   "Associate",
-  "Submit to Sales",
-  "Submit to Client",
+  "Submitted to Sales",
+  "Submitted to Client",
   "Profile Feedback Pending",
   "Interviews",
   "Conditional Offer Sent",
@@ -43,8 +43,8 @@ export const rtsStatusHeaders = [
 
 export const timelineSkip = [
   { 1: "Associate" },
-  { 2: "Submit to Sales" },
-  { 3: "Submit to Client" },
+  { 2: "Submitted to Sales" },
+  { 3: "Submitted to Client" },
   { 4: "Profile Feedback Pending" },
   { 5: "Interview" },
   { 6: "Conditional Offer" },

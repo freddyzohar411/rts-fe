@@ -159,10 +159,10 @@ function JobOverview() {
         setStepperState("Associate");
         break;
       case 2:
-        setStepperState("Submit to Sales");
+        setStepperState("Submitted to Sales");
         break;
       case 3:
-        setStepperState("Submit to Sales");
+        setStepperState("Submitted to Sales");
         break;
       case 4:
         setStepperState("Profile Feedback Pending");
@@ -192,7 +192,13 @@ function JobOverview() {
           />
         );
       case 2:
-        return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
+        return (
+          <SubmitToSales
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+          />
+        );
       case 3:
         return <SubmitToSales closeOffcanvas={closeOffcanvas} />;
       case 4:
@@ -323,10 +329,7 @@ function JobOverview() {
                             }}
                             onClick={() => handleSort(index)}
                           >
-                            {header}{" "}
-                            {isLabels && (
-                              <i className="mdi mdi-sort-descending"></i>
-                            )}
+                            {header}
                           </th>
                         );
                       })}
