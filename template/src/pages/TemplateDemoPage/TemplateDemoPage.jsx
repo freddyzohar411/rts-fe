@@ -23,7 +23,7 @@ import { generateOptions } from "./pdfOption";
 import { ExportHelper } from "@workspace/common";
 import { GeneralModal } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common"; // Use this hook to get module data
-import Test from "./Test";
+import Test2 from "./Test2";
 
 const TemplateBuilderPage = () => {
   const dispatch = useDispatch();
@@ -336,6 +336,7 @@ const TemplateBuilderPage = () => {
           </div>
         </GeneralModal>
       </div>
+
     </React.Fragment>
   );
 };
