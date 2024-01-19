@@ -1,49 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Progress } from "reactstrap";
-import StepComponent from "../JobOverview/StepComponent";
+import React from "react";
+import InterviewStepComponent from "./InterviewStepComponent";
 
-const InterviewPopUp = ({ timelineState, step, setStep }) => {
-  const [activeStep, setActiveStep] = useState(1);
-  const [stepperState, setStepperState] = useState("");
-  useEffect(() => {
-    switch (activeStep) {
-      case 1:
-        setStepperState("First Interview Scheduled");
-        break;
-      case 2:
-        setStepperState("Second Interview Scheduled");
-        break;
-
-      case 3:
-        setStepperState("Third Interview Scheduled");
-        break;
-
-      case 4:
-        setStepperState("Interview Completed");
-        break;
-      default:
-        setStepperState("");
-    }
-  }, [activeStep]);
-
-  const steps = [
+const InterviewPopUp = ({ currentStep }) => {
+  const stepHeaders = [
     "First Interview Scheduled",
     "Second Interview Scheduled",
     "Third Interview Scheduled",
-    "Interview Completed",
+    "Interview Feedback Pending",
   ];
-
+  
   return (
     <React.Fragment>
-      <div className="interview-popover">
-        <div className="d-flex flex-row">
-          {steps.map((step, index) => (
-            <StepComponent
-              key={index}
-              step={step}
-            />
-          ))}
-        </div>
+      <div className="d-flex">
+        {stepHeaders.map((header, index) => (
+          <InterviewStepComponent
+            header={header}
+            index={index}
+            currentStep={currentStep}
+          />
+        ))}
       </div>
     </React.Fragment>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { CONDITIONAL_OFFER_STATUS } from "./constants";
 import { fetchJobForm } from "../../store/actions";
@@ -67,9 +67,11 @@ function ConditionalOfferStatus() {
                   placeholder="30 Min"
                   className="form-control w-25"
                 />
-                <Button className="btn btn-custom-primary">
-                  Preview Pre-Offer Verification
-                </Button>
+                <Link to="/jobs/pre-offer-verification">
+                  <Button className="btn btn-custom-primary">
+                    Preview Pre-Offer Verification
+                  </Button>
+                </Link>
                 <Button className="btn btn-custom-primary">Update</Button>
               </div>
             </div>

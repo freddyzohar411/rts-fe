@@ -6,7 +6,6 @@ import { SUBMIT_TO_CLIENT } from "./constants";
 import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Input, Button, Tooltip } from "reactstrap";
-import { CVPreview } from "../CVPreview";
 import { EmailComponent } from "../EmailComponent";
 
 function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
