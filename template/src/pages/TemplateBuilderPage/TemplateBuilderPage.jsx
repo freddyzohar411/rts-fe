@@ -25,6 +25,7 @@ import { TemplateBuilder } from "../../components";
 import { TemplateDisplayV3 } from "@workspace/common";
 import axios from "axios";
 import { deleteMediaUrls } from "../../helpers/backend_helper";
+import { DeleteCustomModal } from "@workspace/common";
 
 const TemplateBuilderPage = () => {
   const { templateId } = useParams();
@@ -34,6 +35,7 @@ const TemplateBuilderPage = () => {
   const formikRef = useRef(null);
   const [showModalSchema, setShowModalSchema] = useState(false);
   const [editorContent, setEditorContent] = useState("");
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
   const templateEditData = useSelector(
     (state) => state.TemplateReducer.template
@@ -80,9 +82,22 @@ const TemplateBuilderPage = () => {
     }
   }, [templateId]);
 
+  // Confirm Reset Template
+  const confirmResetTemplate = () => {
+    formikRef.current.clearForm();
+    setIsResetModalOpen(false);
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
+        <DeleteCustomModal
+          isOpen={isResetModalOpen}
+          setIsOpen={setIsResetModalOpen}
+          confirmDelete={confirmResetTemplate}
+          header="Reset Template"
+          deleteText={"Are you sure you would like to reset the template?"}
+        />
         <Container fluid>
           <Row>
             <Col>
@@ -139,7 +154,7 @@ const TemplateBuilderPage = () => {
                       <Button
                         type="button"
                         className="btn btn-custom-primary"
-                        onClick={() => formikRef.current.formik.resetForm()}
+                        onClick={() => setIsResetModalOpen(true)}
                       >
                         Reset
                       </Button>

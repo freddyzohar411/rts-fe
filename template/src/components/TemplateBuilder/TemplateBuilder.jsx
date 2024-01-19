@@ -185,6 +185,11 @@ const TemplateBuilder = forwardRef(
       Object.keys(formik.values).forEach((key) => {
         formik.setFieldValue(key, "");
       });
+      setTemplateSelected("");
+      setCategorySelected("");
+      setTypeData("");
+      setSelectedField("");
+      setSelectedSection("");
     };
 
     /**
