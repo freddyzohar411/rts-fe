@@ -16,6 +16,7 @@ import {
   JOB_TIMELINE_COUNT,
   JOB_TIMELINE_COUNT_SUCCESS,
   JOB_TIMELINE_COUNT_FAILURE,
+  TAG_JOB_RESET,
 } from "./actionTypes";
 
 const initialState = {
@@ -47,6 +48,11 @@ const JobStageReducer = (state = initialState, action) => {
       return {
         ...state,
         jobTagMeta: errorMetaData(action.payload),
+      };
+    case TAG_JOB_RESET:
+      return {
+        ...state,
+        jobTagMeta: {},
       };
 
     // tag all job

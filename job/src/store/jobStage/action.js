@@ -11,6 +11,7 @@ import {
   JOB_TIMELINE_COUNT,
   JOB_TIMELINE_COUNT_SUCCESS,
   JOB_TIMELINE_COUNT_FAILURE,
+  TAG_JOB_RESET,
 } from "./actionTypes";
 
 // tag a job
@@ -27,6 +28,10 @@ export const tagJobSuccess = (job) => ({
 export const tagJobFailure = (error) => ({
   type: TAG_JOB_FAILURE,
   payload: error,
+});
+
+export const tagReset = () => ({
+  type: TAG_JOB_RESET,
 });
 
 // tag all job

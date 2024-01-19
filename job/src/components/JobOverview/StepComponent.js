@@ -32,12 +32,12 @@ function StepComponent({ step, timelineState, index, date }) {
               <Progress
                 animated={false}
                 value={startProgressBarValue}
-                style={{ height: "1px", width: "100%" }}
+                style={{ height: "4px", width: "100%" }}
                 color="custom-button"
                 className="no-transition"
               />
             ) : (
-              <div style={{ height: "1px", width: "100%" }}></div>
+              <div style={{ height: "4px", width: "100%" }}></div>
             )}
             <div
               className={`rounded-pill border border-primary bg-grey ${
