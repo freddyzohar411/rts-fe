@@ -30,7 +30,7 @@ function CVPreview({ onExitPreview, templateData, candidateId }) {
             </Container>
           </Col>
         </Row>
-        <Row>
+        <Row className="mt-5">
           <Col>
             <div className="d-flex flex-row gap-2 justify-content-end">
               <Button
