@@ -5,7 +5,7 @@ import React from "react";
 import html2pdf from "html2pdf.js";
 import * as TemplateDisplayHelper from "../Components/TemplateDisplay/templateDisplayHelper";
 
-/**
+/*
  * Helper function to generate PDF from HTML
  * @param {*} content
  * @param {*} options
@@ -42,11 +42,16 @@ export function generatePDFCustom(content, options = {}) {
 
 const generatePDFMulti = async (element, options) => {
   // Wait for images to load
-  const images = element.getElementsByTagName('img');
-  await Promise.all(Array.from(images).map(img => new Promise((resolve, reject) => {
-    img.onload = resolve;
-    img.onerror = reject;
-  })));
+  const images = element.getElementsByTagName("img");
+  await Promise.all(
+    Array.from(images).map(
+      (img) =>
+        new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        })
+    )
+  );
 
   const opt = {
     margin: [0.25, 0.25, 0.25, 0.25],
@@ -137,8 +142,9 @@ export function generateDocxCustom(
     "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
   const footer = "</body></html>";
   // Replace page breaks with divs
-  const htmlContentWithPageBreaks = TemplateDisplayHelper.replacePageBreaks2(htmlContent);
-  console.log("htmlContentWithPageBreaks", htmlContentWithPageBreaks)
+  const htmlContentWithPageBreaks =
+    TemplateDisplayHelper.replacePageBreaks2(htmlContent);
+  console.log("htmlContentWithPageBreaks", htmlContentWithPageBreaks);
   const sourceHTML = header + htmlContentWithPageBreaks + footer;
 
   const buffer = htmlDocx.asBlob(sourceHTML);
@@ -148,3 +154,32 @@ export function generateDocxCustom(
   const filename = options.filename + ".docx";
   FileSaver.saveAs(blob, filename);
 }
+
+/**
+ * Export HTML string to HTML file
+ * @param {*} htmlString
+ * @param {*} fileName
+ */
+export function generateHtml(htmlString, options = { filename: "index.html" }) {
+  const htmlStringWithPageBreak =
+    TemplateDisplayHelper.replacePageBreaks2(htmlString);
+
+  // Create a Blob object with the HTML string
+  const blob = new Blob([htmlStringWithPageBreak], { type: "text/html" });
+
+  // Create a URL for the Blob
+  const url = URL.createObjectURL(blob);
+
+  // Create an anchor element to trigger the download
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = options?.filename + ".html";
+
+  // Trigger a click event to download the file
+  a.click();
+
+  // Clean up by removing the anchor element and revoking the URL
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+

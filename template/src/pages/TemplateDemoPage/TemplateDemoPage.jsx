@@ -23,7 +23,6 @@ import { generateOptions } from "./pdfOption";
 import { ExportHelper } from "@workspace/common";
 import { GeneralModal } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common"; // Use this hook to get module data
-import Test2 from "./Test2";
 
 const TemplateBuilderPage = () => {
   const dispatch = useDispatch();
@@ -236,7 +235,7 @@ const TemplateBuilderPage = () => {
                     </Container>
                   </Row>
                   <Row className="mb-3 mt-3 center d-flex justify-content-center">
-                    <Button
+                    {/* <Button
                       className="w-25 mx-2 btn-custom-primary"
                       onClick={() => {
                         setExportType("pdf");
@@ -245,7 +244,7 @@ const TemplateBuilderPage = () => {
                       disabled={!templateData?.content}
                     >
                       Download as PDF
-                    </Button>
+                    </Button> */}
                     <Button
                       className="w-25 mx-2 btn-custom-primary"
                       onClick={() => {
@@ -264,8 +263,18 @@ const TemplateBuilderPage = () => {
                       }}
                       disabled={!templateData?.content}
                     >
-                      Download as PDF MultiPage
+                      Download as PDF
                     </Button>
+                    {/* <Button
+                      className="w-25 mx-2 btn-custom-primary"
+                      onClick={() => {
+                        setExportType("html");
+                        setSelectNameModalOpen(true);
+                      }}
+                      disabled={!templateData?.content}
+                    >
+                      Download html file
+                    </Button> */}
                   </Row>
                 </CardBody>
                 <CardFooter>
@@ -327,6 +336,11 @@ const TemplateBuilderPage = () => {
                     })
                   );
                 }
+                if (exportType === "html") {
+                  ExportHelper.generateHtml(newContent, {
+                    filename: templateName,
+                  });
+                }
                 setTemplateName("");
                 setSelectNameModalOpen(false);
               }}
@@ -336,7 +350,6 @@ const TemplateBuilderPage = () => {
           </div>
         </GeneralModal>
       </div>
-
     </React.Fragment>
   );
 };
