@@ -12,6 +12,7 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
 module.exports = function override(config, env) {
+
   // Add resolve.fallback configuration
   config.resolve = {
     ...config.resolve,

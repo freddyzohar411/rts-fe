@@ -532,7 +532,7 @@ function JobOverview() {
           style={{ width: "75vw" }}
         >
           <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
-            <div className="avatar-md flex-shrink-0">
+            <div className="avatar-md flex-shrink-0 d-flex gap-3">
               <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
                 {formSubmissionData?.accountName.charAt(0)}
               </div>
@@ -560,7 +560,7 @@ function JobOverview() {
                     </span>
                   </Row>
                 </Col>
-                {(activeStep === 6 || activeStep === 2 || activeStep === 3) && (
+                {/* {(activeStep === 6 || activeStep === 2 || activeStep === 3) && (
                   <Col>
                     <div>
                       <Input
@@ -575,8 +575,9 @@ function JobOverview() {
                       </Input>
                     </div>
                   </Col>
-                )}
+                )} */}
               </Row>
+
             </div>
             {/* Template Selector */}
             {(activeStep === 6) | isPreviewCV && (
