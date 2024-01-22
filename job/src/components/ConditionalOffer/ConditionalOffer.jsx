@@ -15,11 +15,15 @@ import {
 import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
 import { TemplateDisplayV3 } from "@workspace/common";
+import { UseTemplateModuleDataHook } from "@workspace/common";
 
-function ConditionalOffer({ templateData, closeOffcanvas }) {
+function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
   const [activeTab, setActiveTab] = useState("1");
   const [conditionalOfferContent, setConditionalOfferContent] = useState("");
   const [releaseValue, setReleaseValue] = useState("");
+  const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
+    candidateId: candidateId,
+  });
 
   // Handle realease event
   const handleRelease = () => {
@@ -67,7 +71,7 @@ function ConditionalOffer({ templateData, closeOffcanvas }) {
             >
               <TemplateDisplayV3
                 content={templateData?.content ?? null}
-                allData={null}
+                allData={allModuleData}
                 isView={true}
                 handleOutputContent={setConditionalOfferContent}
                 autoResize={true}

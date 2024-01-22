@@ -31,10 +31,6 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
   const [templateData, setTemplateData] = useState(null);
   const {
     allModuleData,
-    setAccountId,
-    setJobId,
-    setCandidateId,
-    setAllIdsHandler,
   } = UseTemplateModuleDataHook.useTemplateModuleData({
     candidateId: candidateId,
   });
