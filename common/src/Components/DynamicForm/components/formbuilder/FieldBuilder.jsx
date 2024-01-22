@@ -477,7 +477,7 @@ const FieldBuilder = ({
           }
         },
       },
-      apply: ["text", "email", "number", "textarea", "password"],
+      apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Pattern Validation Error Message",
@@ -486,7 +486,7 @@ const FieldBuilder = ({
       events: {
         disabled: true,
       },
-      apply: ["text", "email", "number", "textarea", "password"],
+      apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Min Length",
