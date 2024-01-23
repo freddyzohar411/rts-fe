@@ -19,7 +19,6 @@ const MultiInputFormik = ({
   const convertStringToOptions = (string) => {
     if (!string) return [];
     const options = [];
-    console.log("string", string.split(","));
     string.split(",").forEach((element) => {
       options.push({ value: element, label: element });
     });
@@ -57,8 +56,6 @@ const MultiInputFormik = ({
       return formik.values[name];
     }
   };
-
-  console.log("OUT", formik.values[name])
 
   const customStyles = {
     container: (provided) => ({

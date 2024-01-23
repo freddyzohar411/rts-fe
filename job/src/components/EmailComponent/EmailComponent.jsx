@@ -23,6 +23,8 @@ import { UseTemplateModuleDataHook } from "@workspace/common";
 import { TemplateHelper } from "@workspace/common";
 import { MultiInputFormik } from "@workspace/common";
 import { Actions } from "@workspace/common";
+import { toast } from "react-toastify";
+import { ObjectHelper } from "@workspace/common";
 
 function EmailComponent({ isOpen, toggle, candidateId }) {
   const dispatch = useDispatch();
@@ -40,7 +42,6 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
   });
   const emailData = useSelector((state) => state.EmailCommonReducer);
 
-
   /**
    * Handle form submit event (Formik)
    * @param {*} values
@@ -50,8 +51,18 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
     newValues.to = newValues.to.map((item) => item.value);
     newValues.cc = newValues.cc.map((item) => item.value);
     newValues.bcc = newValues.bcc.map((item) => item.value);
-    console.log("values", newValues);
-    dispatch(Actions.sendEmail(newValues));
+    const newFormData =
+      ObjectHelper.convertObjectToFormDataWithArray(newValues);
+    dispatch(
+      Actions.sendEmail({
+        newFormData,
+        config: {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      })
+    );
   };
 
   /**
@@ -102,20 +113,53 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
     formik.setFieldValue(name, [...formik.values[name], newOption]);
   };
 
+  const supportedMimeTypes = [
+    "image/*",
+    "video/*",
+    "application/pdf",
+    "application/msword",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // for docx
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // for xlsx
+    "application/vnd.ms-powerpoint",
+    "text/*",
+  ];
+
   const handleAttachmentChange = (e) => {
+    console.log("e.target.files", e.target.files);
     const files = e.target.files;
     if (!files) return;
     const fileArray = [];
     for (let i = 0; i < files.length; i++) {
-      // Check for file types and size, if not then toast
-
+      // Inlcude docx too
+      if (!supportedMimeTypes.some((type) => files[i].type === type)) {
+        toast.error(`${files[i].name}: File type not supported`);
+        continue;
+      }
+      if (files[i].size > 10000000) {
+        toast.error(`${files[i].name}: File size should be less than 10 MB`);
+        continue;
+      }
       // If all okay then push
       fileArray.push(files[i]);
     }
-    setAttachments(fileArray);
-  }
+    setAttachments((prev) => [...prev, ...fileArray]);
+    // Reset the input
+    e.target.value = null;
+  };
 
-  console.log("attachments", attachments)
+  const getFileSize = (size) => {
+    if (size < 1000000) {
+      return `${(size / 1000).toFixed(2)} KB`;
+    }
+    return `${(size / 1000000).toFixed(2)} MB`;
+  };
+
+  console.log("attachments", attachments);
+
+  useEffect(() => {
+    formik.setFieldValue("attachments", attachments);
+  }, [attachments]);
 
   return (
     <React.Fragment>
@@ -128,7 +172,7 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
             style={{ position: "fixed", bottom: 0, right: 0, minWidth: "50%" }}
             fullscreen={isFullscreen}
           >
-            <div className="modal-header py-2 d-flex flex-row justify-content-between align-items-center">
+            <div className="modal-header d-flex flex-row justify-content-between align-items-center">
               <span className="modal-title h5">New Message</span>
               <div className="d-flex flex-row gap-2" onClick={toggle}>
                 <button
@@ -155,6 +199,7 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                     e.stopPropagation();
                     formik.resetForm();
                     setTemplateData(null);
+                    setAttachments([]);
                     toggle();
                   }}
                 >
@@ -257,66 +302,112 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
               {/* File attachment */}
 
               <ModalFooter className="p-0 mt-3">
-                <div className="d-flex flex-row gap-3 justify-content-end">
-                  <Button
-                    type="button"
-                    className="btn btn-ghost-danger"
-                    onClick={() => {
-                      formik.resetForm();
-                      setTemplateData(null);
-                      setModal(false);
+                <div className="w-100 d-flex flex-row gap-3 justify-content-between align-items-center">
+                  <div
+                    style={{
+                      height: "65px",
+                      width: isFullscreen ? "30%" : "50%",
+                      overflow: "auto",
+                      msOverflowStyle: "none", // For IE and Edge
+                      scrollbarWidth: "none", // For modern browsers
                     }}
+                    className="pe-3"
                   >
-                    Discard
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn btn-custom-primary"
-                    onClick={() => {
-                      attachmentRef.current.click();
-                    }}
-                  >
-                    <i
-                      style={{ fontSize: "1rem" }}
-                      className="ri-attachment-2"
-                    />
-                  </Button>
-                  <input
-                    type="file"
-                    ref={attachmentRef}
-                    className="d-none"
-                    multiple
-                    onChange={handleAttachmentChange}
-                  />
-                  <UncontrolledDropdown className="btn-group">
+                    <span className="text-muted">
+                      {attachments.length > 0 &&
+                        attachments.map((attachment, i) => {
+                          return (
+                            <div className="d-flex justify-content-between gap-5">
+                              <div className="d-flex gap-2">
+                                <span>
+                                  <strong>{attachment.name}</strong>
+                                </span>
+                                <span>
+                                  <strong>
+                                    ({getFileSize(attachment.size)})
+                                  </strong>
+                                </span>
+                              </div>
+
+                              <span
+                                className="text-danger cursor-pointer"
+                                onClick={() => {
+                                  setAttachments(
+                                    attachments.filter(
+                                      (item, index) => index !== i
+                                    )
+                                  );
+                                }}
+                              >
+                                <i className="ri-close-fill"></i>
+                              </span>
+                            </div>
+                          );
+                        })}
+                    </span>
+                  </div>
+                  <div className="d-flex gap-3">
                     <Button
-                      type="submit"
-                      className="btn btn-success"
+                      type="button"
+                      className="btn btn-ghost-danger"
                       onClick={() => {
-                        formik.handleSubmit();
+                        formik.resetForm();
+                        setTemplateData(null);
+                        setAttachments([]);
                         setModal(false);
                       }}
-                      disabled={emailData?.loading}
                     >
-                      {emailData?.loading ? "Sending..." : "Send"}
+                      Discard
                     </Button>
-                    <DropdownToggle
-                      tag="button"
+                    <Button
                       type="button"
-                      className="btn btn-success"
-                      split
+                      className="btn btn-custom-primary"
+                      onClick={() => {
+                        attachmentRef.current.click();
+                      }}
                     >
-                      <span className="visually-hidden">Toggle Dropdown</span>
-                    </DropdownToggle>
-                    <DropdownMenu className="dropdown-menu-end">
-                      <li>
-                        <DropdownItem href="#">
-                          <i className="ri-timer-line text-muted me-1 align-bottom"></i>{" "}
-                          Schedule Send
-                        </DropdownItem>
-                      </li>
-                    </DropdownMenu>
-                  </UncontrolledDropdown>
+                      <i
+                        style={{ fontSize: "1rem" }}
+                        className="ri-attachment-2"
+                      />
+                    </Button>
+                    <input
+                      type="file"
+                      ref={attachmentRef}
+                      className="d-none"
+                      multiple
+                      onChange={handleAttachmentChange}
+                    />
+                    <UncontrolledDropdown className="btn-group">
+                      <Button
+                        type="submit"
+                        className="btn btn-success"
+                        onClick={() => {
+                          formik.handleSubmit();
+                          setModal(false);
+                        }}
+                        disabled={emailData?.loading}
+                      >
+                        {emailData?.loading ? "Sending..." : "Send"}
+                      </Button>
+                      <DropdownToggle
+                        tag="button"
+                        type="button"
+                        className="btn btn-success"
+                        split
+                      >
+                        <span className="visually-hidden">Toggle Dropdown</span>
+                      </DropdownToggle>
+                      <DropdownMenu className="dropdown-menu-end">
+                        <li>
+                          <DropdownItem href="#">
+                            <i className="ri-timer-line text-muted me-1 align-bottom"></i>{" "}
+                            Schedule Send
+                          </DropdownItem>
+                        </li>
+                      </DropdownMenu>
+                    </UncontrolledDropdown>
+                  </div>
                 </div>
               </ModalFooter>
             </ModalBody>
@@ -351,6 +442,7 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                   onClick={() => {
                     formik.resetForm();
                     setTemplateData(null);
+                    setAttachments([]);
                     setIsMinimized(false);
                     toggle();
                   }}

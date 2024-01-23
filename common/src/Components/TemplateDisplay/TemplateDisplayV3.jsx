@@ -279,9 +279,31 @@ const TemplateDisplayV3 = ({
               "bold italic underline forecolor backcolor | align lineheight |" +
               "bullist numlist outdent indent | hr | pagebreak |" +
               "removeformat | searchreplace |" +
-              "table | code codesample | emoticons charmap | fullscreen | preview | help",
+              "table | code codesample | emoticons charmap | image | fullscreen | preview | help",
             content_style:
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+            image_title: true,
+            automatic_uploads: true,
+            file_picker_types: "image",
+            file_picker_callback: function (cb, value, meta) {
+              var input = document.createElement("input");
+              input.setAttribute("type", "file");
+              input.setAttribute("accept", "image/*");
+
+              input.onchange = function () {
+                var file = this.files[0];
+                var reader = new FileReader();
+
+                reader.onload = function () {
+                  // Instead of using the Blob URL, use the reader's result directly
+                  console.log("reader.result", reader.result)
+                  cb(reader.result, { title: file.name });
+                };
+                reader.readAsDataURL(file);
+              };
+
+              input.click();
+            },
           }}
           onEditorChange={(value) => {
             // setParsedContent(value);

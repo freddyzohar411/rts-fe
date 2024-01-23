@@ -5,8 +5,9 @@ import { sendEmail } from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
 function* workSendEmail(action) {
+  const { newFormData, config} = action.payload;
   try {
-    const response = yield call(sendEmail, action.payload);
+    const response = yield call(sendEmail, newFormData, config);
     yield put(sendEmailSuccess(response.data));
     toast.success("Email sent successfully");
   } catch (error) {

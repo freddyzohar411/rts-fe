@@ -18,6 +18,7 @@ export const initialValues = {
   bcc: [],
   subject: "",
   content: "",
+  attachments: [],
 };
 
 export const generateSchema = () => {
@@ -41,5 +42,5 @@ export const schema = yup.object().shape({
   subject: yup.string().required("Please enter a subject."),
   // content: yup.string().required("Please enter a content."),
   content: yup.string().nullable().notRequired(),
-
+  attachments: yup.array().nullable().notRequired(),
 });

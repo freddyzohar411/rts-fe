@@ -60,5 +60,5 @@ export const getFormsByCategories = (category) =>
 // Common Microservice
 
 // Email
-export const sendEmail = (data) =>
-  api.create(`${configURL.COMMON_URL}/${baseURL.EMAIL}/sendingEmail`, data);
+export const sendEmail = (data, config) =>
+  api.create(`${configURL.COMMON_URL}/${baseURL.EMAIL}/sendingEmail`, data, config);
