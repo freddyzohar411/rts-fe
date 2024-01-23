@@ -1,4 +1,4 @@
-import { DynamicTable } from "./Components";
+// import { DynamicTable } from "./Components";
 
 export * from "./Components";
 

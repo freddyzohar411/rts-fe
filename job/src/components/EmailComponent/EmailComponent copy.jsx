@@ -20,8 +20,8 @@ import { useFormik } from "formik";
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { UseTemplateModuleDataHook } from "@workspace/common";
 import { TemplateHelper } from "@workspace/common";
+import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
-import { MultiInputFormik } from "@workspace/common";
 
 function EmailComponent({ isOpen, toggle, candidateId }) {
   const [modal, setModal] = useState(false);
@@ -40,11 +40,7 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
    * @param {*} values
    */
   const handleFormSubmit = async (values) => {
-    const newValues = { ...values };
-    newValues.to = newValues.to.map((item) => item.value);
-    newValues.cc = newValues.cc.map((item) => item.value);
-    newValues.bcc = newValues.bcc.map((item) => item.value);
-    console.log("values", newValues);
+    console.log("values", values);
     // await onSubmit(values, deletedMediaURL);
   };
 
@@ -88,13 +84,17 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
   }, [templateData, allModuleData]);
 
   const handleChange = (selectedOptions, name) => {
-    formik.setFieldValue(name, selectedOptions);
+    formik.setFieldValue("selectedOptions", selectedOptions);
   };
 
   const handleCreateOption = (inputValue, name) => {
+    console.log("inputValue", inputValue);
     const newOption = { value: inputValue, label: inputValue };
-    formik.setFieldValue(name, [...formik.values[name], newOption]);
+    formik.setFieldValue(name, [...formik.values.selectedOptions, newOption]);
   };
+
+  // Show for formik electedOptions
+  console.log("formik Values", formik?.values?.["selectedOptions"])
 
   return (
     <React.Fragment>
@@ -145,6 +145,17 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
               <div>
                 <div className="d-flex gap-3">
                   <div className="mb-3 input-group text-center d-flex flex-nowrap">
+                    <CreatableSelect
+                      isMulti
+                      name="selectedOptions"
+                      value={formik?.values?.["selectedOptions"]}
+                      onChange={(e) => handleChange(e, "selectedOptions")}
+                      onCreateOption={(e) =>
+                        handleCreateOption(e, "selectedOptions")
+                      }
+                      isClearable={true}
+                      placeholder="Type and press Enter to add values"
+                    />
                     <span
                       className="input-group-text"
                       id="to-input"
@@ -152,13 +163,18 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                     >
                       To
                     </span>
-                    <MultiInputFormik
+                    {/* // Need to change to multiple email input */}
+                    <Input
+                      type="text"
+                      aria-label="To"
+                      aria-describedby="to-input"
+                      className="form-control email-compose-input"
+                      defaultValue="support@themesbrand.com"
                       name="to"
-                      formik={formik}
-                      placeholder="Enter email addresses"
-                      containerWidth="100%"
-                      placeholderAlign="left"
-                      // isString={true}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik?.values?.["to"]}
+                      placeholder="Enter email address"
                     />
                   </div>
                   <TemplateSelectByCategoryElement
@@ -172,9 +188,8 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                     value={templateData}
                   />
                 </div>
-
                 <div>
-                  <div className="input-group mb-3 text-center d-flex flex-nowrap">
+                  <div className="input-group mb-3 text-center">
                     <span
                       className="input-group-text"
                       id="cc-input"
@@ -182,17 +197,21 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                     >
                       Cc
                     </span>
-                    <MultiInputFormik
+                    <Input
+                      type="text"
+                      className="form-control"
+                      placeholder="CC"
+                      aria-label="CC"
+                      aria-describedby="cc-input"
                       name="cc"
-                      formik={formik}
-                      placeholder="Enter cc"
-                      containerWidth="100%"
-                      placeholderAlign="left"
-                    />
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik?.values?.["cc"]}
+                    ></Input>
                   </div>
                 </div>
                 <div>
-                  <div className="input-group mb-3 text-center d-flex flex-nowrap">
+                  <div className="input-group mb-3 text-center">
                     <span
                       className="input-group-text"
                       id="bcc-input"
@@ -200,13 +219,17 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                     >
                       Bcc
                     </span>
-                    <MultiInputFormik
+                    <Input
+                      type="text"
+                      className="form-control"
+                      placeholder="BCC"
+                      aria-label="BCC"
+                      aria-describedby="bcc-input"
                       name="bcc"
-                      formik={formik}
-                      placeholder="Enter Bcc"
-                      containerWidth="100%"
-                      placeholderAlign="left"
-                    />
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik?.values?.["bcc"]}
+                    ></Input>
                   </div>
                 </div>
 

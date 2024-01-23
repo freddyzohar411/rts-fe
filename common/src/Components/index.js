@@ -86,6 +86,7 @@ import TemplateSelectByCategoryElement from "./TemplateDisplay/TemplateSelectByC
 
 // Import Elements
 import SelectElement from "./Elements/SelectElement";
+import MultiInputFormik from "./Elements/MultInputFormik";
 
 export {
   BreadCrumb,
@@ -165,4 +166,5 @@ export {
 
   // Export Elements
   SelectElement,
+  MultiInputFormik
 };

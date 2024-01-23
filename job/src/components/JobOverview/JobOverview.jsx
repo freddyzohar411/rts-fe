@@ -560,27 +560,10 @@ function JobOverview() {
                     </span>
                   </Row>
                 </Col>
-                {/* {(activeStep === 6 || activeStep === 2 || activeStep === 3) && (
-                  <Col>
-                    <div>
-                      <Input
-                        type="select"
-                        className="form-select form-select-md"
-                      >
-                        <option value="">
-                          Selected Conditional Offer Template
-                        </option>
-                        <option value="">Template 1</option>
-                        <option value="">Template 2</option>
-                      </Input>
-                    </div>
-                  </Col>
-                )} */}
               </Row>
-
             </div>
             {/* Template Selector */}
-            {(activeStep === 6) | isPreviewCV && (
+            {(activeStep === 6) || isPreviewCV && (
               <Col>
                 <div>
                   <TemplateSelectByCategoryElement

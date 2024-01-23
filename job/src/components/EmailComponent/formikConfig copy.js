@@ -13,11 +13,18 @@ export const populateForm = (value) => {
 
 export const initialValues = {
   id: null,
-  to: [],
-  cc: [],
-  bcc: [],
+  to: "",
+  cc: "",
+  bcc: "",
   subject: "",
   content: "",
+  selectedOptions: [{
+    label: "Hello",
+    value: "Hello",
+  }, {
+    label: "World",
+    value: "World",
+  }],
 };
 
 export const generateSchema = () => {
@@ -34,12 +41,18 @@ export const generateSchema = () => {
 
 export const schema = yup.object().shape({
   id: yup.number().nullable().notRequired(),
-  to: yup.array().min(1, "Input at least one email"),
-  // to: yup.string().required("Please enter a to."),
-  cc: yup.array().nullable().notRequired(),
-  bcc: yup.array().nullable().notRequired(),
+  to: yup.string().required("Please enter a to."),
+  cc: yup.string().nullable().notRequired(),
+  bcc: yup.string().nullable().notRequired(),
   subject: yup.string().required("Please enter a subject."),
   // content: yup.string().required("Please enter a content."),
   content: yup.string().nullable().notRequired(),
-
+  selectedOptions: yup.array()
+    .of(
+      yup.object().shape({
+        label: yup.string().required("Label is required"),
+        value: yup.string().required("Value is required"),
+      })
+    )
+    .min(1, "At least one option is required"),
 });
