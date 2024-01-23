@@ -66,6 +66,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabelIcon: "mdi mdi-card-search-outline",
+      draggableLabel: "Multi Input",
+      draggablePrefix: "element",
+      draggableId: "multiinput",
+      type: "field",
+    },
+    {
       draggableLabelIcon: "mdi mdi-radiobox-marked",
       draggableLabel: "Radio",
       draggablePrefix: "element",

@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CreatableSelect from "react-select/creatable";
 
-const MultInputFormik = ({
-  name,
+const MultiInputElement = ({
   formik,
-  placeholder = "Enter input",
-  isString,
+  isString = true,
+  formStateHook,
+  field,
   ...props
 }) => {
+  const [selectedOptions, setSelectedOptions] = useState("");
   const convertOptionsToCommaseparatedString = (options) => {
     let string = "";
     options.forEach((option) => {
@@ -50,16 +51,6 @@ const MultInputFormik = ({
     }
   };
 
-  const returnValues = () => {
-    if (isString) {
-      return convertStringToOptions(formik?.values?.[name]);
-    } else {
-      return formik.values[name];
-    }
-  };
-
-  console.log("OUT", formik.values[name])
-
   const customStyles = {
     container: (provided) => ({
       ...provided,
@@ -68,15 +59,15 @@ const MultInputFormik = ({
     indicatorsContainer: () => ({ display: "none" }), // Hide indicators container
     control: (provided) => ({
       ...provided,
-      borderColor: "#8AAED6", // Remove border
+      borderColor: "#8AAED6",
       "&:hover": {
         borderColor: "#8AAED6",
       },
-      boxShadow: "none", // Remove focus shadow
+      boxShadow: "none",
     }),
     placeholder: (provided) => ({
       ...provided,
-      textAlign: props?.placeholderAlign || "center", // Align the placeholder text to the left
+      textAlign: props?.placeholderAlign || "left",
     }),
   };
 
@@ -86,12 +77,12 @@ const MultInputFormik = ({
   return (
     <CreatableSelect
       isMulti
-      name={name}
-      value={returnValues()}
-      onChange={(e) => handleChange(e, name)}
-      onCreateOption={(e) => handleCreateOption(e, name)}
+      name={field?.name}
+      value={convertStringToOptions(formik?.values?.[field?.name]) ?? ""}
+      onChange={(e) => handleChange(e, field?.name)}
+      onCreateOption={(e) => handleCreateOption(e, field?.name)}
       isClearable={true}
-      placeholder={placeholder}
+      placeholder={field.placeholder ?? "Enter..."}
       onBlur={formik.handleBlur}
       styles={customStyles}
       components={{ DropdownIndicator, Menu }} // Override dropdown indicator and menu
@@ -99,4 +90,4 @@ const MultInputFormik = ({
   );
 };
 
-export default MultInputFormik;
+export default MultiInputElement;

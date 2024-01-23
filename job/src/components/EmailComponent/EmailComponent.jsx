@@ -20,7 +20,6 @@ import { useFormik } from "formik";
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { UseTemplateModuleDataHook } from "@workspace/common";
 import { TemplateHelper } from "@workspace/common";
-import CreatableSelect from "react-select/creatable";
 import { MultiInputFormik } from "@workspace/common";
 
 function EmailComponent({ isOpen, toggle, candidateId }) {
@@ -158,7 +157,6 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                       placeholder="Enter email addresses"
                       containerWidth="100%"
                       placeholderAlign="left"
-                      // isString={true}
                     />
                   </div>
                   <TemplateSelectByCategoryElement

@@ -32,6 +32,7 @@ import AccountNameSelectElement from "./AccountNameSelectElement";
 import AccountNameSelectAllElement from "./AccountNameSelectElementAll";
 import AccountContactSelectElement from "./AccountContactSelectElement";
 import FormTemplateSelectElement from "./FormTemplateSelectElement";
+import MultiInputElement from "./MultiInputElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -328,8 +329,17 @@ const generateFormField = (
     );
   }
 
+  if (type === "multiinput") {
+    return (
+      <MultiInputElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+  
   // text & button
-
   if (type === "word") {
     return <TextElement field={field} />;
   }

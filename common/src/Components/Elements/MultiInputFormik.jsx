@@ -1,20 +1,64 @@
 import React from "react";
 import CreatableSelect from "react-select/creatable";
 
-const MultInputFormik = ({
+const MultiInputFormik = ({
   name,
   formik,
   placeholder = "Enter input",
+  isString,
   ...props
 }) => {
+  const convertOptionsToCommaseparatedString = (options) => {
+    let string = "";
+    options.forEach((option) => {
+      string += option.value + ",";
+    });
+    return string.slice(0, -1);
+  };
+
+  const convertStringToOptions = (string) => {
+    if (!string) return [];
+    const options = [];
+    console.log("string", string.split(","));
+    string.split(",").forEach((element) => {
+      options.push({ value: element, label: element });
+    });
+    return options;
+  };
+
   const handleChange = (selectedOptions, name) => {
-    formik.setFieldValue(name, selectedOptions);
+    if (isString) {
+      formik.setFieldValue(
+        name,
+        convertOptionsToCommaseparatedString(selectedOptions)
+      );
+    } else {
+      formik.setFieldValue(name, selectedOptions);
+    }
   };
 
   const handleCreateOption = (inputValue, name) => {
     const newOption = { value: inputValue, label: inputValue };
-    formik.setFieldValue(name, [...formik.values[name], newOption]);
+    if (isString) {
+      const arrayValues = convertStringToOptions(formik?.values?.[name]);
+      formik.setFieldValue(
+        name,
+        convertOptionsToCommaseparatedString([...arrayValues, newOption])
+      );
+    } else {
+      formik.setFieldValue(name, [...formik.values[name], newOption]);
+    }
   };
+
+  const returnValues = () => {
+    if (isString) {
+      return convertStringToOptions(formik?.values?.[name]);
+    } else {
+      return formik.values[name];
+    }
+  };
+
+  console.log("OUT", formik.values[name])
 
   const customStyles = {
     container: (provided) => ({
@@ -43,7 +87,7 @@ const MultInputFormik = ({
     <CreatableSelect
       isMulti
       name={name}
-      value={formik?.values?.[name]}
+      value={returnValues()}
       onChange={(e) => handleChange(e, name)}
       onCreateOption={(e) => handleCreateOption(e, name)}
       isClearable={true}
@@ -55,4 +99,4 @@ const MultInputFormik = ({
   );
 };
 
-export default MultInputFormik;
+export default MultiInputFormik;

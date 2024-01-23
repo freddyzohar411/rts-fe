@@ -130,6 +130,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -180,6 +181,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
       validation: [
         {
@@ -222,6 +224,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -267,6 +270,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -314,6 +318,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -420,6 +425,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -457,6 +463,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -831,6 +838,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "selectaccountnameall",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -866,6 +874,7 @@ const FieldBuilder = ({
         "multifile",
         "selectaccountnameall",
         "selectformtemplate",
+        "multiinput",
       ],
       renderCondition: validationConditionList.length > 0,
     },
@@ -915,6 +924,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     // {
@@ -984,6 +994,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     // Which include key value pair for table
@@ -1035,6 +1046,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -1083,6 +1095,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -1127,6 +1140,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -1183,6 +1197,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -1220,6 +1235,7 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectformtemplate",
+        "multiinput",
       ],
     },
     {
