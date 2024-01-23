@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
@@ -26,6 +26,7 @@ import { Actions } from "@workspace/common";
 
 function EmailComponent({ isOpen, toggle, candidateId }) {
   const dispatch = useDispatch();
+  const attachmentRef = useRef(null);
   const [modal, setModal] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [emailContent, setEmailContent] = useState("");
@@ -33,11 +34,12 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
   const [formInitialValues, setFormInitialValues] = useState(initialValues);
   const [formSchema, setFormSchema] = useState(schema);
   const [templateData, setTemplateData] = useState(null);
+  const [attachments, setAttachments] = useState([]);
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
     candidateId: candidateId,
   });
   const emailData = useSelector((state) => state.EmailCommonReducer);
-  console.log("emailData", emailData);
+
 
   /**
    * Handle form submit event (Formik)
@@ -99,6 +101,21 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
     const newOption = { value: inputValue, label: inputValue };
     formik.setFieldValue(name, [...formik.values[name], newOption]);
   };
+
+  const handleAttachmentChange = (e) => {
+    const files = e.target.files;
+    if (!files) return;
+    const fileArray = [];
+    for (let i = 0; i < files.length; i++) {
+      // Check for file types and size, if not then toast
+
+      // If all okay then push
+      fileArray.push(files[i]);
+    }
+    setAttachments(fileArray);
+  }
+
+  console.log("attachments", attachments)
 
   return (
     <React.Fragment>
@@ -237,6 +254,8 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                 }}
                 value={formik?.values?.["content"]}
               />
+              {/* File attachment */}
+
               <ModalFooter className="p-0 mt-3">
                 <div className="d-flex flex-row gap-3 justify-content-end">
                   <Button
@@ -250,7 +269,25 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                   >
                     Discard
                   </Button>
-
+                  <Button
+                    type="button"
+                    className="btn btn-custom-primary"
+                    onClick={() => {
+                      attachmentRef.current.click();
+                    }}
+                  >
+                    <i
+                      style={{ fontSize: "1rem" }}
+                      className="ri-attachment-2"
+                    />
+                  </Button>
+                  <input
+                    type="file"
+                    ref={attachmentRef}
+                    className="d-none"
+                    multiple
+                    onChange={handleAttachmentChange}
+                  />
                   <UncontrolledDropdown className="btn-group">
                     <Button
                       type="submit"
