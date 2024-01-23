@@ -37,7 +37,8 @@ const {
   UserGroupReducer,
   AccountNamesReducer,
   AccountContactReducer,
-  FormCommonReducer
+  FormCommonReducer,
+  EmailCommonReducer
 } = Reducers;
 
 const { Login, ForgetPassword, Profile } = LoginReducers;
@@ -75,6 +76,7 @@ const rootReducer = combineReducers({
   AccountNamesReducer,
   AccountContactReducer,
   FormCommonReducer,
+  EmailCommonReducer,
 
   // public
   Login,

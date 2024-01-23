@@ -38,6 +38,7 @@ const {
   AccountNamesSaga,
   AccountContactSaga,
   FormCommonSaga,
+  EmailCommonSaga,
 } = CommonSaga;
 const { AuthSaga, ForgetSaga, ProfileSaga } = LoginSaga;
 const { DashboardEcommerceSaga, JobsCountSaga } = DashboardSaga;
@@ -68,6 +69,7 @@ export default function* rootSaga() {
     fork(AccountNamesSaga),
     fork(AccountContactSaga),
     fork(FormCommonSaga),
+    fork(EmailCommonSaga),
 
     //public
     fork(AuthSaga),

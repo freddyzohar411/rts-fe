@@ -6,4 +6,5 @@ export const USERGROUP = "api/usergroup";
 export const FORM = "api/forms";
 export const DOCUMENTS = "api/documents";
 export const CONTACTS = "api/contacts";
+export const EMAIL = "api/email";
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
   Input,
@@ -21,10 +22,10 @@ import { initialValues, schema, populateForm } from "./formikConfig";
 import { UseTemplateModuleDataHook } from "@workspace/common";
 import { TemplateHelper } from "@workspace/common";
 import { MultiInputFormik } from "@workspace/common";
-import { toast } from "react-toastify";
-import axios from "axios";
+import { Actions } from "@workspace/common";
 
 function EmailComponent({ isOpen, toggle, candidateId }) {
+  const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [emailContent, setEmailContent] = useState("");
@@ -35,7 +36,8 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
     candidateId: candidateId,
   });
-  const [isEmailLoading, setIsEmailLoading] = useState(false);
+  const emailData = useSelector((state) => state.EmailCommonReducer);
+  console.log("emailData", emailData);
 
   /**
    * Handle form submit event (Formik)
@@ -47,16 +49,7 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
     newValues.cc = newValues.cc.map((item) => item.value);
     newValues.bcc = newValues.bcc.map((item) => item.value);
     console.log("values", newValues);
-    setIsEmailLoading(true)
-    axios.post("http://localhost:8181/api/email/sendingEmail", newValues).then((res) => {
-      console.log(res);
-      setIsEmailLoading(false)
-      toast.success("Email sent successfully");
-    }).catch((err) => {
-      console.log(err);
-      setIsEmailLoading(false)
-      toast.error("Email sending failed");
-    })
+    dispatch(Actions.sendEmail(newValues));
   };
 
   /**
@@ -266,9 +259,9 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                         formik.handleSubmit();
                         setModal(false);
                       }}
-                      disabled={isEmailLoading}
+                      disabled={emailData?.loading}
                     >
-                      {isEmailLoading ? "Sending..." : "Send"}
+                      {emailData?.loading ? "Sending..." : "Send"}
                     </Button>
                     <DropdownToggle
                       tag="button"

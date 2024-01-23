@@ -47,7 +47,7 @@ export const getAccountContacts = (input) =>
     `${configURL.CONTACT_URL}/${baseURL.CONTACTS}/entity/${input.entityType}/${input.entityId}`
   );
 
-  export const getAccountNamesAll = () =>
+export const getAccountNamesAll = () =>
   api.get(`${configURL.ACCOUNT_URL}/${baseURL.ACCOUNT}/names-all`);
 
 // Form Microservice
@@ -56,3 +56,9 @@ export const getFormCategories = () =>
 
 export const getFormsByCategories = (category) =>
   api.get(`${configURL.FORM_URL}/${baseURL.FORM}/categories/${category}`);
+
+// Common Microservice
+
+// Email
+export const sendEmail = (data) =>
+  api.create(`${configURL.COMMON_URL}/${baseURL.EMAIL}/sendingEmail`, data);

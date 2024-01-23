@@ -8,6 +8,7 @@ import UserGroupSaga from "./usergroup/saga";
 import AccountNamesSaga from "./accountnames/saga";
 import AccountContactSaga from "./accountcontact/saga";
 import FormCommonSaga from "./form/saga";
+import EmailCommonSaga from "./email/saga";
 
 export {
   LayoutSaga,
@@ -19,5 +20,6 @@ export {
   UserGroupSaga,
   AccountNamesSaga,
   AccountContactSaga,
-  FormCommonSaga
+  FormCommonSaga,
+  EmailCommonSaga
 };
