@@ -47,5 +47,8 @@ export const getAccountContacts = (input) =>
     `${configURL.CONTACT_URL}/${baseURL.CONTACTS}/entity/${input.entityType}/${input.entityId}`
   );
 
-  export const getAccountNamesAll = () =>
+export const getAccountNamesAll = () =>
   api.get(`${configURL.ACCOUNT_URL}/${baseURL.ACCOUNT}/names-all`);
+
+export const refreshToken = (data) =>
+  api.get(`${configURL.API_URL}/${baseURL.USER}/refreshToken`, data);

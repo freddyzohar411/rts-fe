@@ -5,3 +5,4 @@ export const DEPARTMENT = "api/departments";
 export const USERGROUP = "api/usergroup";
 export const DOCUMENTS = "api/documents";
 export const CONTACTS = "api/contacts";
+export const USER = "api/user";
