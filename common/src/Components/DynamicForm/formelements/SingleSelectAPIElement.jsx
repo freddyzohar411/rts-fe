@@ -37,13 +37,19 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
   // Get Data for API calls if it does not exist in the store
   useEffect(() => {
     if (!apiData || apiData.length === 0) {
-      if (field.list === "industry" || field.list === "subIndustry") {
+      // if (field.list === "industry" || field.list === "subIndustry") {
+      //   dispatch(fetchIndustry());
+      // }
+      if (field.list === "industry") {
         dispatch(fetchIndustry());
       }
       if (field.list === "department") {
         dispatch(fetchDepartment());
       }
-      if (field.list === "country" || field.list === "city") {
+      // if (field.list === "country" || field.list === "city") {
+      //   dispatch(fetchCountryCurrency());
+      // }
+      if (field.list === "country") {
         dispatch(fetchCountryCurrency());
       }
     }

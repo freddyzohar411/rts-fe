@@ -6,7 +6,6 @@ import { SUBMIT_TO_CLIENT } from "./constants";
 import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Input, Button, Tooltip } from "reactstrap";
-import { EmailComponent } from "../EmailComponent";
 import { Actions } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common";
 
@@ -52,7 +51,6 @@ function SubmitToClient({
     }
   }, [form]);
 
-  const [sendEmailModal, setSendEmailModal] = useState(false);
 
   return (
     <React.Fragment>
@@ -118,13 +116,6 @@ function SubmitToClient({
                   >
                     <span>Update without Email</span>
                   </Tooltip>
-                  <EmailComponent
-                    isOpen={sendEmailModal}
-                    toggle={() => {
-                      setSendEmailModal(!sendEmailModal);
-                      closeOffcanvas;
-                    }}
-                  />
                 </div>
               </div>
             </div>

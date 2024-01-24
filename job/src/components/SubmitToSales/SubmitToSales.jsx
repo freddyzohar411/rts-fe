@@ -6,7 +6,6 @@ import { SUBMIT_TO_SALES } from "./constants";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Button, Tooltip } from "reactstrap";
-import { EmailComponent } from "../EmailComponent";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
@@ -38,7 +37,6 @@ function SubmitToSales({
       : false
   );
   const [formTemplate, setFormTemplate] = useState(null);
-  const [sendEmailModal, setSendEmailModal] = useState(false);
   UseTemplateModuleDataHook.useTemplateModuleData({
     candidateId: candidateId,
     jobId: jobId,
@@ -148,15 +146,6 @@ function SubmitToSales({
                   >
                     <span>Update without Email</span>
                   </Tooltip>
-                  <EmailComponent
-                    isOpen={sendEmailModal}
-                    toggle={() => {
-                      setSendEmailModal(false);
-                      closeOffcanvas;
-                    }}
-                    templateData={templateData}
-                    candidateId={candidateId}
-                  />
                 </div>
               </div>
             </div>
