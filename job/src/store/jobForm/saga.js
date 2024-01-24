@@ -37,7 +37,6 @@ function* workFetchJobForm(action) {
     const response = yield call(getFormByFormName, action.payload);
     yield put(fetchJobFormSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching job form");
     yield put(fetchJobFormFailure(error));
   }
 }
@@ -47,7 +46,6 @@ function* workFetchJobDocumentForm(action) {
     const response = yield call(getFormByFormName, action.payload);
     yield put(fetchJobDocumentFormSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching job form");
     yield put(fetchJobDocumentFormFailure(error));
   }
 }

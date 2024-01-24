@@ -7,16 +7,15 @@ axios.defaults.baseURL = api.API_URL;
 // content type
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-// content type
-const token = sessionStorage.getItem("accessToken") ?? null;
-// if (token) axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+const axiosInstance = axios.create({ baseURL: api.API_URL });
+
+let refreshingToken = null;
 
 axios.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem("accessToken");
     if (token) {
       config.headers["Authorization"] = "Bearer " + token; // for Spring Boot back-end
-      // config.headers["x-access-token"] = token; // for Node.js Express back-end
     }
     return config;
   },
@@ -31,18 +30,28 @@ axios.interceptors.response.use(
     return response.data ? response.data : response;
   },
   async function (error) {
-    const originalRequest = error?.config;
+    const originalRequest = error.config;
 
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-    if (error?.response?.status === 403) {
+    if (error?.response?.status === 403 && !originalRequest._retry) {
       try {
-        const refreshTokenResponse = await refreshToken();
+        originalRequest._retry = true;
+
+        refreshingToken = refreshingToken ? refreshingToken : refreshToken();
+        const refreshTokenResponse = await refreshingToken;
+        refreshingToken = null;
         const { access_token, refresh_token } = refreshTokenResponse;
         sessionStorage.setItem("accessToken", access_token);
         sessionStorage.setItem("refreshToken", refresh_token);
+
+        // Update the request headers with the new access token
+        error.config.headers["Authorization"] = `Bearer ${access_token}`;
+        // Retry the original request
+        return axiosInstance(originalRequest);
       } catch (e) {
         toast.error("Your session has been expired.");
         window.location.replace("/login");
+        return Promise.reject(e);
       }
     }
 
@@ -82,6 +91,7 @@ const refreshToken = () => {
     id: userData?.user?.id,
     refreshToken,
   };
+  console.log("test refreshToken", data);
   return axios.post("/api/user/refreshToken", data);
 };
 
@@ -137,7 +147,9 @@ class APIClient {
   };
 
   getToken = () => {
-    return sessionStorage.getItem("accessToken") ?? null;
+    return sessionStorage.getItem("authUser")
+      ? JSON.parse(sessionStorage.getItem("authUser")).access_token
+      : null;
   };
 }
 
