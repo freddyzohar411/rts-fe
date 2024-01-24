@@ -88,6 +88,9 @@ import TemplateSelectByCategoryElement from "./TemplateDisplay/TemplateSelectByC
 import SelectElement from "./Elements/SelectElement";
 import MultiInputFormik from "./Elements/MultiInputFormik";
 
+// Import Email Component
+import EmailComponent from "./Email/EmailComponent";
+
 export {
   BreadCrumb,
   getChartColorsArray,
@@ -166,5 +169,8 @@ export {
 
   // Export Elements
   SelectElement,
-  MultiInputFormik
+  MultiInputFormik,
+
+  // Export Email Component
+  EmailComponent
 };

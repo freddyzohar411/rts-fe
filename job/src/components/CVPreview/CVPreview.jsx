@@ -4,10 +4,7 @@ import { TemplateDisplayV3, UseTemplateModuleDataHook } from "@workspace/common"
 import { TemplateHelper } from "@workspace/common";
 
 function CVPreview({ onExitPreview, templateData, candidateId }) {
-  // const [templateData, setTemplateData] = useState(null);
-  const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
-    candidateId: candidateId,
-  });
+  const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
 
   const handleExitPreview = () => {
     onExitPreview();

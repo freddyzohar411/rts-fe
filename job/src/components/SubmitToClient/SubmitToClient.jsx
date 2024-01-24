@@ -7,8 +7,15 @@ import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Input, Button, Tooltip } from "reactstrap";
 import { EmailComponent } from "../EmailComponent";
+import { Actions } from "@workspace/common";
+import { UseTemplateModuleDataHook } from "@workspace/common";
 
-function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
+function SubmitToClient({
+  closeOffcanvas,
+  onPreviewCVClick,
+  candidateId,
+  jobId,
+}) {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,6 +28,11 @@ function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
       ? linkState?.view
       : false
   );
+
+  UseTemplateModuleDataHook.useTemplateModuleData({
+    candidateId: candidateId,
+    jobId: jobId,
+  });
 
   const toggleFormViewState = () => {
     setView(!view);
@@ -84,7 +96,8 @@ function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
                     type="button"
                     className="btn btn-custom-primary"
                     onClick={() => {
-                      setSendEmailModal(true);
+                      // setSendEmailModal(true);
+                      dispatch(Actions.setEmailOpen());
                     }}
                   >
                     Send Email

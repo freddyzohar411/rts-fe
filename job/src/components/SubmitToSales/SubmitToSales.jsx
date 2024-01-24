@@ -11,6 +11,8 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import { Actions } from "@workspace/common";
+import { UseTemplateModuleDataHook } from "@workspace/common";
 
 function SubmitToSales({
   closeOffcanvas,
@@ -37,6 +39,10 @@ function SubmitToSales({
   );
   const [formTemplate, setFormTemplate] = useState(null);
   const [sendEmailModal, setSendEmailModal] = useState(false);
+  UseTemplateModuleDataHook.useTemplateModuleData({
+    candidateId: candidateId,
+    jobId: jobId,
+  });
 
   const toggleFormViewState = () => {
     setView(!view);
@@ -111,7 +117,8 @@ function SubmitToSales({
                     type="button"
                     className="btn btn-custom-primary"
                     onClick={() => {
-                      setSendEmailModal(true);
+                      // setSendEmailModal(true);
+                      dispatch(Actions.setEmailOpen());
                     }}
                   >
                     Send Email

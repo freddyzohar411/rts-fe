@@ -2,9 +2,12 @@ import {
   SEND_EMAIL,
   SEND_EMAIL_SUCCESS,
   SEND_EMAIL_FAILURE,
+  SET_EMAIL_OPEN,
+  SET_EMAIL_CLOSE,
 } from "./actionTypes";
 
 const initialState = {
+  isEmailOpen: false,
   emailResponse: {},
   errorMsg: "",
   loading: false,
@@ -32,6 +35,16 @@ const EmailCommonReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
+    case SET_EMAIL_OPEN:
+      return {
+        ...state,
+        isEmailOpen: true,
+      };
+    case SET_EMAIL_CLOSE:
+      return {
+        ...state,
+        isEmailOpen: false,
+      };  
     default:
       return state;
   }

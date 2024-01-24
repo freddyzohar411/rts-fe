@@ -238,12 +238,14 @@ function JobOverview() {
             onExitPreview={handleExitPreview}
             templateData={templateData}
             candidateId={candidateId}
+            jobId={jobId}
           />
         ) : (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
             onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
+            jobId={jobId}
             candidateId={candidateId}
           />
         );
