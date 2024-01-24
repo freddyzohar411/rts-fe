@@ -4,7 +4,6 @@ import {
   Button,
   Input,
   Modal,
-  ModalHeader,
   ModalBody,
   ModalFooter,
   UncontrolledDropdown,
@@ -18,13 +17,14 @@ import {
 } from "@workspace/common";
 import { useEffect } from "react";
 import { useFormik } from "formik";
-import { initialValues, schema, populateForm } from "./formikConfig";
+import { initialValues, schema } from "./formikConfig";
 import { UseTemplateModuleDataHook } from "@workspace/common";
 import { TemplateHelper } from "@workspace/common";
 import { MultiInputFormik } from "@workspace/common";
 import { Actions } from "@workspace/common";
 import { toast } from "react-toastify";
 import { ObjectHelper } from "@workspace/common";
+import { FileHelper } from "@workspace/common";
 
 function EmailComponent({ isOpen, toggle, candidateId }) {
   const dispatch = useDispatch();
@@ -104,16 +104,11 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
     }
   }, [templateData, allModuleData]);
 
-  const handleChange = (selectedOptions, name) => {
-    formik.setFieldValue(name, selectedOptions);
-  };
-
-  const handleCreateOption = (inputValue, name) => {
-    const newOption = { value: inputValue, label: inputValue };
-    formik.setFieldValue(name, [...formik.values[name], newOption]);
-  };
-
   const supportedMimeTypes = [
+    "image/png",
+    "image/jpg",
+    "image/jpeg",
+    "image/gif",
     "image/*",
     "video/*",
     "application/pdf",
@@ -125,22 +120,21 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
     "text/*",
   ];
 
+  // Handle attachment change
   const handleAttachmentChange = (e) => {
-    console.log("e.target.files", e.target.files);
     const files = e.target.files;
     if (!files) return;
     const fileArray = [];
     for (let i = 0; i < files.length; i++) {
-      // Inlcude docx too
-      if (!supportedMimeTypes.some((type) => files[i].type === type)) {
+      // Check file type
+      if (!FileHelper.checkFileWithMimeType(files[i], supportedMimeTypes)) {
         toast.error(`${files[i].name}: File type not supported`);
         continue;
       }
-      if (files[i].size > 10000000) {
+      if (!FileHelper.checkFileSizeLimit(files[i], 10000000)) {
         toast.error(`${files[i].name}: File size should be less than 10 MB`);
         continue;
       }
-      // If all okay then push
       fileArray.push(files[i]);
     }
     setAttachments((prev) => [...prev, ...fileArray]);
@@ -148,18 +142,19 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
     e.target.value = null;
   };
 
-  const getFileSize = (size) => {
-    if (size < 1000000) {
-      return `${(size / 1000).toFixed(2)} KB`;
-    }
-    return `${(size / 1000000).toFixed(2)} MB`;
-  };
-
-  console.log("attachments", attachments);
-
+  // Set formik when attachments change
   useEffect(() => {
     formik.setFieldValue("attachments", attachments);
   }, [attachments]);
+
+  // Toast errors upn submit
+  const toastErrors = () => {
+    if (formik.errors) {
+      Object.keys(formik.errors).forEach((key) => {
+        toast.error(formik.errors[key]);
+      });
+    }
+  };
 
   return (
     <React.Fragment>
@@ -308,8 +303,6 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                       height: "65px",
                       width: isFullscreen ? "30%" : "50%",
                       overflow: "auto",
-                      msOverflowStyle: "none", // For IE and Edge
-                      scrollbarWidth: "none", // For modern browsers
                     }}
                     className="pe-3"
                   >
@@ -324,7 +317,11 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                                 </span>
                                 <span>
                                   <strong>
-                                    ({getFileSize(attachment.size)})
+                                    (
+                                    {FileHelper.displayFileSize(
+                                      attachment.size
+                                    )}
+                                    )
                                   </strong>
                                 </span>
                               </div>
@@ -383,6 +380,10 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
                         type="submit"
                         className="btn btn-success"
                         onClick={() => {
+                          if (!formik.isValid) {
+                            toastErrors();
+                            return;
+                          }
                           formik.handleSubmit();
                           setModal(false);
                         }}

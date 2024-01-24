@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 /**
  * Method to check file format is valid or not
  * @param {*} file - file object
@@ -41,8 +43,27 @@ const convertJSONFileToJSONObject = (file) => {
   });
 };
 
+const checkFileWithMimeType = (file, mimeTypes, toastMessage = null) => {
+  if (!mimeTypes.some((type) => file.type === type)) {
+    if (toastMessage) {
+      toast.error(toastMessage);
+    }
+    return false;
+  }
+  return true;
+};
+
+const displayFileSize = (size) => {
+  if (size < 1000000) {
+    return `${(size / 1000).toFixed(2)} KB`;
+  }
+  return `${(size / 1000000).toFixed(2)} MB`;
+};
+
 export {
   checkFileFormatValid,
   checkFileSizeLimit,
   convertJSONFileToJSONObject,
+  checkFileWithMimeType,
+  displayFileSize
 };

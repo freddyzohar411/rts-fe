@@ -8,6 +8,7 @@ export const populateForm = (value) => {
     bcc: value.bcc,
     subject: value.subject,
     content: value.content,
+    attachments: [],
   };
 };
 
@@ -24,23 +25,21 @@ export const initialValues = {
 export const generateSchema = () => {
   return yup.object().shape({
     id: yup.number().nullable().notRequired(),
-    to: yup.string().required("Please enter a to."),
-    cc: yup.string().nullable().notRequired(),
-    bcc: yup.string().nullable().notRequired(),
+    to: yup.array().min(1, "Input at least one email"),
+    cc: yup.array().nullable().notRequired(),
+    bcc: yup.array().nullable().notRequired(),
     subject: yup.string().required("Please enter a subject."),
-    // content: yup.string().required("Please enter a content."),
     content: yup.string().nullable().notRequired(),
+    attachments: yup.array().nullable().notRequired(),
   });
 };
 
 export const schema = yup.object().shape({
   id: yup.number().nullable().notRequired(),
   to: yup.array().min(1, "Input at least one email"),
-  // to: yup.string().required("Please enter a to."),
   cc: yup.array().nullable().notRequired(),
   bcc: yup.array().nullable().notRequired(),
   subject: yup.string().required("Please enter a subject."),
-  // content: yup.string().required("Please enter a content."),
   content: yup.string().nullable().notRequired(),
   attachments: yup.array().nullable().notRequired(),
 });
