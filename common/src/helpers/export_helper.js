@@ -53,9 +53,11 @@ const generatePDFMulti = async (element, type = "save", options) => {
     )
   );
 
+  const fileName = options?.filename ? options.filename + ".pdf" : "test.pdf";
+
   const opt = {
     margin: [0.25, 0.25, 0.25, 0.25],
-    filename: options.filename || "test.pdf",
+    filename: fileName,
     image: { type: "jpeg", quality: 0.98 },
     html2canvas: { scale: 3, useCORS: true }, // Use CORS for images
     jsPDF: { unit: "in", format: "A4", orientation: "portrait" },
@@ -66,14 +68,12 @@ const generatePDFMulti = async (element, type = "save", options) => {
   }
 
   if (type === "file") {
-    // Return a file
-    // const blob = await html2pdf().set(opt).from(element).outputPdf();
     const blob = await html2pdf().set(opt).from(element).output("blob");
-    const file = new File([blob], options.filename || "test.pdf", {
+    const file = new File([blob], fileName, {
       type: "application/pdf",
     });
 
-    return file; // Return the File object
+    return file;
   }
 };
 
@@ -258,9 +258,9 @@ export function convertHtmlToDocxFile(
     type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
 
-  const file = new File([blob], options.filename + ".docx", { 
+  const file = new File([blob], options.filename + ".docx", {
     type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
-  
+
   return file;
 }

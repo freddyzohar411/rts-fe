@@ -27,6 +27,7 @@ import { ObjectHelper } from "@workspace/common";
 import { FileHelper } from "@workspace/common";
 import { setEmailClose } from "../../store/email/action";
 import * as ExportHelper from "../../helpers/export_helper";
+import TemplatePreviewModal from "../TemplateDisplay/TemplatePreviewModal/TemplatePreviewModal";
 import { generateOptions } from "./pdfOption";
 
 function EmailComponent() {
@@ -42,6 +43,8 @@ function EmailComponent() {
   const [attachments, setAttachments] = useState([]);
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
   const emailData = useSelector((state) => state.EmailCommonReducer);
+  const [templateAttachmentModalShow, setTemplateAttachmentModalShow] =
+    useState(false);
   const isEmailOpen = useSelector(
     (state) => state.EmailCommonReducer.isEmailOpen
   );
@@ -351,16 +354,15 @@ function EmailComponent() {
                       type="button"
                       className="btn btn-ghost-danger"
                       onClick={async () => {
-                        console.log("Content!!" + formik?.values?.["content"]);
-                        const file = await ExportHelper.convertHtmlToDocxFile(
-                          formik?.values?.["content"],
-                         {
-                          filename: "email",
-                         }
-                        );
-                          console.log("File!!" + file);
-                        if (!file) return;
-                        setAttachments([...attachments, file]);
+                        // const file = await ExportHelper.convertHtmlToDocxFile(
+                        //   formik?.values?.["content"],
+                        //  {
+                        //   filename: "email",
+                        //  }
+                        // );
+                        // if (!file) return;
+                        // setAttachments([...attachments, file]);
+                        setTemplateAttachmentModalShow(true);
                       }}
                     >
                       Attach template
@@ -435,6 +437,16 @@ function EmailComponent() {
             </ModalBody>
           </Modal>
         )}
+        <TemplatePreviewModal
+          showInsertModal={templateAttachmentModalShow}
+          setShowInsertModal={setTemplateAttachmentModalShow}
+          toExport={false}
+          callback={(file) => {
+            if (!file) return;
+            setAttachments([...attachments, file]);
+          }}
+          allModuleData={allModuleData}
+        />
         {isMinimized && (
           <div
             style={{

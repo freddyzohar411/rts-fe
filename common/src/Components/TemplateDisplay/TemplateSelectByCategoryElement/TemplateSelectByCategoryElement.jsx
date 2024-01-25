@@ -44,11 +44,20 @@ const TemplateSelectByCategoryElement = ({
 
   useEffect(() => {
     if (templatesByCategory) {
+      const checkCategory = templatesByCategory.every(
+        (template) => template.category === categoryName
+      );
+      if (!checkCategory) {
+        return;
+      }
       setTemplateList(
-        templatesByCategory.map((item) => ({
-          value: item.id,
-          label: item.name,
-        }))
+        templatesByCategory.map((item) => {
+          if (item.category !== categoryName) return null;
+          return {
+            value: item.id,
+            label: item.name,
+          };
+        })
       );
       if (defaultFirstValue && templatesByCategory.length > 0) {
         setTemplateSelected({
