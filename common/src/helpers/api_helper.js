@@ -29,36 +29,10 @@ axios.interceptors.response.use(
   async function (response) {
     return response.data ? response.data : response;
   },
-  async function (error) {
-    const originalRequest = error.config;
-
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    if (error?.response?.status === 403 && !originalRequest._retry) {
-      try {
-        originalRequest._retry = true;
-
-        refreshingToken = refreshingToken ? refreshingToken : refreshToken();
-        const refreshTokenResponse = await refreshingToken;
-        refreshingToken = null;
-        const { access_token, refresh_token } = refreshTokenResponse;
-        sessionStorage.setItem("accessToken", access_token);
-        sessionStorage.setItem("refreshToken", refresh_token);
-
-        // Update the request headers with the new access token
-        error.config.headers["Authorization"] = `Bearer ${access_token}`;
-        // Retry the original request
-        return axiosInstance(originalRequest);
-      } catch (e) {
-        toast.error("Your session has been expired.");
-        window.location.replace("/login");
-        return Promise.reject(e);
-      }
-    }
-
+  function (error) {
     if (error?.response?.data) {
       return Promise.reject(error.response.data);
     }
-
     let message;
     switch (error.status) {
       case 500:
@@ -91,7 +65,6 @@ const refreshToken = () => {
     id: userData?.user?.id,
     refreshToken,
   };
-  console.log("test refreshToken", data);
   return axios.post("/api/user/refreshToken", data);
 };
 
@@ -162,4 +135,4 @@ const getLoggedinUser = () => {
   }
 };
 
-export { APIClient, setAuthorization, getLoggedinUser };
+export { APIClient, setAuthorization, getLoggedinUser, refreshToken };
