@@ -83,6 +83,7 @@ import Ckeditor from "./ckeditor/build/ckeditor";
 // Import Template Display
 import TemplateDisplayV3 from "./TemplateDisplay/TemplateDisplayV3";
 import TemplateSelectByCategoryElement from "./TemplateDisplay/TemplateSelectByCategoryElement/TemplateSelectByCategoryElement";
+import TemplateExportButtons from "./TemplateDisplay/TemplateExportButtons/TemplateExportButtons";
 
 // Import Elements
 import SelectElement from "./Elements/SelectElement";
@@ -166,11 +167,12 @@ export {
   // Export Template Display
   TemplateDisplayV3,
   TemplateSelectByCategoryElement,
+  TemplateExportButtons,
 
   // Export Elements
   SelectElement,
   MultiInputFormik,
 
   // Export Email Component
-  EmailComponent
+  EmailComponent,
 };

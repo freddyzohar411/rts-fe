@@ -353,23 +353,6 @@ function EmailComponent() {
                     <Button
                       type="button"
                       className="btn btn-ghost-danger"
-                      onClick={async () => {
-                        // const file = await ExportHelper.convertHtmlToDocxFile(
-                        //   formik?.values?.["content"],
-                        //  {
-                        //   filename: "email",
-                        //  }
-                        // );
-                        // if (!file) return;
-                        // setAttachments([...attachments, file]);
-                        setTemplateAttachmentModalShow(true);
-                      }}
-                    >
-                      Attach template
-                    </Button>
-                    <Button
-                      type="button"
-                      className="btn btn-ghost-danger"
                       onClick={() => {
                         formik.resetForm();
                         setTemplateData(null);
@@ -379,18 +362,6 @@ function EmailComponent() {
                     >
                       Discard
                     </Button>
-                    <Button
-                      type="button"
-                      className="btn btn-custom-primary"
-                      onClick={() => {
-                        attachmentRef.current.click();
-                      }}
-                    >
-                      <i
-                        style={{ fontSize: "1rem" }}
-                        className="ri-attachment-2"
-                      />
-                    </Button>
                     <input
                       type="file"
                       ref={attachmentRef}
@@ -398,6 +369,39 @@ function EmailComponent() {
                       multiple
                       onChange={handleAttachmentChange}
                     />
+                    <UncontrolledDropdown className="btn-group">
+                      <Button
+                        type="submit"
+                        className="btn btn-custom-primary"
+                        onClick={() => {
+                          attachmentRef.current.click();
+                        }}
+                      >
+                        <i
+                          style={{ fontSize: "1rem" }}
+                          className="ri-attachment-2"
+                        />
+                      </Button>
+                      <DropdownToggle
+                        tag="button"
+                        type="button"
+                        className="btn btn-custom-primary"
+                        split
+                      >
+                        <span className="visually-hidden">Toggle Dropdown</span>
+                      </DropdownToggle>
+                      <DropdownMenu className="dropdown-menu-end">
+                        <li>
+                          <DropdownItem
+                            onClick={async () => {
+                              setTemplateAttachmentModalShow(true);
+                            }}
+                          >
+                            Attach Template
+                          </DropdownItem>
+                        </li>
+                      </DropdownMenu>
+                    </UncontrolledDropdown>
                     <UncontrolledDropdown className="btn-group">
                       <Button
                         type="submit"

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TemplateDisplayV3 from "../TemplateDisplayV3";
 import SelectElement from "../components/SelectElement";
-// import { Actions as Temp } from "@workspace/template";
 import * as TemplateActions from "../../../../../template/src/store/template/action";
 import * as ExportHelper from "../../../helpers/export_helper";
 import { generateOptions } from "../pdfOption";

@@ -1,10 +1,15 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Row, Col, Button, Container } from "reactstrap";
-import { TemplateDisplayV3, UseTemplateModuleDataHook } from "@workspace/common";
+import {
+  TemplateDisplayV3,
+  UseTemplateModuleDataHook,
+} from "@workspace/common";
 import { TemplateHelper } from "@workspace/common";
+import { TemplateExportButtons } from "@workspace/common";
 
 function CVPreview({ onExitPreview, templateData, candidateId }) {
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
+  const [exportContent, setExportContent] = useState("");
 
   const handleExitPreview = () => {
     onExitPreview();
@@ -23,6 +28,7 @@ function CVPreview({ onExitPreview, templateData, candidateId }) {
                 allData={allModuleData}
                 isView={true}
                 initialValues
+                handleOutputContent={setExportContent}
               />
             </Container>
           </Col>
@@ -30,13 +36,7 @@ function CVPreview({ onExitPreview, templateData, candidateId }) {
         <Row className="mt-5">
           <Col>
             <div className="d-flex flex-row gap-2 justify-content-end">
-              <Button
-                className="btn btn-custom-primary"
-                type="submit"
-                onClick={handleExitPreview}
-              >
-                Save
-              </Button>
+              <TemplateExportButtons content={exportContent} />
               <Button
                 className="btn btn-danger"
                 type="button"

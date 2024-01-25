@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
-import { TemplateDisplayV3 } from "@workspace/common";
+import { TemplateDisplayV3, TemplateExportButtons } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common";
 
 function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
@@ -99,6 +99,9 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
           </TabPane>
         </TabContent>
         <div className="d-flex justify-content-end gap-3">
+          {activeTab == "3" && (
+            <TemplateExportButtons content={conditionalOfferContent} />
+          )}
           {activeTab == "1" && (
             <Input
               type="number"
@@ -109,9 +112,11 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
               onChange={(e) => setReleaseValue(e.target.value)}
             />
           )}
-          <Button className="btn btn-custom-primary" onClick={handleRelease}>
-            Release
-          </Button>
+          {(activeTab == "1" || activeTab == "3") && (
+            <Button className="btn btn-custom-primary" onClick={handleRelease}>
+              Release
+            </Button>
+          )}
         </div>
       </div>
     </React.Fragment>
