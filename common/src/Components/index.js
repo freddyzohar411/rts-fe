@@ -84,7 +84,7 @@ import Ckeditor from "./ckeditor/build/ckeditor";
 import TemplateDisplayV3 from "./TemplateDisplay/TemplateDisplayV3";
 import TemplateSelectByCategoryElement from "./TemplateDisplay/TemplateSelectByCategoryElement/TemplateSelectByCategoryElement";
 import TemplateExportButtons from "./TemplateDisplay/TemplateExportButtons/TemplateExportButtons";
-
+import TemplatePagePreviewModal from "./TemplateDisplay/TemplatePagePreviewModal/TemplatePagePreviewModal";
 // Import Elements
 import SelectElement from "./Elements/SelectElement";
 import MultiInputFormik from "./Elements/MultiInputFormik";
@@ -168,6 +168,7 @@ export {
   TemplateDisplayV3,
   TemplateSelectByCategoryElement,
   TemplateExportButtons,
+  TemplatePagePreviewModal,
 
   // Export Elements
   SelectElement,

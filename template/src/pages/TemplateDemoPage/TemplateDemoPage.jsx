@@ -23,7 +23,7 @@ import { generateOptions } from "./pdfOption";
 import { ExportHelper } from "@workspace/common";
 import { GeneralModal } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common"; // Use this hook to get module data
-
+import { TemplatePagePreviewModal } from "@workspace/common"; // Use this modal to preview template
 const TemplateBuilderPage = () => {
   const dispatch = useDispatch();
   const { templates } = useSelector((state) => state.TemplateReducer);
@@ -278,6 +278,7 @@ const TemplateBuilderPage = () => {
                   </Row>
                 </CardBody>
                 <CardFooter>
+                  <TemplatePagePreviewModal content={templateData?.content} />
                   <div className="d-flex flex-row justify-content-between">
                     <Link to="/settings/templates">
                       <Button type="button" className="btn btn-custom-primary">
