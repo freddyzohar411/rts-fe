@@ -19,12 +19,12 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
     if (field.list === "industry") {
       return state.IndustryReducer.industry;
     }
-    if (field.list === "department") {
-      return state.DepartmentReducer.department;
-    }
-    if (field.list === "country") {
-      return state.CountryCurrencyReducer.countryCurrency;
-    }
+    // if (field.list === "department") {
+    //   return state.DepartmentReducer.department;
+    // }
+    // if (field.list === "country") {
+    //   return state.CountryCurrencyReducer.countryCurrency;
+    // }
   });
 
   // Helper Functions

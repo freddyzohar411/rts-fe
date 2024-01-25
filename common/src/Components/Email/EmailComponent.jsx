@@ -26,6 +26,8 @@ import { toast } from "react-toastify";
 import { ObjectHelper } from "@workspace/common";
 import { FileHelper } from "@workspace/common";
 import { setEmailClose } from "../../store/email/action";
+import * as ExportHelper from "../../helpers/export_helper";
+import { generateOptions } from "./pdfOption";
 
 function EmailComponent() {
   const dispatch = useDispatch();
@@ -197,7 +199,7 @@ function EmailComponent() {
                     formik.resetForm();
                     setTemplateData(null);
                     setAttachments([]);
-                    dispatch(setEmailClose())
+                    dispatch(setEmailClose());
                   }}
                 >
                   <i className="ri-close-line fs-4"></i>
@@ -348,6 +350,24 @@ function EmailComponent() {
                     <Button
                       type="button"
                       className="btn btn-ghost-danger"
+                      onClick={async () => {
+                        console.log("Content!!" + formik?.values?.["content"]);
+                        const file = await ExportHelper.convertHtmlToDocxFile(
+                          formik?.values?.["content"],
+                         {
+                          filename: "email",
+                         }
+                        );
+                          console.log("File!!" + file);
+                        if (!file) return;
+                        setAttachments([...attachments, file]);
+                      }}
+                    >
+                      Attach template
+                    </Button>
+                    <Button
+                      type="button"
+                      className="btn btn-ghost-danger"
                       onClick={() => {
                         formik.resetForm();
                         setTemplateData(null);
@@ -447,7 +467,7 @@ function EmailComponent() {
                     setTemplateData(null);
                     setAttachments([]);
                     setIsMinimized(false);
-                    dispatch(setEmailClose())
+                    dispatch(setEmailClose());
                   }}
                 ></i>
               </span>
