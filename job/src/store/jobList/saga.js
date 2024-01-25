@@ -70,7 +70,6 @@ function* workPostJobList(action) {
       handleNext();
     }
   } catch (error) {
-    toast.error("Error creating account");
     yield put(postJobListFailure(error));
   }
 }
@@ -104,7 +103,6 @@ function* workPutJobList(action) {
       handleNext();
     }
   } catch (error) {
-    toast.error("Error updating account");
     yield put(putJobListFailure(error));
   }
 }
@@ -115,7 +113,6 @@ function* workFetchJobLists(action) {
     const response = yield call(getJobs, action.payload);
     yield put(fetchJobListsSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts");
     yield put(fetchJobListsFailure(error));
   }
 }
@@ -128,7 +125,6 @@ function* workJobFOD(action) {
     toast.success(response?.message);
   } catch (error) {
     yield put(deleteJobListFailure(error));
-    toast.error("Error: Assigning FOD");
   }
 }
 
@@ -143,7 +139,6 @@ function* workDeleteJobList(action) {
     }
   } catch (error) {
     yield put(deleteJobListFailure(error));
-    toast.error("Error deleting account");
   }
 }
 
@@ -153,7 +148,6 @@ function* workFetchJobListsFields() {
     const response = yield call(getJobFields);
     yield put(fetchJobListsFieldsSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts fields");
     yield put(fetchJobListsFieldsFailure(error));
   }
 }
@@ -164,7 +158,6 @@ function* workFetchJobList(action) {
     const response = yield call(getJobById, action.payload);
     yield put(fetchJobListSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching account");
     yield put(fetchJobListFailure(error));
   }
 }

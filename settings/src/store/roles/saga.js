@@ -28,7 +28,7 @@ import {
   getRole,
   deleteRole,
   updateRole,
-  listRoles
+  listRoles,
 } from "../../helpers/backend_helper";
 
 import { toast } from "react-toastify";
@@ -47,7 +47,6 @@ function* workCreateRole(action) {
     toast.success("Role creation success!");
   } catch (error) {
     yield put(createRoleFailure(error));
-    toast.error("Role creation failed!");
   }
 }
 
@@ -95,7 +94,6 @@ function* workUpdateRole(action) {
     toast.success("Role update success!");
   } catch (error) {
     yield put(updateRoleFailure(error));
-    toast.error("Role update failed!");
   }
 }
 
@@ -112,7 +110,6 @@ function* workDeleteRole(action) {
     toast.success("Role deletion success!");
   } catch (error) {
     yield put(deleteRoleFailure(error));
-    toast.error("Role deletion failed!");
   }
 }
 

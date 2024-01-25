@@ -19,6 +19,9 @@ function* loginUser({ payload: { user, history } }) {
     });
     if (response) {
       yield put(loginSuccess(response));
+      const { access_token, refresh_token } = response;
+      sessionStorage.setItem("accessToken", access_token);
+      sessionStorage.setItem("refreshToken", refresh_token);
       sessionStorage.setItem("authUser", JSON.stringify(response));
       // Check if user has any profile
       yield put(fetchProfile());
@@ -31,6 +34,8 @@ function* loginUser({ payload: { user, history } }) {
   } catch (error) {
     if (error?.status === "UNAUTHORIZED") {
       toast.error(error?.message);
+    } else {
+      toast.error("Something went wrong, Please try again after some time.");
     }
     yield put(apiError(error));
   }

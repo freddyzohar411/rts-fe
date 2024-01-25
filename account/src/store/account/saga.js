@@ -77,7 +77,6 @@ function* workPostAccount(action) {
       return;
     }
   } catch (error) {
-    toast.error("Error creating account");
     yield put(postAccountFailure(error));
   }
 }
@@ -102,7 +101,7 @@ function* workPutAccount(action) {
       toast.success("Account updated successfully");
       return;
     }
-    
+
     if (typeof resetForm === "function") {
       resetForm();
     }
@@ -111,7 +110,6 @@ function* workPutAccount(action) {
       rerenderTable();
     }
   } catch (error) {
-    toast.error("Error updating account");
     yield put(putAccountFailure(error));
   }
 }
@@ -122,7 +120,6 @@ function* workFetchAccounts(action) {
     const response = yield call(getAccounts, action.payload);
     yield put(fetchAccountsSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts");
     yield put(fetchAccountsFailure(error));
   }
 }
@@ -135,7 +132,6 @@ function* workDeleteAccount(action) {
     toast.success("Account deleted successfully");
   } catch (error) {
     yield put(deleteAccountFailure(error));
-    toast.error("Error deleting account");
   }
 }
 
@@ -145,7 +141,6 @@ function* workFetchAccountsFields() {
     const response = yield call(getAccountsFields);
     yield put(fetchAccountsFieldsSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts fields");
     yield put(fetchAccountsFieldsFailure(error));
   }
 }
@@ -157,7 +152,6 @@ function* workFetchAccount(action) {
     yield put(fetchAccountSuccess(response.data));
     yield put(setAccountCountry(response.data.accountCountry));
   } catch (error) {
-    toast.error("Error fetching account");
     yield put(fetchAccountFailure(error));
   }
 }

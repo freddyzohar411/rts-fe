@@ -40,7 +40,6 @@ function* workTagJob(action) {
       navigate(`/jobs/${payload?.jobId}/overview`);
     }
   } catch (error) {
-    toast.error(error?.message);
     yield put(tagJobFailure(error));
   }
 }
@@ -54,7 +53,6 @@ function* workTagAllJob(action) {
     toast.success(response?.message);
     navigate(`/jobs/${payload?.[0]?.jobId}/overview`);
   } catch (error) {
-    toast.error(error?.message);
     yield put(tagJobAllFailure(error));
   }
 }
@@ -65,7 +63,6 @@ function* workFetchJobTimelineList(action) {
     const response = yield call(getJobTimeline, action.payload);
     yield put(fetchJobTimelineListSuccess(response.data));
   } catch (error) {
-    toast.error("Error: fetching job timeline");
     yield put(fetchJobTimelineListFailure(error));
   }
 }
@@ -77,7 +74,6 @@ function* workFetchJobTimelineCount(action) {
     const response = yield call(getJobTimelineCount, jobId);
     yield put(fetchJobtimeineCountSuccess(response.data));
   } catch (error) {
-    toast.error("Error: fetching job timeline count");
     yield put(fetchJobtimeineCountFailure(error));
   }
 }
