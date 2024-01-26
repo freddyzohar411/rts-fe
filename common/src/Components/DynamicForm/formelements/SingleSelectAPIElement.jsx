@@ -13,7 +13,7 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
-  
+
   // Select to return API data
   const apiData = useSelector((state) => {
     if (field.list === "industry") {
@@ -49,9 +49,8 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
 
   // Get Data for API calls if it does not exist in the store
   useEffect(() => {
-    // if (!apiData || apiData.length === 0) {
-    if (!apiData) {
-      console.log("fetching data")
+    if (!apiData || apiData.length === 0) {
+      console.log("fetching data");
       if (field.list === "industry") {
         dispatch(fetchIndustry());
       }

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, Row, Label, Input, Button } from "reactstrap";
 import SelectElement from "../../Elements/SelectElement";
 
 const TemplateSettingsSideBar = ({ setSettings, settings }) => {
+  const [tempSettings, setTempSettings] = useState(settings);
   const setFirstLetterUpperCase = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -27,7 +28,8 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
               { label: "Letter", value: "letter" },
             ]}
             setSelectedOptionData={(e) =>
-              setSettings((prev) => ({ ...prev, pageType: e.value }))
+              //   setSettings((prev) => ({ ...prev, pageType: e.value }))
+              setTempSettings((prev) => ({ ...prev, pageType: e.value }))
             }
             clearable={false}
           />
@@ -46,7 +48,8 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
               { label: "Landscape", value: "landscape" },
             ]}
             setSelectedOptionData={(e) =>
-              setSettings((prev) => ({ ...prev, pageOrientation: e.value }))
+              //   setSettings((prev) => ({ ...prev, pageOrientation: e.value }))
+              setTempSettings((prev) => ({ ...prev, pageOrientation: e.value }))
             }
             clearable={false}
           />
@@ -65,7 +68,8 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
               { label: "Mm", value: "mm" },
             ]}
             setSelectedOptionData={(e) =>
-              setSettings((prev) => ({ ...prev, unit: e.value }))
+              //   setSettings((prev) => ({ ...prev, unit: e.value }))
+              setTempSettings((prev) => ({ ...prev, unit: e.value }))
             }
             clearable={false}
           />
@@ -79,7 +83,14 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
             type="number"
             value={settings.marginTop}
             onChange={(e) =>
-              setSettings((prev) => ({ ...prev, marginTop: parseFloat(e.target.value)  }))
+              //   setSettings((prev) => ({
+              //     ...prev,
+              //     marginTop: parseFloat(e.target.value),
+              //   }))
+              setTempSettings((prev) => ({
+                ...prev,
+                marginTop: parseFloat(e.target.value),
+              }))
             }
             placeholder="Top Margin"
           />
@@ -90,7 +101,14 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
             type="number"
             value={settings.marginBottom}
             onChange={(e) =>
-              setSettings((prev) => ({ ...prev, marginBottom: parseFloat(e.target.value)  }))
+              //   setSettings((prev) => ({
+              //     ...prev,
+              //     marginBottom: parseFloat(e.target.value),
+              //   }))
+              setTempSettings((prev) => ({
+                ...prev,
+                marginBottom: parseFloat(e.target.value),
+              }))
             }
             placeholder="Bottom Margin"
           />
@@ -103,7 +121,14 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
             type="number"
             value={settings.marginLeft}
             onChange={(e) =>
-              setSettings((prev) => ({ ...prev, marginLeft: parseFloat(e.target.value) }))
+              //   setSettings((prev) => ({
+              //     ...prev,
+              //     marginLeft: parseFloat(e.target.value),
+              //   }))
+              setTempSettings((prev) => ({
+                ...prev,
+                marginLeft: parseFloat(e.target.value),
+              }))
             }
             placeholder="Left Margin"
           />
@@ -114,10 +139,27 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
             type="number"
             value={settings.marginRight}
             onChange={(e) =>
-              setSettings((prev) => ({ ...prev, marginRight: parseFloat(e.target.value)  }))
+              //   setSettings((prev) => ({
+              //     ...prev,
+              //     marginRight: parseFloat(e.target.value),
+              //   }))
+              setTempSettings((prev) => ({
+                ...prev,
+                marginRight: parseFloat(e.target.value),
+              }))
             }
             placeholder="Right Margin"
           />
+        </Col>
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-end">
+          <Button
+            className="btn btn-custom-primary"
+            onClick={() => setSettings(tempSettings)}
+          >
+            Preview
+          </Button>
         </Col>
       </Row>
       <h2>Export</h2>
@@ -136,20 +178,22 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
               { label: "Html", value: "html" },
             ]}
             setSelectedOptionData={(e) =>
-              setSettings((prev) => ({ ...prev, exportType: e.value }))
+              //   setSettings((prev) => ({ ...prev, exportType: e.value }))
+              setTempSettings((prev) => ({ ...prev, exportType: e.value }))
             }
             clearable={false}
           />
         </Col>
       </Row>
-      <Row className="mb-2">
+      <Row className="mb-3">
         <Col col="6">
           <Label>File Name</Label>
           <Input
             type="text"
             value={settings.fileName}
             onChange={(e) =>
-              setSettings((prev) => ({ ...prev, fileName: e.target.value }))
+              //   setSettings((prev) => ({ ...prev, fileName: e.target.value }))
+              setTempSettings((prev) => ({ ...prev, fileName: e.target.value }))
             }
             placeholder="Enter File Name"
           />
