@@ -295,6 +295,25 @@ const TemplateBuilder = forwardRef(
                   ) : null}
                 </div>
               </Col>
+              <Col>
+                <Label htmlFor="category">Sub Category</Label>
+                <Input
+                  type="text"
+                  name="subCategory"
+                  className="form-control"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik?.values?.["subCategory"]}
+                  placeholder="Enter a sub category"
+                />
+                <div style={{ minHeight: "25px" }}>
+                  {formik.errors["subCategory"] && formik.touched["subCategory"] ? (
+                    <div style={{ color: "red", fontSize: "0.9rem" }}>
+                      {formik.errors["subCategory"]}
+                    </div>
+                  ) : null}
+                </div>
+              </Col>
             </Row>
             <Row>
               <Col>
