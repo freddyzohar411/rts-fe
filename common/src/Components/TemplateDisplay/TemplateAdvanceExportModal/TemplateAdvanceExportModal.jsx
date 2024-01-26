@@ -45,12 +45,11 @@ const TemplateAdvanceExportModal = ({
   const [templateList, setTemplateList] = useState([]);
   const [showContent, setShowContent] = useState(content ?? "");
 
+  console.log("showContent", showContent);
+
   const templateCategories = useSelector(
     (state) => state.TemplateReducer.templateCategories
   );
-
-  console.log("templateCategories", templateCategories);
-  const [fileName, setFileName] = useState("");
 
   const templatesByCategory = useSelector(
     (state) => state.TemplateReducer.templatesByCategory
@@ -138,10 +137,13 @@ const TemplateAdvanceExportModal = ({
       setShowContent(processedContent);
     };
 
-    if (templateContent) {
+    if (templateContent && allData) {
       setSelectedContentAndProcessed();
+      return;
     }
-  }, [templateContent, allData]);
+
+    setShowContent(content);
+  }, [templateContent, allData, content]);
 
   return (
     <Modal
@@ -165,49 +167,51 @@ const TemplateAdvanceExportModal = ({
             {toExport ? "Export Template" : "Attach Template"}
           </span>
         </div>
-        <Row className="align-items-end mb-1" style={{ minWidth: "800px" }}>
-          <Col>
-            <Label>Category</Label>
-            <SelectElement
-              optionsData={templateCategories.map((category) => ({
-                label: category,
-                value: category,
-              }))}
-              setSelectedOptionData={setCategorySelected}
-              placeholder="Select a category"
-              value={categorySelected}
-            />
-          </Col>
-          <Col>
-            <Label>Template</Label>
-            <SelectElement
-              optionsData={templateList}
-              value={templateSelected}
-              placeholder="Select a field"
-              setSelectedOptionData={setTemplateSelected}
-              module={typeData}
-            />
-          </Col>
-          <Col>
-            <Button
-              type="button"
-              className="self-end btn-primary"
-              disabled={!templateSelected || !categorySelected}
-              onClick={async () => {
-                const template = templatesByCategory.filter(
-                  (template) =>
-                    template.name == templateSelected.value &&
-                    template.category === categorySelected.value
-                )[0];
-                setTemplateContent(template.content);
-                setTemplateSelected("");
-                setCategorySelected("");
-              }}
-            >
-              Preview
-            </Button>
-          </Col>
-        </Row>
+        {!toExport && (
+          <Row className="align-items-end mb-1" style={{ minWidth: "800px" }}>
+            <Col>
+              <Label>Category</Label>
+              <SelectElement
+                optionsData={templateCategories.map((category) => ({
+                  label: category,
+                  value: category,
+                }))}
+                setSelectedOptionData={setCategorySelected}
+                placeholder="Select a category"
+                value={categorySelected}
+              />
+            </Col>
+            <Col>
+              <Label>Template</Label>
+              <SelectElement
+                optionsData={templateList}
+                value={templateSelected}
+                placeholder="Select a field"
+                setSelectedOptionData={setTemplateSelected}
+                module={typeData}
+              />
+            </Col>
+            <Col>
+              <Button
+                type="button"
+                className="self-end btn-primary"
+                disabled={!templateSelected || !categorySelected}
+                onClick={async () => {
+                  const template = templatesByCategory.filter(
+                    (template) =>
+                      template.name == templateSelected.value &&
+                      template.category === categorySelected.value
+                  )[0];
+                  setTemplateContent(template.content);
+                  setTemplateSelected("");
+                  setCategorySelected("");
+                }}
+              >
+                Preview
+              </Button>
+            </Col>
+          </Row>
+        )}
       </ModalHeader>
       <ModalBody scrollable={true} className="bg-light p-0 border">
         <div className="d-flex flex-column">
@@ -224,6 +228,7 @@ const TemplateAdvanceExportModal = ({
                 setSettings={setTemplateSettings}
                 settings={templateSettings}
                 callback={handleExport}
+                toExport={toExport}
               />
             </Col>
             <Col className="col-9">

@@ -6,10 +6,15 @@ import {
 } from "@workspace/common";
 import { TemplateHelper } from "@workspace/common";
 import { TemplateExportButtons } from "@workspace/common";
+import { TemplateAdvanceExportModal } from "@workspace/common";
 
 function CVPreview({ onExitPreview, templateData, candidateId }) {
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
+  const [templateDownloadModalShow, setTemplateDownloadModalShow] =
+    useState(false);
   const [exportContent, setExportContent] = useState("");
+
+  console.log("Export content", exportContent)
 
   const handleExitPreview = () => {
     onExitPreview();
@@ -36,7 +41,9 @@ function CVPreview({ onExitPreview, templateData, candidateId }) {
         <Row className="mt-5">
           <Col>
             <div className="d-flex flex-row gap-2 justify-content-end">
-              <TemplateExportButtons content={exportContent} />
+              <Button onClick={() => setTemplateDownloadModalShow(true)}>
+                Download
+              </Button>
               <Button
                 className="btn btn-danger"
                 type="button"
@@ -47,6 +54,13 @@ function CVPreview({ onExitPreview, templateData, candidateId }) {
             </div>
           </Col>
         </Row>
+        <TemplateAdvanceExportModal
+          content={exportContent}
+          showInsertModal={templateDownloadModalShow}
+          setShowInsertModal={setTemplateDownloadModalShow}
+          toExport={true}
+          allData={allModuleData}
+        />
       </div>
     </React.Fragment>
   );
