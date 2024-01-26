@@ -6,17 +6,19 @@ import { SUBMIT_TO_SALES } from "./constants";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Button, Tooltip } from "reactstrap";
-import { EmailComponent } from "../EmailComponent";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import { Actions } from "@workspace/common";
+import { UseTemplateModuleDataHook } from "@workspace/common";
 
 function SubmitToSales({
   closeOffcanvas,
   onPreviewCVClick,
-  jobId,
+  templateData,
   candidateId,
+  jobId,
 }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,7 +37,10 @@ function SubmitToSales({
       : false
   );
   const [formTemplate, setFormTemplate] = useState(null);
-  const [sendEmailModal, setSendEmailModal] = useState(false);
+  UseTemplateModuleDataHook.useTemplateModuleData({
+    candidateId: candidateId,
+    jobId: jobId,
+  });
 
   const toggleFormViewState = () => {
     setView(!view);
@@ -110,7 +115,8 @@ function SubmitToSales({
                     type="button"
                     className="btn btn-custom-primary"
                     onClick={() => {
-                      setSendEmailModal(true);
+                      // setSendEmailModal(true);
+                      dispatch(Actions.setEmailOpen());
                     }}
                   >
                     Send Email
@@ -140,13 +146,6 @@ function SubmitToSales({
                   >
                     <span>Update without Email</span>
                   </Tooltip>
-                  <EmailComponent
-                    isOpen={sendEmailModal}
-                    toggle={() => {
-                      setSendEmailModal(!sendEmailModal);
-                      closeOffcanvas;
-                    }}
-                  />
                 </div>
               </div>
             </div>

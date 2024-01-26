@@ -49,6 +49,13 @@ import {
 // Form Builder
 import { FormbuilderMain } from "@workspace/formbuilder";
 
+// Template Builder
+import {
+  TemplateBuilderPage,
+  TemplateListingPage,
+  TemplateDemoPage,
+} from "@workspace/template";
+
 // Import constants for permission and module (Route guard)
 import { Permission } from "@workspace/login";
 
@@ -154,6 +161,15 @@ const authProtectedRoutes = [
   { path: "/settings/access/user/:userId", component: <UserDetails /> },
   { path: "/settings/access/user/user-creation", component: <CreateUser /> },
   { path: "/settings/access/user/update/:userId", component: <UpdateUser /> },
+
+  // Template in Settings
+  { path: "/settings/templates", component: <TemplateListingPage /> },
+  { path: "/settings/templates/create", component: <TemplateBuilderPage /> },
+  { path: "/settings/templates/demo", component: <TemplateDemoPage /> },
+  {
+    path: "/settings/templates/:templateId/edit",
+    component: <TemplateBuilderPage />,
+  },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

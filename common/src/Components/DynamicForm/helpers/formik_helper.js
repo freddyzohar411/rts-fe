@@ -101,6 +101,21 @@ const generateValidationSchema2 = (
 
       let fieldValidation;
 
+      // Data type checks
+      const isString = () => {
+        if (
+          field.type === "text" ||
+          field.type === "password" ||
+          field.type === "email" ||
+          field.type === "textarea"
+        )
+          return true;
+      };
+
+      const isNumber = () => {
+        if (field.type === "number") return true;
+      };
+
       switch (field.type) {
         case "text":
         case "password":
@@ -168,7 +183,8 @@ const generateValidationSchema2 = (
           field.emailValidationErrorMessage
         );
       }
-      if (field.pattern) {
+      
+      if (field.pattern && isString()) {
         fieldValidation = fieldValidation.matches(
           field.pattern,
           field.patternValidationErrorMessage
@@ -342,7 +358,7 @@ const generateValidationSchema2 = (
                   isValid = false;
                 }
               }
-              if (condition?.condition === "isNotEmpty"){
+              if (condition?.condition === "isNotEmpty") {
                 if (value != "" && valueToCompare === "") {
                   isValid = false;
                 }

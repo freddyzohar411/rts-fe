@@ -5,6 +5,7 @@ import {
   DeleteCustomModal,
   DynamicTableHelper,
   useTableHook,
+  DateHelper
 } from "@workspace/common";
 import { CUSTOMISATION_INITIAL_OPTION } from "./customisationTableInitialOptions";
 import { Actions as formActions } from "@workspace/formbuilder";
@@ -22,6 +23,17 @@ function DynamicFormListingSettings() {
   const { forms } = useSelector((state) => state.FormReducer);
   const { generateConfig, generateSeachFieldArray, cleanPageRequest } =
     DynamicTableHelper;
+  
+     // Custom renders
+ const customRenderList = [
+  {
+    names: ["updatedAt", "createdAt"],
+    render: (data, opt) =>
+      DateHelper.formatDateStandard2(
+        DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
+      ),
+  },
+];
 
   // Use Table Hook
   const {
@@ -35,13 +47,14 @@ function DynamicFormListingSettings() {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 99,
+      pageSize: 999,
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
       searchFields: generateSeachFieldArray(CUSTOMISATION_INITIAL_OPTION),
     },
-    CUSTOMISATION_INITIAL_OPTION
+    CUSTOMISATION_INITIAL_OPTION,
+    customRenderList
   );
 
   const generateFormConfig = (customConfig) => {

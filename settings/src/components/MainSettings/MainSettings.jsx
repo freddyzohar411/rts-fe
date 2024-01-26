@@ -49,6 +49,11 @@ function MainSettings() {
                     Notification Settings
                   </Link>
                 </li>
+                <li>
+                  <Link className="text-dark" to="/settings/templates">
+                    Templates
+                  </Link>
+                </li>
               </List>
             </Card>
           </Col>

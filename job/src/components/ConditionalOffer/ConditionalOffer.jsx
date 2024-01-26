@@ -4,19 +4,35 @@ import {
   Row,
   Col,
   Container,
-  Button,
   Input,
   Nav,
   NavItem,
   NavLink,
   TabContent,
   TabPane,
+  Button,
 } from "reactstrap";
 import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
+import { TemplateDisplayV3, TemplateExportButtons } from "@workspace/common";
+import { UseTemplateModuleDataHook } from "@workspace/common";
 
-function ConditionalOffer() {
+function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
   const [activeTab, setActiveTab] = useState("1");
+  const [conditionalOfferContent, setConditionalOfferContent] = useState("");
+  const [releaseValue, setReleaseValue] = useState("");
+  const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
+    candidateId: candidateId,
+  });
+
+  // Handle realease event
+  const handleRelease = () => {
+    if (releaseValue) {
+      // Release conditional offer logic
+    } else {
+      closeOffcanvas();
+    }
+  };
 
   return (
     <React.Fragment>
@@ -49,20 +65,19 @@ function ConditionalOffer() {
         </Nav>
         <TabContent activeTab={activeTab}>
           <TabPane tabId="1">
-            <div className="d-flex flex-column gap-5 mt-4">
-              <span className="h6 ">Conditional Offer</span>
-              <div className="d-flex flex-row gap-2 justify-content-end align-items-end">
-                <div className="d-flex flex-column gap-1">
-                  <span>Time to Take Action*</span>
-                  <Input
-                    type="text"
-                    className="form-control"
-                    placeholder="30 Min"
-                  />
-                </div>
-                <Button className="btn btn-custom-primary">Release</Button>
-              </div>
-            </div>
+            <Container
+              className="p-3 mt-3"
+              style={{ height: "100%", minWidth: "100%" }}
+            >
+              <TemplateDisplayV3
+                content={templateData?.content ?? null}
+                allData={allModuleData}
+                isView={true}
+                handleOutputContent={setConditionalOfferContent}
+                autoResize={true}
+                initialValues
+              />
+            </Container>
           </TabPane>
           <TabPane tabId="2">
             <div className="mt-4">
@@ -70,14 +85,39 @@ function ConditionalOffer() {
             </div>
           </TabPane>
           <TabPane tabId="3">
-            <div className="d-flex flex-column gap-5 mt-4">
-              <span className="h6">Preview Conditional Offer</span>
-              <div className="d-flex justify-content-end">
-                <Button className="btn btn-custom-primary">Release</Button>
-              </div>
-            </div>
+            <Container
+              className="p-3 mt-3"
+              style={{ height: "100%", minWidth: "100%" }}
+            >
+              <TemplateDisplayV3
+                content={conditionalOfferContent ?? null}
+                allData={null}
+                isView={true}
+                initialValues
+              />
+            </Container>
           </TabPane>
         </TabContent>
+        <div className="d-flex justify-content-end gap-3">
+          {activeTab == "3" && (
+            <TemplateExportButtons content={conditionalOfferContent} />
+          )}
+          {activeTab == "1" && (
+            <Input
+              type="number"
+              className="mr-2"
+              style={{ width: "200px" }}
+              placeholder="Time in minutes"
+              value={releaseValue}
+              onChange={(e) => setReleaseValue(e.target.value)}
+            />
+          )}
+          {(activeTab == "1" || activeTab == "3") && (
+            <Button className="btn btn-custom-primary" onClick={handleRelease}>
+              Release
+            </Button>
+          )}
+        </div>
       </div>
     </React.Fragment>
   );

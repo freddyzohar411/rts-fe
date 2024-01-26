@@ -19,6 +19,9 @@ import PermissionProtected from "./PermissionProtected";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Import Email Component
+import { EmailComponent } from "@workspace/common";
+
 // Action
 import { usePollingAuthHook } from "@workspace/login";
 
@@ -28,6 +31,7 @@ const Index = () => {
   return (
     <React.Fragment>
       <Router>
+        <EmailComponent />
         <ToastContainer
           position="top-right"
           autoClose={5000}

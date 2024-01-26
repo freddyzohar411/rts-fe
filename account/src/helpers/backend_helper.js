@@ -23,7 +23,6 @@ import {
 import { generateAccountModuleURL, accountModuleURL } from "./constant";
 
 const { APIClient } = Axios;
-
 const api = new APIClient();
 
 // Get Accounts Fields
@@ -77,3 +76,11 @@ export const deleteDraftAccountById = (id) =>
 // Get account Commercial by id
 export const getAccountCommercialById = (id) =>
   api.get(`${ACCOUNT_URL}${BASE_COMMERCIAL}/${id}`);
+
+// Get account data by Id
+export const getAccountDataById = (id) =>
+  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/${id}/data/all`);
+
+// Get account fields all
+export const getAccountsFieldsAll = () =>
+  api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields/all`);

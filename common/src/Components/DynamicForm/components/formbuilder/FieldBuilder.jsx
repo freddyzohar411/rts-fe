@@ -9,6 +9,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { v4 as uuid } from "uuid";
 import CountrySelectField from "../../fieldbuilders/CountrySelectField";
 import UserGroupSelectField from "../../fieldbuilders/UserGroupSelectField";
+import FormCategorySelectField from "../../fieldbuilders/FormCategorySelectField";
 
 const FieldBuilder = ({
   type,
@@ -52,6 +53,10 @@ const FieldBuilder = ({
         {
           label: "City",
           value: "city",
+        },
+        {
+          label: "Form",
+          value: "form",
         },
       ];
     }
@@ -124,6 +129,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -173,6 +180,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
       validation: [
         {
@@ -214,6 +223,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -258,6 +269,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -304,6 +317,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -343,6 +358,12 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
       ],
+    },
+    {
+      label: "Form Category",
+      type: "formcategoryselect",
+      name: "formCategorySelect",
+      apply: ["selectformtemplate"],
     },
     {
       label: "Options",
@@ -403,6 +424,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -439,6 +462,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -459,7 +484,7 @@ const FieldBuilder = ({
           }
         },
       },
-      apply: ["text", "email", "number", "textarea", "password"],
+      apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Pattern Validation Error Message",
@@ -468,7 +493,7 @@ const FieldBuilder = ({
       events: {
         disabled: true,
       },
-      apply: ["text", "email", "number", "textarea", "password"],
+      apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Min Length",
@@ -760,6 +785,7 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "selectformtemplate",
       ],
     },
     {
@@ -811,6 +837,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "selectaccountnameall",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -845,6 +873,8 @@ const FieldBuilder = ({
         "multiselectapi",
         "multifile",
         "selectaccountnameall",
+        "selectformtemplate",
+        "multiinput",
       ],
       renderCondition: validationConditionList.length > 0,
     },
@@ -893,6 +923,8 @@ const FieldBuilder = ({
         "singleselect",
         "singleselectapi",
         "multiselectapi",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     // {
@@ -961,6 +993,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     // Which include key value pair for table
@@ -1011,6 +1045,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -1058,6 +1094,8 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -1101,6 +1139,103 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "selectformtemplate",
+        "multiinput",
+      ],
+    },
+    {
+      label: "Information",
+      type: "radio",
+      name: "information",
+      defaultValue: formBuilderUpdateData?.information?.toString() || "false",
+      options: [
+        { label: "Yes", value: "true" },
+        { label: "No", value: "false" },
+      ],
+      events: {
+        onChange: (e) => {
+          formik.setValues({ ...formik.values, information: e.target.value });
+          if (e.target.value === "false") {
+            document.getElementsByName(
+              "informationText"
+            )[0].disabled = true;
+          } else {
+            document.getElementsByName(
+              "informationText"
+            )[0].disabled = false;
+          }
+        },
+      },
+      apply: [
+        "text",
+        "email",
+        "number",
+        "textarea",
+        "file",
+        "select",
+        "radio",
+        "checkbox",
+        "password",
+        "date",
+        "selectindustry",
+        "selectsubindustry",
+        "selectcountry",
+        "selectcity",
+        "selectcurrency",
+        "selectstate",
+        "selectlandline",
+        "selectdepartment",
+        "selectaccountname",
+        "selectaccountnameall",
+        "selectaccountcontact",
+        "editor",
+        "parentcompany",
+        "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
+        "selectformtemplate",
+        "multiinput",
+      ],
+    },
+    {
+      label: "Information Text",
+      type: "text",
+      name: "informationText",
+      apply: [
+        "text",
+        "email",
+        "number",
+        "textarea",
+        "file",
+        "select",
+        "radio",
+        "checkbox",
+        "password",
+        "date",
+        "selectindustry",
+        "selectsubindustry",
+        "selectcountry",
+        "selectcity",
+        "selectcurrency",
+        "selectstate",
+        "selectlandline",
+        "selectdepartment",
+        "selectaccountname",
+        "selectaccountnameall",
+        "selectaccountcontact",
+        "editor",
+        "parentcompany",
+        "searchselect",
+        "multiselect",
+        "singleselect",
+        "singleselectapi",
+        "multiselectapi",
+        "multifile",
+        "selectformtemplate",
+        "multiinput",
       ],
     },
     {
@@ -1266,6 +1401,9 @@ const FieldBuilder = ({
     case "multifile":
       header = "Multi File Field";
       break;
+    case "selectformtemplate":
+      header = "Select Form Template Field";
+      break;
     default:
   }
 
@@ -1289,6 +1427,14 @@ const FieldBuilder = ({
           tableRenderer: false,
           tableEditId: null,
         }
+  );
+
+  // Form Template
+  const [formCategory, setFormCategory] = useState(formBuilderUpdateData?.formCategorySelect || "");
+
+  // User group List
+  const [formCategoryList, setFormCategoryList] = useState(
+    formBuilderUpdateData?.formCategory || []
   );
 
   // User group
@@ -1386,6 +1532,8 @@ const FieldBuilder = ({
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
       validationSchema.conditionValidation = validationConditionList;
+      validationSchema.formCategorySelect = formCategory;
+      console.log("Validation Schema", validationSchema);
       updateFormField(validationSchema, formBuilderUpdateData.index);
       setFormBuilderType(null);
       setFormBuilderUpdateData(null);
@@ -1412,6 +1560,8 @@ const FieldBuilder = ({
       validationSchema.copyFields = copyConditionList;
       validationSchema.userGroup = userGroupList;
       validationSchema.conditionValidation = validationConditionList;
+      validationSchema.formCategorySelect = formCategory;
+      console.log("Validation Schema", validationSchema);
       addFormField(validationSchema);
       // Set Form Schema
       setFormFieldId(validationSchema.fieldId);
@@ -2445,6 +2595,29 @@ const FieldBuilder = ({
                             </span>
                           </div>
                         ))}
+                    </div>
+                  </div>
+                );
+              } else if (
+                field.type === "formcategoryselect" &&
+                ifContainsType(type, field.apply)
+              ) {
+                return (
+                  <div className="mb-3">
+                    <label htmlFor={field.name} className="form-label">
+                      {field.label}
+                    </label>
+                    <div className="d-flex justify-content-between gap-5">
+                      <div className="d-flex gap-4">
+                        <FormCategorySelectField
+                          setData={setFormCategory}
+                          value={formCategory}
+                          field={{
+                            name: "formcategoryselect",
+                            placeholder: "Select a form category",
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
                 );

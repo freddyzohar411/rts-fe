@@ -31,6 +31,8 @@ import {
 import AccountNameSelectElement from "./AccountNameSelectElement";
 import AccountNameSelectAllElement from "./AccountNameSelectElementAll";
 import AccountContactSelectElement from "./AccountContactSelectElement";
+import FormTemplateSelectElement from "./FormTemplateSelectElement";
+import MultiInputElement from "./MultiInputElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -317,8 +319,27 @@ const generateFormField = (
     );
   }
 
-  // text & button
+  if (type === "selectformtemplate") {
+    return (
+      <FormTemplateSelectElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
 
+  if (type === "multiinput") {
+    return (
+      <MultiInputElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+  
+  // text & button
   if (type === "word") {
     return <TextElement field={field} />;
   }
@@ -347,13 +368,13 @@ const checkVisibleConditions = (field, formik) => {
   if (conditions.length > 0) {
     conditions.forEach((condition) => {
       if (condition.condition === "equals") {
-        if (formik.values[condition.field] === condition.value) {
+        if (formik.values?.[condition.field] === condition.value) {
           visble = false;
         }
       }
 
       if (condition.condition === "notEquals") {
-        if (formik.values[condition.field] !== condition.value) {
+        if (formik.values?.[condition.field] !== condition.value) {
           visble = false;
         }
       }
@@ -367,31 +388,31 @@ const checkVisibleConditions = (field, formik) => {
       }
 
       if (condition.condition === "notContains") {
-        if (!formik.values[condition.field]?.includes(condition.value)) {
+        if (!formik.values?.[condition.field]?.includes(condition.value)) {
           visble = false;
         }
       }
 
       if (condition.condition === "greaterThan") {
-        if (formik.values[condition.field] > condition.value) {
+        if (formik.values?.[condition.field] > condition.value) {
           visble = false;
         }
       }
 
       if (condition.condition === "lessThan") {
-        if (formik.values[condition.field] < condition.value) {
+        if (formik.values?.[condition.field] < condition.value) {
           visble = false;
         }
       }
 
       if (condition.condition === "greaterThanEquals") {
-        if (formik.values[condition.field] >= condition.value) {
+        if (formik.values?.[condition.field] >= condition.value) {
           visble = false;
         }
       }
 
       if (condition.condition === "lessThanEquals") {
-        if (formik.values[condition.field] <= condition.value) {
+        if (formik.values?.[condition.field] <= condition.value) {
           visble = false;
         }
       }

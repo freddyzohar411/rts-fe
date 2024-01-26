@@ -58,5 +58,12 @@ export const CANDIDATE_LANGUAGES_URL = `${SERVER_IP}:9800`;
 // Candidate/Employer details service
 export const CANDIDATE_EMPLOYER_DETAILS_URL = `${SERVER_IP}:9900`;
 
-// Job Service
+// Common Service (Template, Email, SMS)
+export const COMMON_URL = `${SERVER_IP}:8181`;
+
 export const DASHBOARD_URL = `${SERVER_IP}:9300`;
+
+// 
+
+
+
