@@ -1,0 +1,95 @@
+// .preview-content {
+//     border: 1px solid #ccc; /* Just for visibility */
+//     margin: auto;
+//   }
+  
+//   .content {
+//     visibility: hidden; /* Hide all by default */
+//   }
+  
+//   .a4 {
+//     width: 210mm;
+//     height: 297mm;
+//     visibility: visible;
+//   }
+  
+//   .a3 {
+//     width: 297mm;
+//     height: 420mm;
+//     visibility: visible;
+//   }
+  
+//   .letter {
+//     width: 8.5in;
+//     height: 11in;
+//     visibility: visible;
+//   }
+
+// ==============================================
+  // .preview-content-custom {
+  //   box-sizing: border-box;
+  //   overflow: hidden; /* Hide overflow */
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  // }
+
+  // /* Scale settings */
+  // .a4, .a3, .letter {
+  //   border: 1px solid #ccc;
+  //   // transform-origin: top left; /* Scale from the top left corner */
+  // }
+  
+  // .a4 {
+  //   border: 1px solid #ccc;
+  //   width: 210mm;
+  //   height: 297mm;
+  //   transform: scale(0.75); /* Adjust scale as needed */
+  // }
+  
+  // .a3 {
+  //   width: 297mm;
+  //   height: 420mm;
+  //   transform: scale(0.85); /* Adjust scale as needed */
+  // }
+  
+  // .letter {
+  //   width: 8.5in;
+  //   height: 11in;
+  //   transform: scale(0.85); /* Adjust scale as needed */
+  // }
+
+  //=================================
+
+  .preview-content-custom {
+    // box-sizing: border-box;
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    border-bottom: 10px solid black; /* Thick line for separation */
+    // margin-bottom: 20px; /* Space between 'pages' */
+    // transform-origin: top center; /* Scaling origin */;
+    // display: flex;
+    // justify-content: center;
+    // transform-origin: top left; /* Scale from the top left corner */
+    position: relative;
+  }
+  
+  .a4 {
+    width: 210mm;
+    height: 297mm;
+    transform: scale(0.60); /* Scale down for screen */
+    // margin:0;
+  }
+  
+  .a3 {
+    width: 297mm;
+    height: 420mm;
+    transform: scale(0.40); /* Scale down for screen */
+  }
+  
+  .letter {
+    width: 8.5in;
+    height: 11in;
+    transform: scale(0.75); /* Scale down for screen */
+  }
+  

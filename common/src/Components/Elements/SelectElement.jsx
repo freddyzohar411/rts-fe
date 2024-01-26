@@ -8,6 +8,7 @@ const SingleSelectElement = ({
   value,
   placeholder,
   editorRef,
+  clearable = true,
   ...props
 }) => {
   const [search, setSearch] = useState("");
@@ -68,7 +69,7 @@ const SingleSelectElement = ({
         onInputChange={handleInputChange}
         inputValue={search}
         menuShouldScrollIntoView={false}
-        isClearable
+        isClearable={clearable}
         isSearchable
         placeholder={placeholder}
         options={options}

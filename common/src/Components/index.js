@@ -85,6 +85,8 @@ import TemplateDisplayV3 from "./TemplateDisplay/TemplateDisplayV3";
 import TemplateSelectByCategoryElement from "./TemplateDisplay/TemplateSelectByCategoryElement/TemplateSelectByCategoryElement";
 import TemplateExportButtons from "./TemplateDisplay/TemplateExportButtons/TemplateExportButtons";
 import TemplatePagePreviewModal from "./TemplateDisplay/TemplatePagePreviewModal/TemplatePagePreviewModal";
+import TemplateAdvanceExportModal from "./TemplateDisplay/TemplateAdvanceExportModal/TemplateAdvanceExportModal";
+
 // Import Elements
 import SelectElement from "./Elements/SelectElement";
 import MultiInputFormik from "./Elements/MultiInputFormik";
@@ -169,6 +171,7 @@ export {
   TemplateSelectByCategoryElement,
   TemplateExportButtons,
   TemplatePagePreviewModal,
+  TemplateAdvanceExportModal,
 
   // Export Elements
   SelectElement,

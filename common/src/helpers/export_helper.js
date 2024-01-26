@@ -53,14 +53,35 @@ const generatePDFMulti = async (element, type = "save", options) => {
     )
   );
 
-  const fileName = options?.filename ? options.filename + ".pdf" : "test.pdf";
+  const {
+    unit,
+    pageType,
+    pageOrientation,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    fileName: filename,
+  } = options;
+
+  const pageTypeMap = {
+    a4: "A4",
+    a3: "A3",
+    letter: "letter",
+  };
+
+  const fileName = filename ? filename + ".pdf" : "test.pdf";
 
   const opt = {
-    margin: [0.25, 0.25, 0.25, 0.25],
+    margin: [marginTop, marginRight, marginBottom, marginLeft],
     filename: fileName,
     image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 3, useCORS: true }, // Use CORS for images
-    jsPDF: { unit: "in", format: "A4", orientation: "portrait" },
+    html2canvas: { scale: 2, useCORS: true }, // Use CORS for images
+    jsPDF: {
+      unit: unit,
+      format: pageTypeMap[pageType],
+      orientation: pageOrientation,
+    },
   };
 
   if (type === "save") {
@@ -74,6 +95,10 @@ const generatePDFMulti = async (element, type = "save", options) => {
     });
 
     return file;
+  }
+  if (type === "blob") {
+    const blob = await html2pdf().set(opt).from(element).output("blob");
+    return blob;
   }
 };
 
@@ -174,8 +199,19 @@ export function generateDocxCustom(
  * @param {*} fileName
  */
 export function generateHtml(htmlString, options = { filename: "index.html" }) {
-  const htmlStringWithPageBreak =
+  let htmlStringWithPageBreak =
     TemplateDisplayHelper.replacePageBreaks2(htmlString);
+
+  const header = `<head>
+  <style>
+    @page {
+      size: A4;
+      margin: 0.1in;
+    }
+  </style>
+</head>`;
+
+  htmlStringWithPageBreak = header + htmlString;
 
   // Create a Blob object with the HTML string
   const blob = new Blob([htmlStringWithPageBreak], { type: "text/html" });
@@ -263,4 +299,61 @@ export function convertHtmlToDocxFile(
   });
 
   return file;
+}
+
+// Convert html to pdf blob url
+export async function convertHtmlToPdfBlob(htmlString, options = {}) {
+  const content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  console.log("content", content);
+
+  // Create a ref for the target element
+  const targetRef = React.createRef();
+
+  // Create the outer div with inline styles
+  const outerDiv = document.createElement("div");
+  outerDiv.style.opacity = "0";
+
+  // Create the inner div
+  const innerDiv = document.createElement("div");
+
+  // Set the inner HTML using dangerouslySetInnerHTML
+  innerDiv.innerHTML = content;
+
+  // Append the inner div to the outer div
+  outerDiv.appendChild(innerDiv);
+
+  // Append the entire structure to the document body
+  document.body.appendChild(outerDiv);
+
+  // Set the targetRef to the innerDiv reference
+  targetRef.current = innerDiv;
+
+  // Generate PDF using the updated targetRef
+  const blob = await generatePDFMulti(targetRef.current, "blob", options);
+
+  // Last thing to do
+  document.body.removeChild(outerDiv);
+
+  return blob;
+}
+
+function createStyleTag(settings) {
+  const {
+    unit,
+    pageType,
+    pageOrientation,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+  } = settings;
+
+  return `
+      <style>
+          @page {
+              size: ${pageType} ${pageOrientation};
+              margin: ${marginTop}${unit} ${marginRight}${unit} ${marginBottom}${unit} ${marginLeft}${unit};
+          }
+      </style>
+  `;
 }
