@@ -37,7 +37,7 @@ const PageSettingView = ({ pageSize = "a4", settings, content }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (iframeRef.current) {
+      if (iframeRef.current && content) {
         const pdfBlob = await ExportHelper.convertHtmlToPdfBlob(content, {
           ...settings,
         });
@@ -69,7 +69,18 @@ const PageSettingView = ({ pageSize = "a4", settings, content }) => {
   ]);
 
   return (
-    <iframe ref={iframeRef} title="PDF Viewer" width="80%" height="635px" />
+    <>
+      {content ? (
+        <iframe ref={iframeRef} title="PDF Viewer" width="80%" height="635px" />
+      ) : (
+        <div
+          style={{ height: "635px" }}
+          className="d-flex justify-content-center align-items-center"
+        >
+          <h2>Please select template to load</h2>
+        </div>
+      )}
+    </>
   );
 };
 

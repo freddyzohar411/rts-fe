@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Col, Row, Label, Input, Button } from "reactstrap";
 import SelectElement from "../../Elements/SelectElement";
 
-const TemplateSettingsSideBar = ({ setSettings, settings, exportCallback }) => {
+const TemplateSettingsSideBar = ({
+  setSettings,
+  settings,
+  callback,
+  toExport,
+}) => {
   const [tempSettings, setTempSettings] = useState(settings);
   const setFirstLetterUpperCase = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -156,7 +161,8 @@ const TemplateSettingsSideBar = ({ setSettings, settings, exportCallback }) => {
         <Col className="d-flex justify-content-end">
           <Button
             className="btn btn-custom-primary"
-            onClick={() => setSettings({
+            onClick={() =>
+              setSettings({
                 ...settings,
                 unit: tempSettings.unit,
                 pageType: tempSettings.pageType,
@@ -165,13 +171,14 @@ const TemplateSettingsSideBar = ({ setSettings, settings, exportCallback }) => {
                 marginBottom: tempSettings.marginBottom,
                 marginLeft: tempSettings.marginLeft,
                 marginRight: tempSettings.marginRight,
-            })}
+              })
+            }
           >
             Set & Preview
           </Button>
         </Col>
       </Row>
-      <h2>Export</h2>
+      <h2>{toExport ? "Export " : "Attach"}</h2>
       <hr />
       <Row className="mb-2">
         <Col>
@@ -208,7 +215,14 @@ const TemplateSettingsSideBar = ({ setSettings, settings, exportCallback }) => {
       </Row>
       <Row>
         <Col className="d-flex justify-content-end">
-          <Button className="btn btn-custom-primary" onClick={exportCallback}>Export</Button>
+          <Button
+            className="btn btn-custom-primary"
+            onClick={async () => {
+              await callback();
+            }}
+          >
+            {toExport ? "Export" : "Attach"}
+          </Button>
         </Col>
       </Row>
     </div>

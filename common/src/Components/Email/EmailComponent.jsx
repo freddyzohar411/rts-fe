@@ -29,6 +29,7 @@ import { setEmailClose } from "../../store/email/action";
 import * as ExportHelper from "../../helpers/export_helper";
 import TemplatePreviewModal from "../TemplateDisplay/TemplatePreviewModal/TemplatePreviewModal";
 import { generateOptions } from "./pdfOption";
+import TemplateAdvanceExportModal from "../TemplateDisplay/TemplateAdvanceExportModal/TemplateAdvanceExportModal";
 
 function EmailComponent() {
   const dispatch = useDispatch();
@@ -441,15 +442,15 @@ function EmailComponent() {
             </ModalBody>
           </Modal>
         )}
-        <TemplatePreviewModal
+        <TemplateAdvanceExportModal
           showInsertModal={templateAttachmentModalShow}
           setShowInsertModal={setTemplateAttachmentModalShow}
           toExport={false}
-          callback={(file) => {
+          attachmentCallback={(file) => {
             if (!file) return;
             setAttachments([...attachments, file]);
           }}
-          allModuleData={allModuleData}
+          allData={allModuleData}
         />
         {isMinimized && (
           <div

@@ -248,7 +248,7 @@ const TemplateBuilderPage = () => {
                     >
                       Download as PDF
                     </Button> */}
-                    <Button
+                    {/* <Button
                       className="w-25 mx-2 btn-custom-primary"
                       onClick={() => {
                         setExportType("docx");
@@ -277,9 +277,12 @@ const TemplateBuilderPage = () => {
                       disabled={!templateData?.content}
                     >
                       Download html file
-                    </Button>
-                    <Button onClick={() => setShowExportModal(true)}>
-                      A Export
+                    </Button> */}
+                    <Button
+                      className="w-25 mx-2 btn-custom-primary"
+                      onClick={() => setShowExportModal(true)}
+                    >
+                      Export
                     </Button>
                   </Row>
                 </CardBody>
@@ -359,6 +362,8 @@ const TemplateBuilderPage = () => {
           content={newContent ?? ""}
           showInsertModal={showExportModal}
           setShowInsertModal={setShowExportModal}
+          toExport={false}
+          allData={allModuleData}
         />
       </div>
     </React.Fragment>

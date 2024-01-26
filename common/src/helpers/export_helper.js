@@ -265,7 +265,6 @@ export function generateHtml(htmlString, options = { fileName: "index.html" }) {
  */
 export async function convertHtmlToPdfFile(htmlString, options = {}) {
   const content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  console.log("content", content);
 
   // Create a ref for the target element
   const targetRef = React.createRef();
