@@ -171,7 +171,7 @@ export function generateDocCustom(
  */
 export function generateDocxCustom(
   htmlContent,
-  options = { filename: "document" }
+  options = { fileName: "document" }
 ) {
   const header =
     "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
@@ -185,11 +185,36 @@ export function generateDocxCustom(
   console.log("htmlContentWithPageBreaks", htmlContentWithPageBreaks);
   const sourceHTML = header + htmlContentWithPageBreaks + footer;
 
-  const buffer = htmlDocx.asBlob(sourceHTML);
+  // Marin conversion
+  const convertToTwips = (value) => {
+    if (!value) return null;
+    if (options.unit === "in") {
+      return Math.round(value * 1440);
+    }
+    if (options.unit === "mm") {
+      return Math.round(value * 56.7);
+    }
+    if (options.unit === "cm") {
+      return Math.round(value * 567);
+    }
+  };
+
+  // Options
+  const inputOptions = {
+    orientation: options?.pageOrientation || "portrait",
+    margins: {
+      top: convertToTwips(options?.marginTop) || 1440,
+      bottom: convertToTwips(options?.marginBottom) || 1440,
+      left: convertToTwips(options?.marginLeft) || 1440,
+      right: convertToTwips(options?.marginRight) || 1440,
+    },
+  };
+
+  const buffer = htmlDocx.asBlob(sourceHTML, inputOptions);
   const blob = new Blob([buffer], {
     type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
-  const filename = options.filename + ".docx";
+  const filename = options.fileName + ".docx";
   FileSaver.saveAs(blob, filename);
 }
 
@@ -198,7 +223,7 @@ export function generateDocxCustom(
  * @param {*} htmlString
  * @param {*} fileName
  */
-export function generateHtml(htmlString, options = { filename: "index.html" }) {
+export function generateHtml(htmlString, options = { fileName: "index.html" }) {
   let htmlStringWithPageBreak =
     TemplateDisplayHelper.replacePageBreaks2(htmlString);
 
@@ -222,7 +247,7 @@ export function generateHtml(htmlString, options = { filename: "index.html" }) {
   // Create an anchor element to trigger the download
   const a = document.createElement("a");
   a.href = url;
-  a.download = options?.filename + ".html";
+  a.download = options?.fileName + ".html";
 
   // Trigger a click event to download the file
   a.click();

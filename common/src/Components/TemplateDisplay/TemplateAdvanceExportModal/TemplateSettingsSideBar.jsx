@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Col, Row, Label, Input, Button } from "reactstrap";
 import SelectElement from "../../Elements/SelectElement";
 
-const TemplateSettingsSideBar = ({ setSettings, settings }) => {
+const TemplateSettingsSideBar = ({ setSettings, settings, exportCallback }) => {
   const [tempSettings, setTempSettings] = useState(settings);
   const setFirstLetterUpperCase = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -19,8 +19,8 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
           <Label>Page Type</Label>
           <SelectElement
             value={{
-              label: setFirstLetterUpperCase(settings.pageType),
-              value: settings.pageType,
+              label: setFirstLetterUpperCase(tempSettings.pageType),
+              value: tempSettings.pageType,
             }}
             optionsData={[
               { label: "A4", value: "a4" },
@@ -40,8 +40,8 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
           <Label>Page Orientation</Label>
           <SelectElement
             value={{
-              label: setFirstLetterUpperCase(settings.pageOrientation),
-              value: settings.pageOrientation,
+              label: setFirstLetterUpperCase(tempSettings.pageOrientation),
+              value: tempSettings.pageOrientation,
             }}
             optionsData={[
               { label: "Portrait", value: "portrait" },
@@ -60,8 +60,8 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
           <Label>Unit</Label>
           <SelectElement
             value={{
-              label: setFirstLetterUpperCase(settings.unit),
-              value: settings.unit,
+              label: setFirstLetterUpperCase(tempSettings.unit),
+              value: tempSettings.unit,
             }}
             optionsData={[
               { label: "In", value: "in" },
@@ -81,7 +81,7 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
           <Label style={{ fontSize: "0.75rem" }}>Top</Label>
           <Input
             type="number"
-            value={settings.marginTop}
+            value={tempSettings.marginTop}
             onChange={(e) =>
               //   setSettings((prev) => ({
               //     ...prev,
@@ -99,7 +99,7 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
           <Label style={{ fontSize: "0.75rem" }}>Bottom</Label>
           <Input
             type="number"
-            value={settings.marginBottom}
+            value={tempSettings.marginBottom}
             onChange={(e) =>
               //   setSettings((prev) => ({
               //     ...prev,
@@ -119,7 +119,7 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
           <Label style={{ fontSize: "0.75rem" }}>Right</Label>
           <Input
             type="number"
-            value={settings.marginLeft}
+            value={tempSettings.marginLeft}
             onChange={(e) =>
               //   setSettings((prev) => ({
               //     ...prev,
@@ -137,7 +137,7 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
           <Label style={{ fontSize: "0.75rem" }}>Left</Label>
           <Input
             type="number"
-            value={settings.marginRight}
+            value={tempSettings.marginRight}
             onChange={(e) =>
               //   setSettings((prev) => ({
               //     ...prev,
@@ -156,9 +156,18 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
         <Col className="d-flex justify-content-end">
           <Button
             className="btn btn-custom-primary"
-            onClick={() => setSettings(tempSettings)}
+            onClick={() => setSettings({
+                ...settings,
+                unit: tempSettings.unit,
+                pageType: tempSettings.pageType,
+                pageOrientation: tempSettings.pageOrientation,
+                marginTop: tempSettings.marginTop,
+                marginBottom: tempSettings.marginBottom,
+                marginLeft: tempSettings.marginLeft,
+                marginRight: tempSettings.marginRight,
+            })}
           >
-            Preview
+            Set & Preview
           </Button>
         </Col>
       </Row>
@@ -178,8 +187,7 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
               { label: "Html", value: "html" },
             ]}
             setSelectedOptionData={(e) =>
-              //   setSettings((prev) => ({ ...prev, exportType: e.value }))
-              setTempSettings((prev) => ({ ...prev, exportType: e.value }))
+              setSettings((prev) => ({ ...prev, exportType: e.value }))
             }
             clearable={false}
           />
@@ -192,8 +200,7 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
             type="text"
             value={settings.fileName}
             onChange={(e) =>
-              //   setSettings((prev) => ({ ...prev, fileName: e.target.value }))
-              setTempSettings((prev) => ({ ...prev, fileName: e.target.value }))
+              setSettings((prev) => ({ ...prev, fileName: e.target.value }))
             }
             placeholder="Enter File Name"
           />
@@ -201,7 +208,7 @@ const TemplateSettingsSideBar = ({ setSettings, settings }) => {
       </Row>
       <Row>
         <Col className="d-flex justify-content-end">
-          <Button className="btn btn-custom-primary">Export</Button>
+          <Button className="btn btn-custom-primary" onClick={exportCallback}>Export</Button>
         </Col>
       </Row>
     </div>

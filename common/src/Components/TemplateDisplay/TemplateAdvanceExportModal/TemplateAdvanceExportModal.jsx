@@ -12,6 +12,7 @@ import {
 } from "reactstrap";
 import PageSettingView from "../components/PageSettingView";
 import TemplateSettingsSideBar from "./TemplateSettingsSideBar";
+import { ExportHelper } from "../../..";
 
 const TemplateAdvanceExportModal = ({
   content,
@@ -74,6 +75,24 @@ const TemplateAdvanceExportModal = ({
     setShowInsertModal(false);
   };
 
+  const handleExport = async () => {
+    if (templateSettings.exportType === "pdf") {
+      await ExportHelper.generatePDFCustomMulti(content, {
+        ...templateSettings,
+      });
+    }
+    if (templateSettings.exportType === "docx") {
+      await ExportHelper.generateDocxCustom(content, {
+        ...templateSettings,
+      });
+    }
+    if (templateSettings.exportType === "html") {
+      await ExportHelper.generateHtml(content, {
+        ...templateSettings,
+      });
+    }
+  };
+
   return (
     <Modal
       isOpen={showInsertModal}
@@ -97,59 +116,39 @@ const TemplateAdvanceExportModal = ({
         </div>
       </ModalHeader>
       <ModalBody scrollable={true} className="bg-light p-0 border">
-        <div
-          className="d-flex flex-column"
-          style={{ minHeight: "91vh", overflowY: "auto" }}
-        >
+        <div className="d-flex flex-column">
           <Row className="m-0">
             <Col
               className="col-3 pt-3 pb-3 px-4"
               style={{
                 borderRight: "1px grey solid",
                 overflowY: "auto",
-                maxHeight: "620px",
+                maxHeight: "635px",
               }}
             >
               <TemplateSettingsSideBar
                 setSettings={setTemplateSettings}
                 settings={templateSettings}
+                exportCallback={handleExport}
               />
             </Col>
             <Col className="col-9">
               <div className="d-flex justify-content-center">
-                <PageSettingView content={content} settings={templateSettings}/>
+                <PageSettingView
+                  content={content}
+                  settings={templateSettings}
+                />
               </div>
             </Col>
           </Row>
-          {/* <Row className="mb-3 mt-3 center d-flex justify-content-center">
-            <div className="w-50 text-center">
-              <span
-                style={{
-                  fontSize: "1.2rem",
-                  fontWeight: "500",
-                }}
-              >
-                {toExport ? "Export Template" : "Attach Template"}
-              </span>
-
-              <div className="mt-3 w-100 d-flex gap-2">
-                <Button
-                  className="w-100 btn-custom-primary"
-                  onClick={() => {
-                    handlePDF(fileName);
-                  }}
-                >
-                  {toExport ? "Export" : "Attach"}
-                </Button>
-              </div>
-            </div>
-          </Row> */}
           <hr className="mt-0" />
-          <div className="d-flex justify-content-end gap-3">
-            <Button className="btn-danger" onClick={() => closeModal()}>
-              Cancel
-            </Button>
-          </div>
+          <Row className="mx-3">
+            <Col className="d-flex justify-content-end">
+              <Button className="btn-danger" onClick={() => closeModal()}>
+                Cancel
+              </Button>
+            </Col>
+          </Row>
         </div>
       </ModalBody>
     </Modal>

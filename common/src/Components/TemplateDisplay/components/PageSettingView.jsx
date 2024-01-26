@@ -39,7 +39,7 @@ const PageSettingView = ({ pageSize = "a4", settings, content }) => {
     const fetchData = async () => {
       if (iframeRef.current) {
         const pdfBlob = await ExportHelper.convertHtmlToPdfBlob(content, {
-          ...settings
+          ...settings,
         });
         // Assuming you have a Blob object named 'pdfBlob' representing your PDF data
         const blobUrl = URL.createObjectURL(pdfBlob);
@@ -57,10 +57,19 @@ const PageSettingView = ({ pageSize = "a4", settings, content }) => {
         URL.revokeObjectURL(iframeRef.current.src);
       }
     };
-  }, [content, settings]);
+  }, [
+    content,
+    settings.marginBottom,
+    settings.marginLeft,
+    settings.marginRight,
+    settings.marginTop,
+    settings.pageOrientation,
+    settings.pageType,
+    settings.unit,
+  ]);
 
   return (
-    <iframe ref={iframeRef} title="PDF Viewer" width="80%" height="620px" />
+    <iframe ref={iframeRef} title="PDF Viewer" width="80%" height="635px" />
   );
 };
 
