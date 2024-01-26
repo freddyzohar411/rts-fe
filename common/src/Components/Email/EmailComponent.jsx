@@ -43,13 +43,13 @@ function EmailComponent() {
   const [templateData, setTemplateData] = useState(null);
   const [attachments, setAttachments] = useState([]);
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
-  const emailData = useSelector((state) => state.EmailCommonReducer);
   const [templateAttachmentModalShow, setTemplateAttachmentModalShow] =
     useState(false);
-  const isEmailOpen = useSelector(
-    (state) => state.EmailCommonReducer.isEmailOpen
-  );
 
+  const { loading , isEmailOpen, category, subCategory } = useSelector((state) => state.EmailCommonReducer);
+
+  console.log("Category", category)
+  console.log("SubCategory", subCategory)
   /**
    * Handle form submit event (Formik)
    * @param {*} values
@@ -230,7 +230,8 @@ function EmailComponent() {
                     />
                   </div>
                   <TemplateSelectByCategoryElement
-                    categoryName="Email Templates"
+                    categoryName={category ?? null}
+                    subCategoryName={subCategory ?? null}
                     placeholder="Select a template"
                     onChange={(value) => {
                       setTemplateData(value);
@@ -415,9 +416,9 @@ function EmailComponent() {
                           formik.handleSubmit();
                           setModal(false);
                         }}
-                        disabled={emailData?.loading}
+                        disabled={loading}
                       >
-                        {emailData?.loading ? "Sending..." : "Send"}
+                        {loading ? "Sending..." : "Send"}
                       </Button>
                       <DropdownToggle
                         tag="button"

@@ -5,6 +5,7 @@ import Select from "react-select";
 
 const TemplateSelectByCategoryElement = ({
   categoryName = null,
+  subCategoryName = null,
   defaultFirstValue, // Default first value of the option
   width = "auto",
   end, // Justify content end
@@ -36,9 +37,20 @@ const TemplateSelectByCategoryElement = ({
       setTemplateList([]);
       setTemplateSelected("");
     }
+    if (categoryName && subCategoryName) {
+      setTemplateSelected("");
+      dispatch(
+        TemplateActions.fetchTemplateByCategoryAndSubCategory(
+          categoryName,
+          subCategoryName
+        )
+      );
+      return
+    }
     if (categoryName) {
       setTemplateSelected("");
       dispatch(TemplateActions.fetchTemplateByCategory(categoryName));
+      return
     }
   }, [categoryName]);
 

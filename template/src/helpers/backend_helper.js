@@ -32,6 +32,11 @@ export const getTemplateCategories = () =>
 export const getTemplatesByCategory = (category) =>
   api.get(`${COMMON_URL}${BASE_TEMPLATE}/categories/${category}`);
 
+export const getTemplatesByCategoryAndSubCategory = (category, subCategory) =>
+  api.get(
+    `${COMMON_URL}${BASE_TEMPLATE}/categories/${category}/sub-category/${subCategory}`
+  );
+
 // URL
 export const addMediaUrl = () => `${COMMON_URL}${BASE_MEDIA}/add`;
 
