@@ -96,7 +96,8 @@ const TemplateAdvanceExportModal = ({
           ...templateSettings,
         });
       } else {
-        const file = await ExportHelper.convertHtmlToPdfFile(showContent, {
+        // const file = await ExportHelper.convertHtmlToPdfFile(showContent, {
+          const file = await ExportHelper.exportBackendHtml2PdfFile(showContent, {
           ...templateSettings,
         });
         if (attachmentCallback) {
@@ -112,7 +113,8 @@ const TemplateAdvanceExportModal = ({
           ...templateSettings,
         });
       } else {
-        const file = await ExportHelper.convertHtmlToDocxFile(showContent, {
+        // const file = await ExportHelper.convertHtmlToDocxFile(showContent, {
+          const file = await ExportHelper.exportBackendHtml2DocxFile(showContent, {
           ...templateSettings,
         });
         if (attachmentCallback) {
@@ -136,7 +138,10 @@ const TemplateAdvanceExportModal = ({
         allData,
         true
       );
-      setShowContent(processedContent);
+      const removeEditableContent = TemplateHelper.removeContentEditableAndStyles(
+        processedContent
+      )
+      setShowContent(removeEditableContent);
     };
 
     if (templateContent && allData) {
@@ -150,7 +155,7 @@ const TemplateAdvanceExportModal = ({
   
 
   return (
-    <div style={{ zIndex: 9999999999999 }}>
+    // <div style={{ zIndex: 9999999999999 }}>
       <Modal
         isOpen={showInsertModal}
         closeModal={() => {
@@ -222,7 +227,6 @@ const TemplateAdvanceExportModal = ({
         <ModalBody
           scrollable={true}
           className="bg-light p-0 border"
-          style={{ zIndex: 999999999999999999 }} // Set a high z-index value for the modal
         >
           <div className="d-flex flex-column">
             <Row className="m-0">
@@ -262,7 +266,7 @@ const TemplateAdvanceExportModal = ({
           </div>
         </ModalBody>
       </Modal>
-    </div>
+    // </div>
   );
 };
 
