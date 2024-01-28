@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { ExportHelper } from "@workspace/common";
 import { generateOptions } from "./pdfOption";
+import { TemplateAdvanceExportModal } from "@workspace/common";
 
 const EditorElement2 = ({
   name,
@@ -18,6 +19,7 @@ const EditorElement2 = ({
   },
 }) => {
   const editorRef = useRef(null);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   // Inject variable when it changes
   useEffect(() => {
@@ -221,8 +223,26 @@ const EditorElement2 = ({
     setEditorRef(editorRef);
   }, [setEditorRef, editorRef]);
 
+  // useEffect(() => {
+  //   if (showExportModal) {
+  //     // Select the 'more' toolbar element. Adjust the selector as needed.
+  //     const moreToolbar = document.querySelector(".tox-toolbar__overflow");
+
+  //     // Hide the toolbar only when the modal is open
+  //     if (moreToolbar) {
+  //       moreToolbar.style.display = "none";
+  //     }
+  //   }
+  // }, [showExportModal]);
+
   return (
     <>
+      <TemplateAdvanceExportModal
+        content={formik?.values?.[name]}
+        showInsertModal={showExportModal}
+        setShowInsertModal={setShowExportModal}
+        toExport={true}
+      />
       <Editor
         tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
         onInit={(evt, editor) => (editorRef.current = editor)}
@@ -250,6 +270,11 @@ const EditorElement2 = ({
               '<i style="font-size:1.2rem": class="bx bxs-file-pdf"></i>'
             );
 
+            editor.ui.registry.addIcon(
+              "exportPreviewIcon",
+              '<i style="font-size:1.2rem": class="ri-file-download-line"></i>'
+            );
+
             editor.ui.registry.addButton("exportPDFButton", {
               icon: "exportPDFIcon", // Use the custom icon
               tooltip: "Export to PDF",
@@ -272,6 +297,31 @@ const EditorElement2 = ({
                 ExportHelper.generateDocxCustom(content, {
                   filename: "test.docx",
                 });
+              },
+            });
+
+            editor.ui.registry.addButton("exportPreviewButton", {
+              icon: "exportPreviewIcon", // Use the custom icon
+              tooltip: "Preview and Export to Docx/PDF",
+              onAction: function () {
+                const content = editor.getContent();
+                setShowExportModal(true);
+
+                // Code to toggle the extended toolbar
+                const moreToolbar = document.querySelector(
+                  ".tox-toolbar__overflow"
+                );
+                if (moreToolbar) {
+                  moreToolbar.style.display =
+                    moreToolbar.style.display === "none" ? "" : "none";
+                }
+
+                // Update the toggle button state
+                const toggleButton =
+                  document.querySelector(".tox-tbtn--enabled"); // Adjust selector as necessary
+                if (toggleButton) {
+                  toggleButton.classList.remove("tox-tbtn--enabled"); // Adjust class as necessary
+                }
               },
             });
 
@@ -374,7 +424,7 @@ const EditorElement2 = ({
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
-            "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPDFButton exportDocxButton |  help",
+            "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPDFButton exportDocxButton exportPreviewButton |  help",
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           file_picker_callback: handleFilePickerCallback,

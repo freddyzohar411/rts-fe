@@ -11,12 +11,14 @@ import {
   Container,
 } from "reactstrap";
 import PageSettingView from "../components/PageSettingView";
+import PageSettingViewBackend from "../components/PageSettingViewBackend";
 import TemplateSettingsSideBar from "./TemplateSettingsSideBar";
 import SelectElement from "../components/SelectElement";
 import { ExportHelper } from "../../..";
 import { useDispatch, useSelector } from "react-redux";
 import * as TemplateActions from "../../../../../template/src/store/template/action";
 import * as TemplateHelper from "../templateDisplayHelper";
+import "./TemplateAdvanceExportModal.scss";
 
 const TemplateAdvanceExportModal = ({
   content,
@@ -31,10 +33,10 @@ const TemplateAdvanceExportModal = ({
     unit: "in",
     pageType: "a4",
     pageOrientation: "portrait",
-    marginTop: 0.1,
-    marginBottom: 0.1,
-    marginLeft: 0.1,
-    marginRight: 0.1,
+    marginTop: 0.25,
+    marginBottom: 0.25,
+    marginLeft: 0.25,
+    marginRight: 0.25,
     exportType: "pdf",
     fileName: "template",
   });
@@ -106,7 +108,7 @@ const TemplateAdvanceExportModal = ({
     if (templateSettings.exportType === "docx") {
       if (toExport) {
         // await ExportHelper.generateDocxCustom(showContent, {
-          await ExportHelper.exportBackendHtml2Docx(showContent, {
+        await ExportHelper.exportBackendHtml2Docx(showContent, {
           ...templateSettings,
         });
       } else {
@@ -145,113 +147,122 @@ const TemplateAdvanceExportModal = ({
     setShowContent(content);
   }, [templateContent, allData, content]);
 
+  
+
   return (
-    <Modal
-      isOpen={showInsertModal}
-      closeModal={() => {
-        closeModal();
-      }}
-      centered
-      scrollable
-      fullscreen
-    >
-      <ModalHeader
-        className="bg-custom-primary "
-        toggle={() => {
+    <div style={{ zIndex: 9999999999999 }}>
+      <Modal
+        isOpen={showInsertModal}
+        closeModal={() => {
           closeModal();
         }}
-        // style={{ border:"1px solid #e0e0e0" }}
+        centered
+        scrollable
+        fullscreen
+        className="custom-modal"
       >
-        <div className="d-flex flex-column text-dark">
-          <span className="h4 fw-bold">
-            {toExport ? "Export Template" : "Attach Template"}
-          </span>
-        </div>
-        {!toExport && (
-          <Row className="align-items-end mb-1" style={{ minWidth: "800px" }}>
-            <Col>
-              <Label>Category</Label>
-              <SelectElement
-                optionsData={templateCategories.map((category) => ({
-                  label: category,
-                  value: category,
-                }))}
-                setSelectedOptionData={setCategorySelected}
-                placeholder="Select a category"
-                value={categorySelected}
-              />
-            </Col>
-            <Col>
-              <Label>Template</Label>
-              <SelectElement
-                optionsData={templateList}
-                value={templateSelected}
-                placeholder="Select a field"
-                setSelectedOptionData={setTemplateSelected}
-                module={typeData}
-              />
-            </Col>
-            <Col>
-              <Button
-                type="button"
-                className="self-end btn-primary"
-                disabled={!templateSelected || !categorySelected}
-                onClick={async () => {
-                  const template = templatesByCategory.filter(
-                    (template) =>
-                      template.name == templateSelected.value &&
-                      template.category === categorySelected.value
-                  )[0];
-                  setTemplateContent(template.content);
-                  setTemplateSelected("");
-                  setCategorySelected("");
+        <ModalHeader
+          className="bg-custom-primary "
+          toggle={() => {
+            closeModal();
+          }}
+          // style={{ border:"1px solid #e0e0e0" }}
+        >
+          <div className="d-flex flex-column text-dark">
+            <span className="h4 fw-bold">
+              {toExport ? "Export Template" : "Attach Template"}
+            </span>
+          </div>
+          {!toExport && (
+            <Row className="align-items-end mb-1" style={{ minWidth: "800px" }}>
+              <Col>
+                <Label>Category</Label>
+                <SelectElement
+                  optionsData={templateCategories.map((category) => ({
+                    label: category,
+                    value: category,
+                  }))}
+                  setSelectedOptionData={setCategorySelected}
+                  placeholder="Select a category"
+                  value={categorySelected}
+                />
+              </Col>
+              <Col>
+                <Label>Template</Label>
+                <SelectElement
+                  optionsData={templateList}
+                  value={templateSelected}
+                  placeholder="Select a field"
+                  setSelectedOptionData={setTemplateSelected}
+                  module={typeData}
+                />
+              </Col>
+              <Col>
+                <Button
+                  type="button"
+                  className="self-end btn-primary"
+                  disabled={!templateSelected || !categorySelected}
+                  onClick={async () => {
+                    const template = templatesByCategory.filter(
+                      (template) =>
+                        template.name == templateSelected.value &&
+                        template.category === categorySelected.value
+                    )[0];
+                    setTemplateContent(template.content);
+                    setTemplateSelected("");
+                    setCategorySelected("");
+                  }}
+                >
+                  Preview
+                </Button>
+              </Col>
+            </Row>
+          )}
+        </ModalHeader>
+        <ModalBody
+          scrollable={true}
+          className="bg-light p-0 border"
+          style={{ zIndex: 999999999999999999 }} // Set a high z-index value for the modal
+        >
+          <div className="d-flex flex-column">
+            <Row className="m-0">
+              <Col
+                className="col-3 pt-3 pb-3 px-4"
+                style={{
+                  borderRight: "1px grey solid",
+                  overflowY: "auto",
+                  maxHeight: "635px",
                 }}
               >
-                Preview
-              </Button>
-            </Col>
-          </Row>
-        )}
-      </ModalHeader>
-      <ModalBody scrollable={true} className="bg-light p-0 border">
-        <div className="d-flex flex-column">
-          <Row className="m-0">
-            <Col
-              className="col-3 pt-3 pb-3 px-4"
-              style={{
-                borderRight: "1px grey solid",
-                overflowY: "auto",
-                maxHeight: "635px",
-              }}
-            >
-              <TemplateSettingsSideBar
-                setSettings={setTemplateSettings}
-                settings={templateSettings}
-                callback={handleExport}
-                toExport={toExport}
-              />
-            </Col>
-            <Col className="col-9">
-              <div className="d-flex justify-content-center">
-                <PageSettingView
-                  content={showContent}
+                <TemplateSettingsSideBar
+                  setSettings={setTemplateSettings}
                   settings={templateSettings}
+                  callback={handleExport}
                   toExport={toExport}
                 />
-              </div>
-            </Col>
-          </Row>
-          <hr className="mt-0" />
-          <Row className="mx-3">
-            <Col className="d-flex justify-content-end">
-              <Button className="btn-danger" onClick={() => closeModal()}>
-                Cancel
-              </Button>
-            </Col>
-          </Row>
-        </div>
-      </ModalBody>
-    </Modal>
+              </Col>
+              <Col className="col-9">
+                <div className="d-flex justify-content-center">
+                  <PageSettingViewBackend
+                    content={showContent}
+                    settings={templateSettings}
+                    toExport={toExport}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <hr className="mt-0" />
+            <Row className="mx-3">
+              <Col className="d-flex justify-content-end">
+                <Button className="btn-danger" onClick={() => closeModal()}>
+                  Cancel
+                </Button>
+              </Col>
+            </Row>
+          </div>
+        </ModalBody>
+      </Modal>
+    </div>
   );
 };
 

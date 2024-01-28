@@ -413,8 +413,7 @@ export async function exportBackendHtml2Pdf(htmlString, options = {}) {
     .then((res) => {
       console.log(res);
       // Byte array to download as pdf
-      // const byteArray = res.data.pdfOutputStream;
-      const pdfBase64 = res.data.pdfOutputStream;
+      const pdfBase64 = res.data;
 
       // Convert base64 to binary
       const binaryString = window.atob(pdfBase64);
@@ -430,6 +429,49 @@ export async function exportBackendHtml2Pdf(htmlString, options = {}) {
     .catch((err) => {
       console.log(err);
     });
+}
+
+export async function exportBackendHtml2PdfBlob(htmlString, options = {}) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content =
+    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
+
+  const styleTag = createStyleTag(options);
+
+  const html = `
+      <html>
+          <head>
+              ${styleTag}
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  console.log("html", html);
+
+  let fileName = options?.fileName || "document.pdf";
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8181/api/document-conversion/convert/htmlString-to-pdf",
+      { htmlString: html }
+    );
+    const pdfBase64 = response.data;
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    return blob;
+  } catch (error) {
+    console.log(error);
+  }
+
 }
 
 export async function exportBackendHtml2Docx(htmlString, options = {}) {
@@ -464,7 +506,7 @@ export async function exportBackendHtml2Docx(htmlString, options = {}) {
       console.log(res);
       // Byte array to download as pdf
       // const byteArray = res.data.pdfOutputStream;
-      const pdfBase64 = res.data.pdfOutputStream;
+      const pdfBase64 = res.data;
 
       // Convert base64 to binary
       const binaryString = window.atob(pdfBase64);

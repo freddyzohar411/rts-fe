@@ -23,9 +23,10 @@ const FileInputElement = ({
     // Check if file is a docx file type
     if (
       e.target.files[0].type !==
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document" &&
+      e.target.files[0].type !== "application/pdf"
     ) {
-      toast.error("Please upload a valid docx file");
+      toast.error("Please upload a valid docx or PDF file");
       return;
     }
     setFile(e.target.files[0]);

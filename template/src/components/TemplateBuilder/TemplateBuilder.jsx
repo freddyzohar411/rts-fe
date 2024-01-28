@@ -28,6 +28,9 @@ import { categoryConstants } from "./templateBuilderContants";
 import SelectElement from "./SelectElement";
 import FileInputElement from "./FileInputElement";
 import EditorElement2 from "./EditorElement2";
+import axios from "axios";
+import juice from "juice";
+import { f } from "html2pdf.js";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -247,6 +250,47 @@ const TemplateBuilder = forwardRef(
       return false;
     };
 
+    // Convert docx to html
+    const convDocToHtml = async (file, setTemplateContent) => {
+      // Check if file is docx or pdf
+      let url;
+      if (file.name.split(".")[1] !== "docx") {
+        url =
+          "http://localhost:8181/api/document-conversion/convert/docx-to-htmlString";
+      }
+
+      if (file.name.split(".")[1] !== "pdf") {
+        url =
+          "http://localhost:8181/api/document-conversion/convert/pdf-to-htmlString";
+      }
+
+      if (!url) {
+        return;
+      }
+
+      axios
+        .post(
+          url,
+          {
+            docFile: file,
+          },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((res) => {
+          const originalContent = res.data;
+          const inlineContent = juice(originalContent);
+          console.log("Inline", inlineContent);
+          setTemplateContent(inlineContent);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
     return (
       <div className="d-flex flex-column gap-2">
         <Row className="mb-3">
@@ -307,7 +351,8 @@ const TemplateBuilder = forwardRef(
                   placeholder="Enter a sub category"
                 />
                 <div style={{ minHeight: "25px" }}>
-                  {formik.errors["subCategory"] && formik.touched["subCategory"] ? (
+                  {formik.errors["subCategory"] &&
+                  formik.touched["subCategory"] ? (
                     <div style={{ color: "red", fontSize: "0.9rem" }}>
                       {formik.errors["subCategory"]}
                     </div>
@@ -562,7 +607,8 @@ const TemplateBuilder = forwardRef(
                     disabled={(!templateSelected || !categorySelected) && !file}
                     onClick={async () => {
                       if (file) {
-                        await convertToHtml(file, setTemplateContentPreview);
+                        // await convertToHtml(file, setTemplateContentPreview);
+                        await convDocToHtml(file, setTemplateContentPreview);
                       } else {
                         const template = templatesByCategory.filter(
                           (template) =>
