@@ -239,6 +239,24 @@ export function replacePageBreaks2(htmlString) {
 
   return replacedString;
 }
+
+export function convertInlineWidthAndHeightToAttributes(htmlString) {
+  return htmlString.replace(/<(table|tr|td|th)\s+([^>]*)style="([^"]*)"/gi, function(match, tag, otherAttributes, style) {
+      let newAttributes = otherAttributes;
+
+      let widthMatch = /width:\s*([\d.%]+);?/.exec(style);
+      if (widthMatch) {
+          newAttributes += ` width="${widthMatch[1]}"`;
+      }
+
+      let heightMatch = /height:\s*([\d.%]+);?/.exec(style);
+      if (heightMatch) {
+          newAttributes += ` height="${heightMatch[1]}"`;
+      }
+
+      return `<${tag} ${newAttributes} style="${style}"`;
+  });
+}
 // Private function helpers ===============================================
 
 function extractStringLiteralsDoubleBracketsToList(htmlString) {

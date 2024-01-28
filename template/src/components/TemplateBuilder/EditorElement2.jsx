@@ -380,6 +380,11 @@ const EditorElement2 = ({
           file_picker_callback: handleFilePickerCallback,
           images_upload_handler: imageUploadHandler,
           file_picker_types: "media",
+          // table_default_styles: {
+          //   width: "300px",
+          // },
+          // Set colgroup for table to false
+          table_use_colgroups: false,
         }}
         onEditorChange={(value) => {
           formik.setFieldValue(name, value);

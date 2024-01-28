@@ -384,7 +384,9 @@ function createStyleTag(options) {
 }
 
 export async function exportBackendHtml2Pdf(htmlString, options = {}) {
-  const content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content =
+    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
 
   const styleTag = createStyleTag(options);
 
@@ -431,36 +433,25 @@ export async function exportBackendHtml2Pdf(htmlString, options = {}) {
 }
 
 export async function exportBackendHtml2Docx(htmlString, options = {}) {
-  const content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content =
+    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
 
   const styleTag = createStyleTag(options);
 
-  // const html = `
-  //     <html xmlns:o="urn:schemas-microsoft-com:office:office"
-  //     xmlns:w="urn:schemas-microsoft-com:office:word"
-  //     xmlns="http://www.w3.org/TR/REC-html40">
-  //     <head>
-  //     <meta charset='utf-8'>
-  //             ${styleTag}
-  //         </head>
-  //         <body>
-  //             ${content}
-  //         </body>
-  //     </html>
-  // `;
-
   const html = `
-  <html>
+      <html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
       <head>
-          ${styleTag}
-      </head>
-      <body>
-          ${content}
-      </body>
-  </html>
-`;
-
-console.log("html", html);
+      <meta charset='utf-8'>
+              ${styleTag}
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
 
   let fileName = options?.fileName + ".docx" || "document.docx";
 
