@@ -4,6 +4,7 @@ import FileSaver from "file-saver";
 import React from "react";
 import html2pdf from "html2pdf.js";
 import * as TemplateDisplayHelper from "../Components/TemplateDisplay/templateDisplayHelper";
+import axios from "axios";
 
 /*
  * Helper function to generate PDF from HTML
@@ -328,7 +329,6 @@ export function convertHtmlToDocxFile(
 // Convert html to pdf blob url
 export async function convertHtmlToPdfBlob(htmlString, options = {}) {
   const content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  console.log("content", content);
 
   // Create a ref for the target element
   const targetRef = React.createRef();
@@ -361,7 +361,8 @@ export async function convertHtmlToPdfBlob(htmlString, options = {}) {
   return blob;
 }
 
-function createStyleTag(settings) {
+// ================== Backend Export ===================
+function createStyleTag(options) {
   const {
     unit,
     pageType,
@@ -370,7 +371,7 @@ function createStyleTag(settings) {
     marginBottom,
     marginLeft,
     marginRight,
-  } = settings;
+  } = options;
 
   return `
       <style>
@@ -380,4 +381,114 @@ function createStyleTag(settings) {
           }
       </style>
   `;
+}
+
+export async function exportBackendHtml2Pdf(htmlString, options = {}) {
+  const content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+
+  const styleTag = createStyleTag(options);
+
+  const html = `
+      <html>
+          <head>
+              ${styleTag}
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  console.log("html", html);
+
+  let fileName = options?.fileName || "document.pdf";
+
+  const response = await axios
+    .post(
+      "http://localhost:8181/api/document-conversion/convert/htmlString-to-pdf",
+      { htmlString: html }
+    )
+    .then((res) => {
+      console.log(res);
+      // Byte array to download as pdf
+      // const byteArray = res.data.pdfOutputStream;
+      const pdfBase64 = res.data.pdfOutputStream;
+
+      // Convert base64 to binary
+      const binaryString = window.atob(pdfBase64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const blob = new Blob([bytes], { type: "application/pdf" });
+      console.log("blob", blob);
+      FileSaver.saveAs(blob, fileName);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+export async function exportBackendHtml2Docx(htmlString, options = {}) {
+  const content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+
+  const styleTag = createStyleTag(options);
+
+  // const html = `
+  //     <html xmlns:o="urn:schemas-microsoft-com:office:office"
+  //     xmlns:w="urn:schemas-microsoft-com:office:word"
+  //     xmlns="http://www.w3.org/TR/REC-html40">
+  //     <head>
+  //     <meta charset='utf-8'>
+  //             ${styleTag}
+  //         </head>
+  //         <body>
+  //             ${content}
+  //         </body>
+  //     </html>
+  // `;
+
+  const html = `
+  <html>
+      <head>
+          ${styleTag}
+      </head>
+      <body>
+          ${content}
+      </body>
+  </html>
+`;
+
+console.log("html", html);
+
+  let fileName = options?.fileName + ".docx" || "document.docx";
+
+  const response = await axios
+    .post(
+      "http://localhost:8181/api/document-conversion/convert/htmlString-to-docx",
+      { htmlString: html }
+    )
+    .then((res) => {
+      console.log(res);
+      // Byte array to download as pdf
+      // const byteArray = res.data.pdfOutputStream;
+      const pdfBase64 = res.data.pdfOutputStream;
+
+      // Convert base64 to binary
+      const binaryString = window.atob(pdfBase64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const blob = new Blob([bytes], {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+      console.log("blob", blob);
+      FileSaver.saveAs(blob, fileName);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }

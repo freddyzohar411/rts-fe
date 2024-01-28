@@ -45,8 +45,6 @@ const TemplateAdvanceExportModal = ({
   const [templateList, setTemplateList] = useState([]);
   const [showContent, setShowContent] = useState(content ?? "");
 
-  console.log("showContent", showContent);
-
   const templateCategories = useSelector(
     (state) => state.TemplateReducer.templateCategories
   );
@@ -91,7 +89,8 @@ const TemplateAdvanceExportModal = ({
   const handleExport = async () => {
     if (templateSettings.exportType === "pdf") {
       if (toExport) {
-        await ExportHelper.generatePDFCustomMulti(showContent, {
+        // await ExportHelper.generatePDFCustomMulti(showContent, {
+        await ExportHelper.exportBackendHtml2Pdf(showContent, {
           ...templateSettings,
         });
       } else {
@@ -106,7 +105,8 @@ const TemplateAdvanceExportModal = ({
     }
     if (templateSettings.exportType === "docx") {
       if (toExport) {
-        await ExportHelper.generateDocxCustom(showContent, {
+        // await ExportHelper.generateDocxCustom(showContent, {
+          await ExportHelper.exportBackendHtml2Docx(showContent, {
           ...templateSettings,
         });
       } else {

@@ -362,7 +362,7 @@ const TemplateBuilderPage = () => {
           content={newContent ?? ""}
           showInsertModal={showExportModal}
           setShowInsertModal={setShowExportModal}
-          toExport={false}
+          toExport={true}
           allData={allModuleData}
         />
       </div>
