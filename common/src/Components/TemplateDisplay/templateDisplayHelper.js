@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getTemplateFromCategoryAndName } from "./url_helper";
+import { parse } from "node-html-parser";
 
 /**
  * Replace variables placeholders( ${xxx.yyy.zzz} in html with variabledata
@@ -222,42 +223,159 @@ export async function runEffects(
 
 /**
  * Replace page breaks in html string with page break divs
- * @param {*} htmlString 
- * @returns 
+ * @param {*} htmlString
+ * @returns
  */
 export function replacePageBreaks(htmlString) {
   // Use a global regular expression to find and replace all occurrences
   // var replacedString = htmlString.replace(/<p><!--\s*pagebreak\s*--><\/p>/gi, '<div style="break-after: page;"></div>');
-  var replacedString = htmlString.replace(/<!--\s*pagebreak\s*-->/gi, '<div style="break-after: page;"></div>');
+  var replacedString = htmlString.replace(
+    /<!--\s*pagebreak\s*-->/gi,
+    '<div style="break-after: page;"></div>'
+  );
 
   return replacedString;
 }
 
 export function replacePageBreaks2(htmlString) {
   // Use a global regular expression to find and replace all occurrences
-  var replacedString = htmlString.replace(/<!--\s*pagebreak\s*-->/gi, '<div style="page-break-after: always;"></div>');
+  var replacedString = htmlString.replace(
+    /<!--\s*pagebreak\s*-->/gi,
+    '<div style="page-break-after: always;"></div>'
+  );
 
   return replacedString;
 }
 
-export function convertInlineWidthAndHeightToAttributes(htmlString) {
-  return htmlString.replace(/<(table|tr|td|th)\s+([^>]*)style="([^"]*)"/gi, function(match, tag, otherAttributes, style) {
+export function convertStyleToAttributesTable(htmlString) {
+  let replacedString = convertInlineWidthAndHeightToAttributes(htmlString);
+  return convertAlignmentToAttributesTable(replacedString);
+}
+
+export function convertInlineStylesToClasses(htmlString) {
+  const root = parse(htmlString);
+  const styles = {};
+  let styleId = 0;
+
+  const processNode = (node) => {
+    if (node.nodeType === 1) {
+      // Element node
+      // Remove 'align' from <p> tags
+      if (node.tagName === "P" && node.hasAttribute("align")) {
+        node.removeAttribute("align");
+      }
+
+      let style = node.getAttribute("style") || "";
+      let additionalStyle = "";
+
+      // Check if the node has a font-size style and is not one of the specified tags
+      if (
+        style.includes("font-size") &&
+        !["P", "H1", "H2", "H3", "H4", "H5", "H6"].includes(node.tagName)
+      ) {
+        // If it's a span, add 'display: inline' to its style
+        if (node.tagName === "SPAN") {
+          additionalStyle = "display: inline-block; ";
+        }
+
+        // Convert to <p> tag
+        const newNode = parse(
+          `<ins class="style-${styleId}">${node.innerHTML}</ins>`
+        ).firstChild;
+        node.replaceWith(newNode);
+        node = newNode; // Update reference to the new node
+      }
+      // else if (node.tagName === "STRONG") {
+      //   additionalStyle = "font-weight: bold; ";
+      //   // Convert to <p> tag
+      //   const newNode = parse(
+      //     `<ins class="style-${styleId}">${node.innerHTML}</ins>`
+      //   ).firstChild;
+      //   node.replaceWith(newNode);
+      //   node = newNode; // Update reference to the new node
+      // }
+
+      // Combine original and additional styles
+      style = additionalStyle + style;
+
+      // Check if the combined style already exists
+      let className = styles[style] || `style-${styleId}`;
+      if (!styles[style]) {
+        styles[style] = className;
+        styleId++;
+      }
+
+      // Apply the class name and remove the style attribute
+      node.setAttribute("class", className);
+      node.removeAttribute("style");
+
+      // Recursively process child nodes
+      Array.from(node.childNodes).forEach((child) => processNode(child));
+    }
+  };
+
+  // Start processing from the root
+  processNode(root);
+
+  // Generate the CSS string
+  const styleString = Object.entries(styles)
+    .map(([key, value]) => `.${value} { ${key} }`)
+    .join("\n");
+
+  // Return the new HTML and style tag
+  return {
+    html: root.toString(),
+    styleTag: styleString,
+  };
+}
+// Private function helpers ===============================================
+function convertInlineWidthAndHeightToAttributes(htmlString) {
+  return htmlString.replace(
+    /<(table|tr|td|th)\s+([^>]*)style="([^"]*)"/gi,
+    function (match, tag, otherAttributes, style) {
       let newAttributes = otherAttributes;
 
       let widthMatch = /width:\s*([\d.%]+);?/.exec(style);
       if (widthMatch) {
-          newAttributes += ` width="${widthMatch[1]}"`;
+        newAttributes += ` width="${widthMatch[1]}"`;
       }
 
       let heightMatch = /height:\s*([\d.%]+);?/.exec(style);
       if (heightMatch) {
-          newAttributes += ` height="${heightMatch[1]}"`;
+        newAttributes += ` height="${heightMatch[1]}"`;
       }
 
       return `<${tag} ${newAttributes} style="${style}"`;
-  });
+    }
+  );
 }
-// Private function helpers ===============================================
+
+function convertAlignmentToAttributesTable(htmlString) {
+  return htmlString.replace(
+    /<table([^>]*)style="([^"]*)"/gi,
+    function (match, preStyle, style) {
+      let align = "";
+      if (
+        style.includes("margin-left: auto") &&
+        style.includes("margin-right: auto")
+      ) {
+        align = 'align="center"';
+      } else if (
+        style.includes("margin-left: 0") &&
+        style.includes("margin-right: auto")
+      ) {
+        align = 'align="left"';
+      } else if (
+        style.includes("margin-left: auto") &&
+        style.includes("margin-right: 0")
+      ) {
+        align = 'align="right"';
+      }
+
+      return `<table${preStyle}style="${style}" ${align}`;
+    }
+  );
+}
 
 function extractStringLiteralsDoubleBracketsToList(htmlString) {
   if (!htmlString) return;

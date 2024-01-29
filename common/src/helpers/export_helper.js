@@ -392,17 +392,23 @@ function createStyleTag(options, withTag = true) {
   `;
 }
 
-export async function exportBackendHtml2Pdf(htmlString, options = {}) {
+export async function exportBackendHtml2Pdf(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
   let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  content =
-    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
+  // content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
 
-  const styleTag = createStyleTag(options);
+  const styleTag = createStyleTag(options, false);
 
   const html = `
       <html>
           <head>
+          <style>
               ${styleTag}
+              ${cssString}
+          </style>
           </head>
           <body>
               ${content}
@@ -442,8 +448,7 @@ export async function exportBackendHtml2Pdf(htmlString, options = {}) {
 
 export async function exportBackendHtml2PdfBlob(htmlString, options = {}) {
   let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  content =
-    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
 
   const styleTag = createStyleTag(options);
 
@@ -480,10 +485,13 @@ export async function exportBackendHtml2PdfBlob(htmlString, options = {}) {
   }
 }
 
-export async function exportBackendHtml2PdfBlobExtCss(htmlString, options = {}, cssString) {
+export async function exportBackendHtml2PdfBlobExtCss(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
   let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  content =
-    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
+  // content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
 
   const styleTag = createStyleTag(options, false);
 
@@ -502,8 +510,6 @@ export async function exportBackendHtml2PdfBlobExtCss(htmlString, options = {}, 
       </html>
   `;
 
-  console.log("html", html)
-
   let fileName = options?.fileName || "document.pdf";
 
   try {
@@ -526,24 +532,29 @@ export async function exportBackendHtml2PdfBlobExtCss(htmlString, options = {}, 
   }
 }
 
-
-export async function exportBackendHtml2PdfFile(htmlString, options = {}) {
+export async function exportBackendHtml2PdfFile(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
   let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  content =
-    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
 
-  const styleTag = createStyleTag(options);
+  const styleTag = createStyleTag(options, false);
 
   const html = `
-      <html>
-          <head>
-              ${styleTag}
-          </head>
-          <body>
-              ${content}
-          </body>
-      </html>
-  `;
+  <html>
+      <head>
+      <style>
+          ${styleTag}
+          ${cssString}
+      </style>
+      </head>
+      <body>
+          ${content}
+      </body>
+  </html>
+`;
 
   let fileName = options?.fileName + ".pdf" || "document.pdf";
 
@@ -571,12 +582,15 @@ export async function exportBackendHtml2PdfFile(htmlString, options = {}) {
   }
 }
 
-export async function exportBackendHtml2Docx(htmlString, options = {}) {
+export async function exportBackendHtml2Docx(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
   let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  content =
-    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
 
-  const styleTag = createStyleTag(options);
+  const styleTag = createStyleTag(options, false);
 
   const html = `
       <html xmlns:o="urn:schemas-microsoft-com:office:office"
@@ -584,7 +598,10 @@ export async function exportBackendHtml2Docx(htmlString, options = {}) {
       xmlns="http://www.w3.org/TR/REC-html40">
       <head>
       <meta charset='utf-8'>
+      <style>
               ${styleTag}
+              ${cssString}
+          </style>
           </head>
           <body>
               ${content}
@@ -623,12 +640,15 @@ export async function exportBackendHtml2Docx(htmlString, options = {}) {
     });
 }
 
-export async function exportBackendHtml2DocxFile(htmlString, options = {}) {
+export async function exportBackendHtml2DocxFile(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
   let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  content =
-    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
 
-  const styleTag = createStyleTag(options);
+  const styleTag = createStyleTag(options, false);
 
   const html = `
       <html xmlns:o="urn:schemas-microsoft-com:office:office"
@@ -636,7 +656,10 @@ export async function exportBackendHtml2DocxFile(htmlString, options = {}) {
       xmlns="http://www.w3.org/TR/REC-html40">
       <head>
       <meta charset='utf-8'>
+      <style>
               ${styleTag}
+              ${cssString}
+              </style>
           </head>
           <body>
               ${content}

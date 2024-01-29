@@ -50,6 +50,7 @@ function EmailComponent() {
 
   console.log("Category", category)
   console.log("SubCategory", subCategory)
+  
   /**
    * Handle form submit event (Formik)
    * @param {*} values
