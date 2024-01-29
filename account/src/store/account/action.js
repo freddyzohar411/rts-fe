@@ -27,6 +27,9 @@ import {
   FETCH_ACCOUNTS_FIELDS_ALL,
   FETCH_ACCOUNTS_FIELDS_ALL_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_ALL_FAILURE,
+  FETCH_ACCOUNTS_ADMIN,
+  FETCH_ACCOUNTS_ADMIN_SUCCESS,
+  FETCH_ACCOUNTS_ADMIN_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -169,6 +172,22 @@ export const fetchAccountsFieldsAllSuccess = (accountsFields) => ({
 
 export const fetchAccountsFieldsAllFailure = (error) => ({
   type: FETCH_ACCOUNTS_FIELDS_ALL_FAILURE,
+  payload: error,
+});
+
+// Admin
+export const fetchAccountsAdmin = (params) => ({
+  type: FETCH_ACCOUNTS_ADMIN,
+  payload: params,
+});
+
+export const fetchAccountsAdminSuccess = (accounts) => ({
+  type: FETCH_ACCOUNTS_ADMIN_SUCCESS,
+  payload: accounts,
+});
+
+export const fetchAccountsAdminFailure = (error) => ({
+  type: FETCH_ACCOUNTS_ADMIN_FAILURE,
   payload: error,
 });
 

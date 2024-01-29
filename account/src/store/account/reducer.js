@@ -27,6 +27,9 @@ import {
   FETCH_ACCOUNTS_FIELDS_ALL,
   FETCH_ACCOUNTS_FIELDS_ALL_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_ALL_FAILURE,
+  FETCH_ACCOUNTS_ADMIN,
+  FETCH_ACCOUNTS_ADMIN_SUCCESS,
+  FETCH_ACCOUNTS_ADMIN_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -238,6 +241,26 @@ const AccountReducer = (state = initialState, action) => {
         accountsFieldsAll: action.payload,
       };
     case FETCH_ACCOUNTS_FIELDS_ALL_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    // Fetch Admin accounts
+    case FETCH_ACCOUNTS_ADMIN:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_ACCOUNTS_ADMIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accounts: action.payload,
+      };
+    case FETCH_ACCOUNTS_ADMIN_FAILURE:
       return {
         ...state,
         loading: false,
