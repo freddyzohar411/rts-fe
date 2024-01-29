@@ -52,6 +52,9 @@ const TemplateBuilderPage = () => {
   // console.log("inlinedHtml", inlinedHtml)
   // // ========================================================
 
+  // Test 2
+
+
   const templateData = useSelector((state) => state.TemplateReducer.template);
   const {
     allModuleData,

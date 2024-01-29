@@ -362,7 +362,7 @@ export async function convertHtmlToPdfBlob(htmlString, options = {}) {
 }
 
 // ================== Backend Export ===================
-function createStyleTag(options) {
+function createStyleTag(options, withTag = true) {
   const {
     unit,
     pageType,
@@ -372,6 +372,15 @@ function createStyleTag(options) {
     marginLeft,
     marginRight,
   } = options;
+
+  if (!withTag) {
+    return `
+        @page {
+            size: ${pageType} ${pageOrientation};
+            margin: ${marginTop}${unit} ${marginRight}${unit} ${marginBottom}${unit} ${marginLeft}${unit};
+        }
+    `;
+  }
 
   return `
       <style>
@@ -470,6 +479,53 @@ export async function exportBackendHtml2PdfBlob(htmlString, options = {}) {
     console.log(error);
   }
 }
+
+export async function exportBackendHtml2PdfBlobExtCss(htmlString, options = {}, cssString) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content =
+    TemplateDisplayHelper.convertInlineWidthAndHeightToAttributes(content);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+      <html>
+          <head>
+          <style>
+              ${styleTag}
+              ${cssString}
+          </style>
+
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  console.log("html", html)
+
+  let fileName = options?.fileName || "document.pdf";
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8181/api/document-conversion/convert/htmlString-to-pdf",
+      { htmlString: html }
+    );
+    const pdfBase64 = response.data;
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    return blob;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 export async function exportBackendHtml2PdfFile(htmlString, options = {}) {
   let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
