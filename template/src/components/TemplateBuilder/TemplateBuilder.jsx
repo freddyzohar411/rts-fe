@@ -252,25 +252,9 @@ const TemplateBuilder = forwardRef(
 
     // Convert docx to html
     const convDocToHtml = async (file, setTemplateContent) => {
-      // Check if file is docx or pdf
-      let url;
-      if (file.name.split(".")[1] !== "docx") {
-        url =
-          "http://localhost:8181/api/document-conversion/convert/docx-to-htmlString";
-      }
-
-      if (file.name.split(".")[1] !== "pdf") {
-        url =
-          "http://localhost:8181/api/document-conversion/convert/pdf-to-htmlString";
-      }
-
-      if (!url) {
-        return;
-      }
-
       axios
         .post(
-          url,
+          "http://localhost:8181/api/document-conversion/convert/docx-to-htmlString",
           {
             docFile: file,
           },
@@ -282,8 +266,11 @@ const TemplateBuilder = forwardRef(
         )
         .then((res) => {
           const originalContent = res.data;
-          const inlineContent = juice(originalContent);
-          console.log("Inline", inlineContent);
+          console.log("Original Content", originalContent)
+          const inlineContent = juice(originalContent, {
+            removeStyleTags: false,
+          });
+          console.log("Inline Content", inlineContent)
           setTemplateContent(inlineContent);
         })
         .catch((err) => {

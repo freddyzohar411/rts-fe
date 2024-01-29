@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./PageSettingView.scss";
 import * as ExportHelper from "../../../helpers/export_helper";
+import juice from "juice";
 
 const PageSettingViewBackend = ({ settings, content }) => {
   const iframeRef = useRef(null);
@@ -8,10 +9,10 @@ const PageSettingViewBackend = ({ settings, content }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (iframeRef.current && content) {
-        const pdfBlob = await ExportHelper.exportBackendHtml2PdfBlob(content, {
+        console.log("Content HTML: ", content)
+        const pdfBlob = await ExportHelper.exportBackendHtml2PdfBlob(juice(content), {
           ...settings,
         });
-        console.log("pdfBlob", pdfBlob)
         // Assuming you have a Blob object named 'pdfBlob' representing your PDF data
         const blobUrl = URL.createObjectURL(pdfBlob);
 

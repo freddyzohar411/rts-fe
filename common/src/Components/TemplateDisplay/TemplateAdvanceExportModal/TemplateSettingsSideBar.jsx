@@ -13,8 +13,6 @@ const TemplateSettingsSideBar = ({
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
-  console.log("settings", settings);
-
   return (
     <div>
       <h2>Settings</h2>
