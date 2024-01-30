@@ -3,32 +3,38 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SUBMIT_TO_CLIENT } from "./constants";
-import { fetchJobForm } from "../../store/actions";
+import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Input, Button, Tooltip } from "reactstrap";
 import { EmailComponent } from "../EmailComponent";
+import {
+  JOB_STAGE_IDS,
+  JOB_STAGE_STATUS,
+} from "../JobListing/JobListingConstants";
 
-function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
-  const [tooltipOpen, setTooltipOpen] = useState(false);
+function SubmitToClient({
+  closeOffcanvas,
+  onPreviewCVClick,
+  jobId,
+  candidateId,
+}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const formikRef = useRef(null);
   const linkState = location.state;
-  const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
+  const { getAllUserGroups } = useUserAuth();
 
+  const form = useSelector((state) => state.JobFormReducer.form);
+
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const [view, setView] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
       : false
   );
-
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
-
-  const formikRef = useRef(null);
-  const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
+  const [sendEmailModal, setSendEmailModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchJobForm(SUBMIT_TO_CLIENT));
@@ -40,7 +46,34 @@ function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
     }
   }, [form]);
 
-  const [sendEmailModal, setSendEmailModal] = useState(false);
+  const toggleFormViewState = () => {
+    setView(!view);
+  };
+
+  // Handle form submit
+  const handleFormSubmit = async (
+    event,
+    values,
+    newValues,
+    buttonNameHook,
+    formStateHook,
+    rerenderTable
+  ) => {
+    const payload = {
+      jobId: jobId,
+      jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_CLIENT,
+      status: JOB_STAGE_STATUS?.COMPLETED,
+      candidateId,
+      formData: JSON.stringify(values),
+      formId: parseInt(form.formId),
+      jobType: "submit_to_client",
+    };
+    dispatch(tagJob({ payload, navigate }));
+  };
+
+  const handleCancel = () => {
+    closeOffcanvas();
+  };
 
   return (
     <React.Fragment>
@@ -52,7 +85,7 @@ function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
               userDetails={getAllUserGroups()}
               country={null}
               editData={null}
-              onSubmit={null}
+              onSubmit={handleFormSubmit}
               onFormFieldsChange={null}
               errorMessage={null}
               view={view}
@@ -64,15 +97,7 @@ function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
           <Col>
             <div className="d-flex flex-row justify-content-end gap-4 m-2">
               <div className="d-flex flex-column flex-nowrap">
-                <span className="text-muted">Time To Take Action*</span>
-
                 <div className="d-flex flex-row gap-2 flex-nowrap">
-                  <Input
-                    placeholder="30 Min"
-                    type="text"
-                    className="form-control"
-                    style={{ width: "200px" }}
-                  />
                   <Button
                     type="button"
                     className="btn btn-custom-primary"
@@ -93,9 +118,18 @@ function SubmitToClient({ closeOffcanvas, onPreviewCVClick }) {
                     type="button"
                     className="btn btn-custom-primary"
                     id="update-btn"
-                    onClick={closeOffcanvas}
+                    onClick={() => {
+                      formikRef?.current?.formik?.submitForm();
+                    }}
                   >
                     Update
+                  </Button>
+                  <Button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => handleCancel()}
+                  >
+                    Cancel
                   </Button>
                   <Tooltip
                     target="update-btn"

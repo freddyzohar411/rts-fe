@@ -34,7 +34,7 @@ import {
   deleteCandidate,
   getCandidatesFields,
   getCandidateById,
-  completeCandidateRegistration
+  completeCandidateRegistration,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -67,9 +67,7 @@ function* workPostCandidate(action) {
       // yield put(setCandidateCountry(response.data.candidateCountry));
       return;
     }
-
   } catch (error) {
-    toast.error("Error creating candidate");
     yield put(postCandidateFailure(error));
   }
 }
@@ -92,7 +90,6 @@ function* workPutCandidate(action) {
       rerenderTable();
     }
   } catch (error) {
-    toast.error("Error updating account");
     yield put(putCandidateFailure(error));
   }
 }
@@ -103,7 +100,6 @@ function* workFetchCandidates(action) {
     const response = yield call(getCandidates, action.payload);
     yield put(fetchCandidatesSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts");
     yield put(fetchCandidatesFailure(error));
   }
 }
@@ -116,7 +112,6 @@ function* workDeleteCandidate(action) {
     toast.success("Candidate deleted successfully");
   } catch (error) {
     yield put(deleteCandidateFailure(error));
-    toast.error("Error deleting candidate");
   }
 }
 
@@ -126,7 +121,6 @@ function* workFetchCandidatesFields() {
     const response = yield call(getCandidatesFields);
     yield put(fetchCandidatesFieldsSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts fields");
     yield put(fetchCandidatesFieldsFailure(error));
   }
 }
@@ -138,7 +132,6 @@ function* workFetchCandidate(action) {
     yield put(fetchCandidateSuccess(response.data));
     yield put(setCandidateCountry(response.data.accountCountry));
   } catch (error) {
-    toast.error("Error fetching account");
     yield put(fetchCandidateFailure(error));
   }
 }
@@ -153,10 +146,8 @@ function* workPutCandidateDraftStatus(action) {
     toast.success("Candidate created successfully");
   } catch (error) {
     yield put(putCandidateDraftStatusFailure(error));
-    toast.error("Error updating candidate draft status");
   }
 }
-
 
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
