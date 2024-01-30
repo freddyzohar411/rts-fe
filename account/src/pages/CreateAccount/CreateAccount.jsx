@@ -210,14 +210,6 @@ const AccountCreation = () => {
   }, [accountId]);
 
   /**
-   * Get Formik hook from Form component
-   */
-  // const handleFormikChange = useCallback((formik) => {
-  //   // Handle formik change here
-  //   setFormFormik(formik);
-  // }, []);
-
-  /**
    * Get Form field data from Form component
    */
   const handleFormFieldChange = useCallback((formFields) => {
@@ -531,7 +523,7 @@ const AccountCreation = () => {
 
       //Create instruction
       if (formSubmissionData === null) {
-        console.log("here")
+        console.log("here");
         const formData = {
           guidelines: newValues.guidelines,
         };
@@ -620,17 +612,8 @@ const AccountCreation = () => {
   };
 
   /**
-   * Handle Account Success
+   * Handle Account success (Create)
    */
-  // if (createMetaData?.isSuccess) {
-  //   dispatch(resetMetaData());
-  //   if (step === 5) {
-  //     navigate("/accounts");
-  //     return;
-  //   }
-  //   handleNext();
-  // }
-
   useEffect(() => {
     if (createMetaData?.isSuccess) {
       dispatch(accountResetMetaData());
@@ -645,15 +628,6 @@ const AccountCreation = () => {
   /**
    * Handle Account success (Update)
    */
-  // if (updateMetaData?.isSuccess) {
-  //   dispatch(resetMetaData());
-  //   if (step === 5) {
-  //     navigate("/accounts");
-  //     return;
-  //   }
-  //   handleNext();
-  // }
-
   useEffect(() => {
     if (updateMetaData?.isSuccess) {
       dispatch(accountResetMetaData());
@@ -664,7 +638,6 @@ const AccountCreation = () => {
       handleNext();
     }
   }, [updateMetaData?.isSuccess]);
-
 
   return (
     <>
