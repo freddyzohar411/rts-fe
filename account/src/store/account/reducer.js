@@ -20,7 +20,7 @@ import {
   FETCH_ACCOUNTS_FIELDS,
   FETCH_ACCOUNTS_FIELDS_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_FAILURE,
-  RESET_META_DATA,
+  ACCOUNT_RESET_META_DATA,
   FETCH_ACCOUNT_DATA,
   FETCH_ACCOUNT_DATA_SUCCESS,
   FETCH_ACCOUNT_DATA_FAILURE,
@@ -53,6 +53,7 @@ const initialState = {
 };
 
 const AccountReducer = (state = initialState, action) => {
+  console.log("Account reducer")
   switch (action.type) {
     // Fetch Account
     case FETCH_ACCOUNT:
@@ -201,7 +202,8 @@ const AccountReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
-    case RESET_META_DATA:
+    case ACCOUNT_RESET_META_DATA:
+      console.log("Reducer Restting:")
       return {
         ...state,
         meta: resetAllMetaData(),

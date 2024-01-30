@@ -8,7 +8,7 @@ import {
   postAccount,
   putAccount,
   fetchAccount,
-  resetMetaData,
+  accountResetMetaData,
 } from "../../store/account/action";
 import { deleteAccountCountry } from "../../store/accountregistration/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
@@ -63,6 +63,8 @@ const EditAccount = () => {
   const [view, setView] = useState(
     linkState?.view !== null ? linkState?.view : true
   );
+
+  console.log("Active Step", step);
 
   /**
    * Get account id from url
@@ -556,26 +558,49 @@ const EditAccount = () => {
   /**
    * Handle Account Success
    */
-  if (createMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 5) {
-      navigate("/accounts");
-      return;
+  // if (createMetaData?.isSuccess) {
+  //   dispatch(accountResetMetaData());
+  //   if (step === 5) {
+  //     navigate("/accounts");
+  //     return;
+  //   }
+  //   handleNext();
+  // }
+
+  useEffect(() => {
+    if (createMetaData?.isSuccess) {
+      dispatch(accountResetMetaData());
+      if (step === 5) {
+        navigate("/accounts");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [createMetaData?.isSuccess]);
 
   /**
    * Handle Account success (Update)
    */
-  if (updateMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 5) {
-      navigate("/accounts");
-      return;
+  // if (updateMetaData?.isSuccess) {
+  //  dispatch(accountResetMetaData());
+  //   if (step === 5) {
+  //     navigate("/accounts");
+  //     return;
+  //   }
+  //   console.log("GGG")
+  //   handleNext();
+  // }
+
+  useEffect(() => {
+    if (updateMetaData?.isSuccess) {
+      dispatch(accountResetMetaData());
+      if (step === 5) {
+        navigate("/accounts");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [updateMetaData?.isSuccess]);
 
   return (
     <>
