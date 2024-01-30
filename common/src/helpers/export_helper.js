@@ -4,7 +4,7 @@ import FileSaver from "file-saver";
 import React from "react";
 import html2pdf from "html2pdf.js";
 import * as TemplateDisplayHelper from "../Components/TemplateDisplay/templateDisplayHelper";
-import axios from "axios";
+import * as BackendHelper from "./backend_helper";
 
 /*
  * Helper function to generate PDF from HTML
@@ -362,7 +362,7 @@ export async function convertHtmlToPdfBlob(htmlString, options = {}) {
 }
 
 // ================== Backend Export ===================
-function createStyleTag(options, withTag = true, pageDimension=true) {
+function createStyleTag(options, withTag = true, pageDimension = true) {
   const {
     unit,
     pageType,
@@ -374,19 +374,17 @@ function createStyleTag(options, withTag = true, pageDimension=true) {
   } = options;
 
   const paperSizeDimensions = {
-    "A4 portrait": '8.27in 11.69in',
-    "A3 portrait": '11.69in 16.54in',
-    "Letter portrait": '8.5in 11in',
-    "Legal portrait": '8.5in 14in',
-    "A4 landscape": '11.69in 8.27in',
-    "A3 landscape": '16.54in 11.69in',
-    "Letter landscape": '11in 8.5in',
-    "Legal landscape": '14in 8.5in',
+    "A4 portrait": "8.27in 11.69in",
+    "A3 portrait": "11.69in 16.54in",
+    "Letter portrait": "8.5in 11in",
+    "Legal portrait": "8.5in 14in",
+    "A4 landscape": "11.69in 8.27in",
+    "A3 landscape": "16.54in 11.69in",
+    "Letter landscape": "11in 8.5in",
+    "Legal landscape": "14in 8.5in",
   };
 
-
-
-  let pageTypeInput = pageType || 'A4';
+  let pageTypeInput = pageType || "A4";
   if (pageDimension) {
     pageTypeInput = paperSizeDimensions[`${pageType} ${pageOrientation}`];
   }
@@ -438,11 +436,9 @@ export async function exportBackendHtml2Pdf(
 
   let fileName = options?.fileName || "document.pdf";
 
-  const response = await axios
-    .post(
-      "http://localhost:8181/api/document-conversion/convert/htmlString-to-pdf",
-      { htmlString: html }
-    )
+  BackendHelper.convertHtmlStringToPdf({
+    htmlString: html,
+  })
     .then((res) => {
       console.log(res);
       // Byte array to download as pdf
@@ -484,10 +480,9 @@ export async function exportBackendHtml2PdfBlob(htmlString, options = {}) {
   let fileName = options?.fileName || "document.pdf";
 
   try {
-    const response = await axios.post(
-      "http://localhost:8181/api/document-conversion/convert/htmlString-to-pdf",
-      { htmlString: html }
-    );
+    const response = await BackendHelper.convertHtmlStringToPdf({
+      htmlString: html,
+    });
     const pdfBase64 = response.data;
     // Convert base64 to binary
     const binaryString = window.atob(pdfBase64);
@@ -532,10 +527,10 @@ export async function exportBackendHtml2PdfBlobExtCss(
   let fileName = options?.fileName || "document.pdf";
 
   try {
-    const response = await axios.post(
-      "http://localhost:8181/api/document-conversion/convert/htmlString-to-pdf",
-      { htmlString: html }
-    );
+    const response = await BackendHelper.convertHtmlStringToPdf({
+      htmlString: html,
+    });
+
     const pdfBase64 = response.data;
     // Convert base64 to binary
     const binaryString = window.atob(pdfBase64);
@@ -578,10 +573,9 @@ export async function exportBackendHtml2PdfFile(
   let fileName = options?.fileName + ".pdf" || "document.pdf";
 
   try {
-    const response = await axios.post(
-      "http://localhost:8181/api/document-conversion/convert/htmlString-to-pdf",
-      { htmlString: html }
-    );
+    const response = await BackendHelper.convertHtmlStringToPdf({
+      htmlString: html,
+    });
     const pdfBase64 = response.data;
     // Convert base64 to binary
     const binaryString = window.atob(pdfBase64);
@@ -630,33 +624,27 @@ export async function exportBackendHtml2Docx(
 
   let fileName = options?.fileName + ".docx" || "document.docx";
 
-  const response = await axios
-    .post(
-      "http://localhost:8181/api/document-conversion/convert/htmlString-to-docx",
-      { htmlString: html }
-    )
-    .then((res) => {
-      console.log(res);
-      // Byte array to download as pdf
-      // const byteArray = res.data.pdfOutputStream;
-      const pdfBase64 = res.data;
-
-      // Convert base64 to binary
-      const binaryString = window.atob(pdfBase64);
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-      const blob = new Blob([bytes], {
-        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      });
-      console.log("blob", blob);
-      FileSaver.saveAs(blob, fileName);
-    })
-    .catch((err) => {
-      console.log(err);
+  try {
+    const response = await BackendHelper.convertHtmlStringToDocx({
+      htmlString: html,
     });
+    const pdfBase64 = response.data;
+
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], {
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+    console.log("blob", blob);
+    FileSaver.saveAs(blob, fileName);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function exportBackendHtml2DocxFile(
@@ -689,10 +677,9 @@ export async function exportBackendHtml2DocxFile(
   let fileName = options?.fileName || "document";
 
   try {
-    const response = await axios.post(
-      "http://localhost:8181/api/document-conversion/convert/htmlString-to-docx",
-      { htmlString: html }
-    );
+    const response = await BackendHelper.convertHtmlStringToDocx({
+      htmlString: html,
+    });
     const pdfBase64 = response.data;
     // Convert base64 to binary
     const binaryString = window.atob(pdfBase64);

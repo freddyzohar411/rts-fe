@@ -28,6 +28,8 @@ export * as ExportHelper from "./helpers/export_helper";
 
 export * as TemplateHelper from "./Components/TemplateDisplay/templateDisplayHelper";
 
+export * as CommonBackendHelper from "./helpers/backend_helper";
+
 // Redux Store
 export * as Actions from "./store/actions";
 

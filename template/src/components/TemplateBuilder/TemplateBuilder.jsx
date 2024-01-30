@@ -30,7 +30,7 @@ import FileInputElement from "./FileInputElement";
 import EditorElement2 from "./EditorElement2";
 import axios from "axios";
 import juice from "juice";
-import { f } from "html2pdf.js";
+import { CommonBackendHelper } from "@workspace/common";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -252,25 +252,23 @@ const TemplateBuilder = forwardRef(
 
     // Convert docx to html
     const convDocToHtml = async (file, setTemplateContent) => {
-      axios
-        .post(
-          "http://localhost:8181/api/document-conversion/convert/docx-to-htmlString",
-          {
-            docFile: file,
+      CommonBackendHelper.convertDocxToHtmlString(
+        {
+          docFile: file,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
           },
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
+        }
+      )
         .then((res) => {
           const originalContent = res.data;
-          console.log("Original Content", originalContent)
+          console.log("Original Content", originalContent);
           const inlineContent = juice(originalContent, {
             removeStyleTags: false,
           });
-          console.log("Inline Content", inlineContent)
+          console.log("Inline Content", inlineContent);
           setTemplateContent(inlineContent);
         })
         .catch((err) => {
