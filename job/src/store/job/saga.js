@@ -69,7 +69,6 @@ function* workCreateJob(action) {
     }
     navigate("/jobs");
   } catch (error) {
-    toast.error(error?.message);
     yield put(createJobFailure(error));
   }
 }
@@ -94,7 +93,6 @@ function* workCreateJobDocuments(action) {
       rerenderTable();
     }
   } catch (error) {
-    toast.error(error?.message);
     yield put(createJobDocumentsFailure(error));
   }
 }

@@ -4,7 +4,7 @@ import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
 
-function StepComponent({ step, timelineState, index, date }) {
+function StepComponent({ step, timelineState, index, date, status }) {
   const [startProgressBarValue, setStartProgressBarValue] = useState(0);
   const [endProgressBarValue, setEndProgressBarValue] = useState(0);
   const [toggleInterview, setToggleInterview] = useState(false);
@@ -33,20 +33,22 @@ function StepComponent({ step, timelineState, index, date }) {
                 animated={false}
                 value={startProgressBarValue}
                 style={{ height: "4px", width: "100%" }}
-                color="custom-button"
+                color="black"
                 className="no-transition"
               />
             ) : (
               <div style={{ height: "4px", width: "100%" }}></div>
             )}
             <div
-              className={`rounded-pill border border-primary bg-grey ${
-                timelineState === index && "bg-black border-light"
-              } ${timelineState > index && "bg-primary border-light"}`}
+              className={`rounded-pill border border-primary ${
+                timelineState === index
+                  ? "bg-black border-black"
+                  : "bg-primary border-light"
+              }`}
               color="custom-button"
               style={{
-                width: "18px",
-                height: "18px",
+                width: "22px",
+                height: "22px",
                 flexShrink: 0,
                 flexGrow: 0,
                 flexBasis: "auto",
@@ -58,7 +60,7 @@ function StepComponent({ step, timelineState, index, date }) {
               {index === 5 && (
                 <span>
                   <i
-                    className="ri-add-fill text-dark fw-bold cursor-pointer"
+                    className="ri-add-fill text-white fw-bold cursor-pointer"
                     onClick={() => {
                       setToggleInterview(!toggleInterview);
                     }}
@@ -70,12 +72,16 @@ function StepComponent({ step, timelineState, index, date }) {
               <Progress
                 animated={false}
                 value={endProgressBarValue}
-                style={{ height: "1px", width: "100%" }}
-                color="custom-button"
-                className="no-transition"
+                style={{ height: "4px", width: "100%" }}
+                color="black"
+                className={`no-transition ${
+                  timelineState === index
+                    ? "bg-black border-black"
+                    : "border-primary"
+                }`}
               />
             ) : (
-              <div style={{ height: "1px", width: "100%" }}></div>
+              <div style={{ height: "4px", width: "100%" }}></div>
             )}
           </div>
           {date && (

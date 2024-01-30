@@ -228,7 +228,7 @@ const AccountListing = () => {
         deleteText={"Are you sure you would like to delete this account?"}
       />
       <DynamicTableWrapper
-        data={accountsData.accounts}
+        data={accountsData?.accounts}
         config={generateAccountConfig(customConfig)}
         pageInfo={pageInfo}
         pageRequest={pageRequest}

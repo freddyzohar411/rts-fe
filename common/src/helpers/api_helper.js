@@ -7,28 +7,32 @@ axios.defaults.baseURL = api.API_URL;
 // content type
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-// content type
-const token = JSON.parse(sessionStorage.getItem("authUser"))
-  ? JSON.parse(sessionStorage.getItem("authUser")).token
-  : null;
-if (token) axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+const axiosInstance = axios.create({ baseURL: api.API_URL });
+
+let refreshingToken = null;
+
+axios.interceptors.request.use(
+  (config) => {
+    const token = sessionStorage.getItem("accessToken");
+    if (token) {
+      config.headers["Authorization"] = "Bearer " + token; // for Spring Boot back-end
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // intercepting to capture errors
 axios.interceptors.response.use(
-  function (response) {
+  async function (response) {
     return response.data ? response.data : response;
   },
   function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    if (error?.response?.status === 403) {
-      toast.error("JWT token got expired.");
-      window.location.replace("/login");
-    }
-
     if (error?.response?.data) {
       return Promise.reject(error.response.data);
     }
-
     let message;
     switch (error.status) {
       case 500:
@@ -52,6 +56,16 @@ axios.interceptors.response.use(
  */
 const setAuthorization = (token) => {
   axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+};
+
+const refreshToken = () => {
+  const userData = JSON.parse(sessionStorage.getItem("authUser"));
+  const refreshToken = sessionStorage.getItem("refreshToken");
+  const data = {
+    id: userData?.user?.id,
+    refreshToken,
+  };
+  return axios.post("/api/user/refreshToken", data);
 };
 
 class APIClient {
@@ -121,4 +135,4 @@ const getLoggedinUser = () => {
   }
 };
 
-export { APIClient, setAuthorization, getLoggedinUser };
+export { APIClient, setAuthorization, getLoggedinUser, refreshToken };

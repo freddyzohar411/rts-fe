@@ -28,7 +28,7 @@ function SubmitToSales({
   const form = useSelector((state) => state.JobFormReducer.form);
 
   const linkState = location.state;
-  const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
+  const { getAllUserGroups } = useUserAuth();
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [view, setView] = useState(

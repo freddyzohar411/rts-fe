@@ -61,4 +61,11 @@ export const getFormsByCategories = (category) =>
 
 // Email
 export const sendEmail = (data, config) =>
-  api.create(`${configURL.COMMON_URL}/${baseURL.EMAIL}/sendingEmail`, data, config);
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.EMAIL}/sendingEmail`,
+    data,
+    config
+  );
+
+export const refreshToken = (data) =>
+  api.get(`${configURL.API_URL}/${baseURL.USER}/refreshToken`, data);

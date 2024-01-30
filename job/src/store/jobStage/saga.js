@@ -34,13 +34,18 @@ function* workTagJob(action) {
         toast.success("Job has been associated successfully.");
       } else if (payload?.jobType === "submit_to_sales") {
         toast.success("Job has been submitted to sales.");
+      } else if (payload?.jobType === "submit_to_client") {
+        toast.success("Job has been submitted to client.");
+      } else if (payload?.jobType === "profile_feedback_pending") {
+        toast.success("Profile feedback is pending.");
+      } else if (payload?.jobType === "schedule_interview") {
+        toast.success("The interview has been scheduled.");
       }
     } else {
       toast.success(response?.message);
       navigate(`/jobs/${payload?.jobId}/overview`);
     }
   } catch (error) {
-    toast.error(error?.message);
     yield put(tagJobFailure(error));
   }
 }
@@ -54,7 +59,6 @@ function* workTagAllJob(action) {
     toast.success(response?.message);
     navigate(`/jobs/${payload?.[0]?.jobId}/overview`);
   } catch (error) {
-    toast.error(error?.message);
     yield put(tagJobAllFailure(error));
   }
 }
@@ -65,7 +69,6 @@ function* workFetchJobTimelineList(action) {
     const response = yield call(getJobTimeline, action.payload);
     yield put(fetchJobTimelineListSuccess(response.data));
   } catch (error) {
-    toast.error("Error: fetching job timeline");
     yield put(fetchJobTimelineListFailure(error));
   }
 }
@@ -77,7 +80,6 @@ function* workFetchJobTimelineCount(action) {
     const response = yield call(getJobTimelineCount, jobId);
     yield put(fetchJobtimeineCountSuccess(response.data));
   } catch (error) {
-    toast.error("Error: fetching job timeline count");
     yield put(fetchJobtimeineCountFailure(error));
   }
 }

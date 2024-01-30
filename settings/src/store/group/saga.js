@@ -71,7 +71,6 @@ function* workCreateGroup(action) {
     toast.success(groupResponse?.message);
   } catch (error) {
     yield put(createGroupFailure(error?.data));
-    toast.error("Failed to create group!");
   }
 }
 
@@ -84,7 +83,6 @@ function* workUpdateGroup(action) {
     toast.success(groupResponse?.message);
   } catch (error) {
     yield put(updateGroupFailure(error));
-    toast.error("Failed to update group!");
   }
 }
 
@@ -96,7 +94,6 @@ function* workDeleteGroup(action) {
     toast.success(groupResponse?.message);
   } catch (error) {
     yield put(deleteGroupFailure(error));
-    toast.error("Failed to delete group!");
   }
 }
 
