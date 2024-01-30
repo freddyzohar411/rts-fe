@@ -51,6 +51,7 @@ const TwoColumnLayout = (props) => {
     }
     return false;
   }, []);
+  
 
   const initMenu = useCallback(() => {
     const pathName = process.env.PUBLIC_URL + props.router.location.pathname;

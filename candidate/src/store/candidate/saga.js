@@ -9,6 +9,8 @@ import {
   FETCH_CANDIDATES,
   FETCH_CANDIDATES_FIELDS,
   PUT_CANDIDATE_DRAFT_STATUS,
+  FETCH_CANDIDATE_DATA,
+  FETCH_CANDIDATES_FIELDS_ALL,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -26,6 +28,10 @@ import {
   putCandidateDraftStatusSuccess,
   putCandidateDraftStatusFailure,
   putCandidateDraftStatus,
+  fetchCandidateDataSuccess,
+  fetchCandidateDataFailure,
+  fetchCandidatesFieldsAllSuccess,
+  fetchCandidatesFieldsAllFailure,
 } from "./action";
 import {
   getCandidates,
@@ -35,6 +41,8 @@ import {
   getCandidatesFields,
   getCandidateById,
   completeCandidateRegistration,
+  getCandidateDataById,
+  getCandidateFieldAll,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -149,6 +157,29 @@ function* workPutCandidateDraftStatus(action) {
   }
 }
 
+// Fetch candidate data by id
+function* workFetchCandidateData(action) {
+  try {
+    const response = yield call(getCandidateDataById, action.payload);
+    yield put(fetchCandidateDataSuccess(response.data));
+  } catch (error) {
+    toast.error("Error fetching candidate data");
+    yield put(fetchCandidateDataFailure(error));
+  }
+}
+
+// Fetch accounts fields All
+function* workFetchCandidatesFieldsAll() {
+  try {
+    const response = yield call(getCandidateFieldAll);
+    yield put(fetchCandidatesFieldsAllSuccess(response.data));
+  } catch (error) {
+    toast.error("Error fetching accounts fields");
+    yield put(fetchCandidatesFieldsAllFailure(error));
+  }
+}
+
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -157,4 +188,6 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATES_FIELDS, workFetchCandidatesFields);
   yield takeEvery(FETCH_CANDIDATE, workFetchCandidate);
   yield takeEvery(PUT_CANDIDATE_DRAFT_STATUS, workPutCandidateDraftStatus);
+  yield takeEvery(FETCH_CANDIDATE_DATA, workFetchCandidateData);
+  yield takeEvery(FETCH_CANDIDATES_FIELDS_ALL, workFetchCandidatesFieldsAll);
 }

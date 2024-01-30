@@ -29,6 +29,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 
+// Elements
+// import { SelectElement } from "@workspace/common";
+import { TemplateSelectByCategoryElement } from "@workspace/common";
+
+// Stepper
+import { TimelineStepper } from "../TimelineStepper";
+
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
 import SubmitToSales from "../SubmitToSales/SubmitToSales";
@@ -63,14 +70,21 @@ function JobOverview() {
   const [stepperState, setStepperState] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
+
+  const [selectedOfferTemplate, setSelectedOfferTemplate] = useState(null);
+  const [templateData, setTemplateData] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const [formTemplate, setFormTemplate] = useState(null);
   const [candidateId, setCandidateId] = useState();
+
   const [isPreviewCV, setIsPreviewCV] = useState(false);
 
   const form = useSelector((state) => state.JobFormReducer.form);
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
+
   const jobTimelineData = useSelector(
     (state) => state.JobStageReducer.jobTimeline
   );
@@ -204,22 +218,33 @@ function JobOverview() {
         );
       case 2:
         return isPreviewCV ? (
-          <CVPreview onExitPreview={handleExitPreview} />
+          <CVPreview
+            onExitPreview={handleExitPreview}
+            templateData={templateData}
+            candidateId={candidateId}
+          />
         ) : (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
             onPreviewCVClick={handlePreviewCVClick}
+            templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
           />
         );
       case 3:
         return isPreviewCV ? (
-          <CVPreview onExitPreview={handleExitPreview} />
+          <CVPreview
+            onExitPreview={handleExitPreview}
+            templateData={templateData}
+            candidateId={candidateId}
+            jobId={jobId}
+          />
         ) : (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
             onPreviewCVClick={handlePreviewCVClick}
+            templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
           />
@@ -241,7 +266,13 @@ function JobOverview() {
           />
         );
       case 6:
-        return <ConditionalOffer closeOffcanvas={closeOffcanvas} />;
+        return (
+          <ConditionalOffer
+            templateData={templateData}
+            closeOffcanvas={closeOffcanvas}
+            candidateId={candidateId}
+          />
+        );
       case 7:
         return <ConditionalOfferStatus closeOffcanvas={closeOffcanvas} />;
       default:
@@ -250,6 +281,23 @@ function JobOverview() {
   };
 
   // Close Preview CV when OffCanvas is Closed
+  useEffect(() => {
+    // Set Category for Template
+    switch (activeStep) {
+      case 2:
+        setSelectedCategory("CV");
+        break;
+      case 3:
+        setSelectedCategory("CV");
+        break;
+      case 6:
+        setSelectedCategory("Conditional Offer");
+        break;
+      default:
+        setSelectedCategory(null);
+    }
+  }, [activeStep]);
+
   useEffect(() => {
     if (offcanvasForm === false) {
       setIsPreviewCV(false);
@@ -267,6 +315,8 @@ function JobOverview() {
     setOffcanvasForm(!offcanvasForm);
     setCandidateId(id);
   };
+
+  console.log("Active Step", activeStep)
 
   return (
     <React.Fragment>
@@ -396,6 +446,9 @@ function JobOverview() {
                                   data?.timeline[step] ? index : index - 1
                                 }
                                 index={index}
+                                stepLength={
+                                  (Object.keys(data?.timeline)?.length ?? 1) - 1
+                                }
                                 date={data?.timeline?.[step]?.date}
                                 status={data?.timeline?.[step]?.status}
                               />
@@ -494,16 +547,12 @@ function JobOverview() {
           direction="end"
           style={{ width: "75vw" }}
         >
-          {/* Offcanvas Header */}
-          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row justify-content-between align-items-end">
-            {/* Circular Icon and Job Information */}
-            <div className="d-flex flex-row gap-4">
-              {/* Circular Icon */}
-              <div className="avatar-md flex-shrink-0">
-                <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
-                  {formSubmissionData?.accountName.charAt(0)}
-                </div>
+          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
+            <div className="avatar-md flex-shrink-0 d-flex gap-3">
+              <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
+                {formSubmissionData?.accountName.charAt(0)}
               </div>
+
               <Row className="d-flex flex-row justify-content-between align-items-end gap-5">
                 <Col>
                   <Row>
@@ -527,43 +576,28 @@ function JobOverview() {
                     </span>
                   </Row>
                 </Col>
-                {(activeStep === 6 || activeStep === 2 || activeStep === 3) && (
-                  <Col>
-                    <div>
-                      <Input
-                        type="select"
-                        className="form-select form-select-md"
-                      >
-                        <option value="">
-                          Selected Conditional Offer Template
-                        </option>
-                        <option value="">Template 1</option>
-                        <option value="">Template 2</option>
-                      </Input>
-                    </div>
-                  </Col>
-                )}
               </Row>
             </div>
             {/* Template Selector */}
-            {(activeStep === 6) | isPreviewCV && (
-              <div>
-                <Input
-                  type="select"
-                  className="form-select form-select-md"
-                  style={{ width: "250px" }}
-                >
-                  <option value="">Select Template</option>
-                  <option value="">Template 1</option>
-                  <option value="">Template 2</option>
-                </Input>
-              </div>
+            {((activeStep === 6) || isPreviewCV) && (
+              <Col>
+                <div>
+                  <TemplateSelectByCategoryElement
+                    categoryName={selectedCategory}
+                    placeholder="Select a template"
+                    onChange={(value) => {
+                      setTemplateData(value);
+                    }}
+                    defaultFirstValue
+                    width="300px"
+                    end
+                  />
+                </div>
+              </Col>
             )}
           </div>
           <OffcanvasBody>
-            {getFormComponent(activeStep, () =>
-              setOffcanvasForm(!offcanvasForm)
-            )}
+            {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
         </Offcanvas>
         {/* <Tooltip

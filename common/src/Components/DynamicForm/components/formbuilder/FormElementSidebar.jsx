@@ -66,6 +66,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabelIcon: "mdi mdi-card-search-outline",
+      draggableLabel: "Multi Input",
+      draggablePrefix: "element",
+      draggableId: "multiinput",
+      type: "field",
+    },
+    {
       draggableLabelIcon: "mdi mdi-radiobox-marked",
       draggableLabel: "Radio",
       draggablePrefix: "element",
@@ -250,6 +257,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableLabel: "Account Contact Select",
       draggablePrefix: "element",
       draggableId: "selectaccountcontact",
+      type: "field",
+    },
+    {
+      draggableLabelIcon: "ri-file-text-line",
+      draggableLabel: "Form Template Select",
+      draggablePrefix: "element",
+      draggableId: "selectformtemplate",
       type: "field",
     },
   ];

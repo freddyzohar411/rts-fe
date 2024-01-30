@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { FETCH_PARENTCOMPANY } from "./actionTypes";
 import { fetchParentCompanySuccess, fetchParentCompanyFailure } from "./action";
 import { getAccountNamesFromUser } from "../../helpers/backend_helper";
@@ -13,5 +13,5 @@ function* workFetchParentCompany() {
 }
 
 export default function* watchFetchParentCompanySaga() {
-  yield takeEvery(FETCH_PARENTCOMPANY, workFetchParentCompany);
+  yield takeLatest(FETCH_PARENTCOMPANY, workFetchParentCompany);
 }

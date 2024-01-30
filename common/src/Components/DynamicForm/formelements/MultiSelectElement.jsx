@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Label, FormFeedback } from "reactstrap";
 import Select from "react-select";
 import { Lists } from "./listOptions";
-import axios from "axios";
 
 const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
   const { formState } = formStateHook;
@@ -42,6 +41,9 @@ const MultiSelectElement = ({ formik, field, formStateHook, ...props }) => {
     if (formik?.values?.[field?.name]) {
       const updateData = formik?.values[field.name];
       setSelectedOptions(getExistingDataOptions(updateData));
+    }
+    if (formik?.values?.[field?.name] === "") {
+      setSelectedOptions([]);
     }
   }, [formik?.values?.[field?.name]]);
 

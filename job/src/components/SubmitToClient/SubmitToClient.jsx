@@ -11,6 +11,8 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import { Actions } from "@workspace/common";
+import { UseTemplateModuleDataHook } from "@workspace/common";
 
 function SubmitToClient({
   closeOffcanvas,
@@ -18,6 +20,8 @@ function SubmitToClient({
   jobId,
   candidateId,
 }) {
+
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -27,12 +31,18 @@ function SubmitToClient({
 
   const form = useSelector((state) => state.JobFormReducer.form);
 
-  const [tooltipOpen, setTooltipOpen] = useState(false);
   const [view, setView] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
       : false
   );
+
+
+  UseTemplateModuleDataHook.useTemplateModuleData({
+    candidateId: candidateId,
+    jobId: jobId,
+  });
+
   const [formTemplate, setFormTemplate] = useState(null);
   const [sendEmailModal, setSendEmailModal] = useState(false);
 
@@ -75,6 +85,7 @@ function SubmitToClient({
     closeOffcanvas();
   };
 
+
   return (
     <React.Fragment>
       <div>
@@ -109,7 +120,8 @@ function SubmitToClient({
                     type="button"
                     className="btn btn-custom-primary"
                     onClick={() => {
-                      setSendEmailModal(true);
+                      // setSendEmailModal(true);
+                      dispatch(Actions.setEmailOpen());
                     }}
                   >
                     Send Email
@@ -139,13 +151,6 @@ function SubmitToClient({
                   >
                     <span>Update without Email</span>
                   </Tooltip>
-                  <EmailComponent
-                    isOpen={sendEmailModal}
-                    toggle={() => {
-                      setSendEmailModal(!sendEmailModal);
-                      closeOffcanvas;
-                    }}
-                  />
                 </div>
               </div>
             </div>
