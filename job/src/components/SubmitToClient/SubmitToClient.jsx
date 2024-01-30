@@ -13,13 +13,13 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-
 function SubmitToClient({
   closeOffcanvas,
   onPreviewCVClick,
-  candidateId,
   jobId,
+  candidateId,
 }) {
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,7 +30,6 @@ function SubmitToClient({
 
   const form = useSelector((state) => state.JobFormReducer.form);
 
-  const [tooltipOpen, setTooltipOpen] = useState(false);
   const [view, setView] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
@@ -41,10 +40,6 @@ function SubmitToClient({
     candidateId: candidateId,
     jobId: jobId,
   });
-
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
 
   const [formTemplate, setFormTemplate] = useState(null);
   const [sendEmailModal, setSendEmailModal] = useState(false);
@@ -58,6 +53,10 @@ function SubmitToClient({
       setFormTemplate(JSON.parse(JSON.stringify(form)));
     }
   }, [form]);
+
+  const toggleFormViewState = () => {
+    setView(!view);
+  };
 
   // Handle form submit
   const handleFormSubmit = async (

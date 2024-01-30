@@ -67,5 +67,6 @@ export const sendEmail = (data, config) =>
     config
   );
 
+// Refresh token
 export const refreshToken = (data) =>
   api.get(`${configURL.API_URL}/${baseURL.USER}/refreshToken`, data);
