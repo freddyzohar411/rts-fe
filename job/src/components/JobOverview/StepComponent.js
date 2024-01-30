@@ -4,7 +4,14 @@ import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
 
-function StepComponent({ step, timelineState, index, date, status }) {
+function StepComponent({
+  step,
+  timelineState,
+  index,
+  date,
+  status,
+  stepLength,
+}) {
   const [startProgressBarValue, setStartProgressBarValue] = useState(0);
   const [endProgressBarValue, setEndProgressBarValue] = useState(0);
   const [toggleInterview, setToggleInterview] = useState(false);
@@ -74,7 +81,11 @@ function StepComponent({ step, timelineState, index, date, status }) {
                 value={endProgressBarValue}
                 style={{ height: "4px", width: "100%" }}
                 color="black"
-                className="no-transition"
+                className={`no-transition ${
+                  index < stepLength
+                    ? "bg-black border-black"
+                    : "border-primary"
+                }`}
               />
             ) : (
               <div style={{ height: "4px", width: "100%" }}></div>
