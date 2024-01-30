@@ -26,6 +26,9 @@ import {
   CREATE_JOB_FOD,
   CREATE_JOB_FOD_SUCCESS,
   CREATE_JOB_FOD_FAILURE,
+  FETCH_JOBS_ADMIN,
+  FETCH_JOBS_ADMIN_SUCCESS,
+  FETCH_JOBS_ADMIN_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
@@ -237,7 +240,27 @@ const JobListReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
-
+    
+    // Admin
+    case FETCH_JOBS_ADMIN:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_JOBS_ADMIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        jobs: action.payload,
+      };
+    case FETCH_JOBS_ADMIN_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
     default:
       return state;
   }

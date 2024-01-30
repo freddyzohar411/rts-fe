@@ -25,13 +25,14 @@ import {
   fetchJobLists,
   fetchJobListsFields,
   fetchUserGroupByName,
+  fetchJobsAdmin
 } from "../../store/jobList/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
 import JobTagCanvas from "./JobTagCanvas";
 
 const JobListing = () => {
-  const { Permission, checkAllPermission } = useUserAuth();
+  const { Permission, checkAllPermission, checkAnyRole } = useUserAuth();
   const dispatch = useDispatch();
   const { jobType } = useParams();
 
@@ -119,6 +120,10 @@ const JobListing = () => {
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     const request = { ...pageRequest, jobType };
+    if (checkAnyRole(["Admin"])) {
+      dispatch(fetchJobsAdmin(DynamicTableHelper.cleanPageRequest(request)));
+      return
+    }
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
   }, [pageRequest]);
 
