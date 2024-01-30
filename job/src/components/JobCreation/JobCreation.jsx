@@ -19,6 +19,7 @@ import DeleteDraftModal from "./DeleteDraftModal";
 const JobCreation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
   const { jobId } = useParams();
 
@@ -41,11 +42,24 @@ const JobCreation = () => {
 
   // Fetch all the countries and account names
   useEffect(() => {
-    dispatch(fetchJobForm(JOB_FORM_NAME));
-    if (!jobId) {
-      dispatch(fetchDraftJob());
-    }
+    const fetchData = async () => {
+      setIsLoading(true);
+      await dispatch(fetchJobForm(JOB_FORM_NAME));
+      if (!jobId) {
+        await dispatch(fetchDraftJob());
+      }
+      setIsLoading(false); // Move this line inside the async block
+    };
+
+    fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   dispatch(fetchJobForm(JOB_FORM_NAME));
+  //   if (!jobId) {
+  //     dispatch(fetchDraftJob());
+  //   }
+  // }, []);
 
   /**
    * Fetch form template based on step
@@ -69,10 +83,12 @@ const JobCreation = () => {
   }, [jobId, editId]);
 
   useEffect(() => {
+    setIsLoading(true);
     dispatch(clearJobFormSubmission());
     if (jobId) {
       dispatch(fetchJobFormSubmission(jobId));
     }
+    setIsLoading(false);
   }, [jobId]);
 
   /**
@@ -134,6 +150,7 @@ const JobCreation = () => {
   };
 
   document.title = "Job Creation | RTS";
+  console.log("Is Loading Job Creation: ", isLoading);
 
   return (
     <div>
@@ -152,6 +169,7 @@ const JobCreation = () => {
         errorMessage={null}
         view={view}
         ref={formikRef}
+        isLoading={isLoading}
       />
       <JobDocument jobId={randomId} view={view} />
       <div className={`d-flex justify-content-between align-items-center mb-2`}>

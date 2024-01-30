@@ -12,6 +12,7 @@ import {
   Row,
   Col,
   Label,
+  Spinner,
 } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import { DateHelper, useTableHook } from "@workspace/common";
@@ -31,6 +32,7 @@ import { RECRUITER_GROUP } from "../../helpers/constant";
 import JobTagCanvas from "./JobTagCanvas";
 
 const JobListing = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const { jobType } = useParams();
@@ -112,15 +114,32 @@ const JobListing = () => {
 
   // Get all the option groups
   useEffect(() => {
-    dispatch(fetchJobListsFields());
-    dispatch(fetchUserGroupByName(RECRUITER_GROUP));
+    setIsLoading(true);
+    dispatch(fetchJobListsFields()).finally(() => setIsLoading(false));
+    dispatch(fetchUserGroupByName(RECRUITER_GROUP)).finally(() =>
+      setIsLoading(false)
+    );
   }, []);
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   dispatch(fetchJobListsFields());
+  //   dispatch(fetchUserGroupByName(RECRUITER_GROUP));
+  // }, []);
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     const request = { ...pageRequest, jobType };
-    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+    setIsLoading(true);
+    dispatch(
+      fetchJobLists(DynamicTableHelper.cleanPageRequest(request))
+    ).finally(() => setIsLoading(false));
   }, [pageRequest]);
+
+  // useEffect(() => {
+  //   const request = { ...pageRequest, jobType };
+  //   dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+  // }, [pageRequest]);
 
   // Update the page info when job Data changes
   useEffect(() => {
@@ -398,6 +417,7 @@ const JobListing = () => {
         setCustomConfigData={setCustomConfigData}
         gridView={gridView}
         handleTableViewChange={handleTableViewChange}
+        isLoading={isLoading}
       />
       <JobTagCanvas
         tagOffcanvas={tagOffcanvas}

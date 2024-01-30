@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Input,
+  Row,
+  Spinner,
+} from "reactstrap";
 import { Link, useParams } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
@@ -23,6 +32,7 @@ const DynamicTableWrapper = ({
   confirmDelete,
   gridView,
   handleTableViewChange,
+  isLoading,
 }) => {
   const { jobType } = useParams();
   const { Permission, checkAllPermission } = useUserAuth();
@@ -207,6 +217,7 @@ const DynamicTableWrapper = ({
                       data={data}
                       pageRequestSet={pageRequestSet}
                       pageInfo={pageInfo}
+                      isLoading={isLoading}
                     />
                   </div>
                 </CardBody>

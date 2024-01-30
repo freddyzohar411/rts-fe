@@ -16,6 +16,7 @@ import {
 import { useUserAuth } from "@workspace/login";
 
 function CandidateListing() {
+  const [isLoading, setIsLoading] = useState(false);
   const { Permission, checkAllPermission, getName } = useUserAuth();
   const dispatch = useDispatch();
   const candidatesData = useSelector(
@@ -185,8 +186,15 @@ function CandidateListing() {
 
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
+    setIsLoading(true); // Set isLoading to true before fetching data
+    dispatch(
+      fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest))
+    ).finally(() => setIsLoading(false)); // Set isLoading to false after data is fetched
   }, [pageRequest]);
+
+  // useEffect(() => {
+  //   dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
+  // }, [pageRequest]);
 
   // Update the page info when candidate Data changes
   useEffect(() => {
@@ -214,6 +222,7 @@ function CandidateListing() {
         setSearch={setSearch}
         optGroup={candidatesFields}
         setCustomConfigData={setCustomConfigData}
+        isLoading={isLoading}
       />
     </>
   );

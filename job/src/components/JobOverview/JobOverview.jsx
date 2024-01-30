@@ -15,7 +15,6 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
-  Tooltip,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -32,9 +31,6 @@ import { JOB_FORM_NAME } from "../JobCreation/constants";
 // Elements
 // import { SelectElement } from "@workspace/common";
 import { TemplateSelectByCategoryElement } from "@workspace/common";
-
-// Stepper
-import { TimelineStepper } from "../TimelineStepper";
 
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
@@ -56,9 +52,14 @@ import {
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
+import { useMediaQuery } from "react-responsive";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
+  
+  const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
@@ -304,7 +305,14 @@ function JobOverview() {
     setCandidateId(id);
   };
 
-  console.log("Active Step", activeStep)
+  const deliveryTeam = "Ganesh, Priya, Vinod";
+
+  const truncate = (input, length) =>
+    input
+      ? input.length > length
+        ? `${input.substring(0, length)}...`
+        : input
+      : "";
 
   return (
     <React.Fragment>
@@ -315,22 +323,61 @@ function JobOverview() {
         <hr className="border border-dashed border-dark" />
         <Row className="mb-3">
           <Col>
-            <div className="d-flex flex-row justify-content-between align-items-center">
-              <div className="d-flex flex-row h5 fw-bold align-items-end gap-1">
-                <span>{formSubmissionData?.accountName} | </span>
-                <span>{formSubmissionData?.jobTitle} | </span>
-                <span>{formSubmissionData?.clientJobId} | </span>
-                <div className="d-flex flex-column">
-                  <span className="fw-medium h6 text-muted">Sales</span>
-                  <span>{formSubmissionData?.salesManager} | </span>
+            <div
+              className={`d-flex ${
+                isMobile ? "flex-column align-items-start" : "flex-row align-items-center"
+              } justify-content-between gap-1`}
+            >
+              <div
+                className={`d-flex ${
+                  isMobile ? "flex-column align-items-start" : "flex-row align-items-end"
+                } h5 fw-bold  gap-1`}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                <div className="d-flex flex-row gap-1">
+                  <span title={formSubmissionData?.accountName}>
+                    {(isMobile | isTablet)
+                      ? truncate(formSubmissionData?.accountName, 8)
+                      : formSubmissionData?.accountName}
+                  </span>
+                  <span>|</span>
+                  <span title={formSubmissionData?.jobTitle}>
+                    {(isMobile | isTablet)
+                      ? truncate(formSubmissionData?.jobTitle, 8)
+                      : formSubmissionData?.jobTitle}
+                  </span>
+                  <span>|</span>
+                  <span>{formSubmissionData?.clientJobId}</span>
+                  {isMobile || <span>|</span>}
                 </div>
-                <div className="d-flex flex-column">
-                  <span className="fw-medium h6 text-muted">Delivery</span>
-                  <span>Ganesh, Priya, Vinod</span>
+                <div className="d-flex flex-row gap-1">
+                  <div className="d-flex flex-column">
+                    <span className="fw-medium h6 text-muted">Sales</span>
+                    <span title={formSubmissionData?.salesManager}>
+                      {(isMobile | isTablet)
+                        ? truncate(formSubmissionData?.salesManager, 8)
+                        : formSubmissionData?.salesManager}
+                    </span>
+                  </div>
+                  <div className="d-flex align-items-end gap-1">
+                    <span>|</span>
+                    <div className="d-flex flex-column">
+                      <span className="fw-medium h6 text-muted">Delivery</span>
+                      <span>
+                        {(isMobile | isTablet)
+                          ? truncate(deliveryTeam, 8)
+                          : deliveryTeam}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
+
               <div className="d-flex flex-row gap-2 align-items-center">
-                <div className="search-box" style={{ width: "300px" }}>
+                <div
+                  className="search-box"
+                 
+                >
                   <form onSubmit={pageRequestSet.setSearchTerm}>
                     <Input
                       type="text"
@@ -530,7 +577,7 @@ function JobOverview() {
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
-          style={{ width: "75vw" }}
+          style={{ width: isMobile ? "100vw" : "75vw" }}
         >
           <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
             <div className="avatar-md flex-shrink-0 d-flex gap-3">
@@ -564,7 +611,7 @@ function JobOverview() {
               </Row>
             </div>
             {/* Template Selector */}
-            {((activeStep === 6) || isPreviewCV) && (
+            {(activeStep === 6 || isPreviewCV) && (
               <Col>
                 <div>
                   <TemplateSelectByCategoryElement
@@ -585,14 +632,6 @@ function JobOverview() {
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
         </Offcanvas>
-        {/* <Tooltip
-          target="next-step"
-          isOpen={tooltipOpen}
-          toggle={() => setTooltipOpen(!tooltipOpen)}
-          placement="bottom"
-        >
-          {stepperState}
-        </Tooltip> */}
       </div>
     </React.Fragment>
   );

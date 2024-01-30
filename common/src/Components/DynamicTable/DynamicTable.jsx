@@ -6,8 +6,16 @@ import {
   PaginationItem,
   PaginationLink,
 } from "reactstrap";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
+const DynamicTable = ({
+  data,
+  config,
+  pageInfo,
+  pageRequestSet,
+  isLoading,
+}) => {
   // ========================================= Table Configuration ===========================
   // Generate Header
   const generateHeaderJSX = (config) => (
@@ -45,17 +53,26 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
     });
   };
 
+  console.log("Is Loading: ", isLoading)
+
   // ================================================================================================
   return (
     <>
       {/* Table */}
-      <div className="table-responsive table-hover table-card mt-3 mb-1" style={{height: "400px"}}>
+      <div
+        className="table-responsive table-hover table-card mt-3 mb-1"
+        style={{ height: "400px" }}
+      >
         <Table
           className="table align-middle table-nowrap border-secondary align-middle"
           id="accountListingTable"
         >
-          <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
-            <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
+          <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
+            {isLoading ? (
+              <Skeleton />
+            ) : (
+              <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
+            )}
           </thead>
           <tbody className="list form-check-all">
             {data && data.length > 0 ? (
