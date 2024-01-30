@@ -68,8 +68,8 @@ const AccountFormReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_ACCOUNTFORM_SUBMISSION_SUCCESS:
-      let submissionData = action.payload?.submissionData;
-      let submissionId = action.payload?.id;
+      let submissionData = action.payload?.submissionData ?? null;
+      let submissionId = action.payload?.id ?? null;
       if (submissionData && submissionId) {
          submissionData = JSON.parse(action.payload?.submissionData);
          submissionId = parseInt(action.payload.id);

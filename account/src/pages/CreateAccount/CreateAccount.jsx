@@ -183,14 +183,14 @@ const AccountCreation = () => {
       if (step === 2) {
         dispatch(clearAccountFormSubmission());
       }
-      // if (step === 3) {
-      //   dispatch(
-      //     fetchAccountFormSubmission(
-      //       AccountEntityConstant.ACCOUNT_INSTRUCTION,
-      //       accountId
-      //     )
-      //   );
-      // }
+      if (step === 3) {
+        dispatch(
+          fetchAccountFormSubmission(
+            AccountEntityConstant.ACCOUNT_INSTRUCTION,
+            accountId
+          )
+        );
+      }
       if (step === 5) {
         dispatch(
           fetchAccountFormSubmission(
