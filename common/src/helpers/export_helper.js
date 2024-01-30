@@ -362,7 +362,7 @@ export async function convertHtmlToPdfBlob(htmlString, options = {}) {
 }
 
 // ================== Backend Export ===================
-function createStyleTag(options, withTag = true) {
+function createStyleTag(options, withTag = true, pageDimension=true) {
   const {
     unit,
     pageType,
@@ -373,10 +373,28 @@ function createStyleTag(options, withTag = true) {
     marginRight,
   } = options;
 
+  const paperSizeDimensions = {
+    "A4 portrait": '8.27in 11.69in',
+    "A3 portrait": '11.69in 16.54in',
+    "Letter portrait": '8.5in 11in',
+    "Legal portrait": '8.5in 14in',
+    "A4 landscape": '11.69in 8.27in',
+    "A3 landscape": '16.54in 11.69in',
+    "Letter landscape": '11in 8.5in',
+    "Legal landscape": '14in 8.5in',
+  };
+
+
+
+  let pageTypeInput = pageType || 'A4';
+  if (pageDimension) {
+    pageTypeInput = paperSizeDimensions[`${pageType} ${pageOrientation}`];
+  }
+
   if (!withTag) {
     return `
         @page {
-            size: ${pageType} ${pageOrientation};
+            size: ${pageTypeInput} ${pageOrientation};
             margin: ${marginTop}${unit} ${marginRight}${unit} ${marginBottom}${unit} ${marginLeft}${unit};
         }
     `;
@@ -385,7 +403,7 @@ function createStyleTag(options, withTag = true) {
   return `
       <style>
           @page {
-              size: ${pageType} ${pageOrientation};
+              size: ${pageTypeInput} ${pageOrientation};
               margin: ${marginTop}${unit} ${marginRight}${unit} ${marginBottom}${unit} ${marginLeft}${unit};
           }
       </style>
@@ -510,6 +528,7 @@ export async function exportBackendHtml2PdfBlobExtCss(
       </html>
   `;
 
+  console.log("Preview HTML", html);
   let fileName = options?.fileName || "document.pdf";
 
   try {

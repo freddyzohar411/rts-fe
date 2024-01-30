@@ -26,9 +26,10 @@ const TemplateSettingsSideBar = ({
               value: tempSettings.pageType,
             }}
             optionsData={[
-              { label: "A4", value: "a4" },
-              { label: "A3", value: "a3" },
-              { label: "Letter", value: "letter" },
+              { label: "A4", value: "A4" },
+              { label: "A3", value: "A3" },
+              { label: "Letter", value: "Letter" },
+              { label: "Legal", value: "Legal" },
             ]}
             setSelectedOptionData={(e) =>
               //   setSettings((prev) => ({ ...prev, pageType: e.value }))

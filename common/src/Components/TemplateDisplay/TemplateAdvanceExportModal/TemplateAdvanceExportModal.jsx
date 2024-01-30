@@ -31,7 +31,7 @@ const TemplateAdvanceExportModal = ({
   const dispatch = useDispatch();
   const [templateSettings, setTemplateSettings] = useState({
     unit: "in",
-    pageType: "a4",
+    pageType: "A4",
     pageOrientation: "portrait",
     marginTop: 0.25,
     marginBottom: 0.25,
