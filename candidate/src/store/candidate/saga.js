@@ -46,10 +46,7 @@ import {
   completeCandidateRegistration,
   getCandidateDataById,
   getCandidateFieldAll,
-<<<<<<< HEAD
   getCandidatesAdmin
-=======
->>>>>>> main
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
