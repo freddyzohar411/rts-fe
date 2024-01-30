@@ -1533,7 +1533,7 @@ const FieldBuilder = ({
       validationSchema.userGroup = userGroupList;
       validationSchema.conditionValidation = validationConditionList;
       validationSchema.formCategorySelect = formCategory;
-      console.log("Validation Schema", validationSchema);
+      
       updateFormField(validationSchema, formBuilderUpdateData.index);
       setFormBuilderType(null);
       setFormBuilderUpdateData(null);
@@ -1561,7 +1561,7 @@ const FieldBuilder = ({
       validationSchema.userGroup = userGroupList;
       validationSchema.conditionValidation = validationConditionList;
       validationSchema.formCategorySelect = formCategory;
-      console.log("Validation Schema", validationSchema);
+      
       addFormField(validationSchema);
       // Set Form Schema
       setFormFieldId(validationSchema.fieldId);

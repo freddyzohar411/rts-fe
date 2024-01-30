@@ -35,7 +35,6 @@ const TemplatePreviewModal = ({
     (state) => state.TemplateReducer.templateCategories
   );
 
-  console.log("templateCategories", templateCategories);
   const [fileName, setFileName] = useState("");
 
   const templatesByCategory = useSelector(

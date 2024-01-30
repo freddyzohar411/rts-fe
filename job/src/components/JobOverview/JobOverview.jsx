@@ -316,8 +316,6 @@ function JobOverview() {
     setCandidateId(id);
   };
 
-  console.log("Active Step", activeStep)
-
   return (
     <React.Fragment>
       <div>
@@ -579,7 +577,7 @@ function JobOverview() {
               </Row>
             </div>
             {/* Template Selector */}
-            {((activeStep === 6) || isPreviewCV) && (
+            {(activeStep === 6 || isPreviewCV) && (
               <Col>
                 <div>
                   <TemplateSelectByCategoryElement

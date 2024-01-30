@@ -8,7 +8,6 @@ import {
   DropdownToggle,
 } from "reactstrap";
 
-
 //import images
 import avatar1 from "../../assets/images/users/avatar-1.jpg";
 import { createSelector } from "reselect";
@@ -25,23 +24,6 @@ const ProfileDropdown = () => {
   const user = useSelector(selectDashboardData);
 
   const [userName, setUserName] = useState("Admin");
-
-  // useEffect(() => {
-  //   if (sessionStorage.getItem("authUser")) {
-  //     const obj = JSON.parse(sessionStorage.getItem("authUser"));
-  //     setUserName(
-  //       process.env.REACT_APP_DEFAULTAUTH === "fake"
-  //         ? obj.username === undefined
-  //           ? user.first_name
-  //             ? user.first_name
-  //             : obj.data.first_name
-  //           : "Admin" || "Admin"
-  //         : process.env.REACT_APP_DEFAULTAUTH === "firebase"
-  //         ? obj.providerData[0].email
-  //         : "Admin"
-  //     );
-  //   }
-  // }, [userName, user]);
 
   //Dropdown Toggle
   const [isProfileDropdown, setIsProfileDropdown] = useState(false);

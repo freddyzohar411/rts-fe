@@ -4,33 +4,34 @@ import { getValidate } from "../helpers/backend_helper";
 import { useNavigate } from "react-router-dom";
 
 const useProfile = () => {
-  const { getLoggedinUser } = Axios;
   const navigate = useNavigate();
 
   const userProfileSession = Axios.getLoggedinUser();
-  var token = userProfileSession && userProfileSession["access_token"];
+  const token = Axios.getToken();
   const [loading, setLoading] = useState(userProfileSession ? false : true);
   const [userProfile, setUserProfile] = useState(
     userProfileSession ? userProfileSession : null
   );
 
   useEffect(() => {
-    const userProfileSession = getLoggedinUser();
-    var token = userProfileSession && userProfileSession["access_token"];
-    if (token) {
-      getValidate({ token })
-        .then((resp) => {
-          if (resp?.active) {
-            setUserProfile(userProfileSession ? userProfileSession : null);
-            setLoading(token ? false : true);
-          } else {
+    const asyncCall = async () => {
+      var token = await sessionStorage.getItem("accessToken");
+      if (token) {
+        getValidate({ token })
+          .then((resp) => {
+            if (resp?.active) {
+              setUserProfile(userProfileSession ? userProfileSession : null);
+              setLoading(token ? false : true);
+            } else {
+              navigate("/logout");
+            }
+          })
+          .catch((e) => {
             navigate("/logout");
-          }
-        })
-        .catch((e) => {
-          navigate("/logout");
-        });
-    }
+          });
+      }
+    };
+    asyncCall();
   }, []);
 
   return { userProfile, loading, token };
