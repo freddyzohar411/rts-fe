@@ -14,6 +14,19 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
+  // Select to return API data
+  const apiData = useSelector((state) => {
+    if (field.list === "industry") {
+      return state.IndustryReducer.industry;
+    }
+    if (field.list === "department") {
+      return state.DepartmentReducer.department;
+    }
+    if (field.list === "country") {
+      return state.CountryCurrencyReducer.countryCurrency;
+    }
+  });
+
   // Helper Functions
   function mapToOptionFormat(apiData) {
     return apiData.map((item) => ({
@@ -37,13 +50,14 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
   // Get Data for API calls if it does not exist in the store
   useEffect(() => {
     if (!apiData || apiData.length === 0) {
-      if (field.list === "industry" || field.list === "subIndustry") {
+      console.log("fetching data");
+      if (field.list === "industry") {
         dispatch(fetchIndustry());
       }
       if (field.list === "department") {
         dispatch(fetchDepartment());
       }
-      if (field.list === "country" || field.list === "city") {
+      if (field.list === "country") {
         dispatch(fetchCountryCurrency());
       }
     }
@@ -55,19 +69,6 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
       return state.IndustryReducer.industry;
     }
     if (field.list === "city") {
-      return state.CountryCurrencyReducer.countryCurrency;
-    }
-  });
-
-  // Select to return API data
-  const apiData = useSelector((state) => {
-    if (field.list === "industry") {
-      return state.IndustryReducer.industry;
-    }
-    if (field.list === "department") {
-      return state.DepartmentReducer.department;
-    }
-    if (field.list === "country") {
       return state.CountryCurrencyReducer.countryCurrency;
     }
   });
@@ -120,8 +121,14 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
 
   useEffect(() => {
     setSelectedOptions(null);
-    if (formik?.values?.[field.name] && formik?.values?.[field.name] !== "" && options) {
-      const setOption = getSingleExistingDataOptions(formik?.values?.[field.name]);
+    if (
+      formik?.values?.[field.name] &&
+      formik?.values?.[field.name] !== "" &&
+      options
+    ) {
+      const setOption = getSingleExistingDataOptions(
+        formik?.values?.[field.name]
+      );
       if (setOption) {
         setSelectedOptions(setOption);
       } else {
@@ -147,11 +154,11 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
       "&:hover": {
         borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       },
-      backgroundColor: state.isDisabled ? '#EFF2F7' : base.backgroundColor,
+      backgroundColor: state.isDisabled ? "#EFF2F7" : base.backgroundColor,
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      color: state.isDisabled ? 'black !important' : provided.color,
+      color: state.isDisabled ? "black !important" : provided.color,
     }),
   };
 

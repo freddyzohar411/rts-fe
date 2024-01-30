@@ -60,6 +60,14 @@ export const updateJobDocument = (id, data, config) =>
 export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
   `${DOCUMENT_BASE_URL}/entity/user/${entityType}/${entityId}`;
 
+// Get job data by Id
+export const getJobDataById = (id) =>
+  api.get(`${JOB_URL}${BASE_JOBS}/${id}/data/all`);
+
+// Get job fields all
+export const getJobsFieldsAll = () =>
+  api.get(`${JOB_URL}${BASE_JOBS}/fields/all`);
+
 export const tagJob = (data, config) =>
   api.create(`${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}`, data, config);
 
@@ -71,3 +79,4 @@ export const getJobTimeline = (data) =>
 
 export const getJobTimelineCount = (jobId) =>
   api.get(`${JOB_URL}${BASE_JOB_TIMELINE}/jobtimelinecount/${jobId}`);
+

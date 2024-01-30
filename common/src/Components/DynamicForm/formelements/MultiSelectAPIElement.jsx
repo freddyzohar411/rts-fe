@@ -128,7 +128,7 @@ const MultiSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
   const customStyles = {
     menu: (provided) => ({
       ...provided,
-      zIndex: 9999, 
+      zIndex: 9999,
     }),
     control: (base, state) => ({
       ...base,
@@ -138,7 +138,7 @@ const MultiSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
       "&:hover": {
         borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       },
-      backgroundColor: state.isDisabled ? '#EFF2F7' : base.backgroundColor,
+      backgroundColor: state.isDisabled ? "#EFF2F7" : base.backgroundColor,
     }),
   };
 

@@ -104,3 +104,11 @@ export const GET_CANDIDATE_LANGUAGES_BY_ENTITY_URL = (entityType, entityId) =>
 export const CANDIDATE_EMPLOYER_DETAILS_BASE_URL = `${CANDIDATE_EMPLOYER_DETAILS_URL}${BASE_EMPLOYER_DETAILS}`;
 export const GET_CANDIDATE_EMPLOYER_DETAILS_BY_ENTITY_URL = (entityType, entityId) =>
   `${CANDIDATE_EMPLOYER_DETAILS_BASE_URL}/entity/${entityType}/${entityId}`;
+
+// Get candidate data by Id
+export const getCandidateDataById = (id) =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/${id}/data/all`);
+
+// Get candidate field All
+export const getCandidateFieldAll = () =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/fields/all`);

@@ -24,6 +24,9 @@ import { Reducers as SettingReducers } from "@workspace/settings";
 // Candidate
 import { Reducers as CandidateReducers } from "@workspace/candidate";
 
+// Template
+import { Reducers as TemplateReducers } from "@workspace/template";
+
 const {
   Layout,
   CityReducer,
@@ -34,6 +37,8 @@ const {
   UserGroupReducer,
   AccountNamesReducer,
   AccountContactReducer,
+  FormCommonReducer,
+  EmailCommonReducer
 } = Reducers;
 
 const { Login, ForgetPassword, Profile } = LoginReducers;
@@ -57,6 +62,8 @@ const {
 const { CandidateFormReducer, CandidateReducer, CandidateRegistrationReducer } =
   CandidateReducers;
 
+const { TemplateReducer } = TemplateReducers;
+
 const rootReducer = combineReducers({
   // Common
   Layout,
@@ -68,6 +75,8 @@ const rootReducer = combineReducers({
   UserGroupReducer,
   AccountNamesReducer,
   AccountContactReducer,
+  FormCommonReducer,
+  EmailCommonReducer,
 
   // public
   Login,
@@ -101,6 +110,9 @@ const rootReducer = combineReducers({
   CandidateFormReducer,
   CandidateReducer,
   CandidateRegistrationReducer,
+  
+  // Template
+  TemplateReducer,
 });
 
 export default rootReducer;

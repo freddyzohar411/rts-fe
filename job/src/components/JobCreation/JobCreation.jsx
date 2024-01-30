@@ -25,9 +25,7 @@ const JobCreation = () => {
   const location = useLocation();
   const linkState = location.state;
   const [view, setView] = useState(
-    linkState?.view !== null && linkState?.view !== undefined
-      ? linkState?.view
-      : false
+    linkState?.view !== null ? linkState?.view : true
   );
 
   const formikRef = useRef(null);
@@ -55,9 +53,10 @@ const JobCreation = () => {
    */
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      // setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
-  }, [form]);
+  }, [form, view]);
 
   useEffect(() => {
     if (jobId) {
@@ -88,7 +87,7 @@ const JobCreation = () => {
   };
 
   const toggleFormViewState = () => {
-    setView(!view);
+    setView((prevState) => !prevState);
   };
 
   // Handle form submit
@@ -103,12 +102,13 @@ const JobCreation = () => {
     // Check files array is empty or not
     const payload = {
       id: (jobId || editId) ?? null,
-      title: values?.jobTitle,
-      formData: JSON.stringify(values),
+      title: newValues?.jobTitle,
+      formData: JSON.stringify(newValues),
       formId: parseInt(form.formId),
       tempDocId: randomId,
       isDraft: false,
     };
+
     dispatch(createJob({ payload, navigate }));
   };
 
@@ -134,6 +134,7 @@ const JobCreation = () => {
   };
 
   document.title = "Job Creation | RTS";
+
   return (
     <div>
       <DeleteDraftModal
@@ -144,7 +145,7 @@ const JobCreation = () => {
       <Form
         template={formTemplate}
         userDetails={getAllUserGroups()}
-        country={"India"}
+        country={null}
         editData={formSubmissionData}
         onSubmit={handleFormSubmit}
         onFormFieldsChange={handleFormFieldChange}

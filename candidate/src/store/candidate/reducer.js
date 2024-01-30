@@ -24,6 +24,12 @@ import {
   PUT_CANDIDATE_DRAFT_STATUS_SUCCESS,
   PUT_CANDIDATE_DRAFT_STATUS_FAILURE,
   RESET_META_DATA,
+  FETCH_CANDIDATE_DATA,
+  FETCH_CANDIDATE_DATA_SUCCESS,
+  FETCH_CANDIDATE_DATA_FAILURE,
+  FETCH_CANDIDATES_FIELDS_ALL,
+  FETCH_CANDIDATES_FIELDS_ALL_SUCCESS,
+  FETCH_CANDIDATES_FIELDS_ALL_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -36,7 +42,9 @@ import {
 const initialState = {
   candidate: {},
   candidates: [],
+  candidateData: null,
   candidatesFields: [],
+  candidatesFieldsAll: [],
   meta: {},
   createMeta: {},
   updateMeta: {},
@@ -217,6 +225,44 @@ const CandidateReducer = (state = initialState, action) => {
         createMeta: resetAllMetaData(),
         updateMeta: resetAllMetaData(),
         deleteMeta: resetAllMetaData(),
+      };
+    case FETCH_CANDIDATE_DATA:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_CANDIDATE_DATA_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidateData: action.payload,
+      };
+    case FETCH_CANDIDATE_DATA_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case FETCH_CANDIDATES_FIELDS_ALL:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_CANDIDATES_FIELDS_ALL_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidatesFieldsAll: action.payload,
+      };
+    case FETCH_CANDIDATES_FIELDS_ALL_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;

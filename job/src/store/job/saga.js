@@ -6,6 +6,8 @@ import {
   CREATE_JOB,
   FETCH_JOB,
   CREATE_JOB_DOCUMENTS,
+  FETCH_JOB_DATA,
+  FETCH_JOBS_FIELDS_ALL,
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -16,6 +18,10 @@ import {
   fetchJobFailure,
   createJobDocumentsSuccess,
   createJobDocumentsFailure,
+  fetchJobDataSuccess,
+  fetchJobDataFailure,
+  fetchJobsFieldsAllSuccess,
+  fetchJobsFieldsAllFailure,
 } from "./action";
 import {
   getJobs,
@@ -24,6 +30,8 @@ import {
   createJobDocument,
   updateJobDocument,
   updateJob,
+  getJobDataById,
+  getJobsFieldsAll,
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
@@ -89,9 +97,29 @@ function* workCreateJobDocuments(action) {
   }
 }
 
+function* workFetchJobData(action) {
+  try {
+    const response = yield call(getJobDataById, action.payload);
+    yield put(fetchJobDataSuccess(response.data));
+  } catch (error) {
+    yield put(fetchJobDataFailure(error));
+  }
+}
+
+function* workFetchJobsFieldsAll(action) {
+  try {
+    const response = yield call(getJobsFieldsAll, action.payload);
+    yield put(fetchJobsFieldsAllSuccess(response.data));
+  } catch (error) {
+    yield put(fetchJobsFieldsAllFailure(error));
+  }
+}
+
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
   yield takeEvery(CREATE_JOB, workCreateJob);
   yield takeEvery(CREATE_JOB_DOCUMENTS, workCreateJobDocuments);
+  yield takeEvery(FETCH_JOB_DATA, workFetchJobData);
+  yield takeEvery(FETCH_JOBS_FIELDS_ALL, workFetchJobsFieldsAll);
 }

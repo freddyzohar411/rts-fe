@@ -14,6 +14,7 @@ import {
 } from "../../formelements/formElements_helper";
 import Setting from "./Setting";
 import DnDWrapper from "../dragndrop/DnDWrapper";
+import FieldToolTip from "../formdisplay/FieldToolTip";
 
 const DroppableList = ({
   row,
@@ -100,12 +101,19 @@ const DroppableList = ({
                           >
                             <div className="mb-4">
                               <div className="d-flex justify-content-between align-items-center mb-2 ">
-                                <label
-                                  htmlFor={field.name}
-                                  className="form-label"
-                                >
-                                  {field.label}
-                                </label>
+                                <div className="d-flex gap-2">
+                                  <label
+                                    htmlFor={field.name}
+                                    className="form-label"
+                                  >
+                                    {field.label}
+                                  </label>
+                                  {(field.information === "true" ||
+                                    field.information === true) && (
+                                    <FieldToolTip field={field} />
+                                  )}
+                                </div>
+
                                 <div className="editable">
                                   <div className={`d-flex gap-2`}>
                                     {(field?.fieldType === "custom" ||
@@ -202,7 +210,7 @@ const DroppableList = ({
             type="text"
             value={title}
             className="mb-3 fw-bold h6 form-control"
-            style={{borderColor: "lightgrey"}}
+            style={{ borderColor: "lightgrey" }}
             onChange={(e) => setRowtitle(row, e.target.value)}
           />
         )}

@@ -45,6 +45,14 @@ const BaseFormSelectElement = ({
           ...prev,
           baseFormId: baseFormId,
         }));
+      }).catch((err) => {
+        // Check error is 404
+        if (err.code === 404) {
+          setFormOptions((prev) => ({
+            ...prev,
+            baseFormId: null,
+          }));
+        }
       });
     } else {
       setBaseFormTemplate(null);

@@ -21,6 +21,12 @@ import {
   FETCH_ACCOUNTS_FIELDS_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_FAILURE,
   RESET_META_DATA,
+  FETCH_ACCOUNT_DATA,
+  FETCH_ACCOUNT_DATA_SUCCESS,
+  FETCH_ACCOUNT_DATA_FAILURE,
+  FETCH_ACCOUNTS_FIELDS_ALL,
+  FETCH_ACCOUNTS_FIELDS_ALL_SUCCESS,
+  FETCH_ACCOUNTS_FIELDS_ALL_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -32,8 +38,10 @@ import {
 
 const initialState = {
   account: {},
+  accountData: null,
   accounts: [],
   accountsFields: [],
+  accountsFieldsAll: [],
   meta: {},
   createMeta: {},
   updateMeta: {},
@@ -197,6 +205,44 @@ const AccountReducer = (state = initialState, action) => {
         createMeta: resetAllMetaData(),
         updateMeta: resetAllMetaData(),
         deleteMeta: resetAllMetaData(),
+      };
+    case FETCH_ACCOUNT_DATA:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_ACCOUNT_DATA_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accountData: action.payload,
+      };
+    case FETCH_ACCOUNT_DATA_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case FETCH_ACCOUNTS_FIELDS_ALL:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_ACCOUNTS_FIELDS_ALL_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accountsFieldsAll: action.payload,
+      };
+    case FETCH_ACCOUNTS_FIELDS_ALL_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;
