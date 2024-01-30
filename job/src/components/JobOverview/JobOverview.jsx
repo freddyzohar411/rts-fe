@@ -225,9 +225,21 @@ function JobOverview() {
           />
         );
       case 4:
-        return <ProfileFeedbackPending closeOffcanvas={closeOffcanvas} />;
+        return (
+          <ProfileFeedbackPending
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+          />
+        );
       case 5:
-        return <ScheduleInterview closeOffcanvas={closeOffcanvas} />;
+        return (
+          <ScheduleInterview
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+          />
+        );
       case 6:
         return <ConditionalOffer closeOffcanvas={closeOffcanvas} />;
       case 7:

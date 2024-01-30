@@ -74,7 +74,11 @@ function StepComponent({ step, timelineState, index, date, status }) {
                 value={endProgressBarValue}
                 style={{ height: "4px", width: "100%" }}
                 color="black"
-                className="no-transition"
+                className={`no-transition ${
+                  timelineState === index
+                    ? "bg-black border-black"
+                    : "border-primary"
+                }`}
               />
             ) : (
               <div style={{ height: "4px", width: "100%" }}></div>
