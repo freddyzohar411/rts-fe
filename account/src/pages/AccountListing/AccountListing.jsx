@@ -206,6 +206,7 @@ const AccountListing = () => {
       dispatch(
         fetchAccountsAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
       );
+      return
     }
     dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
   }, [pageRequest]);

@@ -11,6 +11,7 @@ import {
   PUT_CANDIDATE_DRAFT_STATUS,
   FETCH_CANDIDATE_DATA,
   FETCH_CANDIDATES_FIELDS_ALL,
+  FETCH_CANDIDATES_ADMIN
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -32,6 +33,8 @@ import {
   fetchCandidateDataFailure,
   fetchCandidatesFieldsAllSuccess,
   fetchCandidatesFieldsAllFailure,
+  fetchCandidatesAdminSuccess,
+  fetchCandidatesAdminFailure,
 } from "./action";
 import {
   getCandidates,
@@ -43,6 +46,7 @@ import {
   completeCandidateRegistration,
   getCandidateDataById,
   getCandidateFieldAll,
+  getCandidatesAdmin
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -187,6 +191,17 @@ function* workFetchCandidatesFieldsAll() {
   }
 }
 
+// Fetch candidate Admin listing
+function* workFetchCandidatesAdmin(action) {
+  try {
+    const response = yield call(getCandidatesAdmin, action.payload);
+    yield put(fetchCandidatesAdminSuccess(response.data));
+  } catch (error) {
+    toast.error("Error fetching accounts");
+    yield put(fetchCandidatesAdminFailure(error));
+  }
+}
+
 
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
@@ -198,4 +213,5 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(PUT_CANDIDATE_DRAFT_STATUS, workPutCandidateDraftStatus);
   yield takeEvery(FETCH_CANDIDATE_DATA, workFetchCandidateData);
   yield takeEvery(FETCH_CANDIDATES_FIELDS_ALL, workFetchCandidatesFieldsAll);
+  yield takeEvery(FETCH_CANDIDATES_ADMIN, workFetchCandidatesAdmin);
 }

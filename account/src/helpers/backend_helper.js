@@ -89,4 +89,4 @@ export const getAccountsFieldsAll = () =>
   // Admin
 // Get Accounts
 export const getAccountsAdmin = (data) =>
-  api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing/admin`, data);
+  api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing/all`, data);
