@@ -396,6 +396,9 @@ function JobOverview() {
                                   data?.timeline[step] ? index : index - 1
                                 }
                                 index={index}
+                                stepLength={
+                                  (Object.keys(data?.timeline)?.length ?? 1) - 1
+                                }
                                 date={data?.timeline?.[step]?.date}
                                 status={data?.timeline?.[step]?.status}
                               />

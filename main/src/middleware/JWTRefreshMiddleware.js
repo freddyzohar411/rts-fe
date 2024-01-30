@@ -33,9 +33,7 @@ const JWTRefreshMiddleware = ({ dispatch, getState }) => {
           }
         }
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
     return next(action);
   };
 };
