@@ -163,7 +163,6 @@ function* workFetchCandidateData(action) {
     const response = yield call(getCandidateDataById, action.payload);
     yield put(fetchCandidateDataSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching candidate data");
     yield put(fetchCandidateDataFailure(error));
   }
 }
@@ -174,11 +173,9 @@ function* workFetchCandidatesFieldsAll() {
     const response = yield call(getCandidateFieldAll);
     yield put(fetchCandidatesFieldsAllSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts fields");
     yield put(fetchCandidatesFieldsAllFailure(error));
   }
 }
-
 
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
