@@ -255,6 +255,43 @@ const EditorElement2 = ({
     setEditorRef(editorRef);
   }, [setEditorRef, editorRef]);
 
+  //   function zoomEditorContent(editor, scale) {
+  //     var contentArea = editor.getContentAreaContainer();
+  //     var contentDocument = editor.getDoc();
+  //     var contentBody = contentDocument.body;
+
+  //     // contentArea.style.overflow = 'auto';
+
+  //     // Apply scale transform
+  //     contentBody.style.transform = 'scale(' + scale + ')';
+  //     contentBody.style.transformOrigin = 'center center'; // Adjust as needed
+  // }
+
+  // function zoomEditorContent(editor, scale) {
+  //   var contentArea = editor.getContentAreaContainer();
+  //   var contentDocument = editor.getDoc();
+  //   var contentBody = contentDocument.body;
+  
+  //   // Calculate the center of the content area
+  //   var centerX = contentArea.clientWidth / 2;
+  
+  //   // Calculate the fixed top position
+  //   var fixedTop = 50; // Set the fixed top value in pixels
+  
+  //   // Apply scale transform
+  //   contentBody.style.transform = `scale(${scale})`;
+  
+  //   // Calculate the translation value to center the content horizontally
+  //   var translateX = (centerX * (1 - scale)).toFixed(2); // Round to two decimal places
+    
+  //   // Apply translation transform to center the content horizontally and keep it fixed from the top
+  //   contentBody.style.transform += ` translate(${translateX}px, ${fixedTop}px)`;
+  
+  //   // Adjust the transformation origin to the center
+  //   contentBody.style.transformOrigin = 'top left'; // Keep the center fixed
+  // }
+
+  
   return (
     <>
       <TemplateAdvanceExportModal
@@ -273,6 +310,29 @@ const EditorElement2 = ({
             editor.on("init", function () {
               applyCanvasStyle(editor, "A4", "portrait"); // Set default to A4 portrait
             });
+            // editor.ui.registry.addMenuButton("zoom", {
+            //   text: "Zoom",
+            //   fetch: function (callback) {
+            //     var items = [
+            //       { text: "50%", value: "0.5" },
+            //       { text: "75%", value: "0.75" },
+            //       { text: "100%", value: "1" },
+            //       // Add more zoom levels as needed
+            //     ];
+            //     callback(
+            //       items.map(function (item) {
+            //         return {
+            //           type: "menuitem",
+            //           text: item.text,
+            //           onAction: function () {
+            //             zoomEditorContent(editor, item.value);
+            //           },
+            //         };
+            //       })
+            //     );
+            //   },
+            // });
+
             editor.ui.registry.addMenuButton("changeSize", {
               text: "Page Size",
               fetch: function (callback) {
@@ -502,7 +562,7 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "undo redo | changeSize | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize | " +
+            "undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
