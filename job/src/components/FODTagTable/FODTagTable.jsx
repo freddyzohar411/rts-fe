@@ -7,7 +7,7 @@ import {
   fetchCandidates,
   fetchCandidatesFields,
 } from "../../../../candidate/src/store/candidate/action";
-import { useTableHook, DynamicTableHelper } from "@Workspace/common";
+import { useTableHook, DynamicTableHelper } from "@workspace/common";
 import { CANDIDATE_INITIAL_OPTIONS } from "./FODCandidateListingConstants";
 import DynamicTableWrapper from "../CandidateDynamicTableWrapper/DynamicTableWrapper";
 import { tagJob, tagJobAll } from "../../store/jobStage/action";
