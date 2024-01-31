@@ -118,6 +118,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "submit",
         "table",
         "selectdepartment",
@@ -171,6 +172,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "table",
         "parentcompany",
@@ -215,6 +217,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "parentcompany",
         "searchselect",
@@ -259,6 +262,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "button",
         "buttonupdate",
@@ -307,6 +311,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         // "button",
         // "buttonupdate"
@@ -416,6 +421,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "parentcompany",
         "searchselect",
@@ -454,6 +460,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "parentcompany",
         "searchselect",
@@ -778,6 +785,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "parentcompany",
         "searchselect",
@@ -916,6 +924,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "selectstate",
         "selectdepartment",
         "editor",
@@ -985,6 +994,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "parentcompany",
         "searchselect",
@@ -1039,6 +1049,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "parentcompany",
         "multiselect",
         "singleselect",
@@ -1086,6 +1097,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "parentcompany",
         "searchselect",
@@ -1128,6 +1140,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "submit",
         "table",
         "selectdepartment",
@@ -1156,13 +1169,9 @@ const FieldBuilder = ({
         onChange: (e) => {
           formik.setValues({ ...formik.values, information: e.target.value });
           if (e.target.value === "false") {
-            document.getElementsByName(
-              "informationText"
-            )[0].disabled = true;
+            document.getElementsByName("informationText")[0].disabled = true;
           } else {
-            document.getElementsByName(
-              "informationText"
-            )[0].disabled = false;
+            document.getElementsByName("informationText")[0].disabled = false;
           }
         },
       },
@@ -1188,6 +1197,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "parentcompany",
         "searchselect",
@@ -1226,6 +1236,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "accountowner",
         "editor",
         "parentcompany",
         "searchselect",
@@ -1339,6 +1350,9 @@ const FieldBuilder = ({
     case "selectaccountcontact":
       header = "Select Account Contact";
       break;
+    case "accountowner":
+      header = "Account Owner";
+      break;
     case "date":
       header = "Date Field";
       break;
@@ -1430,7 +1444,9 @@ const FieldBuilder = ({
   );
 
   // Form Template
-  const [formCategory, setFormCategory] = useState(formBuilderUpdateData?.formCategorySelect || "");
+  const [formCategory, setFormCategory] = useState(
+    formBuilderUpdateData?.formCategorySelect || ""
+  );
 
   // User group List
   const [formCategoryList, setFormCategoryList] = useState(
@@ -1533,7 +1549,7 @@ const FieldBuilder = ({
       validationSchema.userGroup = userGroupList;
       validationSchema.conditionValidation = validationConditionList;
       validationSchema.formCategorySelect = formCategory;
-      
+
       updateFormField(validationSchema, formBuilderUpdateData.index);
       setFormBuilderType(null);
       setFormBuilderUpdateData(null);
@@ -1561,7 +1577,7 @@ const FieldBuilder = ({
       validationSchema.userGroup = userGroupList;
       validationSchema.conditionValidation = validationConditionList;
       validationSchema.formCategorySelect = formCategory;
-      
+
       addFormField(validationSchema);
       // Set Form Schema
       setFormFieldId(validationSchema.fieldId);
