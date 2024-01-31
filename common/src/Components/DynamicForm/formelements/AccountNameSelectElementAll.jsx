@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import {
   fetchAccountById,
+  fetchAccountByIdReset,
   fetchAccountContacts,
   fetchAccountNamesAll,
 } from "../../../store/actions";
@@ -25,6 +26,7 @@ const AccountNameSelectElementAll = ({
 
   useEffect(() => {
     dispatch(fetchAccountNamesAll());
+    dispatch(fetchAccountByIdReset());
   }, []);
 
   useEffect(() => {
