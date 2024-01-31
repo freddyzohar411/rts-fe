@@ -57,6 +57,7 @@ function* logoutUser({ payload: { history } }) {
     }
   } catch (error) {
     yield put(apiError(LOGOUT_USER, error));
+    return window.location.replace("/login");
   }
 }
 
