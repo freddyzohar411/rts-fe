@@ -32,7 +32,6 @@ import { RECRUITER_GROUP } from "../../helpers/constant";
 import JobTagCanvas from "./JobTagCanvas";
 
 const JobListing = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const { jobType } = useParams();
@@ -113,33 +112,32 @@ const JobListing = () => {
   }, [recruiterGroup]);
 
   // Get all the option groups
-  useEffect(() => {
-    setIsLoading(true);
-    dispatch(fetchJobListsFields()).finally(() => setIsLoading(false));
-    dispatch(fetchUserGroupByName(RECRUITER_GROUP)).finally(() =>
-      setIsLoading(false)
-    );
-  }, []);
-
   // useEffect(() => {
   //   setIsLoading(true);
-  //   dispatch(fetchJobListsFields());
-  //   dispatch(fetchUserGroupByName(RECRUITER_GROUP));
+  //   dispatch(fetchJobListsFields()).finally(() => setIsLoading(false));
+  //   dispatch(fetchUserGroupByName(RECRUITER_GROUP)).finally(() =>
+  //     setIsLoading(false)
+  //   );
   // }, []);
 
-  // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, jobType };
-    setIsLoading(true);
-    dispatch(
-      fetchJobLists(DynamicTableHelper.cleanPageRequest(request))
-    ).finally(() => setIsLoading(false));
-  }, [pageRequest]);
+    dispatch(fetchJobListsFields());
+    dispatch(fetchUserGroupByName(RECRUITER_GROUP));
+  }, []);
 
+  // Fetch the job when the pageRequest changes
   // useEffect(() => {
   //   const request = { ...pageRequest, jobType };
-  //   dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+  //   setIsLoading(true);
+  //   dispatch(
+  //     fetchJobLists(DynamicTableHelper.cleanPageRequest(request))
+  //   ).finally(() => setIsLoading(false));
   // }, [pageRequest]);
+
+  useEffect(() => {
+    const request = { ...pageRequest, jobType };
+    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+  }, [pageRequest]);
 
   // Update the page info when job Data changes
   useEffect(() => {
@@ -185,6 +183,8 @@ const JobListing = () => {
     dispatch(deleteJobList({ deleteId, isDraft: false }));
     setIsDeleteModalOpen(false);
   };
+
+  console.log(namesData)
 
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
@@ -248,7 +248,7 @@ const JobListing = () => {
               >
                 FOD
               </DropdownToggle>
-              <DropdownMenu className="p-3">
+              <DropdownMenu className="p-3" style={{ width: "200px" }}>
                 {/* Map Recruiter Checkbox Here */}
                 <Row className="mb-2">
                   <Col>
@@ -276,37 +276,73 @@ const JobListing = () => {
                             <span>{nestedVisible[index] ? "-" : "+"}</span>
                           </div>
                           {nestedVisible[index] && (
-                            <ul
-                              style={{
-                                listStyleType: "circle",
-                                paddingLeft: "20px",
-                              }}
-                            >
-                              {item.subNames.map((subName, subIndex) => {
-                                const split = subName?.split("@");
-                                return (
-                                  <li
-                                    key={subIndex}
-                                    className="d-flex flew-row justify-content-between"
-                                  >
-                                    {split[1]}
-                                    <Label check className="mb-0 ms-2">
-                                      <Input
-                                        type="checkbox"
-                                        checked={
-                                          selectedRecruiter ===
-                                          parseInt(split[0])
-                                        }
-                                        onChange={() =>
-                                          setSelectedRecruiter(
+                            <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+                              <div className="d-flex flex-column justify-content-center align-items-center">
+                                <div
+                                  style={{
+                                    width: "6px",
+                                    height: "6px",
+                                    backgroundColor: "black",
+                                    borderRadius: "100%",
+                                    marginTop: "6px",
+                                  }}
+                                ></div>
+                                <div
+                                  style={{
+                                    flex: 1,
+                                    width: "1px",
+                                    backgroundColor: "black",
+                                    alignItems: "center",
+                                  }}
+                                ></div>
+                                <div
+                                  style={{
+                                    width: "6px",
+                                    height: "6px",
+                                    backgroundColor: "black",
+                                    borderRadius: "100%",
+                                    marginBottom: "6px",
+                                  }}
+                                ></div>
+                              </div>
+                              <div className="ps-0 ms-0 w-100">
+                                {item.subNames.map((subName, subIndex) => {
+                                  const split = subName?.split("@");
+                                  return (
+                                    <li
+                                      key={subIndex}
+                                      className="d-flex flew-row align-items-center justify-content-between"
+                                    >
+                                      {split[1]}
+
+                                      <Label
+                                        check
+                                        className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                      >
+                                        <div
+                                          className="bg-success rounded-circle"
+                                          style={{
+                                            width: "6px",
+                                            height: "6px",
+                                          }}
+                                        ></div>
+                                        <Input
+                                          type="checkbox"
+                                          checked={
+                                            selectedRecruiter ===
                                             parseInt(split[0])
-                                          )
-                                        }
-                                      />
-                                    </Label>
-                                  </li>
-                                );
-                              })}
+                                          }
+                                          onChange={() =>
+                                            setSelectedRecruiter(
+                                              parseInt(split[0])
+                                            )
+                                          }
+                                        />
+                                      </Label>
+                                    </li>
+                                  );
+                                })}
+                              </div>
                             </ul>
                           )}
                         </li>
@@ -417,7 +453,6 @@ const JobListing = () => {
         setCustomConfigData={setCustomConfigData}
         gridView={gridView}
         handleTableViewChange={handleTableViewChange}
-        isLoading={isLoading}
       />
       <JobTagCanvas
         tagOffcanvas={tagOffcanvas}

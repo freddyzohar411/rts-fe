@@ -32,7 +32,6 @@ const DynamicTableWrapper = ({
   confirmDelete,
   gridView,
   handleTableViewChange,
-  isLoading,
 }) => {
   const { jobType } = useParams();
   const { Permission, checkAllPermission } = useUserAuth();
@@ -217,7 +216,6 @@ const DynamicTableWrapper = ({
                       data={data}
                       pageRequestSet={pageRequestSet}
                       pageInfo={pageInfo}
-                      isLoading={isLoading}
                     />
                   </div>
                 </CardBody>

@@ -39,12 +39,12 @@ function StepComponent({
               <Progress
                 animated={false}
                 value={startProgressBarValue}
-                style={{ height: "4px", width: "100%" }}
+                style={{ height: "2px", width: "100%" }}
                 color="black"
                 className="no-transition"
               />
             ) : (
-              <div style={{ height: "4px", width: "100%" }}></div>
+              <div style={{ height: "2px", width: "100%" }}></div>
             )}
             <div
               className={`rounded-pill border border-primary ${
@@ -54,8 +54,8 @@ function StepComponent({
               }`}
               color="custom-button"
               style={{
-                width: "22px",
-                height: "22px",
+                width: "18px",
+                height: "18px",
                 flexShrink: 0,
                 flexGrow: 0,
                 flexBasis: "auto",
@@ -79,7 +79,7 @@ function StepComponent({
               <Progress
                 animated={false}
                 value={endProgressBarValue}
-                style={{ height: "4px", width: "100%" }}
+                style={{ height: "2px", width: "100%" }}
                 color="black"
                 className={`no-transition ${
                   index < stepLength
@@ -88,7 +88,7 @@ function StepComponent({
                 }`}
               />
             ) : (
-              <div style={{ height: "4px", width: "100%" }}></div>
+              <div style={{ height: "2px", width: "100%" }}></div>
             )}
           </div>
           {date && (

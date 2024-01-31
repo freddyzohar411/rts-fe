@@ -9,13 +9,7 @@ import {
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const DynamicTable = ({
-  data,
-  config,
-  pageInfo,
-  pageRequestSet,
-  isLoading,
-}) => {
+const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
   // ========================================= Table Configuration ===========================
   // Generate Header
   const generateHeaderJSX = (config) => (
@@ -53,8 +47,6 @@ const DynamicTable = ({
     });
   };
 
-  console.log("Is Loading: ", isLoading)
-
   // ================================================================================================
   return (
     <>
@@ -68,18 +60,15 @@ const DynamicTable = ({
           id="accountListingTable"
         >
           <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
-            {isLoading ? (
-              <Skeleton />
-            ) : (
-              <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
-            )}
+            <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
           </thead>
           <tbody className="list form-check-all">
             {data && data.length > 0 ? (
               generateBodyJSX(config, data)
             ) : (
               <tr>
-                <td colSpan={config.length}>No data available.</td>
+                
+                <td colSpan={config.length}><Skeleton count={7} style={{marginBottom: "10px"}} /></td>
               </tr>
             )}
             {/* {data && generateBodyJSX(config, data)} */}

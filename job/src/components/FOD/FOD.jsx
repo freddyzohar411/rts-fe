@@ -40,10 +40,10 @@ function FOD() {
     });
   };
 
-  const namesData = [
-    { name: "Anna", subNames: ["John", "Ben"] },
-    { name: "Sally", subNames: ["Alice", "Ken"] },
-  ];
+  // const namesData = [
+  //   { name: "Anna", subNames: ["John", "Ben"] },
+  //   { name: "Sally", subNames: ["Alice", "Ken"] },
+  // ];
 
   const postList = ["LinkedIn", "Naukri", "Monster", "Avensys"];
 

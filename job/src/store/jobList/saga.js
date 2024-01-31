@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery, delay } from "redux-saga/effects";
 
 import {
   FETCH_JOB_LIST,
@@ -110,6 +110,7 @@ function* workPutJobList(action) {
 // Fetch accounts listing
 function* workFetchJobLists(action) {
   try {
+    yield delay(5000);
     const response = yield call(getJobs, action.payload);
     yield put(fetchJobListsSuccess(response.data));
   } catch (error) {

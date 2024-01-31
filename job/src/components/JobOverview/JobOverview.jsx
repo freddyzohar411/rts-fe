@@ -53,10 +53,11 @@ import {
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
 import { useMediaQuery } from "react-responsive";
+import BSGTimeline from "../BSGTimeline/BSGTimeline";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
-  
+
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
@@ -337,24 +338,28 @@ function JobOverview() {
           <Col>
             <div
               className={`d-flex ${
-                isMobile ? "flex-column align-items-start" : "flex-row align-items-center"
+                isMobile
+                  ? "flex-column align-items-start"
+                  : "flex-row align-items-center"
               } justify-content-between gap-1`}
             >
               <div
                 className={`d-flex ${
-                  isMobile ? "flex-column align-items-start" : "flex-row align-items-end"
+                  isMobile
+                    ? "flex-column align-items-start"
+                    : "flex-row align-items-end"
                 } h5 fw-bold  gap-1`}
                 style={{ whiteSpace: "nowrap" }}
               >
                 <div className="d-flex flex-row gap-1">
                   <span title={formSubmissionData?.accountName}>
-                    {(isMobile | isTablet)
+                    {isMobile | isTablet
                       ? truncate(formSubmissionData?.accountName, 8)
                       : formSubmissionData?.accountName}
                   </span>
                   <span>|</span>
                   <span title={formSubmissionData?.jobTitle}>
-                    {(isMobile | isTablet)
+                    {isMobile | isTablet
                       ? truncate(formSubmissionData?.jobTitle, 8)
                       : formSubmissionData?.jobTitle}
                   </span>
@@ -366,7 +371,7 @@ function JobOverview() {
                   <div className="d-flex flex-column">
                     <span className="fw-medium h6 text-muted">Sales</span>
                     <span title={formSubmissionData?.salesManager}>
-                      {(isMobile | isTablet)
+                      {isMobile | isTablet
                         ? truncate(formSubmissionData?.salesManager, 8)
                         : formSubmissionData?.salesManager}
                     </span>
@@ -376,7 +381,7 @@ function JobOverview() {
                     <div className="d-flex flex-column">
                       <span className="fw-medium h6 text-muted">Delivery</span>
                       <span>
-                        {(isMobile | isTablet)
+                        {isMobile | isTablet
                           ? truncate(deliveryTeam, 8)
                           : deliveryTeam}
                       </span>
@@ -386,10 +391,7 @@ function JobOverview() {
               </div>
 
               <div className="d-flex flex-row gap-2 align-items-center">
-                <div
-                  className="search-box"
-                 
-                >
+                <div className="search-box">
                   <form onSubmit={pageRequestSet.setSearchTerm}>
                     <Input
                       type="text"
@@ -534,8 +536,8 @@ function JobOverview() {
               </div>
             </TabPane>
             <TabPane tabId="2">
-              <div className="p-4">
-                <span>BSG Status</span>
+              <div>
+                <BSGTimeline />
               </div>
             </TabPane>
           </TabContent>
