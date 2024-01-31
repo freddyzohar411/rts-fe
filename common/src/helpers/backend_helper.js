@@ -101,3 +101,19 @@ export const convertDocxToHtmlString = (
     data,
     config
   );
+
+// Excel to HTML string
+export const convertExcelToHtmlString = (
+  data,
+  config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/xlsx-to-htmlString`,
+    data,
+    config
+  );
+

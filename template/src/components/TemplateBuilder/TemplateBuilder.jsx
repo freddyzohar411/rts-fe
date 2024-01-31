@@ -251,29 +251,80 @@ const TemplateBuilder = forwardRef(
 
     // Convert docx to html
     const convDocToHtml = async (file, setTemplateContent) => {
-      CommonBackendHelper.convertDocxToHtmlString(
-        {
-          docFile: file,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      // if file is excel
+
+      try {
+        // If file is docx
+        let res;
+        if (
+          file.type ===
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ) {
+          res = await CommonBackendHelper.convertDocxToHtmlString(
+            {
+              docFile: file,
+            },
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
         }
-      )
-        .then((res) => {
-          const originalContent = res.data;
-          console.log("Original Content", originalContent);
-          const inlineContent = juice(originalContent, {
-            removeStyleTags: false,
-          });
-          // const inlineContent = juice(originalContent);
-          console.log("Inline Content", inlineContent);
-          setTemplateContent(inlineContent);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+
+        // Check if exce xlsx
+        if (
+          file.type === "application/vnd.ms-excel" ||
+          file.type ===
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ) {
+          res = await CommonBackendHelper.convertExcelToHtmlString(
+            {
+              docFile: file,
+            },
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+        }
+
+        const originalContent = res.data;
+        console.log("Original Content", originalContent);
+        // const inlineContent = juice(originalContent, {
+        //   removeStyleTags: false,
+        // });
+        const inlineContent = juice(originalContent);
+        console.log("Inline Content", inlineContent);
+        setTemplateContent(inlineContent);
+      } catch (err) {
+        console.log(err);
+      }
+
+      // CommonBackendHelper.convertDocxToHtmlString(
+      //   {
+      //     docFile: file,
+      //   },
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // )
+      //   .then((res) => {
+      //     const originalContent = res.data;
+      //     console.log("Original Content", originalContent);
+      //     const inlineContent = juice(originalContent, {
+      //       removeStyleTags: false,
+      //     });
+      //     // const inlineContent = juice(originalContent);
+      //     console.log("Inline Content", inlineContent);
+      //     setTemplateContent(inlineContent);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     };
 
     return (

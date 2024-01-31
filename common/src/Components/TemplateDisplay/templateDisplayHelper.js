@@ -253,6 +253,7 @@ export function convertStyleToAttributesTable(htmlString) {
 }
 
 export function convertInlineStylesToClasses(htmlString) {
+  // const rootTemp = wrapDeepestChildrenWithFontSize(htmlString);
   const root = parse(htmlString);
   const styles = {};
   let styleId = 0;
@@ -271,7 +272,8 @@ export function convertInlineStylesToClasses(htmlString) {
       // Check if the node has a font-size style and is not one of the specified tags
       if (
         style.includes("font-size") &&
-        !["P", "H1", "H2", "H3", "H4", "H5", "H6"].includes(node.tagName)
+        // !["P", "H1", "H2", "H3", "H4", "H5", "H6"]?.includes(node.tagName)
+        !["P", "H1", "H2", "H3", "H4", "H5", "H6", "TABLE", "TR", "TD", "TH", "THEAD", "TBODY", "TFOOT", "COL", "COLGROUP"].includes(node.tagName)
       ) {
         // If it's a span, add 'display: inline' to its style
         if (node.tagName === "SPAN") {
@@ -328,6 +330,58 @@ export function convertInlineStylesToClasses(htmlString) {
     styleTag: styleString,
   };
 }
+
+function wrapDeepestChildrenWithFontSize(htmlString) {
+  const root = parse(htmlString);
+
+  function processNode(node) {
+      // Check if node is defined and has childNodes
+      if (node && node.childNodes) {
+          if (node.childNodes.length === 0) {
+              // Leaf node, check and apply style
+              const parentFontSize = getParentFontSize(node);
+              if (parentFontSize) {
+                  return `<ins style="font-size: ${parentFontSize};">${node.innerHTML}</ins>`;
+              } else {
+                  return node.outerHTML;
+              }
+          } else {
+              // Process child nodes
+              node.childNodes = node.childNodes.map(child => {
+                  if (child.nodeType === 1) {
+                      return parse(processNode(child));
+                  } else {
+                      return child;
+                  }
+              });
+              return node.outerHTML;
+          }
+      }
+      return '';
+  }
+
+  function getParentFontSize(node) {
+      while (node && node.parentNode) {
+          node = node.parentNode;
+          if (node.nodeType === 1 && node.style && node.style['font-size']) {
+              return node.style['font-size'];
+          }
+      }
+      return null;
+  }
+
+  root.childNodes = root.childNodes.map(child => {
+      if (child.nodeType === 1) {
+          return parse(processNode(child));
+      } else {
+          return child;
+      }
+  });
+
+  return root.toString();
+}
+
+
 // Private function helpers ===============================================
 function convertInlineWidthAndHeightToAttributes(htmlString) {
   return htmlString.replace(
