@@ -41,7 +41,6 @@ const EditorElement2 = ({
     editor.dom.setStyle(editor.getBody(), "border", "1px solid black");
     editor.dom.setStyle(editor.getBody(), "padding", "0px");
     editor.dom.setStyle(editor.getBody(), "boxSizing", "border-box");
-
   }
 
   // Reset canvas to normal style
@@ -255,18 +254,6 @@ const EditorElement2 = ({
     if (!setEditorRef) return;
     setEditorRef(editorRef);
   }, [setEditorRef, editorRef]);
-
-  // useEffect(() => {
-  //   if (showExportModal) {
-  //     // Select the 'more' toolbar element. Adjust the selector as needed.
-  //     const moreToolbar = document.querySelector(".tox-toolbar__overflow");
-
-  //     // Hide the toolbar only when the modal is open
-  //     if (moreToolbar) {
-  //       moreToolbar.style.display = "none";
-  //     }
-  //   }
-  // }, [showExportModal]);
 
   return (
     <>

@@ -21,14 +21,15 @@ const FileInputElement = ({
       return;
     }
     // Check if file is a docx file type
-    if (
-      e.target.files[0].type !==
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document" &&
-      e.target.files[0].type !== "application/pdf"
-    ) {
-      toast.error("Please upload a valid docx or PDF file");
-      return;
-    }
+    // if (
+    //   e.target.files[0].type !==
+    //   "application/vnd.openxmlformats-officedocument.wordprocessingml.document" &&
+    //   e.target.files[0].type !== "application/pdf" &&  //Excel
+    //   e.target.files[0].type !== "application/vnd.ms-excel" //Excel
+    // ) {
+    //   toast.error("Please upload a valid docx or PDF file");
+    //   return;
+    // }
     setFile(e.target.files[0]);
     e.target.value = null;
   };

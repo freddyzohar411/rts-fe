@@ -52,7 +52,6 @@ const TemplateBuilder = forwardRef(
     const [selectedSection, setSelectedSection] = useState("");
     const [fields, setFields] = useState([]);
     const [selectedField, setSelectedField] = useState("");
-
     const templateCategories = useSelector(
       (state) => state.TemplateReducer.templateCategories
     );
@@ -110,16 +109,16 @@ const TemplateBuilder = forwardRef(
       }
     }, [selectedSection]);
 
-    const convertToHtml = async (file, setTemplateContent) => {
-      try {
-        const result = await mammoth.convertToHtml({
-          arrayBuffer: await file.arrayBuffer(),
-        });
-        setTemplateContent(result.value);
-      } catch (error) {
-        console.error("Error converting Word to HTML:", error);
-      }
-    };
+    // const convertToHtml = async (file, setTemplateContent) => {
+    //   try {
+    //     const result = await mammoth.convertToHtml({
+    //       arrayBuffer: await file.arrayBuffer(),
+    //     });
+    //     setTemplateContent(result.value);
+    //   } catch (error) {
+    //     console.error("Error converting Word to HTML:", error);
+    //   }
+    // };
 
     // Get all categories
     useEffect(() => {
@@ -268,6 +267,7 @@ const TemplateBuilder = forwardRef(
           const inlineContent = juice(originalContent, {
             removeStyleTags: false,
           });
+          // const inlineContent = juice(originalContent);
           console.log("Inline Content", inlineContent);
           setTemplateContent(inlineContent);
         })
