@@ -59,13 +59,13 @@ const Login = (props) => {
                   </div>
                 </Col>
               </Row>
-              <Row className="justify-content-center">
+              <Row className="justify-content-center pt-4">
                 {/* <Col md={8} lg={6} xl={5}> */}
                 <Col lg={8} >
                   <Card>
                     <CardBody className="p-3">
                       <div className="text-center mt-2">
-                        <h3 className="text-dark">Welcome back!</h3>
+                        <h2 className="text-dark">Welcome back!</h2>
                         <p className="text-muted size fs-5">
                           Sign in to continue with Avensys.
                         </p>
@@ -154,7 +154,7 @@ const Login = (props) => {
                           <div className="mt-3">
                             <Button
                               color="success"
-                              className="btn btn-next-button border-next-button-border w-100 py-2 fw-semibold fs-5"
+                              className="btn btn-next-button border-next-button-border w-100 py-3 fw-semibold fs-5"
                               type="submit"
                             >
                               Sign In
