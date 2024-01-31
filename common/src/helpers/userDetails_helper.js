@@ -1,14 +1,9 @@
 import jwtDecode from "jwt-decode";
-
-// Get Json web token from session storage
-export const getJwtToken = () => {
-  const token = sessionStorage.getItem("accessToken");
-  return token ?? null;
-};
+import { getToken } from "./api_helper";
 
 // Get information from the Json web token
 export const getUserDetails = () => {
-  const jwtToken = getJwtToken();
+  const jwtToken = getToken();
   if (!jwtToken) {
     return null;
   } else {

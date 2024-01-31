@@ -20,7 +20,7 @@ export function* watchProfile() {
 export function* fetchProfile() {
   try {
     axios.defaults.headers.common["Authorization"] =
-      "Bearer " + JSON.parse(sessionStorage.getItem("authUser")).access_token;
+      "Bearer " + sessionStorage.getItem("accessToken");
     const response = yield call(getUserProfile);
     if (response) {
       yield put(profileSuccess(response));
