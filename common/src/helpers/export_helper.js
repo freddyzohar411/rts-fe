@@ -391,6 +391,10 @@ function createStyleTag(options, withTag = true, pageDimension = true) {
 
   if (!withTag) {
     return `
+        p, span, ins {
+          font-family: Arial, sans-serif;
+          font-size: 12pt;
+        }
         @page {
             size: ${pageTypeInput} ${pageOrientation};
             margin: ${marginTop}${unit} ${marginRight}${unit} ${marginBottom}${unit} ${marginLeft}${unit};
@@ -400,6 +404,10 @@ function createStyleTag(options, withTag = true, pageDimension = true) {
 
   return `
       <style>
+          p, span, ins {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+          }
           @page {
               size: ${pageTypeInput} ${pageOrientation};
               margin: ${marginTop}${unit} ${marginRight}${unit} ${marginBottom}${unit} ${marginLeft}${unit};
