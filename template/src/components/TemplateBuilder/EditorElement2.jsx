@@ -566,7 +566,7 @@ const EditorElement2 = ({
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
-            "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPDFButton exportDocxButton exportPreviewButton | help",
+            "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPreviewButton | help",
           content_style:
             "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; }",
           file_picker_callback: handleFilePickerCallback,

@@ -120,7 +120,7 @@ const TemplateSettingsSideBar = ({
       </Row>
       <Row className="mb-4">
         <Col col="6" className="d-flex flex-column">
-          <Label style={{ fontSize: "0.75rem" }}>Right</Label>
+          <Label style={{ fontSize: "0.75rem" }}>Left</Label>
           <Input
             type="number"
             value={tempSettings.marginLeft}
@@ -138,7 +138,7 @@ const TemplateSettingsSideBar = ({
           />
         </Col>
         <Col col="6" className="d-flex flex-column">
-          <Label style={{ fontSize: "0.75rem" }}>Left</Label>
+          <Label style={{ fontSize: "0.75rem" }}>Right</Label>
           <Input
             type="number"
             value={tempSettings.marginRight}
