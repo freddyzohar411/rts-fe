@@ -20,7 +20,6 @@ const MultiInputElement = ({
   const convertStringToOptions = (string) => {
     if (!string) return [];
     const options = [];
-    console.log("string", string.split(","));
     string.split(",").forEach((element) => {
       options.push({ value: element, label: element });
     });

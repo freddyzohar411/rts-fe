@@ -50,7 +50,6 @@ const SingleSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
   // Get Data for API calls if it does not exist in the store
   useEffect(() => {
     if (!apiData || apiData.length === 0) {
-      console.log("fetching data");
       if (field.list === "industry") {
         dispatch(fetchIndustry());
       }

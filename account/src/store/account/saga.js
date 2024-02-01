@@ -9,7 +9,7 @@ import {
   FETCH_ACCOUNTS,
   FETCH_ACCOUNTS_FIELDS,
   FETCH_ACCOUNT_DATA,
-  FETCH_ACCOUNTS_FIELDS_ALL
+  FETCH_ACCOUNTS_FIELDS_ALL,
 } from "./actionTypes";
 import {
   fetchAccountSuccess,
@@ -37,7 +37,7 @@ import {
   getAccountsFields,
   getAccountById,
   getAccountDataById,
-  getAccountsFieldsAll
+  getAccountsFieldsAll,
 } from "../../helpers/backend_helper";
 import {
   setAccountId,
@@ -167,7 +167,6 @@ function* workFetchAccountData(action) {
     const response = yield call(getAccountDataById, action.payload);
     yield put(fetchAccountDataSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching account data");
     yield put(fetchAccountDataFailure(error));
   }
 }
@@ -177,7 +176,6 @@ function* workFetchAccountsFieldsAll() {
     const response = yield call(getAccountsFieldsAll);
     yield put(fetchAccountsFieldsAllSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts fields");
     yield put(fetchAccountsFieldsAllFailure(error));
   }
 }
