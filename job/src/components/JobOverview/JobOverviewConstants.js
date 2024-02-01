@@ -27,11 +27,11 @@ export const steps = [
 export const jobHeaders = [
   "Tag",
   "Associate",
-  "Submitted to Sales",
-  "Submitted to Client",
+  "Submit to Sales",
+  "Submit to Client",
   "Profile Feedback Pending",
   "Interview Scheduled",
-  "Interview Sched - Future",
+  "Interview Scheduled - Future",
   "Interview Happened",
   "Interview Cancelled/Backout",
   "Interview Pending Feedback",
@@ -52,10 +52,10 @@ export const rtsStatusHeaders = [
 
 export const timelineSkip = [
   { 1: "Associate" },
-  { 2: "Submitted to Sales" },
-  { 3: "Submitted to Client" },
-  { 4: "Profile Feedback Pending" },
-  { 5: "Interview" },
+  { 2: "Submit to Sales" },
+  { 3: "Submit to Client" },
+  { 4: "Profile Feedback" },
+  { 5: "Interviews" },
   { 6: "Conditional Offer" },
   { 7: "Conditional Offer Status" },
 ];

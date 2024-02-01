@@ -63,7 +63,6 @@ function JobOverview() {
   const dispatch = useDispatch();
   const { jobId } = useParams();
   const location = useLocation();
-  const linkState = location.state;
 
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
@@ -71,7 +70,6 @@ function JobOverview() {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
 
-  const [selectedOfferTemplate, setSelectedOfferTemplate] = useState(null);
   const [templateData, setTemplateData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -79,6 +77,7 @@ function JobOverview() {
   const [candidateId, setCandidateId] = useState();
 
   const [isPreviewCV, setIsPreviewCV] = useState(false);
+  const [skipComboOptions, setSkipComboOptions] = useState([]);
 
   const form = useSelector((state) => state.JobFormReducer.form);
   const formSubmissionData = useSelector(
