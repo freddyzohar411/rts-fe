@@ -13,6 +13,7 @@ import {
   FETCH_ACCOUNT_BY_ID,
   FETCH_ACCOUNT_BY_ID_SUCCESS,
   FETCH_ACCOUNT_BY_ID_FAILURE,
+  FETCH_ACCOUNT_BY_ID_RESET,
 } from "./actionTypes";
 
 const initialState = {
@@ -69,6 +70,12 @@ const AccountNamesReducer = (state = initialState, action) => {
       return {
         ...state,
         accountByIdMeta: pendingMetaData(),
+      };
+    case FETCH_ACCOUNT_BY_ID_RESET:
+      return {
+        ...state,
+        accountByIdMeta: pendingMetaData(),
+        accountById: {},
       };
     case FETCH_ACCOUNT_BY_ID_SUCCESS:
       return {

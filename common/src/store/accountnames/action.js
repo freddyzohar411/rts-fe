@@ -8,6 +8,7 @@ import {
   FETCH_ACCOUNT_BY_ID,
   FETCH_ACCOUNT_BY_ID_SUCCESS,
   FETCH_ACCOUNT_BY_ID_FAILURE,
+  FETCH_ACCOUNT_BY_ID_RESET,
 } from "./actionTypes";
 
 export const fetchAccountNames = () => ({
@@ -41,6 +42,10 @@ export const fetchAccountNamesAllFailure = (error) => ({
 export const fetchAccountById = (id) => ({
   type: FETCH_ACCOUNT_BY_ID,
   payload: id,
+});
+
+export const fetchAccountByIdReset = () => ({
+  type: FETCH_ACCOUNT_BY_ID_RESET,
 });
 
 export const fetchAccountByIdSuccess = (account) => ({
