@@ -28,7 +28,8 @@ const JWTRefreshMiddleware = ({ dispatch, getState }) => {
                 toast.error("Your session has been expired.");
                 sessionStorage.removeItem("accessToken");
                 sessionStorage.removeItem("refreshToken");
-                return window.location.replace("/login");
+                window.location.replace("/login");
+                return;
               });
           }
         }

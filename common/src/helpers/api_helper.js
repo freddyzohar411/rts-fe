@@ -1,19 +1,14 @@
 import axios from "axios";
 import * as api from "../config";
-import { toast } from "react-toastify";
 
 // default
 axios.defaults.baseURL = api.API_URL;
 // content type
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const axiosInstance = axios.create({ baseURL: api.API_URL });
-
-let refreshingToken = null;
-
 axios.interceptors.request.use(
-  (config) => {
-    const token = sessionStorage.getItem("accessToken");
+  async (config) => {
+    const token = await sessionStorage.getItem("accessToken");
     if (token) {
       config.headers["Authorization"] = "Bearer " + token; // for Spring Boot back-end
     }
@@ -58,9 +53,9 @@ const setAuthorization = (token) => {
   axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 };
 
-const refreshToken = () => {
+const refreshToken = async () => {
   const userData = JSON.parse(sessionStorage.getItem("authUser"));
-  const refreshToken = sessionStorage.getItem("refreshToken");
+  const refreshToken = await sessionStorage.getItem("refreshToken");
   const data = {
     id: userData?.user?.id,
     refreshToken,
@@ -72,10 +67,6 @@ class APIClient {
   /**
    * Fetches data from given url
    */
-
-  //  get = (url, params) => {
-  //   return axios.get(url, params);
-  // };
   get = (url, params) => {
     let response;
 
@@ -120,9 +111,8 @@ class APIClient {
   };
 
   getToken = () => {
-    return sessionStorage.getItem("authUser")
-      ? JSON.parse(sessionStorage.getItem("authUser")).access_token
-      : null;
+    const accessToken = sessionStorage.getItem("accessToken");
+    return accessToken ?? null;
   };
 }
 
@@ -135,4 +125,9 @@ const getLoggedinUser = () => {
   }
 };
 
-export { APIClient, setAuthorization, getLoggedinUser, refreshToken };
+const getToken = () => {
+  const accessToken = sessionStorage.getItem("accessToken");
+  return accessToken ?? null;
+};
+
+export { APIClient, setAuthorization, getLoggedinUser, refreshToken, getToken };

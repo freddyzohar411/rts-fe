@@ -43,12 +43,14 @@ function* loginUser({ payload: { user, history } }) {
 
 function* logoutUser({ payload: { history } }) {
   try {
-    const user = JSON.parse(sessionStorage.getItem("authUser"));
+    const refreshToken = sessionStorage.getItem("refreshToken");
     const response = yield call(getLogout, {
-      token: user.refresh_token,
+      token: refreshToken,
     });
     if (response) {
       sessionStorage.removeItem("authUser");
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("refreshToken");
       yield put(deleteProfile());
       yield put(logoutUserSuccess(LOGOUT_USER, true));
       toast.success("Logout Successfully");
