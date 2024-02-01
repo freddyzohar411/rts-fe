@@ -442,7 +442,8 @@ export async function exportBackendHtml2Pdf(
 
   console.log("html", html);
 
-  let fileName = options?.fileName || "document.pdf";
+  // let fileName = options?.fileName || "document.pdf";
+  let fileName = "document.png";
 
   BackendHelper.convertHtmlStringToPdf({
     htmlString: html,
@@ -459,7 +460,10 @@ export async function exportBackendHtml2Pdf(
       for (let i = 0; i < len; i++) {
         bytes[i] = binaryString.charCodeAt(i);
       }
-      const blob = new Blob([bytes], { type: "application/pdf" });
+      // const blob = new Blob([bytes], { type: "application/pdf" });
+
+      // Png blob  
+      const blob = new Blob([bytes], { type: "image/png" });
       console.log("blob", blob);
       FileSaver.saveAs(blob, fileName);
     })
