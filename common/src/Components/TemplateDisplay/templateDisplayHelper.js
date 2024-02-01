@@ -253,8 +253,10 @@ export function convertStyleToAttributesTable(htmlString) {
 }
 
 export function convertInlineStylesToClasses(htmlString) {
-  let rootTemp = htmlString
-  // let rootTemp = wrapTextWithIns(htmlString);
+  console.log("Before Convert Inline Styles To Classes: ", htmlString);
+  // let rootTemp = htmlString
+  let rootTemp = wrapTextWithIns(htmlString);
+  console.log("After Convert Inline Styles To Classes: ", rootTemp);
   rootTemp = convertKeywordsToPt(rootTemp);
   const root = parse(rootTemp);
   const styles = {};
@@ -272,42 +274,33 @@ export function convertInlineStylesToClasses(htmlString) {
       let additionalStyle = "";
 
       // Check if the node has a font-size style and is not one of the specified tags
-      if (
-        style.includes("font-size") &&
-        // !["P", "H1", "H2", "H3", "H4", "H5", "H6"]?.includes(node.tagName)
-        ![
-          "P",
-          "H1",
-          "H2",
-          "H3",
-          "H4",
-          "H5",
-          "H6",
-          "TABLE",
-          "TR",
-          "TD",
-          "TH",
-          "THEAD",
-          "TBODY",
-          "TFOOT",
-          "COL",
-          "COLGROUP",
-        ].includes(node.tagName)
-      ) {
-        // If it's a span, add 'display: inline' to its style
-        if (node.tagName === "SPAN") {
-          additionalStyle = "display: inline-block; ";
-        }
+      // if (
+      //   style.includes("font-size") &&
+      //   // !["P", "H1", "H2", "H3", "H4", "H5", "H6"]?.includes(node.tagName)
+      //   ![
+      //     "P",
+      //     "H1",
+      //     "H2",
+      //     "H3",
+      //     "H4",
+      //     "H5",
+      //     "H6",
+      //     "TABLE",
+      //     "TR",
+      //     "TD",
+      //     "TH",
+      //     "THEAD",
+      //     "TBODY",
+      //     "TFOOT",
+      //     "COL",
+      //     "COLGROUP",
+      //   ].includes(node.tagName)
+      // ) {
+      //   // If it's a span, add 'display: inline' to its style
+      //   if (node.tagName === "SPAN") {
+      //     additionalStyle = "display: inline-block; ";
+      //   }
 
-        // Convert to <p> tag
-        const newNode = parse(
-          `<ins class="style-${styleId}">${node.innerHTML}</ins>`
-        ).firstChild;
-        node.replaceWith(newNode);
-        node = newNode; // Update reference to the new node
-      }
-      // else if (node.tagName === "STRONG") {
-      //   additionalStyle = "font-weight: bold; ";
       //   // Convert to <p> tag
       //   const newNode = parse(
       //     `<ins class="style-${styleId}">${node.innerHTML}</ins>`
@@ -350,198 +343,436 @@ export function convertInlineStylesToClasses(htmlString) {
   };
 }
 
-
-function wrapTextWithIns(htmlString) {
-    const root = parse(htmlString);
-
-    function convertPercentageToPt(fontSize, parentFontSize) {
-        const percentage = parseFloat(fontSize);
-        const ptSize = (percentage / 100) * 12; // Convert percentage to pt based on 12pt as 100%
-        return `${ptSize}pt`;
-    }
-
-    function convertKeywordToPt(keyword, referenceFontSize = '12pt') {
-        const keywordMapping = {
-            small: 10, // You can adjust this mapping as needed
-            medium: 12,
-            large: 16,
-            // Add more keywords and their corresponding sizes here
-        };
-        const fontSizeInPt = keywordMapping[keyword.toLowerCase()] || 12; // Default to 12pt if keyword not found
-        return `${fontSizeInPt}pt`;
-    }
-
-    function findFontSize(node, inheritedFontSize = '12pt') {
-      const keywordMapping = {
-        small: 10, // You can adjust this mapping as needed
-        medium: 12,
-        large: 16,
-        // Add more keywords and their corresponding sizes here
-    };
-        while (node && node !== root) {
-            const style = node.attributes && node.attributes.style;
-            let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
-            if (fontSize) {
-                if (fontSize.endsWith('%')) {
-                    // Convert percentage to pt based on inherited font size in pt
-                    fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
-                } else if (fontSize.toLowerCase() in keywordMapping) {
-                    // Convert keyword to pt based on a reference font size
-                    fontSize = convertKeywordToPt(fontSize.toLowerCase(), inheritedFontSize);
-                }
-                return fontSize;
-            }
-            node = node.parentNode;
-        }
-        return inheritedFontSize; // Use the same format as inherited font size (pt)
-    }
-
-    function recursiveTraverse(node, inheritedFontSize) {
-        if (node instanceof HTMLElement) {
-            node.childNodes.forEach((child, index) => {
-                if (child.nodeType === 3 && child.text.trim() !== '') {
-                    if (node.tagName !== "P" && !/^H[1-6]$/i.test(node.tagName)) {
-                        const ins = new HTMLElement('ins', {}, '', node);
-                        ins.set_content(child.text);
-
-                        const fontSize = findFontSize(node, inheritedFontSize);
-                        if (fontSize) {
-                            ins.setAttribute('style', `font-size: ${fontSize};`);
-                        }
-                        node.childNodes[index] = ins;
-                    }
-                } else if (child instanceof HTMLElement) {
-                    const childFontSize = findFontSize(child, inheritedFontSize);
-                    recursiveTraverse(child, childFontSize);
-                }
-            });
-        }
-    }
-
-    recursiveTraverse(root, '12pt'); // Start with a default font size of 12pt
-    return root.toString();
-}
-
 // function wrapTextWithIns(htmlString) {
+//   let el = "ins";
 //   const root = parse(htmlString);
 
-//   function convertPercentageToPt(fontSize, parentFontSize) {
-//       const percentage = parseFloat(fontSize);
-//       const ptSize = (percentage / 100) * 12; // Convert percentage to pt based on 12pt as 100%
-//       return `${ptSize}pt`;
-//   }
-
-//   function convertKeywordToPt(keyword, referenceFontSize = '12pt') {
-//       const keywordMapping = {
-//           small: { fontSize: 10, fontWeight: 'normal' },
-//           medium: { fontSize: 12, fontWeight: 'normal' },
-//           large: { fontSize: 16, fontWeight: 'bold' },
-//           // Add more keywords and their corresponding sizes and weights here
-//       };
-//       const { fontSize, fontWeight } = keywordMapping[keyword.toLowerCase()] || { fontSize: 12, fontWeight: 'normal' };
-//       return `font-size: ${fontSize}pt; font-weight: ${fontWeight}`;
-//   }
-
-//   function findFontStyles(node, inheritedFontStyles = 'font-size: 12pt; font-weight: normal') {
-//     const keywordMapping = {
-//       small: { fontSize: 10, fontWeight: 'normal' },
-//       medium: { fontSize: 12, fontWeight: 'normal' },
-//       large: { fontSize: 16, fontWeight: 'bold' },
-//       // Add more keywords and their corresponding sizes and weights here
+//   let keywordMapping = {
+//     small: 10, // You can adjust this mapping as needed
+//     medium: 12,
+//     large: 16,
+//     // Add more keywords and their corresponding sizes here
 //   };
+
+//   function convertPercentageToPt(fontSize, parentFontSize) {
+//     const percentage = parseFloat(fontSize);
+//     const ptSize = (percentage / 100) * 12; // Convert percentage to pt based on 12pt as 100%
+//     return `${ptSize}pt`;
+//   }
+
+//   function convertKeywordToPt(keyword, referenceFontSize = "12pt") {
+//     const fontSizeInPt = keywordMapping[keyword.toLowerCase()] || 12; // Default to 12pt if keyword not found
+//     return `${fontSizeInPt}pt`;
+//   }
+
+//   function findFontSize(node, inheritedFontSize = "12pt") {
 //     while (node && node !== root) {
-//           const style = node.attributes && node.attributes.style;
-//           const fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
-//           const fontWeight = style ? style.match(/font-weight:\s*([^;]+);?/i)?.[1] : null;
-          
-//           if (fontSize || fontWeight) {
-//               let fontStyles = '';
-//               if (fontSize) {
-//                   if (fontSize.endsWith('%')) {
-//                       // Convert percentage to pt based on inherited font size in pt
-//                       fontStyles += `font-size: ${convertPercentageToPt(fontSize, inheritedFontStyles)};`;
-//                   } else if (fontSize.toLowerCase() in keywordMapping) {
-//                       // Convert keyword to pt and include font weight based on a reference font size
-//                       fontStyles += convertKeywordToPt(fontSize.toLowerCase(), inheritedFontStyles);
-//                   } else {
-//                       // Keep the same format as specified in the style attribute for font size
-//                       fontStyles += `font-size: ${fontSize};`;
-//                   }
-//               }
-//               if (fontWeight) {
-//                   fontStyles += `font-weight: ${fontWeight};`;
-//               }
-//               return fontStyles;
+//       const style = node.attributes && node.attributes.style;
+//       let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
+//       if (fontSize) {
+//         if (fontSize.endsWith("%")) {
+//           // Convert percentage to pt based on inherited font size in pt
+//           fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
+//         } else if (fontSize.toLowerCase() in keywordMapping) {
+//           // Convert keyword to pt based on a reference font size
+//           fontSize = convertKeywordToPt(
+//             fontSize.toLowerCase(),
+//             inheritedFontSize
+//           );
+//         }
+//         return fontSize;
+//       }
+//       node = node.parentNode;
+//     }
+//     return inheritedFontSize; // Use the same format as inherited font size (pt)
+//   }
+
+//   function recursiveTraverse(node, inheritedFontSize) {
+//     if (node instanceof HTMLElement) {
+//       node.childNodes.forEach((child, index) => {
+//         if (child.nodeType === 3 && child.text.trim() !== "") {
+//           if (node.tagName !== "P" && !/^H[1-6]$/i.test(node.tagName)) {
+//             const ins = new HTMLElement(el, {}, "", node);
+//             ins.set_content(child.text);
+
+//             const fontSize = findFontSize(node, inheritedFontSize);
+//             if (fontSize) {
+//               ins.setAttribute("style", `font-size: ${fontSize};`);
+//             }
+//             node.childNodes[index] = ins;
 //           }
-//           node = node.parentNode;
-//       }
-//       return inheritedFontStyles; // Use the same format as inherited font styles
+//         } else if (child instanceof HTMLElement) {
+//           const childFontSize = findFontSize(child, inheritedFontSize);
+//           recursiveTraverse(child, childFontSize);
+//         }
+//       });
+//     }
 //   }
 
-//   function applyFontStylesToElement(node, fontStyles) {
-//       if (node instanceof HTMLElement) {
-//           node.setAttribute('style', fontStyles);
-//       }
-//   }
-
-//   function recursiveTraverse(node, inheritedFontStyles) {
-//       if (node instanceof HTMLElement) {
-//           node.childNodes.forEach((child, index) => {
-//               if (child.nodeType === 3 && child.text.trim() !== '') {
-//                   if (node.tagName !== "P" && !/^H[1-6]$/i.test(node.tagName)) {
-//                       const ins = new HTMLElement('ins', {}, '', node);
-//                       ins.set_content(child.text);
-
-//                       const fontStyles = findFontStyles(node, inheritedFontStyles);
-//                       if (fontStyles) {
-//                           ins.setAttribute('style', fontStyles);
-//                       }
-//                       node.childNodes[index] = ins;
-//                   }
-//               } else if (child instanceof HTMLElement) {
-//                   const childFontStyles = findFontStyles(child, inheritedFontStyles);
-//                   recursiveTraverse(child, childFontStyles);
-//               }
-//           });
-//       }
-//   }
-
-//   recursiveTraverse(root, 'font-size: 12pt; font-weight: normal'); // Start with default font size and weight
+//   recursiveTraverse(root, "12pt"); // Start with a default font size of 12pt
 //   return root.toString();
 // }
+
+// function wrapTextWithIns(htmlString) {
+//   let el = "ins";
+//   const root = parse(htmlString);
+
+//   let keywordMapping = {
+//     small: 10, // You can adjust this mapping as needed
+//     medium: 12,
+//     large: 16,
+//     // Add more keywords and their corresponding sizes here
+//   };
+
+//   function convertPercentageToPt(fontSize, parentFontSize) {
+//     const percentage = parseFloat(fontSize);
+//     const ptSize = (percentage / 100) * 12; // Convert percentage to pt based on 12pt as 100%
+//     return `${ptSize}pt`;
+//   }
+
+//   function convertKeywordToPt(keyword, referenceFontSize = "12pt") {
+//     const fontSizeInPt = keywordMapping[keyword.toLowerCase()] || 12; // Default to 12pt if keyword not found
+//     return `${fontSizeInPt}pt`;
+//   }
+
+//   function findFontSize(node, inheritedFontSize = "12pt") {
+//     while (node && node !== root) {
+//       const style = node.attributes && node.attributes.style;
+//       let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
+//       if (fontSize) {
+//         if (fontSize.endsWith("%")) {
+//           fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
+//         } else if (fontSize.toLowerCase() in keywordMapping) {
+//           fontSize = convertKeywordToPt(fontSize.toLowerCase(), inheritedFontSize);
+//         }
+//         return fontSize;
+//       }
+//       node = node.parentNode;
+//     }
+//     return inheritedFontSize;
+//   }
+
+//   function checkParentStyle(node) {
+//     let fontStyle = "";
+//     while (node && node !== root) {
+//       if (node.tagName === "EM") {
+//         fontStyle += "font-style: italic; ";
+//       } else if (node.tagName === "STRONG") {
+//         fontStyle += "font-weight: bold; ";
+//       } else if (node.tagName === "U") {
+//         fontStyle += "text-decoration: underline; ";
+//       } else if (node.tagName === "S") {
+//         fontStyle += "text-decoration: line-through; ";
+//       } else if (node.tagName === "SUB") {
+//         fontStyle += "vertical-align: sub; ";
+//       } else if (node.tagName === "SUP") {
+//         fontStyle += "vertical-align: super; ";
+//       }
+//       node = node.parentNode;
+//     }
+//     return fontStyle;
+//   }
+
+//   function recursiveTraverse(node, inheritedFontSize) {
+//     if (node instanceof HTMLElement) {
+//       node.childNodes.forEach((child, index) => {
+//         if (child.nodeType === 3 && child.text.trim() !== "") {
+//           if (node.tagName !== "P" && !/^H[1-6]$/i.test(node.tagName)) {
+//             const ins = new HTMLElement(el, {}, "", node);
+//             ins.set_content(child.text);
+
+//             let style = "";
+//             const fontSize = findFontSize(node, inheritedFontSize);
+//             if (fontSize) {
+//               style += `font-size: ${fontSize};`;
+//             }
+
+//             const parentStyle = checkParentStyle(node);
+//             if (parentStyle) {
+//               style += parentStyle;
+//             }
+
+//             if (style) {
+//               ins.setAttribute("style", style);
+//             }
+//             node.childNodes[index] = ins;
+//           }
+//         } else if (child instanceof HTMLElement) {
+//           const childFontSize = findFontSize(child, inheritedFontSize);
+//           recursiveTraverse(child, childFontSize);
+//         }
+//       });
+//     }
+//   }
+
+//   recursiveTraverse(root, "12pt"); // Start with a default font size of 12pt
+//   return root.toString();
+// }
+
+console.log("C")
+// function wrapTextWithIns(htmlString) {
+//   let el = "ins";
+//   const root = parse(htmlString);
+
+//   let keywordMapping = {
+//     small: 10, // You can adjust this mapping as needed
+//     medium: 12,
+//     large: 16,
+//     // Add more keywords and their corresponding sizes here
+//   };
+
+//   function convertPercentageToPt(fontSize, parentFontSize) {
+//     const percentage = parseFloat(fontSize);
+//     const ptSize = (percentage / 100) * 12; // Convert percentage to pt based on 12pt as 100%
+//     return `${ptSize}pt`;
+//   }
+
+//   function convertKeywordToPt(keyword, referenceFontSize = "12pt") {
+//     const fontSizeInPt = keywordMapping[keyword.toLowerCase()] || 12; // Default to 12pt if keyword not found
+//     return `${fontSizeInPt}pt`;
+//   }
+
+//   function findFontSize(node, inheritedFontSize = "12pt") {
+//     while (node && node !== root) {
+//       const style = node.attributes && node.attributes.style;
+//       let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
+//       if (fontSize) {
+//         if (fontSize.endsWith("%")) {
+//           fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
+//         } else if (fontSize.toLowerCase() in keywordMapping) {
+//           fontSize = convertKeywordToPt(
+//             fontSize.toLowerCase(),
+//             inheritedFontSize
+//           );
+//         }
+//         return fontSize;
+//       }
+//       node = node.parentNode;
+//     }
+//     return inheritedFontSize;
+//   }
+
+//   function checkParentStyle(node) {
+//     let fontStyle = "";
+//     while (node && node !== root) {
+//       if (node.tagName === "EM") {
+//         fontStyle += "font-style: italic; ";
+//       } else if (node.tagName === "STRONG") {
+//         fontStyle += "font-weight: bold; ";
+//       } else if (node.tagName === "U") {
+//         fontStyle += "text-decoration: underline; ";
+//       } else if (node.tagName === "S") {
+//         fontStyle += "text-decoration: line-through; ";
+//       } else if (node.tagName === "SUB") {
+//         fontStyle += "vertical-align: sub; ";
+//       } else if (node.tagName === "SUP") {
+//         fontStyle += "vertical-align: super; ";
+//       }
+
+//       // Check for font-weight in style
+//       const style = node.attributes && node.attributes.style;
+//       let fontWeight = style
+//         ? style.match(/font-weight:\s*([^;]+);?/i)?.[1]
+//         : null;
+//       if (fontWeight) {
+//         fontStyle += `font-weight: ${fontWeight}; `;
+//       }
+
+//       node = node.parentNode;
+//     }
+//     return fontStyle;
+//   }
+
+//   function recursiveTraverse(node, inheritedFontSize) {
+//     if (node instanceof HTMLElement) {
+//       node.childNodes.forEach((child, index) => {
+//         if (child.nodeType === 3 && child.text.trim() !== "") {
+//           // if (node.tagName !== "P" && !/^H[1-6]$/i.test(node.tagName)) {
+//           if (
+//             node.tagName !== "P" &&
+//             !/^H[1-6]$/i.test(node.tagName) &&
+//             !/^(TABLE|TR|TD|TH|THEAD|TBODY|TFOOT|COL|COLGROUP)$/i.test(
+//               node.tagName
+//             )
+//           ) {
+//             const ins = new HTMLElement(el, {}, "", node);
+//             ins.set_content(child.text);
+
+//             let style = "";
+//             const fontSize = findFontSize(node, inheritedFontSize);
+//             if (fontSize) {
+//               style += `font-size: ${fontSize};`;
+//             }
+
+//             const parentStyle = checkParentStyle(node);
+//             if (parentStyle) {
+//               style += parentStyle;
+//             }
+
+//             if (style) {
+//               ins.setAttribute("style", style);
+//             }
+//             node.childNodes[index] = ins;
+//           }
+//         } else if (child instanceof HTMLElement) {
+//           const childFontSize = findFontSize(child, inheritedFontSize);
+//           recursiveTraverse(child, childFontSize);
+//         }
+//       });
+//     }
+//   }
+
+//   recursiveTraverse(root, "12pt"); // Start with a default font size of 12pt
+//   return root.toString();
+// }
+
+function wrapTextWithIns(htmlString) {
+  let el = "ins";
+  const root = parse(htmlString);
+
+  let keywordMapping = {
+    small: 10, 
+    medium: 12,
+    large: 16,
+    // Add more keywords and their corresponding sizes here
+  };
+
+  function convertPercentageToPt(fontSize, parentFontSize) {
+    const percentage = parseFloat(fontSize);
+    const ptSize = (percentage / 100) * 12; 
+    return `${ptSize}pt`;
+  }
+
+  function convertKeywordToPt(keyword, referenceFontSize = "12pt") {
+    const fontSizeInPt = keywordMapping[keyword.toLowerCase()] || 12;
+    return `${fontSizeInPt}pt`;
+  }
+
+  function findFontSize(node, inheritedFontSize = "12pt") {
+    while (node && node !== root) {
+      const style = node.attributes && node.attributes.style;
+      let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
+      if (fontSize) {
+        if (fontSize.endsWith("%")) {
+          fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
+        } else if (fontSize.toLowerCase() in keywordMapping) {
+          fontSize = convertKeywordToPt(fontSize.toLowerCase(), inheritedFontSize);
+        }
+        return fontSize;
+      }
+      node = node.parentNode;
+    }
+    return inheritedFontSize;
+  }
+
+  function checkParentStyle(node) {
+    let fontStyle = "";
+    while (node && node !== root) {
+      if (node.tagName === "EM") {
+        fontStyle += "font-style: italic; ";
+      } else if (node.tagName === "STRONG") {
+        fontStyle += "font-weight: bold; ";
+      } else if (node.tagName === "U") {
+        fontStyle += "text-decoration: underline; ";
+      } else if (node.tagName === "S") {
+        fontStyle += "text-decoration: line-through; ";
+      } else if (node.tagName === "SUB") {
+        fontStyle += "vertical-align: sub; ";
+      } else if (node.tagName === "SUP") {
+        fontStyle += "vertical-align: super; ";
+      }
+
+      const style = node.attributes && node.attributes.style;
+      let fontWeight = style ? style.match(/font-weight:\s*([^;]+);?/i)?.[1] : null;
+      if (fontWeight) {
+        fontStyle += `font-weight: ${fontWeight}; `;
+      }
+
+      // Check for font color in style
+      let fontColor = style ? style.match(/color:\s*([^;]+);?/i)?.[1] : null;
+      if (fontColor) {
+        fontStyle += `color: ${fontColor}; `;
+      }
+
+      node = node.parentNode;
+    }
+    return fontStyle;
+  }
+
+  function recursiveTraverse(node, inheritedFontSize) {
+    if (node instanceof HTMLElement) {
+      node.childNodes.forEach((child, index) => {
+        if (child.nodeType === 3 && child.text.trim() !== "") {
+          if (
+            node.tagName !== "P" &&
+            !/^H[1-6]$/i.test(node.tagName) &&
+            !/^(TABLE|TR|TD|TH|THEAD|TBODY|TFOOT|COL|COLGROUP)$/i.test(node.tagName)
+          ) {
+            const ins = new HTMLElement(el, {}, "", node);
+            ins.set_content(child.text);
+
+            let style = "";
+            const fontSize = findFontSize(node, inheritedFontSize);
+            if (fontSize) {
+              style += `font-size: ${fontSize};`;
+            }
+
+            const parentStyle = checkParentStyle(node);
+            if (parentStyle) {
+              style += parentStyle;
+            }
+
+            if (style) {
+              ins.setAttribute("style", style);
+            }
+            node.childNodes[index] = ins;
+          }
+        } else if (child instanceof HTMLElement) {
+          const childFontSize = findFontSize(child, inheritedFontSize);
+          recursiveTraverse(child, childFontSize);
+        }
+      });
+    }
+  }
+
+  recursiveTraverse(root, "12pt"); 
+  return root.toString();
+}
 
 function convertKeywordsToPt(htmlString) {
   const root = parse(htmlString);
 
   function convertKeywordToPt(keyword) {
-      const keywordMapping = {
-          small: 10, // You can adjust this mapping as needed
-          medium: 12,
-          large: 16,
-          // Add more keywords and their corresponding sizes here
-      };
-      return `${keywordMapping[keyword.toLowerCase()]}pt` || keyword;
+    const keywordMapping = {
+      small: 10, // You can adjust this mapping as needed
+      medium: 12,
+      large: 16,
+      // Add more keywords and their corresponding sizes here
+    };
+    return `${keywordMapping[keyword.toLowerCase()]}pt` || keyword;
   }
 
   function recursiveTraverse(node) {
-      if (node instanceof HTMLElement) {
-          const style = node.attributes && node.attributes.style;
-          if (style) {
-              let modifiedStyle = style.replace(/font-size:\s*(small|medium|large);?/gi, (match, p1) => {
-                  return `font-size: ${convertKeywordToPt(p1)};`;
-              });
-              node.setAttribute('style', modifiedStyle);
+    if (node instanceof HTMLElement) {
+      const style = node.attributes && node.attributes.style;
+      if (style) {
+        let modifiedStyle = style.replace(
+          /font-size:\s*(small|medium|large);?/gi,
+          (match, p1) => {
+            return `font-size: ${convertKeywordToPt(p1)};`;
           }
-          node.childNodes.forEach((child) => {
-              recursiveTraverse(child);
-          });
+        );
+        node.setAttribute("style", modifiedStyle);
       }
+      node.childNodes.forEach((child) => {
+        recursiveTraverse(child);
+      });
+    }
   }
 
   recursiveTraverse(root);
   return root.toString();
 }
-
 
 // function applyFontWeight(htmlString) {
 //   const root = parse(htmlString);
@@ -573,7 +804,6 @@ function convertKeywordsToPt(htmlString) {
 //   recursiveApplyFontWeight(root);
 //   return root.toString();
 // }
-
 
 // Private function helpers ===============================================
 function convertInlineWidthAndHeightToAttributes(htmlString) {
