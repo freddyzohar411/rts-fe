@@ -117,3 +117,17 @@ export const convertExcelToHtmlString = (
     config
   );
 
+// HTML to Jpeg
+export const convertHtmlStringToJpeg = (data) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/htmlString-to-jpeg`,
+    data
+  );
+
+// HTML to Png
+export const convertHtmlStringToPng = (data) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/htmlString-to-png`,
+    data
+  );
+

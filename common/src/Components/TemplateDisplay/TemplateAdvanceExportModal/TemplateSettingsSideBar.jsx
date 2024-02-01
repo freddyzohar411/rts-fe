@@ -191,6 +191,8 @@ const TemplateSettingsSideBar = ({
               { label: "Pdf", value: "pdf" },
               { label: "Docx", value: "docx" },
               { label: "Html", value: "html" },
+              { label: "Jpeg", value: "jpeg" },
+              { label: "Png", value: "png" },
               { label: "Pdf Client", value: "pdfClient" },
               { label: "Docx Client", value: "docxClient" },
             ]}

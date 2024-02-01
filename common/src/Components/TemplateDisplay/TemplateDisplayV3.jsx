@@ -3,7 +3,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import useMutationObserver from "./useMutationObserverHook";
 import ReactHtmlParser from "react-html-parser";
 import * as TemplateDisplayHelper from "./templateDisplayHelper";
-// import { runEffects } from "./templateDisplayHelper";
 import { ExportHelper } from "@workspace/common";
 import { generateOptions } from "./pdfOption";
 import { TemplateAdvanceExportModal } from "@workspace/common";

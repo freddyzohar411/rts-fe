@@ -155,12 +155,9 @@ const TemplateAdvanceExportModal = ({
           ...templateSettings,
         });
       } else {
-        const file = await ExportHelper.convertHtmlToPdfFile(
-          showContent.html,
-          {
-            ...templateSettings,
-          },
-        );
+        const file = await ExportHelper.convertHtmlToPdfFile(showContent.html, {
+          ...templateSettings,
+        });
         if (attachmentCallback) {
           attachmentCallback(file);
         }
@@ -170,15 +167,63 @@ const TemplateAdvanceExportModal = ({
 
     if (templateSettings.exportType === "docxClient") {
       if (toExport) {
-        await ExportHelper.generateDocxCustom(showContent.oldHtml,
+        await ExportHelper.generateDocxCustom(showContent.oldHtml, {
+          ...templateSettings,
+        });
+      } else {
+        const file = await ExportHelper.convertHtmlToDocxFile(
+          showContent.oldHtml,
+          {
+            ...templateSettings,
+          }
+        );
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
+
+    if (templateSettings.exportType === "jpeg") {
+      if (toExport) {
+        await ExportHelper.exportBackendHtml2Jpeg(
+          showContent.html,
           {
             ...templateSettings,
           },
+          showContent.styleTag
         );
       } else {
-        const file = await ExportHelper.convertHtmlToDocxFile(showContent.oldHtml, {
+        const file = await ExportHelper.exportBackendHtml2JpegFile(
+          showContent.html,
+          {
             ...templateSettings,
           },
+          showContent.styleTag
+        );
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
+
+    if (templateSettings.exportType === "png") {
+      if (toExport) {
+        await ExportHelper.exportBackendHtml2Png(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
+        );
+      } else {
+        const file = await ExportHelper.exportBackendHtml2PngFile(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
         );
         if (attachmentCallback) {
           attachmentCallback(file);
@@ -340,7 +385,7 @@ const TemplateAdvanceExportModal = ({
             </Col>
           </Row>
           <hr className="mt-0" />
-          <Row className="mx-3">
+          <Row className="mx-3" style={{ zIndex: "0" }}>
             <Col className="d-flex justify-content-end">
               <Button className="btn-danger" onClick={() => closeModal()}>
                 Cancel
