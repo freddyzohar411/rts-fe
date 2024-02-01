@@ -12,12 +12,12 @@ import {
   deleteCandidate,
   fetchCandidates,
   fetchCandidatesFields,
+  fetchCandidatesAdmin,
 } from "../../store/candidate/action";
 import { useUserAuth } from "@workspace/login";
 
 function CandidateListing() {
-  const [isLoading, setIsLoading] = useState(false);
-  const { Permission, checkAllPermission, getName } = useUserAuth();
+  const { Permission, checkAllPermission, checkAnyRole } = useUserAuth();
   const dispatch = useDispatch();
   const candidatesData = useSelector(
     (state) => state.CandidateReducer.candidates
@@ -186,10 +186,13 @@ function CandidateListing() {
 
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    setIsLoading(true); // Set isLoading to true before fetching data
-    dispatch(
-      fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest))
-    ).finally(() => setIsLoading(false)); // Set isLoading to false after data is fetched
+    if (checkAnyRole(["Admin"])) {
+      dispatch(
+        fetchCandidatesAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
+      );
+      return
+    }
+    dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
   }, [pageRequest]);
 
   // useEffect(() => {

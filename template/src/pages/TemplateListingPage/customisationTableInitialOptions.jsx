@@ -18,6 +18,12 @@ const CUSTOMISATION_INITIAL_OPTION = [
     sortValue: "category",
   },
   {
+    label: "Sub Category",
+    value: "subCategory",
+    sort: true,
+    sortValue: "subCategory",
+  },
+  {
     label: "Description",
     value: "description",
     sort: true,

@@ -84,3 +84,9 @@ export const getAccountDataById = (id) =>
 // Get account fields all
 export const getAccountsFieldsAll = () =>
   api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields/all`);
+
+
+  // Admin
+// Get Accounts
+export const getAccountsAdmin = (data) =>
+  api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing/all`, data);

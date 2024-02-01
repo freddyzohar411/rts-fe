@@ -6,14 +6,6 @@ const getAuthUser = () => {
   return JSON.parse(sessionStorage.getItem("authUser"));
 };
 
-const getAccessToken = () => {
-  const authUser = getAuthUser();
-  if (authUser) {
-    return authUser.access_token;
-  }
-  return null;
-};
-
 const getPermissions = () => {
   return JSON.parse(sessionStorage.getItem("permissions"));
 };
@@ -68,15 +60,14 @@ const getUserDetails = () => {
     authUser,
     permissions,
     roles,
-  }
-}
+  };
+};
 
 export {
   isUserLoggedIn,
   getAuthUser,
-  getAccessToken,
   getPermissions,
   checkPermission,
   checkRole,
-  getUserDetails
+  getUserDetails,
 };

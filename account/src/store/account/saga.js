@@ -9,7 +9,8 @@ import {
   FETCH_ACCOUNTS,
   FETCH_ACCOUNTS_FIELDS,
   FETCH_ACCOUNT_DATA,
-  FETCH_ACCOUNTS_FIELDS_ALL
+  FETCH_ACCOUNTS_FIELDS_ALL,
+  FETCH_ACCOUNTS_ADMIN,
 } from "./actionTypes";
 import {
   fetchAccountSuccess,
@@ -28,6 +29,8 @@ import {
   fetchAccountDataFailure,
   fetchAccountsFieldsAllSuccess,
   fetchAccountsFieldsAllFailure,
+  fetchAccountsAdminSuccess,
+  fetchAccountsAdminFailure,
 } from "./action";
 import {
   getAccounts,
@@ -37,7 +40,8 @@ import {
   getAccountsFields,
   getAccountById,
   getAccountDataById,
-  getAccountsFieldsAll
+  getAccountsFieldsAll,
+  getAccountsAdmin,
 } from "../../helpers/backend_helper";
 import {
   setAccountId,
@@ -167,7 +171,6 @@ function* workFetchAccountData(action) {
     const response = yield call(getAccountDataById, action.payload);
     yield put(fetchAccountDataSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching account data");
     yield put(fetchAccountDataFailure(error));
   }
 }
@@ -177,8 +180,17 @@ function* workFetchAccountsFieldsAll() {
     const response = yield call(getAccountsFieldsAll);
     yield put(fetchAccountsFieldsAllSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts fields");
     yield put(fetchAccountsFieldsAllFailure(error));
+  }
+}
+
+function* workFetchAccountsAdmin(action) {
+  try {
+    const response = yield call(getAccountsAdmin, action.payload);
+    yield put(fetchAccountsAdminSuccess(response.data));
+  } catch (error) {
+    toast.error("Error fetching accounts");
+    yield put(fetchAccountsAdminFailure(error));
   }
 }
 
@@ -191,4 +203,5 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(FETCH_ACCOUNT, workFetchAccount);
   yield takeEvery(FETCH_ACCOUNT_DATA, workFetchAccountData);
   yield takeEvery(FETCH_ACCOUNTS_FIELDS_ALL, workFetchAccountsFieldsAll);
+  yield takeEvery(FETCH_ACCOUNTS_ADMIN, workFetchAccountsAdmin);
 }

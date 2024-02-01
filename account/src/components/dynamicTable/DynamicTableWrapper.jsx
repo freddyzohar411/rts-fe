@@ -8,6 +8,7 @@ import { GeneralModal } from "@workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "../../pages/AccountListing/accountListingConstants";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
+import { toast } from "react-toastify";
 
 const DynamicTableWrapper = ({
   data,
@@ -36,6 +37,11 @@ const DynamicTableWrapper = ({
     });
     setSelectedOptGroup(selectedObjects);
   };
+
+  const areOptionsEmpty = () => {
+    return !(optGroup && optGroup.length > 0);
+  };
+
 
   return (
     <React.Fragment>
@@ -152,6 +158,12 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             onClick={() => {
+                              if (areOptionsEmpty()) {
+                                toast.error(
+                                  "No fields to show. Please have at least one account"
+                                );
+                                return;
+                              }
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}

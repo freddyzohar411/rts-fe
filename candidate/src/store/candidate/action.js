@@ -30,6 +30,9 @@ import {
   FETCH_CANDIDATES_FIELDS_ALL,
   FETCH_CANDIDATES_FIELDS_ALL_SUCCESS,
   FETCH_CANDIDATES_FIELDS_ALL_FAILURE,
+  FETCH_CANDIDATES_ADMIN,
+  FETCH_CANDIDATES_ADMIN_SUCCESS,
+  FETCH_CANDIDATES_ADMIN_FAILURE,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -190,6 +193,22 @@ export const fetchCandidatesFieldsAllSuccess = (candidatesFields) => ({
 
 export const fetchCandidatesFieldsAllFailure = (error) => ({
   type: FETCH_CANDIDATES_FIELDS_ALL_FAILURE,
+  payload: error,
+});
+
+// Fetch Candidates Admin
+export const fetchCandidatesAdmin = (params) => ({
+  type: FETCH_CANDIDATES_ADMIN,
+  payload: params,
+});
+
+export const fetchCandidatesAdminSuccess = (candidates) => ({
+  type: FETCH_CANDIDATES_ADMIN_SUCCESS,
+  payload: candidates,
+});
+
+export const fetchCandidatesAdminFailure = (error) => ({
+  type: FETCH_CANDIDATES_ADMIN_FAILURE,
   payload: error,
 });
 

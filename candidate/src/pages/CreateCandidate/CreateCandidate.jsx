@@ -827,7 +827,7 @@ const CreateCandidate = () => {
         );
         return;
       }
-      
+
       // Patch draft status to false
       dispatch(putCandidateDraftStatus(candidateId));
     }
@@ -862,52 +862,57 @@ const CreateCandidate = () => {
   /**
    * Handle Account Success
    */
-  if (createMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 6) {
-      navigate("/candidates");
-      return;
+
+  useEffect(() => {
+    if (createMetaData?.isSuccess) {
+      dispatch(resetMetaData());
+      if (step === 6) {
+        navigate("/candidates");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [createMetaData?.isSuccess]);
 
   /**
    * Handle Account success (Update)
    */
-  if (updateMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 6) {
-      navigate("/candidates");
-      return;
+  useEffect(() => {
+    if (updateMetaData?.isSuccess) {
+      dispatch(resetMetaData());
+      if (step === 6) {
+        navigate("/candidates");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [updateMetaData?.isSuccess]);
 
   return (
     <Container fluid className="page-content">
-        <FormStepper
-          activeStep={step}
-          handleBack={handleBack}
-          handleNext={handleNext}
-          formikRef={formikRef}
-          formFieldsData={formFieldsData}
-          setErrorMessage={setErrorMessage}
-          candidateId={candidateId}
-          resetStepper={resetStepper}
-        >
-          <Form
-            template={formTemplate}
-            userDetails={getAllUserGroups()}
-            country={candidateCountry || country?.name || null}
-            editData={formSubmissionData}
-            onSubmit={handleFormSubmit}
-            onFormFieldsChange={handleFormFieldChange}
-            errorMessage={errorMessage}
-            view={false}
-            ref={formikRef}
-          />
-        </FormStepper>
-      </Container>
+      <FormStepper
+        activeStep={step}
+        handleBack={handleBack}
+        handleNext={handleNext}
+        formikRef={formikRef}
+        formFieldsData={formFieldsData}
+        setErrorMessage={setErrorMessage}
+        candidateId={candidateId}
+        resetStepper={resetStepper}
+      >
+        <Form
+          template={formTemplate}
+          userDetails={getAllUserGroups()}
+          country={candidateCountry || country?.name || null}
+          editData={formSubmissionData}
+          onSubmit={handleFormSubmit}
+          onFormFieldsChange={handleFormFieldChange}
+          errorMessage={errorMessage}
+          view={false}
+          ref={formikRef}
+        />
+      </FormStepper>
+    </Container>
   );
 };
 

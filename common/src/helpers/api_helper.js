@@ -7,8 +7,8 @@ axios.defaults.baseURL = api.API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 axios.interceptors.request.use(
-  async (config) => {
-    const token = await sessionStorage.getItem("accessToken");
+  (config) => {
+    const token = sessionStorage.getItem("accessToken");
     if (token) {
       config.headers["Authorization"] = "Bearer " + token; // for Spring Boot back-end
     }
@@ -55,7 +55,7 @@ const setAuthorization = (token) => {
 
 const refreshToken = async () => {
   const userData = JSON.parse(sessionStorage.getItem("authUser"));
-  const refreshToken = await sessionStorage.getItem("refreshToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
   const data = {
     id: userData?.user?.id,
     refreshToken,
@@ -108,11 +108,6 @@ class APIClient {
    */
   delete = (url, config) => {
     return axios.delete(url, { ...config });
-  };
-
-  getToken = () => {
-    const accessToken = sessionStorage.getItem("accessToken");
-    return accessToken ?? null;
   };
 }
 

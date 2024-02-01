@@ -266,6 +266,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableId: "selectformtemplate",
       type: "field",
     },
+    {
+      draggableLabelIcon: "ri-account-box-fill",
+      draggableLabel: "Account Owner",
+      draggablePrefix: "element",
+      draggableId: "accountowner",
+      type: "field",
+    },
   ];
 
   // Layout List
@@ -279,21 +286,21 @@ const FormElementSidebar = ({ unusedFields }) => {
     },
     {
       draggableLabelIcon: "mdi mdi-format-align-justify",
-      draggableLabel: "Column 1",
+      draggableLabel: "1 Column",
       draggablePrefix: "layout",
       draggableId: "1",
       type: "row",
     },
     {
       draggableLabelIcon: "mdi mdi-format-columns",
-      draggableLabel: "Column 2",
+      draggableLabel: "2 Columns",
       draggablePrefix: "layout",
       draggableId: "2",
       type: "row",
     },
     {
       draggableLabelIcon: "mdi mdi-view-week-outline",
-      draggableLabel: "Column 3",
+      draggableLabel: "3 Columns",
       draggablePrefix: "layout",
       draggableId: "3",
       type: "row",

@@ -112,3 +112,8 @@ export const getCandidateDataById = (id) =>
 // Get candidate field All
 export const getCandidateFieldAll = () =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/fields/all`);
+
+    // Admin
+// Get candidates
+export const getCandidatesAdmin = (data) =>
+api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/all`, data);

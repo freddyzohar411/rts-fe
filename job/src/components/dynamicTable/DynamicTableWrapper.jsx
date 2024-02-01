@@ -19,6 +19,7 @@ import {
   JOB_FILTERS,
   JOB_INITIAL_OPTIONS,
 } from "../JobListing/JobListingConstants";
+import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -46,6 +47,10 @@ const DynamicTableWrapper = ({
       return optGroup.find((option) => option.value === value);
     });
     setSelectedOptGroup(selectedObjects);
+  };
+
+  const areOptionsEmpty = () => {
+    return !(optGroup && optGroup.length > 0);
   };
 
   return (
@@ -78,21 +83,35 @@ const DynamicTableWrapper = ({
                     }
                     onChange={handleChange}
                     icons={{
-                      moveLeft: (
-                        <span className="mdi mdi-chevron-left" key="key" />
-                      ),
+                      moveLeft: [
+                        <span
+                          className={`mdi mdi-chevron-left ${
+                            areOptionsEmpty() ? "disabled-icon" : ""
+                          }`}
+                          key="key"
+                        />,
+                      ],
                       moveAllLeft: [
                         <span
-                          className="mdi mdi-chevron-double-left"
+                          className={`mdi mdi-chevron-double-left ${
+                            areOptionsEmpty() ? "disabled-icon" : ""
+                          }`}
                           key="key"
                         />,
                       ],
                       moveRight: (
-                        <span className="mdi mdi-chevron-right" key="key" />
+                        <span
+                          className={`mdi mdi-chevron-right ${
+                            areOptionsEmpty() ? "disabled-icon" : ""
+                          }`}
+                          key="key"
+                        />
                       ),
                       moveAllRight: [
                         <span
-                          className="mdi mdi-chevron-double-right"
+                          className={`mdi mdi-chevron-double-right ${
+                            areOptionsEmpty() ? "disabled-icon cursor-none" : ""
+                          }`}
                           key="key"
                         />,
                       ],
@@ -187,6 +206,12 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             onClick={() => {
+                              if (areOptionsEmpty()) {
+                                toast.error(
+                                  "No fields to show. Please have at least one job"
+                                );
+                                return;
+                              }
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}

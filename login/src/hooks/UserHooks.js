@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Axios } from "@workspace/common";
 import { getValidate } from "../helpers/backend_helper";
 import { useNavigate } from "react-router-dom";
+import { refreshToken } from "@workspace/common/src/helpers/api_helper";
 
 const useProfile = () => {
   const navigate = useNavigate();
@@ -15,20 +16,19 @@ const useProfile = () => {
 
   useEffect(() => {
     const asyncCall = async () => {
-      var token = await sessionStorage.getItem("accessToken");
-      if (token) {
-        getValidate({ token })
-          .then((resp) => {
-            if (resp?.active) {
-              setUserProfile(userProfileSession ? userProfileSession : null);
-              setLoading(token ? false : true);
-            } else {
-              navigate("/logout");
-            }
-          })
-          .catch((e) => {
-            navigate("/logout");
-          });
+      try {
+        const refreshTokenResponse = await refreshToken();
+        const { access_token } = refreshTokenResponse;
+
+        const resp = await getValidate({ token: access_token });
+        if (resp?.active) {
+          setUserProfile(userProfileSession ? userProfileSession : null);
+          setLoading(token ? false : true);
+        } else {
+          navigate("/logout");
+        }
+      } catch (e) {
+        navigate("/logout");
       }
     };
     asyncCall();

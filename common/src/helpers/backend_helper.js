@@ -50,6 +50,9 @@ export const getAccountContacts = (input) =>
 export const getAccountNamesAll = () =>
   api.get(`${configURL.ACCOUNT_URL}/${baseURL.ACCOUNT}/names-all`);
 
+export const getAccountById = (id) =>
+  api.get(`${configURL.ACCOUNT_URL}/${baseURL.ACCOUNT}/${id}/data`);
+
 // Form Microservice
 export const getFormCategories = () =>
   api.get(`${configURL.FORM_URL}/${baseURL.FORM}/categories`);
@@ -61,8 +64,73 @@ export const getFormsByCategories = (category) =>
 
 // Email
 export const sendEmail = (data, config) =>
-  api.create(`${configURL.COMMON_URL}/${baseURL.EMAIL}/sendingEmail`, data, config);
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.EMAIL}/sendingEmail`,
+    data,
+    config
+  );
 
-
+// Refresh token
 export const refreshToken = (data) =>
   api.get(`${configURL.API_URL}/${baseURL.USER}/refreshToken`, data);
+
+// Document Conversion
+
+// Html string to pdf
+export const convertHtmlStringToPdf = (data) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/htmlString-to-pdf`,
+    data
+  );
+
+// Html string to docx
+export const convertHtmlStringToDocx = (data) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/htmlString-to-docx`,
+    data
+  );
+
+// Docx to HTML string
+export const convertDocxToHtmlString = (
+  data,
+  config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/docx-to-htmlString`,
+    data,
+    config
+  );
+
+// Excel to HTML string
+export const convertExcelToHtmlString = (
+  data,
+  config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/xlsx-to-htmlString`,
+    data,
+    config
+  );
+
+// HTML to Jpeg
+export const convertHtmlStringToJpeg = (data) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/htmlString-to-jpeg`,
+    data
+  );
+
+// HTML to Png
+export const convertHtmlStringToPng = (data) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/htmlString-to-png`,
+    data
+  );
+

@@ -20,13 +20,16 @@ import {
   FETCH_ACCOUNTS_FIELDS,
   FETCH_ACCOUNTS_FIELDS_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_FAILURE,
-  RESET_META_DATA,
+  ACCOUNT_RESET_META_DATA,
   FETCH_ACCOUNT_DATA,
   FETCH_ACCOUNT_DATA_SUCCESS,
   FETCH_ACCOUNT_DATA_FAILURE,
   FETCH_ACCOUNTS_FIELDS_ALL,
   FETCH_ACCOUNTS_FIELDS_ALL_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_ALL_FAILURE,
+  FETCH_ACCOUNTS_ADMIN,
+  FETCH_ACCOUNTS_ADMIN_SUCCESS,
+  FETCH_ACCOUNTS_ADMIN_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -139,8 +142,8 @@ export const fetchAccountsFieldsFailure = (error) => ({
   payload: error,
 });
 
-export const resetMetaData = () => ({
-  type: RESET_META_DATA,
+export const accountResetMetaData = () => ({
+  type: ACCOUNT_RESET_META_DATA,
 });
 
 export const fetchAccountData = (accountId) => ({
@@ -169,6 +172,22 @@ export const fetchAccountsFieldsAllSuccess = (accountsFields) => ({
 
 export const fetchAccountsFieldsAllFailure = (error) => ({
   type: FETCH_ACCOUNTS_FIELDS_ALL_FAILURE,
+  payload: error,
+});
+
+// Admin
+export const fetchAccountsAdmin = (params) => ({
+  type: FETCH_ACCOUNTS_ADMIN,
+  payload: params,
+});
+
+export const fetchAccountsAdminSuccess = (accounts) => ({
+  type: FETCH_ACCOUNTS_ADMIN_SUCCESS,
+  payload: accounts,
+});
+
+export const fetchAccountsAdminFailure = (error) => ({
+  type: FETCH_ACCOUNTS_ADMIN_FAILURE,
   payload: error,
 });
 

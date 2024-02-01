@@ -8,6 +8,7 @@ import {
   FETCH_TEMPLATE,
   FETCH_TEMPLATE_CATEGORIES,
   FETCH_TEMPLATE_BY_CATEGORY,
+  FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY
 } from "./actionTypes";
 import {
   fetchTemplatesSuccess,
@@ -24,6 +25,8 @@ import {
   fetchTemplateCategoriesFailure,
   fetchTemplateByCategorySuccess,
   fetchTemplateByCategoryFailure,
+  fetchTemplateByCategoryAndSubCategorySuccess,
+  fetchTemplateByCategoryAndSubCategoryFailure,
 } from "./action";
 import {
   createTemplate,
@@ -33,6 +36,7 @@ import {
   getTemplates,
   getTemplateCategories,
   getTemplatesByCategory,
+  getTemplatesByCategoryAndSubCategory
 } from "../../helpers/backend_helper.js";
 import { toast } from "react-toastify";
 
@@ -109,6 +113,19 @@ function* workFetchTemplateByCategory(action) {
   }
 }
 
+function* workFetchTemplateByCategorySubcategory(action) {
+  try {
+    const response = yield call(
+      getTemplatesByCategoryAndSubCategory,
+      action.payload.category,
+      action.payload.subCategory
+    );
+    yield put(fetchTemplateByCategoryAndSubCategorySuccess(response.data));
+  } catch (error) {
+    yield put(fetchTemplateByCategoryAndSubCategoryFailure(error));
+  }
+}
+
 export default function* watchFetchTemplatesSaga() {
   yield takeEvery(FETCH_TEMPLATES, workFetchTemplates);
   yield takeEvery(DELETE_TEMPLATE, workDeleteTemplate);
@@ -117,4 +134,5 @@ export default function* watchFetchTemplatesSaga() {
   yield takeEvery(FETCH_TEMPLATE, workFetchTemplate);
   yield takeEvery(FETCH_TEMPLATE_CATEGORIES, workFetchTemplateCategories);
   yield takeEvery(FETCH_TEMPLATE_BY_CATEGORY, workFetchTemplateByCategory);
+  yield takeEvery(FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY, workFetchTemplateByCategorySubcategory);
 }

@@ -21,38 +21,6 @@ const EditorElement2 = ({
   const editorRef = useRef(null);
   const [showExportModal, setShowExportModal] = useState(false);
 
-  // Apply canvas style
-  function applyCanvasStyle(editor, size, orientation) {
-    const sizes = {
-      A4: { width: "8.27in", height: "11.69in" },
-      A3: { width: "11.69in", height: "16.54in" },
-      Letter: { width: "8.5in", height: "11in" },
-    };
-
-    let { width, height } = sizes[size];
-
-    if (orientation === "landscape") {
-      [width, height] = [height, width];
-    }
-
-    editor.dom.setStyle(editor.getBody(), "width", width);
-    editor.dom.setStyle(editor.getBody(), "minHeight", height);
-    editor.dom.setStyle(editor.getBody(), "margin", "60px auto 100px auto");
-    editor.dom.setStyle(editor.getBody(), "border", "1px solid black");
-    editor.dom.setStyle(editor.getBody(), "padding", "0px");
-    editor.dom.setStyle(editor.getBody(), "boxSizing", "border-box");
-  }
-
-  // Reset canvas to normal style
-  function revertToNormalStyle(editor) {
-    editor.dom.setStyle(editor.getBody(), "width", "");
-    editor.dom.setStyle(editor.getBody(), "minHeight", "");
-    editor.dom.setStyle(editor.getBody(), "margin", "");
-    editor.dom.setStyle(editor.getBody(), "border", "");
-    editor.dom.setStyle(editor.getBody(), "padding", "");
-    editor.dom.setStyle(editor.getBody(), "boxSizing", "");
-  }
-
   // Inject variable when it changes
   useEffect(() => {
     // Get the current editor instance
@@ -255,43 +223,18 @@ const EditorElement2 = ({
     setEditorRef(editorRef);
   }, [setEditorRef, editorRef]);
 
-  //   function zoomEditorContent(editor, scale) {
-  //     var contentArea = editor.getContentAreaContainer();
-  //     var contentDocument = editor.getDoc();
-  //     var contentBody = contentDocument.body;
+  // useEffect(() => {
+  //   if (showExportModal) {
+  //     // Select the 'more' toolbar element. Adjust the selector as needed.
+  //     const moreToolbar = document.querySelector(".tox-toolbar__overflow");
 
-  //     // contentArea.style.overflow = 'auto';
+  //     // Hide the toolbar only when the modal is open
+  //     if (moreToolbar) {
+  //       moreToolbar.style.display = "none";
+  //     }
+  //   }
+  // }, [showExportModal]);
 
-  //     // Apply scale transform
-  //     contentBody.style.transform = 'scale(' + scale + ')';
-  //     contentBody.style.transformOrigin = 'center center'; // Adjust as needed
-  // }
-
-  // function zoomEditorContent(editor, scale) {
-  //   var contentArea = editor.getContentAreaContainer();
-  //   var contentDocument = editor.getDoc();
-  //   var contentBody = contentDocument.body;
-  
-  //   // Calculate the center of the content area
-  //   var centerX = contentArea.clientWidth / 2;
-  
-  //   // Calculate the fixed top position
-  //   var fixedTop = 50; // Set the fixed top value in pixels
-  
-  //   // Apply scale transform
-  //   contentBody.style.transform = `scale(${scale})`;
-  
-  //   // Calculate the translation value to center the content horizontally
-  //   var translateX = (centerX * (1 - scale)).toFixed(2); // Round to two decimal places
-    
-  //   // Apply translation transform to center the content horizontally and keep it fixed from the top
-  //   contentBody.style.transform += ` translate(${translateX}px, ${fixedTop}px)`;
-  
-  //   // Adjust the transformation origin to the center
-  //   contentBody.style.transformOrigin = 'top left'; // Keep the center fixed
-  // }
-
-  
   return (
     <>
       <TemplateAdvanceExportModal
@@ -306,91 +249,6 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
-            // On Init setup
-            editor.on("init", function () {
-              applyCanvasStyle(editor, "A4", "portrait"); // Set default to A4 portrait
-            });
-            // editor.ui.registry.addMenuButton("zoom", {
-            //   text: "Zoom",
-            //   fetch: function (callback) {
-            //     var items = [
-            //       { text: "50%", value: "0.5" },
-            //       { text: "75%", value: "0.75" },
-            //       { text: "100%", value: "1" },
-            //       // Add more zoom levels as needed
-            //     ];
-            //     callback(
-            //       items.map(function (item) {
-            //         return {
-            //           type: "menuitem",
-            //           text: item.text,
-            //           onAction: function () {
-            //             zoomEditorContent(editor, item.value);
-            //           },
-            //         };
-            //       })
-            //     );
-            //   },
-            // });
-
-            editor.ui.registry.addMenuButton("changeSize", {
-              text: "Page Size",
-              fetch: function (callback) {
-                var items = [
-                  {
-                    type: "menuitem",
-                    text: "Default",
-                    onAction: function () {
-                      revertToNormalStyle(editor);
-                    },
-                  },
-                  {
-                    type: "menuitem",
-                    text: "A4 Portrait",
-                    onAction: function () {
-                      applyCanvasStyle(editor, "A4", "portrait");
-                    },
-                  },
-                  {
-                    type: "menuitem",
-                    text: "A4 Landscape",
-                    onAction: function () {
-                      applyCanvasStyle(editor, "A4", "landscape");
-                    },
-                  },
-                  {
-                    type: "menuitem",
-                    text: "A3 Portrait",
-                    onAction: function () {
-                      applyCanvasStyle(editor, "A3", "portrait");
-                    },
-                  },
-                  {
-                    type: "menuitem",
-                    text: "A3 Landscape",
-                    onAction: function () {
-                      applyCanvasStyle(editor, "A3", "landscape");
-                    },
-                  },
-                  {
-                    type: "menuitem",
-                    text: "Letter Portrait",
-                    onAction: function () {
-                      applyCanvasStyle(editor, "A3", "portrait");
-                    },
-                  },
-                  {
-                    type: "menuitem",
-                    text: "Letter Landscape",
-                    onAction: function () {
-                      applyCanvasStyle(editor, "Letter", "landscape");
-                    },
-                  },
-                  // ... similarly for A3 and other sizes
-                ];
-                callback(items);
-              },
-            });
             editor.on("keydown", (event) => handleNodeChange(event, editor));
             // Register Icons
             editor.ui.registry.addIcon(
@@ -562,17 +420,14 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize | " +
+            "undo redo | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsizeinput | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
-            "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPreviewButton | help",
+            "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPDFButton exportDocxButton exportPreviewButton |  help",
           content_style:
-            "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; }",
+            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           file_picker_callback: handleFilePickerCallback,
-          font_size_input_default_unit: "point",
-          font_size_formats:
-            "6pt 8pt 9pt 10pt 11pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 34pt 36pt 38pt 40pt 42pt 44pt 46pt 48pt 50pt 55pt 60pt 65pt 70pt 75pt 80pt 85pt 90pt 95pt 100pt",
           images_upload_handler: imageUploadHandler,
           file_picker_types: "media",
           // table_default_styles: {

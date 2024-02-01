@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Col, Input, Row } from "reactstrap";
 import { useSelector } from "react-redux";
-import { DynamicTable } from "@Workspace/common";
+import { DynamicTable } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 
 const DynamicTableWrapper = ({

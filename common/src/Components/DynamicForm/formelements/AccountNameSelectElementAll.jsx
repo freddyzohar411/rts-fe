@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import {
+  fetchAccountById,
+  fetchAccountByIdReset,
   fetchAccountContacts,
   fetchAccountNamesAll,
 } from "../../../store/actions";
@@ -24,6 +26,7 @@ const AccountNameSelectElementAll = ({
 
   useEffect(() => {
     dispatch(fetchAccountNamesAll());
+    dispatch(fetchAccountByIdReset());
   }, []);
 
   useEffect(() => {
@@ -39,9 +42,9 @@ const AccountNameSelectElementAll = ({
 
   useEffect(() => {
     if (formik?.values?.[field.name]) {
-      dispatch(
-        fetchAccountContacts(parseInt(namesToid(formik?.values?.[field.name])))
-      );
+      const accountId = parseInt(namesToid(formik?.values?.[field.name]));
+      dispatch(fetchAccountContacts(accountId));
+      dispatch(fetchAccountById(accountId));
     }
     if (formik?.values?.[field.name] === "") {
       dispatch(fetchAccountContacts(-99));

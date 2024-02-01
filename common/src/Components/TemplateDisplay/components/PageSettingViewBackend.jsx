@@ -1,46 +1,22 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./PageSettingView.scss";
-import ReactHtmlParser from "react-html-parser";
 import * as ExportHelper from "../../../helpers/export_helper";
 
-const PageSettingView = ({ pageSize = "a4", settings, content }) => {
+const PageSettingViewBackend = ({ settings, content }) => {
   const iframeRef = useRef(null);
-  const [paginationInfo, setPaginationInfo] = useState({
-    numberOfPages: 0,
-    breakPoints: [],
-  });
-
-  const {
-    unit,
-    pageType,
-    pageOrientation,
-    marginTop,
-    marginBottom,
-    marginLeft,
-    marginRight,
-  } = settings;
-
-  const generateMarginStyle = () => {
-    let conversion = 96;
-
-    if (unit === "mm") {
-      conversion = 3.7795275591;
-    }
-
-    return {
-      paddingTop: `${margin.top * conversion}px`,
-      paddingRight: `${margin.right * conversion}px`,
-      paddingBottom: `${margin.bottom * conversion}px`,
-      paddingLeft: `${margin.left * conversion}px`,
-    };
-  };
+  console.log("content", content)
 
   useEffect(() => {
     const fetchData = async () => {
-      if (iframeRef.current && content) {
-        const pdfBlob = await ExportHelper.convertHtmlToPdfBlob(content, {
-          ...settings,
-        });
+      if (iframeRef.current && content.html) {
+        console.log("content", content.html )
+        const pdfBlob = await ExportHelper.exportBackendHtml2PdfBlobExtCss(
+          content.html,
+          {
+            ...settings,
+          },
+          content.styleTag
+        );
         // Assuming you have a Blob object named 'pdfBlob' representing your PDF data
         const blobUrl = URL.createObjectURL(pdfBlob);
 
@@ -49,7 +25,9 @@ const PageSettingView = ({ pageSize = "a4", settings, content }) => {
       }
     };
 
-    fetchData();
+    if (content) {
+      fetchData();
+    }
 
     return () => {
       // Clean up the Blob URL when the component unmounts
@@ -58,7 +36,7 @@ const PageSettingView = ({ pageSize = "a4", settings, content }) => {
       }
     };
   }, [
-    content,
+    content.html,
     settings.marginBottom,
     settings.marginLeft,
     settings.marginRight,
@@ -84,4 +62,4 @@ const PageSettingView = ({ pageSize = "a4", settings, content }) => {
   );
 };
 
-export default PageSettingView;
+export default PageSettingViewBackend;

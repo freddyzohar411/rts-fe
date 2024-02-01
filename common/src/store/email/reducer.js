@@ -8,6 +8,8 @@ import {
 
 const initialState = {
   isEmailOpen: false,
+  category: "",
+  subCategory: "",
   emailResponse: {},
   errorMsg: "",
   loading: false,
@@ -36,13 +38,18 @@ const EmailCommonReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
     case SET_EMAIL_OPEN:
+      const { category, subCategory } = action.payload;
       return {
         ...state,
+        category,
+        subCategory,
         isEmailOpen: true,
       };
     case SET_EMAIL_CLOSE:
       return {
         ...state,
+        category: "",
+        subCategory: "",
         isEmailOpen: false,
       };  
     default:

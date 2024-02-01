@@ -1,13 +1,20 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 
-import { FETCH_ACCOUNT_NAMES, FETCH_ACCOUNT_NAMES_ALL } from "./actionTypes";
+import {
+  FETCH_ACCOUNT_BY_ID,
+  FETCH_ACCOUNT_NAMES,
+  FETCH_ACCOUNT_NAMES_ALL,
+} from "./actionTypes";
 import {
   fetchAccountNamesSuccess,
   fetchAccountNamesFailure,
   fetchAccountNamesAllFailure,
   fetchAccountNamesAllSuccess,
+  fetchAccountByIdSuccess,
+  fetchAccountByIdFailure,
 } from "./action";
 import {
+  getAccountById,
   getAccountNames,
   getAccountNamesAll,
 } from "../../helpers/backend_helper";
@@ -30,7 +37,17 @@ function* workFetchAccountNamesAll() {
   }
 }
 
+function* workFetchAccountById(action) {
+  try {
+    const response = yield call(getAccountById, action.payload);
+    yield put(fetchAccountByIdSuccess(response.data));
+  } catch (error) {
+    yield put(fetchAccountByIdFailure(error));
+  }
+}
+
 export default function* watchFetchAccountNamesSaga() {
-  yield takeLatest(FETCH_ACCOUNT_NAMES, workFetchAccountNames);
-  yield takeLatest(FETCH_ACCOUNT_NAMES_ALL, workFetchAccountNamesAll);
+  yield takeEvery(FETCH_ACCOUNT_NAMES, workFetchAccountNames);
+  yield takeEvery(FETCH_ACCOUNT_NAMES_ALL, workFetchAccountNamesAll);
+  yield takeEvery(FETCH_ACCOUNT_BY_ID, workFetchAccountById);
 }
