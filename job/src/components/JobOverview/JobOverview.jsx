@@ -413,7 +413,7 @@ function JobOverview() {
                             className={`text-center align-middle cursor-pointer ${
                               isLabels && "text-nowrap"
                             }`}
-                            key={header}
+                            key={index}
                             scope="col"
                             style={{
                               width: isLabels ? "120px" : "150px",
@@ -431,6 +431,15 @@ function JobOverview() {
                     </tr>
                   </thead>
                   {jobTimelineData?.jobs?.map((data, index) => {
+                    const values = Object.values(data?.timeline);
+                    let maxOrder = 1;
+                    if (values) {
+                      let orders = values?.map((item) => item?.order);
+                      if (orders) {
+                        orders = orders.sort((a, b) => b - a);
+                        maxOrder = orders?.[0] ?? 1;
+                      }
+                    }
                     return (
                       <tbody key={index}>
                         <tr className="text-center align-top">
@@ -439,15 +448,9 @@ function JobOverview() {
                           {steps.map((step, index) => (
                             <td key={index} className="px-0">
                               <StepComponent
-                                timelineState={
-                                  data?.timeline[step] ? index : index - 1
-                                }
                                 index={index}
-                                stepLength={
-                                  (Object.keys(data?.timeline)?.length ?? 1) - 1
-                                }
-                                date={data?.timeline?.[step]?.date}
-                                status={data?.timeline?.[step]?.status}
+                                maxOrder={maxOrder}
+                                data={data?.timeline?.[step]}
                               />
                             </td>
                           ))}

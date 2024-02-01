@@ -14,14 +14,14 @@ export const JOB_TIMELINE_INITIAL_OPTIONS = [
 ];
 
 export const steps = [
-  "TAG",
-  "ASSOCIATE",
-  "SUBMIT_TO_SALES",
-  "SUBMIT_TO_CLIENT",
-  "PROFILE_FEEDBACK_PENDING",
-  "SCHEDULE_INTERVIEW",
-  7,
-  8,
+  "Tag",
+  "Associate",
+  "Submit to Sales",
+  "Submit to Client",
+  "Profile Feedback Pending",
+  "Interviews",
+  "Conditional Offer Sent",
+  "Conditional Offer Accepted/Declined",
 ];
 
 export const jobHeaders = [
