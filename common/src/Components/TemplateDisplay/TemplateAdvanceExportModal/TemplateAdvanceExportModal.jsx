@@ -148,6 +148,44 @@ const TemplateAdvanceExportModal = ({
         ...templateSettings,
       });
     }
+
+    if (templateSettings.exportType === "pdfClient") {
+      if (toExport) {
+        await ExportHelper.generatePDFCustomMulti(showContent.oldHtml, {
+          ...templateSettings,
+        });
+      } else {
+        const file = await ExportHelper.convertHtmlToPdfFile(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+        );
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
+
+    if (templateSettings.exportType === "docxClient") {
+      if (toExport) {
+        await ExportHelper.generateDocxCustom(showContent.oldHtml,
+          {
+            ...templateSettings,
+          },
+        );
+      } else {
+        const file = await ExportHelper.convertHtmlToDocxFile(showContent.oldHtml, {
+            ...templateSettings,
+          },
+        );
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
   };
 
   useEffect(() => {
@@ -200,8 +238,8 @@ const TemplateAdvanceExportModal = ({
   }, [templateContent, allData, content]);
 
   // console.log("Old content: ", showContent.oldHtml);
-  console.log("Style Tag: ", showContent.styleTag);
-  console.log("showContent", showContent.html);
+  // console.log("Style Tag: ", showContent.styleTag);
+  // console.log("showContent", showContent.html);
 
   return (
     // <div style={{ zIndex: 9999999999999 }}>

@@ -191,6 +191,8 @@ const TemplateSettingsSideBar = ({
               { label: "Pdf", value: "pdf" },
               { label: "Docx", value: "docx" },
               { label: "Html", value: "html" },
+              { label: "Pdf Client", value: "pdfClient" },
+              { label: "Docx Client", value: "docxClient" },
             ]}
             setSelectedOptionData={(e) =>
               setSettings((prev) => ({ ...prev, exportType: e.value }))

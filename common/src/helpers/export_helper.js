@@ -66,9 +66,9 @@ const generatePDFMulti = async (element, type = "save", options) => {
   } = options;
 
   const pageTypeMap = {
-    a4: "A4",
-    a3: "A3",
-    letter: "letter",
+    A4: "A4",
+    A3: "A3",
+    Letter: "letter",
   };
 
   const fileName = filename ? filename + ".pdf" : "test.pdf";

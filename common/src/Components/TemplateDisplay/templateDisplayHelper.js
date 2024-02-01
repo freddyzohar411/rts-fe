@@ -625,6 +625,119 @@ console.log("C")
 //   recursiveTraverse(root, "12pt"); // Start with a default font size of 12pt
 //   return root.toString();
 // }
+console.log("D")
+// function wrapTextWithIns(htmlString) {
+//   let el = "ins";
+//   const root = parse(htmlString);
+
+//   let keywordMapping = {
+//     small: 10, 
+//     medium: 12,
+//     large: 16,
+//     // Add more keywords and their corresponding sizes here
+//   };
+
+//   function convertPercentageToPt(fontSize, parentFontSize) {
+//     const percentage = parseFloat(fontSize);
+//     const ptSize = (percentage / 100) * 12; 
+//     return `${ptSize}pt`;
+//   }
+
+//   function convertKeywordToPt(keyword, referenceFontSize = "12pt") {
+//     const fontSizeInPt = keywordMapping[keyword.toLowerCase()] || 12;
+//     return `${fontSizeInPt}pt`;
+//   }
+
+//   function findFontSize(node, inheritedFontSize = "12pt") {
+//     while (node && node !== root) {
+//       const style = node.attributes && node.attributes.style;
+//       let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
+//       if (fontSize) {
+//         if (fontSize.endsWith("%")) {
+//           fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
+//         } else if (fontSize.toLowerCase() in keywordMapping) {
+//           fontSize = convertKeywordToPt(fontSize.toLowerCase(), inheritedFontSize);
+//         }
+//         return fontSize;
+//       }
+//       node = node.parentNode;
+//     }
+//     return inheritedFontSize;
+//   }
+
+//   function checkParentStyle(node) {
+//     let fontStyle = "";
+//     while (node && node !== root) {
+//       if (node.tagName === "EM") {
+//         fontStyle += "font-style: italic; ";
+//       } else if (node.tagName === "STRONG") {
+//         fontStyle += "font-weight: bold; ";
+//       } else if (node.tagName === "U") {
+//         fontStyle += "text-decoration: underline; ";
+//       } else if (node.tagName === "S") {
+//         fontStyle += "text-decoration: line-through; ";
+//       } else if (node.tagName === "SUB") {
+//         fontStyle += "vertical-align: sub; ";
+//       } else if (node.tagName === "SUP") {
+//         fontStyle += "vertical-align: super; ";
+//       }
+
+//       const style = node.attributes && node.attributes.style;
+//       let fontWeight = style ? style.match(/font-weight:\s*([^;]+);?/i)?.[1] : null;
+//       if (fontWeight) {
+//         fontStyle += `font-weight: ${fontWeight}; `;
+//       }
+
+//       // Check for font color in style
+//       let fontColor = style ? style.match(/color:\s*([^;]+);?/i)?.[1] : null;
+//       if (fontColor) {
+//         fontStyle += `color: ${fontColor}; `;
+//       }
+
+//       node = node.parentNode;
+//     }
+//     return fontStyle;
+//   }
+
+//   function recursiveTraverse(node, inheritedFontSize) {
+//     if (node instanceof HTMLElement) {
+//       node.childNodes.forEach((child, index) => {
+//         if (child.nodeType === 3 && child.text.trim() !== "") {
+//           if (
+//             node.tagName !== "P" &&
+//             !/^H[1-6]$/i.test(node.tagName) &&
+//             !/^(TABLE|TR|TD|TH|THEAD|TBODY|TFOOT|COL|COLGROUP)$/i.test(node.tagName)
+//           ) {
+//             const ins = new HTMLElement(el, {}, "", node);
+//             ins.set_content(child.text);
+
+//             let style = "";
+//             const fontSize = findFontSize(node, inheritedFontSize);
+//             if (fontSize) {
+//               style += `font-size: ${fontSize};`;
+//             }
+
+//             const parentStyle = checkParentStyle(node);
+//             if (parentStyle) {
+//               style += parentStyle;
+//             }
+
+//             if (style) {
+//               ins.setAttribute("style", style);
+//             }
+//             node.childNodes[index] = ins;
+//           }
+//         } else if (child instanceof HTMLElement) {
+//           const childFontSize = findFontSize(child, inheritedFontSize);
+//           recursiveTraverse(child, childFontSize);
+//         }
+//       });
+//     }
+//   }
+
+//   recursiveTraverse(root, "12pt"); 
+//   return root.toString();
+// }
 
 function wrapTextWithIns(htmlString) {
   let el = "ins";
@@ -667,6 +780,7 @@ function wrapTextWithIns(htmlString) {
 
   function checkParentStyle(node) {
     let fontStyle = "";
+    let fontFamily = "";
     while (node && node !== root) {
       if (node.tagName === "EM") {
         fontStyle += "font-style: italic; ";
@@ -694,9 +808,15 @@ function wrapTextWithIns(htmlString) {
         fontStyle += `color: ${fontColor}; `;
       }
 
+      // Check for font family in style
+      let foundFontFamily = style ? style.match(/font-family:\s*([^;]+);?/i)?.[1] : null;
+      if (foundFontFamily) {
+        fontFamily = `font-family: ${foundFontFamily}; `;
+      }
+
       node = node.parentNode;
     }
-    return fontStyle;
+    return fontStyle + fontFamily;
   }
 
   function recursiveTraverse(node, inheritedFontSize) {

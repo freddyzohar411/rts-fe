@@ -109,16 +109,7 @@ const TemplateBuilder = forwardRef(
       }
     }, [selectedSection]);
 
-    // const convertToHtml = async (file, setTemplateContent) => {
-    //   try {
-    //     const result = await mammoth.convertToHtml({
-    //       arrayBuffer: await file.arrayBuffer(),
-    //     });
-    //     setTemplateContent(result.value);
-    //   } catch (error) {
-    //     console.error("Error converting Word to HTML:", error);
-    //   }
-    // };
+  
 
     // Get all categories
     useEffect(() => {
@@ -249,7 +240,7 @@ const TemplateBuilder = forwardRef(
       return false;
     };
 
-    // Convert docx to html
+    // Convert docx to html (Backend)
     const convDocToHtml = async (file, setTemplateContent) => {
       // if file is excel
 
@@ -326,6 +317,18 @@ const TemplateBuilder = forwardRef(
       //     console.log(err);
       //   });
     };
+
+      // Convert docx to html (Frontend)
+    // const convDocToHtml = async (file, setTemplateContent) => {
+    //   try {
+    //     const result = await mammoth.convertToHtml({
+    //       arrayBuffer: await file.arrayBuffer(),
+    //     });
+    //     setTemplateContent(result.value);
+    //   } catch (error) {
+    //     console.error("Error converting Word to HTML:", error);
+    //   }
+    // };
 
     return (
       <div className="d-flex flex-column gap-2">
