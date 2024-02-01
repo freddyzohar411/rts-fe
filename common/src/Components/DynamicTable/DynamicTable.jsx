@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Input,
   Table,
@@ -10,6 +10,17 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (data && data.length === 0) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } else {
+      setIsLoading(true);
+    }
+  }, [data]);
+
   // ========================================= Table Configuration ===========================
   // Generate Header
   const generateHeaderJSX = (config) => (
@@ -65,13 +76,17 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
           <tbody className="list form-check-all">
             {data && data.length > 0 ? (
               generateBodyJSX(config, data)
+            ) : isLoading ? (
+              <tr>
+                <td colSpan={config.length}>
+                  <Skeleton count={2} />
+                </td>
+              </tr>
             ) : (
               <tr>
-                
-                <td colSpan={config.length}><Skeleton count={7} style={{marginBottom: "10px"}} /></td>
+                <td colSpan={config.length}>No data available.</td>
               </tr>
             )}
-            {/* {data && generateBodyJSX(config, data)} */}
           </tbody>
         </Table>
       </div>

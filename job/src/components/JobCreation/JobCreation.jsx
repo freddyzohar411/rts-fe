@@ -15,11 +15,12 @@ import { useUserAuth } from "@workspace/login";
 import JobDocument from "./JobDocument";
 import { useRef } from "react";
 import DeleteDraftModal from "./DeleteDraftModal";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const JobCreation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
   const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
   const { jobId } = useParams();
 
@@ -40,26 +41,13 @@ const JobCreation = () => {
   const [randomId, setRandomId] = useState();
   const [deleteDraftModal, setDeleteDraftModal] = useState(false);
 
-  // Fetch all the countries and account names
+  // Fetch all the countries and account nameS
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      await dispatch(fetchJobForm(JOB_FORM_NAME));
-      if (!jobId) {
-        await dispatch(fetchDraftJob());
-      }
-      setIsLoading(false); // Move this line inside the async block
-    };
-
-    fetchData();
+    dispatch(fetchJobForm(JOB_FORM_NAME));
+    if (!jobId) {
+      dispatch(fetchDraftJob());
+    }
   }, []);
-
-  // useEffect(() => {
-  //   dispatch(fetchJobForm(JOB_FORM_NAME));
-  //   if (!jobId) {
-  //     dispatch(fetchDraftJob());
-  //   }
-  // }, []);
 
   /**
    * Fetch form template based on step
@@ -83,12 +71,10 @@ const JobCreation = () => {
   }, [jobId, editId]);
 
   useEffect(() => {
-    setIsLoading(true);
     dispatch(clearJobFormSubmission());
     if (jobId) {
       dispatch(fetchJobFormSubmission(jobId));
     }
-    setIsLoading(false);
   }, [jobId]);
 
   /**
@@ -150,7 +136,6 @@ const JobCreation = () => {
   };
 
   document.title = "Job Creation | RTS";
-  console.log("Is Loading Job Creation: ", isLoading);
 
   return (
     <div>
@@ -159,19 +144,28 @@ const JobCreation = () => {
         setModal={setDeleteDraftModal}
         deleteId={randomId}
       />
-      <Form
-        template={formTemplate}
-        userDetails={getAllUserGroups()}
-        country={null}
-        editData={formSubmissionData}
-        onSubmit={handleFormSubmit}
-        onFormFieldsChange={handleFormFieldChange}
-        errorMessage={null}
-        view={view}
-        ref={formikRef}
-        isLoading={isLoading}
-      />
-      <JobDocument jobId={randomId} view={view} />
+      {formTemplate ? (
+        <Form
+          template={formTemplate}
+          userDetails={getAllUserGroups()}
+          country={null}
+          editData={formSubmissionData}
+          onSubmit={handleFormSubmit}
+          onFormFieldsChange={handleFormFieldChange}
+          errorMessage={null}
+          view={view}
+          ref={formikRef}
+        />
+      ) : (
+        <Skeleton count={3} />
+      )}
+
+      {randomId ? (
+        <JobDocument jobId={randomId} view={view} />
+      ) : (
+        <Skeleton count={3} />
+      )}
+
       <div className={`d-flex justify-content-between align-items-center mb-2`}>
         <div className="d-flex gap-2">
           {jobId && checkReadEditPermission() && (

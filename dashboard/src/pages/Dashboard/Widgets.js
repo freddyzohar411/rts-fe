@@ -151,7 +151,7 @@ const Widgets = () => {
                     >
                       {item.statusArray && renderStatusArray(item.statusArray)}
                       <div className={`${isTablet && "text-center"}`}>
-                        <h4 className={`"fs-1 fw-bold ff-secondary"`}>
+                        <h4 className="fs-1 fw-bold ff-secondary">
                           <span className="counter-value" data-target="559.25">
                             {item?.key !== "offer_status" && (
                               <CountUp

@@ -19,6 +19,8 @@ import {
   JOB_FILTERS,
   JOB_INITIAL_OPTIONS,
 } from "../JobListing/JobListingConstants";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const DynamicTableWrapper = ({
   data,

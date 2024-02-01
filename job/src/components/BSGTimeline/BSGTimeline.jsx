@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Table } from "reactstrap";
 import { bsgStatusHeaders, sampleData, steps } from "./BSGTimelineConstants";
 import StepComponent from "../JobOverview/StepComponent";
+import BSGStepComponent from "./BSGStepComponent";
 
 function BSGTimeline() {
+  const [bsgStep, setBsgStep] = useState(null);
+
   return (
     <React.Fragment>
       <div className="overflow-auto">
@@ -28,12 +31,15 @@ function BSGTimeline() {
           <tbody>
             {sampleData.map((data, index) => {
               return (
-                <tr className="text-center align-top p-0" key={index}>
-                  <td>{data.candidateName}</td>
-                  <td>{data.recruiterName}</td>
+                <tr className="text-center align-top" key={index}>
+                  <td className="py-3">{data.candidateName}</td>
+                  <td className="py-3">{data.recruiterName}</td>
                   {steps.map((step, index) => (
-                    <td key={index} className="p-0">
-                      <StepComponent />
+                    <td
+                      key={index}
+                      className="px-0"
+                    >
+                      <BSGStepComponent index={index} timelineState={bsgStep} />
                     </td>
                   ))}
                 </tr>

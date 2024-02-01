@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Row,
   Col,
+  Card,
+  CardBody,
   Button,
   Input,
   Nav,
@@ -15,6 +17,7 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
+  Popover,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -27,6 +30,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
+import "./StepComponent.scss";
 
 // Elements
 // import { SelectElement } from "@workspace/common";
@@ -49,6 +53,7 @@ import {
   rtsStatusHeaders,
   steps,
   timelineSkip,
+  timelineLegend,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -61,6 +66,7 @@ function JobOverview() {
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
+  const [legendPopoverOpen, setLegendPopoverOpen] = useState(false);
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
@@ -91,7 +97,7 @@ function JobOverview() {
     (state) => state.JobStageReducer.jobTimeline
   );
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
-
+  console.log(timelineLegend);
   // Custom renders
   const customRenderList = [
     {
@@ -327,6 +333,42 @@ function JobOverview() {
         : input
       : "";
 
+  const renderLegend = () => {
+    return (
+      <div className="p-3 ms-2">
+        <div className="mb-2">
+          <span className="fw-semibold">Legend</span>
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "10px",
+          }}
+        >
+          {timelineLegend.map((legend, index) => (
+            <div
+              key={index}
+              className="d-flex flex-row align-items-center mb-2"
+            >
+              <div
+                className={`rounded-circle bg-${legend.color} me-3`}
+                style={{
+                  width: "9px",
+                  height: "9px",
+                  backgroundColor: `${legend.color}`,
+                }}
+              ></div>
+              <div className="me-2">
+                <span>{legend.legend}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <React.Fragment>
       <div>
@@ -388,6 +430,21 @@ function JobOverview() {
                     </div>
                   </div>
                 </div>
+                <div
+                  id="legendPopover"
+                  className="d-flex align-items-center justify-content-center cursor-pointer ms-2"
+                >
+                  <i className="ri-question-line fw-medium"></i>
+                </div>
+                <Popover
+                  target="legendPopover"
+                  isOpen={legendPopoverOpen}
+                  toggle={() => setLegendPopoverOpen(!legendPopoverOpen)}
+                  className="custom-popover"
+                  trigger="legacy"
+                >
+                  {renderLegend()}
+                </Popover>
               </div>
 
               <div className="d-flex flex-row gap-2 align-items-center">
