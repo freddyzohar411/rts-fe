@@ -70,7 +70,7 @@ const AccountCreation = () => {
     (state) => state.AccountReducer.updateMeta
   );
 
-  const MAX_STEP = 6;
+  const MAX_STEP = 5; //C
   const [step, setStep] = useState(0);
   // const [formFormik, setFormFormik] = useState(null);
   const formikRef = useRef(null);
@@ -191,7 +191,7 @@ const AccountCreation = () => {
           )
         );
       }
-      if (step === 5) {
+      if (step === 4) {
         dispatch(
           fetchAccountFormSubmission(
             AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -566,7 +566,7 @@ const AccountCreation = () => {
       }
     }
 
-    if (step === 5) {
+    if (step === 4) {
       // Create commercial
       const formData = {
         ...newValues,
@@ -617,7 +617,7 @@ const AccountCreation = () => {
   useEffect(() => {
     if (createMetaData?.isSuccess) {
       dispatch(accountResetMetaData());
-      if (step === 5) {
+      if (step === 4) {
         navigate("/accounts");
         return;
       }
@@ -631,7 +631,7 @@ const AccountCreation = () => {
   useEffect(() => {
     if (updateMetaData?.isSuccess) {
       dispatch(accountResetMetaData());
-      if (step === 5) {
+      if (step === 4) {
         navigate("/accounts");
         return;
       }
