@@ -18,7 +18,7 @@ import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
 
 const AccountListing = () => {
-  const { Permission, checkAllPermission, checkAnyRole } = useUserAuth();
+  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
   const dispatch = useDispatch();
   const accountsData = useSelector((state) => state.AccountReducer.accounts);
   const accountsFields = useSelector(
@@ -202,7 +202,7 @@ const AccountListing = () => {
 
   // Fetch the account when the pageRequest changes
   useEffect(() => {
-    if (checkAnyRole(["Admin"])) {
+    if (checkAnyRole([Role.ADMIN])) {
       dispatch(
         fetchAccountsAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
       );

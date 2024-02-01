@@ -32,7 +32,7 @@ import { RECRUITER_GROUP } from "../../helpers/constant";
 import JobTagCanvas from "./JobTagCanvas";
 
 const JobListing = () => {
-  const { Permission, checkAllPermission, checkAnyRole } = useUserAuth();
+  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
   const dispatch = useDispatch();
   const { jobType } = useParams();
 
@@ -120,7 +120,7 @@ const JobListing = () => {
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     const request = { ...pageRequest, jobType };
-    if (checkAnyRole(["Admin"])) {
+    if (checkAnyRole([Role.ADMIN])) {
       dispatch(fetchJobsAdmin(DynamicTableHelper.cleanPageRequest(request)));
       return
     }
