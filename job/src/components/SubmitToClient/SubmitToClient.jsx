@@ -118,7 +118,11 @@ function SubmitToClient({
                     className="btn btn-custom-primary"
                     onClick={() => {
                       // setSendEmailModal(true);
-                      dispatch(Actions.setEmailOpen());
+                      dispatch(
+                        Actions.setEmailOpen({
+                          category: "Email Templates",
+                        })
+                      );
                     }}
                   >
                     Send Email
