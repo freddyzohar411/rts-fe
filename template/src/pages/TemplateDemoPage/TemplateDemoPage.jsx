@@ -207,7 +207,6 @@ const TemplateBuilderPage = () => {
                             type="button"
                             className="self-end"
                             onClick={() => {
-                              console.log("selectedTemplate", selectedTemplate);
                               setAllIdsHandler();
                               handleSetHandler();
                             }}

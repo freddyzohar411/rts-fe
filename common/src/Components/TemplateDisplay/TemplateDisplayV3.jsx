@@ -249,7 +249,6 @@ const TemplateDisplayV3 = ({
                   onAction: function () {
                     var selectedText = editor.selection.getContent();
                     var range = editor.selection.getRng();
-
                     const span = editor.selection.getNode();
                     if (span && span.tagName === "SPAN") {
                       const selectedRange = editor.selection.getRng();

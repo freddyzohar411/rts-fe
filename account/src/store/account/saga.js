@@ -171,7 +171,6 @@ function* workFetchAccountData(action) {
     const response = yield call(getAccountDataById, action.payload);
     yield put(fetchAccountDataSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching account data");
     yield put(fetchAccountDataFailure(error));
   }
 }
@@ -181,7 +180,6 @@ function* workFetchAccountsFieldsAll() {
     const response = yield call(getAccountsFieldsAll);
     yield put(fetchAccountsFieldsAllSuccess(response.data));
   } catch (error) {
-    toast.error("Error fetching accounts fields");
     yield put(fetchAccountsFieldsAllFailure(error));
   }
 }

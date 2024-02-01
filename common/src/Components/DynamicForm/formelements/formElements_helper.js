@@ -31,6 +31,7 @@ import {
 import AccountNameSelectElement from "./AccountNameSelectElement";
 import AccountNameSelectAllElement from "./AccountNameSelectElementAll";
 import AccountContactSelectElement from "./AccountContactSelectElement";
+import AccountOwnerElement from "./AccountOwnerElement";
 import FormTemplateSelectElement from "./FormTemplateSelectElement";
 import MultiInputElement from "./MultiInputElement";
 
@@ -148,6 +149,16 @@ const generateFormField = (
   if (type === "selectaccountcontact") {
     return (
       <AccountContactSelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "accountowner") {
+    return (
+      <AccountOwnerElement
         formik={formik}
         field={field}
         formStateHook={formStateHook}
@@ -338,7 +349,7 @@ const generateFormField = (
       />
     );
   }
-  
+
   // text & button
   if (type === "word") {
     return <TextElement field={field} />;
