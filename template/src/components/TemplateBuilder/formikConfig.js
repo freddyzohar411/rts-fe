@@ -6,6 +6,7 @@ export const populateForm = (value) => {
     name: value.name,
     description: value.description,
     category: value.category,
+    subCategory: value.subCategory,
     content: value.content,
   };
 };
@@ -15,6 +16,7 @@ export const initialValues = {
   name: "",
   description: "",
   category: "",
+  subCategory: "",
   content: "",
 };
 
@@ -23,6 +25,7 @@ export const generateSchema = () => {
     id: yup.number().nullable().notRequired(),
     name: yup.string().required("Please enter a name."),
     category: yup.string().required("Please enter a category."),
+    subCategory: yup.string().nullable().notRequired(),
     description: yup.string().nullable().notRequired(),
     content: yup.string().required("Please enter a content."),
   });
@@ -32,6 +35,7 @@ export const schema = yup.object().shape({
   id: yup.number().nullable().notRequired(),
   name: yup.string().required("Please enter a name."),
   category: yup.string().required("Please enter a category."),
+  subCategory: yup.string().nullable().notRequired(),
   description: yup.string().nullable().notRequired(),
   content: yup.string().required("Please enter a content."),
 });

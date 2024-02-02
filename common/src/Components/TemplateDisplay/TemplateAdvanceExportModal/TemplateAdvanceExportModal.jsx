@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Col,
   Row,
@@ -11,70 +11,283 @@ import {
   Container,
 } from "reactstrap";
 import PageSettingView from "../components/PageSettingView";
+import PageSettingViewBackend from "../components/PageSettingViewBackend";
 import TemplateSettingsSideBar from "./TemplateSettingsSideBar";
+import SelectElement from "../components/SelectElement";
+import { ExportHelper } from "../../..";
+import { useDispatch, useSelector } from "react-redux";
+import * as TemplateActions from "../../../../../template/src/store/template/action";
+import * as TemplateHelper from "../templateDisplayHelper";
+import "./TemplateAdvanceExportModal.scss";
 
 const TemplateAdvanceExportModal = ({
   content,
   showInsertModal,
   setShowInsertModal,
   toExport = true,
-  callback,
+  attachmentCallback,
+  allData,
 }) => {
+  const dispatch = useDispatch();
   const [templateSettings, setTemplateSettings] = useState({
     unit: "in",
-    pageType: "a4",
+    pageType: "A4",
     pageOrientation: "portrait",
-    marginTop: 0.1,
-    marginBottom: 0.1,
-    marginLeft: 0.1,
-    marginRight: 0.1,
+    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
     exportType: "pdf",
     fileName: "template",
   });
+  const [typeData, setTypeData] = useState("");
+  const [categorySelected, setCategorySelected] = useState("");
+  const [templateSelected, setTemplateSelected] = useState("");
+  const [templateContent, setTemplateContent] = useState("");
+  const [templateList, setTemplateList] = useState([]);
+  const [showContent, setShowContent] = useState({
+    oldHtml: content,
+    html: "",
+    styleTag: "",
+  });
 
-  const handlePDF = async (fileName) => {
-    if (toExport) {
-      await ExportHelper.generatePDFCustomMulti(
-        content,
-        generateOptions({
-          filename: fileName,
-        })
-      );
-    } else {
-      const file = await ExportHelper.convertHtmlToPdfFile(
-        content,
-        generateOptions({
-          filename: fileName,
-        })
-      );
-      if (callback) {
-        callback(file);
-      }
-      closeModal();
-    }
-  };
+  const templateCategories = useSelector(
+    (state) => state.TemplateReducer.templateCategories
+  );
 
-  const handleDocx = async (fileName) => {
-    if (toExport) {
-      await ExportHelper.generateDocxCustom(content, {
-        filename: fileName,
-      });
-    } else {
-      const file = await ExportHelper.convertHtmlToDocxFile(content, {
-        filename: fileName,
-      });
-      if (callback) {
-        callback(file);
-      }
-      closeModal();
+  const templatesByCategory = useSelector(
+    (state) => state.TemplateReducer.templatesByCategory
+  );
+
+  useEffect(() => {
+    if (showInsertModal) {
+      dispatch(TemplateActions.fetchTemplateCategories());
     }
-  };
+  }, [showInsertModal]);
+
+  useEffect(() => {
+    if (categorySelected == null || categorySelected == "") {
+      setTemplateList([]);
+      setTemplateSelected("");
+    }
+    if (categorySelected) {
+      setTemplateSelected("");
+      dispatch(TemplateActions.fetchTemplateByCategory(categorySelected.value));
+    }
+  }, [categorySelected]);
+
+  useEffect(() => {
+    if (templatesByCategory) {
+      setTemplateList(
+        templatesByCategory.map((template) => ({
+          label: template.name,
+          value: template.name,
+        }))
+      );
+    }
+  }, [templatesByCategory]);
 
   const closeModal = () => {
     setShowInsertModal(false);
+    // setShowContent("");
   };
 
+  const handleExport = async () => {
+    if (templateSettings.exportType === "pdf") {
+      if (toExport) {
+        // await ExportHelper.generatePDFCustomMulti(showContent, {
+        await ExportHelper.exportBackendHtml2Pdf(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
+        );
+      } else {
+        // const file = await ExportHelper.convertHtmlToPdfFile(showContent, {
+        const file = await ExportHelper.exportBackendHtml2PdfFile(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
+        );
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
+    if (templateSettings.exportType === "docx") {
+      if (toExport) {
+        // await ExportHelper.generateDocxCustom(showContent, {
+        await ExportHelper.exportBackendHtml2Docx(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
+        );
+      } else {
+        // const file = await ExportHelper.convertHtmlToDocxFile(showContent, {
+        const file = await ExportHelper.exportBackendHtml2DocxFile(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
+        );
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
+    if (templateSettings.exportType === "html") {
+      await ExportHelper.generateHtml(showContent.oldHtml, {
+        ...templateSettings,
+      });
+    }
+
+    if (templateSettings.exportType === "pdfClient") {
+      if (toExport) {
+        await ExportHelper.generatePDFCustomMulti(showContent.oldHtml, {
+          ...templateSettings,
+        });
+      } else {
+        const file = await ExportHelper.convertHtmlToPdfFile(showContent.html, {
+          ...templateSettings,
+        });
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
+
+    if (templateSettings.exportType === "docxClient") {
+      if (toExport) {
+        await ExportHelper.generateDocxCustom(showContent.oldHtml, {
+          ...templateSettings,
+        });
+      } else {
+        const file = await ExportHelper.convertHtmlToDocxFile(
+          showContent.oldHtml,
+          {
+            ...templateSettings,
+          }
+        );
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
+
+    if (templateSettings.exportType === "jpeg") {
+      if (toExport) {
+        await ExportHelper.exportBackendHtml2Jpeg(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
+        );
+      } else {
+        const file = await ExportHelper.exportBackendHtml2JpegFile(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
+        );
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
+
+    if (templateSettings.exportType === "png") {
+      if (toExport) {
+        await ExportHelper.exportBackendHtml2Png(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
+        );
+      } else {
+        const file = await ExportHelper.exportBackendHtml2PngFile(
+          showContent.html,
+          {
+            ...templateSettings,
+          },
+          showContent.styleTag
+        );
+        if (attachmentCallback) {
+          attachmentCallback(file);
+        }
+        closeModal();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const setSelectedContentAndProcessed = async () => {
+      const processedContent = await TemplateHelper.runEffects(
+        templateContent,
+        null,
+        allData,
+        true
+      );
+      const removeEditableContent =
+        TemplateHelper.removeContentEditableAndStyles(processedContent);
+
+      const convertTableAttributesContent =
+        TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
+
+      const convertInlineStylesContent =
+        TemplateHelper.convertInlineStylesToClasses(
+          convertTableAttributesContent
+        );
+
+      setShowContent((prev) => ({
+        ...prev,
+        oldHtml: content,
+        ...convertInlineStylesContent,
+      }));
+    };
+
+    if (templateContent && allData) {
+      setSelectedContentAndProcessed();
+      return;
+    }
+    if (content || templateContent) {
+      const removeEditableContent =
+        TemplateHelper.removeContentEditableAndStyles(content);
+
+      const convertTableAttributesContent =
+        TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
+
+      const convertInlineStylesContent =
+        TemplateHelper.convertInlineStylesToClasses(
+          convertTableAttributesContent
+        );
+      setShowContent((prev) => ({
+        ...prev,
+        oldHtml: content,
+        ...convertInlineStylesContent,
+      }));
+    }
+  }, [templateContent, allData, content]);
+
+  // console.log("Old content: ", showContent.oldHtml);
+  console.log("Style Tag: ", showContent.styleTag);
+  console.log("showContent", showContent.html);
+
   return (
+    // <div style={{ zIndex: 9999999999999 }}>
     <Modal
       isOpen={showInsertModal}
       closeModal={() => {
@@ -83,76 +296,106 @@ const TemplateAdvanceExportModal = ({
       centered
       scrollable
       fullscreen
+      className="custom-modal"
     >
       <ModalHeader
-        className="bg-primary "
+        className="bg-custom-primary "
         toggle={() => {
           closeModal();
         }}
+        // style={{ border:"1px solid #e0e0e0" }}
       >
         <div className="d-flex flex-column text-dark">
-          <span className="h5 fw-bold">
+          <span className="h4 fw-bold">
             {toExport ? "Export Template" : "Attach Template"}
           </span>
         </div>
+        {!toExport && (
+          <Row className="align-items-end mb-1" style={{ minWidth: "800px" }}>
+            <Col>
+              <Label>Category</Label>
+              <SelectElement
+                optionsData={templateCategories.map((category) => ({
+                  label: category,
+                  value: category,
+                }))}
+                setSelectedOptionData={setCategorySelected}
+                placeholder="Select a category"
+                value={categorySelected}
+              />
+            </Col>
+            <Col>
+              <Label>Template</Label>
+              <SelectElement
+                optionsData={templateList}
+                value={templateSelected}
+                placeholder="Select a field"
+                setSelectedOptionData={setTemplateSelected}
+                module={typeData}
+              />
+            </Col>
+            <Col>
+              <Button
+                type="button"
+                className="self-end btn-primary"
+                disabled={!templateSelected || !categorySelected}
+                onClick={async () => {
+                  const template = templatesByCategory.filter(
+                    (template) =>
+                      template.name == templateSelected.value &&
+                      template.category === categorySelected.value
+                  )[0];
+                  setTemplateContent(template.content);
+                  setTemplateSelected("");
+                  setCategorySelected("");
+                }}
+              >
+                Preview
+              </Button>
+            </Col>
+          </Row>
+        )}
       </ModalHeader>
       <ModalBody scrollable={true} className="bg-light p-0 border">
-        <div
-          className="d-flex flex-column"
-          style={{ minHeight: "91vh", overflowY: "auto" }}
-        >
+        <div className="d-flex flex-column">
           <Row className="m-0">
             <Col
               className="col-3 pt-3 pb-3 px-4"
               style={{
                 borderRight: "1px grey solid",
                 overflowY: "auto",
-                maxHeight: "620px",
+                maxHeight: "635px",
               }}
             >
               <TemplateSettingsSideBar
                 setSettings={setTemplateSettings}
                 settings={templateSettings}
+                callback={handleExport}
+                toExport={toExport}
               />
             </Col>
             <Col className="col-9">
               <div className="d-flex justify-content-center">
-                <PageSettingView content={content} settings={templateSettings}/>
+                <PageSettingViewBackend
+                  content={showContent}
+                  settings={templateSettings}
+                  toExport={toExport}
+                />
               </div>
             </Col>
           </Row>
-          {/* <Row className="mb-3 mt-3 center d-flex justify-content-center">
-            <div className="w-50 text-center">
-              <span
-                style={{
-                  fontSize: "1.2rem",
-                  fontWeight: "500",
-                }}
-              >
-                {toExport ? "Export Template" : "Attach Template"}
-              </span>
-
-              <div className="mt-3 w-100 d-flex gap-2">
-                <Button
-                  className="w-100 btn-custom-primary"
-                  onClick={() => {
-                    handlePDF(fileName);
-                  }}
-                >
-                  {toExport ? "Export" : "Attach"}
-                </Button>
-              </div>
-            </div>
-          </Row> */}
           <hr className="mt-0" />
-          <div className="d-flex justify-content-end gap-3">
-            <Button className="btn-danger" onClick={() => closeModal()}>
-              Cancel
-            </Button>
-          </div>
+          <Row className="mx-3" style={{ zIndex: "0" }}>
+            <Col className="d-flex justify-content-end">
+              <Button className="btn-danger" onClick={() => closeModal()}>
+                Cancel
+              </Button>
+            </Col>
+          </Row>
         </div>
       </ModalBody>
     </Modal>
+    // </div>
   );
 };
 

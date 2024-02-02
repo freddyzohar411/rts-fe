@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   postAccount,
   putAccount,
-  resetMetaData,
+  accountResetMetaData,
 } from "../../store/account/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
 import {
@@ -70,7 +70,7 @@ const AccountCreation = () => {
     (state) => state.AccountReducer.updateMeta
   );
 
-  const MAX_STEP = 6;
+  const MAX_STEP = 5; //C
   const [step, setStep] = useState(0);
   // const [formFormik, setFormFormik] = useState(null);
   const formikRef = useRef(null);
@@ -191,7 +191,7 @@ const AccountCreation = () => {
           )
         );
       }
-      if (step === 5) {
+      if (step === 4) {
         dispatch(
           fetchAccountFormSubmission(
             AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -208,14 +208,6 @@ const AccountCreation = () => {
       dispatch(clearAccountFormSubmission());
     }
   }, [accountId]);
-
-  /**
-   * Get Formik hook from Form component
-   */
-  // const handleFormikChange = useCallback((formik) => {
-  //   // Handle formik change here
-  //   setFormFormik(formik);
-  // }, []);
 
   /**
    * Get Form field data from Form component
@@ -531,6 +523,7 @@ const AccountCreation = () => {
 
       //Create instruction
       if (formSubmissionData === null) {
+        console.log("here");
         const formData = {
           guidelines: newValues.guidelines,
         };
@@ -573,7 +566,7 @@ const AccountCreation = () => {
       }
     }
 
-    if (step === 5) {
+    if (step === 4) {
       // Create commercial
       const formData = {
         ...newValues,
@@ -619,28 +612,32 @@ const AccountCreation = () => {
   };
 
   /**
-   * Handle Account Success
+   * Handle Account success (Create)
    */
-  if (createMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 5) {
-      navigate("/accounts");
-      return;
+  useEffect(() => {
+    if (createMetaData?.isSuccess) {
+      dispatch(accountResetMetaData());
+      if (step === 4) {
+        navigate("/accounts");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [createMetaData?.isSuccess]);
 
   /**
    * Handle Account success (Update)
    */
-  if (updateMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 5) {
-      navigate("/accounts");
-      return;
+  useEffect(() => {
+    if (updateMetaData?.isSuccess) {
+      dispatch(accountResetMetaData());
+      if (step === 4) {
+        navigate("/accounts");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [updateMetaData?.isSuccess]);
 
   return (
     <>

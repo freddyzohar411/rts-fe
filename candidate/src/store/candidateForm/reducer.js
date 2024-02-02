@@ -68,12 +68,17 @@ const CandidateFormReducer = (state = initialState, action) => {
         error: false,
       };
     case FETCH_CANDIDATEFORM_SUBMISSION_SUCCESS:
-      const submissionData = JSON.parse(action.payload.submissionData);
+      let submissionData = action.payload?.submissionData ?? null;
+      let submissionId = action.payload?.id ?? null;
+      if (submissionData && submissionId) {
+        submissionData = JSON.parse(action.payload?.submissionData);
+        submissionId = parseInt(action.payload.id);
+      }
       return {
         ...state,
         formSubmissionLoading: false,
         formSubmission: submissionData,
-        editId: parseInt(action.payload.id),
+        editId: submissionId,
       };
     case FETCH_CANDIDATEFORM_SUBMISSION_FAILURE:
       return {

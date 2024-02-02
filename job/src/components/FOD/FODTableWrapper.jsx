@@ -53,7 +53,6 @@ const FODTableWrapper = ({
                 </Input>
               </div>
             </div>
-
             <div className="d-flex gap-3">
               <Button className="btn btn-custom-primary">
                 <i className="ri-filter-2-fill"></i>
