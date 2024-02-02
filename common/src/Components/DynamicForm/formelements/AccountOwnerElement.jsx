@@ -5,6 +5,15 @@ import { fieldSize } from "./constant";
 const AccountOwnerElement = ({ formik, field, formStateHook, ...props }) => {
   const data = useSelector((state) => state.AccountNamesReducer.accountById);
 
+  useEffect(() => {
+    if (data?.accountSubmissionData) {
+      formik?.setFieldValue(
+        field.name,
+        data?.accountSubmissionData?.accountOwner ?? "NA"
+      );
+    }
+  }, [data]);
+
   return (
     <div>
       {props?.label && (

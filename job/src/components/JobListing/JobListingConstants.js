@@ -6,9 +6,9 @@ const JOB_INITIAL_OPTIONS = [
     sort: true,
   },
   {
-    sortValue: "job_submission_data.salesManager",
-    label: "Sales Manager",
-    value: "jobSubmissionData.salesManager",
+    sortValue: "job_submission_data.accountOwner",
+    label: "Account Owner",
+    value: "jobSubmissionData.accountOwner",
     sort: true,
   },
   {
