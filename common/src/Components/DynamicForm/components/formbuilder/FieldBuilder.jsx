@@ -1516,9 +1516,21 @@ const FieldBuilder = ({
     validationSchema = generateValidationSchemaForFieldBuilder(schema, type);
   }
 
+  const returnUpdateDataWithoutNull = (data) => {
+    let newData = {};
+    for (let key in data) {
+      if (data[key] !== null) {
+        newData[key] = data[key];
+      } else  {
+        newData[key] = "";
+      }
+    }
+    return newData;
+  }
+
   // Use Update data if present
   if (formBuilderUpdateData) {
-    initialValues = formBuilderUpdateData;
+    initialValues = returnUpdateDataWithoutNull(formBuilderUpdateData);
   }
 
   // Handle Submit
