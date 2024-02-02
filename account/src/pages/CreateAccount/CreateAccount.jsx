@@ -268,9 +268,15 @@ const AccountCreation = () => {
         // Get file data
         let formValues = { ...newValues };
         const accountData = { ...formValues };
-        const fileData = formValues?.uploadAgreement;
-        const fileName = fileData?.name;
-        formValues = { ...formValues, uploadAgreement: fileName };
+        if (formValues?.uploadAgreement instanceof File) {
+          const fileData = formValues?.uploadAgreement;
+          const fileName = fileData?.name;
+          formValues = { ...formValues, uploadAgreement: fileName };
+        } else {
+          if (accountData.hasOwnProperty('uploadAgreement')) {
+            delete accountData.uploadAgreement;
+          }
+        }
 
         const accountDataOut = {
           ...accountData,
@@ -293,18 +299,39 @@ const AccountCreation = () => {
           })
         );
       } else {
-        // Update Account
+        // // Update Account
+        // let formValues = { ...newValues };
+        // const accountData = { ...formValues };
+        // const fileData = formValues?.uploadAgreement;
+        // if (typeof fileData === "string") {
+        //   // Remove upload agreement from object
+        //   formValues = { ...formValues, uploadAgreement: fileData };
+        //   delete accountData.uploadAgreement;
+        // } else {
+        //   const fileName = fileData?.name;
+        //   formValues = { ...formValues, uploadAgreement: fileName };
+        // }
+
         let formValues = { ...newValues };
         const accountData = { ...formValues };
-        const fileData = formValues?.uploadAgreement;
-        if (typeof fileData === "string") {
+        const fileData = formValues?.uploadAgreement || "";
+        if (typeof fileData === "string" && fileData !== "") {
           // Remove upload agreement from object
           formValues = { ...formValues, uploadAgreement: fileData };
           delete accountData.uploadAgreement;
-        } else {
+        } else if (typeof fileData === "string" && fileData === "" && formSubmissionData?.uploadAgreement !== "") {
+          delete accountData.uploadAgreement;
+          accountData.isDeleteFile = true;
+        } else if (formSubmissionData?.uploadAgreement === null && !(fileData instanceof File)) {
+          delete accountData.uploadAgreement;
+        } else if (typeof fileData === "string" && fileData === "") {
+          delete accountData.uploadAgreement;
+        }
+        else {
           const fileName = fileData?.name;
           formValues = { ...formValues, uploadAgreement: fileName };
         }
+
 
         const accountDataOut = {
           ...accountData,
