@@ -255,6 +255,8 @@ export function convertStyleToAttributesTable(htmlString) {
 export function convertInlineStylesToClasses(htmlString) {
   console.log("Before Convert Inline Styles To Classes: ", htmlString);
   let rootTemp = wrapTextWithIns(htmlString);
+  rootTemp = replacePWithInsInLi(rootTemp);
+  rootTemp = replacePWithDiv(rootTemp);
   console.log("After Convert Inline Styles To Classes: ", rootTemp);
   rootTemp = convertKeywordsToPt(rootTemp);
   const root = parse(rootTemp);
@@ -306,22 +308,141 @@ export function convertInlineStylesToClasses(htmlString) {
   };
 }
 
-
 // ============================== Helper Function ===============================
+// function wrapTextWithIns(htmlString) {
+//   let el = "ins";
+//   const root = parse(htmlString);
+
+//   let keywordMapping = {
+//     small: 10,
+//     medium: 12,
+//     large: 16,
+//     // Add more keywords and their corresponding sizes here
+//   };
+
+//   function convertPercentageToPt(fontSize, parentFontSize) {
+//     const percentage = parseFloat(fontSize);
+//     const ptSize = (percentage / 100) * 12;
+//     return `${ptSize}pt`;
+//   }
+
+//   function convertKeywordToPt(keyword, referenceFontSize = "12pt") {
+//     const fontSizeInPt = keywordMapping[keyword.toLowerCase()] || 12;
+//     return `${fontSizeInPt}pt`;
+//   }
+
+//   function findFontSize(node, inheritedFontSize = "12pt") {
+//     while (node && node !== root) {
+//       const style = node.attributes && node.attributes.style;
+//       let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
+//       if (fontSize) {
+//         if (fontSize.endsWith("%")) {
+//           fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
+//         } else if (fontSize.toLowerCase() in keywordMapping) {
+//           fontSize = convertKeywordToPt(fontSize.toLowerCase(), inheritedFontSize);
+//         }
+//         return fontSize;
+//       }
+//       node = node.parentNode;
+//     }
+//     return inheritedFontSize;
+//   }
+
+//   function checkParentStyle(node) {
+//     let fontStyle = "";
+//     let fontFamily = "";
+//     while (node && node !== root) {
+//       if (node.tagName === "EM") {
+//         fontStyle += "font-style: italic; ";
+//       } else if (node.tagName === "STRONG") {
+//         fontStyle += "font-weight: bold; ";
+//       } else if (node.tagName === "U") {
+//         fontStyle += "text-decoration: underline; ";
+//       } else if (node.tagName === "S") {
+//         fontStyle += "text-decoration: line-through; ";
+//       } else if (node.tagName === "SUB") {
+//         fontStyle += "vertical-align: sub; ";
+//       } else if (node.tagName === "SUP") {
+//         fontStyle += "vertical-align: super; ";
+//       }
+
+//       const style = node.attributes && node.attributes.style;
+//       let fontWeight = style ? style.match(/font-weight:\s*([^;]+);?/i)?.[1] : null;
+//       if (fontWeight) {
+//         fontStyle += `font-weight: ${fontWeight}; `;
+//       }
+
+//       // Check for font color in style
+//       let fontColor = style ? style.match(/color:\s*([^;]+);?/i)?.[1] : null;
+//       if (fontColor) {
+//         fontStyle += `color: ${fontColor}; `;
+//       }
+
+//       // Check for font family in style
+//       let foundFontFamily = style ? style.match(/font-family:\s*([^;]+);?/i)?.[1] : null;
+//       if (foundFontFamily) {
+//         fontFamily = `font-family: ${foundFontFamily}; `;
+//       }
+
+//       node = node.parentNode;
+//     }
+//     return fontStyle + fontFamily;
+//   }
+
+//   function recursiveTraverse(node, inheritedFontSize) {
+//     if (node instanceof HTMLElement) {
+//       node.childNodes.forEach((child, index) => {
+//         if (child.nodeType === 3 && child.text.trim() !== "") {
+//           if (
+//             node.tagName !== "P" &&
+//             !/^H[1-6]$/i.test(node.tagName) &&
+//             !/^(TABLE|TR|TD|TH|THEAD|TBODY|TFOOT|COL|COLGROUP)$/i.test(node.tagName)
+//           ) {
+//             const ins = new HTMLElement(el, {}, "", node);
+//             ins.set_content(child.text);
+
+//             let style = "";
+//             const fontSize = findFontSize(node, inheritedFontSize);
+//             if (fontSize) {
+//               style += `font-size: ${fontSize};`;
+//             }
+
+//             const parentStyle = checkParentStyle(node);
+//             if (parentStyle) {
+//               style += parentStyle;
+//             }
+
+//             if (style) {
+//               ins.setAttribute("style", style);
+//             }
+//             node.childNodes[index] = ins;
+//           }
+//         } else if (child instanceof HTMLElement) {
+//           const childFontSize = findFontSize(child, inheritedFontSize);
+//           recursiveTraverse(child, childFontSize);
+//         }
+//       });
+//     }
+//   }
+
+//   recursiveTraverse(root, "12pt");
+//   return root.toString();
+// }
+
 function wrapTextWithIns(htmlString) {
   let el = "ins";
-  const root = parse(htmlString);
+  const root = parse(htmlString); // Assuming parse is defined elsewhere to parse the HTML string.
 
   let keywordMapping = {
-    small: 10, 
+    small: 10,
     medium: 12,
     large: 16,
-    // Add more keywords and their corresponding sizes here
+    // Add more keywords and their corresponding sizes here.
   };
 
   function convertPercentageToPt(fontSize, parentFontSize) {
     const percentage = parseFloat(fontSize);
-    const ptSize = (percentage / 100) * 12; 
+    const ptSize = (percentage / 100) * 12;
     return `${ptSize}pt`;
   }
 
@@ -338,7 +459,10 @@ function wrapTextWithIns(htmlString) {
         if (fontSize.endsWith("%")) {
           fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
         } else if (fontSize.toLowerCase() in keywordMapping) {
-          fontSize = convertKeywordToPt(fontSize.toLowerCase(), inheritedFontSize);
+          fontSize = convertKeywordToPt(
+            fontSize.toLowerCase(),
+            inheritedFontSize
+          );
         }
         return fontSize;
       }
@@ -350,72 +474,95 @@ function wrapTextWithIns(htmlString) {
   function checkParentStyle(node) {
     let fontStyle = "";
     let fontFamily = "";
+    let marginStyle = ""; // For accumulating margin styles.
     while (node && node !== root) {
-      if (node.tagName === "EM") {
-        fontStyle += "font-style: italic; ";
-      } else if (node.tagName === "STRONG") {
-        fontStyle += "font-weight: bold; ";
-      } else if (node.tagName === "U") {
-        fontStyle += "text-decoration: underline; ";
-      } else if (node.tagName === "S") {
-        fontStyle += "text-decoration: line-through; ";
-      } else if (node.tagName === "SUB") {
-        fontStyle += "vertical-align: sub; ";
-      } else if (node.tagName === "SUP") {
-        fontStyle += "vertical-align: super; ";
-      }
-
       const style = node.attributes && node.attributes.style;
-      let fontWeight = style ? style.match(/font-weight:\s*([^;]+);?/i)?.[1] : null;
-      if (fontWeight) {
-        fontStyle += `font-weight: ${fontWeight}; `;
-      }
 
-      // Check for font color in style
-      let fontColor = style ? style.match(/color:\s*([^;]+);?/i)?.[1] : null;
-      if (fontColor) {
-        fontStyle += `color: ${fontColor}; `;
-      }
+      // Accumulate font styles.
+      if (node.tagName === "EM") fontStyle += "font-style: italic; ";
+      if (node.tagName === "STRONG") fontStyle += "font-weight: bold; ";
+      if (node.tagName === "U") fontStyle += "text-decoration: underline; ";
+      if (node.tagName === "S") fontStyle += "text-decoration: line-through; ";
+      if (node.tagName === "SUB") fontStyle += "vertical-align: sub; ";
+      if (node.tagName === "SUP") fontStyle += "vertical-align: super; ";
 
-      // Check for font family in style
-      let foundFontFamily = style ? style.match(/font-family:\s*([^;]+);?/i)?.[1] : null;
-      if (foundFontFamily) {
-        fontFamily = `font-family: ${foundFontFamily}; `;
-      }
+      // Accumulate specific font and color styles.
+      let fontWeight = style?.match(/font-weight:\s*([^;]+);?/i)?.[1];
+      if (fontWeight) fontStyle += `font-weight: ${fontWeight}; `;
+
+      let fontColor = style?.match(/color:\s*([^;]+);?/i)?.[1];
+      if (fontColor) fontStyle += `color: ${fontColor}; `;
+
+      let foundFontFamily = style?.match(/font-family:\s*([^;]+);?/i)?.[1];
+      if (foundFontFamily) fontFamily = `font-family: ${foundFontFamily}; `;
+
+      // New: Accumulate margin styles.
+      let margin = style?.match(/margin:\s*([^;]+);?/i)?.[1];
+      if (margin) marginStyle += `margin: ${margin}; `;
+
+      // Accumulate individual margin sides if they're explicitly defined.
+      ["top", "right", "bottom", "left"].forEach((side) => {
+        let marginSide = style?.match(
+          new RegExp(`margin-${side}:\\s*([^;]+);?`, "i")
+        )?.[1];
+        if (marginSide) marginStyle += `margin-${side}: ${marginSide}; `;
+      });
 
       node = node.parentNode;
     }
-    return fontStyle + fontFamily;
+
+    return fontStyle + fontFamily + marginStyle; // Include margin styles in the return.
   }
 
+  // function recursiveTraverse(node, inheritedFontSize) {
+  //   if (node.nodeType === 1) {
+  //     // Ensure node is an element.
+  //     node.childNodes.forEach((child, index) => {
+  //       if (child.nodeType === 3 && child.textContent.trim() !== "") {
+  //         // Node is text and not empty.
+  //         // Your existing conditions to decide whether to wrap text with <ins>.
+  //         const ins = document.createElement(el);
+  //         ins.textContent = child.textContent;
+
+  //         let style = findFontSize(node, inheritedFontSize);
+  //         if (style) {
+  //           style = `font-size: ${style};` + checkParentStyle(node);
+  //           ins.setAttribute("style", style);
+  //         }
+  //         node.replaceChild(ins, child);
+  //       } else if (child.nodeType === 1) {
+  //         // Recurse into child elements.
+  //         recursiveTraverse(child, inheritedFontSize);
+  //       }
+  //     });
+  //   }
+  // }
+
   function recursiveTraverse(node, inheritedFontSize) {
-    if (node instanceof HTMLElement) {
-      node.childNodes.forEach((child, index) => {
-        if (child.nodeType === 3 && child.text.trim() !== "") {
-          if (
-            node.tagName !== "P" &&
-            !/^H[1-6]$/i.test(node.tagName) &&
-            !/^(TABLE|TR|TD|TH|THEAD|TBODY|TFOOT|COL|COLGROUP)$/i.test(node.tagName)
-          ) {
-            const ins = new HTMLElement(el, {}, "", node);
-            ins.set_content(child.text);
-
-            let style = "";
-            const fontSize = findFontSize(node, inheritedFontSize);
-            if (fontSize) {
-              style += `font-size: ${fontSize};`;
-            }
-
-            const parentStyle = checkParentStyle(node);
-            if (parentStyle) {
-              style += parentStyle;
-            }
-
-            if (style) {
-              ins.setAttribute("style", style);
-            }
-            node.childNodes[index] = ins;
+    if (node instanceof HTMLElement) { // Assuming HTMLElement is a custom or simplified DOM node.
+      let childNodes = Array.from(node.childNodes);
+      childNodes.forEach((child, index) => {
+        if (child.nodeType === 3 && child.text.trim() !== "") { // Text node with non-empty content.
+          const ins = new HTMLElement(el, {}, "", node);
+          ins.set_content(child.text);
+  
+          let style = "";
+          const fontSize = findFontSize(node, inheritedFontSize);
+          if (fontSize) {
+            style += `font-size: ${fontSize};`;
           }
+  
+          const parentStyle = checkParentStyle(node);
+          if (parentStyle) {
+            style += parentStyle;
+          }
+  
+          if (style) {
+            ins.setAttribute("style", style);
+          }
+  
+          // Assuming a method to replace or insert the new element in place of the old text node.
+          node.childNodes[index] = ins; // This line assumes you can directly manipulate childNodes like this.
         } else if (child instanceof HTMLElement) {
           const childFontSize = findFontSize(child, inheritedFontSize);
           recursiveTraverse(child, childFontSize);
@@ -423,8 +570,165 @@ function wrapTextWithIns(htmlString) {
       });
     }
   }
+  
 
-  recursiveTraverse(root, "12pt"); 
+  recursiveTraverse(root, "12pt");
+  return root.outerHTML;
+}
+
+
+// function replacePWithIns(htmlString) {
+//   const root = parse(htmlString);
+//   const pTags = root.querySelectorAll('p');
+
+//   pTags.forEach(p => {
+//     const style = p.getAttribute('style');
+//     if (style && (style.includes('margin-top') || style.includes('margin-bottom'))) {
+//       // Create a new <ins> element
+//       const ins = parse(`<ins>${p.innerHTML}</ins>`).firstChild;
+
+//       // Copy attributes from <p> to <ins>, modifying the style to remove margin-top and margin-bottom
+//       Object.keys(p.attributes).forEach(name => {
+//         let value = p.attributes[name];
+//         if (name === 'style') {
+//           // Remove margin-top and margin-bottom from the style
+//           value = value.replace(/margin-(top|bottom):\s*[^;]+;?/g, '').trim();
+//         }
+//         ins.setAttribute(name, value);
+//       });
+
+//       // Replace <p> with <ins>
+//       p.replaceWith(ins);
+//     }
+//   });
+
+//   // Serialize the modified DOM back into a string
+//   return root.toString();
+// }
+console.log("KK")
+// function replacePWithDiv(htmlString) {
+//   const root = parse(htmlString);
+//   const pTags = root.querySelectorAll('p');
+
+//   pTags.forEach(p => {
+//     const style = p.getAttribute('style');
+//     if (style && (style.includes('margin-top') || style.includes('margin-bottom'))) {
+//       // Create a new <ins> element
+//       const ins = parse(`<div>${p.innerHTML}</div>`).firstChild;
+
+//       // Copy attributes from <p> to <ins>, modifying the style to remove margin-top and margin-bottom
+//       Object.keys(p.attributes).forEach(name => {
+//         let value = p.attributes[name];
+//         if (name === 'style') {
+//           // Remove margin-top and margin-bottom from the style
+//           value = value.replace(/margin-(top|bottom):\s*[^;]+;?/g, '').trim();
+//         }
+//         ins.setAttribute(name, value);
+//       });
+
+//       // Replace <p> with <ins>
+//       p.replaceWith(ins);
+//     }
+//   });
+
+//   // Serialize the modified DOM back into a string
+//   return root.toString();
+// }
+console.log("GG")
+// function replacePWithDiv(htmlString) {
+//   const root = parse(htmlString);
+//   const pTags = root.querySelectorAll('p');
+
+//   pTags.forEach(p => {
+//     const style = p.getAttribute('style');
+//     if (style && (style.includes('margin-top') || style.includes('margin-bottom'))) {
+//       // Create a new <ins> element
+//       const ins = parse(`<div>${p.innerHTML}</div>`).firstChild;
+
+//       // Copy attributes from <p> to <ins>, modifying the style to remove margin-top and margin-bottom
+//       Object.keys(p.attributes).forEach(name => {
+//         let value = p.attributes[name];
+//         if (name === 'style') {
+//           // Remove margin-top and margin-bottom from the style
+//           // value = value.replace(/margin-(top|bottom):\s*[^;]+;?/g, '').trim();
+//         }
+//         ins.setAttribute(name, value);
+//       });
+
+//       // Replace <p> with <ins>
+//       p.replaceWith(ins);
+//     }
+//   });
+
+//   // Serialize the modified DOM back into a string
+//   return root.toString();
+// }
+
+function replacePWithDiv(htmlString) {
+  const root = parse(htmlString);
+  const pTags = root.querySelectorAll('p');
+
+  pTags.forEach(p => {
+    const style = p.getAttribute('style');
+    // Check specifically for "margin-bottom: 0in" in the style
+    if (style && /margin-bottom:\s*0in;?/.test(style)) {
+      // Create a new <div> element, assuming parse() returns a DOM-like object
+      const div = parse(`<div>${p.innerHTML}</div>`).firstChild;
+
+      // Copy attributes from <p> to <div>, without modifying the style
+      Object.keys(p.attributes).forEach(name => {
+        const value = p.attributes[name];
+        div.setAttribute(name, value);
+      });
+
+      // Replace <p> with <div>
+      p.replaceWith(div);
+    }
+  });
+
+  // Serialize the modified DOM back into a string
+  return root.toString();
+}
+
+function replacePWithInsInLi(htmlString) {
+  const root = parse(htmlString);
+  const pTags = root.querySelectorAll('p');
+
+  pTags.forEach(p => {
+    // Check all ancestors for an <li> tag
+    let parent = p.parentNode;
+    let isInLiTag = false;
+    while (parent && parent.tagName !== 'HTML') {
+      if (parent.tagName === 'LI') {
+        isInLiTag = true;
+        break;
+      }
+      parent = parent.parentNode;
+    }
+
+    if (isInLiTag) {
+      const style = p.getAttribute('style');
+      if (style && (style.includes('margin-top') || style.includes('margin-bottom'))) {
+        // Create a new <ins> element with the contents of <p>
+        const ins = parse(`<ins>${p.innerHTML}</ins>`).firstChild;
+
+        // Copy attributes from <p> to <ins>, modifying the style to remove margin-top and margin-bottom
+        Object.keys(p.attributes).forEach(name => {
+          let value = p.attributes[name];
+          if (name === 'style') {
+            // Remove margin-top and margin-bottom from the style
+            value = value.replace(/margin-(top|bottom):\s*[^;]+;?/g, '').trim();
+          }
+          ins.setAttribute(name, value);
+        });
+
+        // Replace <p> with <ins>
+        p.replaceWith(ins);
+      }
+    }
+  });
+
+  // Serialize the modified DOM back into a string
   return root.toString();
 }
 
