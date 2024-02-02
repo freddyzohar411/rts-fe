@@ -3,9 +3,9 @@ import { Editor } from "@tinymce/tinymce-react";
 import useMutationObserver from "./useMutationObserverHook";
 import ReactHtmlParser from "react-html-parser";
 import * as TemplateDisplayHelper from "./templateDisplayHelper";
-// import { runEffects } from "./templateDisplayHelper";
 import { ExportHelper } from "@workspace/common";
 import { generateOptions } from "./pdfOption";
+import { TemplateAdvanceExportModal } from "@workspace/common";
 
 import "./TinyCME.scss";
 
@@ -28,7 +28,8 @@ const TemplateDisplayV3 = ({
   const [parsedContent, setParsedContent] = useState(content || "");
   const [fullHtmlString, setFullHtmlString] = useState("");
   const displayRef = useRef(null);
-
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [editorContent, setEditorContent] = useState("");
   /**
    * Set the parsedContent when  content props changes
    */
@@ -107,6 +108,9 @@ const TemplateDisplayV3 = ({
         handleOutputContent(
           TemplateDisplayHelper.removeContentEditableAndStyles(content)
         );
+        setEditorContent(
+          TemplateDisplayHelper.removeContentEditableAndStyles(content)
+        );
       } else {
         handleOutputContent(parsedContent);
       }
@@ -149,169 +153,213 @@ const TemplateDisplayV3 = ({
           <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
         </div>
       ) : (
-        <Editor
-          tinymceScriptSrc={process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"}
-          initialValue={initialValues && parsedContent}
-          value={value}
-          init={{
-            setup: (editor) => {
-              // Register Icons
-              editor.ui.registry.addIcon(
-                "addEditIcon",
-                '<i style="font-size:1.2rem": class="ri-edit-box-line"></i>'
-              );
-              editor.ui.registry.addIcon(
-                "removeEditIcon",
-                '<i style="font-size:1.2rem": class="ri-edit-box-fill"></i>'
-              );
+        <>
+          <TemplateAdvanceExportModal
+            content={editorContent}
+            showInsertModal={showExportModal}
+            setShowInsertModal={setShowExportModal}
+            toExport={true}
+          />
+          <Editor
+            tinymceScriptSrc={
+              process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"
+            }
+            initialValue={initialValues && parsedContent}
+            value={value}
+            init={{
+              setup: (editor) => {
+                // Register Icons
+                editor.ui.registry.addIcon(
+                  "addEditIcon",
+                  '<i style="font-size:1.2rem": class="ri-edit-box-line"></i>'
+                );
+                editor.ui.registry.addIcon(
+                  "removeEditIcon",
+                  '<i style="font-size:1.2rem": class="ri-edit-box-fill"></i>'
+                );
 
-              editor.ui.registry.addIcon(
-                "exportDocxIcon",
-                '<i style="font-size:1.2rem": class="ri-file-word-line"></i>'
-              );
+                editor.ui.registry.addIcon(
+                  "exportDocxIcon",
+                  '<i style="font-size:1.2rem": class="ri-file-word-line"></i>'
+                );
 
-              editor.ui.registry.addIcon(
-                "exportPDFIcon",
-                '<i style="font-size:1.2rem": class="bx bxs-file-pdf"></i>'
-              );
+                editor.ui.registry.addIcon(
+                  "exportPDFIcon",
+                  '<i style="font-size:1.2rem": class="bx bxs-file-pdf"></i>'
+                );
 
-              editor.ui.registry.addButton("exportPDFButton", {
-                icon: "exportPDFIcon", // Use the custom icon
-                tooltip: "Export to PDF",
-                onAction: function () {
-                  const content = editor.getContent();
-                  ExportHelper.generatePDFCustom(
-                    content,
-                    generateOptions({
-                      filename: "test.pdf",
-                    })
-                  );
-                },
-              });
+                editor.ui.registry.addIcon(
+                  "exportPreviewIcon",
+                  '<i style="font-size:1.2rem": class="ri-file-download-line"></i>'
+                );
 
-              editor.ui.registry.addButton("exportDocxButton", {
-                icon: "exportDocxIcon", // Use the custom icon
-                tooltip: "Export to Docx",
-                onAction: function () {
-                  const content = editor.getContent();
-                  ExportHelper.generateDocxCustom(content, {
-                    filename: "test.docx",
-                  });
-                },
-              });
+                //ADD BUTTONS
 
-              // Add a button for enabling
-              editor.ui.registry.addButton("myEnableButton", {
-                icon: "addEditIcon", // Use the custom icon
-                tooltip: "Make Editable",
-                onAction: function () {
-                  var selectedText = editor.selection.getContent();
-                  var range = editor.selection.getRng();
-
-                  // If currently non-editable, wrap the selected text with a span and apply a class
-                  editor.selection.setContent(
-                    `<span style="border: 1px solid #2196F3; background-color: #E3F2FD;" contenteditable="true">${selectedText}</span>`
-                  );
-
-                  // Move the cursor to the end of the inserted content
-                  range.setStartAfter(range.endContainer);
-                  range.collapse(true);
-                  editor.selection.setRng(range);
-                },
-              });
-
-              // Add a button for disabling
-              editor.ui.registry.addButton("myDisableButton", {
-                // text: "Disable",
-                icon: "removeEditIcon",
-                tooltip: "Make Non-Editable",
-                onAction: function () {
-                  var selectedText = editor.selection.getContent();
-                  var range = editor.selection.getRng();
-
-                  const span = editor.selection.getNode();
-                  if (span && span.tagName === "SPAN") {
-                    const selectedRange = editor.selection.getRng();
-                    const selectedText =
-                      selectedRange.cloneContents().textContent;
-
-                    // Create a new span for the selected text
-                    const nonEditableSpan = document.createElement("span");
-                    nonEditableSpan.textContent = selectedText;
-                    nonEditableSpan.style =
-                      "border: none; background-color: initial;"; // Override the parent style
-
-                    // Split the span into three parts: before, selected, and after
-                    const before = span.textContent.substring(
-                      0,
-                      selectedRange.startOffset
+                // Export pdf button
+                editor.ui.registry.addButton("exportPDFButton", {
+                  icon: "exportPDFIcon", // Use the custom icon
+                  tooltip: "Export to PDF",
+                  onAction: function () {
+                    const content = editor.getContent();
+                    ExportHelper.generatePDFCustom(
+                      content,
+                      generateOptions({
+                        filename: "test.pdf",
+                      })
                     );
-                    const after = span.textContent.substring(
-                      selectedRange.endOffset
+                  },
+                });
+
+                editor.ui.registry.addButton("exportDocxButton", {
+                  icon: "exportDocxIcon", // Use the custom icon
+                  tooltip: "Export to Docx",
+                  onAction: function () {
+                    const content = editor.getContent();
+                    ExportHelper.generateDocxCustom(content, {
+                      filename: "test.docx",
+                    });
+                  },
+                });
+
+                // Add a button for enabling
+                editor.ui.registry.addButton("myEnableButton", {
+                  icon: "addEditIcon", // Use the custom icon
+                  tooltip: "Make Editable",
+                  onAction: function () {
+                    var selectedText = editor.selection.getContent();
+                    var range = editor.selection.getRng();
+
+                    // If currently non-editable, wrap the selected text with a span and apply a class
+                    editor.selection.setContent(
+                      `<span style="border: 1px solid #2196F3; background-color: #E3F2FD;" contenteditable="true">${selectedText}</span>`
                     );
-
-                    // Create a new span for the third section (the text after the selection)
-                    const afterSpan = document.createElement("span");
-                    afterSpan.textContent = after;
-                    afterSpan.style = span.style.cssText; // Match the style of the first section
-                    afterSpan.contentEditable = "true"; // Set contenteditable to true
-
-                    // Replace the original span with the three new parts
-                    span.textContent = before;
-                    span.after(nonEditableSpan);
-                    nonEditableSpan.after(afterSpan);
 
                     // Move the cursor to the end of the inserted content
-                    range.setStartAfter(nonEditableSpan);
+                    range.setStartAfter(range.endContainer);
                     range.collapse(true);
                     editor.selection.setRng(range);
-                  }
-                },
-              });
-            },
-            height: height, // Set the initial height to 100% of the parent container
-            min_height: minHeight,
-            botton_margin: 10,
-            menubar: false,
-            plugins: plugins,
-            toolbar:
-              "undo redo | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsizeinput | " +
-              "bold italic underline forecolor backcolor | align lineheight |" +
-              "bullist numlist outdent indent | hr | pagebreak |" +
-              "removeformat | searchreplace |" +
-              "table | code codesample | emoticons charmap | image | fullscreen | preview | help",
-            content_style:
-              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-            image_title: true,
-            automatic_uploads: true,
-            file_picker_types: "image",
-            file_picker_callback: function (cb, value, meta) {
-              var input = document.createElement("input");
-              input.setAttribute("type", "file");
-              input.setAttribute("accept", "image/*");
+                  },
+                });
 
-              input.onchange = function () {
-                var file = this.files[0];
-                var reader = new FileReader();
+                // Add a button for disabling
+                editor.ui.registry.addButton("myDisableButton", {
+                  // text: "Disable",
+                  icon: "removeEditIcon",
+                  tooltip: "Make Non-Editable",
+                  onAction: function () {
+                    var selectedText = editor.selection.getContent();
+                    var range = editor.selection.getRng();
+                    const span = editor.selection.getNode();
+                    if (span && span.tagName === "SPAN") {
+                      const selectedRange = editor.selection.getRng();
+                      const selectedText =
+                        selectedRange.cloneContents().textContent;
 
-                reader.onload = function () {
-                  // Instead of using the Blob URL, use the reader's result directly
-                  cb(reader.result, { title: file.name });
+                      // Create a new span for the selected text
+                      const nonEditableSpan = document.createElement("span");
+                      nonEditableSpan.textContent = selectedText;
+                      nonEditableSpan.style =
+                        "border: none; background-color: initial;"; // Override the parent style
+
+                      // Split the span into three parts: before, selected, and after
+                      const before = span.textContent.substring(
+                        0,
+                        selectedRange.startOffset
+                      );
+                      const after = span.textContent.substring(
+                        selectedRange.endOffset
+                      );
+
+                      // Create a new span for the third section (the text after the selection)
+                      const afterSpan = document.createElement("span");
+                      afterSpan.textContent = after;
+                      afterSpan.style = span.style.cssText; // Match the style of the first section
+                      afterSpan.contentEditable = "true"; // Set contenteditable to true
+
+                      // Replace the original span with the three new parts
+                      span.textContent = before;
+                      span.after(nonEditableSpan);
+                      nonEditableSpan.after(afterSpan);
+
+                      // Move the cursor to the end of the inserted content
+                      range.setStartAfter(nonEditableSpan);
+                      range.collapse(true);
+                      editor.selection.setRng(range);
+                    }
+                  },
+                });
+
+                // Export Preview Button
+                editor.ui.registry.addButton("exportPreviewButton", {
+                  icon: "exportPreviewIcon", // Use the custom icon
+                  tooltip: "Preview and Export to Docx/PDF",
+                  onAction: function () {
+                    const content = editor.getContent();
+                    setShowExportModal(true);
+
+                    // Code to toggle the extended toolbar
+                    const moreToolbar = document.querySelector(
+                      ".tox-toolbar__overflow"
+                    );
+                    if (moreToolbar) {
+                      moreToolbar.style.display =
+                        moreToolbar.style.display === "none" ? "" : "none";
+                    }
+
+                    // Update the toggle button state
+                    const toggleButton =
+                      document.querySelector(".tox-tbtn--enabled"); // Adjust selector as necessary
+                    if (toggleButton) {
+                      toggleButton.classList.remove("tox-tbtn--enabled"); // Adjust class as necessary
+                    }
+                  },
+                });
+              },
+              height: height, // Set the initial height to 100% of the parent container
+              min_height: minHeight,
+              botton_margin: 10,
+              menubar: false,
+              plugins: plugins,
+              toolbar:
+                "undo redo | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsizeinput | " +
+                "bold italic underline forecolor backcolor | align lineheight |" +
+                "bullist numlist outdent indent | hr | pagebreak |" +
+                "removeformat | searchreplace |" +
+                "table | code codesample | emoticons charmap | image | fullscreen | preview | exportPreviewButton | help",
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:12pt, box-sizing: border-box;}",
+              image_title: true,
+              automatic_uploads: true,
+              file_picker_types: "image",
+              file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement("input");
+                input.setAttribute("type", "file");
+                input.setAttribute("accept", "image/*");
+
+                input.onchange = function () {
+                  var file = this.files[0];
+                  var reader = new FileReader();
+
+                  reader.onload = function () {
+                    // Instead of using the Blob URL, use the reader's result directly
+                    console.log("reader.result", reader.result);
+                    cb(reader.result, { title: file.name });
+                  };
+                  reader.readAsDataURL(file);
                 };
-                reader.readAsDataURL(file);
-              };
 
-              input.click();
-            },
-          }}
-          onEditorChange={(value) => {
-            // setParsedContent(value);
-            setNewContent(value);
-            if (onChange) {
-              onChange(value);
-            }
-          }}
-        />
+                input.click();
+              },
+            }}
+            onEditorChange={(value) => {
+              // setParsedContent(value);
+              setNewContent(value);
+              if (onChange) {
+                onChange(value);
+              }
+            }}
+          />
+        </>
       )}
     </>
   );

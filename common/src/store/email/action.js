@@ -21,8 +21,9 @@ export const sendEmailFailure = (payload) => ({
   payload,
 });
 
-export const setEmailOpen = () => ({
+export const setEmailOpen = (payload) => ({
   type: SET_EMAIL_OPEN,
+  payload,
 });
 
 export const setEmailClose = () => ({

@@ -51,6 +51,10 @@ const SingleSelectElement = ({
       ...provided,
       color: state.isDisabled ? "black !important" : provided.color,
     }),
+    options: (provided) => ({
+      ...provided,
+      zIndex: 999999999,
+    }),
   };
 
   const noOptionsMessage = () => null; // Return null to prevent the message from showing

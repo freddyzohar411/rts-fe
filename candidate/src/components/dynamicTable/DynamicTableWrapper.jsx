@@ -8,6 +8,7 @@ import { GeneralModal } from "@workspace/common";
 import { CANDIDATE_INITIAL_OPTIONS } from "../../pages/CandidateListing/candidateListingConstants";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
+import { toast } from "react-toastify";
 
 const DynamicTableWrapper = ({
   data,
@@ -35,6 +36,10 @@ const DynamicTableWrapper = ({
       return optGroup.find((option) => option.value === value);
     });
     setSelectedOptGroup(selectedObjects);
+  };
+
+  const areOptionsEmpty = () => {
+    return !(optGroup && optGroup.length > 0);
   };
 
   return (
@@ -152,6 +157,12 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             onClick={() => {
+                              if (areOptionsEmpty()) {
+                                toast.error(
+                                  "No fields to show. Please have at least one candidate"
+                                );
+                                return;
+                              }
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}

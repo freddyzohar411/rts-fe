@@ -28,6 +28,9 @@ import { categoryConstants } from "./templateBuilderContants";
 import SelectElement from "./SelectElement";
 import FileInputElement from "./FileInputElement";
 import EditorElement2 from "./EditorElement2";
+import axios from "axios";
+import juice from "juice";
+import { CommonBackendHelper } from "@workspace/common";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -49,7 +52,6 @@ const TemplateBuilder = forwardRef(
     const [selectedSection, setSelectedSection] = useState("");
     const [fields, setFields] = useState([]);
     const [selectedField, setSelectedField] = useState("");
-
     const templateCategories = useSelector(
       (state) => state.TemplateReducer.templateCategories
     );
@@ -107,16 +109,7 @@ const TemplateBuilder = forwardRef(
       }
     }, [selectedSection]);
 
-    const convertToHtml = async (file, setTemplateContent) => {
-      try {
-        const result = await mammoth.convertToHtml({
-          arrayBuffer: await file.arrayBuffer(),
-        });
-        setTemplateContent(result.value);
-      } catch (error) {
-        console.error("Error converting Word to HTML:", error);
-      }
-    };
+  
 
     // Get all categories
     useEffect(() => {
@@ -247,6 +240,96 @@ const TemplateBuilder = forwardRef(
       return false;
     };
 
+    // Convert docx to html (Backend)
+    const convDocToHtml = async (file, setTemplateContent) => {
+      // if file is excel
+
+      try {
+        // If file is docx
+        let res;
+        if (
+          file.type ===
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ) {
+          res = await CommonBackendHelper.convertDocxToHtmlString(
+            {
+              docFile: file,
+            },
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+        }
+
+        // Check if exce xlsx
+        if (
+          file.type === "application/vnd.ms-excel" ||
+          file.type ===
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ) {
+          res = await CommonBackendHelper.convertExcelToHtmlString(
+            {
+              docFile: file,
+            },
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+        }
+
+        const originalContent = res.data;
+        console.log("Original Content", originalContent);
+        // const inlineContent = juice(originalContent, {
+        //   removeStyleTags: false,
+        // });
+        const inlineContent = juice(originalContent);
+        console.log("Inline Content", inlineContent);
+        setTemplateContent(inlineContent);
+      } catch (err) {
+        console.log(err);
+      }
+
+      // CommonBackendHelper.convertDocxToHtmlString(
+      //   {
+      //     docFile: file,
+      //   },
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // )
+      //   .then((res) => {
+      //     const originalContent = res.data;
+      //     console.log("Original Content", originalContent);
+      //     const inlineContent = juice(originalContent, {
+      //       removeStyleTags: false,
+      //     });
+      //     // const inlineContent = juice(originalContent);
+      //     console.log("Inline Content", inlineContent);
+      //     setTemplateContent(inlineContent);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+    };
+
+      // Convert docx to html (Frontend)
+    // const convDocToHtml = async (file, setTemplateContent) => {
+    //   try {
+    //     const result = await mammoth.convertToHtml({
+    //       arrayBuffer: await file.arrayBuffer(),
+    //     });
+    //     setTemplateContent(result.value);
+    //   } catch (error) {
+    //     console.error("Error converting Word to HTML:", error);
+    //   }
+    // };
+
     return (
       <div className="d-flex flex-column gap-2">
         <Row className="mb-3">
@@ -291,6 +374,26 @@ const TemplateBuilder = forwardRef(
                   {formik.errors["category"] && formik.touched["category"] ? (
                     <div style={{ color: "red", fontSize: "0.9rem" }}>
                       {formik.errors["category"]}
+                    </div>
+                  ) : null}
+                </div>
+              </Col>
+              <Col>
+                <Label htmlFor="category">Sub Category</Label>
+                <Input
+                  type="text"
+                  name="subCategory"
+                  className="form-control"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik?.values?.["subCategory"]}
+                  placeholder="Enter a sub category"
+                />
+                <div style={{ minHeight: "25px" }}>
+                  {formik.errors["subCategory"] &&
+                  formik.touched["subCategory"] ? (
+                    <div style={{ color: "red", fontSize: "0.9rem" }}>
+                      {formik.errors["subCategory"]}
                     </div>
                   ) : null}
                 </div>
@@ -543,7 +646,8 @@ const TemplateBuilder = forwardRef(
                     disabled={(!templateSelected || !categorySelected) && !file}
                     onClick={async () => {
                       if (file) {
-                        await convertToHtml(file, setTemplateContentPreview);
+                        // await convertToHtml(file, setTemplateContentPreview);
+                        await convDocToHtml(file, setTemplateContentPreview);
                       } else {
                         const template = templatesByCategory.filter(
                           (template) =>

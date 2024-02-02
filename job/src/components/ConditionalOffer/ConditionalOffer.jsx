@@ -16,6 +16,7 @@ import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
 import { TemplateDisplayV3, TemplateExportButtons } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common";
+import { TemplateAdvanceExportModal } from "@workspace/common";
 
 function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
   const [activeTab, setActiveTab] = useState("1");
@@ -24,6 +25,8 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
     candidateId: candidateId,
   });
+  const [templateDownloadModalShow, setTemplateDownloadModalShow] =
+    useState(false);
 
   // Handle realease event
   const handleRelease = () => {
@@ -100,7 +103,9 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
         </TabContent>
         <div className="d-flex justify-content-end gap-3">
           {activeTab == "3" && (
-            <TemplateExportButtons content={conditionalOfferContent} />
+            <Button onClick={() => setTemplateDownloadModalShow(true)}>
+              Download
+            </Button>
           )}
           {activeTab == "1" && (
             <Input
@@ -119,6 +124,13 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
           )}
         </div>
       </div>
+      <TemplateAdvanceExportModal
+        content={conditionalOfferContent}
+        showInsertModal={templateDownloadModalShow}
+        setShowInsertModal={setTemplateDownloadModalShow}
+        toExport={true}
+        allData={allModuleData}
+      />
     </React.Fragment>
   );
 }

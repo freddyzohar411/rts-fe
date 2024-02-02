@@ -30,6 +30,9 @@ import {
   FETCH_CANDIDATES_FIELDS_ALL,
   FETCH_CANDIDATES_FIELDS_ALL_SUCCESS,
   FETCH_CANDIDATES_FIELDS_ALL_FAILURE,
+  FETCH_CANDIDATES_ADMIN,
+  FETCH_CANDIDATES_ADMIN_SUCCESS,
+  FETCH_CANDIDATES_ADMIN_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -258,6 +261,26 @@ const CandidateReducer = (state = initialState, action) => {
         candidatesFieldsAll: action.payload,
       };
     case FETCH_CANDIDATES_FIELDS_ALL_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    // Admin
+    case FETCH_CANDIDATES_ADMIN:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_CANDIDATES_ADMIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidates: action.payload,
+      };
+    case FETCH_CANDIDATES_ADMIN_FAILURE:
       return {
         ...state,
         loading: false,

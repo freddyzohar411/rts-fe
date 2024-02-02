@@ -26,6 +26,9 @@ import {
   CREATE_JOB_FOD,
   CREATE_JOB_FOD_SUCCESS,
   CREATE_JOB_FOD_FAILURE,
+  FETCH_JOBS_ADMIN,
+  FETCH_JOBS_ADMIN_SUCCESS,
+  FETCH_JOBS_ADMIN_FAILURE,
 } from "./actionTypes";
 
 // Fetch User Group by name
@@ -167,5 +170,22 @@ export const createJobFODSuccess = (job) => ({
 
 export const createJobFODFailure = (error) => ({
   type: CREATE_JOB_FOD_FAILURE,
+  payload: error,
+});
+
+
+// Fetch job admin
+export const fetchJobsAdmin = (params) => ({
+  type: FETCH_JOBS_ADMIN,
+  payload: params,
+});
+
+export const fetchJobsAdminSuccess = (jobs) => ({
+  type: FETCH_JOBS_ADMIN_SUCCESS,
+  payload: jobs,
+});
+
+export const fetchJobsAdminFailure = (error) => ({
+  type: FETCH_JOBS_ADMIN_FAILURE,
   payload: error,
 });

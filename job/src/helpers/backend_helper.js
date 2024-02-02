@@ -22,10 +22,10 @@ const api = new APIClient();
 export const getFormByFormName = (formName) =>
   api.get(`${FORM_URL}${BASE_FORMS}/name/${formName}`);
 
-// Get Jobs
+// Get Job by Id
 export const getJobById = (id) => api.get(`${JOB_URL}${BASE_JOBS}/${id}`);
 
-// Get Accounts
+// Get Jobs
 export const getJobs = (data) =>
   api.create(`${JOB_URL}${BASE_JOBS}/listing`, data);
 
@@ -79,4 +79,8 @@ export const getJobTimeline = (data) =>
 
 export const getJobTimelineCount = (jobId) =>
   api.get(`${JOB_URL}${BASE_JOB_TIMELINE}/jobtimelinecount/${jobId}`);
+
+// Get jobs Admin
+export const getJobsAdmin = (data) =>
+api.create(`${JOB_URL}${BASE_JOBS}/listing/all`, data);
 

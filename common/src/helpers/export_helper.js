@@ -4,6 +4,7 @@ import FileSaver from "file-saver";
 import React from "react";
 import html2pdf from "html2pdf.js";
 import * as TemplateDisplayHelper from "../Components/TemplateDisplay/templateDisplayHelper";
+import * as BackendHelper from "./backend_helper";
 
 /*
  * Helper function to generate PDF from HTML
@@ -65,9 +66,9 @@ const generatePDFMulti = async (element, type = "save", options) => {
   } = options;
 
   const pageTypeMap = {
-    a4: "A4",
-    a3: "A3",
-    letter: "letter",
+    A4: "A4",
+    A3: "A3",
+    Letter: "letter",
   };
 
   const fileName = filename ? filename + ".pdf" : "test.pdf";
@@ -171,7 +172,7 @@ export function generateDocCustom(
  */
 export function generateDocxCustom(
   htmlContent,
-  options = { filename: "document" }
+  options = { fileName: "document" }
 ) {
   const header =
     "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
@@ -185,11 +186,36 @@ export function generateDocxCustom(
   console.log("htmlContentWithPageBreaks", htmlContentWithPageBreaks);
   const sourceHTML = header + htmlContentWithPageBreaks + footer;
 
-  const buffer = htmlDocx.asBlob(sourceHTML);
+  // Marin conversion
+  const convertToTwips = (value) => {
+    if (!value) return null;
+    if (options.unit === "in") {
+      return Math.round(value * 1440);
+    }
+    if (options.unit === "mm") {
+      return Math.round(value * 56.7);
+    }
+    if (options.unit === "cm") {
+      return Math.round(value * 567);
+    }
+  };
+
+  // Options
+  const inputOptions = {
+    orientation: options?.pageOrientation || "portrait",
+    margins: {
+      top: convertToTwips(options?.marginTop) || 1440,
+      bottom: convertToTwips(options?.marginBottom) || 1440,
+      left: convertToTwips(options?.marginLeft) || 1440,
+      right: convertToTwips(options?.marginRight) || 1440,
+    },
+  };
+
+  const buffer = htmlDocx.asBlob(sourceHTML, inputOptions);
   const blob = new Blob([buffer], {
     type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
-  const filename = options.filename + ".docx";
+  const filename = options.fileName + ".docx";
   FileSaver.saveAs(blob, filename);
 }
 
@@ -198,7 +224,7 @@ export function generateDocxCustom(
  * @param {*} htmlString
  * @param {*} fileName
  */
-export function generateHtml(htmlString, options = { filename: "index.html" }) {
+export function generateHtml(htmlString, options = { fileName: "index.html" }) {
   let htmlStringWithPageBreak =
     TemplateDisplayHelper.replacePageBreaks2(htmlString);
 
@@ -222,7 +248,7 @@ export function generateHtml(htmlString, options = { filename: "index.html" }) {
   // Create an anchor element to trigger the download
   const a = document.createElement("a");
   a.href = url;
-  a.download = options?.filename + ".html";
+  a.download = options?.fileName + ".html";
 
   // Trigger a click event to download the file
   a.click();
@@ -240,7 +266,6 @@ export function generateHtml(htmlString, options = { filename: "index.html" }) {
  */
 export async function convertHtmlToPdfFile(htmlString, options = {}) {
   const content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  console.log("content", content);
 
   // Create a ref for the target element
   const targetRef = React.createRef();
@@ -304,7 +329,6 @@ export function convertHtmlToDocxFile(
 // Convert html to pdf blob url
 export async function convertHtmlToPdfBlob(htmlString, options = {}) {
   const content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  console.log("content", content);
 
   // Create a ref for the target element
   const targetRef = React.createRef();
@@ -337,7 +361,8 @@ export async function convertHtmlToPdfBlob(htmlString, options = {}) {
   return blob;
 }
 
-function createStyleTag(settings) {
+// ================== Backend Export ===================
+function createStyleTag(options, withTag = true, pageDimension = true) {
   const {
     unit,
     pageType,
@@ -346,14 +371,540 @@ function createStyleTag(settings) {
     marginBottom,
     marginLeft,
     marginRight,
-  } = settings;
+  } = options;
+
+  const paperSizeDimensions = {
+    "A4 portrait": "8.27in 11.69in",
+    "A3 portrait": "11.69in 16.54in",
+    "Letter portrait": "8.5in 11in",
+    "Legal portrait": "8.5in 14in",
+    "A4 landscape": "11.69in 8.27in",
+    "A3 landscape": "16.54in 11.69in",
+    "Letter landscape": "11in 8.5in",
+    "Legal landscape": "14in 8.5in",
+  };
+
+  let pageTypeInput = pageType || "A4";
+  if (pageDimension) {
+    pageTypeInput = paperSizeDimensions[`${pageType} ${pageOrientation}`];
+  }
+
+  if (!withTag) {
+    return `
+        p, span, ins {
+          font-family: Arial, sans-serif;
+          font-size: 12pt;
+        }
+        @page {
+            size: ${pageTypeInput} ${pageOrientation};
+            margin: ${marginTop}${unit} ${marginRight}${unit} ${marginBottom}${unit} ${marginLeft}${unit};
+        }
+    `;
+  }
 
   return `
       <style>
+          p, span, ins {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+          }
           @page {
-              size: ${pageType} ${pageOrientation};
+              size: ${pageTypeInput} ${pageOrientation};
               margin: ${marginTop}${unit} ${marginRight}${unit} ${marginBottom}${unit} ${marginLeft}${unit};
           }
       </style>
   `;
+}
+
+export async function exportBackendHtml2Pdf(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  // content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+      <html>
+          <head>
+          <style>
+              ${styleTag}
+              ${cssString}
+          </style>
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  console.log("html", html);
+
+  let fileName = options?.fileName || "document.pdf";
+
+  BackendHelper.convertHtmlStringToPdf({
+    htmlString: html,
+  })
+    .then((res) => {
+      console.log(res);
+      // Byte array to download as pdf
+      const pdfBase64 = res.data;
+
+      // Convert base64 to binary
+      const binaryString = window.atob(pdfBase64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const blob = new Blob([bytes], { type: "application/pdf" });
+
+      console.log("blob", blob);
+      FileSaver.saveAs(blob, fileName);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+export async function exportBackendHtml2PdfBlob(htmlString, options = {}) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
+
+  const styleTag = createStyleTag(options);
+
+  const html = `
+      <html>
+          <head>
+              ${styleTag}
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  let fileName = options?.fileName || "document.pdf";
+
+  try {
+    const response = await BackendHelper.convertHtmlStringToPdf({
+      htmlString: html,
+    });
+    const pdfBase64 = response.data;
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    return blob;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function exportBackendHtml2PdfBlobExtCss(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  // content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+      <html>
+          <head>
+          <style>
+              ${styleTag}
+              ${cssString}
+          </style>
+
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  console.log("Preview HTML", html);
+  let fileName = options?.fileName || "document.pdf";
+
+  try {
+    const response = await BackendHelper.convertHtmlStringToPdf({
+      htmlString: html,
+    });
+
+    const pdfBase64 = response.data;
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    return blob;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function exportBackendHtml2PdfFile(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+  <html>
+      <head>
+      <style>
+          ${styleTag}
+          ${cssString}
+      </style>
+      </head>
+      <body>
+          ${content}
+      </body>
+  </html>
+`;
+
+  let fileName = options?.fileName + ".pdf" || "document.pdf";
+
+  try {
+    const response = await BackendHelper.convertHtmlStringToPdf({
+      htmlString: html,
+    });
+    const pdfBase64 = response.data;
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    const file = new File([blob], fileName, {
+      type: "application/pdf",
+    });
+
+    return file;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function exportBackendHtml2Docx(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+      <meta charset='utf-8'>
+      <style>
+              ${styleTag}
+              ${cssString}
+          </style>
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  let fileName = options?.fileName + ".docx" || "document.docx";
+
+  try {
+    const response = await BackendHelper.convertHtmlStringToDocx({
+      htmlString: html,
+    });
+    const pdfBase64 = response.data;
+
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], {
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+    console.log("blob", blob);
+    FileSaver.saveAs(blob, fileName);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function exportBackendHtml2DocxFile(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+      <meta charset='utf-8'>
+      <style>
+              ${styleTag}
+              ${cssString}
+              </style>
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  let fileName = options?.fileName || "document";
+
+  try {
+    const response = await BackendHelper.convertHtmlStringToDocx({
+      htmlString: html,
+    });
+    const pdfBase64 = response.data;
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], {
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+    const file = new File([blob], fileName + ".docx", {
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+    return file;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// Export Jpeg from HTML
+export async function exportBackendHtml2Jpeg(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+      <html>
+          <head>
+          <style>
+              ${styleTag}
+              ${cssString}
+          </style>
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  let fileName = options?.fileName || "document";
+
+  BackendHelper.convertHtmlStringToJpeg({
+    htmlString: html,
+  })
+    .then((res) => {
+      // Byte array to download as pdf
+      const pdfBase64 = res.data;
+
+      // Convert base64 to binary
+      const binaryString = window.atob(pdfBase64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const blob = new Blob([bytes], { type: "image/jpeg" });
+
+      console.log("blob", blob);
+      FileSaver.saveAs(blob, fileName);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+// Convert to File Jpeg from HTML
+export async function exportBackendHtml2JpegFile(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+  <html>
+      <head>
+      <style>
+          ${styleTag}
+          ${cssString}
+      </style>
+      </head>
+      <body>
+          ${content}
+      </body>
+  </html>
+`;
+
+  let fileName = options?.fileName  || "document";
+
+  try {
+    const response = await BackendHelper.convertHtmlStringToJpeg({
+      htmlString: html,
+    });
+    const pdfBase64 = response.data;
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "image/jpeg" });
+    const file = new File([blob], fileName + ".jpeg", {
+      type: "image/jpeg",
+    });
+
+    return file;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// Export Png from HTML
+export async function exportBackendHtml2Png(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+      <html>
+          <head>
+          <style>
+              ${styleTag}
+              ${cssString}
+          </style>
+          </head>
+          <body>
+              ${content}
+          </body>
+      </html>
+  `;
+
+  let fileName = options?.fileName || "document";
+
+  BackendHelper.convertHtmlStringToPng({
+    htmlString: html,
+  })
+    .then((res) => {
+      // Byte array to download as pdf
+      const pdfBase64 = res.data;
+
+      // Convert base64 to binary
+      const binaryString = window.atob(pdfBase64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const blob = new Blob([bytes], { type: "image/png" });
+
+      console.log("blob", blob);
+      FileSaver.saveAs(blob, fileName);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+// Convert to File Png from HTML
+export async function exportBackendHtml2PngFile(
+  htmlString,
+  options = {},
+  cssString = ""
+) {
+  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
+
+  const styleTag = createStyleTag(options, false);
+
+  const html = `
+  <html>
+      <head>
+      <style>
+          ${styleTag}
+          ${cssString}
+      </style>
+      </head>
+      <body>
+          ${content}
+      </body>
+  </html>
+`;
+
+  let fileName = options?.fileName  || "document";
+
+  try {
+    const response = await BackendHelper.convertHtmlStringToPng({
+      htmlString: html,
+    });
+    const pdfBase64 = response.data;
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "image/png" });
+    const file = new File([blob], fileName + ".png", {
+      type: "image/png",
+    });
+
+    return file;
+  } catch (error) {
+    console.log(error);
+  }
 }

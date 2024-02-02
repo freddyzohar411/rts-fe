@@ -29,6 +29,7 @@ import { setEmailClose } from "../../store/email/action";
 import * as ExportHelper from "../../helpers/export_helper";
 import TemplatePreviewModal from "../TemplateDisplay/TemplatePreviewModal/TemplatePreviewModal";
 import { generateOptions } from "./pdfOption";
+import TemplateAdvanceExportModal from "../TemplateDisplay/TemplateAdvanceExportModal/TemplateAdvanceExportModal";
 
 function EmailComponent() {
   const dispatch = useDispatch();
@@ -42,13 +43,14 @@ function EmailComponent() {
   const [templateData, setTemplateData] = useState(null);
   const [attachments, setAttachments] = useState([]);
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
-  const emailData = useSelector((state) => state.EmailCommonReducer);
   const [templateAttachmentModalShow, setTemplateAttachmentModalShow] =
     useState(false);
-  const isEmailOpen = useSelector(
-    (state) => state.EmailCommonReducer.isEmailOpen
-  );
 
+  const { loading , isEmailOpen, category, subCategory } = useSelector((state) => state.EmailCommonReducer);
+
+  console.log("Category", category)
+  console.log("SubCategory", subCategory)
+  
   /**
    * Handle form submit event (Formik)
    * @param {*} values
@@ -229,7 +231,8 @@ function EmailComponent() {
                     />
                   </div>
                   <TemplateSelectByCategoryElement
-                    categoryName="Email Templates"
+                    categoryName={category ?? null}
+                    subCategoryName={subCategory ?? null}
                     placeholder="Select a template"
                     onChange={(value) => {
                       setTemplateData(value);
@@ -414,9 +417,9 @@ function EmailComponent() {
                           formik.handleSubmit();
                           setModal(false);
                         }}
-                        disabled={emailData?.loading}
+                        disabled={loading}
                       >
-                        {emailData?.loading ? "Sending..." : "Send"}
+                        {loading ? "Sending..." : "Send"}
                       </Button>
                       <DropdownToggle
                         tag="button"
@@ -441,15 +444,15 @@ function EmailComponent() {
             </ModalBody>
           </Modal>
         )}
-        <TemplatePreviewModal
+        <TemplateAdvanceExportModal
           showInsertModal={templateAttachmentModalShow}
           setShowInsertModal={setTemplateAttachmentModalShow}
           toExport={false}
-          callback={(file) => {
+          attachmentCallback={(file) => {
             if (!file) return;
             setAttachments([...attachments, file]);
           }}
-          allModuleData={allModuleData}
+          allData={allModuleData}
         />
         {isMinimized && (
           <div

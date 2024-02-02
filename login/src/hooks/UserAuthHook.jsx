@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Permission } from "../constants/permissionConstant";
+import { Role } from "../constants/roleConstant"
 import { fetchProfile } from "../store/auth/profile/actions";
 
 /**
@@ -59,18 +60,17 @@ const useUserAuth = () => {
   }
 
   // ------------------ Get & Check Role ------------------
-  const getAllRoles = () =>
-    useMemo(() => {
-      const roleList = [];
-      if (userProfile?.userGroup) {
-        userProfile.userGroup.forEach((group) => {
-          group.roles.forEach((role) => {
-            roleList.push(role.roleName);
-          });
+  const getAllRoles = () => {
+    const roleList = [];
+    if (userProfile?.userGroup) {
+      userProfile.userGroup.forEach((group) => {
+        group.roles.forEach((role) => {
+          roleList.push(role.roleName);
         });
-      }
-      return roleList;
-    }, [userProfile]);
+      });
+    }
+    return roleList;
+  };
 
   function checkAllRole(roleList = []) {
     const roles = getAllRoles();
@@ -183,6 +183,7 @@ const useUserAuth = () => {
     checkAnyRole,
     getName,
     Permission,
+    Role,
   };
 };
 

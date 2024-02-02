@@ -46,10 +46,7 @@ const FormStepper = ({
     if (activeStep === 3 && formikRef?.current?.formik) {
       formikRef.current.formik.submitForm();
     }
-    if (activeStep === 4) {
-      handleNext();
-    }
-    if (activeStep === 5 && formikRef?.current?.formik) {
+    if (activeStep === 4 && formikRef?.current?.formik) {
       formikRef.current.formik.submitForm();
     }
   };

@@ -842,28 +842,32 @@ const EditCandidate = () => {
   };
 
   /**
-   * Handle Candidate Success
+   * Handle Account Success
    */
-  if (createMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 6) {
-      navigate("/candidates");
-      return;
+  useEffect(() => {
+    if (createMetaData?.isSuccess) {
+      dispatch(resetMetaData());
+      if (step === 6) {
+        navigate("/candidates");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [createMetaData?.isSuccess]);
 
   /**
-   * Handle Candidate success (Update)
+   * Handle Account success (Update)
    */
-  if (updateMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 6) {
-      navigate("/candidates");
-      return;
+  useEffect(() => {
+    if (updateMetaData?.isSuccess) {
+      dispatch(resetMetaData());
+      if (step === 6) {
+        navigate("/candidates");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [updateMetaData?.isSuccess]);
 
   return (
     <FormStepper

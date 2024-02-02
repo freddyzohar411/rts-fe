@@ -8,7 +8,7 @@ import {
   postAccount,
   putAccount,
   fetchAccount,
-  resetMetaData,
+  accountResetMetaData,
 } from "../../store/account/action";
 import { deleteAccountCountry } from "../../store/accountregistration/action";
 import { fetchAccountForm } from "../../store/accountForm/action";
@@ -53,7 +53,7 @@ const EditAccount = () => {
     (state) => state.AccountReducer.updateMeta
   );
 
-  const MAX_STEP = 6;
+  const MAX_STEP = 5;
   const [step, setStep] = useState(linkState?.stepNo || 0);
   const formikRef = useRef(null);
   const [editData, setEditData] = useState(formSubmissionData || null);
@@ -173,7 +173,7 @@ const EditAccount = () => {
           )
         );
       }
-      if (step === 5) {
+      if (step === 4) {
         dispatch(
           fetchAccountFormSubmission(
             AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -221,7 +221,7 @@ const EditAccount = () => {
     const isFormChanged = await isFormEdited(formSubmissionData, newValues);
 
     if (!isFormChanged) {
-      if (step === 5) {
+      if (step === 4) {
         navigate("/accounts");
       }
       handleNext();
@@ -487,7 +487,7 @@ const EditAccount = () => {
       }
     }
 
-    if (step === 5) {
+    if (step === 4) {
       const formData = {
         ...newValues,
         entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -553,29 +553,27 @@ const EditAccount = () => {
     setView((prevState) => !prevState);
   };
 
-  /**
-   * Handle Account Success
-   */
-  if (createMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 5) {
-      navigate("/accounts");
-      return;
+  useEffect(() => {
+    if (createMetaData?.isSuccess) {
+      dispatch(accountResetMetaData());
+      if (step === 4) {
+        navigate("/accounts");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [createMetaData?.isSuccess]);
 
-  /**
-   * Handle Account success (Update)
-   */
-  if (updateMetaData?.isSuccess) {
-    dispatch(resetMetaData());
-    if (step === 5) {
-      navigate("/accounts");
-      return;
+  useEffect(() => {
+    if (updateMetaData?.isSuccess) {
+      dispatch(accountResetMetaData());
+      if (step === 4) {
+        navigate("/accounts");
+        return;
+      }
+      handleNext();
     }
-    handleNext();
-  }
+  }, [updateMetaData?.isSuccess]);
 
   return (
     <>

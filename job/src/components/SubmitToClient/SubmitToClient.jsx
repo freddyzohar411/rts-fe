@@ -6,13 +6,12 @@ import { SUBMIT_TO_CLIENT } from "./constants";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Input, Button, Tooltip } from "reactstrap";
-import { EmailComponent } from "../EmailComponent";
+import { Actions } from "@workspace/common";
+import { UseTemplateModuleDataHook } from "@workspace/common";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
-import { Actions } from "@workspace/common";
-import { UseTemplateModuleDataHook } from "@workspace/common";
 
 function SubmitToClient({
   closeOffcanvas,
@@ -20,8 +19,8 @@ function SubmitToClient({
   jobId,
   candidateId,
 }) {
-
   const [tooltipOpen, setTooltipOpen] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -36,7 +35,6 @@ function SubmitToClient({
       ? linkState?.view
       : false
   );
-
 
   UseTemplateModuleDataHook.useTemplateModuleData({
     candidateId: candidateId,
@@ -85,7 +83,6 @@ function SubmitToClient({
     closeOffcanvas();
   };
 
-
   return (
     <React.Fragment>
       <div>
@@ -121,7 +118,11 @@ function SubmitToClient({
                     className="btn btn-custom-primary"
                     onClick={() => {
                       // setSendEmailModal(true);
-                      dispatch(Actions.setEmailOpen());
+                      dispatch(
+                        Actions.setEmailOpen({
+                          category: "Email Templates",
+                        })
+                      );
                     }}
                   >
                     Send Email
