@@ -250,10 +250,24 @@ const EditAccount = () => {
       if (formSubmissionData != null) {
         let formValues = { ...newValues };
         const accountData = { ...formValues };
-        const fileData = formValues?.uploadAgreement;
-        if (typeof fileData === "string") {
+        const fileData = formValues?.uploadAgreement || "";
+        if (typeof fileData === "string" && fileData !== "") {
           // Remove upload agreement from object
           formValues = { ...formValues, uploadAgreement: fileData };
+          delete accountData.uploadAgreement;
+        } else if (
+          typeof fileData === "string" &&
+          fileData === "" &&
+          formSubmissionData?.uploadAgreement !== ""
+        ) {
+          delete accountData.uploadAgreement;
+          accountData.isDeleteFile = true;
+        } else if (
+          formSubmissionData?.uploadAgreement === null &&
+          !(fileData instanceof File)
+        ) {
+          delete accountData.uploadAgreement;
+        } else if (typeof fileData === "string" && fileData === "") {
           delete accountData.uploadAgreement;
         } else {
           const fileName = fileData?.name;
