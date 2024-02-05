@@ -151,6 +151,11 @@ const generateValidationSchema2 = (
         fieldValidation = fieldValidation.required(field.requiredErrorMessage);
       }
 
+      if ((field.required === "false" || field.required === false) && field.type === "file") {
+        // Make it nullable
+        fieldValidation = fieldValidation.nullable();
+      }
+
       if (
         (field.required === "true" || field.required === true) &&
         field.type === "multifile"
@@ -163,6 +168,14 @@ const generateValidationSchema2 = (
             return true;
           }
         );
+      }
+
+      if (
+        (field.required === "false" || field.required === false) &&
+        field.type === "multifile"
+      ) {
+        // Make it nullable
+        fieldValidation = fieldValidation.nullable();
       }
 
       // String
