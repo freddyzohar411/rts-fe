@@ -16,12 +16,10 @@ const TemplateSelectByCategoryElement = ({
   const [search, setSearch] = useState("");
   const [templateList, setTemplateList] = useState([]);
   const [templateSelected, setTemplateSelected] = useState(value ?? null);
-  
+
   const templatesByCategory = useSelector(
     (state) => state.TemplateReducer.templatesByCategory
   );
-
-  console.log("templateSelected", templateSelected)
 
   useEffect(() => {
     if (value == null) {
@@ -48,12 +46,12 @@ const TemplateSelectByCategoryElement = ({
           subCategoryName
         )
       );
-      return
+      return;
     }
     if (categoryName) {
       setTemplateSelected("");
       dispatch(TemplateActions.fetchTemplateByCategory(categoryName));
-      return
+      return;
     }
   }, [categoryName]);
 
@@ -108,15 +106,13 @@ const TemplateSelectByCategoryElement = ({
     }),
   };
 
-  console.log("templatesByCategory", templatesByCategory)
-
   const handleChange = (selectedOptions) => {
     setTemplateSelected(selectedOptions);
     if (props?.onChange && templatesByCategory && selectedOptions?.value) {
       const filteredTemplate = templatesByCategory.filter(
         (template) => template.id === selectedOptions?.value
       )[0];
-     
+
       props.onChange(filteredTemplate ?? null);
     } else {
       // If no template is selected

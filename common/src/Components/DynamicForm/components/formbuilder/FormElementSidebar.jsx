@@ -267,6 +267,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabelIcon: "ri-file-text-line",
+      draggableLabel: "Candidate Status Select",
+      draggablePrefix: "element",
+      draggableId: "selectcandidatestatus",
+      type: "field",
+    },
+    {
       draggableLabelIcon: "ri-account-box-fill",
       draggableLabel: "Account Owner",
       draggablePrefix: "element",

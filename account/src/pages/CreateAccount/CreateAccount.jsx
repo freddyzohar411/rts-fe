@@ -550,7 +550,6 @@ const AccountCreation = () => {
 
       //Create instruction
       if (formSubmissionData === null) {
-        console.log("here");
         const formData = {
           guidelines: newValues.guidelines,
         };

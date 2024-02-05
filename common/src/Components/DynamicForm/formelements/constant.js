@@ -11,3 +11,15 @@ export const fieldSize = {
   "75%": "w-75",
   "100%": "w-100",
 };
+
+export const candidateStatus = [
+  {
+    value: "WITHDRAWN",
+    label: "Profile Withdrawn",
+  },
+  { value: "REJECTED", label: "Profile Rejected" },
+  {
+    value: "COMPLETED",
+    label: "Ready to join",
+  },
+];
