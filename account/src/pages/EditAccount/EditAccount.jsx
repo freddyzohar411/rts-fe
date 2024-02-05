@@ -53,7 +53,7 @@ const EditAccount = () => {
     (state) => state.AccountReducer.updateMeta
   );
 
-  const MAX_STEP = 6;
+  const MAX_STEP = 5;
   const [step, setStep] = useState(linkState?.stepNo || 0);
   const formikRef = useRef(null);
   const [editData, setEditData] = useState(formSubmissionData || null);
@@ -63,8 +63,6 @@ const EditAccount = () => {
   const [view, setView] = useState(
     linkState?.view !== null ? linkState?.view : true
   );
-
-  console.log("Active Step", step);
 
   /**
    * Get account id from url
@@ -175,7 +173,7 @@ const EditAccount = () => {
           )
         );
       }
-      if (step === 5) {
+      if (step === 4) {
         dispatch(
           fetchAccountFormSubmission(
             AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -223,7 +221,7 @@ const EditAccount = () => {
     const isFormChanged = await isFormEdited(formSubmissionData, newValues);
 
     if (!isFormChanged) {
-      if (step === 5) {
+      if (step === 4) {
         navigate("/accounts");
       }
       handleNext();
@@ -252,10 +250,24 @@ const EditAccount = () => {
       if (formSubmissionData != null) {
         let formValues = { ...newValues };
         const accountData = { ...formValues };
-        const fileData = formValues?.uploadAgreement;
-        if (typeof fileData === "string") {
+        const fileData = formValues?.uploadAgreement || "";
+        if (typeof fileData === "string" && fileData !== "") {
           // Remove upload agreement from object
           formValues = { ...formValues, uploadAgreement: fileData };
+          delete accountData.uploadAgreement;
+        } else if (
+          typeof fileData === "string" &&
+          fileData === "" &&
+          formSubmissionData?.uploadAgreement !== ""
+        ) {
+          delete accountData.uploadAgreement;
+          accountData.isDeleteFile = true;
+        } else if (
+          formSubmissionData?.uploadAgreement === null &&
+          !(fileData instanceof File)
+        ) {
+          delete accountData.uploadAgreement;
+        } else if (typeof fileData === "string" && fileData === "") {
           delete accountData.uploadAgreement;
         } else {
           const fileName = fileData?.name;
@@ -489,7 +501,7 @@ const EditAccount = () => {
       }
     }
 
-    if (step === 5) {
+    if (step === 4) {
       const formData = {
         ...newValues,
         entityType: AccountEntityConstant.ACCOUNT_COMMERCIAL,
@@ -555,22 +567,10 @@ const EditAccount = () => {
     setView((prevState) => !prevState);
   };
 
-  /**
-   * Handle Account Success
-   */
-  // if (createMetaData?.isSuccess) {
-  //   dispatch(accountResetMetaData());
-  //   if (step === 5) {
-  //     navigate("/accounts");
-  //     return;
-  //   }
-  //   handleNext();
-  // }
-
   useEffect(() => {
     if (createMetaData?.isSuccess) {
       dispatch(accountResetMetaData());
-      if (step === 5) {
+      if (step === 4) {
         navigate("/accounts");
         return;
       }
@@ -578,23 +578,10 @@ const EditAccount = () => {
     }
   }, [createMetaData?.isSuccess]);
 
-  /**
-   * Handle Account success (Update)
-   */
-  // if (updateMetaData?.isSuccess) {
-  //  dispatch(accountResetMetaData());
-  //   if (step === 5) {
-  //     navigate("/accounts");
-  //     return;
-  //   }
-  //   console.log("GGG")
-  //   handleNext();
-  // }
-
   useEffect(() => {
     if (updateMetaData?.isSuccess) {
       dispatch(accountResetMetaData());
-      if (step === 5) {
+      if (step === 4) {
         navigate("/accounts");
         return;
       }

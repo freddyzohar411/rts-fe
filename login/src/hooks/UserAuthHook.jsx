@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Permission } from "../constants/permissionConstant";
+import { Role } from "../constants/roleConstant"
 import { fetchProfile } from "../store/auth/profile/actions";
 
 /**
@@ -182,6 +183,7 @@ const useUserAuth = () => {
     checkAnyRole,
     getName,
     Permission,
+    Role,
   };
 };
 

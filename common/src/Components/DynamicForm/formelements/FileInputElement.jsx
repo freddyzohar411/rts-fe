@@ -4,11 +4,16 @@ const FileInputElement = ({ formik, field, formStateHook }) => {
   const { formState } = formStateHook;
   const fileInputRef = useRef();
   const truncateString = (str, num) => {
+    if (str) {
+      return str;
+    }
     if (str?.length <= num) {
       return str;
     }
     return str.slice(0, num) + "...";
   };
+
+  console.log("formik?.values?.[field.name]", formik?.values?.[field.name]);
 
   return (
     <>

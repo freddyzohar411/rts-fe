@@ -69,6 +69,7 @@ function* workCreateJob(action) {
     }
     navigate("/jobs");
   } catch (error) {
+    toast.error(error?.message);
     yield put(createJobFailure(error));
   }
 }

@@ -17,7 +17,7 @@ import {
 import { useUserAuth } from "@workspace/login";
 
 function CandidateListing() {
-  const { Permission, checkAllPermission, checkAnyRole } = useUserAuth();
+  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
   const dispatch = useDispatch();
   const candidatesData = useSelector(
     (state) => state.CandidateReducer.candidates
@@ -186,11 +186,11 @@ function CandidateListing() {
 
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    if (checkAnyRole(["Admin"])) {
+    if (checkAnyRole([Role.ADMIN])) {
       dispatch(
         fetchCandidatesAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
       );
-      return
+      return;
     }
     dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
   }, [pageRequest]);

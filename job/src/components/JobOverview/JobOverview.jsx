@@ -71,7 +71,6 @@ function JobOverview() {
   const dispatch = useDispatch();
   const { jobId } = useParams();
   const location = useLocation();
-  const linkState = location.state;
 
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
@@ -79,7 +78,6 @@ function JobOverview() {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
 
-  const [selectedOfferTemplate, setSelectedOfferTemplate] = useState(null);
   const [templateData, setTemplateData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -87,6 +85,7 @@ function JobOverview() {
   const [candidateId, setCandidateId] = useState();
 
   const [isPreviewCV, setIsPreviewCV] = useState(false);
+  const [skipComboOptions, setSkipComboOptions] = useState({});
 
   const form = useSelector((state) => state.JobFormReducer.form);
   const formSubmissionData = useSelector(
@@ -156,6 +155,12 @@ function JobOverview() {
   useEffect(() => {
     if (jobTimelineData) {
       setPageInfoData(jobTimelineData);
+      let jsonObject = {};
+      jobTimelineData?.jobs?.map((data) => {
+        const maxOrder = getMaxOrder(data);
+        jsonObject[data?.id] = maxOrder;
+      });
+      setSkipComboOptions(jsonObject);
     }
   }, [jobTimelineData]);
 
@@ -176,14 +181,6 @@ function JobOverview() {
       dispatch(fetchJobFormSubmission(jobId));
     }
   }, [jobId]);
-
-  const handlePreviewCVClick = () => {
-    setIsPreviewCV(true);
-  };
-
-  const handleExitPreview = () => {
-    setIsPreviewCV(false);
-  };
 
   useEffect(() => {
     // Set the stepper state based on the active step
@@ -214,7 +211,34 @@ function JobOverview() {
     }
   }, [activeStep]);
 
-  const getFormComponent = (step, closeOffcanvas) => {
+  const handlePreviewCVClick = () => {
+    setIsPreviewCV(true);
+  };
+
+  const handleExitPreview = () => {
+    setIsPreviewCV(false);
+  };
+
+  const handleSkipSelection = (jobId, value) => {
+    const newOb = { ...skipComboOptions };
+    newOb[jobId] = value;
+    setSkipComboOptions(newOb);
+  };
+
+  const getMaxOrder = (data) => {
+    const values = Object.values(data?.timeline);
+    let maxOrder = 1;
+    if (values) {
+      let orders = values?.map((item) => item?.order);
+      if (orders) {
+        orders = orders.sort((a, b) => b - a);
+        maxOrder = orders?.[0] ?? 1;
+      }
+    }
+    return maxOrder;
+  };
+
+  const getFormComponent = (step, closeOffcanvas, maxOrder) => {
     switch (step) {
       case 1:
         return (
@@ -319,7 +343,9 @@ function JobOverview() {
     }
   };
 
-  const handleIconClick = (id) => {
+  const handleIconClick = (id, jobId) => {
+    const activeStep = skipComboOptions[jobId];
+    setActiveStep(activeStep);
     setOffcanvasForm(!offcanvasForm);
     setCandidateId(id);
   };
@@ -519,7 +545,7 @@ function JobOverview() {
                             className={`text-center align-middle cursor-pointer ${
                               isLabels && "text-nowrap"
                             }`}
-                            key={header}
+                            key={index}
                             scope="col"
                             style={{
                               width: isLabels ? "120px" : "150px",
@@ -532,11 +558,12 @@ function JobOverview() {
                       })}
                       <th
                         className="text-center align-middle"
-                        style={{ width: "150px" }}
+                        style={{ width: "260px" }}
                       ></th>
                     </tr>
                   </thead>
                   {jobTimelineData?.jobs?.map((data, index) => {
+                    const maxOrder = getMaxOrder(data);
                     return (
                       <tbody key={index}>
                         <tr className="text-center align-top">
@@ -545,15 +572,9 @@ function JobOverview() {
                           {steps.map((step, index) => (
                             <td key={index} className="px-0">
                               <StepComponent
-                                timelineState={
-                                  data?.timeline[step] ? index : index - 1
-                                }
                                 index={index}
-                                stepLength={
-                                  (Object.keys(data?.timeline)?.length ?? 1) - 1
-                                }
-                                date={data?.timeline?.[step]?.date}
-                                status={data?.timeline?.[step]?.status}
+                                maxOrder={maxOrder}
+                                data={data?.timeline?.[step]}
                               />
                             </td>
                           ))}
@@ -561,21 +582,29 @@ function JobOverview() {
                             <div className="d-flex flex-row gap-3 align-items-center">
                               <Input
                                 type="select"
-                                value={activeStep}
+                                value={skipComboOptions?.[data?.id]}
                                 onChange={(e) =>
-                                  setActiveStep(parseInt(e.target.value))
+                                  handleSkipSelection(
+                                    data?.id,
+                                    parseInt(e.target.value)
+                                  )
                                 }
                               >
                                 <option value="">Select</option>
-                                {timelineSkip.map((item, index) => (
-                                  <option key={index} value={index + 1}>
-                                    {Object.values(item)[0]}
-                                  </option>
-                                ))}
+                                {timelineSkip.map((item, index) => {
+                                  if (maxOrder > index + 1) {
+                                    return null;
+                                  }
+                                  return (
+                                    <option key={index} value={index + 1}>
+                                      {Object.values(item)[0]}
+                                    </option>
+                                  );
+                                })}
                               </Input>
                               <i
                                 onClick={() =>
-                                  handleIconClick(data?.candidate?.id)
+                                  handleIconClick(data?.candidate?.id, data?.id)
                                 }
                                 id="next-step"
                                 className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
