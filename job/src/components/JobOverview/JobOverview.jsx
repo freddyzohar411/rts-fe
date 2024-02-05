@@ -66,7 +66,6 @@ function JobOverview() {
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
-  const [legendPopoverOpen, setLegendPopoverOpen] = useState(false);
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
@@ -361,7 +360,7 @@ function JobOverview() {
 
   const renderLegend = () => {
     return (
-      <div>
+      <div className="d-flex flex-row">
         {timelineLegend.map((item, index) => (
           <div
             key={index}
@@ -392,7 +391,7 @@ function JobOverview() {
           <TimelineHeader data={jobHeaders} />
         </Row>
         <hr className="border border-dashed border-dark" />
-        <Row className="mb-3">
+        <Row className="mb-2">
           <Col>
             <div
               className={`d-flex ${
@@ -468,30 +467,15 @@ function JobOverview() {
                     <i className="ri-message-2-fill"></i>
                   </Button>
                 </div>
-                <div className="d-flex flex-row justify-content-between gap-1">
-                  {timelineLegend.map((item, index) => (
-                    <div
-                      key={index}
-                      className="d-flex flex-row gap-2 me-2 align-items-center "
-                    >
-                      <div
-                        className={`bg-${item.color} rounded-circle`}
-                        style={{
-                          width: "9px",
-                          height: "9px",
-                          backgroundColor: `${item.color}`,
-                          border: "1px solid #36454F",
-                        }}
-                      ></div>
-                      <div>
-                        <span>{item.legend}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </Col>
+        </Row>
+        <Row className="mb-3">
+          <div className="d-flex flex-row justify-content-end">
+            {renderLegend()}
+          </div>
+          
         </Row>
 
         <Row>
