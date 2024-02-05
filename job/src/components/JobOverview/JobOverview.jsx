@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Row,
   Col,
@@ -26,15 +26,12 @@ import {
   tagReset,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 
 // Elements
 // import { SelectElement } from "@workspace/common";
 import { TemplateSelectByCategoryElement } from "@workspace/common";
-
-// Stepper
-import { TimelineStepper } from "../TimelineStepper";
 
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
@@ -56,6 +53,7 @@ import {
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
+import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
@@ -228,6 +226,18 @@ function JobOverview() {
       }
     }
     return maxOrder;
+  };
+
+  const getStatus = (data, orderNo) => {
+    const values = Object.values(data?.timeline);
+    let status;
+    if (values) {
+      let orders = values?.filter((item) => item?.order === orderNo);
+      if (orders) {
+        status = orders?.[0]?.status ?? null;
+      }
+    }
+    return status;
   };
 
   const getFormComponent = (step, closeOffcanvas, maxOrder) => {
@@ -458,7 +468,16 @@ function JobOverview() {
                     </tr>
                   </thead>
                   {jobTimelineData?.jobs?.map((data, index) => {
-                    const maxOrder = getMaxOrder(data);
+                    let maxOrder = getMaxOrder(data);
+                    const status = getStatus(data, maxOrder);
+                    maxOrder =
+                      status !== JOB_STAGE_STATUS.REJECTED &&
+                      status !== JOB_STAGE_STATUS.WITHDRAWN
+                        ? maxOrder
+                        : maxOrder - 1;
+                    const isRejected =
+                      status === JOB_STAGE_STATUS.REJECTED ||
+                      status === JOB_STAGE_STATUS.WITHDRAWN;
                     return (
                       <tbody key={index}>
                         <tr className="text-center align-top">
@@ -469,42 +488,48 @@ function JobOverview() {
                               <StepComponent
                                 index={index}
                                 maxOrder={maxOrder}
+                                isRejected={isRejected}
                                 data={data?.timeline?.[step]}
                               />
                             </td>
                           ))}
                           <td>
-                            <div className="d-flex flex-row gap-3 align-items-center">
-                              <Input
-                                type="select"
-                                value={skipComboOptions?.[data?.id]}
-                                onChange={(e) =>
-                                  handleSkipSelection(
-                                    data?.id,
-                                    parseInt(e.target.value)
-                                  )
-                                }
-                              >
-                                <option value="">Select</option>
-                                {timelineSkip.map((item, index) => {
-                                  if (maxOrder > index + 1) {
-                                    return null;
+                            {!isRejected && (
+                              <div className="d-flex flex-row gap-3 align-items-center">
+                                <Input
+                                  type="select"
+                                  value={skipComboOptions?.[data?.id]}
+                                  onChange={(e) =>
+                                    handleSkipSelection(
+                                      data?.id,
+                                      parseInt(e.target.value)
+                                    )
                                   }
-                                  return (
-                                    <option key={index} value={index + 1}>
-                                      {Object.values(item)[0]}
-                                    </option>
-                                  );
-                                })}
-                              </Input>
-                              <i
-                                onClick={() =>
-                                  handleIconClick(data?.candidate?.id, data?.id)
-                                }
-                                id="next-step"
-                                className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
-                              ></i>
-                            </div>
+                                >
+                                  <option value="">Select</option>
+                                  {timelineSkip.map((item, index) => {
+                                    if (maxOrder > index + 1) {
+                                      return null;
+                                    }
+                                    return (
+                                      <option key={index} value={index + 1}>
+                                        {Object.values(item)[0]}
+                                      </option>
+                                    );
+                                  })}
+                                </Input>
+                                <i
+                                  onClick={() =>
+                                    handleIconClick(
+                                      data?.candidate?.id,
+                                      data?.id
+                                    )
+                                  }
+                                  id="next-step"
+                                  className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
+                                ></i>
+                              </div>
+                            )}
                           </td>
                         </tr>
                       </tbody>
