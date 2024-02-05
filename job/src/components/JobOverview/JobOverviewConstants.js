@@ -62,20 +62,20 @@ export const timelineSkip = [
 
 export const timelineLegend = [
   {
-    color: "primary",
-    legend: "Completed",
+    color: "dark",
+    legend: "Completed Stage",
     borderColor: "custom-primary",
     tooltip: "Candidate has completed this stage.",
   },
   {
-    color: "light",
-    legend: "Have Not Started",
+    color: "custom-primary",
+    legend: "Incomplete Stage",
     borderColor: "primary",
     tooltip: "Candidate has not progressed to this stage.",
   },
   {
     color: "danger",
-    legend: "Rejected",
+    legend: "Candidate Rejected",
     borderColor: "dark",
     tooltip: "Candidate has been rejected.",
   },
@@ -88,13 +88,13 @@ export const timelineLegend = [
   {
     color: "orange",
     borderColor: "dark",
-    legend: "Withdrawn",
+    legend: "Candidate Withdrawn",
     tooltip: "Candidate has withdrawn.",
   },
   {
     color: "success",
     borderColor: "dark",
-    legend: "Completed",
+    legend: "Completed All Stages",
     tooltip: "Candidate has completed all stages.",
   }
 ];

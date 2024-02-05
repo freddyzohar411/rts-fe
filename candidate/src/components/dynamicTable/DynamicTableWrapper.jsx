@@ -29,7 +29,6 @@ const DynamicTableWrapper = ({
   optGroup,
   setCustomConfigData,
   confirmDelete,
-  isLoading,
 }) => {
   const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);

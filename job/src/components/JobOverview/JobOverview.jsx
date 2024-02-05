@@ -335,36 +335,26 @@ function JobOverview() {
 
   const renderLegend = () => {
     return (
-      <div className="p-3 ms-2">
-        <div className="mb-2">
-          <span className="fw-semibold">Legend</span>
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "10px",
-          }}
-        >
-          {timelineLegend.map((legend, index) => (
+      <div>
+        {timelineLegend.map((item, index) => (
+          <div
+            key={index}
+            className="d-flex flex-row gap-2 me-2 align-items-center "
+          >
             <div
-              key={index}
-              className="d-flex flex-row align-items-center mb-2"
-            >
-              <div
-                className={`rounded-circle bg-${legend.color} me-3`}
-                style={{
-                  width: "9px",
-                  height: "9px",
-                  backgroundColor: `${legend.color}`,
-                }}
-              ></div>
-              <div className="me-2">
-                <span>{legend.legend}</span>
-              </div>
+              className={`bg-${item.color} rounded-circle`}
+              style={{
+                width: "9px",
+                height: "9px",
+                backgroundColor: `${item.color}`,
+                border: "1px solid #36454F",
+              }}
+            ></div>
+            <div>
+              <span>{item.legend}</span>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     );
   };
@@ -430,42 +420,49 @@ function JobOverview() {
                     </div>
                   </div>
                 </div>
-                <div
-                  id="legendPopover"
-                  className="d-flex align-items-center justify-content-center cursor-pointer ms-2"
-                >
-                  <i className="ri-question-line fw-medium"></i>
-                </div>
-                <Popover
-                  target="legendPopover"
-                  isOpen={legendPopoverOpen}
-                  toggle={() => setLegendPopoverOpen(!legendPopoverOpen)}
-                  className="custom-popover"
-                  trigger="legacy"
-                >
-                  {renderLegend()}
-                </Popover>
               </div>
-
-              <div className="d-flex flex-row gap-2 align-items-center">
-                <div className="search-box">
-                  <form onSubmit={pageRequestSet.setSearchTerm}>
-                    <Input
-                      type="text"
-                      placeholder="Search"
-                      className="form-control search"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </form>
-                  <i className="ri-search-eye-line search-icon"></i>
+              <div className="d-flex flex-column gap-2">
+                <div className="d-flex flex-row gap-2 justify-content-end align-items-center">
+                  <div className="search-box">
+                    <form onSubmit={pageRequestSet.setSearchTerm}>
+                      <Input
+                        type="text"
+                        placeholder="Search"
+                        className="form-control search"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                    </form>
+                    <i className="ri-search-eye-line search-icon"></i>
+                  </div>
+                  <Button className="btn btn-custom-primary">
+                    <i className="ri-filter-2-fill"></i>
+                  </Button>
+                  <Button className="btn btn-custom-primary">
+                    <i className="ri-message-2-fill"></i>
+                  </Button>
                 </div>
-                <Button className="btn btn-custom-primary">
-                  <i className="ri-filter-2-fill"></i>
-                </Button>
-                <Button className="btn btn-custom-primary">
-                  <i className="ri-message-2-fill"></i>
-                </Button>
+                <div className="d-flex flex-row justify-content-between gap-1">
+                  {timelineLegend.map((item, index) => (
+                    <div
+                      key={index}
+                      className="d-flex flex-row gap-2 me-2 align-items-center "
+                    >
+                      <div
+                        className={`bg-${item.color} rounded-circle`}
+                        style={{
+                          width: "9px",
+                          height: "9px",
+                          backgroundColor: `${item.color}`,
+                          border: "1px solid #36454F",
+                        }}
+                      ></div>
+                      <div>
+                        <span>{item.legend}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </Col>

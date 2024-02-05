@@ -225,7 +225,6 @@ function CandidateListing() {
         setSearch={setSearch}
         optGroup={candidatesFields}
         setCustomConfigData={setCustomConfigData}
-        isLoading={isLoading}
       />
     </>
   );
