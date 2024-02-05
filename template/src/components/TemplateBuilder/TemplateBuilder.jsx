@@ -109,8 +109,6 @@ const TemplateBuilder = forwardRef(
       }
     }, [selectedSection]);
 
-  
-
     // Get all categories
     useEffect(() => {
       dispatch(TemplateActions.fetchTemplateCategories());
@@ -282,16 +280,12 @@ const TemplateBuilder = forwardRef(
         }
 
         const originalContent = res.data;
-        console.log("Original Content", originalContent);
         // const inlineContent = juice(originalContent, {
         //   removeStyleTags: false,
         // });
         const inlineContent = juice(originalContent);
-        console.log("Inline Content", inlineContent);
         setTemplateContent(inlineContent);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
 
       // CommonBackendHelper.convertDocxToHtmlString(
       //   {
@@ -305,20 +299,17 @@ const TemplateBuilder = forwardRef(
       // )
       //   .then((res) => {
       //     const originalContent = res.data;
-      //     console.log("Original Content", originalContent);
       //     const inlineContent = juice(originalContent, {
       //       removeStyleTags: false,
       //     });
       //     // const inlineContent = juice(originalContent);
-      //     console.log("Inline Content", inlineContent);
       //     setTemplateContent(inlineContent);
       //   })
       //   .catch((err) => {
-      //     console.log(err);
       //   });
     };
 
-      // Convert docx to html (Frontend)
+    // Convert docx to html (Frontend)
     // const convDocToHtml = async (file, setTemplateContent) => {
     //   try {
     //     const result = await mammoth.convertToHtml({

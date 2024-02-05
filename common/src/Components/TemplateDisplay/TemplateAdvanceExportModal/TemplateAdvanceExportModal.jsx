@@ -282,10 +282,6 @@ const TemplateAdvanceExportModal = ({
     }
   }, [templateContent, allData, content]);
 
-  // console.log("Old content: ", showContent.oldHtml);
-  console.log("Style Tag: ", showContent.styleTag);
-  console.log("showContent", showContent.html);
-
   return (
     // <div style={{ zIndex: 9999999999999 }}>
     <Modal

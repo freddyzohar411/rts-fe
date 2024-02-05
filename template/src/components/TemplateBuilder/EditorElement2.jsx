@@ -80,12 +80,7 @@ const EditorElement2 = ({
 
   // Delete all draft media
   const deleteDraftMedia = () => {
-    axios
-      .delete(API.deleteDraftMedia())
-      .then((res) => {})
-      .catch((err) => {
-        console.log("err", err);
-      });
+    axios.delete(API.deleteDraftMedia());
   };
 
   // Upload image handler
@@ -121,7 +116,6 @@ const EditorElement2 = ({
           resolve(res.data.mediaUrl);
         })
         .catch((err) => {
-          console.log("err", err);
           reject("Upload failed");
         });
     });
@@ -174,7 +168,6 @@ const EditorElement2 = ({
           resolve(res.data.mediaUrl);
         })
         .catch((err) => {
-          console.log("err", err);
           // Set dialog div opacity to 1 and pointer-events to auto
           dialogEl.style.pointerEvents = "auto";
           cancelBtnEl.removeAttribute("disabled");
@@ -271,27 +264,26 @@ const EditorElement2 = ({
   //   var contentArea = editor.getContentAreaContainer();
   //   var contentDocument = editor.getDoc();
   //   var contentBody = contentDocument.body;
-  
+
   //   // Calculate the center of the content area
   //   var centerX = contentArea.clientWidth / 2;
-  
+
   //   // Calculate the fixed top position
   //   var fixedTop = 50; // Set the fixed top value in pixels
-  
+
   //   // Apply scale transform
   //   contentBody.style.transform = `scale(${scale})`;
-  
+
   //   // Calculate the translation value to center the content horizontally
   //   var translateX = (centerX * (1 - scale)).toFixed(2); // Round to two decimal places
-    
+
   //   // Apply translation transform to center the content horizontally and keep it fixed from the top
   //   contentBody.style.transform += ` translate(${translateX}px, ${fixedTop}px)`;
-  
+
   //   // Adjust the transformation origin to the center
   //   contentBody.style.transformOrigin = 'top left'; // Keep the center fixed
   // }
 
-  
   return (
     <>
       <TemplateAdvanceExportModal
