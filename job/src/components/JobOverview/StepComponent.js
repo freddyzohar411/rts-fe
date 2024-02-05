@@ -4,7 +4,7 @@ import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
 
-function StepComponent({ index, maxOrder, data }) {
+function StepComponent({ index, maxOrder, data, isRejected }) {
   const [toggleInterview, setToggleInterview] = useState(false);
   const date = data?.date;
   const status = data?.status;
@@ -14,7 +14,13 @@ function StepComponent({ index, maxOrder, data }) {
     let customCSS = "bg-primary border-light";
     switch (status) {
       case "COMPLETED":
-        customCSS = "bg-black border-black";
+        customCSS = "bg-success border-success";
+        break;
+      case "WITHDRAWN":
+        customCSS = "bg-withdrawn border-withdrawn";
+        break;
+      case "REJECTED":
+        customCSS = "bg-danger border-danger";
         break;
       case "SKIPPED":
         customCSS = "bg-gray border-gray";
@@ -50,7 +56,7 @@ function StepComponent({ index, maxOrder, data }) {
 
             <div
               className={`rounded-pill border border-primary ${
-                index === maxOrder
+                index === maxOrder && !isRejected
                   ? "bg-warning border-warning"
                   : getBulletBgColor()
               }`}
