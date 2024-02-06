@@ -26,7 +26,7 @@ import {
   fetchJobLists,
   fetchJobListsFields,
   fetchUserGroupByName,
-  fetchJobsAdmin
+  fetchJobsAdmin,
 } from "../../store/jobList/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
@@ -139,7 +139,7 @@ const JobListing = () => {
     const request = { ...pageRequest, jobType };
     if (checkAnyRole([Role.ADMIN])) {
       dispatch(fetchJobsAdmin(DynamicTableHelper.cleanPageRequest(request)));
-      return
+      return;
     }
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
   }, [pageRequest]);
@@ -189,7 +189,7 @@ const JobListing = () => {
     setIsDeleteModalOpen(false);
   };
 
-  console.log(namesData)
+  console.log(namesData);
 
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
@@ -324,13 +324,6 @@ const JobListing = () => {
                                         check
                                         className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
                                       >
-                                        <div
-                                          className="bg-success rounded-circle"
-                                          style={{
-                                            width: "6px",
-                                            height: "6px",
-                                          }}
-                                        ></div>
                                         <Input
                                           type="checkbox"
                                           checked={

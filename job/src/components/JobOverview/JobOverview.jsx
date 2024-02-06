@@ -18,6 +18,8 @@ import {
   PaginationItem,
   PaginationLink,
   Popover,
+  PopoverBody,
+  Tooltip,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -66,6 +68,7 @@ function JobOverview() {
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
+  const [legendTooltip, setLegendTooltip] = useState(false);
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
@@ -95,7 +98,6 @@ function JobOverview() {
     (state) => state.JobStageReducer.jobTimeline
   );
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
-  console.log(timelineLegend);
   // Custom renders
   const customRenderList = [
     {
@@ -360,11 +362,12 @@ function JobOverview() {
 
   const renderLegend = () => {
     return (
-      <div className="d-flex flex-row">
+      <div className="d-flex flex-wrap">
         {timelineLegend.map((item, index) => (
           <div
             key={index}
-            className="d-flex flex-row gap-2 me-2 align-items-center "
+            className="d-flex flex-row gap-2 justify-content-start align-items-center me-2"
+            style={{ width: "calc(50% - 8px)" }}
           >
             <div
               className={`bg-${item.color} rounded-circle`}
@@ -448,6 +451,22 @@ function JobOverview() {
               </div>
               <div className="d-flex flex-column gap-2">
                 <div className="d-flex flex-row gap-2 justify-content-end align-items-center">
+                  <div>
+                    <i
+                      id="legendInfo"
+                      className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
+                      onClick={() => setLegendTooltip(!legendTooltip)}
+                    ></i>
+                    <Tooltip
+                      target="legendInfo"
+                      placement="bottom"
+                      isOpen={legendTooltip}
+                      toggle={() => setLegendTooltip(!legendTooltip)}
+                      className="legend-tooltip"
+                    >
+                      {renderLegend()}
+                    </Tooltip>
+                  </div>
                   <div className="search-box">
                     <form onSubmit={pageRequestSet.setSearchTerm}>
                       <Input
@@ -470,12 +489,6 @@ function JobOverview() {
               </div>
             </div>
           </Col>
-        </Row>
-        <Row className="mb-3">
-          <div className="d-flex flex-row justify-content-end">
-            {renderLegend()}
-          </div>
-          
         </Row>
 
         <Row>
