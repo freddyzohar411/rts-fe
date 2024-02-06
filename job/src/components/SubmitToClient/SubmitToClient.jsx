@@ -70,7 +70,7 @@ function SubmitToClient({
     const payload = {
       jobId: jobId,
       jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_CLIENT,
-      status: JOB_STAGE_STATUS?.COMPLETED,
+      status: values?.candidateStatus ?? JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),

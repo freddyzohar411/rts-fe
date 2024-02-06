@@ -301,7 +301,7 @@ const PageSettingViewBackend = ({ settings, content }) => {
           ).firstChild;
           node.replaceWith(newNode);
           node = newNode; // Update reference to the new node
-        } 
+        }
         // else if (node.tagName === "STRONG") {
         //   additionalStyle = "font-weight: bold; ";
         //   // Convert to <p> tag
@@ -484,9 +484,7 @@ const PageSettingViewBackend = ({ settings, content }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (iframeRef.current && content) {
-        console.log("Content HTML: ", content);
         let { newHtml, styleTag } = convertInlineStylesToClasses(content);
-        console.log("newHtml", newHtml);
         // newHtml = removeStrongTags(newHtml);
         // newHtml = convertSpansToParagraphs(newHtml);
         const pdfBlob = await ExportHelper.exportBackendHtml2PdfBlobExtCss(
