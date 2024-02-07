@@ -6,7 +6,6 @@ import * as TemplateDisplayHelper from "./templateDisplayHelper";
 import { ExportHelper } from "@workspace/common";
 import { generateOptions } from "./pdfOption";
 import { TemplateAdvanceExportModal } from "@workspace/common";
-
 import "./TinyCME.scss";
 
 const TemplateDisplayV3 = ({

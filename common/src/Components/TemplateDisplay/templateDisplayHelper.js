@@ -325,6 +325,37 @@ export function convertInlineStylesToClasses(htmlString) {
   };
 }
 
+export function addCssStyleForAlignAttribute(htmlString) {
+  // Parse the HTML string
+  const root = parse(htmlString);
+
+  // Find all elements with an 'align' attribute
+  const elementsWithAlign = root.querySelectorAll('[align]');
+
+  elementsWithAlign.forEach(element => {
+    const alignValue = element.getAttribute('align');
+
+    // Determine the CSS equivalent and add it
+    let cssTextAlign = '';
+    switch (alignValue.toLowerCase()) {
+      case 'left':
+      case 'right':
+      case 'center':
+      case 'justify':
+        cssTextAlign = `text-align: ${alignValue};`;
+        break;
+      // Add cases for other possible values of 'align' if needed
+    }
+
+    // Add or update the 'style' attribute with the CSS text-align
+    const currentStyle = element.getAttribute('style') || '';
+    element.setAttribute('style', `${currentStyle} ${cssTextAlign}`);
+  });
+
+  // Serialize the DOM back to a string
+  return root.toString();
+}
+
 // ============================== Helper Function ===============================
 
 function wrapTextWithIns(htmlString) {
@@ -763,3 +794,5 @@ function replaceVariablesArray(htmlString, variableData) {
   });
   return replacedTemplateContent;
 }
+
+
