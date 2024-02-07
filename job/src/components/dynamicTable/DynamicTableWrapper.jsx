@@ -239,7 +239,7 @@ const DynamicTableWrapper = ({
                             toggle={() => setMassFODOpen(!massFODOpen)}
                           >
                             <DropdownToggle
-                              className="d-flex flex-row align-items-center gap-2"
+                              className="d-flex flex-row align-items-center gap-2 bg-custom-primary text-white"
                               caret
                             >
                               <i className="bx bxs-user-account"></i>
@@ -337,7 +337,7 @@ const DynamicTableWrapper = ({
                           </ButtonDropdown>
                           <Button
                             type="button"
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="mdi mdi-download"></i>
@@ -356,7 +356,7 @@ const DynamicTableWrapper = ({
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="ri-settings-3-fill"></i>
@@ -364,16 +364,22 @@ const DynamicTableWrapper = ({
                             Custom View
                           </Button>
                           {checkAllPermission([Permission.JOB_WRITE]) && (
-                            <Button type="button" className="btn btn-primary">
-                              <Link
-                                to="/jobs/job-creation"
-                                style={{ color: "black" }}
+                            <Link
+                              to="/jobs/job-creation"
+                              style={{ color: "black" }}
+                            >
+                              <Button
+                                type="button"
+                                className="btn btn-custom-primary"
                               >
                                 Create Job Openings
-                              </Link>
-                            </Button>
+                              </Button>
+                            </Link>
                           )}
-                          <Button type="button" className="btn btn-primary">
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                          >
                             <i className="ri-filter-line"></i>
                           </Button>
                         </div>
