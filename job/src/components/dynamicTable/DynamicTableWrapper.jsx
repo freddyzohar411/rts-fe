@@ -7,16 +7,18 @@ import {
   Container,
   Input,
   Row,
-  Dropdown,
   DropdownToggle,
   DropdownMenu,
   ButtonDropdown,
   Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import { Link, useParams } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
-import { GeneralModal } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,8 +28,6 @@ import {
   JOB_INITIAL_OPTIONS,
 } from "../JobListing/JobListingConstants";
 import { toast } from "react-toastify";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const DynamicTableWrapper = ({
   data,
@@ -95,96 +95,97 @@ const DynamicTableWrapper = ({
   return (
     <React.Fragment>
       <div className="page-content">
-        <GeneralModal
+        <Modal
           isOpen={isCustomViewModalOpen}
           setIsOpen={setIsCustomModalView}
+          size="xl"
+          centered
         >
-          <div>
-            <Row>
-              <Col lg={12}>
-                <div className="mt-4 mt-lg-0 p-4">
-                  <h5 className="fs-14 mb-1">Job Fields Options</h5>
-                  <p className="text-muted">
-                    Select fields to show on job listing table
-                  </p>
-                  <DualListBox
-                    canFilter
-                    filterCallback={(optGroup, filterInput) => {
-                      if (filterInput === "") {
-                        return true;
-                      }
-                      return new RegExp(filterInput, "i").test(optGroup.label);
-                    }}
-                    filterPlaceholder="Search..."
-                    options={optGroup ?? []}
-                    selected={
-                      selectedOptGroup.map((option) => option?.value) ?? []
-                    }
-                    onChange={handleChange}
-                    icons={{
-                      moveLeft: [
-                        <span
-                          className={`mdi mdi-chevron-left ${
-                            areOptionsEmpty() ? "disabled-icon" : ""
-                          }`}
-                          key="key"
-                        />,
-                      ],
-                      moveAllLeft: [
-                        <span
-                          className={`mdi mdi-chevron-double-left ${
-                            areOptionsEmpty() ? "disabled-icon" : ""
-                          }`}
-                          key="key"
-                        />,
-                      ],
-                      moveRight: (
-                        <span
-                          className={`mdi mdi-chevron-right ${
-                            areOptionsEmpty() ? "disabled-icon" : ""
-                          }`}
-                          key="key"
-                        />
-                      ),
-                      moveAllRight: [
-                        <span
-                          className={`mdi mdi-chevron-double-right ${
-                            areOptionsEmpty() ? "disabled-icon cursor-none" : ""
-                          }`}
-                          key="key"
-                        />,
-                      ],
-                      moveDown: (
-                        <span className="mdi mdi-chevron-down" key="key" />
-                      ),
-                      moveUp: <span className="mdi mdi-chevron-up" key="key" />,
-                      moveTop: (
-                        <span className="mdi mdi-chevron-double-up" key="key" />
-                      ),
-                      moveBottom: (
-                        <span
-                          className="mdi mdi-chevron-double-down"
-                          key="key"
-                        />
-                      ),
-                    }}
-                  />
-                  <div className="d-flex justify-content-end">
-                    <button
-                      className="btn btn-primary mt-3 "
-                      onClick={() => {
-                        setCustomConfigData(selectedOptGroup);
-                        setIsCustomModalView(false);
-                      }}
-                    >
-                      Set
-                    </button>
-                  </div>
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </GeneralModal>
+          <ModalHeader className="border border-bottom border-primary pb-3">
+            <div className="d-flex flex-column gap-1">
+              <span className="modal-title">Job Fields Options</span>
+              <span className="text-muted fs-6">
+                Select fields to show on job listing table.
+              </span>
+            </div>
+          </ModalHeader>
+          <ModalBody>
+            <div className="p-2">
+              <DualListBox
+                id="preserve-order"
+                canFilter
+                filterCallback={(optGroup, filterInput) => {
+                  if (filterInput === "") {
+                    return true;
+                  }
+                  return new RegExp(filterInput, "i").test(optGroup.label);
+                }}
+                options={optGroup ?? []}
+                preserveSelectOrder
+                selected={selectedOptGroup.map((option) => option?.value) ?? []}
+                showOrderButtons
+                onChange={handleChange}
+                icons={{
+                  moveLeft: [
+                    <span
+                      className={`mdi mdi-chevron-left ${
+                        areOptionsEmpty() ? "disabled-icon" : ""
+                      }`}
+                      key="key"
+                    />,
+                  ],
+                  moveAllLeft: [
+                    <span
+                      className={`mdi mdi-chevron-double-left ${
+                        areOptionsEmpty() ? "disabled-icon" : ""
+                      }`}
+                      key="key"
+                    />,
+                  ],
+                  moveRight: (
+                    <span
+                      className={`mdi mdi-chevron-right ${
+                        areOptionsEmpty() ? "disabled-icon" : ""
+                      }`}
+                      key="key"
+                    />
+                  ),
+                  moveAllRight: [
+                    <span
+                      className={`mdi mdi-chevron-double-right ${
+                        areOptionsEmpty() ? "disabled-icon cursor-none" : ""
+                      }`}
+                      key="key"
+                    />,
+                  ],
+                  moveDown: <span className="mdi mdi-chevron-down" />,
+                  moveUp: <span className="mdi mdi-chevron-up" />,
+                  moveTop: <span className="mdi mdi-chevron-double-up" />,
+                  moveBottom: <span className="mdi mdi-chevron-double-down" />,
+                }}
+              />
+            </div>
+          </ModalBody>
+          <ModalFooter className="border border-top border-primary pt-3">
+            <div className="d-flex flex-row gap-2 justify-content-end">
+              <Button
+                className="btn btn-danger"
+                onClick={() => setIsCustomModalView(!isCustomViewModalOpen)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="btn btn-custom-primary px-3"
+                onClick={() => {
+                  setCustomConfigData(selectedOptGroup);
+                  setIsCustomModalView(false);
+                }}
+              >
+                Set
+              </Button>
+            </div>
+          </ModalFooter>
+        </Modal>
         <Container fluid>
           <Row>
             <Col lg={12}>
