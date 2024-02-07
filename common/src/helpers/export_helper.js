@@ -512,7 +512,8 @@ export async function exportBackendHtml2PdfBlobExtCss(
   options = {},
   cssString = ""
 ) {
-  let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
+  let content = htmlString;
+  // let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
   // content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
 
   const styleTag = createStyleTag(options, false);
@@ -784,7 +785,7 @@ export async function exportBackendHtml2JpegFile(
   </html>
 `;
 
-  let fileName = options?.fileName  || "document";
+  let fileName = options?.fileName || "document";
 
   try {
     const response = await BackendHelper.convertHtmlStringToJpeg({
@@ -884,7 +885,7 @@ export async function exportBackendHtml2PngFile(
   </html>
 `;
 
-  let fileName = options?.fileName  || "document";
+  let fileName = options?.fileName || "document";
 
   try {
     const response = await BackendHelper.convertHtmlStringToPng({
