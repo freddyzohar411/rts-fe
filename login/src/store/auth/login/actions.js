@@ -5,6 +5,9 @@ import {
   LOGOUT_USER_SUCCESS,
   API_ERROR,
   RESET_LOGIN_FLAG,
+  LOGIN_RESET_PASSWORD_USER,
+  LOGIN_RESET_PASSWORD_SUCCESS,
+  LOGIN_RESET_PASSWORD_ERROR,
 } from "./actionTypes";
 
 export const loginUser = (user, history) => {
@@ -45,5 +48,26 @@ export const apiError = (error) => {
 export const resetLoginFlag = () => {
   return {
     type: RESET_LOGIN_FLAG,
+  };
+};
+
+export const loginResetPassword = (user, history) => {
+  return {
+    type: LOGIN_RESET_PASSWORD_USER,
+    payload: { user, history },
+  };
+};
+
+export const loginResetPasswordSuccess = (user) => {
+  return {
+    type: LOGIN_RESET_PASSWORD_SUCCESS,
+    payload: user,
+  };
+};
+
+export const loginResetPasswordError = (error) => {
+  return {
+    type: LOGIN_RESET_PASSWORD_ERROR,
+    payload: error,
   };
 };
