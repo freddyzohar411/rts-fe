@@ -213,40 +213,64 @@ const EditorElement2 = ({
 
   // Handle file Picker callback
   const handleFilePickerCallback = (cb, value, meta) => {
-    const cancelBtnEl = document.querySelector('[title="Cancel"]');
-    const saveBtnEl = document.querySelector('[title="Save"]');
-    const dialogEl = document.querySelector('[role="dialog"]');
+    if (meta.filetype === "media") {
+      const cancelBtnEl = document.querySelector('[title="Cancel"]');
+      const saveBtnEl = document.querySelector('[title="Save"]');
+      const dialogEl = document.querySelector('[role="dialog"]');
 
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "video/*");
+      const input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "video/*");
 
-    input.addEventListener("change", (e) => {
-      const file = e.target.files[0];
+      input.addEventListener("change", (e) => {
+        const file = e.target.files[0];
 
-      if (file) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          const id = "blobid" + new Date().getTime();
-          const blobCache = tinymce.activeEditor.editorUpload.blobCache;
-          const base64 = reader.result.split(",")[1];
-          const blobInfo = blobCache.create(id, file, base64);
-          blobCache.add(blobInfo);
+        if (file) {
+          const reader = new FileReader();
+          reader.addEventListener("load", () => {
+            const id = "blobid" + new Date().getTime();
+            const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+            const base64 = reader.result.split(",")[1];
+            const blobInfo = blobCache.create(id, file, base64);
+            blobCache.add(blobInfo);
 
-          videoUploadHandler(
-            blobInfo,
-            file,
-            cancelBtnEl,
-            saveBtnEl,
-            dialogEl
-          ).then((res) => {
-            cb(res, { title: file.name });
+            videoUploadHandler(
+              blobInfo,
+              file,
+              cancelBtnEl,
+              saveBtnEl,
+              dialogEl
+            ).then((res) => {
+              cb(res, { title: file.name });
+            });
           });
-        });
+          reader.readAsDataURL(file);
+        }
+      });
+      input.click();
+    }
+
+    if (meta.filetype === "image") {
+
+      var input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "image/*");
+
+      input.onchange = function () {
+        var file = this.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function () {
+          // Instead of using the Blob URL, use the reader's result directly
+          console.log("reader.result", reader.result);
+          cb(reader.result, { title: file.name });
+        };
         reader.readAsDataURL(file);
-      }
-    });
-    input.click();
+      };
+
+      input.click();
+    }
+
   };
 
   // Set editor ref
@@ -255,41 +279,6 @@ const EditorElement2 = ({
     setEditorRef(editorRef);
   }, [setEditorRef, editorRef]);
 
-  //   function zoomEditorContent(editor, scale) {
-  //     var contentArea = editor.getContentAreaContainer();
-  //     var contentDocument = editor.getDoc();
-  //     var contentBody = contentDocument.body;
-
-  //     // contentArea.style.overflow = 'auto';
-
-  //     // Apply scale transform
-  //     contentBody.style.transform = 'scale(' + scale + ')';
-  //     contentBody.style.transformOrigin = 'center center'; // Adjust as needed
-  // }
-
-  // function zoomEditorContent(editor, scale) {
-  //   var contentArea = editor.getContentAreaContainer();
-  //   var contentDocument = editor.getDoc();
-  //   var contentBody = contentDocument.body;
-
-  //   // Calculate the center of the content area
-  //   var centerX = contentArea.clientWidth / 2;
-
-  //   // Calculate the fixed top position
-  //   var fixedTop = 50; // Set the fixed top value in pixels
-
-  //   // Apply scale transform
-  //   contentBody.style.transform = `scale(${scale})`;
-
-  //   // Calculate the translation value to center the content horizontally
-  //   var translateX = (centerX * (1 - scale)).toFixed(2); // Round to two decimal places
-
-  //   // Apply translation transform to center the content horizontally and keep it fixed from the top
-  //   contentBody.style.transform += ` translate(${translateX}px, ${fixedTop}px)`;
-
-  //   // Adjust the transformation origin to the center
-  //   contentBody.style.transformOrigin = 'top left'; // Keep the center fixed
-  // }
 
   // Function to add the 'active-header' class
   const addHeaderStyle = (editor) => {
@@ -663,7 +652,7 @@ const EditorElement2 = ({
           font_size_formats:
             "6pt 8pt 9pt 10pt 11pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 34pt 36pt 38pt 40pt 42pt 44pt 46pt 48pt 50pt 55pt 60pt 65pt 70pt 75pt 80pt 85pt 90pt 95pt 100pt",
           images_upload_handler: imageUploadHandler,
-          file_picker_types: "media",
+          file_picker_types: "image, media",
           // table_default_styles: {
           //   width: "300px",
           // },
