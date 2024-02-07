@@ -11,7 +11,7 @@ import {
   ModalBody,
   ModalHeader,
   ModalFooter,
-  Label
+  Label,
 } from "reactstrap";
 import { Link, useParams } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
@@ -188,15 +188,15 @@ const DynamicTableWrapper = ({
         <Modal
           isOpen={massFODOpen}
           toggle={() => setMassFODOpen(!massFODOpen)}
-          size="lg"
+          size="md"
           centered
         >
           <ModalHeader className="border border-bottom border-primary">
             <div className="d-flex flex-column mb-3">
               <span>Assign Recruiters to Job FOD</span>
               <span className="text-muted fs-6">
-                Please select the recruiters you would like to assign to the
-                selected Job FOD.
+                Please select recruiters for the selected jobs to assign for
+                FOD.
               </span>
             </div>
           </ModalHeader>
@@ -213,6 +213,7 @@ const DynamicTableWrapper = ({
                 </div>
               </Col>
             </Row>
+            <hr className="border border-primary" />
             <Row>
               <Col>
                 <Row>
@@ -231,32 +232,9 @@ const DynamicTableWrapper = ({
                           {nestedVisible[index] && (
                             <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
                               <div className="d-flex flex-column justify-content-center align-items-center">
-                                <div
-                                  style={{
-                                    width: "6px",
-                                    height: "6px",
-                                    backgroundColor: "black",
-                                    borderRadius: "100%",
-                                    marginTop: "6px",
-                                  }}
-                                ></div>
-                                <div
-                                  style={{
-                                    flex: 1,
-                                    width: "1px",
-                                    backgroundColor: "black",
-                                    alignItems: "center",
-                                  }}
-                                ></div>
-                                <div
-                                  style={{
-                                    width: "6px",
-                                    height: "6px",
-                                    backgroundColor: "black",
-                                    borderRadius: "100%",
-                                    marginBottom: "6px",
-                                  }}
-                                ></div>
+                                <div className="styled-dropdown ball-1"></div>
+                                <div className="styled-line"></div>
+                                <div className="styled-dropdown ball-2"></div>
                               </div>
                               <div className="ps-0 ms-0 w-100">
                                 {item.subNames.map((subName, subIndex) => {
@@ -299,8 +277,16 @@ const DynamicTableWrapper = ({
               </Col>
             </Row>
           </ModalBody>
-          <ModalFooter className="border border-top">
-            <Button className="btn btn-custom-primary mt-3" type="submit">Assign</Button>
+          <ModalFooter className="border border-top pt-3">
+            <Button
+              className="btn btn-danger"
+              onClick={() => setMassFODOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button className="btn btn-custom-primary" type="submit">
+              Assign
+            </Button>
           </ModalFooter>
         </Modal>
         <Container fluid>

@@ -195,10 +195,6 @@ function CandidateListing() {
     dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
   }, [pageRequest]);
 
-  // useEffect(() => {
-  //   dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
-  // }, [pageRequest]);
-
   // Update the page info when candidate Data changes
   useEffect(() => {
     if (candidatesData) {

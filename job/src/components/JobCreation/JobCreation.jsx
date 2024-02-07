@@ -41,7 +41,7 @@ const JobCreation = () => {
   const [randomId, setRandomId] = useState();
   const [deleteDraftModal, setDeleteDraftModal] = useState(false);
 
-  // Fetch all the countries and account nameS
+  // Fetch all the countries and account names
   useEffect(() => {
     dispatch(fetchJobForm(JOB_FORM_NAME));
     if (!jobId) {

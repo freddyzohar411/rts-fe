@@ -12,9 +12,9 @@ import {
   Row,
   Col,
   Label,
-  Spinner,
 } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
+import "./JobListing.scss";
 import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
@@ -113,28 +113,12 @@ const JobListing = () => {
   }, [recruiterGroup]);
 
   // Get all the option groups
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   dispatch(fetchJobListsFields()).finally(() => setIsLoading(false));
-  //   dispatch(fetchUserGroupByName(RECRUITER_GROUP)).finally(() =>
-  //     setIsLoading(false)
-  //   );
-  // }, []);
-
   useEffect(() => {
     dispatch(fetchJobListsFields());
     dispatch(fetchUserGroupByName(RECRUITER_GROUP));
   }, []);
 
   // Fetch the job when the pageRequest changes
-  // useEffect(() => {
-  //   const request = { ...pageRequest, jobType };
-  //   setIsLoading(true);
-  //   dispatch(
-  //     fetchJobLists(DynamicTableHelper.cleanPageRequest(request))
-  //   ).finally(() => setIsLoading(false));
-  // }, [pageRequest]);
-
   useEffect(() => {
     const request = { ...pageRequest, jobType };
     if (checkAnyRole([Role.ADMIN])) {
@@ -271,9 +255,8 @@ const JobListing = () => {
                       {namesData?.map((item, index) => (
                         <li key={index}>
                           <div
-                            className="d-flex flex-row justify-content-between mb-1"
+                            className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
                             onClick={() => toggleNested(index)}
-                            style={{ cursor: "pointer" }}
                           >
                             <span>{item.name}</span>
                             <span>{nestedVisible[index] ? "-" : "+"}</span>
@@ -281,32 +264,9 @@ const JobListing = () => {
                           {nestedVisible[index] && (
                             <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
                               <div className="d-flex flex-column justify-content-center align-items-center">
-                                <div
-                                  style={{
-                                    width: "6px",
-                                    height: "6px",
-                                    backgroundColor: "black",
-                                    borderRadius: "100%",
-                                    marginTop: "6px",
-                                  }}
-                                ></div>
-                                <div
-                                  style={{
-                                    flex: 1,
-                                    width: "1px",
-                                    backgroundColor: "black",
-                                    alignItems: "center",
-                                  }}
-                                ></div>
-                                <div
-                                  style={{
-                                    width: "6px",
-                                    height: "6px",
-                                    backgroundColor: "black",
-                                    borderRadius: "100%",
-                                    marginBottom: "6px",
-                                  }}
-                                ></div>
+                                <div className="styled-dropdown ball-1"></div>
+                                <div className="styled-line"></div>
+                                <div className="styled-dropdown ball-2"></div>
                               </div>
                               <div className="ps-0 ms-0 w-100">
                                 {item.subNames.map((subName, subIndex) => {

@@ -1,4 +1,4 @@
-import { call, put, takeEvery, delay } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 
 import {
   FETCH_DRAFT_JOB,
@@ -34,7 +34,6 @@ function* workFetchDraftJob() {
 
 function* workFetchJobForm(action) {
   try {
-    // yield delay(1000);
     const response = yield call(getFormByFormName, action.payload);
     yield put(fetchJobFormSuccess(response.data));
   } catch (error) {
@@ -44,7 +43,6 @@ function* workFetchJobForm(action) {
 
 function* workFetchJobDocumentForm(action) {
   try {
-    // yield delay(1000);
     const response = yield call(getFormByFormName, action.payload);
     yield put(fetchJobDocumentFormSuccess(response.data));
   } catch (error) {

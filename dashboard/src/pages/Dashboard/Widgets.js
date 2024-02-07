@@ -168,7 +168,7 @@ const Widgets = () => {
                           <span>{item.data}</span>
                         </h4>
                       </div>
-                      <div className="">
+                      <div>
                         <a
                           href=""
                           className="fs-5 fw-semibold"
