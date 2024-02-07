@@ -266,6 +266,7 @@ export function convertStyleToAttributesTable(htmlString) {
 export function convertInlineStylesToClasses(htmlString) {
   // console.log("HTML 1: ", htmlString);
   let rootTemp = replacePageBreakPlaceHolder(htmlString);
+  rootTemp = wrapCenteredImages(rootTemp);
   console.log("HTML 1.1: ", rootTemp);
   rootTemp = wrapTextWithIns(rootTemp);
   console.log("HTML 2.4444: ", rootTemp);
@@ -795,4 +796,107 @@ function replaceVariablesArray(htmlString, variableData) {
   return replacedTemplateContent;
 }
 
+// function convertAlignmentStylesToAttributes(htmlString) {
+//   return htmlString.replace(
+//     /<(\w+)([^>]*)style="([^"]*)"/gi, // Match any tag with a style attribute
+//     function (match, tagName, preStyle, style) {
+//       let align = "";
+//       // Handling for text-align in block elements
+//       if (style.includes("text-align: center")) {
+//         align = 'align="center"';
+//       } else if (style.includes("text-align: left")) {
+//         align = 'align="left"';
+//       } else if (style.includes("text-align: right")) {
+//         align = 'align="right"';
+//       }
+//       // Handling for margin auto alignments typically used with <img> tags
+//       else if (
+//         tagName.toLowerCase() === 'img' &&
+//         style.includes("margin-left: auto") &&
+//         style.includes("margin-right: auto")
+//       ) {
+//         align = 'align="middle"';
+//       } else if (
+//         tagName.toLowerCase() === 'img' &&
+//         style.includes("margin-left:0") &&
+//         style.includes("margin-right:auto")
+//       ) {
+//         align = 'align="left"';
+//       } else if (
+//         tagName.toLowerCase() === 'img' &&
+//         style.includes("margin-left:auto") &&
+//         style.includes("margin-right:0")
+//       ) {
+//         align = 'align="right"';
+//       }
 
+//       // Construct the new tag with alignment attributes
+//       // If align is not empty, add it to the tag, otherwise, return the original tag
+//       return align ? `<${tagName}${preStyle}style="${style}" ${align}` : match;
+//     }
+//   );
+// }
+
+function convertAlignmentStylesToAttributes(htmlString) {
+  return htmlString.replace(
+    /<(\w+)([^>]*)style="([^"]*)"/gi, // Match any tag with a style attribute
+    function (match, tagName, preStyle, style) {
+      let align = "";
+      let modifiedStyle = style;
+
+      // Handling for text-align in block elements
+      if (style.includes("text-align: center")) {
+        align = 'align="center"';
+      } else if (style.includes("text-align: left")) {
+        align = 'align="left"';
+      } else if (style.includes("text-align: right")) {
+        align = 'align="right"';
+      }
+
+      // Special handling for images
+      if (tagName.toLowerCase() === 'img') {
+        if (style.includes("margin-left: auto") && style.includes("margin-right: auto")) {
+          // Remove margin styles for auto margins
+          modifiedStyle = style.replace(/margin-(left|right): auto;?\s?/g, '');
+          // Wrap the img tag in a div with text-align:center and apply any remaining styles
+          return `<div style="text-align:center;"><img ${preStyle}style="${modifiedStyle}" /></div>`;
+        } else if (style.includes("margin-left: 0") && style.includes("margin-right: auto")) {
+          align = 'align="left"';
+        } else if (style.includes("margin-left: auto") && style.includes("margin-right: 0")) {
+          align = 'align="right"';
+        }
+      }
+
+      // Reconstruct the tag with alignment attributes if applicable
+      // For img tags, ensure self-closing syntax is respected
+      return align || tagName.toLowerCase() === 'img'
+        ? `<${tagName} ${preStyle}style="${modifiedStyle}" ${align} />`
+        : `<${tagName} ${preStyle}style="${modifiedStyle}" ${align}>`;
+    }
+  );
+}
+
+function traverseAndWrap(node) {
+  node.childNodes.forEach((child) => {
+    // Check if the child is an <img> with the specific style
+    if (child.tagName === 'IMG') {
+      const style = child.getAttribute('style');
+      if (style && style.includes('margin-left: auto') && style.includes('margin-right: auto')) {
+        // Create a new <div> wrapper for the <img>
+        const wrapper = new HTMLElement('div', { style: 'text-align: center;' }, 'style="text-align:center;"', null, child.parentNode);
+        // Replace the <img> with the wrapper <div> and reinsert the <img> into the wrapper
+        child.replaceWith(wrapper);
+        wrapper.appendChild(child);
+      }
+    } else if (child.childNodes.length > 0) {
+      // Recurse into child nodes
+      traverseAndWrap(child);
+    }
+  });
+}
+
+function wrapCenteredImages(htmlString) {
+  const root = parse(htmlString);
+  traverseAndWrap(root);
+  return root.toString();
+}
