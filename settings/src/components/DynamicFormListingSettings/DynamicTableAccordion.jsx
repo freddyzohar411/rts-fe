@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   Row,
@@ -8,8 +8,11 @@ import {
   PaginationLink,
   Input,
 } from "reactstrap";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const DynamicTableAccordion = ({ data, config, pageInfo, pageRequestSet }) => {
+  const [isLoading, setIsLoading] = useState(false);
   // Modules
   const categories = [
     ...new Set(data?.map((item) => item.formCategory || "No Category")),
@@ -92,6 +95,16 @@ const DynamicTableAccordion = ({ data, config, pageInfo, pageRequestSet }) => {
     });
   };
 
+  useEffect(() => {
+    if (data && data.length === 0) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } else {
+      setIsLoading(true);
+    }
+  }, [data]);
+
   return (
     <div>
       <Row>
@@ -99,10 +112,24 @@ const DynamicTableAccordion = ({ data, config, pageInfo, pageRequestSet }) => {
           <div className="table-responsive">
             <Table className="table table-hover table-striped table-bordered border-secondary align-start">
               <thead>
-                <tr>{data && generateHeaderJsx(config)}</tr>
+                <tr>
+                  {data && data.length > 0 ? (
+                    generateHeaderJsx(config)
+                  ) : isLoading ? (
+                    <Skeleton />
+                  ) : (
+                    <span>Header is not available.</span>
+                  )}
+                </tr>
               </thead>
               <tbody>
-                {data && generateBodyJsx(config, data, categories, open)}
+                {data && data.length > 0 ? (
+                  generateBodyJsx(config, data, categories, open)
+                ) : isLoading ? (
+                  <Skeleton count={5} />
+                ) : (
+                  <span>Data is not available.</span>
+                )}
               </tbody>
             </Table>
           </div>

@@ -18,8 +18,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchRoles, deleteRole, listRoles } from "../../../store/roles/action";
 import { fetchModules } from "../../../store/module/action";
 import { fetchPermissions } from "../../../store/permissions/action";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function RolesTab() {
+  const [isLoading, setIsLoading] = useState(false);
   const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
   const roles = rolesListing.roles;
   const totalPages = rolesListing.totalPages;
@@ -84,6 +87,16 @@ function RolesTab() {
     setModal(!modal);
   };
 
+  useEffect(() => {
+    if (roles && roles.length === 0) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } else {
+      setIsLoading(true);
+    }
+  }, [roles]);
+
   return (
     <div>
       <Row>
@@ -131,12 +144,10 @@ function RolesTab() {
               className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3"
               id="rolesTable"
             >
-              <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
+              <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
                 <tr>
                   <th scope="col">
-                    <span className="me-1">
-                      Roles
-                    </span>
+                    <span className="me-1">Roles</span>
                     <i
                       className="mdi mdi-sort"
                       onClick={() => {
@@ -145,16 +156,14 @@ function RolesTab() {
                       style={{ cursor: "pointer" }}
                     ></i>
                   </th>
-                  <th scope="col">
-                    Description
-                  </th>
+                  <th scope="col">Description</th>
                   <th scope="col" style={{ width: "30px" }}>
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {roles?.length > 0 ? (
+                {roles && roles?.length > 0 ? (
                   roles?.map((role, index) => (
                     <tr key={index}>
                       <td>{role?.roleName}</td>
@@ -202,6 +211,12 @@ function RolesTab() {
                       </td>
                     </tr>
                   ))
+                ) : isLoading ? (
+                  <tr>
+                    <td colSpan={3}>
+                      <Skeleton count={5} />
+                    </td>
+                  </tr>
                 ) : (
                   <tr>
                     <td colSpan={3}>No roles found!</td>

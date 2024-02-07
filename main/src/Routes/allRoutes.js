@@ -5,7 +5,13 @@ import { Navigate } from "react-router-dom";
 import { Dashboard } from "@workspace/dashboard";
 
 // User Profile
-import { Login, Logout, UserProfile, ForgetPassword } from "@workspace/login";
+import {
+  Login,
+  Logout,
+  UserProfile,
+  ForgetPassword,
+  ResetPassword,
+} from "@workspace/login";
 
 // Account
 import { AccountListing, EditAccount, CreateAccount } from "@workspace/account";
@@ -184,6 +190,7 @@ const authProtectedRoutes = [
 const publicRoutes = [
   // Authentication Page
   { path: "/login", component: <Login /> },
+  { path: "/reset-password", component: <ResetPassword /> },
   { path: "/logout", component: <Logout /> },
   { path: "/forget-password", component: <ForgetPassword /> },
 ];

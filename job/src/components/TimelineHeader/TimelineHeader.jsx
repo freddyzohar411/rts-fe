@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button } from "reactstrap";
 import { useSelector } from "react-redux";
+import { useMediaQuery } from "react-responsive";
 
 function TimelineHeader({ data }) {
   const [startIndex, setStartIndex] = useState(0);
-  const itemsPerPage = 6;
+  const [itemsPerPage, setItemsPerPage] = useState(0);
+  const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
+  useEffect(() => {
+    if (isMobile) {
+      setItemsPerPage(1)
+    } else if (isTablet) {
+      setItemsPerPage(4)
+    } else {
+      setItemsPerPage(6)
+    }
+  }, [itemsPerPage]);
 
   const jobTimelineCount = useSelector(
     (state) => state.JobStageReducer.jobTimelineCount
@@ -33,8 +46,11 @@ function TimelineHeader({ data }) {
   };
 
   return (
-    <Row className="align-items-stretch w-100 m-0" style={{ height: "60px" }}>
-      <Col xs="auto" className="d-flex align-items-stretch">
+    <Row
+      className="align-items-stretch w-100 m-0"
+      style={{ height: "60px" }}
+    >
+      <Col xs="auto" className="d-flex align-items-stretch flex-nowrap">
         <Button
           onClick={handlePrevClick}
           disabled={startIndex === 0}
@@ -44,13 +60,13 @@ function TimelineHeader({ data }) {
         </Button>
       </Col>
       <Col>
-        <div className="d-flex flex-row justify-content-between overflow-auto">
+        <div className={`${isMobile || "d-flex flex-row justify-content-between mx-2"}`}>
           {data
             .slice(startIndex, startIndex + itemsPerPage)
             .map((item, index) => (
               <div
                 key={index}
-                className="mx-2 d-flex flex-column align-items-center mt-2 gap-2 text-center"
+                className="d-flex flex-column align-items-center mt-2 gap-2 text-center"
               >
                 <div
                   className="rounded rounded-pill bg-primary text-white d-flex align-items-center justify-content-center"

@@ -18,8 +18,11 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, listUsers } from "../../../store/users/action";
 import { DateHelper } from "@workspace/common";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function UsersTab() {
+  const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const usersListing =
     useSelector((state) => state?.UserReducer?.usersListing) || [];
@@ -75,6 +78,16 @@ function UsersTab() {
     setModal(!modal);
   };
 
+  useEffect(() => {
+    if (users && users.length === 0) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } else {
+      setIsLoading(true);
+    }
+  }, [users]);
+
   return (
     <div>
       <Row className="d-flex flex-row align-items-center">
@@ -99,12 +112,10 @@ function UsersTab() {
               className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3"
               id="customFormTable"
             >
-              <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
+              <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
                 <tr>
                   <th>
-                    <span className="me-1">
-                      Name
-                    </span>
+                    <span className="me-1">Name</span>
                     <i
                       className="mdi mdi-sort"
                       style={{ cursor: "pointer" }}
@@ -126,10 +137,8 @@ function UsersTab() {
                   <th scope="col" hidden>
                     Roles
                   </th>
-                  <th scope="col">
-                    Member of Group(s)
-                  </th>
-                  <th scope="col" style={{ width: "30px"}}>
+                  <th scope="col">Member of Group(s)</th>
+                  <th scope="col" style={{ width: "30px" }}>
                     <span className="me-1">Date Joined</span>
                     <i
                       className="mdi mdi-sort"
@@ -141,7 +150,7 @@ function UsersTab() {
                   </th>
                   {/* <th scope="col">Last Login</th> */}
 
-                  <th scope="col" style={{ width: "30px" }}>  
+                  <th scope="col" style={{ width: "30px" }}>
                     Status
                   </th>
                   <th scope="col" style={{ width: "30px" }}>
@@ -150,7 +159,7 @@ function UsersTab() {
                 </tr>
               </thead>
               <tbody>
-                {users?.length > 0 ? (
+                {users && users?.length > 0 ? (
                   users?.map((user, index) => (
                     <tr key={index}>
                       <td>
@@ -224,6 +233,12 @@ function UsersTab() {
                       </td>
                     </tr>
                   ))
+                ) : isLoading ? (
+                  <tr>
+                    <td colSpan={8}>
+                      <Skeleton count={5} />
+                    </td>
+                  </tr>
                 ) : (
                   <tr>
                     <td colSpan="8">No users found!</td>

@@ -14,6 +14,7 @@ import {
   Label,
 } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
+import "./JobListing.scss";
 import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
@@ -25,7 +26,7 @@ import {
   fetchJobLists,
   fetchJobListsFields,
   fetchUserGroupByName,
-  fetchJobsAdmin
+  fetchJobsAdmin,
 } from "../../store/jobList/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
@@ -122,7 +123,7 @@ const JobListing = () => {
     const request = { ...pageRequest, jobType };
     if (checkAnyRole([Role.ADMIN])) {
       dispatch(fetchJobsAdmin(DynamicTableHelper.cleanPageRequest(request)));
-      return
+      return;
     }
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
   }, [pageRequest]);
@@ -234,7 +235,7 @@ const JobListing = () => {
               >
                 FOD
               </DropdownToggle>
-              <DropdownMenu className="p-3">
+              <DropdownMenu className="p-3" style={{ width: "200px" }}>
                 {/* Map Recruiter Checkbox Here */}
                 <Row className="mb-2">
                   <Col>
@@ -254,45 +255,50 @@ const JobListing = () => {
                       {namesData?.map((item, index) => (
                         <li key={index}>
                           <div
-                            className="d-flex flex-row justify-content-between mb-1"
+                            className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
                             onClick={() => toggleNested(index)}
-                            style={{ cursor: "pointer" }}
                           >
                             <span>{item.name}</span>
                             <span>{nestedVisible[index] ? "-" : "+"}</span>
                           </div>
                           {nestedVisible[index] && (
-                            <ul
-                              style={{
-                                listStyleType: "circle",
-                                paddingLeft: "20px",
-                              }}
-                            >
-                              {item.subNames.map((subName, subIndex) => {
-                                const split = subName?.split("@");
-                                return (
-                                  <li
-                                    key={subIndex}
-                                    className="d-flex flew-row justify-content-between"
-                                  >
-                                    {split[1]}
-                                    <Label check className="mb-0 ms-2">
-                                      <Input
-                                        type="checkbox"
-                                        checked={
-                                          selectedRecruiter ===
-                                          parseInt(split[0])
-                                        }
-                                        onChange={() =>
-                                          setSelectedRecruiter(
+                            <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+                              <div className="d-flex flex-column justify-content-center align-items-center">
+                                <div className="styled-dropdown ball-1"></div>
+                                <div className="styled-line"></div>
+                                <div className="styled-dropdown ball-2"></div>
+                              </div>
+                              <div className="ps-0 ms-0 w-100">
+                                {item.subNames.map((subName, subIndex) => {
+                                  const split = subName?.split("@");
+                                  return (
+                                    <li
+                                      key={subIndex}
+                                      className="d-flex flew-row align-items-center justify-content-between"
+                                    >
+                                      {split[1]}
+
+                                      <Label
+                                        check
+                                        className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                      >
+                                        <Input
+                                          type="checkbox"
+                                          checked={
+                                            selectedRecruiter ===
                                             parseInt(split[0])
-                                          )
-                                        }
-                                      />
-                                    </Label>
-                                  </li>
-                                );
-                              })}
+                                          }
+                                          onChange={() =>
+                                            setSelectedRecruiter(
+                                              parseInt(split[0])
+                                            )
+                                          }
+                                        />
+                                      </Label>
+                                    </li>
+                                  );
+                                })}
+                              </div>
                             </ul>
                           )}
                         </li>
