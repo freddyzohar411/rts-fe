@@ -271,54 +271,27 @@ const EditorElement2 = ({
   //   var contentArea = editor.getContentAreaContainer();
   //   var contentDocument = editor.getDoc();
   //   var contentBody = contentDocument.body;
-
+  
   //   // Calculate the center of the content area
   //   var centerX = contentArea.clientWidth / 2;
-
+  
   //   // Calculate the fixed top position
   //   var fixedTop = 50; // Set the fixed top value in pixels
-
+  
   //   // Apply scale transform
   //   contentBody.style.transform = `scale(${scale})`;
-
+  
   //   // Calculate the translation value to center the content horizontally
   //   var translateX = (centerX * (1 - scale)).toFixed(2); // Round to two decimal places
-
+    
   //   // Apply translation transform to center the content horizontally and keep it fixed from the top
   //   contentBody.style.transform += ` translate(${translateX}px, ${fixedTop}px)`;
-
+  
   //   // Adjust the transformation origin to the center
   //   contentBody.style.transformOrigin = 'top left'; // Keep the center fixed
   // }
 
-  // Function to add the 'active-header' class
-  const addHeaderStyle = (editor) => {
-    const header = editor.getBody().querySelector('div[title="header"]');
-    if (header) {
-      header.classList.add("active-header");
-    }
-  };
-
-  // Function to remove the 'active-header' class
-  const removeHeaderStyle = (editor) => {
-    const header = editor.getBody().querySelector('div[title="header"]');
-    if (header) {
-      header.classList.remove("active-header");
-    }
-  };
-
-  useEffect(() => {
-    // Define custom styles for the active header
-    const style = document.createElement("style");
-    style.type = "text/css";
-    style.innerHTML = `.active-header { background-color: #f0f0f0; }`;
-    document.head.appendChild(style);
-
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
-
+  
   return (
     <>
       <TemplateAdvanceExportModal
@@ -333,8 +306,6 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
-            editor.on("focusin", () => addHeaderStyle(editor));
-            editor.on("focusout", () => removeHeaderStyle(editor));
             // On Init setup
             editor.on("init", function () {
               applyCanvasStyle(editor, "A4", "portrait"); // Set default to A4 portrait
@@ -564,66 +535,6 @@ const EditorElement2 = ({
                 }
               },
             });
-
-            editor.ui.registry.addButton("insertCustomHeader", {
-              text: "Insert Custom Header",
-              onAction: function () {
-                // Check if a header already exists
-                var existingHeader = editor
-                  .getContent()
-                  .includes('title="header"');
-
-                if (!existingHeader) {
-                  // Insert an empty header section with a placeholder
-                  var headerHtml =
-                    '<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><p>Insert your header content here...</p></div>';
-
-                  // Insert the header at the beginning of the content
-                  var content = editor.getContent();
-
-                  // Insert the header at the beginning of the content
-                  var content = editor.getContent();
-                  editor.setContent(headerHtml + content);
-                }
-
-                // Focus the editor on the header section for immediate editing
-                editor.focus();
-
-                // If a header already exists, move the cursor to it
-                var headerSection = editor
-                  .getBody()
-                  .querySelector('div[title="header"] p');
-                if (headerSection) {
-                  editor.selection.select(headerSection, true);
-                  editor.selection.collapse(false);
-                }
-              },
-            });
-
-            editor.ui.registry.addButton("exitHeader", {
-              text: "Exit Header",
-              onAction: function () {
-                // Check if we're currently in the header
-                var headerSection = editor
-                  .getBody()
-                  .querySelector('div[title="header"]');
-                if (headerSection) {
-                  // Create a new paragraph element outside the header
-                  var newParagraph = document.createElement("p");
-                  newParagraph.innerHTML = "&nbsp;"; // Optional placeholder text
-
-                  // Insert the new paragraph after the header div
-                  headerSection.parentNode.insertBefore(
-                    newParagraph,
-                    headerSection.nextSibling
-                  );
-
-                  // Move the cursor to the new paragraph
-                  editor.selection.select(newParagraph, true);
-                  editor.selection.collapse(true);
-                }
-              },
-            });
           },
           height: 500,
           menubar: false,
@@ -651,7 +562,7 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize | " +
+            "undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
