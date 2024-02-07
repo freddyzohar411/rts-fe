@@ -543,7 +543,7 @@ function JobOverview() {
             <TabPane tabId="1">
               <div className="overflow-auto">
                 <Table
-                  className="table table-striped align-middle"
+                  className="table table-striped align-middle jobtimeline"
                   style={{ tableLayout: "fixed", wordWrap: "break-word" }}
                 >
                   <thead className="table-light">
