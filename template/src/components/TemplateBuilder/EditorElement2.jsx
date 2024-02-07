@@ -251,7 +251,6 @@ const EditorElement2 = ({
     }
 
     if (meta.filetype === "image") {
-
       var input = document.createElement("input");
       input.setAttribute("type", "file");
       input.setAttribute("accept", "image/*");
@@ -270,7 +269,6 @@ const EditorElement2 = ({
 
       input.click();
     }
-
   };
 
   // Set editor ref
@@ -278,7 +276,6 @@ const EditorElement2 = ({
     if (!setEditorRef) return;
     setEditorRef(editorRef);
   }, [setEditorRef, editorRef]);
-
 
   // Function to add the 'active-header' class
   const addHeaderStyle = (editor) => {
@@ -613,6 +610,15 @@ const EditorElement2 = ({
                 }
               },
             });
+
+            // editor.on("GetContent", function (e) {
+            //   var content = e.content;
+            //   // A simple example to add inline style to paragraphs
+            //   e.content = content.replace(
+            //     /<p>/g,
+            //     '<p style="margin-bottom: 0in;">'
+            //   );
+            // });
           },
           height: 500,
           menubar: false,
@@ -640,13 +646,22 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize | " +
+            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
             "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPreviewButton | help",
+          // newline_behavior: "invert",
           content_style:
-            "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; }",
+            "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; } ul{ margin:0;} ",
+          style_formats: [
+            {
+              title: "Line Height 0.5",
+              block: "p",
+              styles: { lineHeight: "0.5" },
+            },
+            { title: "P 0.1mm", block: "p", styles: { margin: "0 0 0.1mm 0" } },
+          ],
           file_picker_callback: handleFilePickerCallback,
           font_size_input_default_unit: "point",
           font_size_formats:
