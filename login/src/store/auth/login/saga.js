@@ -4,10 +4,24 @@ import bcrypt from "bcryptjs-react";
 import { fetchProfile } from "../profile/actions";
 
 // Login Redux States
-import { LOGIN_USER, LOGOUT_USER } from "./actionTypes";
-import { apiError, loginSuccess, logoutUserSuccess } from "./actions";
+import {
+  LOGIN_RESET_PASSWORD_USER,
+  LOGIN_USER,
+  LOGOUT_USER,
+} from "./actionTypes";
+import {
+  apiError,
+  loginResetPasswordError,
+  loginResetPasswordSuccess,
+  loginSuccess,
+  logoutUserSuccess,
+} from "./actions";
 import { deleteProfile } from "../profile/actions";
-import { getLogout, postLogin } from "../../../helpers/backend_helper";
+import {
+  getLogout,
+  loginResetPwd,
+  postLogin,
+} from "../../../helpers/backend_helper";
 
 function* loginUser({ payload: { user, history } }) {
   try {
@@ -26,8 +40,13 @@ function* loginUser({ payload: { user, history } }) {
       // Check if user has any profile
       yield put(fetchProfile());
       yield take("PROFILE_SUCCESS");
-      history("/dashboard");
-      toast.success("Thanks for logging in.");
+      const isTemp = response?.user?.isTemp;
+      if (isTemp) {
+        history("/reset-password");
+      } else {
+        history("/dashboard");
+        toast.success("Thanks for logging in.");
+      }
     } else {
       yield put(apiError(response));
     }
@@ -61,9 +80,21 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 
+function* loginResetPassword({ payload: { user, history } }) {
+  try {
+    const response = yield call(loginResetPwd, user);
+    yield put(loginResetPasswordSuccess(response));
+    toast.success("Password has been reset successfully.");
+    history("/dashboard");
+  } catch (error) {
+    yield put(loginResetPasswordError(error));
+  }
+}
+
 function* authSaga() {
   yield takeEvery(LOGIN_USER, loginUser);
   yield takeEvery(LOGOUT_USER, logoutUser);
+  yield takeEvery(LOGIN_RESET_PASSWORD_USER, loginResetPassword);
 }
 
 export default authSaga;

@@ -13,8 +13,6 @@ const FileInputElement = ({ formik, field, formStateHook }) => {
     return str.slice(0, num) + "...";
   };
 
-  console.log("formik?.values?.[field.name]", formik?.values?.[field.name]);
-
   return (
     <>
       <input
