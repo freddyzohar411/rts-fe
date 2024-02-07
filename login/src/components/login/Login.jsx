@@ -46,7 +46,7 @@ const Login = (props) => {
             <Container>
               <Row>
                 <Col lg={12}>
-                  <div className="text-center mt-sm-5 text-white-50">
+                  <div className="text-center mt-sm-4 text-white-50">
                     <div>
                       <Link to="/login" className="d-inline-block auth-logo">
                         <img src={logo_big} alt="" height="80" />
@@ -60,12 +60,11 @@ const Login = (props) => {
                 </Col>
               </Row>
               <Row className="justify-content-center pt-4">
-                {/* <Col md={8} lg={6} xl={5}> */}
                 <Col lg={8} >
                   <Card>
                     <CardBody className="p-3">
                       <div className="text-center mt-2">
-                        <h2 className="text-dark">Welcome back!</h2>
+                        <h3 className="text-dark">Welcome back!</h3>
                         <p className="text-muted size fs-5">
                           Sign in to continue with Avensys.
                         </p>

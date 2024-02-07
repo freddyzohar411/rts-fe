@@ -189,8 +189,6 @@ const JobListing = () => {
     setIsDeleteModalOpen(false);
   };
 
-  console.log(namesData);
-
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
   const generateJobListConfig = (customConfig) => {
