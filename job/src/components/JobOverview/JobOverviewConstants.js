@@ -59,3 +59,42 @@ export const timelineSkip = [
   { 6: "Conditional Offer" },
   { 7: "Conditional Offer Status" },
 ];
+
+export const timelineLegend = [
+  {
+    color: "dark",
+    legend: "Completed Stage",
+    borderColor: "custom-primary",
+    tooltip: "Candidate has completed this stage.",
+  },
+  {
+    color: "custom-primary",
+    legend: "Incomplete Stage",
+    borderColor: "primary",
+    tooltip: "Candidate has not progressed to this stage.",
+  },
+  {
+    color: "danger",
+    legend: "Candidate Rejected",
+    borderColor: "dark",
+    tooltip: "Candidate has been rejected.",
+  },
+  {
+    color: "warning",
+    legend: "In Progress",
+    borderColor: "dark",
+    tooltip: "Candidate is in progress in this stage.",
+  },
+  {
+    color: "orange",
+    borderColor: "dark",
+    legend: "Candidate Withdrawn",
+    tooltip: "Candidate has withdrawn.",
+  },
+  {
+    color: "success",
+    borderColor: "dark",
+    legend: "Completed All Stages",
+    tooltip: "Candidate has completed all stages.",
+  }
+];

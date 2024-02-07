@@ -42,35 +42,34 @@ const Login = (props) => {
     >
       {({ errors, touched }) => (
         <ParticlesAuth>
-          <div className="auth-page-content mt-lg-5">
+          <div className="auth-page-content">
             <Container>
               <Row>
                 <Col lg={12}>
-                  <div className="text-center mt-sm-5 mb-4 text-white-50">
+                  <div className="text-center mt-sm-4 text-white-50">
                     <div>
                       <Link to="/login" className="d-inline-block auth-logo">
-                        <img src={logo_big} alt="" height="100" />
+                        <img src={logo_big} alt="" height="80" />
                       </Link>
                     </div>
-                    <p className="mt-3 fs-4 fw-medium text-white">
+                    <p className="fs-5 fw-medium text-white">
                       Talent and Recruitment Services to clients across the
                       world.
                     </p>
                   </div>
                 </Col>
               </Row>
-              <Row className="justify-content-center">
-                {/* <Col md={8} lg={6} xl={5}> */}
+              <Row className="justify-content-center pt-4">
                 <Col lg={8} >
-                  <Card className="mt-4">
-                    <CardBody className="p-4">
+                  <Card>
+                    <CardBody className="p-3">
                       <div className="text-center mt-2">
-                        <h2 className="text-dark">Welcome back!</h2>
-                        <p className="text-muted size fs-4">
+                        <h3 className="text-dark">Welcome back!</h3>
+                        <p className="text-muted size fs-5">
                           Sign in to continue with Avensys.
                         </p>
                       </div>
-                      <div className="p-2 mt-4">
+                      <div className="p-2">
                         <Form>
                           <div className="mb-3">
                             <Label htmlFor="email" className="form-label">
@@ -151,10 +150,10 @@ const Login = (props) => {
                               Remember me
                             </Label>
                           </div>
-                          <div className="mt-5">
+                          <div className="mt-3">
                             <Button
                               color="success"
-                              className="btn btn-next-button border-next-button-border w-100 py-3 fw-semibold fs-4"
+                              className="btn btn-next-button border-next-button-border w-100 py-3 fw-semibold fs-5"
                               type="submit"
                             >
                               Sign In

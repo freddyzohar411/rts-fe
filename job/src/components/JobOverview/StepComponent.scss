@@ -4,6 +4,17 @@
     border-radius: 2em;
 }
 
+.legend-tooltip .tooltip-inner {
+    max-width: 370px !important;
+    width: 370px !important;
+    background-color: white;
+    border: 1px solid #8080801d;
+    color: black;
+}
+
+.legend-tooltip .arrow::before {
+    border-bottom-color: white !important;
+}
 .progress-transition {
     -webkit-transition: none !important;
     -moz-transition: none !important;

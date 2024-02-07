@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Input,
+  Row,
+  Spinner,
+} from "reactstrap";
 import { Link } from "react-router-dom";
 // import DynamicTable from "./DynamicTable";
 import { DynamicTable } from "@workspace/common";
@@ -157,12 +166,6 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             onClick={() => {
-                              if (areOptionsEmpty()) {
-                                toast.error(
-                                  "No fields to show. Please have at least one candidate"
-                                );
-                                return;
-                              }
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}

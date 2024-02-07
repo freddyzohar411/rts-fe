@@ -51,7 +51,7 @@ function StepComponent({ index, maxOrder, data, isRejected }) {
                 }`}
               />
             ) : (
-              <div style={{ height: "4px", width: "100%" }}></div>
+              <div style={{ height: "2px", width: "100%" }}></div>
             )}
 
             <div
@@ -62,8 +62,8 @@ function StepComponent({ index, maxOrder, data, isRejected }) {
               }`}
               color="custom-button"
               style={{
-                width: "22px",
-                height: "22px",
+                width: "18px",
+                height: "18px",
                 flexShrink: 0,
                 flexGrow: 0,
                 flexBasis: "auto",
@@ -94,7 +94,7 @@ function StepComponent({ index, maxOrder, data, isRejected }) {
                 }`}
               />
             ) : (
-              <div style={{ height: "4px", width: "100%" }}></div>
+              <div style={{ height: "2px", width: "100%" }}></div>
             )}
           </div>
           {date && (

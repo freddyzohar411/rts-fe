@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Input,
   Table,
@@ -6,8 +6,21 @@ import {
   PaginationItem,
   PaginationLink,
 } from "reactstrap";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (data && data.length === 0) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } else {
+      setIsLoading(true);
+    }
+  }, [data]);
+
   // ========================================= Table Configuration ===========================
   // Generate Header
   const generateHeaderJSX = (config) => (
@@ -49,23 +62,31 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
   return (
     <>
       {/* Table */}
-      <div className="table-responsive table-hover table-card mt-3 mb-1" style={{height: "400px"}}>
+      <div
+        className="table-responsive table-hover table-card mt-3 mb-1"
+        style={{ height: "400px" }}
+      >
         <Table
           className="table align-middle table-nowrap border-secondary align-middle"
           id="accountListingTable"
         >
-          <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
+          <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
             <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
           </thead>
           <tbody className="list form-check-all">
             {data && data.length > 0 ? (
               generateBodyJSX(config, data)
+            ) : isLoading ? (
+              <tr>
+                <td colSpan={config.length}>
+                  <Skeleton count={2} />
+                </td>
+              </tr>
             ) : (
               <tr>
                 <td colSpan={config.length}>No data available.</td>
               </tr>
             )}
-            {/* {data && generateBodyJSX(config, data)} */}
           </tbody>
         </Table>
       </div>

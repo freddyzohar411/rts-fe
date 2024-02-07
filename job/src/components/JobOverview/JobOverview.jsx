@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import {
   Row,
   Col,
+  Card,
+  CardBody,
   Button,
   Input,
   Nav,
@@ -15,6 +17,8 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
+  Popover,
+  PopoverBody,
   Tooltip,
 } from "reactstrap";
 import {
@@ -28,6 +32,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
+import "./StepComponent.scss";
 
 // Elements
 // import { SelectElement } from "@workspace/common";
@@ -50,13 +55,21 @@ import {
   rtsStatusHeaders,
   steps,
   timelineSkip,
+  timelineLegend,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
 import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
+import { useMediaQuery } from "react-responsive";
+import BSGTimeline from "../BSGTimeline/BSGTimeline";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
+
+  const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
+  const [legendTooltip, setLegendTooltip] = useState(false);
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
@@ -86,7 +99,6 @@ function JobOverview() {
     (state) => state.JobStageReducer.jobTimeline
   );
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
-
   // Custom renders
   const customRenderList = [
     {
@@ -352,6 +364,42 @@ function JobOverview() {
     setCandidateId(id);
   };
 
+  const deliveryTeam = "Ganesh, Priya, Vinod";
+
+  const truncate = (input, length) =>
+    input
+      ? input.length > length
+        ? `${input.substring(0, length)}...`
+        : input
+      : "";
+
+  const renderLegend = () => {
+    return (
+      <div className="d-flex flex-wrap">
+        {timelineLegend.map((item, index) => (
+          <div
+            key={index}
+            className="d-flex flex-row gap-2 justify-content-start align-items-center me-2"
+            style={{ width: "calc(50% - 8px)" }}
+          >
+            <div
+              className={`bg-${item.color} rounded-circle`}
+              style={{
+                width: "9px",
+                height: "9px",
+                backgroundColor: `${item.color}`,
+                border: "1px solid #36454F",
+              }}
+            ></div>
+            <div>
+              <span>{item.legend}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <React.Fragment>
       <div>
@@ -359,41 +407,98 @@ function JobOverview() {
           <TimelineHeader data={jobHeaders} />
         </Row>
         <hr className="border border-dashed border-dark" />
-        <Row className="mb-3">
+        <Row className="mb-2">
           <Col>
-            <div className="d-flex flex-row justify-content-between align-items-center">
-              <div className="d-flex flex-row h5 fw-bold align-items-end gap-1">
-                <span>{formSubmissionData?.accountName} | </span>
-                <span>{formSubmissionData?.jobTitle} | </span>
-                <span>{formSubmissionData?.clientJobId} | </span>
-                <div className="d-flex flex-column">
-                  <span className="fw-medium h6 text-muted">Sales</span>
-                  <span>{formSubmissionData?.salesManager} | </span>
+            <div
+              className={`d-flex ${
+                isMobile
+                  ? "flex-column align-items-start"
+                  : "flex-row align-items-center"
+              } justify-content-between gap-1`}
+            >
+              <div
+                className={`d-flex ${
+                  isMobile
+                    ? "flex-column align-items-start"
+                    : "flex-row align-items-end"
+                } h5 fw-bold  gap-1`}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                <div className="d-flex flex-row gap-1">
+                  <span title={formSubmissionData?.accountName}>
+                    {isMobile | isTablet
+                      ? truncate(formSubmissionData?.accountName, 8)
+                      : formSubmissionData?.accountName}
+                  </span>
+                  <span>|</span>
+                  <span title={formSubmissionData?.jobTitle}>
+                    {isMobile | isTablet
+                      ? truncate(formSubmissionData?.jobTitle, 8)
+                      : formSubmissionData?.jobTitle}
+                  </span>
+                  <span>|</span>
+                  <span>{formSubmissionData?.clientJobId}</span>
+                  {isMobile || <span>|</span>}
                 </div>
-                <div className="d-flex flex-column">
-                  <span className="fw-medium h6 text-muted">Delivery</span>
-                  <span>Ganesh, Priya, Vinod</span>
+                <div className="d-flex flex-row gap-1">
+                  <div className="d-flex flex-column">
+                    <span className="fw-medium h6 text-muted">Sales</span>
+                    <span title={formSubmissionData?.salesManager}>
+                      {isMobile | isTablet
+                        ? truncate(formSubmissionData?.salesManager, 8)
+                        : formSubmissionData?.salesManager}
+                    </span>
+                  </div>
+                  <div className="d-flex align-items-end gap-1">
+                    <span>|</span>
+                    <div className="d-flex flex-column">
+                      <span className="fw-medium h6 text-muted">Delivery</span>
+                      <span>
+                        {isMobile | isTablet
+                          ? truncate(deliveryTeam, 8)
+                          : deliveryTeam}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="d-flex flex-row gap-2 align-items-center">
-                <div className="search-box" style={{ width: "300px" }}>
-                  <form onSubmit={pageRequestSet.setSearchTerm}>
-                    <Input
-                      type="text"
-                      placeholder="Search"
-                      className="form-control search"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </form>
-                  <i className="ri-search-eye-line search-icon"></i>
+              <div className="d-flex flex-column gap-2">
+                <div className="d-flex flex-row gap-2 justify-content-end align-items-center">
+                  <div>
+                    <i
+                      id="legendInfo"
+                      className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
+                      onClick={() => setLegendTooltip(!legendTooltip)}
+                    ></i>
+                    <Tooltip
+                      target="legendInfo"
+                      placement="bottom"
+                      isOpen={legendTooltip}
+                      toggle={() => setLegendTooltip(!legendTooltip)}
+                      className="legend-tooltip"
+                    >
+                      {renderLegend()}
+                    </Tooltip>
+                  </div>
+                  <div className="search-box">
+                    <form onSubmit={pageRequestSet.setSearchTerm}>
+                      <Input
+                        type="text"
+                        placeholder="Search"
+                        className="form-control search"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                    </form>
+                    <i className="ri-search-eye-line search-icon"></i>
+                  </div>
+                  <Button className="btn btn-custom-primary">
+                    <i className="ri-filter-2-fill"></i>
+                  </Button>
+                  <Button className="btn btn-custom-primary">
+                    <i className="ri-message-2-fill"></i>
+                  </Button>
                 </div>
-                <Button className="btn btn-custom-primary">
-                  <i className="ri-filter-2-fill"></i>
-                </Button>
-                <Button className="btn btn-custom-primary">
-                  <i className="ri-message-2-fill"></i>
-                </Button>
               </div>
             </div>
           </Col>
@@ -539,8 +644,8 @@ function JobOverview() {
               </div>
             </TabPane>
             <TabPane tabId="2">
-              <div className="p-4">
-                <span>BSG Status</span>
+              <div>
+                <BSGTimeline />
               </div>
             </TabPane>
           </TabContent>
@@ -597,7 +702,7 @@ function JobOverview() {
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
-          style={{ width: "75vw" }}
+          style={{ width: isMobile ? "100vw" : "75vw" }}
         >
           <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
             <div className="avatar-md flex-shrink-0 d-flex gap-3">
@@ -652,14 +757,6 @@ function JobOverview() {
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
         </Offcanvas>
-        {/* <Tooltip
-          target="next-step"
-          isOpen={tooltipOpen}
-          toggle={() => setTooltipOpen(!tooltipOpen)}
-          placement="bottom"
-        >
-          {stepperState}
-        </Tooltip> */}
       </div>
     </React.Fragment>
   );
