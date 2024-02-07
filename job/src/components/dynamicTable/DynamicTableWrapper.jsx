@@ -7,16 +7,18 @@ import {
   Container,
   Input,
   Row,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
+  DropdownToggle,
+  DropdownMenu,
+  ButtonDropdown,
   Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import { Link, useParams } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
-import { GeneralModal } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,8 +28,6 @@ import {
   JOB_INITIAL_OPTIONS,
 } from "../JobListing/JobListingConstants";
 import { toast } from "react-toastify";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const DynamicTableWrapper = ({
   data,
@@ -95,198 +95,95 @@ const DynamicTableWrapper = ({
   return (
     <React.Fragment>
       <div className="page-content">
-        <GeneralModal
+        <Modal
           isOpen={isCustomViewModalOpen}
           setIsOpen={setIsCustomModalView}
-        >
-          <div>
-            <Row>
-              <Col lg={12}>
-                <div className="mt-4 mt-lg-0 p-4">
-                  <h5 className="fs-14 mb-1">Job Fields Options</h5>
-                  <p className="text-muted">
-                    Select fields to show on job listing table
-                  </p>
-                  <DualListBox
-                    canFilter
-                    filterCallback={(optGroup, filterInput) => {
-                      if (filterInput === "") {
-                        return true;
-                      }
-                      return new RegExp(filterInput, "i").test(optGroup.label);
-                    }}
-                    filterPlaceholder="Search..."
-                    options={optGroup ?? []}
-                    selected={
-                      selectedOptGroup.map((option) => option?.value) ?? []
-                    }
-                    onChange={handleChange}
-                    icons={{
-                      moveLeft: [
-                        <span
-                          className={`mdi mdi-chevron-left ${
-                            areOptionsEmpty() ? "disabled-icon" : ""
-                          }`}
-                          key="key"
-                        />,
-                      ],
-                      moveAllLeft: [
-                        <span
-                          className={`mdi mdi-chevron-double-left ${
-                            areOptionsEmpty() ? "disabled-icon" : ""
-                          }`}
-                          key="key"
-                        />,
-                      ],
-                      moveRight: (
-                        <span
-                          className={`mdi mdi-chevron-right ${
-                            areOptionsEmpty() ? "disabled-icon" : ""
-                          }`}
-                          key="key"
-                        />
-                      ),
-                      moveAllRight: [
-                        <span
-                          className={`mdi mdi-chevron-double-right ${
-                            areOptionsEmpty() ? "disabled-icon cursor-none" : ""
-                          }`}
-                          key="key"
-                        />,
-                      ],
-                      moveDown: (
-                        <span className="mdi mdi-chevron-down" key="key" />
-                      ),
-                      moveUp: <span className="mdi mdi-chevron-up" key="key" />,
-                      moveTop: (
-                        <span className="mdi mdi-chevron-double-up" key="key" />
-                      ),
-                      moveBottom: (
-                        <span
-                          className="mdi mdi-chevron-double-down"
-                          key="key"
-                        />
-                      ),
-                    }}
-                  />
-                  <div className="d-flex justify-content-end">
-                    <button
-                      className="btn btn-primary mt-3 "
-                      onClick={() => {
-                        setCustomConfigData(selectedOptGroup);
-                        setIsCustomModalView(false);
-                      }}
-                    >
-                      Set
-                    </button>
-                  </div>
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </GeneralModal>
-        <Modal
-          isOpen={massFODOpen}
-          toggle={() => setMassFODOpen(!massFODOpen)}
-          size="md"
+          size="xl"
           centered
         >
-          <ModalHeader className="border border-bottom border-primary">
-            <div className="d-flex flex-column mb-3">
-              <span>Assign Recruiters to Job FOD</span>
+          <ModalHeader className="border border-bottom border-primary pb-3">
+            <div className="d-flex flex-column gap-1">
+              <span className="modal-title">Job Fields Options</span>
               <span className="text-muted fs-6">
-                Please select recruiters for the selected jobs to assign for
-                FOD.
+                Select fields to show on job listing table.
               </span>
             </div>
           </ModalHeader>
           <ModalBody>
-            <Row className="mb-3">
-              <Col>
-                <div className="search-box">
-                  <Input
-                    placeholder="Search for recruiter.."
-                    className="form-control"
-                    type="text"
-                  />
-                  <i className="ri-search-line search-icon"></i>
-                </div>
-              </Col>
-            </Row>
-            <hr className="border border-primary" />
-            <Row>
-              <Col>
-                <Row>
-                  <Col>
-                    <ul className="ps-0 list-unstyled">
-                      {namesData?.map((item, index) => (
-                        <li key={index}>
-                          <div
-                            className="d-flex flex-row justify-content-between mb-1"
-                            onClick={() => toggleNested(index)}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <span>{item.name}</span>
-                            <span>{nestedVisible[index] ? "-" : "+"}</span>
-                          </div>
-                          {nestedVisible[index] && (
-                            <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
-                              <div className="d-flex flex-column justify-content-center align-items-center">
-                                <div className="styled-dropdown ball-1"></div>
-                                <div className="styled-line"></div>
-                                <div className="styled-dropdown ball-2"></div>
-                              </div>
-                              <div className="ps-0 ms-0 w-100">
-                                {item.subNames.map((subName, subIndex) => {
-                                  const split = subName?.split("@");
-                                  return (
-                                    <li
-                                      key={subIndex}
-                                      className="d-flex flew-row align-items-center justify-content-between"
-                                    >
-                                      {split[1]}
-
-                                      <Label
-                                        check
-                                        className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
-                                      >
-                                        <Input
-                                          type="checkbox"
-                                          checked={
-                                            selectedRecruiter ===
-                                            parseInt(split[0])
-                                          }
-                                          onChange={() =>
-                                            setSelectedRecruiter(
-                                              parseInt(split[0])
-                                            )
-                                          }
-                                        />
-                                      </Label>
-                                    </li>
-                                  );
-                                })}
-                              </div>
-                            </ul>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+            <div className="p-2">
+              <DualListBox
+                id="preserve-order"
+                canFilter
+                filterCallback={(optGroup, filterInput) => {
+                  if (filterInput === "") {
+                    return true;
+                  }
+                  return new RegExp(filterInput, "i").test(optGroup.label);
+                }}
+                options={optGroup ?? []}
+                preserveSelectOrder
+                selected={selectedOptGroup.map((option) => option?.value) ?? []}
+                showOrderButtons
+                onChange={handleChange}
+                icons={{
+                  moveLeft: [
+                    <span
+                      className={`mdi mdi-chevron-left ${
+                        areOptionsEmpty() ? "disabled-icon" : ""
+                      }`}
+                      key="key"
+                    />,
+                  ],
+                  moveAllLeft: [
+                    <span
+                      className={`mdi mdi-chevron-double-left ${
+                        areOptionsEmpty() ? "disabled-icon" : ""
+                      }`}
+                      key="key"
+                    />,
+                  ],
+                  moveRight: (
+                    <span
+                      className={`mdi mdi-chevron-right ${
+                        areOptionsEmpty() ? "disabled-icon" : ""
+                      }`}
+                      key="key"
+                    />
+                  ),
+                  moveAllRight: [
+                    <span
+                      className={`mdi mdi-chevron-double-right ${
+                        areOptionsEmpty() ? "disabled-icon cursor-none" : ""
+                      }`}
+                      key="key"
+                    />,
+                  ],
+                  moveDown: <span className="mdi mdi-chevron-down" />,
+                  moveUp: <span className="mdi mdi-chevron-up" />,
+                  moveTop: <span className="mdi mdi-chevron-double-up" />,
+                  moveBottom: <span className="mdi mdi-chevron-double-down" />,
+                }}
+              />
+            </div>
           </ModalBody>
-          <ModalFooter className="border border-top pt-3">
-            <Button
-              className="btn btn-danger"
-              onClick={() => setMassFODOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button className="btn btn-custom-primary" type="submit">
-              Assign
-            </Button>
+          <ModalFooter className="border border-top border-primary pt-3">
+            <div className="d-flex flex-row gap-2 justify-content-end">
+              <Button
+                className="btn btn-danger"
+                onClick={() => setIsCustomModalView(!isCustomViewModalOpen)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="btn btn-custom-primary px-3"
+                onClick={() => {
+                  setCustomConfigData(selectedOptGroup);
+                  setIsCustomModalView(false);
+                }}
+              >
+                Set
+              </Button>
+            </div>
           </ModalFooter>
         </Modal>
         <Container fluid>
@@ -337,19 +234,110 @@ const DynamicTableWrapper = ({
                       </Col>
                       <Col>
                         <div className="d-flex column-gap-2 justify-content-end">
-                          <Button
-                            type="button"
-                            className="btn btn-primary d-flex align-items-center gap-2"
-                            onClick={() => setMassFODOpen(!massFODOpen)}
+                          <ButtonDropdown
+                            isOpen={massFODOpen}
+                            toggle={() => setMassFODOpen(!massFODOpen)}
                           >
-                            <span>
-                              <i className="ri-group-2-fill"></i>
-                            </span>
-                            <span>Mass FOD</span>
-                          </Button>
+                            <DropdownToggle
+                              className="d-flex flex-row align-items-center gap-2 bg-custom-primary text-white"
+                              caret
+                            >
+                              <i className="bx bxs-user-account"></i>
+                              <span>Mass FOD</span>
+                            </DropdownToggle>
+                            <DropdownMenu
+                              className="pt-3 px-3"
+                              style={{ width: "200px" }}
+                            >
+                              <Row className="mb-3">
+                                <Col>
+                                  <div className="search-box">
+                                    <Input
+                                      type="text"
+                                      placeholder="Search.."
+                                      className="form-control form-control-sm"
+                                    />
+                                    <i className="bx bx-search search-icon"></i>
+                                  </div>
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col>
+                                  <ul className="ps-0 list-unstyled">
+                                    {namesData?.map((item, index) => (
+                                      <li key={index}>
+                                        <div
+                                          className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
+                                          onClick={() => toggleNested(index)}
+                                        >
+                                          <span>{item.name}</span>
+                                          <span>
+                                            {nestedVisible[index] ? "-" : "+"}
+                                          </span>
+                                        </div>
+                                        {nestedVisible[index] && (
+                                          <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+                                            <div className="d-flex flex-column justify-content-center align-items-center">
+                                              <div className="styled-dropdown ball-1"></div>
+                                              <div className="styled-line"></div>
+                                              <div className="styled-dropdown ball-2"></div>
+                                            </div>
+                                            <div className="ps-0 ms-0 w-100">
+                                              {item.subNames.map(
+                                                (subName, subIndex) => {
+                                                  const split =
+                                                    subName?.split("@");
+                                                  return (
+                                                    <li
+                                                      key={subIndex}
+                                                      className="d-flex flew-row align-items-center justify-content-between"
+                                                    >
+                                                      {split[1]}
+
+                                                      <Label
+                                                        check
+                                                        className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                                      >
+                                                        <Input
+                                                          type="checkbox"
+                                                          checked={
+                                                            selectedRecruiter ===
+                                                            parseInt(split[0])
+                                                          }
+                                                          onChange={() =>
+                                                            setSelectedRecruiter(
+                                                              parseInt(split[0])
+                                                            )
+                                                          }
+                                                        />
+                                                      </Label>
+                                                    </li>
+                                                  );
+                                                }
+                                              )}
+                                            </div>
+                                          </ul>
+                                        )}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className="d-flex justify-content-end">
+                                  <Button
+                                    type="submit"
+                                    className="btn btn-custom-primary btn-sm px-3"
+                                  >
+                                    Assign
+                                  </Button>
+                                </Col>
+                              </Row>
+                            </DropdownMenu>
+                          </ButtonDropdown>
                           <Button
                             type="button"
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="mdi mdi-download"></i>
@@ -368,7 +356,7 @@ const DynamicTableWrapper = ({
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}
-                            className="btn btn-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
                           >
                             <span>
                               <i className="ri-settings-3-fill"></i>
@@ -376,16 +364,22 @@ const DynamicTableWrapper = ({
                             Custom View
                           </Button>
                           {checkAllPermission([Permission.JOB_WRITE]) && (
-                            <Button type="button" className="btn btn-primary">
-                              <Link
-                                to="/jobs/job-creation"
-                                style={{ color: "black" }}
+                            <Link
+                              to="/jobs/job-creation"
+                              style={{ color: "black" }}
+                            >
+                              <Button
+                                type="button"
+                                className="btn btn-custom-primary"
                               >
                                 Create Job Openings
-                              </Link>
-                            </Button>
+                              </Button>
+                            </Link>
                           )}
-                          <Button type="button" className="btn btn-primary">
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                          >
                             <i className="ri-filter-line"></i>
                           </Button>
                         </div>
