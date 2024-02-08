@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, CardBody, Container } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CandidateStepper from "../../components/CandidateStepper/CandidateStepper";
@@ -80,12 +80,22 @@ const FormStepper = ({
   /**
    * Handle delete draft candidate success
    */
-  if (deleteDraftCandidateMetaData?.isSuccess) {
-    setIsDeleteModalOpen(false);
-    resetStepper(0);
-    toast.success("Candidate form reset successfully");
-    dispatch(resetMetaDataCandidateRegistration());
-  }
+  
+  // if (deleteDraftCandidateMetaData?.isSuccess) {
+  //   setIsDeleteModalOpen(false);
+  //   resetStepper(0);
+  //   toast.success("Candidate form reset successfully");
+  //   dispatch(resetMetaDataCandidateRegistration());
+  // }
+
+  useEffect(() => {
+    if (deleteDraftCandidateMetaData?.isSuccess) {
+      setIsDeleteModalOpen(false);
+      resetStepper(0);
+      toast.success("Candidate form reset successfully");
+      dispatch(resetMetaDataCandidateRegistration());
+    }
+  },[deleteDraftCandidateMetaData?.isSuccess])
 
   return (
     <Card>
