@@ -143,7 +143,10 @@ export const fetchTemplateByCategoryFailure = (error) => ({
 });
 
 // Fetch template by category and subcategory
-export const fetchTemplateByCategoryAndSubCategory = (category, subCategory) => ({
+export const fetchTemplateByCategoryAndSubCategory = (
+  category,
+  subCategory
+) => ({
   type: FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY,
   payload: { category, subCategory },
 });
@@ -157,7 +160,3 @@ export const fetchTemplateByCategoryAndSubCategoryFailure = (error) => ({
   type: FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY_FAILURE,
   payload: error,
 });
-
-
-
-

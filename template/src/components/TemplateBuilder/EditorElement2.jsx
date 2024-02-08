@@ -254,7 +254,6 @@ const EditorElement2 = ({
 
         reader.onload = function () {
           // Instead of using the Blob URL, use the reader's result directly
-          console.log("reader.result", reader.result);
           cb(reader.result, { title: file.name });
         };
         reader.readAsDataURL(file);

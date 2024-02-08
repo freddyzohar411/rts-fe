@@ -41,7 +41,6 @@ import {
   DOCUMENT_BY_ID_URL,
 } from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
-import CountryModal from "../../components/CountryModal/CountryModal";
 import { fetchCandidateForm } from "../../store/candidateForm/action";
 import axios from "axios";
 
@@ -80,15 +79,6 @@ const CreateCandidate = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
-
-  /**
-   * Set country if is in edit mode
-   */
-  // useEffect(() => {
-  //   if (candidateCountry) {
-  //     setCountry(candidateCountry);
-  //   }
-  // }, [candidateCountry]);
 
   /**
    * Fetch form template based on step

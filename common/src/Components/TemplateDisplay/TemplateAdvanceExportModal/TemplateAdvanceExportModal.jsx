@@ -3,14 +3,11 @@ import {
   Col,
   Row,
   Label,
-  Input,
   Button,
   Modal,
   ModalHeader,
   ModalBody,
-  Container,
 } from "reactstrap";
-import PageSettingView from "../components/PageSettingView";
 import PageSettingViewBackend from "../components/PageSettingViewBackend";
 import TemplateSettingsSideBar from "./TemplateSettingsSideBar";
 import SelectElement from "../components/SelectElement";
@@ -95,7 +92,6 @@ const TemplateAdvanceExportModal = ({
   const handleExport = async () => {
     if (templateSettings.exportType === "pdf") {
       if (toExport) {
-        // await ExportHelper.generatePDFCustomMulti(showContent, {
         await ExportHelper.exportBackendHtml2Pdf(
           showContent.html,
           {
@@ -104,7 +100,6 @@ const TemplateAdvanceExportModal = ({
           showContent.styleTag
         );
       } else {
-        // const file = await ExportHelper.convertHtmlToPdfFile(showContent, {
         const file = await ExportHelper.exportBackendHtml2PdfFile(
           showContent.html,
           {
@@ -120,7 +115,6 @@ const TemplateAdvanceExportModal = ({
     }
     if (templateSettings.exportType === "docx") {
       if (toExport) {
-        // await ExportHelper.generateDocxCustom(showContent, {
         await ExportHelper.exportBackendHtml2Docx(
           showContent.html,
           {
@@ -129,7 +123,6 @@ const TemplateAdvanceExportModal = ({
           showContent.styleTag
         );
       } else {
-        // const file = await ExportHelper.convertHtmlToDocxFile(showContent, {
         const file = await ExportHelper.exportBackendHtml2DocxFile(
           showContent.html,
           {
@@ -283,7 +276,6 @@ const TemplateAdvanceExportModal = ({
   }, [templateContent, allData, content]);
 
   return (
-    // <div style={{ zIndex: 9999999999999 }}>
     <Modal
       isOpen={showInsertModal}
       closeModal={() => {
@@ -299,7 +291,6 @@ const TemplateAdvanceExportModal = ({
         toggle={() => {
           closeModal();
         }}
-        // style={{ border:"1px solid #e0e0e0" }}
       >
         <div className="d-flex flex-column text-dark">
           <span className="h4 fw-bold">
@@ -391,7 +382,6 @@ const TemplateAdvanceExportModal = ({
         </div>
       </ModalBody>
     </Modal>
-    // </div>
   );
 };
 

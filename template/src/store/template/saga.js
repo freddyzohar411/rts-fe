@@ -8,7 +8,7 @@ import {
   FETCH_TEMPLATE,
   FETCH_TEMPLATE_CATEGORIES,
   FETCH_TEMPLATE_BY_CATEGORY,
-  FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY
+  FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY,
 } from "./actionTypes";
 import {
   fetchTemplatesSuccess,
@@ -36,7 +36,7 @@ import {
   getTemplates,
   getTemplateCategories,
   getTemplatesByCategory,
-  getTemplatesByCategoryAndSubCategory
+  getTemplatesByCategoryAndSubCategory,
 } from "../../helpers/backend_helper.js";
 import { toast } from "react-toastify";
 
@@ -134,5 +134,8 @@ export default function* watchFetchTemplatesSaga() {
   yield takeEvery(FETCH_TEMPLATE, workFetchTemplate);
   yield takeEvery(FETCH_TEMPLATE_CATEGORIES, workFetchTemplateCategories);
   yield takeEvery(FETCH_TEMPLATE_BY_CATEGORY, workFetchTemplateByCategory);
-  yield takeEvery(FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY, workFetchTemplateByCategorySubcategory);
+  yield takeEvery(
+    FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY,
+    workFetchTemplateByCategorySubcategory
+  );
 }

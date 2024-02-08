@@ -228,7 +228,6 @@ export async function runEffects(
  */
 export function replacePageBreaks(htmlString) {
   // Use a global regular expression to find and replace all occurrences
-  // var replacedString = htmlString.replace(/<p><!--\s*pagebreak\s*--><\/p>/gi, '<div style="break-after: page;"></div>');
   var replacedString = htmlString.replace(
     /<!--\s*pagebreak\s*-->/gi,
     '<div style="break-after: page;"></div>'
@@ -249,7 +248,6 @@ export function replacePageBreaks2(htmlString) {
 
 export function replacePageBreakPlaceHolder(htmlString) {
   // Use a global regular expression to find and replace all occurrences
-  // var replacedString = htmlString.replace(/<p><!--\s*pagebreak\s*--><\/p>/gi, '<div style="break-after: page;"></div>');
   var replacedString = htmlString.replace(
     /<!--\s*pagebreak\s*-->/gi,
     '<p style="page-break-before: always;"></p>'
@@ -264,19 +262,14 @@ export function convertStyleToAttributesTable(htmlString) {
 }
 
 export function convertInlineStylesToClasses(htmlString) {
-  // console.log("HTML 1: ", htmlString);
   let rootTemp = replacePageBreakPlaceHolder(htmlString);
   // Add attributes to the td if there is a style with vertical align
   rootTemp = convertVerticalAlignToValignAttributes(rootTemp);
   // Wrap img with div to center the image
   rootTemp = wrapCenteredImages(rootTemp);
-
   rootTemp = wrapTextWithIns(rootTemp);
-  console.log("HTML 2.4444: ", rootTemp);
   rootTemp = replacePWithInsInLi(rootTemp);
-  console.log("HTML 3: ", rootTemp);
   rootTemp = replacePWithDiv(rootTemp);
-  console.log("HTML 4: ", rootTemp);
   rootTemp = convertKeywordsToPt(rootTemp);
   const root = parse(rootTemp);
   const styles = {};
@@ -541,52 +534,6 @@ function replacePWithDiv(htmlString) {
   return root.toString();
 }
 
-// Old but working (Do not delete)
-// function replacePWithInsInLi(htmlString) {
-//   const root = parse(htmlString);
-//   const pTags = root.querySelectorAll("p");
-
-//   pTags.forEach((p) => {
-//     // Check all ancestors for an <li> tag
-//     let parent = p.parentNode;
-//     let isInLiTag = false;
-//     while (parent && parent.tagName !== "HTML") {
-//       if (parent.tagName === "LI") {
-//         isInLiTag = true;
-//         break;
-//       }
-//       parent = parent.parentNode;
-//     }
-
-//     if (isInLiTag) {
-//       const style = p.getAttribute("style");
-//       if (
-//         style &&
-//         (style.includes("margin-top") || style.includes("margin-bottom"))
-//       ) {
-//         // Create a new <ins> element with the contents of <p>
-//         const ins = parse(`<ins>${p.innerHTML}</ins>`).firstChild;
-
-//         // Copy attributes from <p> to <ins>, modifying the style to remove margin-top and margin-bottom
-//         Object.keys(p.attributes).forEach((name) => {
-//           let value = p.attributes[name];
-//           if (name === "style") {
-//             // Remove margin-top and margin-bottom from the style
-//             value = value.replace(/margin-(top|bottom):\s*[^;]+;?/g, "").trim();
-//           }
-//           ins.setAttribute(name, value);
-//         });
-
-//         // Replace <p> with <ins>
-//         p.replaceWith(ins);
-//       }
-//     }
-//   });
-
-//   // Serialize the modified DOM back into a string
-//   return root.toString();
-// }
-
 function replacePWithInsInLi(htmlString) {
   const root = parse(htmlString);
   const pTags = root.querySelectorAll("p");
@@ -798,47 +745,6 @@ function replaceVariablesArray(htmlString, variableData) {
   });
   return replacedTemplateContent;
 }
-
-// function convertAlignmentStylesToAttributes(htmlString) {
-//   return htmlString.replace(
-//     /<(\w+)([^>]*)style="([^"]*)"/gi, // Match any tag with a style attribute
-//     function (match, tagName, preStyle, style) {
-//       let align = "";
-//       // Handling for text-align in block elements
-//       if (style.includes("text-align: center")) {
-//         align = 'align="center"';
-//       } else if (style.includes("text-align: left")) {
-//         align = 'align="left"';
-//       } else if (style.includes("text-align: right")) {
-//         align = 'align="right"';
-//       }
-//       // Handling for margin auto alignments typically used with <img> tags
-//       else if (
-//         tagName.toLowerCase() === 'img' &&
-//         style.includes("margin-left: auto") &&
-//         style.includes("margin-right: auto")
-//       ) {
-//         align = 'align="middle"';
-//       } else if (
-//         tagName.toLowerCase() === 'img' &&
-//         style.includes("margin-left:0") &&
-//         style.includes("margin-right:auto")
-//       ) {
-//         align = 'align="left"';
-//       } else if (
-//         tagName.toLowerCase() === 'img' &&
-//         style.includes("margin-left:auto") &&
-//         style.includes("margin-right:0")
-//       ) {
-//         align = 'align="right"';
-//       }
-
-//       // Construct the new tag with alignment attributes
-//       // If align is not empty, add it to the tag, otherwise, return the original tag
-//       return align ? `<${tagName}${preStyle}style="${style}" ${align}` : match;
-//     }
-//   );
-// }
 
 function convertAlignmentStylesToAttributes(htmlString) {
   return htmlString.replace(

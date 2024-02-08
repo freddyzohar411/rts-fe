@@ -52,7 +52,7 @@ const SingleSelectElement = ({
     }),
   };
 
-  const noOptionsMessage = () => null; // Return null to prevent the message from showing
+  const noOptionsMessage = () => null;
 
   return (
     <div>

@@ -183,7 +183,6 @@ export function generateDocxCustom(
   // Replace page breaks with divs
   const htmlContentWithPageBreaks =
     TemplateDisplayHelper.replacePageBreaks2(htmlContent);
-  console.log("htmlContentWithPageBreaks", htmlContentWithPageBreaks);
   const sourceHTML = header + htmlContentWithPageBreaks + footer;
 
   // Marin conversion
@@ -311,7 +310,6 @@ export function convertHtmlToDocxFile(
   // Replace page breaks with divs
   const htmlContentWithPageBreaks =
     TemplateDisplayHelper.replacePageBreaks2(htmlString);
-  console.log("htmlContentWithPageBreaks", htmlContentWithPageBreaks);
   const sourceHTML = header + htmlContentWithPageBreaks + footer;
 
   const buffer = htmlDocx.asBlob(sourceHTML);
@@ -440,15 +438,12 @@ export async function exportBackendHtml2Pdf(
       </html>
   `;
 
-  console.log("html", html);
-
   let fileName = options?.fileName || "document.pdf";
 
   BackendHelper.convertHtmlStringToPdf({
     htmlString: html,
   })
     .then((res) => {
-      console.log(res);
       // Byte array to download as pdf
       const pdfBase64 = res.data;
 
@@ -460,8 +455,6 @@ export async function exportBackendHtml2Pdf(
         bytes[i] = binaryString.charCodeAt(i);
       }
       const blob = new Blob([bytes], { type: "application/pdf" });
-
-      console.log("blob", blob);
       FileSaver.saveAs(blob, fileName);
     })
     .catch((err) => {
@@ -532,8 +525,6 @@ export async function exportBackendHtml2PdfBlobExtCss(
           </body>
       </html>
   `;
-
-  console.log("Preview HTML", html);
   let fileName = options?.fileName || "document.pdf";
 
   try {
@@ -650,7 +641,6 @@ export async function exportBackendHtml2Docx(
     const blob = new Blob([bytes], {
       type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     });
-    console.log("blob", blob);
     FileSaver.saveAs(blob, fileName);
   } catch (error) {
     console.log(error);
@@ -751,8 +741,6 @@ export async function exportBackendHtml2Jpeg(
         bytes[i] = binaryString.charCodeAt(i);
       }
       const blob = new Blob([bytes], { type: "image/jpeg" });
-
-      console.log("blob", blob);
       FileSaver.saveAs(blob, fileName);
     })
     .catch((err) => {
@@ -851,8 +839,6 @@ export async function exportBackendHtml2Png(
         bytes[i] = binaryString.charCodeAt(i);
       }
       const blob = new Blob([bytes], { type: "image/png" });
-
-      console.log("blob", blob);
       FileSaver.saveAs(blob, fileName);
     })
     .catch((err) => {

@@ -350,7 +350,6 @@ const TemplateDisplayV3 = ({
               },
             }}
             onEditorChange={(value) => {
-              // setParsedContent(value);
               setNewContent(value);
               if (onChange) {
                 onChange(value);

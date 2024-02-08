@@ -28,7 +28,7 @@ import {
 import { JsonHelper } from "@workspace/common";
 
 const initialState = {
-  templateCategories:[],
+  templateCategories: [],
   templatesByCategory: [],
   templates: [],
   template: null,

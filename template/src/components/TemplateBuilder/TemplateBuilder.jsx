@@ -31,7 +31,6 @@ import EditorElement2 from "./EditorElement2";
 import juice from "juice";
 import { CommonBackendHelper } from "@workspace/common";
 
-
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
     const dispatch = useDispatch();
@@ -284,37 +283,15 @@ const TemplateBuilder = forwardRef(
         //   removeStyleTags: false,
         // });
         const inlineContent = juice(originalContent);
-        const inlineContent2 = TemplateHelper.addCssStyleForAlignAttribute(inlineContent);
-        console.log("Inline Content", inlineContent);
+        const inlineContent2 =
+          TemplateHelper.addCssStyleForAlignAttribute(inlineContent);
         setTemplateContent(inlineContent2);
       } catch (err) {
         console.log(err);
       }
-
-      // CommonBackendHelper.convertDocxToHtmlString(
-      //   {
-      //     docFile: file,
-      //   },
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // )
-      //   .then((res) => {
-      //     const originalContent = res.data;
-      //     const inlineContent = juice(originalContent, {
-      //       removeStyleTags: false,
-      //     });
-      //     // const inlineContent = juice(originalContent);
-      //     setTemplateContent(inlineContent);
-      //   })
-      //   .catch((err) => {
-      //   });
     };
 
-
-      // Convert docx to html (Frontend)
+    // Convert docx to html (Frontend)
     const convDocToHtmlOld = async (file, setTemplateContent) => {
       try {
         const result = await mammoth.convertToHtml({
@@ -325,7 +302,7 @@ const TemplateBuilder = forwardRef(
         console.error("Error converting Word to HTML:", error);
       }
     };
-    
+
     return (
       <div className="d-flex flex-column gap-2">
         <Row className="mb-3">
@@ -642,7 +619,6 @@ const TemplateBuilder = forwardRef(
                     disabled={(!templateSelected || !categorySelected) && !file}
                     onClick={async () => {
                       if (file) {
-                        // await convertToHtml(file, setTemplateContentPreview);
                         await convDocToHtml(file, setTemplateContentPreview);
                       } else {
                         const template = templatesByCategory.filter(
@@ -666,7 +642,6 @@ const TemplateBuilder = forwardRef(
                     disabled={(!templateSelected || !categorySelected) && !file}
                     onClick={async () => {
                       if (file) {
-                        // await convertToHtml(file, setTemplateContentPreview);
                         await convDocToHtmlOld(file, setTemplateContentPreview);
                       } else {
                         const template = templatesByCategory.filter(
