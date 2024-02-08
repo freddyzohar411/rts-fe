@@ -35,16 +35,8 @@ const FormStepper = ({
       formikRef.current.formik.submitForm();
     }
 
-    if (activeStep === 1 && formikRef?.current?.formik) {
-      const table = formFieldsData.filter(
-        (field) => field.name === CandidateTableListConstant.DOCUMENTS_LIST
-      );
-      if (table.length === 1 && table[0]?.tableData?.length > 0) {
-        setErrorMessage(null);
-        handleNext();
-      } else {
-        setErrorMessage("Please add 1 document to proceed");
-      }
+    if (activeStep === 1) {
+      handleNext();
     }
 
     if (activeStep === 2) {
@@ -55,8 +47,16 @@ const FormStepper = ({
       handleNext();
     }
 
-    if (activeStep === 4) {
-      handleNext();
+    if (activeStep === 4 && formikRef?.current?.formik) {
+      const table = formFieldsData.filter(
+        (field) => field.name === CandidateTableListConstant.DOCUMENTS_LIST
+      );
+      if (table.length === 1 && table[0]?.tableData?.length > 0) {
+        setErrorMessage(null);
+        handleNext();
+      } else {
+        setErrorMessage("Please add 1 document to proceed");
+      }
     }
 
     if (activeStep === 5) {
@@ -80,14 +80,6 @@ const FormStepper = ({
   /**
    * Handle delete draft candidate success
    */
-  
-  // if (deleteDraftCandidateMetaData?.isSuccess) {
-  //   setIsDeleteModalOpen(false);
-  //   resetStepper(0);
-  //   toast.success("Candidate form reset successfully");
-  //   dispatch(resetMetaDataCandidateRegistration());
-  // }
-
   useEffect(() => {
     if (deleteDraftCandidateMetaData?.isSuccess) {
       setIsDeleteModalOpen(false);
@@ -95,7 +87,7 @@ const FormStepper = ({
       toast.success("Candidate form reset successfully");
       dispatch(resetMetaDataCandidateRegistration());
     }
-  },[deleteDraftCandidateMetaData?.isSuccess])
+  }, [deleteDraftCandidateMetaData?.isSuccess]);
 
   return (
     <Card>
