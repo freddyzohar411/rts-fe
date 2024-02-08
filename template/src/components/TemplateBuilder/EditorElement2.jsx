@@ -646,7 +646,7 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
+            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles styleselect | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
@@ -656,11 +656,69 @@ const EditorElement2 = ({
             "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; } ul{ margin:0;} ",
           style_formats: [
             {
-              title: "Line Height 0.5",
+              title: "Styles",
               block: "p",
-              styles: { lineHeight: "0.5" },
             },
-            { title: "P 0.1mm", block: "p", styles: { margin: "0 0 0.1mm 0" } },
+            {
+              title: "No Spacing",
+              block: "p",
+              styles: { margin: "0 0 0.01mm 0" },
+            },
+            {
+              title: "0.5mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 0.5mm 0" },
+            },
+            {
+              title: "1mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 1mm 0" },
+            },
+            {
+              title: "2mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 2mm 0" },
+            },
+            {
+              title: "3mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 3mm 0" },
+            },
+            {
+              title: "4mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 4mm 0" },
+            },
+            {
+              title: "Bullet No Spacing",
+              selector: "li",
+              styles: { margin: "0 0 0.01mm 0" },
+            },
+            {
+              title: "Bullet 0.5mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 0.5mm 0" },
+            },
+            {
+              title: "Bullet 1mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 1mm 0" },
+            },
+            {
+              title: "Bullet 2mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 2mm 0" },
+            },
+            {
+              title: "Bullet 3mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 3mm 0" },
+            },
+            {
+              title: "Bullet 4mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 4mm 0" },
+            },
           ],
           file_picker_callback: handleFilePickerCallback,
           font_size_input_default_unit: "point",
