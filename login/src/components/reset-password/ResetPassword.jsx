@@ -12,10 +12,11 @@ import {
   FormFeedback,
 } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
 import ParticlesAuth from "../../ParticlesAuth";
 import { initialValues, schema } from "./constants";
-import { useDispatch } from "react-redux";
 import { loginResetPassword } from "../../store/actions";
 
 const ResetPassword = () => {
@@ -23,17 +24,26 @@ const ResetPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const resetPasswordMeta = useSelector(
+    (state) => state.Login.loginResetPasswordMeta
+  );
+
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
 
   const handleFormSubmit = async (values) => {
     const authUser = JSON.parse(sessionStorage.getItem("authUser"));
-    const payload = {
-      userId: authUser?.user?.id,
-      password: values?.password,
-      confirmPassword: values?.confirmPassword,
-    };
-    dispatch(loginResetPassword(payload, navigate));
+    if (authUser) {
+      const payload = {
+        userId: authUser?.user?.id,
+        password: values?.password,
+        confirmPassword: values?.confirmPassword,
+      };
+      dispatch(loginResetPassword(payload, navigate));
+    } else {
+      toast.error("Please do login first.");
+      navigate("/login");
+    }
   };
 
   return (

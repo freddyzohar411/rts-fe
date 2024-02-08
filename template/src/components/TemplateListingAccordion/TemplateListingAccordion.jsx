@@ -23,7 +23,6 @@ const TemplateListingAccordion = ({
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
-
     } else {
       setIsLoading(true);
     }
@@ -110,8 +109,6 @@ const TemplateListingAccordion = ({
       );
     });
   };
-
-  console.log("test", data)
 
   return (
     <div>
