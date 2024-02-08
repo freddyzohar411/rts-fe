@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
 import { moduleConstants } from "./constants";
-import { TemplateDisplayV3 } from "@workspace/common";
+import { TemplateDisplayV3, TemplateHelper } from "@workspace/common";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
 import { addMediaUrl, deleteDraftMediaUrl } from "../../helpers/backend_helper";
@@ -28,7 +28,6 @@ import { categoryConstants } from "./templateBuilderContants";
 import SelectElement from "./SelectElement";
 import FileInputElement from "./FileInputElement";
 import EditorElement2 from "./EditorElement2";
-import axios from "axios";
 import juice from "juice";
 import { CommonBackendHelper } from "@workspace/common";
 
@@ -261,7 +260,7 @@ const TemplateBuilder = forwardRef(
           );
         }
 
-        // Check if exce xlsx
+        // Check if excel xlsx
         if (
           file.type === "application/vnd.ms-excel" ||
           file.type ===
@@ -284,42 +283,25 @@ const TemplateBuilder = forwardRef(
         //   removeStyleTags: false,
         // });
         const inlineContent = juice(originalContent);
-        setTemplateContent(inlineContent);
-      } catch (err) {}
-
-      // CommonBackendHelper.convertDocxToHtmlString(
-      //   {
-      //     docFile: file,
-      //   },
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // )
-      //   .then((res) => {
-      //     const originalContent = res.data;
-      //     const inlineContent = juice(originalContent, {
-      //       removeStyleTags: false,
-      //     });
-      //     // const inlineContent = juice(originalContent);
-      //     setTemplateContent(inlineContent);
-      //   })
-      //   .catch((err) => {
-      //   });
+        const inlineContent2 =
+          TemplateHelper.addCssStyleForAlignAttribute(inlineContent);
+        setTemplateContent(inlineContent2);
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     // Convert docx to html (Frontend)
-    // const convDocToHtml = async (file, setTemplateContent) => {
-    //   try {
-    //     const result = await mammoth.convertToHtml({
-    //       arrayBuffer: await file.arrayBuffer(),
-    //     });
-    //     setTemplateContent(result.value);
-    //   } catch (error) {
-    //     console.error("Error converting Word to HTML:", error);
-    //   }
-    // };
+    const convDocToHtmlOld = async (file, setTemplateContent) => {
+      try {
+        const result = await mammoth.convertToHtml({
+          arrayBuffer: await file.arrayBuffer(),
+        });
+        setTemplateContent(result.value);
+      } catch (error) {
+        console.error("Error converting Word to HTML:", error);
+      }
+    };
 
     return (
       <div className="d-flex flex-column gap-2">
@@ -637,7 +619,6 @@ const TemplateBuilder = forwardRef(
                     disabled={(!templateSelected || !categorySelected) && !file}
                     onClick={async () => {
                       if (file) {
-                        // await convertToHtml(file, setTemplateContentPreview);
                         await convDocToHtml(file, setTemplateContentPreview);
                       } else {
                         const template = templatesByCategory.filter(
@@ -652,6 +633,29 @@ const TemplateBuilder = forwardRef(
                     }}
                   >
                     Preview
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    type="button"
+                    className="self-end btn-custom-primary"
+                    disabled={(!templateSelected || !categorySelected) && !file}
+                    onClick={async () => {
+                      if (file) {
+                        await convDocToHtmlOld(file, setTemplateContentPreview);
+                      } else {
+                        const template = templatesByCategory.filter(
+                          (template) =>
+                            template.name == templateSelected.value &&
+                            template.category === categorySelected.value
+                        )[0];
+                        setTemplateContentPreview(template.content);
+                        setTemplateSelected("");
+                        setCategorySelected("");
+                      }
+                    }}
+                  >
+                    Preview Old
                   </Button>
                 </Col>
               </Row>

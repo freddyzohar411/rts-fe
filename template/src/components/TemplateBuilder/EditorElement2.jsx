@@ -116,7 +116,7 @@ const EditorElement2 = ({
           resolve(res.data.mediaUrl);
         })
         .catch((err) => {
-          reject("Upload failed");
+          // reject("Upload failed");
         });
     });
 
@@ -206,40 +206,61 @@ const EditorElement2 = ({
 
   // Handle file Picker callback
   const handleFilePickerCallback = (cb, value, meta) => {
-    const cancelBtnEl = document.querySelector('[title="Cancel"]');
-    const saveBtnEl = document.querySelector('[title="Save"]');
-    const dialogEl = document.querySelector('[role="dialog"]');
+    if (meta.filetype === "media") {
+      const cancelBtnEl = document.querySelector('[title="Cancel"]');
+      const saveBtnEl = document.querySelector('[title="Save"]');
+      const dialogEl = document.querySelector('[role="dialog"]');
 
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "video/*");
+      const input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "video/*");
 
-    input.addEventListener("change", (e) => {
-      const file = e.target.files[0];
+      input.addEventListener("change", (e) => {
+        const file = e.target.files[0];
 
-      if (file) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          const id = "blobid" + new Date().getTime();
-          const blobCache = tinymce.activeEditor.editorUpload.blobCache;
-          const base64 = reader.result.split(",")[1];
-          const blobInfo = blobCache.create(id, file, base64);
-          blobCache.add(blobInfo);
+        if (file) {
+          const reader = new FileReader();
+          reader.addEventListener("load", () => {
+            const id = "blobid" + new Date().getTime();
+            const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+            const base64 = reader.result.split(",")[1];
+            const blobInfo = blobCache.create(id, file, base64);
+            blobCache.add(blobInfo);
 
-          videoUploadHandler(
-            blobInfo,
-            file,
-            cancelBtnEl,
-            saveBtnEl,
-            dialogEl
-          ).then((res) => {
-            cb(res, { title: file.name });
+            videoUploadHandler(
+              blobInfo,
+              file,
+              cancelBtnEl,
+              saveBtnEl,
+              dialogEl
+            ).then((res) => {
+              cb(res, { title: file.name });
+            });
           });
-        });
+          reader.readAsDataURL(file);
+        }
+      });
+      input.click();
+    }
+
+    if (meta.filetype === "image") {
+      var input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "image/*");
+
+      input.onchange = function () {
+        var file = this.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function () {
+          // Instead of using the Blob URL, use the reader's result directly
+          cb(reader.result, { title: file.name });
+        };
         reader.readAsDataURL(file);
-      }
-    });
-    input.click();
+      };
+
+      input.click();
+    }
   };
 
   // Set editor ref
@@ -248,41 +269,32 @@ const EditorElement2 = ({
     setEditorRef(editorRef);
   }, [setEditorRef, editorRef]);
 
-  //   function zoomEditorContent(editor, scale) {
-  //     var contentArea = editor.getContentAreaContainer();
-  //     var contentDocument = editor.getDoc();
-  //     var contentBody = contentDocument.body;
+  // Function to add the 'active-header' class
+  const addHeaderStyle = (editor) => {
+    const header = editor.getBody().querySelector('div[title="header"]');
+    if (header) {
+      header.classList.add("active-header");
+    }
+  };
 
-  //     // contentArea.style.overflow = 'auto';
+  // Function to remove the 'active-header' class
+  const removeHeaderStyle = (editor) => {
+    const header = editor.getBody().querySelector('div[title="header"]');
+    if (header) {
+      header.classList.remove("active-header");
+    }
+  };
 
-  //     // Apply scale transform
-  //     contentBody.style.transform = 'scale(' + scale + ')';
-  //     contentBody.style.transformOrigin = 'center center'; // Adjust as needed
-  // }
-
-  // function zoomEditorContent(editor, scale) {
-  //   var contentArea = editor.getContentAreaContainer();
-  //   var contentDocument = editor.getDoc();
-  //   var contentBody = contentDocument.body;
-
-  //   // Calculate the center of the content area
-  //   var centerX = contentArea.clientWidth / 2;
-
-  //   // Calculate the fixed top position
-  //   var fixedTop = 50; // Set the fixed top value in pixels
-
-  //   // Apply scale transform
-  //   contentBody.style.transform = `scale(${scale})`;
-
-  //   // Calculate the translation value to center the content horizontally
-  //   var translateX = (centerX * (1 - scale)).toFixed(2); // Round to two decimal places
-
-  //   // Apply translation transform to center the content horizontally and keep it fixed from the top
-  //   contentBody.style.transform += ` translate(${translateX}px, ${fixedTop}px)`;
-
-  //   // Adjust the transformation origin to the center
-  //   contentBody.style.transformOrigin = 'top left'; // Keep the center fixed
-  // }
+  useEffect(() => {
+    // Define custom styles for the active header
+    const style = document.createElement("style");
+    style.type = "text/css";
+    style.innerHTML = `.active-header { background-color: #f0f0f0; }`;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   return (
     <>
@@ -298,6 +310,8 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
+            editor.on("focusin", () => addHeaderStyle(editor));
+            editor.on("focusout", () => removeHeaderStyle(editor));
             // On Init setup
             editor.on("init", function () {
               applyCanvasStyle(editor, "A4", "portrait"); // Set default to A4 portrait
@@ -527,6 +541,75 @@ const EditorElement2 = ({
                 }
               },
             });
+
+            editor.ui.registry.addButton("insertCustomHeader", {
+              text: "Insert Custom Header",
+              onAction: function () {
+                // Check if a header already exists
+                var existingHeader = editor
+                  .getContent()
+                  .includes('title="header"');
+
+                if (!existingHeader) {
+                  // Insert an empty header section with a placeholder
+                  var headerHtml =
+                    '<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><p>Insert your header content here...</p></div>';
+
+                  // Insert the header at the beginning of the content
+                  var content = editor.getContent();
+
+                  // Insert the header at the beginning of the content
+                  var content = editor.getContent();
+                  editor.setContent(headerHtml + content);
+                }
+
+                // Focus the editor on the header section for immediate editing
+                editor.focus();
+
+                // If a header already exists, move the cursor to it
+                var headerSection = editor
+                  .getBody()
+                  .querySelector('div[title="header"] p');
+                if (headerSection) {
+                  editor.selection.select(headerSection, true);
+                  editor.selection.collapse(false);
+                }
+              },
+            });
+
+            editor.ui.registry.addButton("exitHeader", {
+              text: "Exit Header",
+              onAction: function () {
+                // Check if we're currently in the header
+                var headerSection = editor
+                  .getBody()
+                  .querySelector('div[title="header"]');
+                if (headerSection) {
+                  // Create a new paragraph element outside the header
+                  var newParagraph = document.createElement("p");
+                  newParagraph.innerHTML = "&nbsp;"; // Optional placeholder text
+
+                  // Insert the new paragraph after the header div
+                  headerSection.parentNode.insertBefore(
+                    newParagraph,
+                    headerSection.nextSibling
+                  );
+
+                  // Move the cursor to the new paragraph
+                  editor.selection.select(newParagraph, true);
+                  editor.selection.collapse(true);
+                }
+              },
+            });
+
+            // editor.on("GetContent", function (e) {
+            //   var content = e.content;
+            //   // A simple example to add inline style to paragraphs
+            //   e.content = content.replace(
+            //     /<p>/g,
+            //     '<p style="margin-bottom: 0in;">'
+            //   );
+            // });
           },
           height: 500,
           menubar: false,
@@ -554,23 +637,86 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize | " +
+            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
             "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPreviewButton | help",
+          // newline_behavior: "invert",
           content_style:
-            "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; }",
+            "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; } ul{ margin:0;} ",
+          style_formats: [
+            {
+              title: "Styles",
+              block: "p",
+            },
+            {
+              title: "No Spacing",
+              block: "p",
+              styles: { margin: "0 0 0.01mm 0" },
+            },
+            {
+              title: "0.5mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 0.5mm 0" },
+            },
+            {
+              title: "1mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 1mm 0" },
+            },
+            {
+              title: "2mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 2mm 0" },
+            },
+            {
+              title: "3mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 3mm 0" },
+            },
+            {
+              title: "4mm Spacing",
+              block: "p",
+              styles: { margin: "0 0 4mm 0" },
+            },
+            {
+              title: "Bullet No Spacing",
+              selector: "li",
+              styles: { margin: "0 0 0.01mm 0" },
+            },
+            {
+              title: "Bullet 0.5mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 0.5mm 0" },
+            },
+            {
+              title: "Bullet 1mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 1mm 0" },
+            },
+            {
+              title: "Bullet 2mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 2mm 0" },
+            },
+            {
+              title: "Bullet 3mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 3mm 0" },
+            },
+            {
+              title: "Bullet 4mm Spacing",
+              selector: "li",
+              styles: { margin: "0 0 4mm 0" },
+            },
+          ],
           file_picker_callback: handleFilePickerCallback,
           font_size_input_default_unit: "point",
           font_size_formats:
             "6pt 8pt 9pt 10pt 11pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 34pt 36pt 38pt 40pt 42pt 44pt 46pt 48pt 50pt 55pt 60pt 65pt 70pt 75pt 80pt 85pt 90pt 95pt 100pt",
           images_upload_handler: imageUploadHandler,
-          file_picker_types: "media",
-          // table_default_styles: {
-          //   width: "300px",
-          // },
-          // Set colgroup for table to false
+          file_picker_types: "image, media",
           table_use_colgroups: false,
         }}
         onEditorChange={(value) => {

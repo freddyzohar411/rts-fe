@@ -4,7 +4,6 @@ import {
   Col,
   Row,
   Label,
-  Input,
   Button,
   Modal,
   ModalHeader,
@@ -13,7 +12,7 @@ import {
 } from "reactstrap";
 import SelectElement from "../components/SelectElement";
 import "./pagePreview.scss";
-import "../TinyCME.scss"
+import "../TinyCME.scss";
 
 const TemplatePagePreviewModal = ({ content }) => {
   const [pageSize, setPageSize] = useState({
@@ -66,15 +65,8 @@ const TemplatePagePreviewModal = ({ content }) => {
             </Col>
           </Row>
           <Row>
-            {/* <div className={`tinyCME ${pageSize}`}>
-              <div> {ReactHtmlParser(content)}</div>
-            </div>{" "} */}
-            {/* Preview content */}
             <div className={`tinyCME preview-content ${pageSize.value}`}>
-              <div
-                className={`${pageSize.value}`}
-                // style={{ display: pageSize === "a4" ? "block" : "none" }}
-              >
+              <div className={`${pageSize.value}`}>
                 <div> {ReactHtmlParser(content)}</div>
               </div>
             </div>

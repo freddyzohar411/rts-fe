@@ -228,7 +228,6 @@ export async function runEffects(
  */
 export function replacePageBreaks(htmlString) {
   // Use a global regular expression to find and replace all occurrences
-  // var replacedString = htmlString.replace(/<p><!--\s*pagebreak\s*--><\/p>/gi, '<div style="break-after: page;"></div>');
   var replacedString = htmlString.replace(
     /<!--\s*pagebreak\s*-->/gi,
     '<div style="break-after: page;"></div>'
@@ -241,7 +240,17 @@ export function replacePageBreaks2(htmlString) {
   // Use a global regular expression to find and replace all occurrences
   var replacedString = htmlString.replace(
     /<!--\s*pagebreak\s*-->/gi,
-    '<div style="page-break-after: always;"></div>'
+    '<div style="page-break-before: always;"></div>'
+  );
+
+  return replacedString;
+}
+
+export function replacePageBreakPlaceHolder(htmlString) {
+  // Use a global regular expression to find and replace all occurrences
+  var replacedString = htmlString.replace(
+    /<!--\s*pagebreak\s*-->/gi,
+    '<p style="page-break-before: always;"></p>'
   );
 
   return replacedString;
@@ -253,7 +262,12 @@ export function convertStyleToAttributesTable(htmlString) {
 }
 
 export function convertInlineStylesToClasses(htmlString) {
-  let rootTemp = wrapTextWithIns(htmlString);
+  let rootTemp = replacePageBreakPlaceHolder(htmlString);
+  // Add attributes to the td if there is a style with vertical align
+  rootTemp = convertVerticalAlignToValignAttributes(rootTemp);
+  // Wrap img with div to center the image
+  rootTemp = wrapCenteredImages(rootTemp);
+  rootTemp = wrapTextWithIns(rootTemp);
   rootTemp = replacePWithInsInLi(rootTemp);
   rootTemp = replacePWithDiv(rootTemp);
   rootTemp = convertKeywordsToPt(rootTemp);
@@ -275,6 +289,7 @@ export function convertInlineStylesToClasses(htmlString) {
       // Combine original and additional styles
       style = additionalStyle + style;
 
+      if (!style.includes("page-break-before: always;")) {
       // Check if the combined style already exists
       let className = styles[style] || `style-${styleId}`;
       if (!styles[style]) {
@@ -285,6 +300,7 @@ export function convertInlineStylesToClasses(htmlString) {
       // Apply the class name and remove the style attribute
       node.setAttribute("class", className);
       node.removeAttribute("style");
+      }
 
       // Recursively process child nodes
       Array.from(node.childNodes).forEach((child) => processNode(child));
@@ -304,6 +320,37 @@ export function convertInlineStylesToClasses(htmlString) {
     html: root.toString(),
     styleTag: styleString,
   };
+}
+
+export function addCssStyleForAlignAttribute(htmlString) {
+  // Parse the HTML string
+  const root = parse(htmlString);
+
+  // Find all elements with an 'align' attribute
+  const elementsWithAlign = root.querySelectorAll('[align]');
+
+  elementsWithAlign.forEach(element => {
+    const alignValue = element.getAttribute('align');
+
+    // Determine the CSS equivalent and add it
+    let cssTextAlign = '';
+    switch (alignValue.toLowerCase()) {
+      case 'left':
+      case 'right':
+      case 'center':
+      case 'justify':
+        cssTextAlign = `text-align: ${alignValue};`;
+        break;
+      // Add cases for other possible values of 'align' if needed
+    }
+
+    // Add or update the 'style' attribute with the CSS text-align
+    const currentStyle = element.getAttribute('style') || '';
+    element.setAttribute('style', `${currentStyle} ${cssTextAlign}`);
+  });
+
+  // Serialize the DOM back to a string
+  return root.toString();
 }
 
 // ============================== Helper Function ===============================
@@ -418,28 +465,30 @@ function wrapTextWithIns(htmlString) {
   // }
 
   function recursiveTraverse(node, inheritedFontSize) {
-    if (node instanceof HTMLElement) { // Assuming HTMLElement is a custom or simplified DOM node.
+    if (node instanceof HTMLElement) {
+      // Assuming HTMLElement is a custom or simplified DOM node.
       let childNodes = Array.from(node.childNodes);
       childNodes.forEach((child, index) => {
-        if (child.nodeType === 3 && child.text.trim() !== "") { // Text node with non-empty content.
+        if (child.nodeType === 3 && child.text.trim() !== "") {
+          // Text node with non-empty content.
           const ins = new HTMLElement(el, {}, "", node);
           ins.set_content(child.text);
-  
+
           let style = "";
           const fontSize = findFontSize(node, inheritedFontSize);
           if (fontSize) {
             style += `font-size: ${fontSize};`;
           }
-  
+
           const parentStyle = checkParentStyle(node);
           if (parentStyle) {
             style += parentStyle;
           }
-  
+
           if (style) {
             ins.setAttribute("style", style);
           }
-  
+
           // Assuming a method to replace or insert the new element in place of the old text node.
           node.childNodes[index] = ins; // This line assumes you can directly manipulate childNodes like this.
         } else if (child instanceof HTMLElement) {
@@ -449,7 +498,6 @@ function wrapTextWithIns(htmlString) {
       });
     }
   }
-  
 
   recursiveTraverse(root, "12pt");
   return root.outerHTML;
@@ -457,17 +505,22 @@ function wrapTextWithIns(htmlString) {
 
 function replacePWithDiv(htmlString) {
   const root = parse(htmlString);
-  const pTags = root.querySelectorAll('p');
+  const pTags = root.querySelectorAll("p");
 
-  pTags.forEach(p => {
-    const style = p.getAttribute('style');
-    // Check specifically for "margin-bottom: 0in" in the style
+  pTags.forEach((p) => {
+    const style = p.getAttribute("style");
+    // Skip <p> tags with "page-break-before: always;"
+    if (style && style.includes("page-break-before: always;")) {
+      return; // Do not change these <p> tags
+    }
+
+    // Proceed with replacing <p> tags having "margin-bottom: 0in"
     if (style && /margin-bottom:\s*0in;?/.test(style)) {
       // Create a new <div> element, assuming parse() returns a DOM-like object
       const div = parse(`<div>${p.innerHTML}</div>`).firstChild;
 
       // Copy attributes from <p> to <div>, without modifying the style
-      Object.keys(p.attributes).forEach(name => {
+      Object.keys(p.attributes).forEach((name) => {
         const value = p.attributes[name];
         div.setAttribute(name, value);
       });
@@ -483,14 +536,21 @@ function replacePWithDiv(htmlString) {
 
 function replacePWithInsInLi(htmlString) {
   const root = parse(htmlString);
-  const pTags = root.querySelectorAll('p');
+  const pTags = root.querySelectorAll("p");
 
-  pTags.forEach(p => {
+  pTags.forEach((p) => {
+    // Check for <p> tags with "page-break-before: always;" and skip them
+    const style = p.getAttribute("style");
+    if (style && style.includes("page-break-before: always;")) {
+      // Do nothing and move to the next <p> tag
+      return;
+    }
+
     // Check all ancestors for an <li> tag
     let parent = p.parentNode;
     let isInLiTag = false;
-    while (parent && parent.tagName !== 'HTML') {
-      if (parent.tagName === 'LI') {
+    while (parent && parent.tagName !== "HTML") {
+      if (parent.tagName === "LI") {
         isInLiTag = true;
         break;
       }
@@ -498,17 +558,19 @@ function replacePWithInsInLi(htmlString) {
     }
 
     if (isInLiTag) {
-      const style = p.getAttribute('style');
-      if (style && (style.includes('margin-top') || style.includes('margin-bottom'))) {
+      if (
+        style &&
+        (style.includes("margin-top") || style.includes("margin-bottom"))
+      ) {
         // Create a new <ins> element with the contents of <p>
         const ins = parse(`<ins>${p.innerHTML}</ins>`).firstChild;
 
         // Copy attributes from <p> to <ins>, modifying the style to remove margin-top and margin-bottom
-        Object.keys(p.attributes).forEach(name => {
+        Object.keys(p.attributes).forEach((name) => {
           let value = p.attributes[name];
-          if (name === 'style') {
+          if (name === "style") {
             // Remove margin-top and margin-bottom from the style
-            value = value.replace(/margin-(top|bottom):\s*[^;]+;?/g, '').trim();
+            value = value.replace(/margin-(top|bottom):\s*[^;]+;?/g, "").trim();
           }
           ins.setAttribute(name, value);
         });
@@ -682,4 +744,84 @@ function replaceVariablesArray(htmlString, variableData) {
     replacedTemplateContent = replacedTemplateContent.replace(match, value);
   });
   return replacedTemplateContent;
+}
+
+function convertAlignmentStylesToAttributes(htmlString) {
+  return htmlString.replace(
+    /<(\w+)([^>]*)style="([^"]*)"/gi, // Match any tag with a style attribute
+    function (match, tagName, preStyle, style) {
+      let align = "";
+      let modifiedStyle = style;
+
+      // Handling for text-align in block elements
+      if (style.includes("text-align: center")) {
+        align = 'align="center"';
+      } else if (style.includes("text-align: left")) {
+        align = 'align="left"';
+      } else if (style.includes("text-align: right")) {
+        align = 'align="right"';
+      }
+
+      // Special handling for images
+      if (tagName.toLowerCase() === 'img') {
+        if (style.includes("margin-left: auto") && style.includes("margin-right: auto")) {
+          // Remove margin styles for auto margins
+          modifiedStyle = style.replace(/margin-(left|right): auto;?\s?/g, '');
+          // Wrap the img tag in a div with text-align:center and apply any remaining styles
+          return `<div style="text-align:center;"><img ${preStyle}style="${modifiedStyle}" /></div>`;
+        } else if (style.includes("margin-left: 0") && style.includes("margin-right: auto")) {
+          align = 'align="left"';
+        } else if (style.includes("margin-left: auto") && style.includes("margin-right: 0")) {
+          align = 'align="right"';
+        }
+      }
+
+      // Reconstruct the tag with alignment attributes if applicable
+      // For img tags, ensure self-closing syntax is respected
+      return align || tagName.toLowerCase() === 'img'
+        ? `<${tagName} ${preStyle}style="${modifiedStyle}" ${align} />`
+        : `<${tagName} ${preStyle}style="${modifiedStyle}" ${align}>`;
+    }
+  );
+}
+
+// Function to transverse and wrap the images with div
+function traverseAndWrap(node) {
+  node.childNodes.forEach((child) => {
+    // Check if the child is an <img> with the specific style
+    if (child.tagName === 'IMG') {
+      const style = child.getAttribute('style');
+      if (style && style.includes('margin-left: auto') && style.includes('margin-right: auto')) {
+        // Create a new <div> wrapper for the <img>
+        const wrapper = new HTMLElement('div', { style: 'text-align: center;' }, 'style="text-align:center;"', null, child.parentNode);
+        // Replace the <img> with the wrapper <div> and reinsert the <img> into the wrapper
+        child.replaceWith(wrapper);
+        wrapper.appendChild(child);
+      }
+    } else if (child.childNodes.length > 0) {
+      // Recurse into child nodes
+      traverseAndWrap(child);
+    }
+  });
+}
+
+function wrapCenteredImages(htmlString) {
+  const root = parse(htmlString);
+  traverseAndWrap(root);
+  return root.toString();
+}
+
+// Add attributes to the td if there is a style with vertical align
+function convertVerticalAlignToValignAttributes(htmlString) {
+  return htmlString.replace(
+    /<td([^>]*)style="([^"]*vertical-align: (top|middle|bottom)[^"]*)"/gi,
+    function(match, preStyle, style, align) {
+      // Determine the valign attribute based on the vertical-align value
+      let valign = `valign="${align}"`;
+
+      // Return the modified td start tag with the valign attribute added
+      // and keep the original style attribute unchanged
+      return `<td${preStyle}style="${style}" ${valign}`;
+    }
+  );
 }

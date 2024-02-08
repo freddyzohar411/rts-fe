@@ -32,7 +32,6 @@ const TemplateSettingsSideBar = ({
               { label: "Legal", value: "Legal" },
             ]}
             setSelectedOptionData={(e) =>
-              //   setSettings((prev) => ({ ...prev, pageType: e.value }))
               setTempSettings((prev) => ({ ...prev, pageType: e.value }))
             }
             clearable={false}
@@ -52,7 +51,6 @@ const TemplateSettingsSideBar = ({
               { label: "Landscape", value: "landscape" },
             ]}
             setSelectedOptionData={(e) =>
-              //   setSettings((prev) => ({ ...prev, pageOrientation: e.value }))
               setTempSettings((prev) => ({ ...prev, pageOrientation: e.value }))
             }
             clearable={false}
@@ -72,7 +70,6 @@ const TemplateSettingsSideBar = ({
               { label: "Mm", value: "mm" },
             ]}
             setSelectedOptionData={(e) =>
-              //   setSettings((prev) => ({ ...prev, unit: e.value }))
               setTempSettings((prev) => ({ ...prev, unit: e.value }))
             }
             clearable={false}
@@ -87,10 +84,6 @@ const TemplateSettingsSideBar = ({
             type="number"
             value={tempSettings.marginTop}
             onChange={(e) =>
-              //   setSettings((prev) => ({
-              //     ...prev,
-              //     marginTop: parseFloat(e.target.value),
-              //   }))
               setTempSettings((prev) => ({
                 ...prev,
                 marginTop: parseFloat(e.target.value),
@@ -105,10 +98,6 @@ const TemplateSettingsSideBar = ({
             type="number"
             value={tempSettings.marginBottom}
             onChange={(e) =>
-              //   setSettings((prev) => ({
-              //     ...prev,
-              //     marginBottom: parseFloat(e.target.value),
-              //   }))
               setTempSettings((prev) => ({
                 ...prev,
                 marginBottom: parseFloat(e.target.value),
@@ -125,10 +114,6 @@ const TemplateSettingsSideBar = ({
             type="number"
             value={tempSettings.marginLeft}
             onChange={(e) =>
-              //   setSettings((prev) => ({
-              //     ...prev,
-              //     marginLeft: parseFloat(e.target.value),
-              //   }))
               setTempSettings((prev) => ({
                 ...prev,
                 marginLeft: parseFloat(e.target.value),
@@ -143,10 +128,6 @@ const TemplateSettingsSideBar = ({
             type="number"
             value={tempSettings.marginRight}
             onChange={(e) =>
-              //   setSettings((prev) => ({
-              //     ...prev,
-              //     marginRight: parseFloat(e.target.value),
-              //   }))
               setTempSettings((prev) => ({
                 ...prev,
                 marginRight: parseFloat(e.target.value),

@@ -86,7 +86,7 @@ const TemplateBuilderPage = () => {
   const confirmResetTemplate = () => {
     formikRef.current.clearForm();
     setIsResetModalOpen(false);
-  }
+  };
 
   return (
     <React.Fragment>
