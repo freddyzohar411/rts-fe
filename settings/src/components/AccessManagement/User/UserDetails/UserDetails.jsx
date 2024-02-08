@@ -112,8 +112,8 @@ function UserDetails() {
                       <div className="mb-3 d-flex flex-column gap-1">
                         <span className="fw-semibold">Manager</span>
                         <span>
-                          {user.manager
-                            ? `${user.manager.firstName} (${user.manager.mobile})`
+                          {user?.manager
+                            ? `${user?.manager?.firstName} (${user?.manager?.mobile})`
                             : "-"}
                         </span>
                       </div>
