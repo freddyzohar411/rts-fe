@@ -91,7 +91,6 @@ const FormStepper = ({
               Back
             </Button>
           )}
-          <Button className="btn btn-custom-primary">Skip</Button>
           <Button className="btn btn-custom-primary" onClick={handleNextStep}>
             Next
           </Button>

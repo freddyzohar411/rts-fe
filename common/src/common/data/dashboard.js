@@ -19,8 +19,8 @@ const recruiterDashboard = [
   {
     id: 2,
     cardColor: "primary",
-    label: "All Job",
-    subLabel: "Openings",
+    label: "All Active",
+    subLabel: "Jobs",
     badge: "",
     badgeClass: "",
     percentage: " ",
@@ -36,8 +36,8 @@ const recruiterDashboard = [
   {
     id: 3,
     cardColor: "primary",
-    label: "Total",
-    subLabel: "Assign",
+    label: "Assigned Jobs",
+    subLabel: "",
     badge: "",
     badgeClass: "",
     percentage: "",
@@ -53,13 +53,13 @@ const recruiterDashboard = [
   {
     id: 4,
     cardColor: "primary",
-    label: "All Job",
-    subLabel: "Status",
+    label: "All Jobs",
+    subLabel: "",
     badge: "",
     badgeClass: "",
     percentage: "",
     counter: "350897",
-    link: "/jobs/filter/all_job_status",
+    link: "/jobs/filter/all_jobs",
     bgcolor: "warning",
     icon: "bx bxs-collection",
     decimals: 0,
@@ -70,8 +70,8 @@ const recruiterDashboard = [
   {
     id: 5,
     cardColor: "primary",
-    label: "Total Focus",
-    subLabel: "of the Day",
+    label: "Total Do",
+    subLabel: "",
     badge: "",
     badgeClass: "",
     percentage: "",
@@ -122,8 +122,8 @@ const recruiterDashboard = [
   {
     id: 8,
     cardColor: "primary",
-    label: "Offer",
-    subLabel: "Status",
+    label: "Offer Status",
+    subLabel: "",
     statusArray: [
       { status: "Accepted", count: 100 },
       { status: "Declined", count: 90 },
@@ -158,6 +158,23 @@ const recruiterDashboard = [
     suffix: "",
     key: "offer_review_by_recruiter",
   },
+  ,{
+    id: 10,
+    cardColor: "primary",
+    label: "Reminders",
+    subLabel: "",
+    badge: "",
+    badgeClass: "",
+    percentage: "",
+    counter: "3",
+    link: "",
+    bgcolor: "primary",
+    icon: "mdi mdi-bell-badge-outline",
+    decimals: 0,
+    prefix: "",
+    suffix: "",
+    key: "offer_review_by_recruiter",
+  }
 ];
 
 const salesDashboard = [

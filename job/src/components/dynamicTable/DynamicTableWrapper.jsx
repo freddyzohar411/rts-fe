@@ -243,7 +243,7 @@ const DynamicTableWrapper = ({
                               caret
                             >
                               <i className="bx bxs-user-account"></i>
-                              <span>Mass FOD</span>
+                              <span>FOD</span>
                             </DropdownToggle>
                             <DropdownMenu
                               className="pt-3 px-3"
