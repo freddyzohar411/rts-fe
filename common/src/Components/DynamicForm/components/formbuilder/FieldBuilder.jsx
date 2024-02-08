@@ -10,6 +10,7 @@ import { v4 as uuid } from "uuid";
 import CountrySelectField from "../../fieldbuilders/CountrySelectField";
 import UserGroupSelectField from "../../fieldbuilders/UserGroupSelectField";
 import FormCategorySelectField from "../../fieldbuilders/FormCategorySelectField";
+import * as FieldBuilderHelper from "./fieldBuilderValidation_helper";
 
 const FieldBuilder = ({
   type,
@@ -23,7 +24,8 @@ const FieldBuilder = ({
   setShowModalSchema,
   formOptions,
 }) => {
-  const [validationSchema, setValidationSchema] = useState({});
+  const [validationSchema, setValidationSchema] = useState(null);
+
   //========================= States ================================
   // Condition validation state
   const [validationConditionList, setValidationConditionList] = useState(
@@ -392,18 +394,18 @@ const FieldBuilder = ({
         { label: "No", value: "false" },
       ],
       events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, required: e.target.value });
-          if (e.target.value === "false") {
-            document.getElementsByName(
-              "requiredErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "requiredErrorMessage"
-            )[0].disabled = false;
-          }
-        },
+        // onChange: (e) => {
+        //   formik.setValues({ ...formik.values, required: e.target.value });
+        //   if (e.target.value === "false") {
+        //     document.getElementsByName(
+        //       "requiredErrorMessage"
+        //     )[0].disabled = true;
+        //   } else {
+        //     document.getElementsByName(
+        //       "requiredErrorMessage"
+        //     )[0].disabled = false;
+        //   }
+        // },
       },
       apply: [
         "text",
@@ -480,6 +482,7 @@ const FieldBuilder = ({
         "selectformtemplate",
         "multiinput",
       ],
+      isDisabled: true,
       validation: [
         {
           required: false,
@@ -1325,7 +1328,7 @@ const FieldBuilder = ({
       apply: ["word"],
     },
   ]);
-  // Overall Form schema config (For all types of fields)
+  
   // const config = [
   //   {
   //     label: "Label",
@@ -2864,51 +2867,10 @@ const FieldBuilder = ({
 
   // If formik field changes
   useEffect(() => {
-    if (formik && formik?.values?.["required"]) {
-      if (
-        formik?.values?.["required"] === true ||
-        formik?.values?.["required"] === "true"
-      ) {
-        setConfig((prev) => {
-          // Find for name == requiredErrorMessage
-          // then set the validation to true
-          return prev.map((field) => {
-            if (field.name === "requiredErrorMessage") {
-              return {
-                ...field,
-                validation: [
-                  {
-                    required: true,
-                    message: "Required error message is required",
-                  },
-                ],
-              };
-            }
-            return field;
-          });
-        });
-      }
-      if (
-        formik?.values?.["required"] === false ||
-        formik?.values?.["required"] === "false"
-      ) {
-        try {
-          formik?.setValues({ ...formik.values, requiredErrorMessage: "" });
-        } catch (e) {}
-        setConfig((prev) => {
-          // Find for name == requiredErrorMessage
-          // then set the validation to true
-          return prev.map((field) => {
-            if (field.name === "requiredErrorMessage") {
-              return {
-                ...field,
-                validation: [],
-              };
-            }
-            return field;
-          });
-        });
-      }
+    if (config && formik && formik?.values?.["required"]) {
+      setConfig((prev) =>
+        FieldBuilderHelper.requiredErrorMessageValidation(formik, prev)
+      );
     }
   }, [formik?.values?.["required"]]);
 
@@ -2925,9 +2887,7 @@ const FieldBuilder = ({
     if (formik && config) {
       config?.forEach((field) => {
         if (field.type === "radio" && field?.defaultValue) {
-          try {
-            formik?.setFieldValue(field.name, field.defaultValue);
-          } catch (e) {}
+          formik?.setFieldValue(field.name, field.defaultValue);
         }
       });
     }
@@ -2961,6 +2921,7 @@ const FieldBuilder = ({
                       className="form-control"
                       onChange={formik.handleChange}
                       value={formik.values[field.name]}
+                      disabled={field.isDisabled ?? false}
                       {...field.events}
                     />
                     {formik.errors[field.name] && formik.touched[field.name] ? (
