@@ -10,6 +10,7 @@ import {
   Input,
   Button,
   FormFeedback,
+  Spinner,
 } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +19,7 @@ import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
 import ParticlesAuth from "../../ParticlesAuth";
 import { initialValues, schema } from "./constants";
 import { loginResetPassword } from "../../store/actions";
+import { encode } from "@workspace/common/src/helpers/string_helper";
 
 const ResetPassword = () => {
   document.title = "Reset Password | RTS";
@@ -36,8 +38,8 @@ const ResetPassword = () => {
     if (authUser) {
       const payload = {
         userId: authUser?.user?.id,
-        password: values?.password,
-        confirmPassword: values?.confirmPassword,
+        password: encode(values?.password),
+        confirmPassword: encode(values?.confirmPassword),
       };
       dispatch(loginResetPassword(payload, navigate));
     } else {
@@ -81,10 +83,11 @@ const ResetPassword = () => {
                         <h5>First Time Login</h5>
                         <div className="d-flex flex-column text-muted mb-2">
                           <span>Please create a new password.</span>
-                          <span>
-                            Your new password must be different from previous
-                            used passwords.
-                          </span>
+                          {resetPasswordMeta?.isError && (
+                            <span className="text-danger">
+                              {resetPasswordMeta?.errorMessage?.message}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="p-2">
@@ -171,10 +174,15 @@ const ResetPassword = () => {
                           </div>
                           <div className="mt-4">
                             <Button
-                              className="btn btn-custom-primary w-100"
+                              className="btn btn-custom-primary w-100 d-flex justify-content-center align-items-center"
                               type="submit"
                             >
-                              Create New Password
+                              <span style={{ marginRight: "5px" }}>
+                                Create New Password
+                              </span>
+                              {resetPasswordMeta?.isLoading && (
+                                <Spinner size="sm">Loading...</Spinner>
+                              )}
                             </Button>
                           </div>
                         </Form>

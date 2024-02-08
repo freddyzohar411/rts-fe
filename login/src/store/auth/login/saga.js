@@ -1,6 +1,5 @@
 import { call, put, takeEvery, take } from "redux-saga/effects";
 import { toast } from "react-toastify";
-import bcrypt from "bcryptjs-react";
 import { fetchProfile } from "../profile/actions";
 
 // Login Redux States
@@ -10,10 +9,11 @@ import {
   LOGOUT_USER,
 } from "./actionTypes";
 import {
-  apiError,
+  loginError,
   loginResetPasswordError,
   loginResetPasswordSuccess,
   loginSuccess,
+  logoutUserError,
   logoutUserSuccess,
 } from "./actions";
 import { deleteProfile } from "../profile/actions";
@@ -22,33 +22,29 @@ import {
   loginResetPwd,
   postLogin,
 } from "../../../helpers/backend_helper";
+import { encode } from "@workspace/common/src/helpers/string_helper";
 
 function* loginUser({ payload: { user, history } }) {
   try {
-    const saltRounds = 10;
-    const hashedPassword = yield bcrypt.hash(user.password, saltRounds);
+    const hashedPassword = yield encode(user.password);
     const response = yield call(postLogin, {
       username: user.username,
-      password: user.password,
+      password: hashedPassword,
     });
-    if (response) {
-      yield put(loginSuccess(response));
-      const { access_token, refresh_token } = response;
-      sessionStorage.setItem("accessToken", access_token);
-      sessionStorage.setItem("refreshToken", refresh_token);
-      sessionStorage.setItem("authUser", JSON.stringify(response));
-      // Check if user has any profile
-      yield put(fetchProfile());
-      yield take("PROFILE_SUCCESS");
-      const isTemp = response?.user?.isTemp;
-      if (isTemp) {
-        history("/reset-password");
-      } else {
-        history("/dashboard");
-        toast.success("Thanks for logging in.");
-      }
+    yield put(loginSuccess(response));
+    const { access_token, refresh_token } = response;
+    sessionStorage.setItem("accessToken", access_token);
+    sessionStorage.setItem("refreshToken", refresh_token);
+    sessionStorage.setItem("authUser", JSON.stringify(response));
+    // Check if user has any profile
+    yield put(fetchProfile());
+    yield take("PROFILE_SUCCESS");
+    const isTemp = response?.user?.isTemp;
+    if (isTemp) {
+      history("/reset-password");
     } else {
-      yield put(apiError(response));
+      history("/dashboard");
+      toast.success("Thanks for logging in.");
     }
   } catch (error) {
     if (error?.status === "UNAUTHORIZED") {
@@ -56,7 +52,7 @@ function* loginUser({ payload: { user, history } }) {
     } else {
       toast.error("Something went wrong, Please try again after some time.");
     }
-    yield put(apiError(error));
+    yield put(loginError(error));
   }
 }
 
@@ -75,7 +71,7 @@ function* logoutUser({ payload: { history } }) {
       toast.success("Logout Successfully");
     }
   } catch (error) {
-    yield put(apiError(LOGOUT_USER, error));
+    yield put(logoutUserError(LOGOUT_USER, error));
     return window.location.replace("/login");
   }
 }
