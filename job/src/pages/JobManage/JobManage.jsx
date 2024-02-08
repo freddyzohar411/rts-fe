@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { CustomNav } from "@workspace/common";
 import { Container, Breadcrumb, BreadcrumbItem, Row, Col } from "reactstrap";
 import { StringHelper } from "@workspace/common";
-
+import { Link } from "react-router-dom";
 import JobCreation from "../../components/JobCreation/JobCreation";
 import JobOverview from "../../components/JobOverview/JobOverview";
 
@@ -28,7 +28,9 @@ const JobManage = () => {
         <Row>
           <Col>
             <Breadcrumb>
-              <BreadcrumbItem>Jobs</BreadcrumbItem>
+              <BreadcrumbItem>
+                <Link to="/jobs">Jobs</Link>
+              </BreadcrumbItem>
               <BreadcrumbItem active>{`${StringHelper.capitalizeFirstLetter(
                 slug
               )}`}</BreadcrumbItem>
