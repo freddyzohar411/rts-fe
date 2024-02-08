@@ -3,13 +3,14 @@ import {
   LOGIN_SUCCESS,
   LOGOUT_USER,
   LOGOUT_USER_SUCCESS,
-  API_ERROR,
-  RESET_LOGIN_FLAG,
   LOGIN_RESET_PASSWORD_USER,
   LOGIN_RESET_PASSWORD_SUCCESS,
   LOGIN_RESET_PASSWORD_ERROR,
+  LOGIN_ERROR,
+  LOGOUT_USER_ERROR,
 } from "./actionTypes";
 
+// User login
 export const loginUser = (user, history) => {
   return {
     type: LOGIN_USER,
@@ -24,6 +25,14 @@ export const loginSuccess = (user) => {
   };
 };
 
+export const loginError = (error) => {
+  return {
+    type: LOGIN_ERROR,
+    payload: error,
+  };
+};
+
+// User logout
 export const logoutUser = (history) => {
   return {
     type: LOGOUT_USER,
@@ -38,19 +47,14 @@ export const logoutUserSuccess = () => {
   };
 };
 
-export const apiError = (error) => {
+export const logoutUserError = (error) => {
   return {
-    type: API_ERROR,
+    type: LOGOUT_USER_ERROR,
     payload: error,
   };
 };
 
-export const resetLoginFlag = () => {
-  return {
-    type: RESET_LOGIN_FLAG,
-  };
-};
-
+// User first time login password reset
 export const loginResetPassword = (user, history) => {
   return {
     type: LOGIN_RESET_PASSWORD_USER,
