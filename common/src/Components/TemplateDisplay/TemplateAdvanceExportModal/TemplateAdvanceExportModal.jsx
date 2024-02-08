@@ -37,6 +37,7 @@ const TemplateAdvanceExportModal = ({
     exportType: "pdf",
     fileName: "template",
   });
+
   const [typeData, setTypeData] = useState("");
   const [categorySelected, setCategorySelected] = useState("");
   const [templateSelected, setTemplateSelected] = useState("");

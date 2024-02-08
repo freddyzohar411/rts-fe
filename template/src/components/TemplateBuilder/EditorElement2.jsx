@@ -637,7 +637,7 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles styleselect | " +
+            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak |" +
             "removeformat | searchreplace |" +
@@ -717,10 +717,6 @@ const EditorElement2 = ({
             "6pt 8pt 9pt 10pt 11pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 34pt 36pt 38pt 40pt 42pt 44pt 46pt 48pt 50pt 55pt 60pt 65pt 70pt 75pt 80pt 85pt 90pt 95pt 100pt",
           images_upload_handler: imageUploadHandler,
           file_picker_types: "image, media",
-          // table_default_styles: {
-          //   width: "300px",
-          // },
-          // Set colgroup for table to false
           table_use_colgroups: false,
         }}
         onEditorChange={(value) => {
