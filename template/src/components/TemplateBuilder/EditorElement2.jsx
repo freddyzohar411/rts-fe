@@ -116,7 +116,7 @@ const EditorElement2 = ({
           resolve(res.data.mediaUrl);
         })
         .catch((err) => {
-          reject("Upload failed");
+          // reject("Upload failed");
         });
     });
 

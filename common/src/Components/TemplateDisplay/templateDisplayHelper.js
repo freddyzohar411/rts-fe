@@ -266,8 +266,11 @@ export function convertStyleToAttributesTable(htmlString) {
 export function convertInlineStylesToClasses(htmlString) {
   // console.log("HTML 1: ", htmlString);
   let rootTemp = replacePageBreakPlaceHolder(htmlString);
+  // Add attributes to the td if there is a style with vertical align
+  rootTemp = convertVerticalAlignToValignAttributes(rootTemp);
+  // Wrap img with div to center the image
   rootTemp = wrapCenteredImages(rootTemp);
-  console.log("HTML 1.1: ", rootTemp);
+
   rootTemp = wrapTextWithIns(rootTemp);
   console.log("HTML 2.4444: ", rootTemp);
   rootTemp = replacePWithInsInLi(rootTemp);
@@ -876,6 +879,7 @@ function convertAlignmentStylesToAttributes(htmlString) {
   );
 }
 
+// Function to transverse and wrap the images with div
 function traverseAndWrap(node) {
   node.childNodes.forEach((child) => {
     // Check if the child is an <img> with the specific style
@@ -899,4 +903,19 @@ function wrapCenteredImages(htmlString) {
   const root = parse(htmlString);
   traverseAndWrap(root);
   return root.toString();
+}
+
+// Add attributes to the td if there is a style with vertical align
+function convertVerticalAlignToValignAttributes(htmlString) {
+  return htmlString.replace(
+    /<td([^>]*)style="([^"]*vertical-align: (top|middle|bottom)[^"]*)"/gi,
+    function(match, preStyle, style, align) {
+      // Determine the valign attribute based on the vertical-align value
+      let valign = `valign="${align}"`;
+
+      // Return the modified td start tag with the valign attribute added
+      // and keep the original style attribute unchanged
+      return `<td${preStyle}style="${style}" ${valign}`;
+    }
+  );
 }
