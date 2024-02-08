@@ -11,4 +11,12 @@ export const generateRandomString = (length) => {
     randomString += alphabet.charAt(randomIndex);
   }
   return randomString;
-}
+};
+
+export const encode = (str) => {
+  const hashedStr = btoa(btoa(str));
+  const randomStr = generateRandomString(4);
+  const updatedStr =
+    hashedStr.substring(0, 4) + randomStr + hashedStr.substring(4);
+  return updatedStr;
+};

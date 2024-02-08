@@ -13,7 +13,7 @@ export const resetAllMetaData = () => ({
   isAbort: false,
   successMessage: "",
   errorMessage: "",
-})
+});
 
 export const pendingMetaData = (successMessage = "", errorMessage = "") => ({
   isLoading: true,
@@ -33,7 +33,7 @@ export const successMetaData = (successMessage = "", errorMessage = "") => ({
   errorMessage,
 });
 
-export const errorMetaData = (successMessage = "", errorMessage = "") => ({
+export const errorMetaData = (errorMessage = "", successMessage = "") => ({
   isLoading: false,
   isSuccess: false,
   isError: true,
