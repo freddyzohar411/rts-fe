@@ -51,7 +51,7 @@ const CandidateStepper = ({ step, setStep }) => {
               <NavItem>
                 <NavLink
                   onClick={() => setStep && setStep(1)}
-                  href="/contact-creation"
+                  to="#"
                   id="pills-gen-info-tab"
                   className={classnames(
                     {
@@ -63,8 +63,8 @@ const CandidateStepper = ({ step, setStep }) => {
                   tag="button"
                 >
                   <div className="d-flex flex-column row-gap-2 justify-content-center align-items-center">
-                    <i className="mdi mdi-badge-account-horizontal-outline mt-2"></i>
-                    <p className="h6">Documents</p>
+                    <i className="mdi mdi-file-document-outline mt-2"></i>
+                    <p className="h6">Work Experience</p>
                   </div>
                 </NavLink>
               </NavItem>
@@ -76,15 +76,15 @@ const CandidateStepper = ({ step, setStep }) => {
                   className={classnames(
                     {
                       active: step === 2,
-                      done: step <= 6 && step > 2,
+                      done: step <= 7 && step > 2,
                     },
                     "rounded-pill"
                   )}
                   tag="button"
                 >
                   <div className="d-flex flex-column row-gap-2 justify-content-center align-items-center">
-                    <i className="mdi mdi-file-document-outline mt-2"></i>
-                    <p className="h6">Work Experience</p>
+                    <i className="mdi mdi-calculator mt-2"></i>
+                    <p className="h6">Languages</p>
                   </div>
                 </NavLink>
               </NavItem>
@@ -111,7 +111,7 @@ const CandidateStepper = ({ step, setStep }) => {
               <NavItem>
                 <NavLink
                   onClick={() => setStep && setStep(4)}
-                  to="#"
+                  href="/contact-creation"
                   id="pills-gen-info-tab"
                   className={classnames(
                     {
@@ -123,8 +123,8 @@ const CandidateStepper = ({ step, setStep }) => {
                   tag="button"
                 >
                   <div className="d-flex flex-column row-gap-2 justify-content-center align-items-center">
-                    <i className="mdi mdi-file-document-edit mt-2"></i>
-                    <p className="h6">Certification</p>
+                    <i className="mdi mdi-badge-account-horizontal-outline mt-2"></i>
+                    <p className="h6">Documents</p>
                   </div>
                 </NavLink>
               </NavItem>
@@ -136,15 +136,15 @@ const CandidateStepper = ({ step, setStep }) => {
                   className={classnames(
                     {
                       active: step === 5,
-                      done: step <= 7 && step > 5,
+                      done: step <= 6 && step > 5,
                     },
                     "rounded-pill"
                   )}
                   tag="button"
                 >
                   <div className="d-flex flex-column row-gap-2 justify-content-center align-items-center">
-                    <i className="mdi mdi-calculator mt-2"></i>
-                    <p className="h6">Languages</p>
+                    <i className="mdi mdi-file-document-edit mt-2"></i>
+                    <p className="h6">Certification</p>
                   </div>
                 </NavLink>
               </NavItem>
@@ -164,7 +164,7 @@ const CandidateStepper = ({ step, setStep }) => {
                 >
                   <div className="d-flex flex-column row-gap-2 justify-content-center align-items-center">
                     <i className="mdi mdi-calculator mt-2"></i>
-                    <p className="h6">Employer Details</p>
+                    <p className="h6">Reference</p>
                   </div>
                 </NavLink>
               </NavItem>

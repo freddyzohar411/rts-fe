@@ -1,10 +1,20 @@
+// export const CandidateFormConstant = {
+//   0: "Candidate_basic_info",
+//   1: "Candidate_documents",
+//   2: "Candidate_work_experience",
+//   3: "Candidate_education_details",
+//   4: "Candidate_certification",
+//   5: "Candidate_languages",
+//   6: "Candidate_employer_details",
+// };
+
 export const CandidateFormConstant = {
   0: "Candidate_basic_info",
-  1: "Candidate_documents",
-  2: "Candidate_work_experience",
+  1: "Candidate_work_experience",
+  2: "Candidate_languages",
   3: "Candidate_education_details",
-  4: "Candidate_certification",
-  5: "Candidate_languages",
+  4: "Candidate_documents",
+  5: "Candidate_certification",
   6: "Candidate_employer_details",
 };
 

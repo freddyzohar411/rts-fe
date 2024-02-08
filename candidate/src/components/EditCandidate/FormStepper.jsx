@@ -17,17 +17,29 @@ const FormStepper = ({
   resetStepper,
   toggleFormViewState,
   viewState,
-  setStep
+  setStep,
 }) => {
   const { Permission, checkAllPermission } = useUserAuth();
   const navigate = useNavigate();
-  
+
   const handleNextStep = () => {
     if (activeStep === 0 && formikRef?.current?.formik) {
       formikRef.current.formik.submitForm();
     }
 
-    if (activeStep === 1 && formikRef?.current?.formik) {
+    if (activeStep === 1) {
+      handleNext();
+    }
+
+    if (activeStep === 2) {
+      handleNext();
+    }
+
+    if (activeStep === 3) {
+      handleNext();
+    }
+
+    if (activeStep === 4 && formikRef?.current?.formik) {
       const table = formFieldsData.filter(
         (field) => field.name === CandidateTableListConstant.DOCUMENTS_LIST
       );
@@ -39,21 +51,10 @@ const FormStepper = ({
       }
     }
 
-    if (activeStep === 2) {
-      handleNext();
-    }
-
-    if (activeStep === 3) {
-      handleNext();
-    }
-
-    if (activeStep === 4) {
-      handleNext();
-    }
-
     if (activeStep === 5) {
       handleNext();
     }
+
     if (activeStep === 6) {
       navigate("/candidates");
       if (viewState === false) {
@@ -71,7 +72,7 @@ const FormStepper = ({
 
   return (
     <>
-      <CandidateStepper step={activeStep} setStep={setStep}/>
+      <CandidateStepper step={activeStep} setStep={setStep} />
       <div className="px-3"> {children}</div>
       <div
         className={`d-flex ${
@@ -81,7 +82,10 @@ const FormStepper = ({
         } align-items-center mb-2`}
       >
         {candidateId && checkReadEditPermission() && (
-          <Button onClick={toggleFormViewState} className="btn btn-custom-primary">
+          <Button
+            onClick={toggleFormViewState}
+            className="btn btn-custom-primary"
+          >
             {viewState ? "Edit" : "View"}
           </Button>
         )}
