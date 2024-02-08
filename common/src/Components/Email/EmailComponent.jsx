@@ -46,11 +46,10 @@ function EmailComponent() {
   const [templateAttachmentModalShow, setTemplateAttachmentModalShow] =
     useState(false);
 
-  const { loading , isEmailOpen, category, subCategory } = useSelector((state) => state.EmailCommonReducer);
+  const { loading, isEmailOpen, category, subCategory } = useSelector(
+    (state) => state.EmailCommonReducer
+  );
 
-  console.log("Category", category)
-  console.log("SubCategory", subCategory)
-  
   /**
    * Handle form submit event (Formik)
    * @param {*} values

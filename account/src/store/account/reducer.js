@@ -53,7 +53,6 @@ const initialState = {
 };
 
 const AccountReducer = (state = initialState, action) => {
-  console.log("Account reducer")
   switch (action.type) {
     // Fetch Account
     case FETCH_ACCOUNT:
@@ -203,7 +202,6 @@ const AccountReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
     case ACCOUNT_RESET_META_DATA:
-      console.log("Reducer Restting:")
       return {
         ...state,
         meta: resetAllMetaData(),

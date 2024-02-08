@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Row,
   Col,
+  Card,
+  CardBody,
   Button,
   Input,
   Nav,
@@ -15,6 +17,8 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
+  Popover,
+  PopoverBody,
   Tooltip,
 } from "reactstrap";
 import {
@@ -26,15 +30,13 @@ import {
   tagReset,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
+import "./StepComponent.scss";
 
 // Elements
 // import { SelectElement } from "@workspace/common";
 import { TemplateSelectByCategoryElement } from "@workspace/common";
-
-// Stepper
-import { TimelineStepper } from "../TimelineStepper";
 
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
@@ -53,17 +55,25 @@ import {
   rtsStatusHeaders,
   steps,
   timelineSkip,
+  timelineLegend,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
+import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
+import { useMediaQuery } from "react-responsive";
+import BSGTimeline from "../BSGTimeline/BSGTimeline";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
 
+  const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
+  const [legendTooltip, setLegendTooltip] = useState(false);
+
   const dispatch = useDispatch();
   const { jobId } = useParams();
   const location = useLocation();
-  const linkState = location.state;
 
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
@@ -71,7 +81,6 @@ function JobOverview() {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
 
-  const [selectedOfferTemplate, setSelectedOfferTemplate] = useState(null);
   const [templateData, setTemplateData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -79,6 +88,7 @@ function JobOverview() {
   const [candidateId, setCandidateId] = useState();
 
   const [isPreviewCV, setIsPreviewCV] = useState(false);
+  const [skipComboOptions, setSkipComboOptions] = useState({});
 
   const form = useSelector((state) => state.JobFormReducer.form);
   const formSubmissionData = useSelector(
@@ -89,7 +99,6 @@ function JobOverview() {
     (state) => state.JobStageReducer.jobTimeline
   );
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
-
   // Custom renders
   const customRenderList = [
     {
@@ -148,6 +157,12 @@ function JobOverview() {
   useEffect(() => {
     if (jobTimelineData) {
       setPageInfoData(jobTimelineData);
+      let jsonObject = {};
+      jobTimelineData?.jobs?.map((data) => {
+        const maxOrder = getMaxOrder(data);
+        jsonObject[data?.id] = maxOrder;
+      });
+      setSkipComboOptions(jsonObject);
     }
   }, [jobTimelineData]);
 
@@ -168,14 +183,6 @@ function JobOverview() {
       dispatch(fetchJobFormSubmission(jobId));
     }
   }, [jobId]);
-
-  const handlePreviewCVClick = () => {
-    setIsPreviewCV(true);
-  };
-
-  const handleExitPreview = () => {
-    setIsPreviewCV(false);
-  };
 
   useEffect(() => {
     // Set the stepper state based on the active step
@@ -206,7 +213,46 @@ function JobOverview() {
     }
   }, [activeStep]);
 
-  const getFormComponent = (step, closeOffcanvas) => {
+  const handlePreviewCVClick = () => {
+    setIsPreviewCV(true);
+  };
+
+  const handleExitPreview = () => {
+    setIsPreviewCV(false);
+  };
+
+  const handleSkipSelection = (jobId, value) => {
+    const newOb = { ...skipComboOptions };
+    newOb[jobId] = value;
+    setSkipComboOptions(newOb);
+  };
+
+  const getMaxOrder = (data) => {
+    const values = Object.values(data?.timeline);
+    let maxOrder = 1;
+    if (values) {
+      let orders = values?.map((item) => item?.order);
+      if (orders) {
+        orders = orders.sort((a, b) => b - a);
+        maxOrder = orders?.[0] ?? 1;
+      }
+    }
+    return maxOrder;
+  };
+
+  const getStatus = (data, orderNo) => {
+    const values = Object.values(data?.timeline);
+    let status;
+    if (values) {
+      let orders = values?.filter((item) => item?.order === orderNo);
+      if (orders) {
+        status = orders?.[0]?.status ?? null;
+      }
+    }
+    return status;
+  };
+
+  const getFormComponent = (step, closeOffcanvas, maxOrder) => {
     switch (step) {
       case 1:
         return (
@@ -311,9 +357,47 @@ function JobOverview() {
     }
   };
 
-  const handleIconClick = (id) => {
+  const handleIconClick = (id, jobId) => {
+    const activeStep = skipComboOptions[jobId];
+    setActiveStep(activeStep);
     setOffcanvasForm(!offcanvasForm);
     setCandidateId(id);
+  };
+
+  const deliveryTeam = "Ganesh, Priya, Vinod";
+
+  const truncate = (input, length) =>
+    input
+      ? input.length > length
+        ? `${input.substring(0, length)}...`
+        : input
+      : "";
+
+  const renderLegend = () => {
+    return (
+      <div className="d-flex flex-wrap">
+        {timelineLegend.map((item, index) => (
+          <div
+            key={index}
+            className="d-flex flex-row gap-2 justify-content-start align-items-center me-2"
+            style={{ width: "calc(50% - 8px)" }}
+          >
+            <div
+              className={`bg-${item.color} rounded-circle`}
+              style={{
+                width: "9px",
+                height: "9px",
+                backgroundColor: `${item.color}`,
+                border: "1px solid #36454F",
+              }}
+            ></div>
+            <div>
+              <span>{item.legend}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -323,41 +407,98 @@ function JobOverview() {
           <TimelineHeader data={jobHeaders} />
         </Row>
         <hr className="border border-dashed border-dark" />
-        <Row className="mb-3">
+        <Row className="mb-2">
           <Col>
-            <div className="d-flex flex-row justify-content-between align-items-center">
-              <div className="d-flex flex-row h5 fw-bold align-items-end gap-1">
-                <span>{formSubmissionData?.accountName} | </span>
-                <span>{formSubmissionData?.jobTitle} | </span>
-                <span>{formSubmissionData?.clientJobId} | </span>
-                <div className="d-flex flex-column">
-                  <span className="fw-medium h6 text-muted">Sales</span>
-                  <span>{formSubmissionData?.salesManager} | </span>
+            <div
+              className={`d-flex ${
+                isMobile
+                  ? "flex-column align-items-start"
+                  : "flex-row align-items-center"
+              } justify-content-between gap-1`}
+            >
+              <div
+                className={`d-flex ${
+                  isMobile
+                    ? "flex-column align-items-start"
+                    : "flex-row align-items-end"
+                } h5 fw-bold  gap-1`}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                <div className="d-flex flex-row gap-1">
+                  <span title={formSubmissionData?.accountName}>
+                    {isMobile | isTablet
+                      ? truncate(formSubmissionData?.accountName, 8)
+                      : formSubmissionData?.accountName}
+                  </span>
+                  <span>|</span>
+                  <span title={formSubmissionData?.jobTitle}>
+                    {isMobile | isTablet
+                      ? truncate(formSubmissionData?.jobTitle, 8)
+                      : formSubmissionData?.jobTitle}
+                  </span>
+                  <span>|</span>
+                  <span>{formSubmissionData?.clientJobId}</span>
+                  {isMobile || <span>|</span>}
                 </div>
-                <div className="d-flex flex-column">
-                  <span className="fw-medium h6 text-muted">Delivery</span>
-                  <span>Ganesh, Priya, Vinod</span>
+                <div className="d-flex flex-row gap-1">
+                  <div className="d-flex flex-column">
+                    <span className="fw-medium h6 text-muted">Sales</span>
+                    <span title={formSubmissionData?.salesManager}>
+                      {isMobile | isTablet
+                        ? truncate(formSubmissionData?.salesManager, 8)
+                        : formSubmissionData?.salesManager}
+                    </span>
+                  </div>
+                  <div className="d-flex align-items-end gap-1">
+                    <span>|</span>
+                    <div className="d-flex flex-column">
+                      <span className="fw-medium h6 text-muted">Delivery</span>
+                      <span>
+                        {isMobile | isTablet
+                          ? truncate(deliveryTeam, 8)
+                          : deliveryTeam}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="d-flex flex-row gap-2 align-items-center">
-                <div className="search-box" style={{ width: "300px" }}>
-                  <form onSubmit={pageRequestSet.setSearchTerm}>
-                    <Input
-                      type="text"
-                      placeholder="Search"
-                      className="form-control search"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </form>
-                  <i className="ri-search-eye-line search-icon"></i>
+              <div className="d-flex flex-column gap-2">
+                <div className="d-flex flex-row gap-2 justify-content-end align-items-center">
+                  <div>
+                    <i
+                      id="legendInfo"
+                      className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
+                      onClick={() => setLegendTooltip(!legendTooltip)}
+                    ></i>
+                    <Tooltip
+                      target="legendInfo"
+                      placement="bottom"
+                      isOpen={legendTooltip}
+                      toggle={() => setLegendTooltip(!legendTooltip)}
+                      className="legend-tooltip"
+                    >
+                      {renderLegend()}
+                    </Tooltip>
+                  </div>
+                  <div className="search-box">
+                    <form onSubmit={pageRequestSet.setSearchTerm}>
+                      <Input
+                        type="text"
+                        placeholder="Search"
+                        className="form-control search"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                    </form>
+                    <i className="ri-search-eye-line search-icon"></i>
+                  </div>
+                  <Button className="btn btn-custom-primary">
+                    <i className="ri-filter-2-fill"></i>
+                  </Button>
+                  <Button className="btn btn-custom-primary">
+                    <i className="ri-message-2-fill"></i>
+                  </Button>
                 </div>
-                <Button className="btn btn-custom-primary">
-                  <i className="ri-filter-2-fill"></i>
-                </Button>
-                <Button className="btn btn-custom-primary">
-                  <i className="ri-message-2-fill"></i>
-                </Button>
               </div>
             </div>
           </Col>
@@ -402,7 +543,7 @@ function JobOverview() {
             <TabPane tabId="1">
               <div className="overflow-auto">
                 <Table
-                  className="table table-striped align-middle"
+                  className="table table-striped align-middle jobtimeline"
                   style={{ tableLayout: "fixed", wordWrap: "break-word" }}
                 >
                   <thead className="table-light">
@@ -414,7 +555,7 @@ function JobOverview() {
                             className={`text-center align-middle cursor-pointer ${
                               isLabels && "text-nowrap"
                             }`}
-                            key={header}
+                            key={index}
                             scope="col"
                             style={{
                               width: isLabels ? "120px" : "150px",
@@ -427,11 +568,21 @@ function JobOverview() {
                       })}
                       <th
                         className="text-center align-middle"
-                        style={{ width: "150px" }}
+                        style={{ width: "260px" }}
                       ></th>
                     </tr>
                   </thead>
                   {jobTimelineData?.jobs?.map((data, index) => {
+                    let maxOrder = getMaxOrder(data);
+                    const status = getStatus(data, maxOrder);
+                    maxOrder =
+                      status !== JOB_STAGE_STATUS.REJECTED &&
+                      status !== JOB_STAGE_STATUS.WITHDRAWN
+                        ? maxOrder
+                        : maxOrder - 1;
+                    const isRejected =
+                      status === JOB_STAGE_STATUS.REJECTED ||
+                      status === JOB_STAGE_STATUS.WITHDRAWN;
                     return (
                       <tbody key={index}>
                         <tr className="text-center align-top">
@@ -440,42 +591,50 @@ function JobOverview() {
                           {steps.map((step, index) => (
                             <td key={index} className="px-0">
                               <StepComponent
-                                timelineState={
-                                  data?.timeline[step] ? index : index - 1
-                                }
                                 index={index}
-                                stepLength={
-                                  (Object.keys(data?.timeline)?.length ?? 1) - 1
-                                }
-                                date={data?.timeline?.[step]?.date}
-                                status={data?.timeline?.[step]?.status}
+                                maxOrder={maxOrder}
+                                isRejected={isRejected}
+                                data={data?.timeline?.[step]}
                               />
                             </td>
                           ))}
                           <td>
-                            <div className="d-flex flex-row gap-3 align-items-center">
-                              <Input
-                                type="select"
-                                value={activeStep}
-                                onChange={(e) =>
-                                  setActiveStep(parseInt(e.target.value))
-                                }
-                              >
-                                <option value="">Select</option>
-                                {timelineSkip.map((item, index) => (
-                                  <option key={index} value={index + 1}>
-                                    {Object.values(item)[0]}
-                                  </option>
-                                ))}
-                              </Input>
-                              <i
-                                onClick={() =>
-                                  handleIconClick(data?.candidate?.id)
-                                }
-                                id="next-step"
-                                className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
-                              ></i>
-                            </div>
+                            {!isRejected && (
+                              <div className="d-flex flex-row gap-3 align-items-center">
+                                <Input
+                                  type="select"
+                                  value={skipComboOptions?.[data?.id]}
+                                  onChange={(e) =>
+                                    handleSkipSelection(
+                                      data?.id,
+                                      parseInt(e.target.value)
+                                    )
+                                  }
+                                >
+                                  <option value="">Select</option>
+                                  {timelineSkip.map((item, index) => {
+                                    if (maxOrder > index + 1) {
+                                      return null;
+                                    }
+                                    return (
+                                      <option key={index} value={index + 1}>
+                                        {Object.values(item)[0]}
+                                      </option>
+                                    );
+                                  })}
+                                </Input>
+                                <i
+                                  onClick={() =>
+                                    handleIconClick(
+                                      data?.candidate?.id,
+                                      data?.id
+                                    )
+                                  }
+                                  id="next-step"
+                                  className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
+                                ></i>
+                              </div>
+                            )}
                           </td>
                         </tr>
                       </tbody>
@@ -485,8 +644,8 @@ function JobOverview() {
               </div>
             </TabPane>
             <TabPane tabId="2">
-              <div className="p-4">
-                <span>BSG Status</span>
+              <div>
+                <BSGTimeline />
               </div>
             </TabPane>
           </TabContent>
@@ -543,7 +702,7 @@ function JobOverview() {
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
-          style={{ width: "75vw" }}
+          style={{ width: isMobile ? "100vw" : "75vw" }}
         >
           <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
             <div className="avatar-md flex-shrink-0 d-flex gap-3">
@@ -598,14 +757,6 @@ function JobOverview() {
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
         </Offcanvas>
-        {/* <Tooltip
-          target="next-step"
-          isOpen={tooltipOpen}
-          toggle={() => setTooltipOpen(!tooltipOpen)}
-          placement="bottom"
-        >
-          {stepperState}
-        </Tooltip> */}
       </div>
     </React.Fragment>
   );

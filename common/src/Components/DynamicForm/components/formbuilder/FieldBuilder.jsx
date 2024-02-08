@@ -118,6 +118,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "submit",
         "table",
@@ -172,6 +173,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "table",
@@ -217,6 +219,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -262,6 +265,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "button",
@@ -311,6 +315,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         // "button",
@@ -421,6 +426,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -460,6 +466,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -785,6 +792,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -924,6 +932,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "selectstate",
         "selectdepartment",
@@ -994,6 +1003,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -1049,6 +1059,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "parentcompany",
         "multiselect",
@@ -1097,6 +1108,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -1140,6 +1152,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "submit",
         "table",
@@ -1197,6 +1210,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -1236,6 +1250,7 @@ const FieldBuilder = ({
         "selectaccountname",
         "selectaccountnameall",
         "selectaccountcontact",
+        "selectcandidatestatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -1349,6 +1364,9 @@ const FieldBuilder = ({
       break;
     case "selectaccountcontact":
       header = "Select Account Contact";
+      break;
+    case "selectcandidatestatus":
+      header = "Select Candidate Status";
       break;
     case "accountowner":
       header = "Account Owner";
@@ -1521,12 +1539,12 @@ const FieldBuilder = ({
     for (let key in data) {
       if (data[key] !== null) {
         newData[key] = data[key];
-      } else  {
+      } else {
         newData[key] = "";
       }
     }
     return newData;
-  }
+  };
 
   // Use Update data if present
   if (formBuilderUpdateData) {

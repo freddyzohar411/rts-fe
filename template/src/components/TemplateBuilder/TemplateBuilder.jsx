@@ -109,8 +109,6 @@ const TemplateBuilder = forwardRef(
       }
     }, [selectedSection]);
 
-  
-
     // Get all categories
     useEffect(() => {
       dispatch(TemplateActions.fetchTemplateCategories());
@@ -282,7 +280,6 @@ const TemplateBuilder = forwardRef(
         }
 
         const originalContent = res.data;
-        console.log("Original Content", originalContent);
         // const inlineContent = juice(originalContent, {
         //   removeStyleTags: false,
         // });
@@ -306,18 +303,16 @@ const TemplateBuilder = forwardRef(
       // )
       //   .then((res) => {
       //     const originalContent = res.data;
-      //     console.log("Original Content", originalContent);
       //     const inlineContent = juice(originalContent, {
       //       removeStyleTags: false,
       //     });
       //     // const inlineContent = juice(originalContent);
-      //     console.log("Inline Content", inlineContent);
       //     setTemplateContent(inlineContent);
       //   })
       //   .catch((err) => {
-      //     console.log(err);
       //   });
     };
+
 
       // Convert docx to html (Frontend)
     const convDocToHtmlOld = async (file, setTemplateContent) => {
@@ -330,7 +325,7 @@ const TemplateBuilder = forwardRef(
         console.error("Error converting Word to HTML:", error);
       }
     };
-
+    
     return (
       <div className="d-flex flex-column gap-2">
         <Row className="mb-3">

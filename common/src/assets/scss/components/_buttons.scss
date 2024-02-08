@@ -60,6 +60,9 @@ a {
           --#{$prefix}btn-hover-bg: var(--#{$prefix}custom-primary-hover);
           --#{$prefix}btn-hover-border-color: var(--#{$prefix}custom-primary-hover);
           --#{$prefix}btn-hover-color: var(--#{$prefix}dark);
+          --#{$prefix}btn-active-bg: var(--#{$prefix}custom-primary-hover);
+          --#{$prefix}btn-active-border-color: var(--#{$prefix}custom-primary);
+
         }
       }
 

@@ -24,16 +24,13 @@ import SingleSelectElement from "./SingleSelectElement";
 import SingleSelectAPIElement from "./SingleSelectAPIElement";
 import MultiSelectAPIElement from "./MultiSelectAPIElement";
 import MultiFileInputElement from "./MultiFileInputElement";
-import {
-  moduleConstant,
-  permissionConstant,
-} from "../../../constants/authConstant";
 import AccountNameSelectElement from "./AccountNameSelectElement";
 import AccountNameSelectAllElement from "./AccountNameSelectElementAll";
 import AccountContactSelectElement from "./AccountContactSelectElement";
 import AccountOwnerElement from "./AccountOwnerElement";
 import FormTemplateSelectElement from "./FormTemplateSelectElement";
 import MultiInputElement from "./MultiInputElement";
+import CandidateStatusSelectElement from "./CandidateStatusSelectElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -149,6 +146,16 @@ const generateFormField = (
   if (type === "selectaccountcontact") {
     return (
       <AccountContactSelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "selectcandidatestatus") {
+    return (
+      <CandidateStatusSelectElement
         formik={formik}
         field={field}
         formStateHook={formStateHook}

@@ -6,9 +6,9 @@ const JOB_INITIAL_OPTIONS = [
     sort: true,
   },
   {
-    sortValue: "job_submission_data.salesManager",
-    label: "Sales Manager",
-    value: "jobSubmissionData.salesManager",
+    sortValue: "job_submission_data.accountOwner",
+    label: "Account Owner",
+    value: "jobSubmissionData.accountOwner",
     sort: true,
   },
   {
@@ -85,6 +85,11 @@ const JOB_STAGE_IDS = {
   SCHEDULE_INTERVIEW: 6,
 };
 
-const JOB_STAGE_STATUS = { IN_PROGRESS: "IN PROGRESS", COMPLETED: "COMPLETED" };
+const JOB_STAGE_STATUS = {
+  IN_PROGRESS: "IN PROGRESS",
+  COMPLETED: "COMPLETED",
+  WITHDRAWN: "WITHDRAWN",
+  REJECTED: "REJECTED",
+};
 
 export { JOB_INITIAL_OPTIONS, JOB_FILTERS, JOB_STAGE_IDS, JOB_STAGE_STATUS };

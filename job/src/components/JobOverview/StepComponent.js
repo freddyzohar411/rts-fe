@@ -1,61 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Progress, Popover, PopoverBody } from "reactstrap";
 import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
 
-function StepComponent({
-  step,
-  timelineState,
-  index,
-  date,
-  status,
-  stepLength,
-}) {
-  const [startProgressBarValue, setStartProgressBarValue] = useState(0);
-  const [endProgressBarValue, setEndProgressBarValue] = useState(0);
+function StepComponent({ index, maxOrder, data, isRejected }) {
   const [toggleInterview, setToggleInterview] = useState(false);
+  const date = data?.date;
+  const status = data?.status;
+  const inProgress = maxOrder + 1;
 
-  useEffect(() => {
-    if (timelineState > index) {
-      setStartProgressBarValue(100);
-      setEndProgressBarValue(100);
-    } else if (timelineState === index) {
-      setStartProgressBarValue(100);
-      setEndProgressBarValue(0);
-    } else if (timelineState < index) {
-      setStartProgressBarValue(0);
-      setEndProgressBarValue(0);
+  const getBulletBgColor = () => {
+    let customCSS = "bg-primary border-light";
+    switch (status) {
+      case "COMPLETED":
+        customCSS = "bg-success border-success";
+        break;
+      case "WITHDRAWN":
+        customCSS = "bg-withdrawn border-withdrawn";
+        break;
+      case "REJECTED":
+        customCSS = "bg-danger border-danger";
+        break;
+      case "SKIPPED":
+        customCSS = "bg-gray border-gray";
+        break;
+      case "REJECTED":
+        customCSS = "bg-danger border-danger";
+        break;
+      default:
+        break;
     }
-  }, [timelineState, index]);
+    return customCSS;
+  };
 
   return (
     <React.Fragment>
       <div id={`Popover-${index}`} className="step-component pt-2">
         <div className="d-flex gap-2 flex-column justify-content-center align-items-center gap-1">
-          {step && <span className="text-center">{step}</span>}
           <div className="d-flex flex-row justify-content-center align-items-center w-100">
             {index !== 0 ? (
               <Progress
                 animated={false}
-                value={startProgressBarValue}
+                value={0}
                 style={{ height: "4px", width: "100%" }}
-                color="black"
-                className="no-transition"
+                className={`no-transition ${
+                  index < inProgress
+                    ? "bg-black border-black"
+                    : "border-primary"
+                }`}
               />
             ) : (
-              <div style={{ height: "4px", width: "100%" }}></div>
+              <div style={{ height: "2px", width: "100%" }}></div>
             )}
+
             <div
               className={`rounded-pill border border-primary ${
-                timelineState === index
-                  ? "bg-black border-black"
-                  : "bg-primary border-light"
+                index === maxOrder && !isRejected
+                  ? "bg-warning border-warning"
+                  : getBulletBgColor()
               }`}
               color="custom-button"
               style={{
-                width: "22px",
-                height: "22px",
+                width: "18px",
+                height: "18px",
                 flexShrink: 0,
                 flexGrow: 0,
                 flexBasis: "auto",
@@ -78,17 +86,15 @@ function StepComponent({
             {index !== 7 ? (
               <Progress
                 animated={false}
-                value={endProgressBarValue}
+                value={0}
                 style={{ height: "4px", width: "100%" }}
                 color="black"
                 className={`no-transition ${
-                  index < stepLength
-                    ? "bg-black border-black"
-                    : "border-primary"
+                  index < maxOrder ? "bg-black border-black" : "border-primary"
                 }`}
               />
             ) : (
-              <div style={{ height: "4px", width: "100%" }}></div>
+              <div style={{ height: "2px", width: "100%" }}></div>
             )}
           </div>
           {date && (

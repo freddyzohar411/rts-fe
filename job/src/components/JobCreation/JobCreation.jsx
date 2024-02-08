@@ -15,6 +15,8 @@ import { useUserAuth } from "@workspace/login";
 import JobDocument from "./JobDocument";
 import { useRef } from "react";
 import DeleteDraftModal from "./DeleteDraftModal";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const JobCreation = () => {
   const navigate = useNavigate();
@@ -142,18 +144,28 @@ const JobCreation = () => {
         setModal={setDeleteDraftModal}
         deleteId={randomId}
       />
-      <Form
-        template={formTemplate}
-        userDetails={getAllUserGroups()}
-        country={null}
-        editData={formSubmissionData}
-        onSubmit={handleFormSubmit}
-        onFormFieldsChange={handleFormFieldChange}
-        errorMessage={null}
-        view={view}
-        ref={formikRef}
-      />
-      <JobDocument jobId={randomId} view={view} />
+      {formTemplate ? (
+        <Form
+          template={formTemplate}
+          userDetails={getAllUserGroups()}
+          country={null}
+          editData={formSubmissionData}
+          onSubmit={handleFormSubmit}
+          onFormFieldsChange={handleFormFieldChange}
+          errorMessage={null}
+          view={view}
+          ref={formikRef}
+        />
+      ) : (
+        <Skeleton count={3} />
+      )}
+
+      {randomId ? (
+        <JobDocument jobId={randomId} view={view} />
+      ) : (
+        <Skeleton count={3} />
+      )}
+
       <div className={`d-flex justify-content-between align-items-center mb-2`}>
         <div className="d-flex gap-2">
           {jobId && checkReadEditPermission() && (

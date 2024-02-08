@@ -8,3 +8,6 @@ export const GET_VALIDATE = "/api/user/validate";
 
 // PROFILE
 export const GET_USER_PROFILE = "/api/user/profile";
+
+// PROFILE
+export const LOGIN_RESET_PASSWORD = "/api/user/loginResetPassword";

@@ -4,12 +4,10 @@ import * as ExportHelper from "../../../helpers/export_helper";
 
 const PageSettingViewBackend = ({ settings, content }) => {
   const iframeRef = useRef(null);
-  console.log("content", content)
 
   useEffect(() => {
     const fetchData = async () => {
       if (iframeRef.current && content.html) {
-        console.log("content", content.html )
         const pdfBlob = await ExportHelper.exportBackendHtml2PdfBlobExtCss(
           content.html,
           {

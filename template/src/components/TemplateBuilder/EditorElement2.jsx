@@ -80,12 +80,7 @@ const EditorElement2 = ({
 
   // Delete all draft media
   const deleteDraftMedia = () => {
-    axios
-      .delete(API.deleteDraftMedia())
-      .then((res) => {})
-      .catch((err) => {
-        console.log("err", err);
-      });
+    axios.delete(API.deleteDraftMedia());
   };
 
   // Upload image handler
@@ -121,7 +116,6 @@ const EditorElement2 = ({
           resolve(res.data.mediaUrl);
         })
         .catch((err) => {
-          console.log("err", err);
           reject("Upload failed");
         });
     });
@@ -174,7 +168,6 @@ const EditorElement2 = ({
           resolve(res.data.mediaUrl);
         })
         .catch((err) => {
-          console.log("err", err);
           // Set dialog div opacity to 1 and pointer-events to auto
           dialogEl.style.pointerEvents = "auto";
           cancelBtnEl.removeAttribute("disabled");
@@ -299,7 +292,6 @@ const EditorElement2 = ({
     style.type = "text/css";
     style.innerHTML = `.active-header { background-color: #f0f0f0; }`;
     document.head.appendChild(style);
-
     return () => {
       document.head.removeChild(style);
     };

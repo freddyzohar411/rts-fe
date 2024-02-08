@@ -17,8 +17,11 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteGroup, listGroups } from "../../../store/group/action";
 import { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function GroupsTab() {
+  const [isLoading, setIsLoading] = useState(false);
   const deleteMeta = useSelector((state) => state.GroupReducer.deleteMeta);
   const groupListing =
     useSelector((state) => state?.GroupReducer.groupListing) ?? [];
@@ -80,6 +83,16 @@ function GroupsTab() {
     dispatch(deleteGroup(deletedId));
   };
 
+  useEffect(() => {
+    if (groups && groups.length === 0) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } else {
+      setIsLoading(true);
+    }
+  }, [groups]);
+
   return (
     <div>
       <Row>
@@ -101,7 +114,7 @@ function GroupsTab() {
       <Row>
         <Col lg={12}>
           <Table className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3">
-            <thead style={{backgroundColor: "#B8DAF3", color: "#000000"}}>
+            <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
               <tr>
                 <th scope="col">
                   <span className="me-1">Group Name</span>
@@ -111,7 +124,7 @@ function GroupsTab() {
                     style={{ cursor: "pointer" }}
                   ></i>
                 </th>
-                <th scope="col" style={{ width: "600px"}}>
+                <th scope="col" style={{ width: "600px" }}>
                   Description
                 </th>
                 <th scope="col" style={{ width: "10px" }}>
@@ -120,7 +133,7 @@ function GroupsTab() {
               </tr>
             </thead>
             <tbody>
-              {groups?.length > 0 ? (
+              {groups && groups?.length > 0 ? (
                 groups?.map((item, idx) => (
                   <tr key={idx}>
                     <td>{item?.userGroupName}</td>
@@ -163,6 +176,12 @@ function GroupsTab() {
                     </td>
                   </tr>
                 ))
+              ) : isLoading ? (
+                <tr>
+                  <td colSpan={3}>
+                    <Skeleton count={5} />
+                  </td>
+                </tr>
               ) : (
                 <tr>
                   <td colSpan="3">No groups found!</td>
