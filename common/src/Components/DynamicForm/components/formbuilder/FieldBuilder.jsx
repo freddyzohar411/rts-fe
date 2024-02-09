@@ -396,18 +396,18 @@ const FieldBuilder = ({
         { label: "No", value: "false" },
       ],
       // events: {
-        // onChange: (e) => {
-        //   formik.setValues({ ...formik.values, required: e.target.value });
-        //   if (e.target.value === "false") {
-        //     document.getElementsByName(
-        //       "requiredErrorMessage"
-        //     )[0].disabled = true;
-        //   } else {
-        //     document.getElementsByName(
-        //       "requiredErrorMessage"
-        //     )[0].disabled = false;
-        //   }
-        // },
+      // onChange: (e) => {
+      //   formik.setValues({ ...formik.values, required: e.target.value });
+      //   if (e.target.value === "false") {
+      //     document.getElementsByName(
+      //       "requiredErrorMessage"
+      //     )[0].disabled = true;
+      //   } else {
+      //     document.getElementsByName(
+      //       "requiredErrorMessage"
+      //     )[0].disabled = false;
+      //   }
+      // },
       // },
       apply: [
         "text",
@@ -532,7 +532,8 @@ const FieldBuilder = ({
       label: "Email Validation",
       type: "radio",
       name: "emailValidation",
-      defaultValue: formBuilderUpdateData?.emailValidation?.toString() || "false",
+      defaultValue:
+        formBuilderUpdateData?.emailValidation?.toString() || "false",
       options: [
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
@@ -1335,7 +1336,39 @@ const FieldBuilder = ({
     type: type,
     fieldId: uuid(),
   };
-  //=================================================================
+  //=======================Config UseEffect================================
+  useEffect(() => {
+    if (validationConditionList?.length > 0) {
+      setConfig((prev) => {
+        return prev.map((item) => {
+          if (item.name === "conditionValidationErrorMessage") {
+            item.renderCondition = true;
+            item.validation = [
+              {
+                required: true,
+                message: "Condition validation error message is required",
+              },
+            ];
+          }
+          return item;
+        });
+      });
+    } else {
+      formik?.setFieldValue("conditionValidationErrorMessage", "");
+      setConfig((prev) => {
+        return prev.map((item) => {
+          if (item.name === "conditionValidationErrorMessage") {
+            item.renderCondition = false;
+            item.validation = [
+            ];
+          }
+          return item;
+        });
+      });
+    }
+  }, [validationConditionList?.length]);
+
+  // ================================================================
   // Table setting
   const [tableSetting, setTableSetting] = useState(
     formBuilderUpdateData?.tableSetting
@@ -1571,11 +1604,11 @@ const FieldBuilder = ({
 
   const checkRadioEquality = (value, fieldValue) => {
     // Check if it is boolean than convert into string
-      if (typeof value === "boolean") {
-        value = value.toString();
-      }
-      return value === fieldValue;
-  }
+    if (typeof value === "boolean") {
+      value = value.toString();
+    }
+    return value === fieldValue;
+  };
 
   return (
     <div className="bg-light">
@@ -1695,7 +1728,10 @@ const FieldBuilder = ({
                               value={option.value} // Use option.value here
                               onChange={formik.handleChange}
                               checked={
-                                checkRadioEquality( formik.values[field.name] ,option.value)
+                                checkRadioEquality(
+                                  formik.values[field.name],
+                                  option.value
+                                )
                                 //  formik?.values[field.name] === option.value
                               }
                               {...field.events}
