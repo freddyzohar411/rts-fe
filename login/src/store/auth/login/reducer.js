@@ -1,62 +1,78 @@
 import {
+  errorMetaData,
+  pendingMetaData,
+  successMetaData,
+} from "@workspace/common";
+import {
   LOGIN_USER,
   LOGIN_SUCCESS,
   LOGOUT_USER,
   LOGOUT_USER_SUCCESS,
-  API_ERROR,
-  RESET_LOGIN_FLAG,
+  LOGIN_RESET_PASSWORD_USER,
+  LOGIN_RESET_PASSWORD_SUCCESS,
+  LOGIN_RESET_PASSWORD_ERROR,
+  LOGIN_ERROR,
+  LOGOUT_USER_ERROR,
 } from "./actionTypes";
 
 const initialState = {
-  errorMsg: "",
-  loading: false,
-  error: false,
+  loginMeta: {},
+  logoutMeta: {},
+  loginResetPassword: {},
+  loginResetPasswordMeta: {},
 };
 
 const login = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_USER:
-      state = {
+      return {
         ...state,
-        loading: true,
-        error: false,
+        loginMeta: pendingMetaData(),
       };
-      break;
     case LOGIN_SUCCESS:
-      state = {
+      return {
         ...state,
-        loading: false,
-        error: false,
+        loginMeta: successMetaData(action.payload),
       };
-      break;
+    case LOGIN_ERROR:
+      return {
+        ...state,
+        loginMeta: errorMetaData(action.payload),
+      };
     case LOGOUT_USER:
-      state = { ...state, isUserLogout: false };
-      break;
+      return { ...state, logoutMeta: pendingMetaData(), isUserLogout: false };
     case LOGOUT_USER_SUCCESS:
-      state = { ...state, isUserLogout: true };
-      break;
-    case API_ERROR:
-      state = {
+      return {
         ...state,
-        errorMsg: action.payload.data,
-        loading: true,
-        error: true,
-        isUserLogout: false,
+        logoutMeta: successMetaData(action.payload),
+        isUserLogout: true,
       };
-      break;
-    case RESET_LOGIN_FLAG:
-      state = {
+    case LOGOUT_USER_ERROR:
+      return {
         ...state,
-        errorMsg: null,
-        loading: false,
-        error: false,
+        logoutMeta: errorMetaData(action.payload),
+        isUserLogout: true,
       };
-      break;
+    // Login user reset password
+    case LOGIN_RESET_PASSWORD_USER:
+      return {
+        ...state,
+        loginResetPasswordMeta: pendingMetaData(),
+      };
+    case LOGIN_RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        loginResetPasswordMeta: successMetaData(action.payload),
+        loginResetPassword: action.payload,
+      };
+    case LOGIN_RESET_PASSWORD_ERROR:
+      return {
+        ...state,
+        loginResetPasswordMeta: errorMetaData(action.payload),
+      };
     default:
-      state = { ...state };
-      break;
+      return { ...state };
   }
-  return state;
 };
 
 export default login;

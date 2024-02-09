@@ -113,7 +113,7 @@ function UserDetails() {
                         <span className="fw-semibold">Manager</span>
                         <span>
                           {user?.manager
-                            ? `${user?.manager.firstName} (${user?.manager.mobile})`
+                            ? `${user?.manager?.firstName} (${user?.manager?.mobile})`
                             : "-"}
                         </span>
                       </div>

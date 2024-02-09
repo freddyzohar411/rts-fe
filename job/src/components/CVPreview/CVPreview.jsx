@@ -14,8 +14,6 @@ function CVPreview({ onExitPreview, templateData, candidateId }) {
     useState(false);
   const [exportContent, setExportContent] = useState("");
 
-  console.log("Export content", exportContent)
-
   const handleExitPreview = () => {
     onExitPreview();
   };

@@ -1,5 +1,3 @@
 import TemplateReducer from "./template/reducer";
 
-export {
-  TemplateReducer,
-};
+export { TemplateReducer };

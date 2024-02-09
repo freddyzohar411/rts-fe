@@ -87,12 +87,12 @@ const EditCandidate = () => {
       if (step === 1) {
         const formEdited = setTableAPI(
           form,
-          CandidateTableListConstant.DOCUMENTS_LIST,
-          GET_DOCUMENT_BY_ENTITY_URL(
-            CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+          CandidateTableListConstant.WORK_EXPERIENCE_LIST,
+          GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL(
+            CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
             candidateId
           ),
-          DOCUMENT_BASE_URL
+          CANDIDATE_WORK_EXPERIENCE_BASE_URL
         );
         setFormTemplate(formEdited);
         return;
@@ -100,12 +100,12 @@ const EditCandidate = () => {
       if (step === 2) {
         const formEdited = setTableAPI(
           form,
-          CandidateTableListConstant.WORK_EXPERIENCE_LIST,
-          GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL(
-            CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+          CandidateTableListConstant.LANGUAGES_LIST,
+          GET_CANDIDATE_LANGUAGES_BY_ENTITY_URL(
+            CandidateEntityConstant.CANDIDATE_LANGUAGES,
             candidateId
           ),
-          CANDIDATE_WORK_EXPERIENCE_BASE_URL
+          CANDIDATE_LANGUAGES_BASE_URL
         );
         setFormTemplate(formEdited);
         return;
@@ -126,12 +126,12 @@ const EditCandidate = () => {
       if (step === 4) {
         const formEdited = setTableAPI(
           form,
-          CandidateTableListConstant.CERTIFICATION_LIST,
-          GET_CANDIDATE_CERTIFICATE_BY_ENTITY_URL(
-            CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+          CandidateTableListConstant.DOCUMENTS_LIST,
+          GET_DOCUMENT_BY_ENTITY_URL(
+            CandidateEntityConstant.CANDIDATE_DOCUMENTS,
             candidateId
           ),
-          CANDIDATE_CERTIFICATE_BASE_URL
+          DOCUMENT_BASE_URL
         );
         setFormTemplate(formEdited);
         return;
@@ -139,12 +139,12 @@ const EditCandidate = () => {
       if (step === 5) {
         const formEdited = setTableAPI(
           form,
-          CandidateTableListConstant.LANGUAGES_LIST,
-          GET_CANDIDATE_LANGUAGES_BY_ENTITY_URL(
-            CandidateEntityConstant.CANDIDATE_LANGUAGES,
+          CandidateTableListConstant.CERTIFICATION_LIST,
+          GET_CANDIDATE_CERTIFICATE_BY_ENTITY_URL(
+            CandidateEntityConstant.CANDIDATE_CERTIFICATION,
             candidateId
           ),
-          CANDIDATE_LANGUAGES_BASE_URL
+          CANDIDATE_CERTIFICATE_BASE_URL
         );
         setFormTemplate(formEdited);
         return;
@@ -335,103 +335,8 @@ const EditCandidate = () => {
       }
     }
 
-    // Documents
-    if (step === 1) {
-      // Add document
-      if (buttonName === "add") {
-        setErrorMessage(null);
-        setButtonName("");
-        let formValues = { ...newValues };
-        const documentData = { ...formValues };
-        const fileData = formValues?.file;
-        const fileName = fileData?.name;
-        formValues = { ...formValues, file: fileName };
-        const documentDataOut = {
-          ...documentData,
-          entityType: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
-          entityId: parseInt(candidateId),
-          formData: JSON.stringify(formValues),
-          formId: parseInt(form.formId),
-        };
-        delete documentDataOut.documentList;
-
-        const documentFormData =
-          ObjectHelper.convertObjectToFormData(documentDataOut);
-
-        dispatch(
-          postCandidate({
-            entity: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
-            newData: documentFormData,
-            config: {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            },
-            rerenderTable: rerenderTable,
-            resetForm: resetForm([], "create"),
-          })
-        );
-      }
-
-      // Cancel add document and reset form
-      if (buttonName === "cancel" && !editData) {
-        resetForm([], "create");
-        return;
-      }
-
-      // Update document
-      if (buttonName === "tableUpdate") {
-        setButtonName("");
-        let formValues = { ...newValues };
-        const documentData = { ...formValues };
-        const fileData = formValues?.file;
-        if (typeof fileData === "string") {
-          // Remove upload agreement from object
-          formValues = { ...formValues, file: fileData };
-          delete documentData.file;
-        } else {
-          const fileName = fileData?.name;
-          formValues = { ...formValues, file: fileName };
-        }
-
-        const documentDataOut = {
-          ...documentData,
-          entityType: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
-          entityId: parseInt(candidateId),
-          formData: JSON.stringify(formValues),
-          formId: parseInt(form.formId),
-        };
-        delete documentDataOut.documentList;
-
-        const documentFormData =
-          ObjectHelper.convertObjectToFormData(documentDataOut);
-
-        // Get update id
-        const table = formFieldsData.find(
-          (field) =>
-            field.type === "table" &&
-            field.name === CandidateTableListConstant.DOCUMENTS_LIST
-        );
-        const { tableEditId } = table.tableSetting;
-        dispatch(
-          putCandidate({
-            entity: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
-            id: tableEditId,
-            newData: documentFormData,
-            config: {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            },
-            rerenderTable: rerenderTable,
-            resetForm: resetForm([], "create"),
-          })
-        );
-      }
-    }
-
     // Work Experience
-    if (step === 2) {
+    if (step === 1) {
       // Add contact
       if (buttonName === "add") {
         setErrorMessage(null);
@@ -531,6 +436,68 @@ const EditCandidate = () => {
       }
     }
 
+    // Languages
+    if (step === 2) {
+      // Add contact
+      if (buttonName === "add") {
+        setErrorMessage(null);
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
+
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+        return;
+      }
+
+      // Cancel add contact and reset form
+      if (buttonName === "cancel" && !editData) {
+        setButtonName("");
+        resetForm([], "create");
+        return;
+      }
+
+      // Update contact
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        const newData = {
+          ...newValues,
+          entityId: candidateId,
+          entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+          formData: JSON.stringify(newValues),
+          formId: parseInt(form.formId),
+        };
+
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.LANGUAGES_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+            id: tableEditId,
+            newData,
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+      }
+    }
+
     // Education Details
     if (step === 3) {
       // Add contact
@@ -593,8 +560,103 @@ const EditCandidate = () => {
       }
     }
 
-    // Certificates
+    // Documents
     if (step === 4) {
+      // Add document
+      if (buttonName === "add") {
+        setErrorMessage(null);
+        setButtonName("");
+        let formValues = { ...newValues };
+        const documentData = { ...formValues };
+        const fileData = formValues?.file;
+        const fileName = fileData?.name;
+        formValues = { ...formValues, file: fileName };
+        const documentDataOut = {
+          ...documentData,
+          entityType: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+          entityId: parseInt(candidateId),
+          formData: JSON.stringify(formValues),
+          formId: parseInt(form.formId),
+        };
+        delete documentDataOut.documentList;
+
+        const documentFormData =
+          ObjectHelper.convertObjectToFormData(documentDataOut);
+
+        dispatch(
+          postCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+            newData: documentFormData,
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+      }
+
+      // Cancel add document and reset form
+      if (buttonName === "cancel" && !editData) {
+        resetForm([], "create");
+        return;
+      }
+
+      // Update document
+      if (buttonName === "tableUpdate") {
+        setButtonName("");
+        let formValues = { ...newValues };
+        const documentData = { ...formValues };
+        const fileData = formValues?.file;
+        if (typeof fileData === "string") {
+          // Remove upload agreement from object
+          formValues = { ...formValues, file: fileData };
+          delete documentData.file;
+        } else {
+          const fileName = fileData?.name;
+          formValues = { ...formValues, file: fileName };
+        }
+
+        const documentDataOut = {
+          ...documentData,
+          entityType: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+          entityId: parseInt(candidateId),
+          formData: JSON.stringify(formValues),
+          formId: parseInt(form.formId),
+        };
+        delete documentDataOut.documentList;
+
+        const documentFormData =
+          ObjectHelper.convertObjectToFormData(documentDataOut);
+
+        // Get update id
+        const table = formFieldsData.find(
+          (field) =>
+            field.type === "table" &&
+            field.name === CandidateTableListConstant.DOCUMENTS_LIST
+        );
+        const { tableEditId } = table.tableSetting;
+        dispatch(
+          putCandidate({
+            entity: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+            id: tableEditId,
+            newData: documentFormData,
+            config: {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
+            rerenderTable: rerenderTable,
+            resetForm: resetForm([], "create"),
+          })
+        );
+      }
+    }
+
+    // Certificates
+    if (step === 5) {
       // Add contact
       if (buttonName === "add") {
         setErrorMessage(null);
@@ -646,68 +708,6 @@ const EditCandidate = () => {
         dispatch(
           putCandidate({
             entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
-            id: tableEditId,
-            newData,
-            rerenderTable: rerenderTable,
-            resetForm: resetForm([], "create"),
-          })
-        );
-      }
-    }
-
-    // Languages
-    if (step === 5) {
-      // Add contact
-      if (buttonName === "add") {
-        setErrorMessage(null);
-        setButtonName("");
-        const newData = {
-          ...newValues,
-          entityId: candidateId,
-          entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-          formData: JSON.stringify(newValues),
-          formId: parseInt(form.formId),
-        };
-
-        dispatch(
-          postCandidate({
-            entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-            newData,
-            rerenderTable: rerenderTable,
-            resetForm: resetForm([], "create"),
-          })
-        );
-        return;
-      }
-
-      // Cancel add contact and reset form
-      if (buttonName === "cancel" && !editData) {
-        setButtonName("");
-        resetForm([], "create");
-        return;
-      }
-
-      // Update contact
-      if (buttonName === "tableUpdate") {
-        setButtonName("");
-        const newData = {
-          ...newValues,
-          entityId: candidateId,
-          entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-          formData: JSON.stringify(newValues),
-          formId: parseInt(form.formId),
-        };
-
-        // Get update id
-        const table = formFieldsData.find(
-          (field) =>
-            field.type === "table" &&
-            field.name === CandidateTableListConstant.LANGUAGES_LIST
-        );
-        const { tableEditId } = table.tableSetting;
-        dispatch(
-          putCandidate({
-            entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
             id: tableEditId,
             newData,
             rerenderTable: rerenderTable,
@@ -825,16 +825,14 @@ const EditCandidate = () => {
   const toggleFormViewState = () => {
     if (
       step === 1 ||
-      // step === 2 ||
+      step === 2 ||
       step === 3 ||
       step === 4 ||
       step === 5 ||
       step === 6
     ) {
       if (view === false) {
-        // formFormik.resetForm();
         formikRef.current.clearForm();
-        // Set all to untouched
         formikRef.current.formik.setTouched({});
       }
     }

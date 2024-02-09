@@ -25,7 +25,8 @@ const FileInputElement = ({
       e.target.files[0].type !==
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document" &&
       e.target.files[0].type !== "application/vnd.ms-excel" && //Excel
-      e.target.files[0].type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" //Excel
+      e.target.files[0].type !==
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" //Excel
     ) {
       toast.error("Please upload a valid docx or Excel file");
       return;
@@ -45,7 +46,6 @@ const FileInputElement = ({
         onChange={handleFileChange}
         placeholder={placeholder}
       />
-      {/* Create a similar file input to replace the actual file input */}
       <div className="d-flex align-items-center w-100 h-100">
         <button
           type="button"

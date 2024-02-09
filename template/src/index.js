@@ -1,5 +1,5 @@
 export * from "./components";
-export * from "./pages"
+export * from "./pages";
 
 // Redux Store
 export * as Actions from "./store/actions";

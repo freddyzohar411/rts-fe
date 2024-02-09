@@ -10,16 +10,17 @@ import {
   Label,
   Button,
   FormFeedback,
+  Spinner,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Field, Formik, Form } from "formik";
 import { initialValues, schema } from "./constants";
-import logoLight from "@workspace/common/src/assets/images/logo-light.png";
 import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
 
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../store/actions";
 import { withRouter } from "@workspace/common";
+import { useSelector } from "react-redux";
 
 const Login = (props) => {
   document.title = "Login | RTS";
@@ -31,6 +32,8 @@ const Login = (props) => {
   const handleFormSubmit = async (values) => {
     dispatch(loginUser(values, props.router.navigate));
   };
+
+  const loginMeta = useSelector((state) => state.Login.loginMeta);
 
   return (
     <Formik
@@ -60,7 +63,7 @@ const Login = (props) => {
                 </Col>
               </Row>
               <Row className="justify-content-center pt-4">
-                <Col lg={8} >
+                <Col lg={8}>
                   <Card>
                     <CardBody className="p-3">
                       <div className="text-center mt-2">
@@ -156,7 +159,12 @@ const Login = (props) => {
                               className="btn btn-next-button border-next-button-border w-100 py-3 fw-semibold fs-5"
                               type="submit"
                             >
-                              Sign In
+                              <span style={{ marginRight: "5px" }}>
+                                Sign In
+                              </span>
+                              {loginMeta?.isLoading && (
+                                <Spinner size="sm">Loading...</Spinner>
+                              )}
                             </Button>
                           </div>
                         </Form>

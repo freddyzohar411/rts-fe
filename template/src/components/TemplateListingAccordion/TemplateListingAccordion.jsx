@@ -19,11 +19,10 @@ const TemplateListingAccordion = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    if (data.length === 0) {
+    if (data?.length === 0) {
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
-
     } else {
       setIsLoading(true);
     }
@@ -110,8 +109,6 @@ const TemplateListingAccordion = ({
       );
     });
   };
-
-  console.log("test", data)
 
   return (
     <div>

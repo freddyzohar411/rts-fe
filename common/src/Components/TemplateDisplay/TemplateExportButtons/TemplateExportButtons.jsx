@@ -29,7 +29,11 @@ const TemplateExportButtons = ({ content }) => {
   return (
     <>
       <UncontrolledDropdown direction="up">
-        <DropdownToggle caret color="primary" className="btn btn-custom-primary">
+        <DropdownToggle
+          caret
+          color="primary"
+          className="btn btn-custom-primary"
+        >
           Download
         </DropdownToggle>
         <DropdownMenu>

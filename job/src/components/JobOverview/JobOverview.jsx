@@ -17,8 +17,6 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
-  Popover,
-  PopoverBody,
   Tooltip,
 } from "reactstrap";
 import {
@@ -37,7 +35,6 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 // Elements
-// import { SelectElement } from "@workspace/common";
 import { TemplateSelectByCategoryElement } from "@workspace/common";
 
 // Forms
@@ -154,7 +151,10 @@ function JobOverview() {
     if (jobTagMeta?.isSuccess) {
       setOffcanvasForm(!offcanvasForm);
       dispatch(
-        fetchJobTimelineList(DynamicTableHelper.cleanPageRequest(pageRequest))
+        fetchJobTimelineList({
+          ...DynamicTableHelper.cleanPageRequest(pageRequest),
+          jobId: parseInt(jobId),
+        })
       );
       dispatch(fetchJobtimeineCount({ jobId }));
       dispatch(tagReset());
@@ -164,7 +164,10 @@ function JobOverview() {
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     dispatch(
-      fetchJobTimelineList(DynamicTableHelper.cleanPageRequest(pageRequest))
+      fetchJobTimelineList({
+        ...DynamicTableHelper.cleanPageRequest(pageRequest),
+        jobId: parseInt(jobId),
+      })
     );
   }, [pageRequest]);
 
