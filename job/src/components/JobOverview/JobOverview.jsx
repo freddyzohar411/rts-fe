@@ -33,6 +33,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 import "./StepComponent.scss";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 // Elements
 // import { SelectElement } from "@workspace/common";
@@ -66,6 +68,7 @@ import BSGTimeline from "../BSGTimeline/BSGTimeline";
 function JobOverview() {
   document.title = "Job Timeline | RTS";
 
+  const [isLoading, setIsLoading] = useState(true);
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
@@ -95,6 +98,8 @@ function JobOverview() {
     (state) => state.JobFormReducer.formSubmission
   );
 
+  console.log("Form Submission Data", formSubmissionData);
+
   const jobTimelineData = useSelector(
     (state) => state.JobStageReducer.jobTimeline
   );
@@ -109,6 +114,16 @@ function JobOverview() {
         ),
     },
   ];
+
+  useEffect(() => {
+    if (jobTimelineData && jobTimelineData.length === 0) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } else {
+      setIsLoading(true);
+    }
+  }, [jobTimelineData]);
 
   // Table Hooks
   const {
@@ -437,7 +452,11 @@ function JobOverview() {
                       : formSubmissionData?.jobTitle}
                   </span>
                   <span>|</span>
-                  <span>{formSubmissionData?.clientJobId}</span>
+                  <span>
+                    {formSubmissionData?.clientJobId
+                      ? formSubmissionData?.clientJobId
+                      : "Not Available"}
+                  </span>
                   {isMobile || <span>|</span>}
                 </div>
                 <div className="d-flex flex-row gap-1">
@@ -446,7 +465,9 @@ function JobOverview() {
                     <span title={formSubmissionData?.salesManager}>
                       {isMobile | isTablet
                         ? truncate(formSubmissionData?.salesManager, 8)
-                        : formSubmissionData?.salesManager}
+                        : formSubmissionData?.salesManager
+                        ? formSubmissionData?.salesManager
+                        : "Not Available"}
                     </span>
                   </div>
                   <div className="d-flex align-items-end gap-1">
@@ -572,74 +593,88 @@ function JobOverview() {
                       ></th>
                     </tr>
                   </thead>
-                  {jobTimelineData?.jobs?.map((data, index) => {
-                    let maxOrder = getMaxOrder(data);
-                    const status = getStatus(data, maxOrder);
-                    maxOrder =
-                      status !== JOB_STAGE_STATUS.REJECTED &&
-                      status !== JOB_STAGE_STATUS.WITHDRAWN
-                        ? maxOrder
-                        : maxOrder - 1;
-                    const isRejected =
-                      status === JOB_STAGE_STATUS.REJECTED ||
-                      status === JOB_STAGE_STATUS.WITHDRAWN;
-                    return (
-                      <tbody key={index}>
-                        <tr className="text-center align-top">
-                          <td className="pt-4">{`${data?.candidate?.firstName} ${data?.candidate?.lastName}`}</td>
-                          <td className="pt-4">{`${data?.createdByName}`}</td>
-                          {steps.map((step, index) => (
-                            <td key={index} className="px-0">
-                              <StepComponent
-                                index={index}
-                                maxOrder={maxOrder}
-                                isRejected={isRejected}
-                                data={data?.timeline?.[step]}
-                              />
-                            </td>
-                          ))}
-                          <td>
-                            {!isRejected && (
-                              <div className="d-flex flex-row gap-3 align-items-center">
-                                <Input
-                                  type="select"
-                                  value={skipComboOptions?.[data?.id]}
-                                  onChange={(e) =>
-                                    handleSkipSelection(
-                                      data?.id,
-                                      parseInt(e.target.value)
-                                    )
-                                  }
-                                >
-                                  <option value="">Select</option>
-                                  {timelineSkip.map((item, index) => {
-                                    if (maxOrder > index + 1) {
-                                      return null;
+                  {jobTimelineData && jobTimelineData.length > 0 ? (
+                    jobTimelineData?.jobs?.map((data, index) => {
+                      let maxOrder = getMaxOrder(data);
+                      const status = getStatus(data, maxOrder);
+                      maxOrder =
+                        status !== JOB_STAGE_STATUS.REJECTED &&
+                        status !== JOB_STAGE_STATUS.WITHDRAWN
+                          ? maxOrder
+                          : maxOrder - 1;
+                      const isRejected =
+                        status === JOB_STAGE_STATUS.REJECTED ||
+                        status === JOB_STAGE_STATUS.WITHDRAWN;
+                      return (
+                        <tbody key={index}>
+                          <tr className="text-center align-top">
+                            <td className="pt-4">{`${data?.candidate?.firstName} ${data?.candidate?.lastName}`}</td>
+                            <td className="pt-4">{`${data?.createdByName}`}</td>
+                            {steps.map((step, index) => (
+                              <td key={index} className="px-0">
+                                <StepComponent
+                                  index={index}
+                                  maxOrder={maxOrder}
+                                  isRejected={isRejected}
+                                  data={data?.timeline?.[step]}
+                                />
+                              </td>
+                            ))}
+                            <td>
+                              {!isRejected && (
+                                <div className="d-flex flex-row gap-3 align-items-center">
+                                  <Input
+                                    type="select"
+                                    value={skipComboOptions?.[data?.id]}
+                                    onChange={(e) =>
+                                      handleSkipSelection(
+                                        data?.id,
+                                        parseInt(e.target.value)
+                                      )
                                     }
-                                    return (
-                                      <option key={index} value={index + 1}>
-                                        {Object.values(item)[0]}
-                                      </option>
-                                    );
-                                  })}
-                                </Input>
-                                <i
-                                  onClick={() =>
-                                    handleIconClick(
-                                      data?.candidate?.id,
-                                      data?.id
-                                    )
-                                  }
-                                  id="next-step"
-                                  className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
-                                ></i>
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    );
-                  })}
+                                  >
+                                    <option value="">Select</option>
+                                    {timelineSkip.map((item, index) => {
+                                      if (maxOrder > index + 1) {
+                                        return null;
+                                      }
+                                      return (
+                                        <option key={index} value={index + 1}>
+                                          {Object.values(item)[0]}
+                                        </option>
+                                      );
+                                    })}
+                                  </Input>
+                                  <i
+                                    onClick={() =>
+                                      handleIconClick(
+                                        data?.candidate?.id,
+                                        data?.id
+                                      )
+                                    }
+                                    id="next-step"
+                                    className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
+                                  ></i>
+                                </div>
+                              )}
+                            </td>
+                          </tr>
+                        </tbody>
+                      );
+                    })
+                  ) : isLoading ? (
+                    <tr>
+                      <td colSpan={rtsStatusHeaders.length}>
+                        <Skeleton count={1} />
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <td colSpan={rtsStatusHeaders.length}>
+                        No data available.
+                      </td>
+                    </tr>
+                  )}
                 </Table>
               </div>
             </TabPane>

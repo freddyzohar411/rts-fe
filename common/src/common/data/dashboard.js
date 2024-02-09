@@ -70,7 +70,7 @@ const recruiterDashboard = [
   {
     id: 5,
     cardColor: "primary",
-    label: "Total Do",
+    label: "To Do",
     subLabel: "",
     badge: "",
     badgeClass: "",

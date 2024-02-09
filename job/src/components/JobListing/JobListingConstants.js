@@ -6,12 +6,6 @@ const JOB_INITIAL_OPTIONS = [
     sort: true,
   },
   {
-    sortValue: "job_submission_data.accountOwner",
-    label: "Account Owner",
-    value: "jobSubmissionData.accountOwner",
-    sort: true,
-  },
-  {
     sortValue: "job_submission_data.accountName",
     label: "Account Name",
     value: "jobSubmissionData.accountName",

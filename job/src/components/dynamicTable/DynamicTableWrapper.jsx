@@ -92,6 +92,10 @@ const DynamicTableWrapper = ({
     return !(optGroup && optGroup.length > 0);
   };
 
+  // console.log("Selected Opt Group", selectedOptGroup);
+  // console.log("Opt Group", optGroup);
+  console.log("1", selectedOptGroup.map((option) => option?.value) ?? []);
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -112,7 +116,8 @@ const DynamicTableWrapper = ({
           <ModalBody>
             <div className="p-2">
               <DualListBox
-                id="preserve-order"
+                showOrderButtons
+                preserveSelectOrder
                 canFilter
                 filterCallback={(optGroup, filterInput) => {
                   if (filterInput === "") {
@@ -120,10 +125,11 @@ const DynamicTableWrapper = ({
                   }
                   return new RegExp(filterInput, "i").test(optGroup.label);
                 }}
-                options={optGroup ?? []}
-                preserveSelectOrder
+                filterPlaceholder="Search..."
+                options={
+                  optGroup?.filter((option) => option?.value !== "") ?? []
+                }
                 selected={selectedOptGroup.map((option) => option?.value) ?? []}
-                showOrderButtons
                 onChange={handleChange}
                 icons={{
                   moveLeft: [
