@@ -15,6 +15,19 @@ const useFieldBuilderValidation = (formik, config, setConfig) => {
     }
   }, [formik.values["required"]]);
 
+  // Email validation
+  useEffect(() => {
+    if (config && formik && formik?.values?.["emailValidation"]) {
+      setConfig((prev) =>
+        FieldBuilderHelper.requiredErrorMessageValidationRadio(formik, prev, {
+          fieldNameCheck: "emailValidation",
+          fieldNameValidation: "emailValidationErrorMessage",
+          errorMessage: "Email validation error message is required",
+        })
+      );
+    }
+  }, [formik.values["emailValidation"]]);
+
   // Information validation
   useEffect(() => {
     if (config && formik && formik?.values?.["information"]) {
@@ -30,16 +43,91 @@ const useFieldBuilderValidation = (formik, config, setConfig) => {
 
   // Min length validation
   useEffect(() => {
-    if (config && formik && formik?.values?.["minLength"]) {
+    if (config && formik) {
       setConfig((prev) =>
-        FieldBuilderHelper.requiredErrorMessageValidationInput(formik, prev, {
-          fieldNameCheck: "minLength",
-          fieldNameValidation: "minLengthErrorMessage",
-          errorMessage: "Min Length error message is required",
-        })
+        FieldBuilderHelper.requiredErrorMessageValidationInputNum(
+          formik,
+          prev,
+          {
+            fieldNameCheck: "minLength",
+            fieldNameValidation: "minLengthErrorMessage",
+            errorMessage: "Min Length error message is required",
+          }
+        )
       );
     }
   }, [formik.values["minLength"]]);
+
+  // Max length validation
+  useEffect(() => {
+    if (config && formik) {
+      setConfig((prev) =>
+        FieldBuilderHelper.requiredErrorMessageValidationInputNum(
+          formik,
+          prev,
+          {
+            fieldNameCheck: "maxLength",
+            fieldNameValidation: "maxLengthErrorMessage",
+            errorMessage: "Max Length error message is required",
+          }
+        )
+      );
+    }
+  }, [formik.values["maxLength"]]);
+
+  // Regex
+  useEffect(() => {
+    if (config && formik) {
+      setConfig((prev) =>
+        FieldBuilderHelper.requiredErrorMessageValidationInputNum(
+          formik,
+          prev,
+          {
+            fieldNameCheck: "pattern",
+            fieldNameValidation: "patternValidationErrorMessage",
+            errorMessage: "Regex error message is required",
+          }
+        )
+      );
+    }
+  }, [formik.values["pattern"]]);
+
+  // Min value validation
+  useEffect(() => {
+    if (config && formik) {
+      setConfig((prev) =>
+        FieldBuilderHelper.requiredErrorMessageValidationInputNum(
+          formik,
+          prev,
+          {
+            fieldNameCheck: "minValue",
+            fieldNameValidation: "minValueErrorMessage",
+            errorMessage: "Min value error message is required",
+          }
+        )
+      );
+    }
+  }, [formik.values["minValue"]]);
+
+  // Max value validation
+  useEffect(() => {
+    if (config && formik) {
+      setConfig((prev) =>
+        FieldBuilderHelper.requiredErrorMessageValidationInputNum(
+          formik,
+          prev,
+          {
+            fieldNameCheck: "maxValue",
+            fieldNameValidation: "maxValueErrorMessage",
+            errorMessage: "Max value error message is required",
+          }
+        )
+      );
+    }
+  }, [formik.values["maxValue"]]);
+
+  // Show all formik erro
+  console.log("formik.errors", formik.errors);
 };
 
 export default useFieldBuilderValidation;

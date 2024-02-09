@@ -17,12 +17,12 @@ export function requiredErrorMessageValidationRadio(
   );
 }
 
-export function requiredErrorMessageValidationInput(
+export function requiredErrorMessageValidationInputNum(
   formik,
   config,
   fieldOptions = {}
 ) {
-  return handleValidationInput(
+  return handleValidationInputNum(
     formik,
     config,
     fieldOptions.fieldNameCheck,
@@ -83,7 +83,7 @@ function handleValidationRadio(
   }
 }
 
-function handleValidationInput(
+function handleValidationInputNum(
   formik,
   config,
   fieldNameCheck,
@@ -91,23 +91,14 @@ function handleValidationInput(
   validation,
   options
 ) {
-  if (config && formik && formik?.values?.[fieldNameCheck]) {
-    console.log(
-      "formik?.values?.[fieldNameCheck]",
-      formik?.values?.[fieldNameCheck]
-    );
-    if (
-      // formik?.values?.[fieldNameCheck] !== "" ||
-      // formik?.values?.[fieldNameCheck] !== null ||
-      formik?.values?.[fieldNameCheck] !== undefined 
-      // formik?.values?.[fieldNameCheck] !== 0
-    ) {
+  if (config && formik) {
+    if (formik?.values?.[fieldNameCheck] !== "") {
       return addValidation(config, fieldNameValidation, validation, {
         isDisabled: false,
         ...options,
       });
     } else {
-      formik?.setFieldValue(fieldNameValidation, 0);
+      // formik?.setFieldValue(fieldNameValidation, 0);
       formik?.setFieldTouched(fieldNameValidation, false);
       return addValidation(config, fieldNameValidation, [], {
         isDisabled: true,

@@ -1272,7 +1272,10 @@ const FormBuilder = ({
         >
           <ModalHeader
             className="bg-primary pb-3"
-            toggle={() => setShowModalSchema(!showModalSchema)}
+            toggle={() => {
+              setFormBuilderUpdateData(null);
+              setFormBuilderType(null);
+              setShowModalSchema(!showModalSchema)}}
           >
             <div className="d-flex flex-column text-dark">
               <span className="h5 fw-bold">Edit Field</span>

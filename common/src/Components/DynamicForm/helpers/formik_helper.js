@@ -151,7 +151,10 @@ const generateValidationSchema2 = (
         fieldValidation = fieldValidation.required(field.requiredErrorMessage);
       }
 
-      if ((field.required === "false" || field.required === false) && field.type === "file") {
+      if (
+        (field.required === "false" || field.required === false) &&
+        field.type === "file"
+      ) {
         // Make it nullable
         fieldValidation = fieldValidation.nullable();
       }
@@ -191,12 +194,15 @@ const generateValidationSchema2 = (
           field.maxLengthErrorMessage
         );
       }
-      if (field.emailValidation) {
-        fieldValidation = fieldValidation.email(
-          field.emailValidationErrorMessage
-        );
+
+      if (field.type === "email") {
+        if (field.emailValidation) {
+          fieldValidation = fieldValidation.email(
+            field.emailValidationErrorMessage
+          );
+        }
       }
-      
+
       if (field.pattern && isString()) {
         fieldValidation = fieldValidation.matches(
           field.pattern,
@@ -400,6 +406,12 @@ const generateValidationSchemaForFieldBuilder = (schema, type) => {
         case "text":
           fieldValidation = Yup.string();
           break;
+        // case "number":
+        //   fieldValidation = Yup.number();
+        //   break;
+        // default:
+        //   fieldValidation = Yup.string();
+        //   break;
       }
 
       field?.validation?.forEach((validation) => {
