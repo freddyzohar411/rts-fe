@@ -2,7 +2,7 @@ import React from 'react'
 
 const CandidateEmail = () => {
   return (
-    <div>CandidateEmail</div>
+    <div>Not available.</div>
   )
 }
 
