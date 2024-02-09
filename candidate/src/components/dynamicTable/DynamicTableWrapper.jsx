@@ -174,10 +174,10 @@ const DynamicTableWrapper = ({
                         <div className="d-flex column-gap-2 justify-content-end">
                           <Button
                             type="button"
-                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center header-btn"
                           >
                             <span>
-                              <i className="mdi mdi-download"></i>
+                              <i className="mdi mdi-download me-1"></i>
                             </span>
                             Imports
                           </Button>
@@ -187,10 +187,10 @@ const DynamicTableWrapper = ({
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}
-                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center header-btn"
                           >
                             <span>
-                              <i className="ri-settings-3-fill"></i>
+                              <i className="ri-settings-3-fill me-1"></i>
                             </span>
                             Custom View
                           </Button>
@@ -209,7 +209,7 @@ const DynamicTableWrapper = ({
                           )}
                           <Button
                             type="button"
-                            className="btn btn-custom-primary"
+                            className="btn btn-custom-primary header-btn"
                           >
                             <i className="ri-filter-line"></i>
                           </Button>
