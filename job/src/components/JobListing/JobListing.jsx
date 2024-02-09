@@ -227,7 +227,7 @@ const JobListing = () => {
               toggle={() => handleFodAssignDropdown(data.id)}
             >
               <DropdownToggle
-                className="btn btn-sm btn-custom-primary"
+                className="btn btn-sm btn-custom-primary table-btn px-3"
                 onClick={() => {
                   setActiveJob(data.id);
                   setSelectedRecruiter();
@@ -323,7 +323,7 @@ const JobListing = () => {
             {checkAllPermission([Permission.JOB_EDIT]) && (
               <Button
                 tag="button"
-                className="btn btn-sm btn-custom-primary"
+                className="btn btn-sm btn-custom-primary table-btn"
                 onClick={() => {
                   setSelectedRowData(data);
                   setTagOffcanvas(!tagOffcanvas);
@@ -340,9 +340,9 @@ const JobListing = () => {
             >
               <Button
                 type="button"
-                className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
+                className="btn btn-custom-primary table-btn"
               >
-                <i className="ri-eye-line" style={{ fontSize: "0.75rem" }}></i>
+                <i className="ri-eye-line"></i>
               </Button>
             </Link>
 
@@ -354,12 +354,9 @@ const JobListing = () => {
               >
                 <Button
                   type="button"
-                  className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
+                  className="btn btn-custom-primary table-btn"
                 >
-                  <i
-                    className="mdi mdi-pencil"
-                    style={{ fontSize: "0.65rem" }}
-                  ></i>
+                  <i className="mdi mdi-pencil"></i>
                 </Button>
               </Link>
             )}
@@ -367,7 +364,7 @@ const JobListing = () => {
             {checkAllPermission([Permission.JOB_DELETE]) && (
               <Button
                 type="button"
-                className="btn btn-danger d-flex align-items-center column-gap-2 px-2 py-0"
+                className="btn btn-danger table-btn"
                 onClick={() => {
                   setDeleteId(data.id);
                   setIsDeleteModalOpen(true);
@@ -376,7 +373,6 @@ const JobListing = () => {
                 <span>
                   <i
                     className="mdi mdi-delete"
-                    style={{ fontSize: "0.65rem" }}
                   ></i>
                 </span>
               </Button>

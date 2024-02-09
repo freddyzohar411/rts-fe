@@ -8,6 +8,7 @@ import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapp
 import { DynamicTableHelper, DateHelper } from "@workspace/common";
 import { CANDIDATE_INITIAL_OPTIONS } from "./candidateListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
+import "./CandidateListing.scss"
 import {
   deleteCandidate,
   fetchCandidates,
@@ -126,9 +127,9 @@ function CandidateListing() {
             >
               <Button
                 type="button"
-                className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
+                className="btn btn-custom-primary table-btn"
               >
-                <i className="ri-eye-line" style={{ fontSize: "0.75rem" }}></i>
+                <i className="ri-eye-line"></i>
               </Button>
             </Link>
             {/* {checkAllPermission([Permission.CANDIDATE_EDIT]) && data.createdByName === getName() && ( */}
@@ -140,11 +141,10 @@ function CandidateListing() {
               >
                 <Button
                   type="button"
-                  className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
+                  className="btn btn-custom-primary table-btn"
                 >
                   <i
                     className="mdi mdi-pencil"
-                    style={{ fontSize: "0.65rem" }}
                   ></i>
                 </Button>
               </Link>
@@ -152,7 +152,7 @@ function CandidateListing() {
             {checkAllPermission([Permission.CANDIDATE_DELETE]) && (
               <Button
                 type="button"
-                className="btn btn-danger d-flex align-items-center column-gap-2 px-2 py-0"
+                className="btn btn-danger table-btn"
                 onClick={() => {
                   setDeleteId(data.id);
                   setIsDeleteModalOpen(true);
@@ -161,7 +161,6 @@ function CandidateListing() {
                 <span>
                   <i
                     className="mdi mdi-delete"
-                    style={{ fontSize: "0.65rem" }}
                   ></i>
                 </span>
               </Button>

@@ -8,6 +8,7 @@ import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapp
 import { DynamicTableHelper } from "@workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
+import "./AccountListing.scss";
 import {
   deleteAccount,
   fetchAccounts,
@@ -143,9 +144,9 @@ const AccountListing = () => {
             >
               <Button
                 type="button"
-                className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
+                className="btn btn-custom-primary table-btn"
               >
-                <i className="ri-eye-line" style={{ fontSize: "0.75rem" }}></i>
+                <i className="ri-eye-line"></i>
               </Button>
             </Link>
             {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
@@ -156,29 +157,23 @@ const AccountListing = () => {
               >
                 <Button
                   type="button"
-                  className="btn btn-custom-primary d-flex align-items-center column-gap-2 px-2 py-1"
+                  className="btn btn-custom-primary table-btn"
                 >
-                  <i
-                    className="mdi mdi-pencil"
-                    style={{ fontSize: "0.65rem" }}
-                  ></i>
+                  <i className="mdi mdi-pencil"></i>
                 </Button>
               </Link>
             )}
             {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
               <Button
                 type="button"
-                className="btn btn-danger d-flex align-items-center column-gap-2 px-2 py-0"
+                className="btn btn-danger table-btn d-flex "
                 onClick={() => {
                   setDeleteId(data.id);
                   setIsDeleteModalOpen(true);
                 }}
               >
                 <span>
-                  <i
-                    className="mdi mdi-delete"
-                    style={{ fontSize: "0.65rem" }}
-                  ></i>
+                  <i className="mdi mdi-delete"></i>
                 </span>
               </Button>
             )}
@@ -206,7 +201,7 @@ const AccountListing = () => {
       dispatch(
         fetchAccountsAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
       );
-      return
+      return;
     }
     dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
   }, [pageRequest]);

@@ -76,9 +76,6 @@ const BasicInfo = ({ handleNext }) => {
           <FormSelection
             name="basicInfo.candidateNationality"
             label="Candidate Nationality*"
-            onChange={(value) => {
-              console.log(value);
-            }}
             options={sortbyname}
             className="js-example-basic-single mb-0"
             error={getIn(errors, "basicInfo.candidateNationality")}
@@ -120,9 +117,6 @@ const BasicInfo = ({ handleNext }) => {
         <Col lg={4}>
           <FormSelection
             label="Candidate Owner"
-            onChange={(value) => {
-              console.log(value);
-            }}
             options={sortbyname}
             className="js-example-basic-single mb-0"
             name="basicInfo.candidateOwner"
@@ -232,9 +226,6 @@ const BasicInfo = ({ handleNext }) => {
         <Col lg={4}>
           <FormSelection
             label="Primary Skills*"
-            onChange={(value) => {
-              console.log(value);
-            }}
             options={sortbyname}
             className="js-example-basic-single mb-0"
             name="basicInfo.primarySkills"
@@ -265,9 +256,6 @@ const BasicInfo = ({ handleNext }) => {
         <Col lg={4}>
           <FormSelection
             label="Candidate Status*"
-            onChange={(value) => {
-              console.log(value);
-            }}
             options={sortbyname}
             className="js-example-basic-single mb-0"
             name="basicInfo.candidateStatus"
@@ -276,9 +264,6 @@ const BasicInfo = ({ handleNext }) => {
         <Col lg={4}>
           <FormSelection
             label="Source*"
-            onChange={(value) => {
-              console.log(value);
-            }}
             options={sortbyname}
             className="js-example-basic-single mb-0"
             name="basicInfo.source"
