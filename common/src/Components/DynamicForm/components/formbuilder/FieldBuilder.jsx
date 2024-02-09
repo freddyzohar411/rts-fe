@@ -610,72 +610,30 @@ const FieldBuilder = ({
       type: "multiselect",
       name: "fileTypeValidation",
       options: [
+        // { label: "All file types", value: "" },
         { label: "pdf", value: "pdf" },
         { label: "doc", value: "doc" },
         { label: "docx", value: "docx" },
         { label: "xls", value: "xls" },
       ],
-      events: {
-        onChange: (e) => {
-          formik.setValues({
-            ...formik.values,
-            fileTypeValidation: Array.from(
-              e.target.selectedOptions,
-              (option) => option.value
-            ),
-          });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "fileTypeValidationErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "fileTypeValidationErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
       apply: ["file", "multifile"],
     },
     {
       label: "File Type Validation Error Message",
       type: "text",
       name: "fileTypeValidationErrorMessage",
-      events: {
-        disabled: true,
-      },
       apply: ["file", "multifile"],
     },
     {
       label: "File Size Validation (MB)",
       type: "number",
       name: "fileSizeValidation",
-      events: {
-        onChange: (e) => {
-          formik.setValues({
-            ...formik.values,
-            fileSizeValidation: e.target.value,
-          });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "fileSizeValidationErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "fileSizeValidationErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
       apply: ["file", "multifile"],
     },
     {
       label: "File Size Validation Error Message",
       type: "text",
       name: "fileSizeValidationErrorMessage",
-      events: {
-        disabled: true,
-      },
       apply: ["file", "multifile"],
     },
 

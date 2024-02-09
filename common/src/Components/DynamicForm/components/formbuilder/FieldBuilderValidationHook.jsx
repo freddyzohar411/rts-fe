@@ -126,6 +126,40 @@ const useFieldBuilderValidation = (formik, config, setConfig) => {
     }
   }, [formik.values["maxValue"]]);
 
+  // File Validation
+  useEffect(() => {
+    if (config && formik) {
+      setConfig((prev) =>
+        FieldBuilderHelper.requiredErrorMessageValidationMultiSelect(
+          formik,
+          prev,
+          {
+            fieldNameCheck: "fileTypeValidation",
+            fieldNameValidation: "fileTypeValidationErrorMessage",
+            errorMessage: "File validation error message is required",
+          }
+        )
+      );
+    }
+  }, [formik.values["fileTypeValidation"]]);
+
+  // File Size Validation
+  useEffect(() => {
+    if (config && formik) {
+      setConfig((prev) =>
+        FieldBuilderHelper.requiredErrorMessageValidationInputNum(
+          formik,
+          prev,
+          {
+            fieldNameCheck: "fileSizeValidation",
+            fieldNameValidation: "fileSizeValidationErrorMessage",
+            errorMessage: "File size error message is required",
+          }
+        )
+      );
+    }
+  }, [formik.values["fileSizeValidation"]]);
+
   // Show all formik erro
   console.log("formik.errors", formik.errors);
 };
