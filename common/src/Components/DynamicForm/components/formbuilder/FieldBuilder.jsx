@@ -11,6 +11,7 @@ import CountrySelectField from "../../fieldbuilders/CountrySelectField";
 import UserGroupSelectField from "../../fieldbuilders/UserGroupSelectField";
 import FormCategorySelectField from "../../fieldbuilders/FormCategorySelectField";
 import * as FieldBuilderHelper from "./fieldBuilderValidation_helper";
+import useFieldBuilderValidationHook from "./FieldBuilderValidationHook";
 
 const FieldBuilder = ({
   type,
@@ -25,6 +26,7 @@ const FieldBuilder = ({
   formOptions,
 }) => {
   const [validationSchema, setValidationSchema] = useState(null);
+
 
   //========================= States ================================
   // Condition validation state
@@ -523,29 +525,29 @@ const FieldBuilder = ({
       label: "Min Length",
       type: "number",
       name: "minLength",
-      events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, minLength: e.target.value });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "minLengthErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "minLengthErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
+      // events: {
+      //   onChange: (e) => {
+      //     formik.setValues({ ...formik.values, minLength: e.target.value });
+      //     if (e.target.value === "") {
+      //       document.getElementsByName(
+      //         "minLengthErrorMessage"
+      //       )[0].disabled = true;
+      //     } else {
+      //       document.getElementsByName(
+      //         "minLengthErrorMessage"
+      //       )[0].disabled = false;
+      //     }
+      //   },
+      // },
       apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Min Length Error Message",
       type: "text",
       name: "minLengthErrorMessage",
-      events: {
-        disabled: true,
-      },
+      // events: {
+      //   disabled: true,
+      // },
       apply: ["text", "email", "textarea", "password"],
     },
     {
@@ -1188,16 +1190,6 @@ const FieldBuilder = ({
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
       ],
-      events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, information: e.target.value });
-          if (e.target.value === "false") {
-            document.getElementsByName("informationText")[0].disabled = true;
-          } else {
-            document.getElementsByName("informationText")[0].disabled = false;
-          }
-        },
-      },
       apply: [
         "text",
         "email",
@@ -1328,1233 +1320,6 @@ const FieldBuilder = ({
       apply: ["word"],
     },
   ]);
-  
-  // const config = [
-  //   {
-  //     label: "Label",
-  //     type: "text",
-  //     name: "label",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectstate",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectlandline",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "submit",
-  //       "table",
-  //       "selectdepartment",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Sub Name/Key",
-  //     type: "text",
-  //     name: "subName",
-  //     apply: ["selectcurrency", "selectlandline"],
-  //     validation: [
-  //       {
-  //         required: true,
-  //         message: "Sub key is required",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     label: "Name/Key",
-  //     type: "text",
-  //     name: "name",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectstate",
-  //       "selectlandline",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "table",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //     validation: [
-  //       {
-  //         required: true,
-  //         message: "Key is required",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     label: "Placeholder",
-  //     type: "text",
-  //     name: "placeholder",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectstate",
-  //       "selectlandline",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Field Location",
-  //     type: "radio",
-  //     name: "fieldLocation",
-  //     options: [
-  //       { label: "Left", value: "left" },
-  //       { label: "Center", value: "center" },
-  //       { label: "Right", value: "right" },
-  //     ],
-  //     defaultValue: formBuilderUpdateData?.fieldLocation || "left",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectstate",
-  //       "selectlandline",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "button",
-  //       "buttonupdate",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Field Size",
-  //     type: "radio",
-  //     name: "fieldSize",
-  //     options: [
-  //       { label: "Auto", value: "auto" },
-  //       { label: "25%", value: "25%" },
-  //       { label: "50%", value: "50%" },
-  //       { label: "75%", value: "75%" },
-  //       { label: "100%", value: "100%" },
-  //     ],
-  //     defaultValue: formBuilderUpdateData?.fieldSize || "100%",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectstate",
-  //       "selectlandline",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       // "button",
-  //       // "buttonupdate"
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Module",
-  //     type: "select",
-  //     name: "module",
-  //     options: [
-  //       {
-  //         label: "Account",
-  //         value: "account",
-  //       },
-  //       {
-  //         label: "Job",
-  //         value: "job",
-  //       },
-  //       {
-  //         label: "Candidate",
-  //         value: "candidate",
-  //       },
-  //     ],
-  //     apply: ["searchselect"],
-  //   },
-  //   {
-  //     label: "Search Query Key",
-  //     type: "text",
-  //     name: "queryKey",
-  //     apply: ["searchselect"],
-  //   },
-  //   {
-  //     label: "Select List",
-  //     type: "select",
-  //     name: "list",
-  //     options: generateList(type),
-  //     apply: [
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //     ],
-  //   },
-  //   {
-  //     label: "Form Category",
-  //     type: "formcategoryselect",
-  //     name: "formCategorySelect",
-  //     apply: ["selectformtemplate"],
-  //   },
-  //   {
-  //     label: "Options",
-  //     type: "keyvalue",
-  //     name: "options",
-  //     apply: ["radio", "select", "multiselect", "checkbox", "singleselect"],
-  //   },
-  //   {
-  //     label: "Required",
-  //     type: "radio",
-  //     name: "required",
-  //     defaultValue: formBuilderUpdateData?.required?.toString() || "false",
-  //     options: [
-  //       { label: "Yes", value: "true" },
-  //       { label: "No", value: "false" },
-  //     ],
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({ ...formik.values, required: e.target.value });
-  //         if (e.target.value === "false") {
-  //           document.getElementsByName(
-  //             "requiredErrorMessage"
-  //           )[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName(
-  //             "requiredErrorMessage"
-  //           )[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectstate",
-  //       "selectlandline",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Required Error Message",
-  //     type: "text",
-  //     name: "requiredErrorMessage",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectstate",
-  //       "selectlandline",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Validation Regex",
-  //     type: "text",
-  //     name: "pattern",
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({ ...formik.values, pattern: e.target.value });
-  //         if (e.target.value === "") {
-  //           document.getElementsByName(
-  //             "patternValidationErrorMessage"
-  //           )[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName(
-  //             "patternValidationErrorMessage"
-  //           )[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: ["text", "email", "textarea", "password"],
-  //   },
-  //   {
-  //     label: "Pattern Validation Error Message",
-  //     type: "text",
-  //     name: "patternValidationErrorMessage",
-  //     events: {
-  //       disabled: true,
-  //     },
-  //     apply: ["text", "email", "textarea", "password"],
-  //   },
-  //   {
-  //     label: "Min Length",
-  //     type: "number",
-  //     name: "minLength",
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({ ...formik.values, minLength: e.target.value });
-  //         if (e.target.value === "") {
-  //           document.getElementsByName(
-  //             "minLengthErrorMessage"
-  //           )[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName(
-  //             "minLengthErrorMessage"
-  //           )[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: ["text", "email", "textarea", "password"],
-  //   },
-  //   {
-  //     label: "Min Length Error Message",
-  //     type: "text",
-  //     name: "minLengthErrorMessage",
-  //     events: {
-  //       disabled: true,
-  //     },
-  //     apply: ["text", "email", "textarea", "password"],
-  //   },
-  //   {
-  //     label: "Max Length",
-  //     type: "number",
-  //     name: "maxLength",
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({ ...formik.values, maxLength: e.target.value });
-  //         if (e.target.value === "") {
-  //           document.getElementsByName(
-  //             "maxLengthErrorMessage"
-  //           )[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName(
-  //             "maxLengthErrorMessage"
-  //           )[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: ["text", "email", "textarea", "password"],
-  //   },
-  //   {
-  //     label: "Max Length Error Message",
-  //     type: "text",
-  //     name: "maxLengthErrorMessage",
-  //     events: {
-  //       disabled: true,
-  //     },
-  //     apply: ["text", "email", "textarea", "password"],
-  //   },
-  //   {
-  //     label: "Email Validation",
-  //     type: "radio",
-  //     name: "emailValidation",
-  //     options: [
-  //       { label: "Yes", value: "true" },
-  //       { label: "No", value: "false" },
-  //     ],
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({
-  //           ...formik.values,
-  //           emailValidation: e.target.value,
-  //         });
-  //         if (e.target.value === "") {
-  //           document.getElementsByName(
-  //             "emailValidationErrorMessage"
-  //           )[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName(
-  //             "emailValidationErrorMessage"
-  //           )[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: ["email"],
-  //   },
-  //   {
-  //     label: "Email Validation Error Message",
-  //     type: "text",
-  //     name: "emailValidationErrorMessage",
-  //     events: {
-  //       disabled: true,
-  //     },
-  //     apply: ["email"],
-  //   },
-  //   {
-  //     label: "Max Value",
-  //     type: "number",
-  //     name: "maxValue",
-  //     apply: ["number"],
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({ ...formik.values, maxValue: e.target.value });
-  //         if (e.target.value === "") {
-  //           document.getElementsByName(
-  //             "maxValueErrorMessage"
-  //           )[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName(
-  //             "maxValueErrorMessage"
-  //           )[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: ["number"],
-  //   },
-  //   {
-  //     label: "Max Value Error Message",
-  //     type: "text",
-  //     name: "maxValueErrorMessage",
-  //     events: {
-  //       disabled: true,
-  //     },
-  //     apply: ["number"],
-  //   },
-  //   {
-  //     label: "Min Value",
-  //     type: "number",
-  //     name: "minValue",
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({ ...formik.values, minValue: e.target.value });
-  //         if (e.target.value === "") {
-  //           document.getElementsByName(
-  //             "minValueErrorMessage"
-  //           )[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName(
-  //             "minValueErrorMessage"
-  //           )[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: ["number"],
-  //   },
-  //   {
-  //     label: "Min Value Error Message",
-  //     type: "text",
-  //     name: "minValueErrorMessage",
-  //     events: {
-  //       disabled: true,
-  //     },
-  //     apply: ["number"],
-  //   },
-  //   {
-  //     // Allow multiple types of files
-  //     label: "File Type Validation",
-  //     type: "multiselect",
-  //     name: "fileTypeValidation",
-  //     options: [
-  //       { label: "pdf", value: "pdf" },
-  //       { label: "doc", value: "doc" },
-  //       { label: "docx", value: "docx" },
-  //       { label: "xls", value: "xls" },
-  //     ],
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({
-  //           ...formik.values,
-  //           fileTypeValidation: Array.from(
-  //             e.target.selectedOptions,
-  //             (option) => option.value
-  //           ),
-  //         });
-  //         if (e.target.value === "") {
-  //           document.getElementsByName(
-  //             "fileTypeValidationErrorMessage"
-  //           )[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName(
-  //             "fileTypeValidationErrorMessage"
-  //           )[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: ["file", "multifile"],
-  //   },
-  //   {
-  //     label: "File Type Validation Error Message",
-  //     type: "text",
-  //     name: "fileTypeValidationErrorMessage",
-  //     events: {
-  //       disabled: true,
-  //     },
-  //     apply: ["file", "multifile"],
-  //   },
-  //   {
-  //     label: "File Size Validation (MB)",
-  //     type: "number",
-  //     name: "fileSizeValidation",
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({
-  //           ...formik.values,
-  //           fileSizeValidation: e.target.value,
-  //         });
-  //         if (e.target.value === "") {
-  //           document.getElementsByName(
-  //             "fileSizeValidationErrorMessage"
-  //           )[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName(
-  //             "fileSizeValidationErrorMessage"
-  //           )[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: ["file", "multifile"],
-  //   },
-  //   {
-  //     label: "File Size Validation Error Message",
-  //     type: "text",
-  //     name: "fileSizeValidationErrorMessage",
-  //     events: {
-  //       disabled: true,
-  //     },
-  //     apply: ["file", "multifile"],
-  //   },
-
-  //   {
-  //     label: "Parent",
-  //     type: "select",
-  //     name: "parent",
-  //     options: formFields.map((field) => ({
-  //       label: field.name,
-  //       value: field.name,
-  //     })),
-  //     apply: [
-  //       "selectsubindustry",
-  //       "selectstate",
-  //       "selectcity",
-  //       "singleselectapi",
-  //     ],
-  //   },
-  //   {
-  //     label: "Visible Off (Conditions)",
-  //     type: "visible",
-  //     name: "visible",
-  //     conditionTypes: [
-  //       "equals",
-  //       "notEquals",
-  //       "contains",
-  //       "notContains",
-  //       "greaterThan",
-  //       "lessThan",
-  //       "greaterThanOrEqual",
-  //       "lessThanOrEqual",
-  //       "startsWith",
-  //       "endsWith",
-  //       "isEmpty",
-  //       "isNotEmpty",
-  //     ],
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcity",
-  //       "selectcountry",
-  //       "selectcurrency",
-  //       "selectlandline",
-  //       "selectstate",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "selectformtemplate",
-  //     ],
-  //   },
-  //   {
-  //     label: "Conditional Validation",
-  //     type: "conditionalValidation",
-  //     name: "conditionalValidation",
-  //     conditionTypes: [
-  //       "equals",
-  //       "notEquals",
-  //       "contains",
-  //       "notContains",
-  //       "greaterThan",
-  //       "lessThan",
-  //       "greaterThanOrEqual",
-  //       "lessThanOrEqual",
-  //       "startsWith",
-  //       "endsWith",
-  //       "isEmpty",
-  //       "isNotEmpty",
-  //       "before",
-  //       "beforeOrEqual",
-  //       "after",
-  //       "afterOrEqual",
-  //     ],
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcity",
-  //       "selectcountry",
-  //       "selectcurrency",
-  //       "selectlandline",
-  //       "selectstate",
-  //       "selectdepartment",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "selectaccountnameall",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Condition Validation Error Message",
-  //     type: "text",
-  //     name: "conditionValidationErrorMessage",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectstate",
-  //       "selectlandline",
-  //       "selectdepartment",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectaccountnameall",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //     renderCondition: validationConditionList.length > 0,
-  //   },
-  //   {
-  //     label: "Copy Fields",
-  //     type: "copyFields",
-  //     name: "copyFields",
-  //     conditionTypes: [
-  //       "equals",
-  //       "notEquals",
-  //       "contains",
-  //       "notContains",
-  //       "greaterThan",
-  //       "lessThan",
-  //       "greaterThanOrEqual",
-  //       "lessThanOrEqual",
-  //       "startsWith",
-  //       "endsWith",
-  //       "isEmpty",
-  //       "isNotEmpty",
-  //     ],
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectlandline",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "selectstate",
-  //       "selectdepartment",
-  //       "editor",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   // {
-  //   //   label: "User Group Access",
-  //   //   type: "checkbox",
-  //   //   name: "userGroup",
-  //   //   options: [
-  //   //     { label: "Admin", value: "admin" },
-  //   //     { label: "User", value: "user" },
-  //   //   ],
-  //   //   apply: [
-  //   //     "text",
-  //   //     "email",
-  //   //     "number",
-  //   //     "textarea",
-  //   //     "file",
-  //   //     "select",
-  //   //     "radio",
-  //   //     "checkbox",
-  //   //     "password",
-  //   //     "date",
-  //   //     "selectindustry",
-  //   //     "selectsubindustry",
-  //   //     "selectcountry",
-  //   //     "selectcity",
-  //   //     "selectcurrency",
-  //   //     "selectlandline",
-  //   //     "selectstate",
-  //   //     "selectdepartment",
-  //   //     "editor",
-  //   //     "parentcompany",
-  //   //     "searchselect",
-  //   //   ],
-  //   // },
-  //   {
-  //     label: "User Group Access",
-  //     type: "usergroupselect",
-  //     name: "userGroup",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectlandline",
-  //       "selectstate",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   // Which include key value pair for table
-  //   // Table header for user input and a select for table data
-  //   {
-  //     label: "Table Config",
-  //     type: "tableConfig",
-  //     name: "tableConfig",
-  //     other: {
-  //       tableData: [],
-  //     },
-  //     apply: ["table"],
-  //   },
-  //   {
-  //     label: "Table Setting",
-  //     type: "tableSetting",
-  //     name: "tableSetting",
-  //     apply: ["table"],
-  //   },
-  //   {
-  //     label: "Global Country Condition (Visible On)",
-  //     type: "countryselect",
-  //     name: "countryOptions",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcurrency",
-  //       "selectlandline",
-  //       "selectcountry",
-  //       "selectstate",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "parentcompany",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Field Type",
-  //     type: "radio",
-  //     name: "fieldType",
-  //     options:
-  //       formOptions.formType === "base"
-  //         ? [
-  //             { label: "Static", value: "static" },
-  //             { label: "Predefined", value: "predefined" },
-  //             { label: "Custom", value: "custom" },
-  //           ]
-  //         : [{ label: "Custom", value: "custom" }],
-  //     defaultValue: formBuilderUpdateData?.fieldType || "custom",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectlandline",
-  //       "selectstate",
-  //       "submit",
-  //       "table",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Is Used",
-  //     type: "radio",
-  //     name: "isUsed",
-  //     options: [
-  //       { label: "Yes", value: "true" },
-  //       { label: "No", value: "false" },
-  //     ],
-  //     defaultValue: formBuilderUpdateData?.isUsed.toString() || "true",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectlandline",
-  //       "selectstate",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "submit",
-  //       "table",
-  //       "selectdepartment",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Information",
-  //     type: "radio",
-  //     name: "information",
-  //     defaultValue: formBuilderUpdateData?.information?.toString() || "false",
-  //     options: [
-  //       { label: "Yes", value: "true" },
-  //       { label: "No", value: "false" },
-  //     ],
-  //     events: {
-  //       onChange: (e) => {
-  //         formik.setValues({ ...formik.values, information: e.target.value });
-  //         if (e.target.value === "false") {
-  //           document.getElementsByName("informationText")[0].disabled = true;
-  //         } else {
-  //           document.getElementsByName("informationText")[0].disabled = false;
-  //         }
-  //       },
-  //     },
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectstate",
-  //       "selectlandline",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Information Text",
-  //     type: "text",
-  //     name: "informationText",
-  //     apply: [
-  //       "text",
-  //       "email",
-  //       "number",
-  //       "textarea",
-  //       "file",
-  //       "select",
-  //       "radio",
-  //       "checkbox",
-  //       "password",
-  //       "date",
-  //       "selectindustry",
-  //       "selectsubindustry",
-  //       "selectcountry",
-  //       "selectcity",
-  //       "selectcurrency",
-  //       "selectstate",
-  //       "selectlandline",
-  //       "selectdepartment",
-  //       "selectaccountname",
-  //       "selectaccountnameall",
-  //       "selectaccountcontact",
-  //       "selectcandidatestatus",
-  //       "accountowner",
-  //       "editor",
-  //       "parentcompany",
-  //       "searchselect",
-  //       "multiselect",
-  //       "singleselect",
-  //       "singleselectapi",
-  //       "multiselectapi",
-  //       "multifile",
-  //       "selectformtemplate",
-  //       "multiinput",
-  //     ],
-  //   },
-  //   {
-  //     label: "Button Text",
-  //     type: "text",
-  //     name: "buttonText",
-  //     apply: ["button", "buttonupdate"],
-  //   },
-  //   {
-  //     label: "Button name",
-  //     type: "text",
-  //     name: "buttonName",
-  //     apply: ["button", "buttonupdate"],
-  //   },
-  //   {
-  //     label: "Button Type",
-  //     type: "radio",
-  //     name: "buttonType",
-  //     options: [
-  //       { label: "Button", value: "button" },
-  //       { label: "Submit", value: "submit" },
-  //     ],
-  //     defaultValue: formBuilderUpdateData?.buttonType || "button",
-  //     apply: ["button", "buttonupdate"],
-  //   },
-  //   // {
-  //   //   label: "Button Location",
-  //   //   type: "radio",
-  //   //   name: "buttonLocation",
-  //   //   options: [
-  //   //     { label: "Left", value: "left" },
-  //   //     { label: "Center", value: "center" },
-  //   //     { label: "Right", value: "right" },
-  //   //   ],
-  //   //   defaultValue: formBuilderUpdateData?.buttonLocation || "left",
-  //   //   apply: ["button", "buttonupdate"],
-  //   // },
-  //   {
-  //     label: "Button Class",
-  //     type: "text",
-  //     name: "buttonClass",
-  //     apply: ["button", "buttonupdate"],
-  //   },
-  //   {
-  //     label: "Text",
-  //     type: "textarea",
-  //     name: "wordText",
-  //     apply: ["word"],
-  //   },
-  //   {
-  //     label: "Text Size",
-  //     type: "text",
-  //     name: "wordSize",
-  //     apply: ["word"],
-  //   },
-  // ];
 
   let schema = config;
   let header = null;
@@ -2792,8 +1557,36 @@ const FieldBuilder = ({
     initialValues = returnUpdateDataWithoutNull(formBuilderUpdateData);
   }
 
+  // const firstHandleFormSubmit = (e) => {
+  //   console.log("First Handle Form Submit");
+  //   console.log("Formik Error", formik.errors);
+  //   console.log("Formik Touched", formik.touched);
+  //   console.log(Object.keys(formik.values));
+  //   e.preventDefault();
+
+  //   // Mark all fields as touched
+  //   const touchedFields = Object.keys(formik.values).reduce(
+  //     (acc, fieldName) => {
+  //       acc[fieldName] = true;
+  //       return acc;
+  //     },
+  //     {}
+  //   );
+  //   formik.setTouched(touchedFields);
+
+  //   // Validate the form and then submit if there are no errors
+  //   formik.validateForm().then((errors) => {
+  //     if (Object.keys(errors).length === 0) {
+  //       // If no validation errors, proceed with form submission
+  //       formik.submitForm(); // Use submitForm instead of handleSubmit for explicit submission
+  //     }
+  //   });
+  // };
+
   // Handle Submit
-  const handleFormSchemaSubmit = (values) => {
+  const handleFormSchemaSubmit = (
+    values
+  ) => {
     let validationSchema = { ...values };
     if (formBuilderUpdateData) {
       validationSchema = { ...formBuilderUpdateData, ...values };
@@ -2863,18 +1656,16 @@ const FieldBuilder = ({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: handleFormSchemaSubmit,
+    validateOnBlur: true,
+    // validateOnChange: true,
   });
 
-  // If formik field changes
-  useEffect(() => {
-    if (config && formik && formik?.values?.["required"]) {
-      setConfig((prev) =>
-        FieldBuilderHelper.requiredErrorMessageValidation(formik, prev)
-      );
-    }
-  }, [formik?.values?.["required"]]);
+  // Field Builder Validation Hook to handle validation in builder form
+  useFieldBuilderValidationHook(formik, config, setConfig);
 
+  // Set validation schema on config change (Update validation schema)
   useEffect(() => {
+    console.log("WHY")
     if (formik) {
       setValidationSchema(
         generateValidationSchemaForFieldBuilder(config, type)
@@ -2883,15 +1674,15 @@ const FieldBuilder = ({
   }, [config]);
 
   // Set default radio value
-  useEffect(() => {
-    if (formik && config) {
-      config?.forEach((field) => {
-        if (field.type === "radio" && field?.defaultValue) {
-          formik?.setFieldValue(field.name, field.defaultValue);
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (formik && config) {
+  //     config?.forEach((field) => {
+  //       if (field.type === "radio" && field?.defaultValue) {
+  //         formik?.setFieldValue(field.name, field.defaultValue);
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   return (
     <div className="bg-light">
@@ -2920,6 +1711,7 @@ const FieldBuilder = ({
                       placeholder={`Enter ${field.label}`}
                       className="form-control"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values[field.name]}
                       disabled={field.isDisabled ?? false}
                       {...field.events}
@@ -2929,6 +1721,11 @@ const FieldBuilder = ({
                         {formik.errors[field.name]}
                       </div>
                     ) : null}
+                    {/* {formik.errors[field.name] || formik.touched[field.name] ? (
+                      <div className="mt-2 text-danger">
+                        {formik.errors[field.name]}
+                      </div>
+                    ) : null} */}
                   </div>
                 );
               } else if (
@@ -3940,7 +2737,11 @@ const FieldBuilder = ({
               Update Field
             </button>
           ) : (
-            <button type="submit" className="btn btn-custom-primary">
+            <button
+              type="submit"
+              className="btn btn-custom-primary"
+              // onClick={firstHandleFormSubmit}
+            >
               Create Field
             </button>
           )}
