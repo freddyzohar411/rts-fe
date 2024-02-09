@@ -222,104 +222,105 @@ const JobListing = () => {
         sortValue: "action",
         render: (data) => (
           <div className="d-flex column-gap-2">
-            <Dropdown
-              isOpen={fodAssign[data.id] || false}
-              toggle={() => handleFodAssignDropdown(data.id)}
-            >
-              <DropdownToggle
-                className="btn btn-sm btn-custom-primary"
-                onClick={() => {
-                  setActiveJob(data.id);
-                  setSelectedRecruiter();
-                }}
+            {checkAllPermission([Permission.CANDIDATE_WRITE]) && (
+              <Dropdown
+                isOpen={fodAssign[data.id] || false}
+                toggle={() => handleFodAssignDropdown(data.id)}
               >
-                FOD
-              </DropdownToggle>
-              <DropdownMenu className="p-3" style={{ width: "200px" }}>
-                {/* Map Recruiter Checkbox Here */}
-                <Row className="mb-2">
-                  <Col>
-                    <div className="search-box">
-                      <Input
-                        className="form-control form-control-sm"
-                        placeholder="Search.."
-                        type="text"
-                      />
-                      <i className="ri-search-eye-line search-icon"></i>
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <ul className="ps-0 list-unstyled">
-                      {namesData?.map((item, index) => (
-                        <li key={index}>
-                          <div
-                            className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
-                            onClick={() => toggleNested(index)}
-                          >
-                            <span>{item.name}</span>
-                            <span>{nestedVisible[index] ? "-" : "+"}</span>
-                          </div>
-                          {nestedVisible[index] && (
-                            <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
-                              <div className="d-flex flex-column justify-content-center align-items-center">
-                                <div className="styled-dropdown ball-1"></div>
-                                <div className="styled-line"></div>
-                                <div className="styled-dropdown ball-2"></div>
-                              </div>
-                              <div className="ps-0 ms-0 w-100">
-                                {item.subNames.map((subName, subIndex) => {
-                                  const split = subName?.split("@");
-                                  return (
-                                    <li
-                                      key={subIndex}
-                                      className="d-flex flew-row align-items-center justify-content-between"
-                                    >
-                                      {split[1]}
-
-                                      <Label
-                                        check
-                                        className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                <DropdownToggle
+                  className="btn btn-sm btn-custom-primary"
+                  onClick={() => {
+                    setActiveJob(data.id);
+                    setSelectedRecruiter();
+                  }}
+                >
+                  FOD
+                </DropdownToggle>
+                <DropdownMenu className="p-3" style={{ width: "200px" }}>
+                  {/* Map Recruiter Checkbox Here */}
+                  <Row className="mb-2">
+                    <Col>
+                      <div className="search-box">
+                        <Input
+                          className="form-control form-control-sm"
+                          placeholder="Search.."
+                          type="text"
+                        />
+                        <i className="ri-search-eye-line search-icon"></i>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <ul className="ps-0 list-unstyled">
+                        {namesData?.map((item, index) => (
+                          <li key={index}>
+                            <div
+                              className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
+                              onClick={() => toggleNested(index)}
+                            >
+                              <span>{item.name}</span>
+                              <span>{nestedVisible[index] ? "-" : "+"}</span>
+                            </div>
+                            {nestedVisible[index] && (
+                              <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+                                <div className="d-flex flex-column justify-content-center align-items-center">
+                                  <div className="styled-dropdown ball-1"></div>
+                                  <div className="styled-line"></div>
+                                  <div className="styled-dropdown ball-2"></div>
+                                </div>
+                                <div className="ps-0 ms-0 w-100">
+                                  {item.subNames.map((subName, subIndex) => {
+                                    const split = subName?.split("@");
+                                    return (
+                                      <li
+                                        key={subIndex}
+                                        className="d-flex flew-row align-items-center justify-content-between"
                                       >
-                                        <Input
-                                          type="checkbox"
-                                          checked={
-                                            selectedRecruiter ===
-                                            parseInt(split[0])
-                                          }
-                                          onChange={() =>
-                                            setSelectedRecruiter(
+                                        {split[1]}
+                                        <Label
+                                          check
+                                          className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                        >
+                                          <Input
+                                            type="checkbox"
+                                            checked={
+                                              selectedRecruiter ===
                                               parseInt(split[0])
-                                            )
-                                          }
-                                        />
-                                      </Label>
-                                    </li>
-                                  );
-                                })}
-                              </div>
-                            </ul>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <div className="d-flex justify-content-end">
-                      <Button
-                        className="btn btn-sm btn-custom-primary px-3"
-                        onClick={() => handleFODAssign()}
-                      >
-                        Assign
-                      </Button>
-                    </div>
-                  </Col>
-                </Row>
-              </DropdownMenu>
-            </Dropdown>
+                                            }
+                                            onChange={() =>
+                                              setSelectedRecruiter(
+                                                parseInt(split[0])
+                                              )
+                                            }
+                                          />
+                                        </Label>
+                                      </li>
+                                    );
+                                  })}
+                                </div>
+                              </ul>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <div className="d-flex justify-content-end">
+                        <Button
+                          className="btn btn-sm btn-custom-primary px-3"
+                          onClick={() => handleFODAssign()}
+                        >
+                          Assign
+                        </Button>
+                      </div>
+                    </Col>
+                  </Row>
+                </DropdownMenu>
+              </Dropdown>
+            )}
             {checkAllPermission([Permission.JOB_EDIT]) && (
               <Button
                 tag="button"
