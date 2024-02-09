@@ -95,8 +95,6 @@ function JobOverview() {
     (state) => state.JobFormReducer.formSubmission
   );
 
-  console.log("Form Submission Data", formSubmissionData);
-
   const jobTimelineData = useSelector(
     (state) => state.JobStageReducer.jobTimeline
   );
