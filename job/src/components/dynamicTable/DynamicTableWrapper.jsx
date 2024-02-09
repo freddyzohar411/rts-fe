@@ -92,10 +92,6 @@ const DynamicTableWrapper = ({
     return !(optGroup && optGroup.length > 0);
   };
 
-  // console.log("Selected Opt Group", selectedOptGroup);
-  // console.log("Opt Group", optGroup);
-  console.log("1", selectedOptGroup.map((option) => option?.value) ?? []);
-
   return (
     <React.Fragment>
       <div className="page-content">
