@@ -93,6 +93,8 @@ const DynamicTableWrapper = ({
     return !(optGroup && optGroup.length > 0);
   };
 
+  console.log(jobType, "jobType")
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -195,7 +197,7 @@ const DynamicTableWrapper = ({
               <Card className="m-3">
                 <CardBody>
                   <div className="listjs-table">
-                    <Row className="d-flex column-gap-1 mb-3">
+                    <Row className="d-flex flex-row align-items-baseline column-gap-1 mb-3">
                       <Col>
                         <div className="d-flex justify-content-start align-items-center">
                           {setSearch && (
@@ -242,7 +244,7 @@ const DynamicTableWrapper = ({
                             toggle={() => setMassFODOpen(!massFODOpen)}
                           >
                             <DropdownToggle
-                              className="d-flex flex-row align-items-center gap-2 bg-custom-primary text-white"
+                              className="d-flex flex-row align-items-center gap-1 bg-custom-primary text-white"
                               caret
                             >
                               <i className="bx bxs-user-account"></i>
@@ -345,10 +347,10 @@ const DynamicTableWrapper = ({
                           </ButtonDropdown>
                           <Button
                             type="button"
-                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center header-btn"
                           >
                             <span>
-                              <i className="mdi mdi-download"></i>
+                              <i className="mdi mdi-download me-1"></i>
                             </span>
                             Imports
                           </Button>
@@ -364,10 +366,10 @@ const DynamicTableWrapper = ({
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}
-                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center header-btn"
                           >
                             <span>
-                              <i className="ri-settings-3-fill"></i>
+                              <i className="ri-settings-3-fill me-1"></i>
                             </span>
                             Custom View
                           </Button>
@@ -378,7 +380,7 @@ const DynamicTableWrapper = ({
                             >
                               <Button
                                 type="button"
-                                className="btn btn-custom-primary"
+                                className="btn btn-custom-primary header-btn"
                               >
                                 Create Job Openings
                               </Button>
@@ -386,7 +388,7 @@ const DynamicTableWrapper = ({
                           )}
                           <Button
                             type="button"
-                            className="btn btn-custom-primary"
+                            className="btn btn-custom-primary header-btn"
                           >
                             <i className="ri-filter-line"></i>
                           </Button>

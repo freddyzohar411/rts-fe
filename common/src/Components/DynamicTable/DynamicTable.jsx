@@ -8,6 +8,7 @@ import {
 } from "reactstrap";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import "./DynamicTable.scss";
 
 const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -79,7 +80,7 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
             ) : isLoading ? (
               <tr>
                 <td colSpan={config.length}>
-                  <Skeleton count={2} />
+                  <Skeleton className="pb-3" count={2} />
                 </td>
               </tr>
             ) : (

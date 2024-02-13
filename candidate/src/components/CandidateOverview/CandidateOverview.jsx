@@ -2,7 +2,7 @@ import React from 'react'
 
 const CandidateOverview = () => {
   return (
-    <div>CandidateOverview</div>
+    <div>Not available.</div>
   )
 }
 
