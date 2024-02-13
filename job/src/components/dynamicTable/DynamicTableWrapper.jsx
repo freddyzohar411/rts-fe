@@ -28,6 +28,7 @@ import {
   JOB_INITIAL_OPTIONS,
 } from "../JobListing/JobListingConstants";
 import { toast } from "react-toastify";
+import { RECRUITER_GROUP } from "../../helpers/constant";
 
 const DynamicTableWrapper = ({
   data,
@@ -41,6 +42,7 @@ const DynamicTableWrapper = ({
   confirmDelete,
   gridView,
   handleTableViewChange,
+  operations,
 }) => {
   const { jobType } = useParams();
   const { Permission, checkAllPermission } = useUserAuth();
@@ -50,7 +52,6 @@ const DynamicTableWrapper = ({
   const [massFODOpen, setMassFODOpen] = useState(false);
   const [namesData, setNamesData] = useState([]);
   const [nestedVisible, setNestedVisible] = useState([]);
-  const [selectedRecruiter, setSelectedRecruiter] = useState();
 
   const dispatch = useDispatch();
 
@@ -70,7 +71,7 @@ const DynamicTableWrapper = ({
   }, [recruiterGroup]);
 
   useEffect(() => {
-    dispatch(fetchUserGroupByName("Recruiter Group"));
+    dispatch(fetchUserGroupByName(RECRUITER_GROUP));
   }, []);
 
   const toggleNested = (index) => {
@@ -304,13 +305,15 @@ const DynamicTableWrapper = ({
                                                       >
                                                         <Input
                                                           type="checkbox"
-                                                          checked={
-                                                            selectedRecruiter ===
+                                                          checked={operations?.selectedRecruiter?.includes(
                                                             parseInt(split[0])
-                                                          }
-                                                          onChange={() =>
-                                                            setSelectedRecruiter(
-                                                              parseInt(split[0])
+                                                          )}
+                                                          onChange={(e) =>
+                                                            operations?.handleFODCheck(
+                                                              parseInt(
+                                                                split[0]
+                                                              ),
+                                                              e.target.checked
                                                             )
                                                           }
                                                         />
@@ -332,6 +335,9 @@ const DynamicTableWrapper = ({
                                   <Button
                                     type="submit"
                                     className="btn btn-custom-primary btn-sm px-3"
+                                    onClick={() =>
+                                      operations?.handleFODAssign()
+                                    }
                                   >
                                     Assign
                                   </Button>
