@@ -120,12 +120,12 @@ const JobListing = () => {
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, jobType };
+    const request = { ...pageRequest, jobType: gridView };
     if (checkAnyRole([Role.ADMIN])) {
       dispatch(fetchJobsAdmin(DynamicTableHelper.cleanPageRequest(request)));
-      return;
+    } else {
+      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
     }
-    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
   }, [pageRequest]);
 
   // Update the page info when job Data changes

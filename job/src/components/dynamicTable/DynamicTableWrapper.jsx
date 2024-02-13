@@ -28,6 +28,7 @@ import {
   JOB_INITIAL_OPTIONS,
 } from "../JobListing/JobListingConstants";
 import { toast } from "react-toastify";
+import { RECRUITER_GROUP } from "../../helpers/constant";
 
 const DynamicTableWrapper = ({
   data,
@@ -70,7 +71,7 @@ const DynamicTableWrapper = ({
   }, [recruiterGroup]);
 
   useEffect(() => {
-    dispatch(fetchUserGroupByName("Recruiter Group"));
+    dispatch(fetchUserGroupByName(RECRUITER_GROUP));
   }, []);
 
   const toggleNested = (index) => {
