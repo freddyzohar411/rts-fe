@@ -46,8 +46,8 @@ const JobListing = () => {
   // Dropdown State
   const [fodAssign, setFodAssign] = useState({});
   const [namesData, setNamesData] = useState([]);
-  const [activeJob, setActiveJob] = useState(-1);
-  const [selectedRecruiter, setSelectedRecruiter] = useState();
+  const [activeJob, setActiveJob] = useState([]);
+  const [selectedRecruiter, setSelectedRecruiter] = useState([]);
   const [gridView, setGridView] = useState(jobType);
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -156,8 +156,42 @@ const JobListing = () => {
     });
   };
 
+  const selectAllJobs = (isChecked) => {
+    if (isChecked) {
+      if (jobsData?.jobs) {
+        const ids = [];
+        jobsData?.jobs?.forEach((item) => {
+          ids.push(item?.id);
+        });
+        setActiveJob(ids);
+      }
+    } else {
+      setActiveJob([]);
+    }
+  };
+
+  const handleJobCheck = (id, checked) => {
+    if (checked) {
+      setActiveJob([...activeJob, id]);
+    } else {
+      const updatedVal = activeJob?.filter((sid) => sid !== id);
+      setActiveJob(updatedVal);
+    }
+  };
+
+  const handleFODCheck = (id, checked) => {
+    if (checked) {
+      setSelectedRecruiter([...selectedRecruiter, id]);
+    } else {
+      const updatedVal = selectedRecruiter?.filter((sid) => sid !== id);
+      setSelectedRecruiter(updatedVal);
+    }
+  };
+
   const handleFODAssign = () => {
-    if (selectedRecruiter) {
+    if (activeJob?.length === 0) {
+      toast.error("Please select a job.");
+    } else if (selectedRecruiter?.length > 0) {
       dispatch(
         createJobFOD({ jobId: activeJob, recruiterId: selectedRecruiter })
       );
@@ -184,21 +218,22 @@ const JobListing = () => {
               className="form-check-input"
               type="checkbox"
               id="checkbox"
-              value="option"
+              checked={activeJob?.length === jobsData?.jobs?.length}
+              onChange={(e) => selectAllJobs(e?.target?.checked)}
             />
           </div>
         ),
         name: "checkbox",
         sort: false,
         sortValue: "checkbox",
-        render: () => {
+        render: (data) => {
           return (
             <div className="form-check">
               <Input
                 className="form-check-input"
                 type="checkbox"
-                name="chk_child"
-                value="option1"
+                checked={activeJob.includes(parseInt(data?.id))}
+                onChange={(e) => handleJobCheck(data?.id, e.target.checked)}
               />
             </div>
           );
@@ -230,8 +265,8 @@ const JobListing = () => {
                 <DropdownToggle
                   className="btn btn-sm btn-custom-primary"
                   onClick={() => {
-                    setActiveJob(data.id);
-                    setSelectedRecruiter();
+                    setActiveJob([data.id]);
+                    setSelectedRecruiter([]);
                   }}
                 >
                   FOD
@@ -284,13 +319,13 @@ const JobListing = () => {
                                         >
                                           <Input
                                             type="checkbox"
-                                            checked={
-                                              selectedRecruiter ===
+                                            checked={selectedRecruiter.includes(
                                               parseInt(split[0])
-                                            }
-                                            onChange={() =>
-                                              setSelectedRecruiter(
-                                                parseInt(split[0])
+                                            )}
+                                            onChange={(e) =>
+                                              handleFODCheck(
+                                                parseInt(split[0]),
+                                                e.target.checked
                                               )
                                             }
                                           />
@@ -410,6 +445,13 @@ const JobListing = () => {
         setCustomConfigData={setCustomConfigData}
         gridView={gridView}
         handleTableViewChange={handleTableViewChange}
+        operations={{
+          handleJobCheck: handleJobCheck,
+          handleFODCheck: handleFODCheck,
+          handleFODAssign: handleFODAssign,
+          activeJob: activeJob,
+          selectedRecruiter: selectedRecruiter,
+        }}
       />
       <JobTagCanvas
         tagOffcanvas={tagOffcanvas}
