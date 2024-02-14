@@ -93,8 +93,6 @@ const DynamicTableWrapper = ({
     return !(optGroup && optGroup.length > 0);
   };
 
-  console.log(jobType, "jobType")
-
   return (
     <React.Fragment>
       <div className="page-content">
@@ -335,9 +333,12 @@ const DynamicTableWrapper = ({
                                   <Button
                                     type="submit"
                                     className="btn btn-custom-primary btn-sm px-3"
-                                    onClick={() =>
-                                      operations?.handleFODAssign()
-                                    }
+                                    onClick={() => {
+                                      operations?.handleFODAssign();
+                                      setMassFODOpen(!massFODOpen);
+                                      operations?.setActiveJob([]);
+                                      operations?.setSelectedRecruiter([]);
+                                    }}
                                   >
                                     Assign
                                   </Button>
