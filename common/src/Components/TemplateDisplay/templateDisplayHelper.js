@@ -267,7 +267,10 @@ export function convertInlineStylesToClasses(htmlString) {
   rootTemp = convertVerticalAlignToValignAttributes(rootTemp);
   // Wrap img with div to center the image
   rootTemp = wrapCenteredImages(rootTemp);
+  
   rootTemp = wrapTextWithIns(rootTemp);
+
+  rootTemp = convertPaddingToMarginAndMerge(rootTemp); // New (14022024)
   rootTemp = replacePWithInsInLi(rootTemp);
   rootTemp = replacePWithDiv(rootTemp);
   rootTemp = convertKeywordsToPt(rootTemp);
@@ -290,16 +293,16 @@ export function convertInlineStylesToClasses(htmlString) {
       style = additionalStyle + style;
 
       if (!style.includes("page-break-before: always;")) {
-      // Check if the combined style already exists
-      let className = styles[style] || `style-${styleId}`;
-      if (!styles[style]) {
-        styles[style] = className;
-        styleId++;
-      }
+        // Check if the combined style already exists
+        let className = styles[style] || `style-${styleId}`;
+        if (!styles[style]) {
+          styles[style] = className;
+          styleId++;
+        }
 
-      // Apply the class name and remove the style attribute
-      node.setAttribute("class", className);
-      node.removeAttribute("style");
+        // Apply the class name and remove the style attribute
+        node.setAttribute("class", className);
+        node.removeAttribute("style");
       }
 
       // Recursively process child nodes
@@ -327,26 +330,26 @@ export function addCssStyleForAlignAttribute(htmlString) {
   const root = parse(htmlString);
 
   // Find all elements with an 'align' attribute
-  const elementsWithAlign = root.querySelectorAll('[align]');
+  const elementsWithAlign = root.querySelectorAll("[align]");
 
-  elementsWithAlign.forEach(element => {
-    const alignValue = element.getAttribute('align');
+  elementsWithAlign.forEach((element) => {
+    const alignValue = element.getAttribute("align");
 
     // Determine the CSS equivalent and add it
-    let cssTextAlign = '';
+    let cssTextAlign = "";
     switch (alignValue.toLowerCase()) {
-      case 'left':
-      case 'right':
-      case 'center':
-      case 'justify':
+      case "left":
+      case "right":
+      case "center":
+      case "justify":
         cssTextAlign = `text-align: ${alignValue};`;
         break;
       // Add cases for other possible values of 'align' if needed
     }
 
     // Add or update the 'style' attribute with the CSS text-align
-    const currentStyle = element.getAttribute('style') || '';
-    element.setAttribute('style', `${currentStyle} ${cssTextAlign}`);
+    const currentStyle = element.getAttribute("style") || "";
+    element.setAttribute("style", `${currentStyle} ${cssTextAlign}`);
   });
 
   // Serialize the DOM back to a string
@@ -401,6 +404,8 @@ function wrapTextWithIns(htmlString) {
     let fontStyle = "";
     let fontFamily = "";
     let marginStyle = ""; // For accumulating margin styles.
+    let textDecoration = ""; // For accumulating text-decoration styles.
+    let fontItalicStyle = ""; // For accumulating italic font style.
     while (node && node !== root) {
       const style = node.attributes && node.attributes.style;
 
@@ -416,11 +421,27 @@ function wrapTextWithIns(htmlString) {
       let fontWeight = style?.match(/font-weight:\s*([^;]+);?/i)?.[1];
       if (fontWeight) fontStyle += `font-weight: ${fontWeight}; `;
 
-      let fontColor = style?.match(/color:\s*([^;]+);?/i)?.[1];
+      // let fontColor = style?.match(/color:\s*([^;]+);?/i)?.[1];
+      // if (fontColor) fontStyle += `color: ${fontColor}; `;
+
+      let fontColor = style?.match(/(?<!-)color:\s*([^;]+);?/i)?.[1];
       if (fontColor) fontStyle += `color: ${fontColor}; `;
 
       let foundFontFamily = style?.match(/font-family:\s*([^;]+);?/i)?.[1];
-      if (foundFontFamily) fontFamily = `font-family: ${foundFontFamily}; `;
+      if (foundFontFamily) {
+        fontFamily = `font-family: ${foundFontFamily}; `;
+        break;
+      }
+
+      // Check and accumulate text-decoration and font-style if explicitly defined. (14022024)
+      let textDecorationStyle = style?.match(
+        /text-decoration:\s*([^;]+);?/i
+      )?.[1];
+      if (textDecorationStyle)
+        textDecoration += `text-decoration: ${textDecorationStyle}; `;
+
+      let fontItalic = style?.match(/font-style:\s*italic;?/i)?.[0];
+      if (fontItalic) fontItalicStyle += `${fontItalic} `;
 
       // New: Accumulate margin styles.
       let margin = style?.match(/margin:\s*([^;]+);?/i)?.[1];
@@ -437,7 +458,9 @@ function wrapTextWithIns(htmlString) {
       node = node.parentNode;
     }
 
-    return fontStyle + fontFamily + marginStyle; // Include margin styles in the return.
+    return (
+      fontStyle + fontFamily + marginStyle + textDecoration + fontItalicStyle
+    ); // Include margin styles in the return.
   }
 
   // function recursiveTraverse(node, inheritedFontSize) {
@@ -620,6 +643,84 @@ function convertKeywordsToPt(htmlString) {
   return root.toString();
 }
 
+// function convertPaddingToMargin(htmlString) {
+//   const root = parse(htmlString); // Assuming parse is defined elsewhere to parse the HTML string.
+
+//   function recursiveTraverse(node) {
+//     if (node instanceof HTMLElement) {
+//       const style = node.attributes && node.attributes.style;
+//       if (style) {
+//         // This regex matches padding properties and captures the entire declaration for replacement.
+//         const paddingRegex = /padding(-top|-right|-bottom|-left)?\s*:\s*([^;]+);?/gi;
+//         let modifiedStyle = style.replace(paddingRegex, (match, p1, p2) => {
+//           // p1 captures the specific padding side (-top, -right, etc.), if any, and p2 captures the value.
+//           // If p1 is undefined (meaning the shorthand 'padding' was used), it's replaced with an empty string.
+//           const marginProperty = `margin${p1 || ''}`;
+//           return `${marginProperty}: ${p2};`;
+//         });
+//         node.setAttribute("style", modifiedStyle);
+//       }
+//       node.childNodes.forEach((child) => {
+//         recursiveTraverse(child);
+//       });
+//     }
+//   }
+
+//   recursiveTraverse(root);
+//   return root.toString(); // Assuming root.toString() serializes the modified DOM back to an HTML string.
+// }
+
+function convertPaddingToMarginAndMerge(htmlString) {
+  const root = parse(htmlString); // Assuming parse is defined elsewhere to parse the HTML string.
+
+  function mergeStyles(existingStyle, newStyle) {
+    const styleObject = existingStyle.split(';').reduce((acc, cur) => {
+      const [key, value] = cur.split(':').map(part => part.trim());
+      if (key && value) {
+        acc[key.toLowerCase()] = value;
+      }
+      return acc;
+    }, {});
+
+    newStyle.split(';').forEach(style => {
+      const [key, value] = style.split(':').map(part => part.trim());
+      if (key && value) {
+        // Merge logic: if it's a margin property, and we already have it, we need to decide how to merge.
+        // For simplicity, we'll just add the new value next to the old one, separated by a space.
+        // More sophisticated merging logic might be needed for real-world applications.
+        if (key.toLowerCase().startsWith('margin') && styleObject[key.toLowerCase()]) {
+          styleObject[key.toLowerCase()] = `${styleObject[key.toLowerCase()]} ${value}`;
+        } else {
+          styleObject[key.toLowerCase()] = value;
+        }
+      }
+    });
+
+    return Object.entries(styleObject).map(([key, value]) => `${key}: ${value}`).join('; ');
+  }
+
+  function recursiveTraverse(node) {
+    if (node instanceof HTMLElement) {
+      const style = node.attributes && node.attributes.style;
+      if (style) {
+        // Convert padding to margin
+        const paddingToMargin = style.replace(/padding(-top|-right|-bottom|-left)?\s*:\s*([^;]+);?/gi, (match, p1, p2) => {
+          return `margin${p1 || ''}: ${p2};`;
+        });
+        // Merge existing styles with the new margin styles
+        const mergedStyle = mergeStyles(style, paddingToMargin);
+        node.setAttribute("style", mergedStyle);
+      }
+      node.childNodes.forEach((child) => {
+        recursiveTraverse(child);
+      });
+    }
+  }
+
+  recursiveTraverse(root);
+  return root.toString();
+}
+
 //   const root = parse(htmlString);
 
 //   function findFontWeight(node) {
@@ -763,22 +864,31 @@ function convertAlignmentStylesToAttributes(htmlString) {
       }
 
       // Special handling for images
-      if (tagName.toLowerCase() === 'img') {
-        if (style.includes("margin-left: auto") && style.includes("margin-right: auto")) {
+      if (tagName.toLowerCase() === "img") {
+        if (
+          style.includes("margin-left: auto") &&
+          style.includes("margin-right: auto")
+        ) {
           // Remove margin styles for auto margins
-          modifiedStyle = style.replace(/margin-(left|right): auto;?\s?/g, '');
+          modifiedStyle = style.replace(/margin-(left|right): auto;?\s?/g, "");
           // Wrap the img tag in a div with text-align:center and apply any remaining styles
           return `<div style="text-align:center;"><img ${preStyle}style="${modifiedStyle}" /></div>`;
-        } else if (style.includes("margin-left: 0") && style.includes("margin-right: auto")) {
+        } else if (
+          style.includes("margin-left: 0") &&
+          style.includes("margin-right: auto")
+        ) {
           align = 'align="left"';
-        } else if (style.includes("margin-left: auto") && style.includes("margin-right: 0")) {
+        } else if (
+          style.includes("margin-left: auto") &&
+          style.includes("margin-right: 0")
+        ) {
           align = 'align="right"';
         }
       }
 
       // Reconstruct the tag with alignment attributes if applicable
       // For img tags, ensure self-closing syntax is respected
-      return align || tagName.toLowerCase() === 'img'
+      return align || tagName.toLowerCase() === "img"
         ? `<${tagName} ${preStyle}style="${modifiedStyle}" ${align} />`
         : `<${tagName} ${preStyle}style="${modifiedStyle}" ${align}>`;
     }
@@ -789,11 +899,21 @@ function convertAlignmentStylesToAttributes(htmlString) {
 function traverseAndWrap(node) {
   node.childNodes.forEach((child) => {
     // Check if the child is an <img> with the specific style
-    if (child.tagName === 'IMG') {
-      const style = child.getAttribute('style');
-      if (style && style.includes('margin-left: auto') && style.includes('margin-right: auto')) {
+    if (child.tagName === "IMG") {
+      const style = child.getAttribute("style");
+      if (
+        style &&
+        style.includes("margin-left: auto") &&
+        style.includes("margin-right: auto")
+      ) {
         // Create a new <div> wrapper for the <img>
-        const wrapper = new HTMLElement('div', { style: 'text-align: center;' }, 'style="text-align:center;"', null, child.parentNode);
+        const wrapper = new HTMLElement(
+          "div",
+          { style: "text-align: center;" },
+          'style="text-align:center;"',
+          null,
+          child.parentNode
+        );
         // Replace the <img> with the wrapper <div> and reinsert the <img> into the wrapper
         child.replaceWith(wrapper);
         wrapper.appendChild(child);
@@ -815,7 +935,7 @@ function wrapCenteredImages(htmlString) {
 function convertVerticalAlignToValignAttributes(htmlString) {
   return htmlString.replace(
     /<td([^>]*)style="([^"]*vertical-align: (top|middle|bottom)[^"]*)"/gi,
-    function(match, preStyle, style, align) {
+    function (match, preStyle, style, align) {
       // Determine the valign attribute based on the vertical-align value
       let valign = `valign="${align}"`;
 
