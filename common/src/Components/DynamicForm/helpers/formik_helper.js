@@ -434,6 +434,8 @@ const generateValidationSchemaForFieldBuilder = (schema, type, formFields, formB
           fieldValidation = fieldValidation.email(validation.message);
         }
 
+        // Check for key duplication in main key and sub key for the entire form, only 
+        // if field id is not the same as the field being updated (formBuilderUpdateData)
         if (validation.keyDuplication) {
           fieldValidation = fieldValidation.test(
             "keyDuplication",
