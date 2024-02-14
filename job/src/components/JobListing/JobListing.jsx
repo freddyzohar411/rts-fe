@@ -345,6 +345,7 @@ const JobListing = () => {
                     <Col>
                       <div className="d-flex justify-content-end">
                         <Button
+                          type="submit"
                           className="btn btn-sm btn-custom-primary px-3"
                           onClick={() => handleFODAssign()}
                         >
@@ -445,6 +446,8 @@ const JobListing = () => {
           handleFODAssign: handleFODAssign,
           activeJob: activeJob,
           selectedRecruiter: selectedRecruiter,
+          setActiveJob: setActiveJob,
+          setSelectedRecruiter: setSelectedRecruiter,
         }}
       />
       <JobTagCanvas
