@@ -17,6 +17,7 @@ function CVPreview({ onExitPreview, templateData, candidateId }) {
   const handleExitPreview = () => {
     onExitPreview();
   };
+
   return (
     <React.Fragment>
       <div>

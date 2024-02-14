@@ -267,10 +267,9 @@ export function convertInlineStylesToClasses(htmlString) {
   rootTemp = convertVerticalAlignToValignAttributes(rootTemp);
   // Wrap img with div to center the image
   rootTemp = wrapCenteredImages(rootTemp);
-  
   rootTemp = wrapTextWithIns(rootTemp);
-
   rootTemp = convertPaddingToMarginAndMerge(rootTemp); // New (14022024)
+  console.log("ROOT TEMP: ", rootTemp);
   rootTemp = replacePWithInsInLi(rootTemp);
   rootTemp = replacePWithDiv(rootTemp);
   rootTemp = convertKeywordsToPt(rootTemp);
@@ -292,7 +291,7 @@ export function convertInlineStylesToClasses(htmlString) {
       // Combine original and additional styles
       style = additionalStyle + style;
 
-      if (!style.includes("page-break-before: always;")) {
+      if (!style.includes("page-break-before: always;") && !style.includes("page-break-before: always")) {
         // Check if the combined style already exists
         let className = styles[style] || `style-${styleId}`;
         if (!styles[style]) {

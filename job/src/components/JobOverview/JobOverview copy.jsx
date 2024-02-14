@@ -110,6 +110,8 @@ function JobOverview() {
     },
   ];
 
+  console.log("jobTimelineData", jobTimelineData);
+
   useEffect(() => {
     if (jobTimelineData && jobTimelineData.length === 0) {
       setTimeout(() => {
@@ -594,9 +596,7 @@ function JobOverview() {
                       ></th>
                     </tr>
                   </thead>
-
-                  {/* // FIX */}
-                  {jobTimelineData && jobTimelineData?.jobs?.length > 0 ? (
+                  {jobTimelineData && jobTimelineData.length > 0 ? (
                     jobTimelineData?.jobs?.map((data, index) => {
                       let maxOrder = getMaxOrder(data);
                       const status = getStatus(data, maxOrder);
