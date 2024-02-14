@@ -396,7 +396,7 @@ const generateValidationSchema2 = (
 };
 
 // Generate validation schema for field Builder
-const generateValidationSchemaForFieldBuilder = (schema, type) => {
+const generateValidationSchemaForFieldBuilder = (schema, type, formFields) => {
   const validationSchema = Yup.object(
     schema?.reduce((acc, field) => {
       if (!field.apply.includes(type)) return acc;
@@ -432,6 +432,21 @@ const generateValidationSchemaForFieldBuilder = (schema, type) => {
         }
         if (validation.email) {
           fieldValidation = fieldValidation.email(validation.message);
+        }
+
+        if (validation.keyDuplication) {
+          fieldValidation = fieldValidation.test(
+            "keyDuplication",
+            validation.message,
+            (value) => {
+              if (value === "") return true;
+              if (formFields.length === 0) return true;
+              const isDuplicate = formFields.filter(
+                (field) => field.name === value
+              );
+              return isDuplicate?.length > 0 ? false : true;
+            }
+          );
         }
       });
 

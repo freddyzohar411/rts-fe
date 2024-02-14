@@ -197,6 +197,10 @@ const FieldBuilder = ({
           required: true,
           message: "Key is required",
         },
+        {
+          keyDuplication: true,
+          message: "Key already exists",
+        }
       ],
     },
     {
@@ -1454,7 +1458,7 @@ const FieldBuilder = ({
     if (config && !formBuilderUpdateData) {
       setInitialValues(generateInitialValues(config));
       setValidationSchema(
-        generateValidationSchemaForFieldBuilder(config, type)
+        generateValidationSchemaForFieldBuilder(config, type, formFields)
       );
     }
   }, []);
@@ -1478,7 +1482,6 @@ const FieldBuilder = ({
     }
   }, [formBuilderUpdateData]);
 
-  // const firstHandleFormSubmit = (e) => {
   //   console.log("First Handle Form Submit");
   //   console.log("Formik Error", formik.errors);
   //   console.log("Formik Touched", formik.touched);
@@ -1586,7 +1589,7 @@ const FieldBuilder = ({
   useEffect(() => {
     if (formik) {
       setValidationSchema(
-        generateValidationSchemaForFieldBuilder(config, type)
+        generateValidationSchemaForFieldBuilder(config, type, formFields)
       );
     }
   }, [config]);
