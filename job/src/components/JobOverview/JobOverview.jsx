@@ -110,6 +110,8 @@ function JobOverview() {
     },
   ];
 
+  console.log("jobTimelineData", jobTimelineData);
+
   useEffect(() => {
     if (jobTimelineData && jobTimelineData.length === 0) {
       setTimeout(() => {

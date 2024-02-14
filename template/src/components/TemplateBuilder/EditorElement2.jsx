@@ -271,6 +271,7 @@ const EditorElement2 = ({
 
   // Function to add the 'active-header' class
   const addHeaderStyle = (editor) => {
+    console.log("HEAADERRRR");
     const header = editor.getBody().querySelector('div[title="header"]');
     if (header) {
       header.classList.add("active-header");
@@ -295,6 +296,8 @@ const EditorElement2 = ({
       document.head.removeChild(style);
     };
   }, []);
+
+  // Remove header style
 
   return (
     <>
@@ -542,8 +545,8 @@ const EditorElement2 = ({
               },
             });
 
-            editor.ui.registry.addButton("insertCustomHeader", {
-              text: "Insert Custom Header",
+            editor.ui.registry.addButton("insertHeader", {
+              text: "Insert Header",
               onAction: function () {
                 // Check if a header already exists
                 var existingHeader = editor
@@ -602,6 +605,20 @@ const EditorElement2 = ({
               },
             });
 
+            editor.ui.registry.addButton("removeHeader", {
+              text: "Remove Header",
+              onAction: function () {
+                // Check if we're currently in the header
+                var headerSection = editor
+                  .getBody()
+                  .querySelector('div[title="header"]');
+                if (headerSection) {
+                  // Remove the header section
+                  headerSection.remove();
+                }
+              },
+            });
+
             // editor.on("GetContent", function (e) {
             //   var content = e.content;
             //   // A simple example to add inline style to paragraphs
@@ -637,9 +654,9 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
+            "undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
-            "bullist numlist outdent indent | hr | pagebreak |" +
+            "bullist numlist outdent indent | hr | pagebreak | insertHeader exitHeader removeHeader |" +
             "removeformat | searchreplace |" +
             "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPreviewButton | help",
           // newline_behavior: "invert",
