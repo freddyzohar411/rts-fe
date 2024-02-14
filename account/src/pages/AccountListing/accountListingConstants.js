@@ -19,9 +19,9 @@ const ACCOUNT_INITIAL_OPTIONS = [
   },
   {
     label: "Account Owner",
-    value: "accountSubmissionData.secondaryOwner",
+    value: "accountSubmissionData.accountOwner",
     sort: true,
-    sortValue: "account_submission_data.secondaryOwner",
+    sortValue: "account_submission_data.accountOwner",
   },
   {
     label: "Created By",
