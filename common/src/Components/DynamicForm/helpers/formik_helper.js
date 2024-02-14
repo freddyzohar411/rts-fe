@@ -396,7 +396,7 @@ const generateValidationSchema2 = (
 };
 
 // Generate validation schema for field Builder
-const generateValidationSchemaForFieldBuilder = (schema, type, formFields) => {
+const generateValidationSchemaForFieldBuilder = (schema, type, formFields, formBuilderUpdateData) => {
   const validationSchema = Yup.object(
     schema?.reduce((acc, field) => {
       if (!field.apply.includes(type)) return acc;
@@ -442,7 +442,7 @@ const generateValidationSchemaForFieldBuilder = (schema, type, formFields) => {
               if (value === "") return true;
               if (formFields.length === 0) return true;
               const isDuplicate = formFields.filter(
-                (field) => field.name === value
+                (field) => (field.name === value || field?.subName === value) && (formBuilderUpdateData?.fieldId !== field?.fieldId)
               );
               return isDuplicate?.length > 0 ? false : true;
             }

@@ -150,6 +150,10 @@ const FieldBuilder = ({
           required: true,
           message: "Sub key is required",
         },
+        {
+          keyDuplication: true,
+          message: "Key already exists",
+        }
       ],
     },
     {
@@ -1458,7 +1462,7 @@ const FieldBuilder = ({
     if (config && !formBuilderUpdateData) {
       setInitialValues(generateInitialValues(config));
       setValidationSchema(
-        generateValidationSchemaForFieldBuilder(config, type, formFields)
+        generateValidationSchemaForFieldBuilder(config, type, formFields, formBuilderUpdateData)
       );
     }
   }, []);
@@ -1589,7 +1593,7 @@ const FieldBuilder = ({
   useEffect(() => {
     if (formik) {
       setValidationSchema(
-        generateValidationSchemaForFieldBuilder(config, type, formFields)
+        generateValidationSchemaForFieldBuilder(config, type, formFields, formBuilderUpdateData)
       );
     }
   }, [config]);
