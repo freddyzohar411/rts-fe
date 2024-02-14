@@ -631,7 +631,6 @@ function wrapTextWithIns(htmlString) {
     return finalStyle;
   }
   
-
   // function recursiveTraverse(node, inheritedFontSize) {
   //   if (node.nodeType === 1) {
   //     // Ensure node is an element.
