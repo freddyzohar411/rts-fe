@@ -22,7 +22,7 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
   const [activeTab, setActiveTab] = useState("1");
   const [conditionalOfferContent, setConditionalOfferContent] = useState("");
   const [releaseValue, setReleaseValue] = useState("");
-  const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
+  const { allModuleData, isAllLoading } = UseTemplateModuleDataHook.useTemplateModuleData({
     candidateId: candidateId,
   });
   const [templateDownloadModalShow, setTemplateDownloadModalShow] =
@@ -94,6 +94,7 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
             >
               <TemplateDisplayV3
                 content={conditionalOfferContent ?? null}
+                isAllLoading={isAllLoading}
                 allData={null}
                 isView={true}
                 initialValues
@@ -126,6 +127,7 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
       </div>
       <TemplateAdvanceExportModal
         content={conditionalOfferContent}
+        isAllLoading={false}
         showInsertModal={templateDownloadModalShow}
         setShowInsertModal={setTemplateDownloadModalShow}
         toExport={true}

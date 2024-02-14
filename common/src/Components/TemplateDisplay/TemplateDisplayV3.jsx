@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Spinner } from "reactstrap";
 import { Editor } from "@tinymce/tinymce-react";
 import useMutationObserver from "./useMutationObserverHook";
 import ReactHtmlParser from "react-html-parser";
@@ -22,6 +23,7 @@ const TemplateDisplayV3 = ({
   onChange,
   value, // Value - Used with formik
   initialValues,
+  isAllLoading,
 }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
@@ -29,6 +31,11 @@ const TemplateDisplayV3 = ({
   const displayRef = useRef(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [editorContent, setEditorContent] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  
+  console.log("isAllLoading", isAllLoading);
+
   /**
    * Set the parsedContent when  content props changes
    */
@@ -75,6 +82,7 @@ const TemplateDisplayV3 = ({
       if (!content) return;
       if (!processContent) return;
       try {
+        // setIsLoading(true);
         const result = await TemplateDisplayHelper.runEffects(
           content,
           null,
@@ -84,6 +92,8 @@ const TemplateDisplayV3 = ({
         setParsedContent(result);
       } catch (error) {
         console.error("Error applying effects:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -144,13 +154,35 @@ const TemplateDisplayV3 = ({
   if (autoResize) {
     plugins = [...plugins, "autoresize"];
   }
-
+  console.log("Is Loading0", isAllLoading);
+  console.log("Is Loading1", isLoading);
   return (
     <>
-      {isView ? (
-        <div className="tinyCME">
-          <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
+      {/* {(isLoading || isAllLoading) && (
+        <div className="d-flex justify-content-center align-items-center vh-100">
+          <Spinner
+            style={{ width: "100px", height: "100px", color: "black" }}
+          />
         </div>
+      )} */}
+       {(isLoading) && (
+        <div className="d-flex justify-content-center align-items-center vh-100">
+          <Spinner
+            style={{ width: "100px", height: "100px", color: "black" }}
+          />
+        </div>
+      )}
+      {isView ? (
+        (!isLoading && !isAllLoading) &&  (
+          <div className="tinyCME">
+            <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
+          </div>
+        )
+        // (
+        //   <div className="tinyCME">
+        //     <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
+        //   </div>
+        // )
       ) : (
         <>
           <TemplateAdvanceExportModal

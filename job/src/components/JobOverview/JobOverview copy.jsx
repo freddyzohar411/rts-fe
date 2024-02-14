@@ -792,7 +792,11 @@ function JobOverview() {
             )}
           </div>
           <OffcanvasBody>
-            {getFormComponent(activeStep, () => setOffcanvasForm(false))}
+            {getFormComponent(activeStep, () => {
+              console.log("Closing Offcanvas")
+              setTemplateData(null);
+              setOffcanvasForm(false)
+              })}
           </OffcanvasBody>
         </Offcanvas>
       </div>

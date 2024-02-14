@@ -21,12 +21,7 @@ export const useTemplateModuleData = (dataId) => {
     candidateId: dataId?.candidateId || null,
   });
   const [allModuleData, setAllModuleData] = useState({});
-  const [isAllLoading, setIsAllLoading] = useState({
-    all: true,
-    account: dataId?.accountId ? true : false,
-    job: dataId?.jobId ? true : false,
-    candidate: dataId?.candidateId ? true : false,
-  });
+  const [isAllLoading, setIsAllLoading] = useState(true);
 
   const setAllIdsHandler = () => {
     setAllIds({
@@ -77,39 +72,62 @@ export const useTemplateModuleData = (dataId) => {
   }, [accountData, candidateData, jobData]);
 
   // Dispatch accordingly of accountId, jobId, candidateId changes
-  useEffect(() => {
-    // const getData = async () => {
-    //   if (accountId) {
-    //     setIsAllLoading((prev) => ({ ...prev, account: true }));
-    //     await dispatch(fetchAccountData(accountId));
-    //     setIsAllLoading((prev) => ({ ...prev, account: false }));
-    //   }
-    //   if (jobId) {
-    //     setIsAllLoading((prev) => ({ ...prev, job: true }));
-    //     await dispatch(fetchJobData(jobId));
-    //     setIsAllLoading((prev) => ({ ...prev, job: false }));
-    //   }
-    //   if (candidateId) {
-    //     setIsAllLoading((prev) => ({ ...prev, candidate: true }));
-    //     await dispatch(fetchCandidateData(candidateId));
-    //     setTimeout(() => {
-    //       setIsAllLoading((prev) => ({ ...prev, candidate: false }));
-    //     }, 10000);
-    //     // setIsAllLoading((prev) => ({ ...prev, candidate: false }));
-    //   }
-    // };
-    // getData();
-    if (accountId) {
-      dispatch(fetchAccountData(accountId));
-    }
-    if (jobId) {
-      dispatch(fetchJobData(jobId));
-    }
-    if (candidateId) {
-      dispatch(fetchCandidateData(candidateId));
-    }
+  // useEffect(() => {
+  //   // const getData = async () => {
+  //   //   if (accountId) {
+  //   //     setIsAllLoading((prev) => ({ ...prev, account: true }));
+  //   //     await dispatch(fetchAccountData(accountId));
+  //   //     setIsAllLoading((prev) => ({ ...prev, account: false }));
+  //   //   }
+  //   //   if (jobId) {
+  //   //     setIsAllLoading((prev) => ({ ...prev, job: true }));
+  //   //     await dispatch(fetchJobData(jobId));
+  //   //     setIsAllLoading((prev) => ({ ...prev, job: false }));
+  //   //   }
+  //   //   if (candidateId) {
+  //   //     setIsAllLoading((prev) => ({ ...prev, candidate: true }));
+  //   //     await dispatch(fetchCandidateData(candidateId));
+  //   //     setTimeout(() => {
+  //   //       setIsAllLoading((prev) => ({ ...prev, candidate: false }));
+  //   //     }, 10000);
+  //   //     // setIsAllLoading((prev) => ({ ...prev, candidate: false }));
+  //   //   }
+  //   // };
+  //   // getData();
+  //   if (accountId) {
+  //     dispatch(fetchAccountData(accountId));
+  //   }
+  //   if (jobId) {
+  //     dispatch(fetchJobData(jobId));
+  //   }
+  //   if (candidateId) {
+  //     dispatch(fetchCandidateData(candidateId));
+  //   }
 
-  }, [allIds]);
+  // }, [allIds]);
+
+
+  useEffect(() => {
+    const getData = async () => {
+      if (accountId || jobId || candidateId) {
+
+        // Start loading
+        setIsAllLoading(true);
+  
+        // Fetch all data
+        await Promise.all([
+          accountId && dispatch(fetchAccountData(accountId)),
+          jobId && dispatch(fetchJobData(jobId)),
+          candidateId && dispatch(fetchCandidateData(candidateId))
+        ]);
+
+        // Stop loading
+        setIsAllLoading(false);
+      }
+    };
+  
+    getData();
+  }, [accountId, jobId, candidateId]);
 
   return {
     allModuleData,

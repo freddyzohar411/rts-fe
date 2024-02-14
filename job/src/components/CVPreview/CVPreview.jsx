@@ -9,7 +9,10 @@ import { TemplateExportButtons } from "@workspace/common";
 import { TemplateAdvanceExportModal } from "@workspace/common";
 
 function CVPreview({ onExitPreview, templateData, candidateId }) {
-  const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
+  const { allModuleData, isAllLoading } =
+    UseTemplateModuleDataHook.useTemplateModuleData({
+      candidateId: candidateId,
+    });
   const [templateDownloadModalShow, setTemplateDownloadModalShow] =
     useState(false);
   const [exportContent, setExportContent] = useState("");
@@ -23,18 +26,23 @@ function CVPreview({ onExitPreview, templateData, candidateId }) {
       <div>
         <Row>
           <Col>
-            <Container
-              className="p-3 mt-3 border border-1 border-dark"
-              style={{ height: "100%", minWidth: "80%" }}
-            >
-              <TemplateDisplayV3
-                content={templateData?.content ?? null}
-                allData={allModuleData}
-                isView={true}
-                initialValues
-                handleOutputContent={setExportContent}
-              />
-            </Container>
+            {templateData?.content ? (
+              <Container
+                className="p-3 mt-3 border border-1 border-dark"
+                style={{ height: "100%", minWidth: "80%" }}
+              >
+                <TemplateDisplayV3
+                  content={templateData?.content ?? null}
+                  isAllLoading={isAllLoading}
+                  allData={allModuleData}
+                  isView={true}
+                  initialValues
+                  handleOutputContent={setExportContent}
+                />
+              </Container>
+            ) : (
+              <h1>Loading...</h1>
+            )}
           </Col>
         </Row>
         <Row className="mt-5">

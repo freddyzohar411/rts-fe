@@ -269,7 +269,7 @@ export function convertInlineStylesToClasses(htmlString) {
   rootTemp = wrapCenteredImages(rootTemp);
   rootTemp = wrapTextWithIns(rootTemp);
   rootTemp = convertPaddingToMarginAndMerge(rootTemp); // New (14022024)
-  console.log("ROOT TEMP: ", rootTemp);
+  // console.log("ROOT TEMP: ", rootTemp);
   rootTemp = replacePWithInsInLi(rootTemp);
   rootTemp = replacePWithDiv(rootTemp);
   rootTemp = convertKeywordsToPt(rootTemp);
