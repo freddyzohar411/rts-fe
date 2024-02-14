@@ -27,7 +27,6 @@ const FieldBuilder = ({
 }) => {
   const [validationSchema, setValidationSchema] = useState(null);
   const [initialValues, setInitialValues] = useState({});
-  const [uuidKey, setUuidKey] = useState(!formBuilderUpdateData.label ? formBuilderUpdateData.name : uuid());
 
   //========================= States ================================
   // Condition validation state
@@ -154,7 +153,7 @@ const FieldBuilder = ({
         {
           keyDuplication: true,
           message: "Key already exists",
-        },
+        }
       ],
     },
     {
@@ -205,11 +204,8 @@ const FieldBuilder = ({
         {
           keyDuplication: true,
           message: "Key already exists",
-        },
+        }
       ],
-      events: {
-        disabled: true,
-      },
     },
     {
       label: "Placeholder",
@@ -1371,7 +1367,8 @@ const FieldBuilder = ({
         return prev.map((item) => {
           if (item.name === "conditionValidationErrorMessage") {
             item.renderCondition = false;
-            item.validation = [];
+            item.validation = [
+            ];
           }
           return item;
         });
@@ -1465,12 +1462,7 @@ const FieldBuilder = ({
     if (config && !formBuilderUpdateData) {
       setInitialValues(generateInitialValues(config));
       setValidationSchema(
-        generateValidationSchemaForFieldBuilder(
-          config,
-          type,
-          formFields,
-          formBuilderUpdateData
-        )
+        generateValidationSchemaForFieldBuilder(config, type, formFields, formBuilderUpdateData)
       );
     }
   }, []);
@@ -1601,12 +1593,7 @@ const FieldBuilder = ({
   useEffect(() => {
     if (formik) {
       setValidationSchema(
-        generateValidationSchemaForFieldBuilder(
-          config,
-          type,
-          formFields,
-          formBuilderUpdateData
-        )
+        generateValidationSchemaForFieldBuilder(config, type, formFields, formBuilderUpdateData)
       );
     }
   }, [config]);
@@ -1629,64 +1616,6 @@ const FieldBuilder = ({
     }
     return value === fieldValue;
   };
-
-  function toCamelCase(str) {
-    return (
-      str
-        // Lowercase the string to ensure consistent processing
-        .toLowerCase()
-        // Split the string into words
-        .split(" ")
-        // Map each word to either itself (if it's the first word) or the word with its first letter capitalized
-        .map((word, index) => {
-          if (index === 0) {
-            return word; // Return the first word as is (in lowercase)
-          }
-          // Capitalize the first letter of each subsequent word
-          return word.charAt(0).toUpperCase() + word.slice(1);
-        })
-        // Join the words together without spaces
-        .join("")
-    );
-  }
-
-  // Add UUID to key field if no value
-  useEffect(() => {
-    if (formik?.values["name"] === "") {
-      formik.setFieldValue(["name"], uuidKey);
-    }
-  }, [formik?.values["name"]]);
-
-  useEffect(() => {
-    if (formik?.values["label"] && formik?.values["name"] !== "") {
-      // console.log("Formik Name", formik?.values["name"]);
-      // const getUUIDArray = formik?.values["name"].split(":");
-      // if (getUUIDArray?.length === 2) {
-      //   const getUUID = getUUIDArray[1];
-      //   formik.setFieldValue(
-      //     ["name"],
-      //     `${toCamelCase(formik?.values["label"])}:${getUUID}`
-      //   );
-      // }
-      // if (getUUIDArray?.length === 1) {
-      //   formik.setFieldValue(
-      //     ["name"],
-      //     `${toCamelCase(formik?.values["label"])}:${getUUIDArray[0]}`
-      //   );
-      // }
-
-      if (formik?.values["label"]) {
-        formik.setFieldValue(
-          ["name"],
-          `${toCamelCase(formik?.values["label"])}`
-        );
-      }
-    }
-
-    if (formik?.values["label"] === "") {
-      formik.setFieldValue(["name"], uuidKey);
-    }
-  }, [formik?.values["label"]]);
 
   return (
     <div className="bg-light">
