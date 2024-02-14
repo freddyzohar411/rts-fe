@@ -318,7 +318,20 @@ function EmailComponent() {
                       {attachments.length > 0 &&
                         attachments.map((attachment, i) => {
                           return (
-                            <div className="d-flex justify-content-between gap-5">
+                            <div className="d-flex gap-3">
+                              <span
+                                className="text-danger cursor-pointer"
+                                onClick={() => {
+                                  setAttachments(
+                                    attachments.filter(
+                                      (item, index) => index !== i
+                                    )
+                                  );
+                                }}
+                              >
+                                <i className="ri-close-fill"></i>
+                              </span>
+                              
                               <div className="d-flex gap-2">
                                 <span>
                                   <strong>{attachment.name}</strong>
@@ -333,19 +346,6 @@ function EmailComponent() {
                                   </strong>
                                 </span>
                               </div>
-
-                              <span
-                                className="text-danger cursor-pointer"
-                                onClick={() => {
-                                  setAttachments(
-                                    attachments.filter(
-                                      (item, index) => index !== i
-                                    )
-                                  );
-                                }}
-                              >
-                                <i className="ri-close-fill"></i>
-                              </span>
                             </div>
                           );
                         })}

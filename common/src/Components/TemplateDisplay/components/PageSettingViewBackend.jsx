@@ -29,7 +29,7 @@ const PageSettingViewBackend = ({ settings, content }) => {
           if (!isMounted) {
             return;
           }
-          // Assuming you have a Blob object named 'pdfBlob' representing your PDF data
+
           const blobUrl = URL.createObjectURL(pdfBlob);
 
           // Set the Blob URL as the source for the iframe
@@ -67,17 +67,6 @@ const PageSettingViewBackend = ({ settings, content }) => {
     settings.unit,
   ]);
 
-  // if (isLoading) {
-  //   return (
-  //     <div
-  //       style={{ height: "635px" }}
-  //       className="d-flex justify-content-center align-items-center"
-  //     >
-  //       <h2>Loading...</h2>
-  //     </div>
-  //   );
-  // }
-
   return (
     <>
       {content?.html ? (
@@ -96,26 +85,11 @@ const PageSettingViewBackend = ({ settings, content }) => {
             style={{ height: "635px" }}
             className="d-flex justify-content-center align-items-center"
           >
-            {/* <h2>Loading...</h2> */}
             <Spinner style={{ width: '100px', height: '100px', color: "black"}}/>
           </div>
         )
       }
     </>
-  //   <>
-  //   <div
-  //     style={{ height: "635px" }}
-  //     className={`d-flex justify-content-center align-items-center ${!content || isLoading ? 'loading' : ''}`}
-  //   >
-  //     {isLoading ? (
-  //       <h2>Loading...</h2>
-  //     ) : content ? (
-  //       <iframe ref={iframeRef} title="PDF Viewer" width="80%" height="635px" style={{ display: 'block' }} />
-  //     ) : (
-  //       <h2>Please select a template to load</h2>
-  //     )}
-  //   </div>
-  // </>
   );
 };
 
