@@ -53,7 +53,14 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
   const generateBodyJSX = (config, data) => {
     return data.map((rowData) => {
       const rowdata = config.map((option) => {
-        return <td key={option.name}>{option.render(rowData)}</td>;
+        return (
+          <td
+            key={option.name}
+            style={option?.name === "action" ? { overflow: "visible" } : {}}
+          >
+            {option.render(rowData)}
+          </td>
+        );
       });
       return <tr key={rowData.id}>{rowdata}</tr>;
     });
