@@ -9,18 +9,18 @@ const CustomNav = ({ navContents, slug, children }) => {
         <Col>
           <Card>
             <CardBody>
-              <Nav pills className="bg-white">
+              <Nav pills>
                 {navContents.map((navContent, index) => {
                   return (
                     <NavItem key={index}>
-                      <NavLink
-                        style={{ cursor: "pointer" }}
-                        active={slug === navContent.slug ? true : false}
-                      >
-                        <Link className="text-dark" to={navContent.url}>
+                      <Link to={navContent.url}>
+                        <NavLink
+                          style={{ cursor: "pointer" }}
+                          active={slug === navContent.slug ? true : false}
+                        >
                           {navContent.link}
-                        </Link>
-                      </NavLink>
+                        </NavLink>
+                      </Link>
                     </NavItem>
                   );
                 })}

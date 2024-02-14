@@ -7,10 +7,12 @@ const AccountOwnerElement = ({ formik, field, formStateHook, ...props }) => {
 
   useEffect(() => {
     if (data?.accountSubmissionData) {
-      formik?.setFieldValue(
-        field.name,
-        data?.accountSubmissionData?.accountOwner ?? "NA"
-      );
+      try {
+        formik?.setFieldValue(
+          field.name,
+          data?.accountSubmissionData?.accountOwner ?? "NA"
+        );
+      } catch {}
     }
   }, [data]);
 

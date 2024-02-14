@@ -80,6 +80,9 @@ function* loginResetPassword({ payload: { user, history } }) {
   try {
     const response = yield call(loginResetPwd, user);
     yield put(loginResetPasswordSuccess(response));
+    const authUser = JSON.parse(sessionStorage.getItem("authUser"));
+    authUser.user["isTemp"] = false;
+    yield sessionStorage.setItem("authUser", JSON.stringify(authUser));
     toast.success("Password has been reset successfully.");
     history("/dashboard");
   } catch (error) {

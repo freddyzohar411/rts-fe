@@ -2,7 +2,7 @@ import React from 'react'
 
 const CandidateTask = () => {
   return (
-    <div>CandidateTask</div>
+    <div>Not available.</div>
   )
 }
 

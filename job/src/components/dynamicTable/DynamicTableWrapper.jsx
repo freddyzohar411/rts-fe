@@ -28,6 +28,7 @@ import {
   JOB_INITIAL_OPTIONS,
 } from "../JobListing/JobListingConstants";
 import { toast } from "react-toastify";
+import { RECRUITER_GROUP } from "../../helpers/constant";
 
 const DynamicTableWrapper = ({
   data,
@@ -41,6 +42,7 @@ const DynamicTableWrapper = ({
   confirmDelete,
   gridView,
   handleTableViewChange,
+  operations,
 }) => {
   const { jobType } = useParams();
   const { Permission, checkAllPermission } = useUserAuth();
@@ -50,7 +52,6 @@ const DynamicTableWrapper = ({
   const [massFODOpen, setMassFODOpen] = useState(false);
   const [namesData, setNamesData] = useState([]);
   const [nestedVisible, setNestedVisible] = useState([]);
-  const [selectedRecruiter, setSelectedRecruiter] = useState();
 
   const dispatch = useDispatch();
 
@@ -70,7 +71,7 @@ const DynamicTableWrapper = ({
   }, [recruiterGroup]);
 
   useEffect(() => {
-    dispatch(fetchUserGroupByName("Recruiter Group"));
+    dispatch(fetchUserGroupByName(RECRUITER_GROUP));
   }, []);
 
   const toggleNested = (index) => {
@@ -92,6 +93,8 @@ const DynamicTableWrapper = ({
     return !(optGroup && optGroup.length > 0);
   };
 
+  console.log(jobType, "jobType")
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -112,7 +115,8 @@ const DynamicTableWrapper = ({
           <ModalBody>
             <div className="p-2">
               <DualListBox
-                id="preserve-order"
+                showOrderButtons
+                preserveSelectOrder
                 canFilter
                 filterCallback={(optGroup, filterInput) => {
                   if (filterInput === "") {
@@ -120,10 +124,11 @@ const DynamicTableWrapper = ({
                   }
                   return new RegExp(filterInput, "i").test(optGroup.label);
                 }}
-                options={optGroup ?? []}
-                preserveSelectOrder
+                filterPlaceholder="Search..."
+                options={
+                  optGroup?.filter((option) => option?.value !== "") ?? []
+                }
                 selected={selectedOptGroup.map((option) => option?.value) ?? []}
-                showOrderButtons
                 onChange={handleChange}
                 icons={{
                   moveLeft: [
@@ -192,7 +197,7 @@ const DynamicTableWrapper = ({
               <Card className="m-3">
                 <CardBody>
                   <div className="listjs-table">
-                    <Row className="d-flex column-gap-1 mb-3">
+                    <Row className="d-flex flex-row align-items-baseline column-gap-1 mb-3">
                       <Col>
                         <div className="d-flex justify-content-start align-items-center">
                           {setSearch && (
@@ -239,11 +244,11 @@ const DynamicTableWrapper = ({
                             toggle={() => setMassFODOpen(!massFODOpen)}
                           >
                             <DropdownToggle
-                              className="d-flex flex-row align-items-center gap-2 bg-custom-primary text-white"
+                              className="d-flex flex-row align-items-center gap-1 bg-custom-primary text-white"
                               caret
                             >
                               <i className="bx bxs-user-account"></i>
-                              <span>Mass FOD</span>
+                              <span>FOD</span>
                             </DropdownToggle>
                             <DropdownMenu
                               className="pt-3 px-3"
@@ -300,13 +305,15 @@ const DynamicTableWrapper = ({
                                                       >
                                                         <Input
                                                           type="checkbox"
-                                                          checked={
-                                                            selectedRecruiter ===
+                                                          checked={operations?.selectedRecruiter?.includes(
                                                             parseInt(split[0])
-                                                          }
-                                                          onChange={() =>
-                                                            setSelectedRecruiter(
-                                                              parseInt(split[0])
+                                                          )}
+                                                          onChange={(e) =>
+                                                            operations?.handleFODCheck(
+                                                              parseInt(
+                                                                split[0]
+                                                              ),
+                                                              e.target.checked
                                                             )
                                                           }
                                                         />
@@ -328,6 +335,9 @@ const DynamicTableWrapper = ({
                                   <Button
                                     type="submit"
                                     className="btn btn-custom-primary btn-sm px-3"
+                                    onClick={() =>
+                                      operations?.handleFODAssign()
+                                    }
                                   >
                                     Assign
                                   </Button>
@@ -337,10 +347,10 @@ const DynamicTableWrapper = ({
                           </ButtonDropdown>
                           <Button
                             type="button"
-                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center header-btn"
                           >
                             <span>
-                              <i className="mdi mdi-download"></i>
+                              <i className="mdi mdi-download me-1"></i>
                             </span>
                             Imports
                           </Button>
@@ -356,10 +366,10 @@ const DynamicTableWrapper = ({
                               setIsCustomModalView(true);
                               setCustomViewShow(!customViewShow);
                             }}
-                            className="btn btn-custom-primary d-flex align-items-center column-gap-2"
+                            className="btn btn-custom-primary d-flex align-items-center header-btn"
                           >
                             <span>
-                              <i className="ri-settings-3-fill"></i>
+                              <i className="ri-settings-3-fill me-1"></i>
                             </span>
                             Custom View
                           </Button>
@@ -370,7 +380,7 @@ const DynamicTableWrapper = ({
                             >
                               <Button
                                 type="button"
-                                className="btn btn-custom-primary"
+                                className="btn btn-custom-primary header-btn"
                               >
                                 Create Job Openings
                               </Button>
@@ -378,7 +388,7 @@ const DynamicTableWrapper = ({
                           )}
                           <Button
                             type="button"
-                            className="btn btn-custom-primary"
+                            className="btn btn-custom-primary header-btn"
                           >
                             <i className="ri-filter-line"></i>
                           </Button>
