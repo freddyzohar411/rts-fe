@@ -44,6 +44,7 @@ import {
 
 const initialState = {
   candidate: {},
+  candidateMeta: {},
   candidates: [],
   candidateData: null,
   candidatesFields: [],
@@ -61,42 +62,38 @@ const CandidateReducer = (state = initialState, action) => {
     case FETCH_CANDIDATE:
       return {
         ...state,
-        loading: true,
-        error: false,
+        candidateMeta: pendingMetaData(),
       };
     case FETCH_CANDIDATE_SUCCESS:
       return {
         ...state,
-        loading: false,
+        candidateMeta: successMetaData(action.payload),
         candidate: action.payload,
       };
     case FETCH_CANDIDATE_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        candidate: {},
+        candidateMeta: errorMetaData(action.payload),
       };
 
     // Fetch all accounts
     case FETCH_CANDIDATES:
       return {
         ...state,
-        loading: true,
-        error: false,
+        candidateMeta: pendingMetaData(),
       };
     case FETCH_CANDIDATES_SUCCESS:
       return {
         ...state,
-        loading: false,
+        candidateMeta: successMetaData(action.payload),
         candidates: action.payload,
       };
     case FETCH_CANDIDATES_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        candidates: [],
+        candidateMeta: errorMetaData(action.payload),
       };
 
     // Create an Account
@@ -271,21 +268,19 @@ const CandidateReducer = (state = initialState, action) => {
     case FETCH_CANDIDATES_ADMIN:
       return {
         ...state,
-        loading: true,
-        error: false,
+        candidateMeta: pendingMetaData(),
       };
     case FETCH_CANDIDATES_ADMIN_SUCCESS:
       return {
         ...state,
-        loading: false,
+        candidateMeta: successMetaData(action.payload),
         candidates: action.payload,
       };
     case FETCH_CANDIDATES_ADMIN_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        candidates: {},
+        candidateMeta: errorMetaData(action.payload),
       };
     default:
       return state;
