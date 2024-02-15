@@ -51,7 +51,11 @@ const DynamicTable = ({
         return (
           <td
             key={option.name}
-            style={option?.name === "action" ? { overflow: "visible" } : {}}
+            style={
+              option?.name === "action"
+                ? { overflow: "visible", maxWidth: "100%" }
+                : { maxWidth: "150px" }
+            }
           >
             {option.render(rowData)}
           </td>
