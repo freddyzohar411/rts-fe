@@ -62,7 +62,7 @@ export const timelineSkip = [
 
 export const timelineLegend = [
   {
-    color: "dark",
+    color: "success",
     legend: "Completed Stage",
     borderColor: "custom-primary",
     tooltip: "Candidate has completed this stage.",
@@ -86,7 +86,7 @@ export const timelineLegend = [
     tooltip: "Candidate is in progress in this stage.",
   },
   {
-    color: "orange",
+    color: "gray",
     borderColor: "dark",
     legend: "Candidate Withdrawn",
     tooltip: "Candidate has withdrawn.",

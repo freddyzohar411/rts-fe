@@ -386,7 +386,7 @@ function JobOverview() {
                 width: "9px",
                 height: "9px",
                 backgroundColor: `${item.color}`,
-                border: "1px solid #36454F",
+                border: `1px solid ${item.color}`,
               }}
             ></div>
             <div>
