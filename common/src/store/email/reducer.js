@@ -4,6 +4,7 @@ import {
   SEND_EMAIL_FAILURE,
   SET_EMAIL_OPEN,
   SET_EMAIL_CLOSE,
+  RESET_SEND_EMAIL
 } from "./actionTypes";
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   errorMsg: "",
   loading: false,
   error: false,
+  success: false,
 };
 
 const EmailCommonReducer = (state = initialState, action) => {
@@ -29,6 +31,7 @@ const EmailCommonReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         emailResponse: action.payload,
+        success: true,
       };
     case SEND_EMAIL_FAILURE:
       return {
@@ -36,6 +39,7 @@ const EmailCommonReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
+        success: false,
       };
     case SET_EMAIL_OPEN:
       const { category, subCategory } = action.payload;
@@ -52,6 +56,14 @@ const EmailCommonReducer = (state = initialState, action) => {
         subCategory: "",
         isEmailOpen: false,
       };  
+    case RESET_SEND_EMAIL:
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        success: false,
+        emailResponse: {},
+      };
     default:
       return state;
   }

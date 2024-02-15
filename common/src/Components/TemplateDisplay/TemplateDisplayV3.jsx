@@ -24,6 +24,7 @@ const TemplateDisplayV3 = ({
   value, // Value - Used with formik
   initialValues,
   isAllLoading,
+  showLoading = true,
 }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
@@ -31,9 +32,8 @@ const TemplateDisplayV3 = ({
   const displayRef = useRef(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [editorContent, setEditorContent] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  
   console.log("isAllLoading", isAllLoading);
 
   /**
@@ -158,14 +158,7 @@ const TemplateDisplayV3 = ({
   console.log("Is Loading1", isLoading);
   return (
     <>
-      {/* {(isLoading || isAllLoading) && (
-        <div className="d-flex justify-content-center align-items-center vh-100">
-          <Spinner
-            style={{ width: "100px", height: "100px", color: "black" }}
-          />
-        </div>
-      )} */}
-       {(isLoading) && (
+      {showLoading && isLoading && (
         <div className="d-flex justify-content-center align-items-center vh-100">
           <Spinner
             style={{ width: "100px", height: "100px", color: "black" }}
@@ -173,16 +166,12 @@ const TemplateDisplayV3 = ({
         </div>
       )}
       {isView ? (
-        (!isLoading && !isAllLoading) &&  (
+        !isLoading &&
+        !isAllLoading && (
           <div className="tinyCME">
             <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
           </div>
         )
-        // (
-        //   <div className="tinyCME">
-        //     <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
-        //   </div>
-        // )
       ) : (
         <>
           <TemplateAdvanceExportModal

@@ -25,7 +25,7 @@ import { Actions } from "@workspace/common";
 import { toast } from "react-toastify";
 import { ObjectHelper } from "@workspace/common";
 import { FileHelper } from "@workspace/common";
-import { setEmailClose } from "../../store/email/action";
+import { setEmailClose, resetSendEmail } from "../../store/email/action";
 import * as ExportHelper from "../../helpers/export_helper";
 import TemplatePreviewModal from "../TemplateDisplay/TemplatePreviewModal/TemplatePreviewModal";
 import { generateOptions } from "./pdfOption";
@@ -46,7 +46,7 @@ function EmailComponent() {
   const [templateAttachmentModalShow, setTemplateAttachmentModalShow] =
     useState(false);
 
-  const { loading, isEmailOpen, category, subCategory } = useSelector(
+  const { loading, isEmailOpen, category, subCategory, success } = useSelector(
     (state) => state.EmailCommonReducer
   );
 
@@ -162,6 +162,28 @@ function EmailComponent() {
         toast.error(formik.errors[key]);
       });
     }
+  };
+
+  // Upon successfully sent email, reset form and close modal
+  useEffect(() => {
+    if (success) {
+      formik.resetForm();
+      setTemplateData(null);
+      setAttachments([]);
+      dispatch(resetSendEmail());
+      dispatch(setEmailClose());
+    }
+  }, [success]);
+
+  const downloadAttachment = (attachment) => {
+    // Assuming attachment.file is a Blob or File object
+    const url = window.URL.createObjectURL(attachment);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = attachment.name; 
+    a.click(); 
+    window.URL.revokeObjectURL(url); 
+    a.remove(); 
   };
 
   return (
@@ -292,6 +314,7 @@ function EmailComponent() {
                 </div>
               </div>
               <TemplateDisplayV3
+                isAllLoading={false}
                 content={templateData?.content ?? null}
                 allData={allModuleData}
                 isView={false}
@@ -302,6 +325,7 @@ function EmailComponent() {
                   formik.setFieldValue("content", content);
                 }}
                 value={formik?.values?.["content"]}
+                showLoading={false}
               />
               {/* File attachment */}
               <ModalFooter className="p-0 mt-3">
@@ -331,9 +355,11 @@ function EmailComponent() {
                               >
                                 <i className="ri-close-fill"></i>
                               </span>
-                              
                               <div className="d-flex gap-2">
-                                <span>
+                                <span
+                                  onClick={() => downloadAttachment(attachment)}
+                                  className="cursor-pointer"
+                                >
                                   <strong>{attachment.name}</strong>
                                 </span>
                                 <span>

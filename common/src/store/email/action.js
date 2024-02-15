@@ -4,6 +4,7 @@ import {
   SEND_EMAIL_FAILURE,
   SET_EMAIL_OPEN,
   SET_EMAIL_CLOSE,
+  RESET_SEND_EMAIL,
 } from "./actionTypes";
 
 export const sendEmail = (payload) => ({
@@ -30,3 +31,6 @@ export const setEmailClose = () => ({
   type: SET_EMAIL_CLOSE,
 });
 
+export const resetSendEmail = () => ({
+  type: RESET_SEND_EMAIL,
+});
