@@ -58,6 +58,8 @@ const DynamicTableWrapper = ({
   const recruiterGroup = useSelector(
     (state) => state.JobListReducer.recruiterGroup
   );
+  const jobsMeta = useSelector((state) => state.JobListReducer.jobsMeta);
+
   useEffect(() => {
     if (recruiterGroup?.users?.length > 0) {
       const users = [];
@@ -401,6 +403,7 @@ const DynamicTableWrapper = ({
                       data={data}
                       pageRequestSet={pageRequestSet}
                       pageInfo={pageInfo}
+                      isLoading={jobsMeta?.isLoading}
                     />
                   </div>
                 </CardBody>

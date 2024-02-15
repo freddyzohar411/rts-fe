@@ -1,4 +1,9 @@
 import {
+  errorMetaData,
+  pendingMetaData,
+  successMetaData,
+} from "@workspace/common";
+import {
   FETCH_JOB_LIST,
   FETCH_JOB_LIST_SUCCESS,
   FETCH_JOB_LIST_FAILURE,
@@ -35,6 +40,7 @@ const initialState = {
   job: {},
   jobFOD: {},
   jobs: [],
+  jobsMeta: {},
   jobsFields: [],
   recruiterGroup: null,
   errorMsg: "",
@@ -92,21 +98,19 @@ const JobListReducer = (state = initialState, action) => {
     case FETCH_JOB_LISTS:
       return {
         ...state,
-        loading: true,
-        error: false,
+        jobsMeta: pendingMetaData(),
       };
     case FETCH_JOB_LISTS_SUCCESS:
       return {
         ...state,
-        loading: false,
+        jobsMeta: successMetaData(action.payload),
         jobs: action.payload,
       };
     case FETCH_JOB_LISTS_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        jobs: [],
+        jobsMeta: errorMetaData(action.payload),
       };
 
     // Create an JobList
@@ -240,26 +244,24 @@ const JobListReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
-    
+
     // Admin
     case FETCH_JOBS_ADMIN:
       return {
         ...state,
-        loading: true,
-        error: false,
+        jobsMeta: pendingMetaData(),
       };
     case FETCH_JOBS_ADMIN_SUCCESS:
       return {
         ...state,
-        loading: false,
+        jobsMeta: successMetaData(action.payload),
         jobs: action.payload,
       };
     case FETCH_JOBS_ADMIN_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        jobs: [],
+        jobsMeta: errorMetaData(action.payload),
       };
     default:
       return state;
