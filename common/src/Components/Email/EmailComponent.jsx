@@ -180,10 +180,10 @@ function EmailComponent() {
     const url = window.URL.createObjectURL(attachment);
     const a = document.createElement("a");
     a.href = url;
-    a.download = attachment.name; 
-    a.click(); 
-    window.URL.revokeObjectURL(url); 
-    a.remove(); 
+    a.download = attachment.name;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
   };
 
   return (
@@ -216,7 +216,11 @@ function EmailComponent() {
                     setIsFullscreen(!isFullscreen);
                   }}
                 >
-                  <i className="ri-fullscreen-line fs-5"></i>
+                  {isFullscreen ? (
+                    <i className="bx bx-window fs-5"></i>
+                  ) : (
+                    <i className="bx bx-windows fs-5"></i>
+                  )}
                 </button>
                 <button
                   className="btn"
