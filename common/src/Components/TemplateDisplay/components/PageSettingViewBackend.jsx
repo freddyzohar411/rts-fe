@@ -7,8 +7,6 @@ const PageSettingViewBackend = ({ settings, content }) => {
   const iframeRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log("Content", content);
-
   useEffect(() => {
     let isMounted = true; // Flag to track mounting status
     const fetchData = async () => {

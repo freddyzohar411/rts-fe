@@ -276,8 +276,8 @@ const TemplateAdvanceExportModal = ({
     }
   }, [templateContent, allData, content]);
 
-  // console.log("Style Tag", showContent.styleTag)
-  // console.log("showContent", showContent.html)
+  console.log("Style Tag", showContent.styleTag)
+  console.log("showContent", showContent.html)
 
   return (
     <Modal

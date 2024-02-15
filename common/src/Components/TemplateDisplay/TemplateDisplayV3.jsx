@@ -34,8 +34,6 @@ const TemplateDisplayV3 = ({
   const [editorContent, setEditorContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log("isAllLoading", isAllLoading);
-
   /**
    * Set the parsedContent when  content props changes
    */
@@ -154,8 +152,7 @@ const TemplateDisplayV3 = ({
   if (autoResize) {
     plugins = [...plugins, "autoresize"];
   }
-  console.log("Is Loading0", isAllLoading);
-  console.log("Is Loading1", isLoading);
+
   return (
     <>
       {showLoading && isLoading && (
