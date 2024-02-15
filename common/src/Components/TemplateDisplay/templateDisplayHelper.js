@@ -714,18 +714,50 @@ function wrapTextWithIns(htmlString) {
     return `${fontSizeInPt}pt`;
   }
 
+  // function findFontSize(node, inheritedFontSize = "12pt") {
+  //   while (node && node !== root) {
+  //     const style = node.attributes && node.attributes.style;
+  //     let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
+  //     if (fontSize) {
+  //       if (fontSize.endsWith("%")) {
+  //         fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
+  //       } else if (fontSize.toLowerCase() in keywordMapping) {
+  //         fontSize = convertKeywordToPt(
+  //           fontSize.toLowerCase(),
+  //           inheritedFontSize
+  //         );
+  //       }
+  //       return fontSize;
+  //     }
+  //     node = node.parentNode;
+  //   }
+  //   return inheritedFontSize;
+  // }
+
   function findFontSize(node, inheritedFontSize = "12pt") {
+    const headingSizeMapping = {
+      h1: "24pt",
+      h2: "18pt",
+      h3: "14pt",
+      h4: "12pt",
+      h5: "10pt",
+      h6: "8pt",
+    };
+  
     while (node && node !== root) {
       const style = node.attributes && node.attributes.style;
       let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
+  
+      // Check if the node is a heading and has a mapped size.
+      if (!fontSize && headingSizeMapping[node.tagName.toLowerCase()]) {
+        return headingSizeMapping[node.tagName.toLowerCase()];
+      }
+  
       if (fontSize) {
         if (fontSize.endsWith("%")) {
           fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
         } else if (fontSize.toLowerCase() in keywordMapping) {
-          fontSize = convertKeywordToPt(
-            fontSize.toLowerCase(),
-            inheritedFontSize
-          );
+          fontSize = convertKeywordToPt(fontSize.toLowerCase(), inheritedFontSize);
         }
         return fontSize;
       }
