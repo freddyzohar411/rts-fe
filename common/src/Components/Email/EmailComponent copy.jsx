@@ -30,7 +30,6 @@ import * as ExportHelper from "../../helpers/export_helper";
 import TemplatePreviewModal from "../TemplateDisplay/TemplatePreviewModal/TemplatePreviewModal";
 import { generateOptions } from "./pdfOption";
 import TemplateAdvanceExportModal from "../TemplateDisplay/TemplateAdvanceExportModal/TemplateAdvanceExportModal";
-import * as BackendHelper from "../../helpers/backend_helper";
 
 function EmailComponent() {
   const dispatch = useDispatch();
@@ -46,41 +45,10 @@ function EmailComponent() {
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
   const [templateAttachmentModalShow, setTemplateAttachmentModalShow] =
     useState(false);
-  const [attachmentTemplates, setAttachmentTemplates] = useState([]);
 
-  const {
-    loading,
-    isEmailOpen,
-    category,
-    subCategory,
-    success,
-    attachmentCategory,
-    attachmentSubcategory,
-  } = useSelector((state) => state.EmailCommonReducer);
-
-  useEffect(() => {
-    if (attachmentCategory && attachmentSubcategory) {
-      BackendHelper.getTemplatesByCategoryAndSubCategory(
-        attachmentCategory,
-        attachmentSubcategory
-      )
-        .then((res) => setAttachmentTemplates(res.data))
-        .catch((err) => {
-          console.log(err);
-        });
-      return;
-    }
-    if (attachmentCategory) {
-      BackendHelper.getTemplatesByCategory(attachmentCategory)
-        .then((res) => setAttachmentTemplates(res.data))
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [attachmentCategory, attachmentSubcategory]);
-
-  // console.log("attachmentCategory", attachmentCategory);
-  // console.log("attachmentTemplates", attachmentTemplates);
+  const { loading, isEmailOpen, category, subCategory, success } = useSelector(
+    (state) => state.EmailCommonReducer
+  );
 
   /**
    * Handle form submit event (Formik)
@@ -217,59 +185,6 @@ function EmailComponent() {
     window.URL.revokeObjectURL(url);
     a.remove();
   };
-
-  const setSelectedContentAndProcessed = async (templateContent, allData) => {
-    const processedContent = await TemplateHelper.runEffects(
-      templateContent,
-      null,
-      allData,
-      true
-    );
-    const removeEditableContent =
-      TemplateHelper.removeContentEditableAndStyles(processedContent);
-
-    const convertTableAttributesContent =
-      TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
-
-    const convertInlineStylesContent =
-      TemplateHelper.convertInlineStylesToClasses(
-        convertTableAttributesContent
-      );
-      return convertInlineStylesContent;
-  };
-
-  const attachmentTemplate = async (id) => {
-    const filterTemplate = attachmentTemplates.find(
-      (template) => template.id === id
-    );
-    if (!filterTemplate) return;
-    const processedTemplate = await setSelectedContentAndProcessed(
-      filterTemplate.content,
-      allModuleData
-    );
-      console.log("processedTemplate", processedTemplate);
-
-    if (processedTemplate) {
-      const file = await ExportHelper.exportBackendHtml2PdfFile(
-        processedTemplate.html,
-        {
-          unit: "in",
-          pageType: "A4",
-          pageOrientation: "portrait",
-          marginTop: 0,
-          marginBottom: 0,
-          marginLeft: 0,
-          marginRight: 0,
-          exportType: "pdf",
-          fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`
-        },
-        processedTemplate.styleTag
-      )
-      setAttachments([...attachments, file]);
-    }
-  };
-
-  console.log("All Module Data", allModuleData);
 
   return (
     <React.Fragment>
@@ -508,21 +423,9 @@ function EmailComponent() {
                         <span className="visually-hidden">Toggle Dropdown</span>
                       </DropdownToggle>
                       <DropdownMenu className="dropdown-menu-end">
+
                         {/* Start here */}
-                        {attachmentTemplates.map((template) => {
-                          return (
-                            <li key={template.id}>
-                              <DropdownItem
-                                onClick={async () => {
-                                  attachmentTemplate(template.id);
-                                }}
-                              >
-                                {template.name}
-                              </DropdownItem>
-                            </li>
-                          );
-                        })}
-                        <hr style={{margin: 0}}/>
+                        
                         <li>
                           <DropdownItem
                             onClick={async () => {

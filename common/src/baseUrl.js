@@ -9,4 +9,5 @@ export const CONTACTS = "api/contacts";
 export const EMAIL = "api/email";
 export const USER = "api/user";
 export const DOCUMENT_CONVERSION = "api/document-conversion";
+export const TEMPLATE = "api/template";
 

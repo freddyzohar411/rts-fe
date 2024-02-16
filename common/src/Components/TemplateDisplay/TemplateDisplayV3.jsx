@@ -417,13 +417,12 @@ const TemplateDisplayV3 = ({
                           insertLogo(editor, "right");
                         },
                       },
-    
+
                       // ... similarly for A3 and other sizes
                     ];
                     callback(items);
                   },
                 });
-    
               },
               height: height, // Set the initial height to 100% of the parent container
               min_height: minHeight,

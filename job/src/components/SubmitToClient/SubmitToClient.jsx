@@ -121,6 +121,7 @@ function SubmitToClient({
                       dispatch(
                         Actions.setEmailOpen({
                           category: "Email Templates",
+                          attachmentCategory: "Email Templates",
                         })
                       );
                     }}
