@@ -440,26 +440,24 @@ export async function exportBackendHtml2Pdf(
 
   let fileName = options?.fileName || "document.pdf";
 
-  BackendHelper.convertHtmlStringToPdf({
-    htmlString: html,
-  })
-    .then((res) => {
-      // Byte array to download as pdf
-      const pdfBase64 = res.data;
-
-      // Convert base64 to binary
-      const binaryString = window.atob(pdfBase64);
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-      const blob = new Blob([bytes], { type: "application/pdf" });
-      FileSaver.saveAs(blob, fileName);
-    })
-    .catch((err) => {
-      console.log(err);
+  try {
+    const response = await BackendHelper.convertHtmlStringToPdf({
+      htmlString: html,
     });
+    const pdfBase64 = response.data;
+
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    FileSaver.saveAs(blob, fileName);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 export async function exportBackendHtml2PdfBlob(htmlString, options = {}) {
@@ -726,26 +724,26 @@ export async function exportBackendHtml2Jpeg(
 
   let fileName = options?.fileName || "document";
 
-  BackendHelper.convertHtmlStringToJpeg({
-    htmlString: html,
-  })
-    .then((res) => {
-      // Byte array to download as pdf
-      const pdfBase64 = res.data;
-
-      // Convert base64 to binary
-      const binaryString = window.atob(pdfBase64);
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-      const blob = new Blob([bytes], { type: "image/jpeg" });
-      FileSaver.saveAs(blob, fileName);
-    })
-    .catch((err) => {
-      console.log(err);
+  try {
+    const res = await BackendHelper.convertHtmlStringToJpeg({
+      htmlString: html,
     });
+
+    // Byte array to download as pdf
+    const pdfBase64 = res.data;
+
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "image/jpeg" });
+    FileSaver.saveAs(blob, fileName);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // Convert to File Jpeg from HTML
@@ -824,26 +822,25 @@ export async function exportBackendHtml2Png(
 
   let fileName = options?.fileName || "document";
 
-  BackendHelper.convertHtmlStringToPng({
-    htmlString: html,
-  })
-    .then((res) => {
-      // Byte array to download as pdf
-      const pdfBase64 = res.data;
-
-      // Convert base64 to binary
-      const binaryString = window.atob(pdfBase64);
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-      const blob = new Blob([bytes], { type: "image/png" });
-      FileSaver.saveAs(blob, fileName);
-    })
-    .catch((err) => {
-      console.log(err);
+  try {
+    const res = await BackendHelper.convertHtmlStringToPng({
+      htmlString: html,
     });
+    // Byte array to download as pdf
+    const pdfBase64 = res.data;
+
+    // Convert base64 to binary
+    const binaryString = window.atob(pdfBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: "image/png" });
+    FileSaver.saveAs(blob, fileName);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // Convert to File Png from HTML
