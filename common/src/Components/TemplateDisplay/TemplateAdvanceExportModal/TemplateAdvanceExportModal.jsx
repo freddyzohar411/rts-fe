@@ -61,14 +61,6 @@ const TemplateAdvanceExportModal = ({
   );
 
   useEffect(() => {
-    // if (content === null) {
-    //   setTemplateContent("");
-    //   setShowContent({
-    //     oldHtml: content,
-    //     html: "",
-    //     styleTag: "",
-    //   });
-    // }
     setTemplateContent(content);
   }, [content]);
 
@@ -299,9 +291,10 @@ const TemplateAdvanceExportModal = ({
       setSelectedContentAndProcessed();
       return;
     }
-    if (content || templateContent) {
+    // if (content || templateContent) {
+    if (templateContent && templateContent !== "") {
       const removeEditableContent =
-        TemplateHelper.removeContentEditableAndStyles(content);
+        TemplateHelper.removeContentEditableAndStyles(templateContent);
 
       const convertTableAttributesContent =
         TemplateHelper.convertStyleToAttributesTable(removeEditableContent);

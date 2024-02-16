@@ -117,11 +117,10 @@ function SubmitToClient({
                     type="button"
                     className="btn btn-custom-primary"
                     onClick={() => {
-                      // setSendEmailModal(true);
                       dispatch(
                         Actions.setEmailOpen({
                           category: "Email Templates",
-                          attachmentCategory: "Email Templates",
+                          attachmentCategory: "CV",
                         })
                       );
                     }}

@@ -11,23 +11,35 @@ import {
   TabContent,
   TabPane,
   Button,
+  UncontrolledDropdown,
+  DropdownItem,
+  DropdownToggle,
+  DropdownMenu,
 } from "reactstrap";
 import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
 import { TemplateDisplayV3, TemplateExportButtons } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common";
 import { TemplateAdvanceExportModal } from "@workspace/common";
+import { ExportHelper, TemplateHelper } from "@workspace/common";
 
-function ConditionalOffer({ templateData, closeOffcanvas, candidateId, jobId }) {
+function ConditionalOffer({
+  templateData,
+  closeOffcanvas,
+  candidateId,
+  jobId,
+}) {
   const [activeTab, setActiveTab] = useState("1");
   const [conditionalOfferContent, setConditionalOfferContent] = useState("");
   const [releaseValue, setReleaseValue] = useState("");
-  const { allModuleData, isAllLoading } = UseTemplateModuleDataHook.useTemplateModuleData({
-    candidateId: candidateId,
-    jobId: jobId,
-  });
+  const { allModuleData, isAllLoading } =
+    UseTemplateModuleDataHook.useTemplateModuleData({
+      candidateId: candidateId,
+      jobId: jobId,
+    });
   const [templateDownloadModalShow, setTemplateDownloadModalShow] =
     useState(false);
+  const [downloadLoading, setDownloadLoading] = useState(false);
 
   // Handle realease event
   const handleRelease = () => {
@@ -36,6 +48,33 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId, jobId }) 
     } else {
       closeOffcanvas();
     }
+  };
+
+  const downloadHandler = async (content, type) => {
+    if (!content) return;
+    const processedTemplate =
+      await TemplateHelper.setSelectedContentAndProcessed(
+        content,
+        allModuleData
+      );
+
+    if (type === "pdf") {
+      await ExportHelper.exportBackendHtml2Pdf(
+        processedTemplate.html,
+        {
+          unit: "in",
+          pageType: "A4",
+          pageOrientation: "portrait",
+          marginTop: 0,
+          marginBottom: 0,
+          marginLeft: 0,
+          marginRight: 0,
+          exportType: "pdf",
+          fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}_ConditionOffer`,
+        },
+        processedTemplate.styleTag
+      );
+    }s
   };
 
   return (
@@ -105,9 +144,43 @@ function ConditionalOffer({ templateData, closeOffcanvas, candidateId, jobId }) 
         </TabContent>
         <div className="d-flex justify-content-end gap-3">
           {activeTab == "3" && (
-            <Button onClick={() => setTemplateDownloadModalShow(true)}>
-              Download
-            </Button>
+            // <Button onClick={() => setTemplateDownloadModalShow(true)}>
+            //   Download
+            // </Button>
+            <UncontrolledDropdown className="btn-group">
+              <Button
+                type="submit"
+                className="btn btn-custom-primary"
+                onClick={async () => {
+                  // Download pdf here
+                  setDownloadLoading(true);
+                  await downloadHandler(templateData?.content, "pdf");
+                  setDownloadLoading(false);
+                }}
+              >
+                {downloadLoading ? "Downloading..." : "Download"}
+              </Button>
+              <DropdownToggle
+                tag="button"
+                type="button"
+                className="btn btn-custom-primary"
+                split
+              >
+                <span className="visually-hidden">Toggle Dropdown</span>
+              </DropdownToggle>
+              <DropdownMenu className="dropdown-menu-end">
+                {/* Start here */}
+                <li>
+                  <DropdownItem
+                    onClick={() => {
+                      setTemplateDownloadModalShow(true);
+                    }}
+                  >
+                    Advanced Options
+                  </DropdownItem>
+                </li>
+              </DropdownMenu>
+            </UncontrolledDropdown>
           )}
           {activeTab == "1" && (
             <Input

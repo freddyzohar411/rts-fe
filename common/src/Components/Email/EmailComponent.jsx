@@ -31,6 +31,7 @@ import TemplatePreviewModal from "../TemplateDisplay/TemplatePreviewModal/Templa
 import { generateOptions } from "./pdfOption";
 import TemplateAdvanceExportModal from "../TemplateDisplay/TemplateAdvanceExportModal/TemplateAdvanceExportModal";
 import * as BackendHelper from "../../helpers/backend_helper";
+import "./EmailComponent.scss";
 
 function EmailComponent() {
   const dispatch = useDispatch();
@@ -219,37 +220,35 @@ function EmailComponent() {
     window.URL.revokeObjectURL(url);
     a.remove();
   };
+  //   const processedContent = await TemplateHelper.runEffects(
+  //     templateContent,
+  //     null,
+  //     allData,
+  //     true
+  //   );
+  //   const removeEditableContent =
+  //     TemplateHelper.removeContentEditableAndStyles(processedContent);
 
-  const setSelectedContentAndProcessed = async (templateContent, allData) => {
-    const processedContent = await TemplateHelper.runEffects(
-      templateContent,
-      null,
-      allData,
-      true
-    );
-    const removeEditableContent =
-      TemplateHelper.removeContentEditableAndStyles(processedContent);
+  //   const convertTableAttributesContent =
+  //     TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
 
-    const convertTableAttributesContent =
-      TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
-
-    const convertInlineStylesContent =
-      TemplateHelper.convertInlineStylesToClasses(
-        convertTableAttributesContent
-      );
-    return convertInlineStylesContent;
-  };
+  //   const convertInlineStylesContent =
+  //     TemplateHelper.convertInlineStylesToClasses(
+  //       convertTableAttributesContent
+  //     );
+  //   return convertInlineStylesContent;
+  // };
 
   const attachmentTemplate = async (id) => {
     const filterTemplate = attachmentTemplates.find(
       (template) => template.id === id
     );
     if (!filterTemplate) return;
-    const processedTemplate = await setSelectedContentAndProcessed(
-      filterTemplate.content,
-      allModuleData
-    );
-    console.log("processedTemplate", processedTemplate);
+    const processedTemplate =
+      await TemplateHelper.setSelectedContentAndProcessed(
+        filterTemplate.content,
+        allModuleData
+      );
 
     if (processedTemplate) {
       const file = await ExportHelper.exportBackendHtml2PdfFile(
@@ -270,8 +269,6 @@ function EmailComponent() {
       setAttachments([...attachments, file]);
     }
   };
-
-  console.log("All Module Data", allModuleData);
 
   return (
     <React.Fragment>
@@ -517,24 +514,28 @@ function EmailComponent() {
                               <DropdownItem>
                                 <div
                                   className="d-flex justify-content-between align-items-center"
-                                  style={{ width: "150px" }}
+                                  style={{ width: "175px" }}
                                 >
                                   <span
                                     onClick={async () => {
                                       attachmentTemplate(template.id);
                                     }}
+                                    className="cursor-pointer template-name flex-grow-1"
                                   >
                                     {template.name}
                                   </span>
-                                  <i
-                                    className="ri-more-line fs-5"
-                                    onClick={() => {
-                                      setAttachmentTemplateSelected(
-                                        template.content
-                                      );
-                                      setTemplateAttachmentModalShow(true)
-                                    }}
-                                  ></i>
+                                  <div className="d-flex gap-1 align-items-center">
+                                  <span style={{color:"#D3D3D3"}}>|</span>
+                                    <i
+                                      className="ri-more-line fs-5 more-icon cursor-pointer"
+                                      onClick={() => {
+                                        setAttachmentTemplateSelected(
+                                          template.content
+                                        );
+                                        setTemplateAttachmentModalShow(true);
+                                      }}
+                                    ></i>
+                                  </div>
                                 </div>
                               </DropdownItem>
                             </li>
@@ -544,7 +545,7 @@ function EmailComponent() {
                         <li>
                           <DropdownItem
                             onClick={() => {
-                              setTemplateAttachmentModalShow(true)
+                              setTemplateAttachmentModalShow(true);
                             }}
                           >
                             Attach Template
@@ -602,7 +603,7 @@ function EmailComponent() {
           }}
           allData={allModuleData}
           closeModalCallback={() => {
-            setAttachmentTemplateSelected(null);
+            setAttachmentTemplateSelected("");
           }}
         />
         {isMinimized && (

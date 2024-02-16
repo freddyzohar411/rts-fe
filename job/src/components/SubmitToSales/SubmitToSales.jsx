@@ -119,7 +119,6 @@ function SubmitToSales({
                         Actions.setEmailOpen({
                           category: "Email Templates",
                           attachmentCategory: "CV",
-                          // subCategory: "sale",
                         })
                       );
                     }}

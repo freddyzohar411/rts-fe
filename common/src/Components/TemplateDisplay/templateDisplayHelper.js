@@ -248,6 +248,7 @@ export function replacePageBreaks2(htmlString) {
 
 export function replacePageBreakPlaceHolder(htmlString) {
   // Use a global regular expression to find and replace all occurrences
+  if (!htmlString) return;
   var replacedString = htmlString.replace(
     /<!--\s*pagebreak\s*-->/gi,
     '<p style="page-break-before: always;"></p>'
@@ -355,6 +356,26 @@ export function addCssStyleForAlignAttribute(htmlString) {
 
   // Serialize the DOM back to a string
   return root.toString();
+}
+
+export async function setSelectedContentAndProcessed(templateContent, allData) {
+  const processedContent = await runEffects(
+    templateContent,
+    null,
+    allData,
+    true
+  );
+  const removeEditableContent =
+    removeContentEditableAndStyles(processedContent);
+
+  const convertTableAttributesContent = convertStyleToAttributesTable(
+    removeEditableContent
+  );
+
+  const convertInlineStylesContent = convertInlineStylesToClasses(
+    convertTableAttributesContent
+  );
+  return convertInlineStylesContent;
 }
 
 // ============================== Helper Function ===============================
@@ -577,10 +598,10 @@ export function addCssStyleForAlignAttribute(htmlString) {
 //     let fontColor = null;
 //     let fontFamily = null;
 //     let marginStyle = null;
-  
+
 //     while (node && node !== root) {
 //       const style = node.attributes && node.attributes.style;
-  
+
 //       if (!fontStyle && node.tagName === "EM") fontStyle = "italic";
 //       if (!fontWeight && node.tagName === "STRONG") fontWeight = "bold";
 //       if (!textDecoration) {
@@ -588,17 +609,17 @@ export function addCssStyleForAlignAttribute(htmlString) {
 //         if (node.tagName === "S") textDecoration = "line-through";
 //       }
 //       if (!fontItalicStyle && style?.includes("font-style: italic;")) fontItalicStyle = "italic";
-  
+
 //       if (!fontColor) {
 //         let foundColor = style?.match(/(?<!-)color:\s*([^;]+);?/i)?.[1];
 //         if (foundColor) fontColor = foundColor;
 //       }
-  
+
 //       if (!fontFamily) {
 //         let foundFamily = style?.match(/font-family:\s*([^;]+);?/i)?.[1];
 //         if (foundFamily) fontFamily = foundFamily;
 //       }
-  
+
 //       if (!marginStyle) {
 //         let foundMargin = style?.match(/margin:\s*([^;]+);?/i)?.[1];
 //         if (foundMargin) {
@@ -615,7 +636,7 @@ export function addCssStyleForAlignAttribute(htmlString) {
 //       }
 //       node = node.parentNode; // Continue with the next parent.
 //     }
-  
+
 //     // Construct the final style string from the collected values.
 //     let finalStyle = "";
 //     if (fontStyle) finalStyle += `font-style: ${fontStyle}; `;
@@ -625,10 +646,10 @@ export function addCssStyleForAlignAttribute(htmlString) {
 //     if (fontColor) finalStyle += `color: ${fontColor}; `;
 //     if (fontFamily) finalStyle += `font-family: ${fontFamily}; `;
 //     if (marginStyle) finalStyle += `margin: ${marginStyle}; `;
-  
+
 //     return finalStyle;
 //   }
-  
+
 //   // function recursiveTraverse(node, inheritedFontSize) {
 //   //   if (node.nodeType === 1) {
 //   //     // Ensure node is an element.
@@ -743,21 +764,24 @@ function wrapTextWithIns(htmlString) {
       h5: "10pt",
       h6: "8pt",
     };
-  
+
     while (node && node !== root) {
       const style = node.attributes && node.attributes.style;
       let fontSize = style ? style.match(/font-size:\s*([^;]+);?/i)?.[1] : null;
-  
+
       // Check if the node is a heading and has a mapped size.
       if (!fontSize && headingSizeMapping[node.tagName.toLowerCase()]) {
         return headingSizeMapping[node.tagName.toLowerCase()];
       }
-  
+
       if (fontSize) {
         if (fontSize.endsWith("%")) {
           fontSize = convertPercentageToPt(fontSize, inheritedFontSize);
         } else if (fontSize.toLowerCase() in keywordMapping) {
-          fontSize = convertKeywordToPt(fontSize.toLowerCase(), inheritedFontSize);
+          fontSize = convertKeywordToPt(
+            fontSize.toLowerCase(),
+            inheritedFontSize
+          );
         }
         return fontSize;
       }
@@ -768,14 +792,33 @@ function wrapTextWithIns(htmlString) {
 
   function checkParentStyle(node) {
     // Initialize variables for storing the closest style definitions.
-    let fontStyle, fontWeight, textDecoration, fontItalicStyle, fontColor, fontFamily, marginStyle = null;
-  
+    let fontStyle,
+      fontWeight,
+      textDecoration,
+      fontItalicStyle,
+      fontColor,
+      fontFamily,
+      marginStyle = null;
+
     // Check and gather styles from ancestors.
     let currentNode = node;
-    while (currentNode && currentNode !== root && (fontStyle === null || fontWeight === null || textDecoration === null || fontItalicStyle === null || fontColor === null || fontFamily === null || marginStyle === null)) {
+    while (
+      currentNode &&
+      currentNode !== root &&
+      (fontStyle === null ||
+        fontWeight === null ||
+        textDecoration === null ||
+        fontItalicStyle === null ||
+        fontColor === null ||
+        fontFamily === null ||
+        marginStyle === null)
+    ) {
       const style = currentNode.attributes && currentNode.attributes.style;
-  
-      if (!fontStyle && (currentNode.tagName === "EM" || style?.includes("font-style: italic;"))) {
+
+      if (
+        !fontStyle &&
+        (currentNode.tagName === "EM" || style?.includes("font-style: italic;"))
+      ) {
         fontStyle = "italic";
       }
       if (!fontWeight) {
@@ -809,18 +852,22 @@ function wrapTextWithIns(htmlString) {
         } else {
           // Look for individual margins if the shorthand hasn't been found.
           ["top", "right", "bottom", "left"].forEach((side) => {
-            let marginSide = style?.match(new RegExp(`margin-${side}:\s*([^;]+);?`, "i"))?.[1];
+            let marginSide = style?.match(
+              new RegExp(`margin-${side}:\s*([^;]+);?`, "i")
+            )?.[1];
             if (marginSide) {
-              marginStyle = marginStyle ? `${marginStyle}; margin-${side}: ${marginSide}` : `margin-${side}: ${marginSide}`;
+              marginStyle = marginStyle
+                ? `${marginStyle}; margin-${side}: ${marginSide}`
+                : `margin-${side}: ${marginSide}`;
             }
           });
         }
       }
-  
+
       // Move to the next parent node.
       currentNode = currentNode.parentNode;
     }
-  
+
     // Construct the final style string from the collected values.
     let finalStyle = "";
     if (fontStyle) finalStyle += `font-style: ${fontStyle}; `;
@@ -830,10 +877,9 @@ function wrapTextWithIns(htmlString) {
     if (fontColor) finalStyle += `color: ${fontColor}; `;
     if (fontFamily) finalStyle += `font-family: ${fontFamily}; `;
     if (marginStyle) finalStyle += `margin: ${marginStyle}; `;
-  
+
     return finalStyle;
   }
-  
 
   function recursiveTraverse(node, inheritedFontSize) {
     if (node instanceof HTMLElement) {
@@ -1115,6 +1161,7 @@ function convertPaddingToMarginAndMerge(htmlString) {
 
 // Private function helpers ===============================================
 function convertInlineWidthAndHeightToAttributes(htmlString) {
+  if (!htmlString) return;
   return htmlString.replace(
     /<(table|tr|td|th)\s+([^>]*)style="([^"]*)"/gi,
     function (match, tag, otherAttributes, style) {
@@ -1136,6 +1183,7 @@ function convertInlineWidthAndHeightToAttributes(htmlString) {
 }
 
 function convertAlignmentToAttributesTable(htmlString) {
+  if (!htmlString) return;
   return htmlString.replace(
     /<table([^>]*)style="([^"]*)"/gi,
     function (match, preStyle, style) {
