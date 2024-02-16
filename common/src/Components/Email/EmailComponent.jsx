@@ -43,6 +43,8 @@ function EmailComponent() {
   const [formSchema, setFormSchema] = useState(schema);
   const [templateData, setTemplateData] = useState(null);
   const [attachments, setAttachments] = useState([]);
+  const [attachmentTemplateSelected, setAttachmentTemplateSelected] =
+    useState(null);
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
   const [templateAttachmentModalShow, setTemplateAttachmentModalShow] =
     useState(false);
@@ -235,7 +237,7 @@ function EmailComponent() {
       TemplateHelper.convertInlineStylesToClasses(
         convertTableAttributesContent
       );
-      return convertInlineStylesContent;
+    return convertInlineStylesContent;
   };
 
   const attachmentTemplate = async (id) => {
@@ -247,7 +249,7 @@ function EmailComponent() {
       filterTemplate.content,
       allModuleData
     );
-      console.log("processedTemplate", processedTemplate);
+    console.log("processedTemplate", processedTemplate);
 
     if (processedTemplate) {
       const file = await ExportHelper.exportBackendHtml2PdfFile(
@@ -261,10 +263,10 @@ function EmailComponent() {
           marginLeft: 0,
           marginRight: 0,
           exportType: "pdf",
-          fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`
+          fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`,
         },
         processedTemplate.styleTag
-      )
+      );
       setAttachments([...attachments, file]);
     }
   };
@@ -512,21 +514,37 @@ function EmailComponent() {
                         {attachmentTemplates.map((template) => {
                           return (
                             <li key={template.id}>
-                              <DropdownItem
-                                onClick={async () => {
-                                  attachmentTemplate(template.id);
-                                }}
-                              >
-                                {template.name}
+                              <DropdownItem>
+                                <div
+                                  className="d-flex justify-content-between align-items-center"
+                                  style={{ width: "150px" }}
+                                >
+                                  <span
+                                    onClick={async () => {
+                                      attachmentTemplate(template.id);
+                                    }}
+                                  >
+                                    {template.name}
+                                  </span>
+                                  <i
+                                    className="ri-more-line fs-5"
+                                    onClick={() => {
+                                      setAttachmentTemplateSelected(
+                                        template.content
+                                      );
+                                      setTemplateAttachmentModalShow(true)
+                                    }}
+                                  ></i>
+                                </div>
                               </DropdownItem>
                             </li>
                           );
                         })}
-                        <hr style={{margin: 0}}/>
+                        <hr style={{ margin: 0 }} />
                         <li>
                           <DropdownItem
-                            onClick={async () => {
-                              setTemplateAttachmentModalShow(true);
+                            onClick={() => {
+                              setTemplateAttachmentModalShow(true)
                             }}
                           >
                             Attach Template
@@ -574,6 +592,7 @@ function EmailComponent() {
           </Modal>
         )}
         <TemplateAdvanceExportModal
+          content={attachmentTemplateSelected}
           showInsertModal={templateAttachmentModalShow}
           setShowInsertModal={setTemplateAttachmentModalShow}
           toExport={false}
@@ -582,6 +601,9 @@ function EmailComponent() {
             setAttachments([...attachments, file]);
           }}
           allData={allModuleData}
+          closeModalCallback={() => {
+            setAttachmentTemplateSelected(null);
+          }}
         />
         {isMinimized && (
           <div

@@ -26,6 +26,7 @@ const TemplateAdvanceExportModal = ({
   toExport = true,
   attachmentCallback,
   allData,
+  closeModalCallback = null,
 }) => {
   const dispatch = useDispatch();
   const [templateSettings, setTemplateSettings] = useState({
@@ -58,6 +59,28 @@ const TemplateAdvanceExportModal = ({
   const templatesByCategory = useSelector(
     (state) => state.TemplateReducer.templatesByCategory
   );
+
+  useEffect(() => {
+    // if (content === null) {
+    //   setTemplateContent("");
+    //   setShowContent({
+    //     oldHtml: content,
+    //     html: "",
+    //     styleTag: "",
+    //   });
+    // }
+    setTemplateContent(content);
+  }, [content]);
+
+  useEffect(() => {
+    if (templateContent == null) {
+      setShowContent({
+        oldHtml: content,
+        html: "",
+        styleTag: "",
+      });
+    }
+  }, [templateContent]);
 
   useEffect(() => {
     if (showInsertModal) {
@@ -98,6 +121,10 @@ const TemplateAdvanceExportModal = ({
         html: "",
         styleTag: "",
       });
+    }
+
+    if (closeModalCallback) {
+      closeModalCallback();
     }
   };
 
