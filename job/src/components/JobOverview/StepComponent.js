@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Progress, Popover, PopoverBody } from "reactstrap";
+import { Progress, UncontrolledPopover, PopoverBody } from "reactstrap";
 import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
 
-function StepComponent({ index, maxOrder, data, isRejected }) {
+function StepComponent({ index, maxOrder, data, isRejected, candidateId }) {
   const [toggleInterview, setToggleInterview] = useState(false);
   const date = data?.date;
   const status = data?.status;
@@ -36,7 +36,10 @@ function StepComponent({ index, maxOrder, data, isRejected }) {
 
   return (
     <React.Fragment>
-      <div id={`Popover-${index}`} className="step-component pt-2">
+      <div
+        id={`Popover-${index}-${candidateId}`}
+        className="step-component pt-2"
+      >
         <div className="d-flex gap-2 flex-column justify-content-center align-items-center gap-1">
           <div className="d-flex flex-row justify-content-center align-items-center w-100">
             {index !== 0 ? (
@@ -67,9 +70,6 @@ function StepComponent({ index, maxOrder, data, isRejected }) {
                 flexShrink: 0,
                 flexGrow: 0,
                 flexBasis: "auto",
-              }}
-              onClick={() => {
-                setToggleInterview(!toggleInterview);
               }}
             >
               {index === 5 && (
@@ -106,18 +106,18 @@ function StepComponent({ index, maxOrder, data, isRejected }) {
       </div>
       {/* Interview Schedule Pop Up */}
       {index === 5 && (
-        <Popover
+        <UncontrolledPopover
           className="custom-popover"
           placement="bottom"
           isOpen={toggleInterview}
-          target={`Popover-${index}`}
+          target={`Popover-${index}-${candidateId}`}
           trigger="legacy"
           toggle={() => setToggleInterview(!toggleInterview)}
         >
           <PopoverBody>
-            <InterviewPopUp currentStep={0} />
+            <InterviewPopUp currentStep={1} />
           </PopoverBody>
-        </Popover>
+        </UncontrolledPopover>
       )}
     </React.Fragment>
   );

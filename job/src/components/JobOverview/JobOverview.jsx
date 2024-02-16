@@ -26,7 +26,7 @@ import {
   tagReset,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 import "./StepComponent.scss";
 import Skeleton from "react-loading-skeleton";
@@ -609,6 +609,7 @@ function JobOverview() {
                                   maxOrder={maxOrder}
                                   isRejected={isRejected}
                                   data={data?.timeline?.[step]}
+                                  candidateId={data?.candidate?.id}
                                 />
                               </td>
                             ))}

@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Progress } from "reactstrap";
+
 function InterviewStepComponent({ header, currentStep, index }) {
   const [startProgressBarValue, setStartProgressBarValue] = useState(0);
   const [endProgressBarValue, setEndProgressBarValue] = useState(0);
 
   useEffect(() => {
     if (currentStep > index) {
-        setStartProgressBarValue(100);
-        setEndProgressBarValue(100);
-      } else if (currentStep === index) {
-        setStartProgressBarValue(100);
-        setEndProgressBarValue(0);
-      } else if (currentStep < index) {
-        setStartProgressBarValue(0);
-        setEndProgressBarValue(0);
-      }
+      setStartProgressBarValue(100);
+      setEndProgressBarValue(100);
+    } else if (currentStep === index) {
+      setStartProgressBarValue(100);
+      setEndProgressBarValue(0);
+    } else if (currentStep < index) {
+      setStartProgressBarValue(0);
+      setEndProgressBarValue(0);
+    }
   }, [currentStep, index]);
 
   return (
