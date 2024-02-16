@@ -380,7 +380,6 @@ const EditorElement2 = ({
 
   return (
     <>
-      <img src={base64ImgLogo} alt="Avensys Logo" width="150" />
       <TemplateAdvanceExportModal
         content={formik?.values?.[name]}
         showInsertModal={showExportModal}
@@ -767,9 +766,9 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "insertLogo | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
+            "undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
-            "bullist numlist outdent indent | hr | pagebreak | insertHeader exitHeader removeHeader |" +
+            "bullist numlist outdent indent | hr | pagebreak | insertLogo insertHeader exitHeader removeHeader |" +
             "removeformat | searchreplace |" +
             "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPreviewButton | help",
           // newline_behavior: "invert",
