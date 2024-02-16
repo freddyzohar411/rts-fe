@@ -15,6 +15,7 @@ import { ExportHelper } from "../../..";
 import { useDispatch, useSelector } from "react-redux";
 import * as TemplateActions from "../../../../../template/src/store/template/action";
 import * as TemplateHelper from "../templateDisplayHelper";
+import AvensysLogo from "../../../assets/images/Avensys-Logo.png";
 import "./TemplateAdvanceExportModal.scss";
 
 const TemplateAdvanceExportModal = ({
