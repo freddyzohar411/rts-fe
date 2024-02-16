@@ -333,6 +333,7 @@ function JobOverview() {
             templateData={templateData}
             closeOffcanvas={closeOffcanvas}
             candidateId={candidateId}
+            jobId={parseInt(jobId)}
           />
         );
       case 7:

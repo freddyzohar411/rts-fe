@@ -18,12 +18,13 @@ import { TemplateDisplayV3, TemplateExportButtons } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common";
 import { TemplateAdvanceExportModal } from "@workspace/common";
 
-function ConditionalOffer({ templateData, closeOffcanvas, candidateId }) {
+function ConditionalOffer({ templateData, closeOffcanvas, candidateId, jobId }) {
   const [activeTab, setActiveTab] = useState("1");
   const [conditionalOfferContent, setConditionalOfferContent] = useState("");
   const [releaseValue, setReleaseValue] = useState("");
   const { allModuleData, isAllLoading } = UseTemplateModuleDataHook.useTemplateModuleData({
     candidateId: candidateId,
+    jobId: jobId,
   });
   const [templateDownloadModalShow, setTemplateDownloadModalShow] =
     useState(false);
