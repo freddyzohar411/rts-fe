@@ -45,7 +45,7 @@ const TemplateAdvanceExportModal = ({
   const [templateSelected, setTemplateSelected] = useState("");
   const [templateContent, setTemplateContent] = useState("");
   const [templateList, setTemplateList] = useState([]);
-  const [showContent, setShowContent] = useState( {
+  const [showContent, setShowContent] = useState({
     oldHtml: content,
     html: "",
     styleTag: "",
@@ -91,8 +91,14 @@ const TemplateAdvanceExportModal = ({
     setShowInsertModal(false);
     setTemplateSelected("");
     setCategorySelected("");
-    setTemplateContent("");
-    setShowContent({});
+    if (!toExport) {
+      setTemplateContent("");
+      setShowContent({
+        oldHtml: content,
+        html: "",
+        styleTag: "",
+      });
+    }
   };
 
   const handleExport = async () => {
@@ -237,13 +243,6 @@ const TemplateAdvanceExportModal = ({
   };
 
   useEffect(() => {
-    if (
-      (templateContent == "" || templateContent == null) &&
-      (content == "" || content == null)
-    ) {
-      setShowContent({});
-      return;
-    }
     const setSelectedContentAndProcessed = async () => {
       const processedContent = await TemplateHelper.runEffects(
         templateContent,
@@ -295,6 +294,9 @@ const TemplateAdvanceExportModal = ({
   // Template selected will show the preview
   useEffect(() => {
     console.log("Template Selected", templateSelected);
+    if (toExport) {
+      return;
+    }
     if (
       !templateSelected ||
       templateSelected === "" ||
@@ -313,8 +315,8 @@ const TemplateAdvanceExportModal = ({
     }
   }, [templateSelected]);
 
-  console.log("Style Tag", showContent.styleTag);
-  console.log("showContent", showContent.html);
+  // console.log("Style Tag", showContent.styleTag);
+  // console.log("showContent", showContent.html);
 
   return (
     <Modal

@@ -602,7 +602,7 @@ export async function exportBackendHtml2Docx(
   cssString = ""
 ) {
   let content = TemplateDisplayHelper.replacePageBreaks(htmlString);
-  // content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
+  content = TemplateDisplayHelper.convertStyleToAttributesTable(content);
 
   const styleTag = createStyleTag(options, false);
 
