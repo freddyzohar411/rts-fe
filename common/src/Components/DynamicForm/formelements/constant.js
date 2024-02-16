@@ -20,6 +20,6 @@ export const candidateStatus = [
   { value: "REJECTED", label: "Profile Rejected" },
   {
     value: "COMPLETED",
-    label: "Ready to join",
+    label: "Profile Selected",
   },
 ];
