@@ -16,8 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import * as TemplateActions from "../../../../../template/src/store/template/action";
 import * as TemplateHelper from "../templateDisplayHelper";
 import "./TemplateAdvanceExportModal.scss";
-import { toHaveStyle } from "@testing-library/jest-dom/matchers";
-import { toast } from "react-toastify";
 
 const TemplateAdvanceExportModal = ({
   content,
@@ -45,7 +43,7 @@ const TemplateAdvanceExportModal = ({
   const [templateSelected, setTemplateSelected] = useState("");
   const [templateContent, setTemplateContent] = useState("");
   const [templateList, setTemplateList] = useState([]);
-  const [showContent, setShowContent] = useState( {
+  const [showContent, setShowContent] = useState({
     oldHtml: content,
     html: "",
     styleTag: "",
@@ -89,17 +87,10 @@ const TemplateAdvanceExportModal = ({
 
   const closeModal = () => {
     setShowInsertModal(false);
-    setTemplateSelected("");
-    setCategorySelected("");
-    setTemplateContent("");
-    setShowContent({});
+    // setShowContent("");
   };
 
   const handleExport = async () => {
-    if (!showContent.html) {
-      toast.error("Please select a template first");
-      return;
-    }
     if (templateSettings.exportType === "pdf") {
       if (toExport) {
         await ExportHelper.exportBackendHtml2Pdf(
@@ -237,13 +228,6 @@ const TemplateAdvanceExportModal = ({
   };
 
   useEffect(() => {
-    if (
-      (templateContent == "" || templateContent == null) &&
-      (content == "" || content == null)
-    ) {
-      setShowContent({});
-      return;
-    }
     const setSelectedContentAndProcessed = async () => {
       const processedContent = await TemplateHelper.runEffects(
         templateContent,
@@ -292,29 +276,8 @@ const TemplateAdvanceExportModal = ({
     }
   }, [templateContent, allData, content]);
 
-  // Template selected will show the preview
-  useEffect(() => {
-    console.log("Template Selected", templateSelected);
-    if (
-      !templateSelected ||
-      templateSelected === "" ||
-      templateSelected === null
-    ) {
-      setTemplateContent("");
-      return;
-    }
-    const template = templatesByCategory.filter(
-      (template) =>
-        template.name == templateSelected.value &&
-        template.category === categorySelected.value
-    )[0];
-    if (template) {
-      setTemplateContent(template?.content);
-    }
-  }, [templateSelected]);
-
-  console.log("Style Tag", showContent.styleTag);
-  console.log("showContent", showContent.html);
+  console.log("Style Tag", showContent.styleTag)
+  console.log("showContent", showContent.html)
 
   return (
     <Modal
@@ -362,8 +325,7 @@ const TemplateAdvanceExportModal = ({
                 module={typeData}
               />
             </Col>
-            {/* // Preview Button */}
-            {/* <Col>
+            <Col>
               <Button
                 type="button"
                 className="self-end btn-primary"
@@ -381,7 +343,7 @@ const TemplateAdvanceExportModal = ({
               >
                 Preview
               </Button>
-            </Col> */}
+            </Col>
           </Row>
         )}
       </ModalHeader>

@@ -9,6 +9,7 @@ const TemplateSettingsSideBar = ({
   toExport,
 }) => {
   const [tempSettings, setTempSettings] = useState(settings);
+  const [loading, setLoading] = useState(false);
   const setFirstLetterUpperCase = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -202,10 +203,18 @@ const TemplateSettingsSideBar = ({
           <Button
             className="btn btn-custom-primary"
             onClick={async () => {
+              setLoading(true);
               await callback();
+              setLoading(false);
             }}
           >
-            {toExport ? "Export" : "Attach"}
+            {toExport
+              ? loading
+                ? "Exporting..."
+                : "Export"
+              : loading
+              ? "Attaching..."
+              : "Attach"}
           </Button>
         </Col>
       </Row>
