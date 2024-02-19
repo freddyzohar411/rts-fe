@@ -295,24 +295,24 @@ const Navdata = () => {
           link: "/settings/general",
           parentId: "settings",
         },
-        {
-          id: "usersControl",
-          label: "Users and Control",
-          link: "/settings/control",
-          parentId: "settings",
-        },
-        {
-          id: "customisation",
-          label: "Customisation",
-          link: "/settings/customisation",
-          parentId: "settings",
-        },
-        {
-          id: "resumeManagement",
-          label: "Resume Management",
-          link: "/settings/resume-management",
-          parentId: "settings",
-        },
+        // {
+        //   id: "usersControl",
+        //   label: "Users and Control",
+        //   link: "/settings/control",
+        //   parentId: "settings",
+        // },
+        // {
+        //   id: "customisation",
+        //   label: "Customisation",
+        //   link: "/settings/customisation",
+        //   parentId: "settings",
+        // },
+        // {
+        //   id: "resumeManagement",
+        //   label: "Resume Management",
+        //   link: "/settings/resume-management",
+        //   parentId: "settings",
+        // },
       ].filter(Boolean),
     },
   ].filter(Boolean);
