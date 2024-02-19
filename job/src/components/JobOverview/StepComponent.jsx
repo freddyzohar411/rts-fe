@@ -4,7 +4,15 @@ import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
 
-function StepComponent({ index, maxOrder, data, isRejected, candidateId }) {
+function StepComponent({
+  index,
+  maxOrder,
+  data,
+  isRejected,
+  candidateId,
+  timeline,
+  originalOrder,
+}) {
   const [toggleInterview, setToggleInterview] = useState(false);
   const date = data?.date;
   const status = data?.status;
@@ -115,7 +123,12 @@ function StepComponent({ index, maxOrder, data, isRejected, candidateId }) {
           toggle={() => setToggleInterview(!toggleInterview)}
         >
           <PopoverBody>
-            <InterviewPopUp currentStep={1} />
+            <InterviewPopUp
+              index={index}
+              timeline={timeline}
+              maxOrder={maxOrder}
+              originalOrder={originalOrder}
+            />
           </PopoverBody>
         </UncontrolledPopover>
       )}

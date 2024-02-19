@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { SCHEDULE_INTERVIEW } from "./constants";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
-import { Row, Col, Input, Button } from "reactstrap";
+import { Row, Col, Button } from "reactstrap";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
@@ -53,7 +53,7 @@ function ScheduleInterview({ closeOffcanvas, jobId, candidateId }) {
   ) => {
     const payload = {
       jobId: jobId,
-      jobStageId: JOB_STAGE_IDS?.SCHEDULE_INTERVIEW,
+      jobStageId: JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED,
       status: JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),

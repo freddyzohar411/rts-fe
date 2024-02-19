@@ -31,7 +31,7 @@ export const PROFILE_FEEDBACK_OPTIONS = [
   },
   { value: "REJECTED", label: "Profile Rejected" },
   {
-    value: "first_interview_scheduled",
+    value: "COMPLETED",
     label: "1st Interview Scheduled",
   },
 ];

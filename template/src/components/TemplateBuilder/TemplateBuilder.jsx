@@ -286,9 +286,7 @@ const TemplateBuilder = forwardRef(
         const inlineContent2 =
           TemplateHelper.addCssStyleForAlignAttribute(inlineContent);
         setTemplateContent(inlineContent2);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     };
 
     // Convert docx to html (Frontend)

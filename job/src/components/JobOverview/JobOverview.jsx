@@ -41,6 +41,9 @@ import SubmitToSales from "../SubmitToSales/SubmitToSales";
 import SubmitToClient from "../SubmitToClient/SubmitToClient";
 import ProfileFeedbackPending from "../ProfileFeedbackPending/ProfileFeedbackPending";
 import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
+import FirstInterviewFeedbackPending from "../FirstInterviewFeedback/FirstInterviewFeedback";
+import ThirdInterviewFeedbackPending from "../ThirdinterviewFeedback/ThirdinterviewFeedback";
+import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import StepComponent from "./StepComponent";
@@ -164,7 +167,10 @@ function JobOverview() {
       setPageInfoData(jobTimelineData);
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
-        const maxOrder = getMaxOrder(data);
+        let maxOrder = getMaxOrder(data);
+        if (maxOrder >= 6 && maxOrder <= 9) {
+          maxOrder = 5;
+        }
         jsonObject[data?.id] = maxOrder;
       });
       setSkipComboOptions(jsonObject);
@@ -205,18 +211,57 @@ function JobOverview() {
         setStepperState("Profile Feedback Pending");
         break;
       case 5:
-        setStepperState("Schedule Interview");
+        setStepperState("Schedule First Interview");
         break;
       case 6:
-        setStepperState("Conditional Offer");
+        setStepperState("Update 1st Interview Feedback");
         break;
       case 7:
+        setStepperState("Schedule Second Interview");
+        break;
+      case 8:
+        setStepperState("Update 2nd Interview Feedback");
+        break;
+      case 9:
+        setStepperState("Schedule Third Interview");
+        break;
+      case 10:
+        setStepperState("Update 3rd Interview Feedback");
+        break;
+      case 11:
+        setStepperState("Conditional Offer");
+        break;
+      case 12:
         setStepperState("Conditional Offer Status");
         break;
       default:
         setStepperState("");
     }
   }, [activeStep]);
+
+  // Close Preview CV when OffCanvas is Closed
+  useEffect(() => {
+    // Set Category for Template
+    switch (activeStep) {
+      case 2:
+        setSelectedCategory("CV");
+        break;
+      case 3:
+        setSelectedCategory("CV");
+        break;
+      case 11:
+        setSelectedCategory("Conditional Offer");
+        break;
+      default:
+        setSelectedCategory(null);
+    }
+  }, [activeStep]);
+
+  useEffect(() => {
+    if (offcanvasForm === false) {
+      setIsPreviewCV(false);
+    }
+  }, [offcanvasForm]);
 
   const handlePreviewCVClick = () => {
     setIsPreviewCV(true);
@@ -306,6 +351,7 @@ function JobOverview() {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
+            handleIconClick={handleIconClick}
           />
         );
       case 5:
@@ -318,42 +364,58 @@ function JobOverview() {
         );
       case 6:
         return (
+          <FirstInterviewFeedbackPending
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+          />
+        );
+      case 7:
+        return (
+          <ScheduleInterview
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+          />
+        );
+      case 8:
+        return (
+          <SecondInterviewFeedbackPending
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+          />
+        );
+      case 9:
+        return (
+          <ScheduleInterview
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+          />
+        );
+      case 10:
+        return (
+          <ThirdInterviewFeedbackPending
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+          />
+        );
+      case 11:
+        return (
           <ConditionalOffer
             templateData={templateData}
             closeOffcanvas={closeOffcanvas}
             candidateId={candidateId}
           />
         );
-      case 7:
+      case 12:
         return <ConditionalOfferStatus closeOffcanvas={closeOffcanvas} />;
       default:
         return null;
     }
   };
-
-  // Close Preview CV when OffCanvas is Closed
-  useEffect(() => {
-    // Set Category for Template
-    switch (activeStep) {
-      case 2:
-        setSelectedCategory("CV");
-        break;
-      case 3:
-        setSelectedCategory("CV");
-        break;
-      case 6:
-        setSelectedCategory("Conditional Offer");
-        break;
-      default:
-        setSelectedCategory(null);
-    }
-  }, [activeStep]);
-
-  useEffect(() => {
-    if (offcanvasForm === false) {
-      setIsPreviewCV(false);
-    }
-  }, [offcanvasForm]);
 
   const handleSort = (index) => {
     if (index === 0 || index === 1) {
@@ -362,10 +424,12 @@ function JobOverview() {
     }
   };
 
-  const handleIconClick = (id, jobId) => {
-    const activeStep = skipComboOptions[jobId];
+  const handleIconClick = (id, jobId, actStep, openCanvas) => {
+    const activeStep = actStep ?? skipComboOptions[jobId];
     setActiveStep(activeStep);
-    setOffcanvasForm(!offcanvasForm);
+    if (!openCanvas) {
+      setOffcanvasForm(!offcanvasForm);
+    }
     setCandidateId(id);
   };
 
@@ -597,6 +661,10 @@ function JobOverview() {
                       const isRejected =
                         status === JOB_STAGE_STATUS.REJECTED ||
                         status === JOB_STAGE_STATUS.WITHDRAWN;
+                      const originalOrder = maxOrder;
+                      if (maxOrder >= 6 && maxOrder <= 9) {
+                        maxOrder = 5;
+                      }
                       return (
                         <tbody key={index}>
                           <tr className="text-center align-top">
@@ -610,6 +678,8 @@ function JobOverview() {
                                   isRejected={isRejected}
                                   data={data?.timeline?.[step]}
                                   candidateId={data?.candidate?.id}
+                                  timeline={data?.timeline}
+                                  originalOrder={originalOrder}
                                 />
                               </td>
                             ))}
@@ -761,7 +831,7 @@ function JobOverview() {
               </Row>
             </div>
             {/* Template Selector */}
-            {(activeStep === 6 || isPreviewCV) && (
+            {(activeStep === 11 || isPreviewCV) && (
               <Col>
                 <div>
                   <TemplateSelectByCategoryElement

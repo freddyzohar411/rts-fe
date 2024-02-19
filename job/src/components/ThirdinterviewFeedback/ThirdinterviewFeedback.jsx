@@ -2,7 +2,7 @@ import { Form } from "@workspace/common";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FIRST_INTERVIEW_FEEDBACK_PENDING } from "./constants";
+import { THIRD_INTERVIEW_FEEDBACK_PENDING } from "./constants";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Button } from "reactstrap";
@@ -11,7 +11,11 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-function FirstInterviewFeedbackPending({ closeOffcanvas, jobId, candidateId }) {
+function ThirdInterviewFeedbackPending({
+  closeOffcanvas,
+  jobId,
+  candidateId,
+}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -33,7 +37,7 @@ function FirstInterviewFeedbackPending({ closeOffcanvas, jobId, candidateId }) {
   const [formTemplate, setFormTemplate] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchJobForm(FIRST_INTERVIEW_FEEDBACK_PENDING));
+    dispatch(fetchJobForm(THIRD_INTERVIEW_FEEDBACK_PENDING));
   }, []);
 
   useEffect(() => {
@@ -53,12 +57,12 @@ function FirstInterviewFeedbackPending({ closeOffcanvas, jobId, candidateId }) {
   ) => {
     const payload = {
       jobId: jobId,
-      jobStageId: JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED,
-      status: values?.firstInterviewStatus ?? JOB_STAGE_STATUS?.COMPLETED,
+      jobStageId: JOB_STAGE_IDS?.THIRD_INTERVIEW_SCHEDULED,
+      status: values?.secondInterviewStatus ?? JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),
-      jobType: "first_interview_feedback_pending",
+      jobType: "third_interview_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
   };
@@ -114,4 +118,4 @@ function FirstInterviewFeedbackPending({ closeOffcanvas, jobId, candidateId }) {
   );
 }
 
-export default FirstInterviewFeedbackPending;
+export default ThirdInterviewFeedbackPending;
