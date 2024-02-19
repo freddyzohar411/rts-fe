@@ -6,6 +6,9 @@ import {
   VALIDATE_RESET_TOKEN_SUCCESS,
   VALIDATE_RESET_TOKEN_ERROR,
   RESET_FORGET_PASSWORD_META,
+  FORGET_PASSWORD_RESET,
+  FORGET_PASSWORD_RESET_SUCCESS,
+  FORGET_PASSWORD_RESET_ERROR,
 } from "./actionTypes";
 
 export const userForgetPassword = (user, history) => {
@@ -55,3 +58,26 @@ export const resetForgetPasswordMeta = () => {
     type: RESET_FORGET_PASSWORD_META,
   };
 };
+
+export const forgetPasswordReset = (data) => {
+  return {
+    type: FORGET_PASSWORD_RESET,
+    payload: data,
+  };
+}
+
+export const forgetPasswordResetSuccess = (message) => {
+  return {
+    type: FORGET_PASSWORD_RESET_SUCCESS,
+    payload: message,
+  };
+}
+
+export const forgetPasswordResetError = (message) => {
+  return {
+    type: FORGET_PASSWORD_RESET_ERROR,
+    payload: message,
+  };
+}
+
+

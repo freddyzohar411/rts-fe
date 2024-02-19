@@ -18,3 +18,5 @@ export const forgetPassword = (email) => `/api/user/forget-password/${email}`
 // Validate Reset Token
 export const validateResetToken = (token) => "/api/user/validate-forget-password-token?token=" + token;
 
+// Forget reset password
+export const FORGET_RESET_PASSWORD = "/api/user/forget-password/reset";

@@ -33,16 +33,6 @@ const ResetPassword = () => {
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
 
-  // // Use URLSearchParams to parse the query string
-  // const queryParams = new URLSearchParams(location.search);
-  // const token = queryParams.get("token"); // Replace 'example' with your parameter name
-
-  // useEffect(() => {
-  //   if (token) {
-  //     dispatch(validateResetToken(token, navigate));
-  //   }
-  // });
-
   const handleFormSubmit = async (values) => {
       const authUser = JSON.parse(sessionStorage.getItem("authUser"));
       if (authUser) {

@@ -20,7 +20,11 @@ import ParticlesAuth from "../../ParticlesAuth";
 import { initialValues, schema } from "./constants";
 import { loginResetPassword } from "../../store/actions";
 import { encode } from "@workspace/common/src/helpers/string_helper";
-import { validateResetToken } from "../../store/auth/forgetpwd/actions";
+import {
+  forgetPasswordReset,
+  validateResetToken,
+  resetForgetPasswordMeta,
+} from "../../store/auth/forgetpwd/actions";
 
 const ForgetResetPassword = () => {
   document.title = "Reset Password | RTS";
@@ -32,6 +36,9 @@ const ForgetResetPassword = () => {
   );
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
+  const forgetResetPasswordData = useSelector((state) => state.ForgetPassword);
+
+  console.log("forgetResetPasswordData", forgetResetPasswordData);
 
   // Use URLSearchParams to parse the query string
   const queryParams = new URLSearchParams(location.search);
@@ -41,11 +48,26 @@ const ForgetResetPassword = () => {
     if (token) {
       dispatch(validateResetToken(token, navigate));
     }
-  });
+    return () => {
+      dispatch(resetForgetPasswordMeta());
+    };
+  }, [token]);
 
   const handleFormSubmit = async (values) => {
-  
+    const payload = {
+      token,
+      password: encode(values?.password),
+      confirmPassword: encode(values?.confirmPassword),
+    };
+    dispatch(forgetPasswordReset(payload));
   };
+
+  useEffect(() => {
+    if (forgetResetPasswordData?.resetForgetPasswordSuccess) {
+      toast.success("Password reset successfully");
+      navigate("/login");
+    }
+  }, [forgetResetPasswordData?.resetForgetPasswordSuccess]);
 
   return (
     <Formik
@@ -176,10 +198,10 @@ const ForgetResetPassword = () => {
                               className="btn btn-custom-primary w-100 d-flex justify-content-center align-items-center"
                               type="submit"
                             >
-                              <span style={{ marginRight: "5px" }}>
-                                Create New Password
+                              <span style={{ marginRight: "10px" }}>
+                                Reset Password
                               </span>
-                              {resetPasswordMeta?.isLoading && (
+                              {forgetResetPasswordData?.resetForgetPasswordIsLoading && (
                                 <Spinner size="sm">Loading...</Spinner>
                               )}
                             </Button>
