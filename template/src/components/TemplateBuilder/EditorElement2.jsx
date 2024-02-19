@@ -349,12 +349,20 @@ const EditorElement2 = ({
       }
       let headerHtml;
       // Insert an empty header section with a placeholder
+      // if (position === "center") {
+      //   headerHtml = `<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><div style="text-align: center;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      // } else if (position === "right") {
+      //   headerHtml = `<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><div style="text-align: right;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      // } else {
+      //   headerHtml = `<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><div style="text-align: left;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      // }
+
       if (position === "center") {
-        headerHtml = `<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><div style="text-align: center;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+        headerHtml = `<div title="header" contenteditable="true"><div style="text-align: center;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
       } else if (position === "right") {
-        headerHtml = `<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><div style="text-align: right;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+        headerHtml = `<div title="header" contenteditable="true"><div style="text-align: right;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
       } else {
-        headerHtml = `<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><div style="text-align: left;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+        headerHtml = `<div title="header" contenteditable="true"><div style="text-align: left;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
       }
 
       // Insert the header at the beginning of the content
