@@ -39,21 +39,16 @@ const ProfileDropdown = () => {
       >
         <DropdownToggle tag="button" type="button" className="btn">
           <span className="d-flex align-items-center">
-            <img
-              className="rounded-circle header-profile-user"
-              src={avatar1}
-              alt="Header Avatar"
-            />
-            <span className="text-start ms-xl-2">
-              <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
+            <span className="text-start">
+              <span className="d-none d-xl-inline-block fw-medium user-name-text">
                 {userProfile?.firstName} {userProfile?.lastName}
               </span>
             </span>
           </span>
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
-          <h6 className="dropdown-header">Welcome {userName}!</h6>
-          <DropdownItem href={process.env.PUBLIC_URL + "/profile"}>
+          <h6 className="dropdown-header">Welcome {userProfile?.firstName}!</h6>
+          <DropdownItem href={process.env.PUBLIC_URL + "/profile"} hidden>
             <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
             <span className="align-middle">Profile</span>
           </DropdownItem>
