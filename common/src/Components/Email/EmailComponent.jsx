@@ -10,6 +10,7 @@ import {
   DropdownItem,
   DropdownToggle,
   DropdownMenu,
+  Spinner,
 } from "reactstrap";
 import {
   TemplateDisplayV3,
@@ -50,6 +51,7 @@ function EmailComponent() {
   const [templateAttachmentModalShow, setTemplateAttachmentModalShow] =
     useState(false);
   const [attachmentTemplates, setAttachmentTemplates] = useState([]);
+  const [attachmentLoading, setAttachmentLoading] = useState(false);
 
   const {
     loading,
@@ -241,29 +243,36 @@ function EmailComponent() {
       (template) => template.id === id
     );
     if (!filterTemplate) return;
-    const processedTemplate =
-      await TemplateHelper.setSelectedContentAndProcessed(
-        filterTemplate.content,
-        allModuleData
-      );
+    setAttachmentLoading(true);
+    try {
+      const processedTemplate =
+        await TemplateHelper.setSelectedContentAndProcessed(
+          filterTemplate.content,
+          allModuleData
+        );
 
-    if (processedTemplate) {
-      const file = await ExportHelper.exportBackendHtml2PdfFile(
-        processedTemplate.html,
-        {
-          unit: "in",
-          pageType: "A4",
-          pageOrientation: "portrait",
-          marginTop: 0,
-          marginBottom: 0,
-          marginLeft: 0,
-          marginRight: 0,
-          exportType: "pdf",
-          fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`,
-        },
-        processedTemplate.styleTag
-      );
-      setAttachments([...attachments, file]);
+      if (processedTemplate) {
+        const file = await ExportHelper.exportBackendHtml2PdfFile(
+          processedTemplate.html,
+          {
+            unit: "in",
+            pageType: "A4",
+            pageOrientation: "portrait",
+            marginTop: 0,
+            marginBottom: 0,
+            marginLeft: 0,
+            marginRight: 0,
+            exportType: "pdf",
+            fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`,
+          },
+          processedTemplate.styleTag
+        );
+        setAttachments([...attachments, file]);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAttachmentLoading(false);
     }
   };
 
@@ -490,10 +499,19 @@ function EmailComponent() {
                           attachmentRef.current.click();
                         }}
                       >
-                        <i
-                          style={{ fontSize: "1rem" }}
-                          className="ri-attachment-2"
-                        />
+                        {attachmentLoading ? (
+                          <Spinner
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                            }}
+                          />
+                        ) : (
+                          <i
+                            style={{ fontSize: "1rem" }}
+                            className="ri-attachment-2"
+                          />
+                        )}
                       </Button>
                       <DropdownToggle
                         tag="button"
@@ -522,7 +540,7 @@ function EmailComponent() {
                                     {template.name}
                                   </span>
                                   <div className="d-flex gap-1 align-items-center">
-                                  <span style={{color:"#D3D3D3"}}>|</span>
+                                    <span style={{ color: "#D3D3D3" }}>|</span>
                                     <i
                                       className="ri-more-line fs-5 more-icon cursor-pointer"
                                       onClick={() => {
