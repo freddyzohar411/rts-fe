@@ -23,8 +23,6 @@ const EditorElement2 = ({
   const [showExportModal, setShowExportModal] = useState(false);
   const [base64ImgLogo, setBase64ImgLogo] = useState(null);
 
-  console.log("AvensysLogo: ", AvensysLogo);
-
   // Apply canvas style
   function applyCanvasStyle(editor, size, orientation) {
     const sizes = {

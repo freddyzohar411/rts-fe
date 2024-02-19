@@ -313,7 +313,6 @@ const TemplateAdvanceExportModal = ({
 
   // Template selected will show the preview
   useEffect(() => {
-    console.log("Template Selected", templateSelected);
     if (toExport) {
       return;
     }

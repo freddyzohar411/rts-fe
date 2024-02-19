@@ -82,9 +82,6 @@ function EmailComponent() {
     }
   }, [attachmentCategory, attachmentSubcategory]);
 
-  // console.log("attachmentCategory", attachmentCategory);
-  // console.log("attachmentTemplates", attachmentTemplates);
-
   /**
    * Handle form submit event (Formik)
    * @param {*} values
