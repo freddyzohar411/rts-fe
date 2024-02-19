@@ -11,3 +11,10 @@ export const GET_USER_PROFILE = "/api/user/profile";
 
 // PROFILE
 export const LOGIN_RESET_PASSWORD = "/api/user/loginResetPassword";
+
+// FORGET PASSWORD
+export const forgetPassword = (email) => `/api/user/forget-password/${email}`
+
+// Validate Reset Token
+export const validateResetToken = (token) => "/api/user/validate-forget-password-token?token=" + token;
+

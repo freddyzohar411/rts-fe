@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Field, Formik, Form } from "formik";
 import {
   Row,
@@ -12,7 +12,7 @@ import {
   FormFeedback,
   Spinner,
 } from "reactstrap";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
@@ -20,42 +20,32 @@ import ParticlesAuth from "../../ParticlesAuth";
 import { initialValues, schema } from "./constants";
 import { loginResetPassword } from "../../store/actions";
 import { encode } from "@workspace/common/src/helpers/string_helper";
-import { validateResetToken } from "../../store/auth/forgetpwd/actions";
 
 const ResetPassword = () => {
   document.title = "Reset Password | RTS";
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+
   const resetPasswordMeta = useSelector(
     (state) => state.Login.loginResetPasswordMeta
   );
+
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
 
-  // // Use URLSearchParams to parse the query string
-  // const queryParams = new URLSearchParams(location.search);
-  // const token = queryParams.get("token"); // Replace 'example' with your parameter name
-
-  // useEffect(() => {
-  //   if (token) {
-  //     dispatch(validateResetToken(token, navigate));
-  //   }
-  // });
-
   const handleFormSubmit = async (values) => {
-      const authUser = JSON.parse(sessionStorage.getItem("authUser"));
-      if (authUser) {
-        const payload = {
-          userId: authUser?.user?.id,
-          password: encode(values?.password),
-          confirmPassword: encode(values?.confirmPassword),
-        };
-        dispatch(loginResetPassword(payload, navigate));
-      } else {
-        toast.error("Please do login first.");
-        navigate("/login");
-      }
+    const authUser = JSON.parse(sessionStorage.getItem("authUser"));
+    if (authUser) {
+      const payload = {
+        userId: authUser?.user?.id,
+        password: encode(values?.password),
+        confirmPassword: encode(values?.confirmPassword),
+      };
+      dispatch(loginResetPassword(payload, navigate));
+    } else {
+      toast.error("Please do login first.");
+      navigate("/login");
+    }
   };
 
   return (

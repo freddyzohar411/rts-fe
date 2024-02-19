@@ -2,11 +2,17 @@ import {
   FORGET_PASSWORD,
   FORGET_PASSWORD_SUCCESS,
   FORGET_PASSWORD_ERROR,
+  VALIDATE_RESET_TOKEN,
+  VALIDATE_RESET_TOKEN_SUCCESS,
+  VALIDATE_RESET_TOKEN_ERROR,
+  RESET_FORGET_PASSWORD_META,
 } from "./actionTypes";
 
 const initialState = {
   forgetSuccessMsg: null,
   forgetError: null,
+  isLoading: false,
+  tokenValid: null,
 };
 
 const forgetPassword = (state = initialState, action) => {
@@ -14,6 +20,7 @@ const forgetPassword = (state = initialState, action) => {
     case FORGET_PASSWORD:
       state = {
         ...state,
+        isLoading: true,
         forgetSuccessMsg: null,
         forgetError: null,
       };
@@ -21,11 +28,24 @@ const forgetPassword = (state = initialState, action) => {
     case FORGET_PASSWORD_SUCCESS:
       state = {
         ...state,
+        isLoading: false,
         forgetSuccessMsg: action.payload,
       };
       break;
     case FORGET_PASSWORD_ERROR:
+      state = { ...state, forgetError: action.payload, isLoading: false};
+      break;
+    case VALIDATE_RESET_TOKEN:
+      state = { ...state, forgetSuccessMsg: null, forgetError: null, tokenValid: null };
+      break;
+    case VALIDATE_RESET_TOKEN_SUCCESS:
+      state = { ...state, tokenValid: action.payload };
+      break;
+    case VALIDATE_RESET_TOKEN_ERROR:
       state = { ...state, forgetError: action.payload };
+      break;
+    case RESET_FORGET_PASSWORD_META:
+      state = { ...state, forgetSuccessMsg: null, forgetError: null, tokenValid: null, isLoading: false };
       break;
     default:
       state = { ...state };

@@ -22,7 +22,7 @@ import { loginResetPassword } from "../../store/actions";
 import { encode } from "@workspace/common/src/helpers/string_helper";
 import { validateResetToken } from "../../store/auth/forgetpwd/actions";
 
-const ResetPassword = () => {
+const ForgetResetPassword = () => {
   document.title = "Reset Password | RTS";
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,29 +33,18 @@ const ResetPassword = () => {
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
 
-  // // Use URLSearchParams to parse the query string
-  // const queryParams = new URLSearchParams(location.search);
-  // const token = queryParams.get("token"); // Replace 'example' with your parameter name
+  // Use URLSearchParams to parse the query string
+  const queryParams = new URLSearchParams(location.search);
+  const token = queryParams.get("token"); // Replace 'example' with your parameter name
 
-  // useEffect(() => {
-  //   if (token) {
-  //     dispatch(validateResetToken(token, navigate));
-  //   }
-  // });
+  useEffect(() => {
+    if (token) {
+      dispatch(validateResetToken(token, navigate));
+    }
+  });
 
   const handleFormSubmit = async (values) => {
-      const authUser = JSON.parse(sessionStorage.getItem("authUser"));
-      if (authUser) {
-        const payload = {
-          userId: authUser?.user?.id,
-          password: encode(values?.password),
-          confirmPassword: encode(values?.confirmPassword),
-        };
-        dispatch(loginResetPassword(payload, navigate));
-      } else {
-        toast.error("Please do login first.");
-        navigate("/login");
-      }
+  
   };
 
   return (
@@ -90,7 +79,7 @@ const ResetPassword = () => {
                   <Card>
                     <CardBody className="p-4">
                       <div className="text-center my-2">
-                        <h5>First Time Login</h5>
+                        <h5>Reset Password</h5>
                         <div className="d-flex flex-column text-muted mb-2">
                           <span>Please create a new password.</span>
                           {resetPasswordMeta?.isError && (
@@ -209,4 +198,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ForgetResetPassword;

@@ -7,6 +7,8 @@ import {
   GET_VALIDATE,
   GET_USER_PROFILE,
   LOGIN_RESET_PASSWORD,
+  forgetPassword,
+  validateResetToken
 } from "./url_helper";
 
 const { APIClient } = Axios;
@@ -42,3 +44,9 @@ export const getUserProfile = () => api.get(GET_USER_PROFILE);
 
 // First time login reset password
 export const loginResetPwd = (data) => api.create(LOGIN_RESET_PASSWORD, data);
+
+// Forgot Password
+export const  getforgetPassword = (data) => api.get(forgetPassword(data));
+
+// Validate Reset Token
+export const getValidateResetToken = (data) => api.get(validateResetToken(data));
