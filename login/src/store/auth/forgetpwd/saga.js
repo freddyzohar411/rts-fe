@@ -37,8 +37,7 @@ function* forgetUser({ payload: { user, history } }) {
       userForgetPasswordError(error?.message || "Something went wrong")
     );
     console.log("error", error);
-
-    toast.error(error?.message || "Something went wrong, Please try again");
+    // toast.error(error?.message || "Something went wrong, Please try again");
   }
 }
 

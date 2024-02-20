@@ -18,7 +18,6 @@ import { toast } from "react-toastify";
 import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
 import ParticlesAuth from "../../ParticlesAuth";
 import { initialValues, schema } from "./constants";
-import { loginResetPassword } from "../../store/actions";
 import { encode } from "@workspace/common/src/helpers/string_helper";
 import {
   forgetPasswordReset,
@@ -31,18 +30,13 @@ const ForgetResetPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const resetPasswordMeta = useSelector(
-    (state) => state.Login.loginResetPasswordMeta
-  );
+
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
   const forgetResetPasswordData = useSelector((state) => state.ForgetPassword);
 
-  console.log("forgetResetPasswordData", forgetResetPasswordData);
-
-  // Use URLSearchParams to parse the query string
   const queryParams = new URLSearchParams(location.search);
-  const token = queryParams.get("token"); // Replace 'example' with your parameter name
+  const token = queryParams.get("token");
 
   useEffect(() => {
     if (token) {
@@ -104,11 +98,6 @@ const ForgetResetPassword = () => {
                         <h5>Reset Password</h5>
                         <div className="d-flex flex-column text-muted mb-2">
                           <span>Please create a new password.</span>
-                          {resetPasswordMeta?.isError && (
-                            <span className="text-danger">
-                              {resetPasswordMeta?.errorMessage?.message}
-                            </span>
-                          )}
                         </div>
                       </div>
                       <div className="p-2">

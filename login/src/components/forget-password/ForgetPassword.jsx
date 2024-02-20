@@ -11,6 +11,7 @@ import {
   Input,
   Label,
   Form,
+  Spinner,
 } from "reactstrap";
 
 //redux
@@ -72,6 +73,9 @@ const ForgetPasswordPage = (props) => {
   // Inside your component
   const { forgetError, forgetSuccessMsg } = useSelector(selectLayoutProperties);
 
+  console.log("forgetError", forgetError);
+  console.log("forgetSuccessMsg", forgetSuccessMsg);
+
   document.title = "Reset Password | RTS";
 
   return (
@@ -100,32 +104,21 @@ const ForgetPasswordPage = (props) => {
                   <div className="text-center mt-2">
                     <h5 className="text-primary">Forgot Password?</h5>
                     <p className="text-muted">Reset password with Avensys.</p>
-
-                    <lord-icon
-                      src="https://cdn.lordicon.com/rhvddzym.json"
-                      trigger="loop"
-                      colors="primary:#0ab39c"
-                      className="avatar-xl"
-                      style={{ width: "120px", height: "120px" }}
-                    ></lord-icon>
                   </div>
-
-                  <Alert
-                    className="border-0 alert-warning text-center mb-2 mx-2"
-                    role="alert"
-                  >
-                    Enter your email and instructions will be sent to you!
-                  </Alert>
+                  {!forgetSuccessMsg && !forgetError && (
+                    <Alert
+                      className="border-0 alert-warning text-center mb-2 mx-2"
+                      role="alert"
+                    >
+                      Enter your email and instructions will be sent to you!
+                    </Alert>
+                  )}
                   <div className="p-2">
                     {forgetError && forgetError ? (
-                      <Alert color="danger" style={{ marginTop: "13px" }}>
-                        {forgetError}
-                      </Alert>
+                      <Alert color="danger">{forgetError}</Alert>
                     ) : null}
                     {forgetSuccessMsg ? (
-                      <Alert color="success" style={{ marginTop: "13px" }}>
-                        {forgetSuccessMsg}
-                      </Alert>
+                      <Alert color="success">{forgetSuccessMsg}</Alert>
                     ) : null}
                     <Form
                       onSubmit={(e) => {
@@ -163,9 +156,14 @@ const ForgetPasswordPage = (props) => {
                           type="submit"
                           isDisabled={forgetPasswordData?.isLoading}
                         >
-                          {forgetPasswordData.isLoading
-                            ? "Sending Link..."
-                            : "Send Reset Password Link"}
+                          {forgetPasswordData.isLoading ? (
+                            <>
+                              <span style={{marginRight:"10px"}}>Sending Link</span>
+                              <Spinner size="sm">Loading...</Spinner>
+                            </>
+                          ) : (
+                            "Send Reset Password Link"
+                          )}
                         </button>
                       </div>
                     </Form>

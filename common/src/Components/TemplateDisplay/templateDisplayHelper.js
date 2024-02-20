@@ -47,7 +47,7 @@ export async function replaceTemplate(htmlString, mappedVariableData) {
 }
 
 /**
- *
+ * Replace template placeholders only with recursion
  * @param {*} htmlString
  * @param {*} mappedVariableData
  * @returns
@@ -65,15 +65,6 @@ export async function replaceTemplateOnly(htmlString) {
   // const matches = htmlString.match(pattern);
   console.log("matches", matches);
   let result = htmlString;
-
-  // Function to replace variables if exists, otherwise return the original value
-  // const replaceValue = (value, mappedVariableData) => {
-  //   if (typeof replaceVariables === "function") {
-  //     return replaceVariables(value, mappedVariableData);
-  //   } else {
-  //     return value; // Return original value if replaceVariables is not a function
-  //   }
-  // };
 
   // Iterate over matches and replace them
   matches.forEach((match) => {
