@@ -1,22 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Progress } from "reactstrap";
+import Moment from "react-moment";
+import "../JobOverview/StepComponent.scss";
 
-function InterviewStepComponent({ header, currentStep, index }) {
-  const [startProgressBarValue, setStartProgressBarValue] = useState(0);
-  const [endProgressBarValue, setEndProgressBarValue] = useState(0);
+function InterviewStepComponent({ header, index, maxOrder, data }) {
+  const date = data?.date;
+  const status = data?.status;
+  const inProgress = maxOrder + 1;
 
-  useEffect(() => {
-    if (currentStep > index) {
-      setStartProgressBarValue(100);
-      setEndProgressBarValue(100);
-    } else if (currentStep === index) {
-      setStartProgressBarValue(100);
-      setEndProgressBarValue(0);
-    } else if (currentStep < index) {
-      setStartProgressBarValue(0);
-      setEndProgressBarValue(0);
+  const getBulletBgColor = () => {
+    let customCSS = "bg-primary border-light";
+    switch (status) {
+      case "COMPLETED":
+        customCSS = "bg-success border-success";
+        break;
+      case "WITHDRAWN":
+        customCSS = "bg-withdrawn border-withdrawn";
+        break;
+      case "REJECTED":
+        customCSS = "bg-danger border-danger";
+        break;
+      case "SKIPPED":
+        customCSS = "bg-gray border-gray";
+        break;
+      case "REJECTED":
+        customCSS = "bg-danger border-danger";
+        break;
+      default:
+        break;
     }
-  }, [currentStep, index]);
+    return customCSS;
+  };
 
   return (
     <React.Fragment>
@@ -26,20 +40,23 @@ function InterviewStepComponent({ header, currentStep, index }) {
           <span>{header}</span>
           {/* Progress Bars and Step */}
           <div className="d-flex flex-row align-items-center justify-content-center m-0">
-            {index !== 0 ? (
+            {index !== 0 && (
               <Progress
                 style={{ height: "1px", width: "100%" }}
-                color="bg-secondary"
-                value={startProgressBarValue}
+                className={`no-transition ${
+                  index < inProgress
+                    ? "bg-black border-black"
+                    : "border-primary"
+                }`}
+                value={0}
               />
-            ) : (
-              <div style={{ height: "1px", width: "100%" }}></div>
             )}
-
             <div
               className={`rounded-pill border border-primary ${
-                currentStep === index && "bg-primary border-light"
-              } ${currentStep > index && "bg-primary border-light"}`}
+                index === maxOrder
+                  ? "bg-warning border-warning"
+                  : getBulletBgColor()
+              }`}
               style={{
                 height: "18px",
                 width: "18px",
@@ -48,18 +65,23 @@ function InterviewStepComponent({ header, currentStep, index }) {
                 flexBasis: "auto",
               }}
             ></div>
-            {index !== 3 ? (
+            {index !== 3 && (
               <Progress
                 style={{ height: "1px", width: "100%" }}
-                color="bg-secondary"
-                value={endProgressBarValue}
+                className={`no-transition ${
+                  index < maxOrder ? "bg-black border-black" : "border-primary"
+                }`}
+                color="black"
+                value={0}
               />
-            ) : (
-              <div style={{ height: "1px", width: "100%" }}></div>
             )}
           </div>
           {/* Date */}
-          <span>11/01/2024</span>
+          {date && (
+            <div className="d-flex flex-column align-items-center justify-content-center">
+              <Moment format="DD/MM/YYYY">{date}</Moment>
+            </div>
+          )}
         </div>
       </div>
     </React.Fragment>
