@@ -20,6 +20,46 @@ export const candidateStatus = [
   { value: "REJECTED", label: "Profile Rejected" },
   {
     value: "COMPLETED",
-    label: "Ready to join",
+    label: "Profile Selected",
+  },
+];
+
+export const PROFILE_FEEDBACK_OPTIONS = [
+  {
+    value: "WITHDRAWN",
+    label: "Profile Withdrawn",
+  },
+  { value: "REJECTED", label: "Profile Rejected" },
+  {
+    value: "COMPLETED",
+    label: "1st Interview Scheduled",
+  },
+];
+
+export const FIRST_INTERVIEW_FEEDBACK_OPTIONS = [
+  {
+    value: "WITHDRAWN",
+    label: "Profile Withdrawn",
+  },
+  { value: "REJECTED", label: "Profile Rejected" },
+  {
+    value: "COMPLETED",
+    label: "Scheduled 2nd Interview",
+  },
+];
+
+export const SECOND_INTERVIEW_FEEDBACK_OPTIONS = [
+  {
+    value: "WITHDRAWN",
+    label: "Profile Withdrawn",
+  },
+  { value: "REJECTED", label: "Profile Rejected" },
+  {
+    value: "COMPLETED",
+    label: "Scheduled 3rd Interview",
+  },
+  {
+    value: "SECOND_INTERVIEW",
+    label: "Rescheduled 2nd Interview",
   },
 ];

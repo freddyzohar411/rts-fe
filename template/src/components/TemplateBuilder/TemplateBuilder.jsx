@@ -289,9 +289,7 @@ const TemplateBuilder = forwardRef(
 
         console.log("Inline Content 2: ", inlineContent2);
         setTemplateContent(inlineContent2);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     };
 
     // Convert docx to html (Frontend)

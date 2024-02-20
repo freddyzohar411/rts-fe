@@ -31,6 +31,9 @@ import AccountOwnerElement from "./AccountOwnerElement";
 import FormTemplateSelectElement from "./FormTemplateSelectElement";
 import MultiInputElement from "./MultiInputElement";
 import CandidateStatusSelectElement from "./CandidateStatusSelectElement";
+import ProfileFeedbackStatusSelectElement from "./ProfileFeedbackStatusSelectElement";
+import FirstInterviewFeedbackStatus from "./FirstInterviewFeedbackStatus";
+import SecondInterviewFeedbackStatus from "./SecondInterviewFeedbackStatus";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -156,6 +159,36 @@ const generateFormField = (
   if (type === "selectcandidatestatus") {
     return (
       <CandidateStatusSelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "selectprofilefeedbackstatus") {
+    return (
+      <ProfileFeedbackStatusSelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "selectfirstintrvfdbkstatus") {
+    return (
+      <FirstInterviewFeedbackStatus
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+      />
+    );
+  }
+
+  if (type === "selectsecondintrvfdbkstatus") {
+    return (
+      <SecondInterviewFeedbackStatus
         formik={formik}
         field={field}
         formStateHook={formStateHook}
