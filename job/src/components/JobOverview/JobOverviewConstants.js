@@ -13,16 +13,27 @@ export const JOB_TIMELINE_INITIAL_OPTIONS = [
   },
 ];
 
-export const steps = [
-  "Tag",
-  "Associate",
-  "Submit to Sales",
-  "Submit to Client",
-  "Profile Feedback Pending",
-  "Interviews",
-  "Conditional Offer Sent",
-  "Conditional Offer Accepted/Declined",
-];
+export const steps = {
+  Tag: "Tag",
+  Associate: "Associate",
+  "Submit to Sales": "Submit to Sales",
+  "Submit to Client": "Submit to Client",
+  "Profile Feedback Pending": "Profile Feedback Pending",
+  Interviews: "Interview Feedback Pending",
+  "Conditional Offer Sent": "Conditional Offer Sent",
+  "Conditional Offer Accepted/Declined": "Conditional Offer Accepted/Declined",
+};
+
+export const stepOrders = {
+  Tag: 0,
+  Associate: 1,
+  "Submit to Sales": 2,
+  "Submit to Client": 3,
+  "Profile Feedback Pending": 4,
+  Interviews: 5,
+  "Conditional Offer Sent": 9,
+  "Conditional Offer Accepted/Declined": 10,
+};
 
 export const jobHeaders = [
   "Tag",
@@ -50,15 +61,15 @@ export const rtsStatusHeaders = [
   "Conditional Offer Accepted/Declined",
 ];
 
-export const timelineSkip = [
-  { 1: "Associate" },
-  { 2: "Submit to Sales" },
-  { 3: "Submit to Client" },
-  { 4: "Profile Feedback" },
-  { 5: "Interviews" },
-  { 6: "Conditional Offer" },
-  { 7: "Conditional Offer Status" },
-];
+export const timelineSkip = {
+  Associate: 1,
+  "Submit to Sales": 2,
+  "Submit to Client": 3,
+  "Profile Feedback": 4,
+  Interviews: 5,
+  "Conditional Offer": 9,
+  "Conditional Offer Status": 10,
+};
 
 export const timelineLegend = [
   {
@@ -96,5 +107,5 @@ export const timelineLegend = [
     borderColor: "dark",
     legend: "Completed All Stages",
     tooltip: "Candidate has completed all stages.",
-  }
+  },
 ];

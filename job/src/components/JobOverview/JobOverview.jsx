@@ -56,6 +56,7 @@ import {
   steps,
   timelineSkip,
   timelineLegend,
+  stepOrders,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -168,7 +169,7 @@ function JobOverview() {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
-        if (maxOrder >= 6 && maxOrder <= 9) {
+        if (maxOrder >= 6 && maxOrder < 9) {
           maxOrder = 5;
         }
         jsonObject[data?.id] = maxOrder;
@@ -438,6 +439,31 @@ function JobOverview() {
     setCandidateId(id);
   };
 
+  /**
+   * @author Rahul Sahu
+   * @description Get form index on the basis of index
+   */
+  const getFormIndex = (originalOrder) => {
+    let index = null;
+    switch (originalOrder) {
+      case 6:
+        index = 6;
+        break;
+      case 7:
+        index = 8;
+        break;
+      case 8:
+        index = 10;
+        break;
+      case 9:
+        index = 11;
+        break;
+      default:
+        break;
+    }
+    return index;
+  };
+
   const deliveryTeam = "Ganesh, Priya, Vinod";
 
   const renderLegend = () => {
@@ -667,7 +693,7 @@ function JobOverview() {
                         status === JOB_STAGE_STATUS.REJECTED ||
                         status === JOB_STAGE_STATUS.WITHDRAWN;
                       const originalOrder = maxOrder;
-                      if (maxOrder >= 6 && maxOrder <= 9) {
+                      if (maxOrder >= 6 && maxOrder < 9) {
                         maxOrder = 5;
                       }
                       return (
@@ -675,19 +701,21 @@ function JobOverview() {
                           <tr className="text-center align-top">
                             <td className="pt-4">{`${data?.candidate?.firstName} ${data?.candidate?.lastName}`}</td>
                             <td className="pt-4">{`${data?.createdByName}`}</td>
-                            {steps.map((step, index) => (
-                              <td key={index} className="px-0">
-                                <StepComponent
-                                  index={index}
-                                  maxOrder={maxOrder}
-                                  isRejected={isRejected}
-                                  data={data?.timeline?.[step]}
-                                  candidateId={data?.candidate?.id}
-                                  timeline={data?.timeline}
-                                  originalOrder={originalOrder}
-                                />
-                              </td>
-                            ))}
+                            {Object.keys(steps).map((step, index) => {
+                              return (
+                                <td key={index} className="px-0">
+                                  <StepComponent
+                                    index={stepOrders[step]}
+                                    maxOrder={maxOrder}
+                                    isRejected={isRejected}
+                                    data={data?.timeline?.[steps[step]]}
+                                    candidateId={data?.candidate?.id}
+                                    timeline={data?.timeline}
+                                    originalOrder={originalOrder}
+                                  />
+                                </td>
+                              );
+                            })}
                             <td>
                               {!isRejected && (
                                 <div className="d-flex flex-row gap-3 align-items-center">
@@ -702,29 +730,28 @@ function JobOverview() {
                                     }
                                   >
                                     <option value="">Select</option>
-                                    {timelineSkip.map((item, index) => {
-                                      if (maxOrder > index + 1) {
-                                        return null;
+                                    {Object.keys(timelineSkip).map(
+                                      (item, index) => {
+                                        if (maxOrder > timelineSkip[item] + 1) {
+                                          return null;
+                                        }
+                                        return (
+                                          <option
+                                            key={index}
+                                            value={timelineSkip[item]}
+                                          >
+                                            {item}
+                                          </option>
+                                        );
                                       }
-                                      return (
-                                        <option key={index} value={index + 1}>
-                                          {Object.values(item)[0]}
-                                        </option>
-                                      );
-                                    })}
+                                    )}
                                   </Input>
                                   <i
                                     onClick={() =>
                                       handleIconClick(
                                         data?.candidate?.id,
                                         data?.id,
-                                        originalOrder === 6
-                                          ? 6
-                                          : originalOrder === 7
-                                          ? 8
-                                          : originalOrder === 8
-                                          ? 10
-                                          : null
+                                        getFormIndex(originalOrder)
                                       )
                                     }
                                     id="next-step"
