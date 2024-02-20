@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Row,
   Col,
@@ -11,19 +11,24 @@ import {
   Input,
   Label,
   Form,
+  Spinner,
 } from "reactstrap";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Formik Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // action
-import { userForgetPassword } from "../../store/actions";
+import {
+  userForgetPassword,
+  resetForgetPasswordMeta,
+} from "../../store/actions";
 
 // import images
 import logoLight from "@workspace/common/src/assets/images/logo-light.png";
@@ -34,20 +39,30 @@ import { withRouter } from "@workspace/common";
 
 const ForgetPasswordPage = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const onForgotPassSubmit = (values) => {
+    dispatch(userForgetPassword(values, navigate));
+  };
+  const forgetPasswordData = useSelector((state) => state.ForgetPassword);
 
-  const validation = useFormik({
+  useEffect(() => {
+    return () => {
+      dispatch(resetForgetPasswordMeta());
+    };
+  }, []);
+
+  const formik = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
-
     initialValues: {
       email: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
+      email: Yup.string()
+        .required("Please Enter Your Email")
+        .email("Please enter valid Email"),
     }),
-    onSubmit: (values) => {
-      dispatch(userForgetPassword(values, props.router.navigate));
-    },
+    onSubmit: onForgotPassSubmit,
   });
 
   const selectLayoutState = (state) => state.ForgetPassword;
@@ -86,37 +101,26 @@ const ForgetPasswordPage = (props) => {
                   <div className="text-center mt-2">
                     <h5 className="text-primary">Forgot Password?</h5>
                     <p className="text-muted">Reset password with Avensys.</p>
-
-                    <lord-icon
-                      src="https://cdn.lordicon.com/rhvddzym.json"
-                      trigger="loop"
-                      colors="primary:#0ab39c"
-                      className="avatar-xl"
-                      style={{ width: "120px", height: "120px" }}
-                    ></lord-icon>
                   </div>
-
-                  <Alert
-                    className="border-0 alert-warning text-center mb-2 mx-2"
-                    role="alert"
-                  >
-                    Enter your email and instructions will be sent to you!
-                  </Alert>
+                  {!forgetSuccessMsg && !forgetError && (
+                    <Alert
+                      className="border-0 alert-warning text-center mb-2 mx-2"
+                      role="alert"
+                    >
+                      Enter your email and instructions will be sent to you!
+                    </Alert>
+                  )}
                   <div className="p-2">
                     {forgetError && forgetError ? (
-                      <Alert color="danger" style={{ marginTop: "13px" }}>
-                        {forgetError}
-                      </Alert>
+                      <Alert color="danger">{forgetError}</Alert>
                     ) : null}
                     {forgetSuccessMsg ? (
-                      <Alert color="success" style={{ marginTop: "13px" }}>
-                        {forgetSuccessMsg}
-                      </Alert>
+                      <Alert color="success">{forgetSuccessMsg}</Alert>
                     ) : null}
                     <Form
                       onSubmit={(e) => {
                         e.preventDefault();
-                        validation.handleSubmit();
+                        formik.handleSubmit();
                         return false;
                       }}
                     >
@@ -127,25 +131,36 @@ const ForgetPasswordPage = (props) => {
                           className="form-control"
                           placeholder="Enter email"
                           type="email"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.email || ""}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.email || ""}
                           invalid={
-                            validation.touched.email && validation.errors.email
+                            formik.touched.email && formik.errors.email
                               ? true
                               : false
                           }
                         />
-                        {validation.touched.email && validation.errors.email ? (
+                        {formik.touched.email && formik.errors.email ? (
                           <FormFeedback type="invalid">
-                            <div>{validation.errors.email}</div>
+                            <div>{formik.errors.email}</div>
                           </FormFeedback>
                         ) : null}
                       </div>
 
                       <div className="text-center mt-4">
-                        <button className="btn btn-success w-100" type="submit">
-                          Send Reset Link
+                        <button
+                          className="btn btn-success w-100"
+                          type="submit"
+                          isDisabled={forgetPasswordData?.isLoading}
+                        >
+                          {forgetPasswordData.isLoading ? (
+                            <>
+                              <span style={{marginRight:"10px"}}>Sending Link</span>
+                              <Spinner size="sm">Loading...</Spinner>
+                            </>
+                          ) : (
+                            "Send Reset Password Link"
+                          )}
                         </button>
                       </div>
                     </Form>

@@ -15,3 +15,4 @@ export const BASE_DOCUMENTS = "/api/documents";
 
 //Document
 export const BASE_USER_GROUP = "/api/usergroup";
+

@@ -18,35 +18,50 @@ import { toast } from "react-toastify";
 import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
 import ParticlesAuth from "../../ParticlesAuth";
 import { initialValues, schema } from "./constants";
-import { loginResetPassword } from "../../store/actions";
 import { encode } from "@workspace/common/src/helpers/string_helper";
-import { validateResetToken } from "../../store/auth/forgetpwd/actions";
+import {
+  forgetPasswordReset,
+  validateResetToken,
+  resetForgetPasswordMeta,
+} from "../../store/auth/forgetpwd/actions";
 
-const ResetPassword = () => {
+const ForgetResetPassword = () => {
   document.title = "Reset Password | RTS";
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const resetPasswordMeta = useSelector(
-    (state) => state.Login.loginResetPasswordMeta
-  );
+
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
+  const forgetResetPasswordData = useSelector((state) => state.ForgetPassword);
+
+  const queryParams = new URLSearchParams(location.search);
+  const token = queryParams.get("token");
+
+  useEffect(() => {
+    if (token) {
+      dispatch(validateResetToken(token, navigate));
+    }
+    return () => {
+      dispatch(resetForgetPasswordMeta());
+    };
+  }, [token]);
 
   const handleFormSubmit = async (values) => {
-      const authUser = JSON.parse(sessionStorage.getItem("authUser"));
-      if (authUser) {
-        const payload = {
-          userId: authUser?.user?.id,
-          password: encode(values?.password),
-          confirmPassword: encode(values?.confirmPassword),
-        };
-        dispatch(loginResetPassword(payload, navigate));
-      } else {
-        toast.error("Please do login first.");
-        navigate("/login");
-      }
+    const payload = {
+      token,
+      password: encode(values?.password),
+      confirmPassword: encode(values?.confirmPassword),
+    };
+    dispatch(forgetPasswordReset(payload));
   };
+
+  useEffect(() => {
+    if (forgetResetPasswordData?.resetForgetPasswordSuccess) {
+      toast.success("Password reset successfully");
+      navigate("/login");
+    }
+  }, [forgetResetPasswordData?.resetForgetPasswordSuccess]);
 
   return (
     <Formik
@@ -80,14 +95,9 @@ const ResetPassword = () => {
                   <Card>
                     <CardBody className="p-4">
                       <div className="text-center my-2">
-                        <h5>First Time Login</h5>
+                        <h5>Reset Password</h5>
                         <div className="d-flex flex-column text-muted mb-2">
                           <span>Please create a new password.</span>
-                          {resetPasswordMeta?.isError && (
-                            <span className="text-danger">
-                              {resetPasswordMeta?.errorMessage?.message}
-                            </span>
-                          )}
                         </div>
                       </div>
                       <div className="p-2">
@@ -177,10 +187,10 @@ const ResetPassword = () => {
                               className="btn btn-custom-primary w-100 d-flex justify-content-center align-items-center"
                               type="submit"
                             >
-                              <span style={{ marginRight: "5px" }}>
-                                Create New Password
+                              <span style={{ marginRight: "10px" }}>
+                                Reset Password
                               </span>
-                              {resetPasswordMeta?.isLoading && (
+                              {forgetResetPasswordData?.resetForgetPasswordIsLoading && (
                                 <Spinner size="sm">Loading...</Spinner>
                               )}
                             </Button>
@@ -199,4 +209,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ForgetResetPassword;

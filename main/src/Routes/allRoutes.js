@@ -11,6 +11,7 @@ import {
   UserProfile,
   ForgetPassword,
   ResetPassword,
+  ForgetResetPassword
 } from "@workspace/login";
 
 // Account
@@ -191,6 +192,7 @@ const publicRoutes = [
   // Authentication Page
   { path: "/login", component: <Login /> },
   { path: "/reset-password", component: <ResetPassword /> },
+  { path: "/forget-reset-password", component: <ForgetResetPassword /> },
   { path: "/logout", component: <Logout /> },
   { path: "/forget-password", component: <ForgetPassword /> },
 ];

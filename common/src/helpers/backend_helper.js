@@ -134,3 +134,11 @@ export const convertHtmlStringToPng = (data) =>
     data
   );
 
+// Get Templates by category
+export const getTemplatesByCategory = (category) =>
+  api.get(`${configURL.COMMON_URL}/${baseURL.TEMPLATE}/categories/${category}`);
+
+export const getTemplatesByCategoryAndSubCategory = (category, subCategory) =>
+  api.get(
+    `${configURL.COMMON_URL}/${baseURL.TEMPLATE}/categories/${category}/sub-category/${subCategory}`
+  );

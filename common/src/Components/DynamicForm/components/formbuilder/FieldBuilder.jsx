@@ -10,6 +10,8 @@ import { v4 as uuid } from "uuid";
 import CountrySelectField from "../../fieldbuilders/CountrySelectField";
 import UserGroupSelectField from "../../fieldbuilders/UserGroupSelectField";
 import FormCategorySelectField from "../../fieldbuilders/FormCategorySelectField";
+import * as FieldBuilderHelper from "./fieldBuilderValidation_helper";
+import useFieldBuilderValidationHook from "./FieldBuilderValidationHook";
 
 const FieldBuilder = ({
   type,
@@ -23,6 +25,10 @@ const FieldBuilder = ({
   setShowModalSchema,
   formOptions,
 }) => {
+  const [validationSchema, setValidationSchema] = useState(null);
+  const [initialValues, setInitialValues] = useState({});
+  const [uuidKey, setUuidKey] = useState(!formBuilderUpdateData.label ? formBuilderUpdateData.name : uuid());
+
   //========================= States ================================
   // Condition validation state
   const [validationConditionList, setValidationConditionList] = useState(
@@ -91,8 +97,8 @@ const FieldBuilder = ({
       },
     ];
   };
-  // Overall Form schema config (For all types of fields)
-  const config = [
+
+  const [config, setConfig] = useState([
     {
       label: "Label",
       type: "text",
@@ -148,6 +154,10 @@ const FieldBuilder = ({
           required: true,
           message: "Sub key is required",
         },
+        {
+          keyDuplication: true,
+          message: "Key already exists",
+        },
       ],
     },
     {
@@ -198,7 +208,14 @@ const FieldBuilder = ({
           required: true,
           message: "Key is required",
         },
+        {
+          keyDuplication: true,
+          message: "Key already exists",
+        },
       ],
+      events: {
+        disabled: true,
+      },
     },
     {
       label: "Placeholder",
@@ -405,20 +422,20 @@ const FieldBuilder = ({
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
       ],
-      events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, required: e.target.value });
-          if (e.target.value === "false") {
-            document.getElementsByName(
-              "requiredErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "requiredErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
+      // events: {
+      // onChange: (e) => {
+      //   formik.setValues({ ...formik.values, required: e.target.value });
+      //   if (e.target.value === "false") {
+      //     document.getElementsByName(
+      //       "requiredErrorMessage"
+      //     )[0].disabled = true;
+      //   } else {
+      //     document.getElementsByName(
+      //       "requiredErrorMessage"
+      //     )[0].disabled = false;
+      //   }
+      // },
+      // },
       apply: [
         "text",
         "email",
@@ -500,128 +517,66 @@ const FieldBuilder = ({
         "selectformtemplate",
         "multiinput",
       ],
+      isDisabled: true,
+      validation: [
+        {
+          required: false,
+          message: "Required error message is required",
+        },
+      ],
     },
     {
       label: "Validation Regex",
       type: "text",
       name: "pattern",
-      events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, pattern: e.target.value });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "patternValidationErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "patternValidationErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
       apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Pattern Validation Error Message",
       type: "text",
       name: "patternValidationErrorMessage",
-      events: {
-        disabled: true,
-      },
       apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Min Length",
       type: "number",
       name: "minLength",
-      events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, minLength: e.target.value });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "minLengthErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "minLengthErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
       apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Min Length Error Message",
       type: "text",
       name: "minLengthErrorMessage",
-      events: {
-        disabled: true,
-      },
       apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Max Length",
       type: "number",
       name: "maxLength",
-      events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, maxLength: e.target.value });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "maxLengthErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "maxLengthErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
       apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Max Length Error Message",
       type: "text",
       name: "maxLengthErrorMessage",
-      events: {
-        disabled: true,
-      },
       apply: ["text", "email", "textarea", "password"],
     },
     {
       label: "Email Validation",
       type: "radio",
       name: "emailValidation",
+      defaultValue:
+        formBuilderUpdateData?.emailValidation?.toString() || "false",
       options: [
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
       ],
-      events: {
-        onChange: (e) => {
-          formik.setValues({
-            ...formik.values,
-            emailValidation: e.target.value,
-          });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "emailValidationErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "emailValidationErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
       apply: ["email"],
     },
     {
       label: "Email Validation Error Message",
       type: "text",
       name: "emailValidationErrorMessage",
-      events: {
-        disabled: true,
-      },
       apply: ["email"],
     },
     {
@@ -629,58 +584,58 @@ const FieldBuilder = ({
       type: "number",
       name: "maxValue",
       apply: ["number"],
-      events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, maxValue: e.target.value });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "maxValueErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "maxValueErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
+      // events: {
+      //   onChange: (e) => {
+      //     formik.setValues({ ...formik.values, maxValue: e.target.value });
+      //     if (e.target.value === "") {
+      //       document.getElementsByName(
+      //         "maxValueErrorMessage"
+      //       )[0].disabled = true;
+      //     } else {
+      //       document.getElementsByName(
+      //         "maxValueErrorMessage"
+      //       )[0].disabled = false;
+      //     }
+      //   },
+      // },
       apply: ["number"],
     },
     {
       label: "Max Value Error Message",
       type: "text",
       name: "maxValueErrorMessage",
-      events: {
-        disabled: true,
-      },
+      // events: {
+      //   disabled: true,
+      // },
       apply: ["number"],
     },
     {
       label: "Min Value",
       type: "number",
       name: "minValue",
-      events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, minValue: e.target.value });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "minValueErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "minValueErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
+      // events: {
+      //   onChange: (e) => {
+      //     formik.setValues({ ...formik.values, minValue: e.target.value });
+      //     if (e.target.value === "") {
+      //       document.getElementsByName(
+      //         "minValueErrorMessage"
+      //       )[0].disabled = true;
+      //     } else {
+      //       document.getElementsByName(
+      //         "minValueErrorMessage"
+      //       )[0].disabled = false;
+      //     }
+      //   },
+      // },
       apply: ["number"],
     },
     {
       label: "Min Value Error Message",
       type: "text",
       name: "minValueErrorMessage",
-      events: {
-        disabled: true,
-      },
+      // events: {
+      //   disabled: true,
+      // },
       apply: ["number"],
     },
     {
@@ -689,72 +644,30 @@ const FieldBuilder = ({
       type: "multiselect",
       name: "fileTypeValidation",
       options: [
+        // { label: "All file types", value: "" },
         { label: "pdf", value: "pdf" },
         { label: "doc", value: "doc" },
         { label: "docx", value: "docx" },
         { label: "xls", value: "xls" },
       ],
-      events: {
-        onChange: (e) => {
-          formik.setValues({
-            ...formik.values,
-            fileTypeValidation: Array.from(
-              e.target.selectedOptions,
-              (option) => option.value
-            ),
-          });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "fileTypeValidationErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "fileTypeValidationErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
       apply: ["file", "multifile"],
     },
     {
       label: "File Type Validation Error Message",
       type: "text",
       name: "fileTypeValidationErrorMessage",
-      events: {
-        disabled: true,
-      },
       apply: ["file", "multifile"],
     },
     {
       label: "File Size Validation (MB)",
       type: "number",
       name: "fileSizeValidation",
-      events: {
-        onChange: (e) => {
-          formik.setValues({
-            ...formik.values,
-            fileSizeValidation: e.target.value,
-          });
-          if (e.target.value === "") {
-            document.getElementsByName(
-              "fileSizeValidationErrorMessage"
-            )[0].disabled = true;
-          } else {
-            document.getElementsByName(
-              "fileSizeValidationErrorMessage"
-            )[0].disabled = false;
-          }
-        },
-      },
       apply: ["file", "multifile"],
     },
     {
       label: "File Size Validation Error Message",
       type: "text",
       name: "fileSizeValidationErrorMessage",
-      events: {
-        disabled: true,
-      },
       apply: ["file", "multifile"],
     },
 
@@ -1217,16 +1130,6 @@ const FieldBuilder = ({
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
       ],
-      events: {
-        onChange: (e) => {
-          formik.setValues({ ...formik.values, information: e.target.value });
-          if (e.target.value === "false") {
-            document.getElementsByName("informationText")[0].disabled = true;
-          } else {
-            document.getElementsByName("informationText")[0].disabled = false;
-          }
-        },
-      },
       apply: [
         "text",
         "email",
@@ -1362,7 +1265,7 @@ const FieldBuilder = ({
       name: "wordSize",
       apply: ["word"],
     },
-  ];
+  ]);
 
   let schema = config;
   let header = null;
@@ -1499,7 +1402,38 @@ const FieldBuilder = ({
     type: type,
     fieldId: uuid(),
   };
-  //=================================================================
+  //=======================Config UseEffect================================
+  useEffect(() => {
+    if (validationConditionList?.length > 0) {
+      setConfig((prev) => {
+        return prev.map((item) => {
+          if (item.name === "conditionValidationErrorMessage") {
+            item.renderCondition = true;
+            item.validation = [
+              {
+                required: true,
+                message: "Condition validation error message is required",
+              },
+            ];
+          }
+          return item;
+        });
+      });
+    } else {
+      formik?.setFieldValue("conditionValidationErrorMessage", "");
+      setConfig((prev) => {
+        return prev.map((item) => {
+          if (item.name === "conditionValidationErrorMessage") {
+            item.renderCondition = false;
+            item.validation = [];
+          }
+          return item;
+        });
+      });
+    }
+  }, [validationConditionList?.length]);
+
+  // ================================================================
   // Table setting
   const [tableSetting, setTableSetting] = useState(
     formBuilderUpdateData?.tableSetting
@@ -1581,12 +1515,19 @@ const FieldBuilder = ({
   };
 
   // Generate initial values for formik
-  let initialValues = {};
-  let validationSchema = {};
-  if (schema) {
-    initialValues = generateInitialValues(schema);
-    validationSchema = generateValidationSchemaForFieldBuilder(schema, type);
-  }
+  useEffect(() => {
+    if (config && !formBuilderUpdateData) {
+      setInitialValues(generateInitialValues(config));
+      setValidationSchema(
+        generateValidationSchemaForFieldBuilder(
+          config,
+          type,
+          formFields,
+          formBuilderUpdateData
+        )
+      );
+    }
+  }, []);
 
   const returnUpdateDataWithoutNull = (data) => {
     let newData = {};
@@ -1600,10 +1541,11 @@ const FieldBuilder = ({
     return newData;
   };
 
-  // Use Update data if present
-  if (formBuilderUpdateData) {
-    initialValues = returnUpdateDataWithoutNull(formBuilderUpdateData);
-  }
+  useEffect(() => {
+    if (formBuilderUpdateData) {
+      setInitialValues(returnUpdateDataWithoutNull(formBuilderUpdateData));
+    }
+  }, [formBuilderUpdateData]);
 
   // Handle Submit
   const handleFormSchemaSubmit = (values) => {
@@ -1672,19 +1614,89 @@ const FieldBuilder = ({
 
   // Formik for form field creation
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: handleFormSchemaSubmit,
   });
 
-  //Set default radio value
+  // Field Builder Validation Hook to handle validation in builder form
+  useFieldBuilderValidationHook(formik, config, setConfig);
+
+  // Set validation schema on config change (Update validation schema)
   useEffect(() => {
-    config.forEach((field) => {
-      if (field.type === "radio" && field?.defaultValue) {
-        formik.setFieldValue(field.name, field.defaultValue);
+    if (formik) {
+      setValidationSchema(
+        generateValidationSchemaForFieldBuilder(
+          config,
+          type,
+          formFields,
+          formBuilderUpdateData
+        )
+      );
+    }
+  }, [config]);
+
+  // Set default radio value
+  useEffect(() => {
+    if (formik && config) {
+      config?.forEach((field) => {
+        if (field.type === "radio" && field?.defaultValue) {
+          formik?.setFieldValue(field.name, field.defaultValue);
+        }
+      });
+    }
+  }, [initialValues]);
+
+  const checkRadioEquality = (value, fieldValue) => {
+    // Check if it is boolean than convert into string
+    if (typeof value === "boolean") {
+      value = value.toString();
+    }
+    return value === fieldValue;
+  };
+
+  function toCamelCase(str) {
+    return (
+      str
+        // Lowercase the string to ensure consistent processing
+        .toLowerCase()
+        // Split the string into words
+        .split(" ")
+        // Map each word to either itself (if it's the first word) or the word with its first letter capitalized
+        .map((word, index) => {
+          if (index === 0) {
+            return word; // Return the first word as is (in lowercase)
+          }
+          // Capitalize the first letter of each subsequent word
+          return word.charAt(0).toUpperCase() + word.slice(1);
+        })
+        // Join the words together without spaces
+        .join("")
+    );
+  }
+
+  // Add UUID to key field if no value
+  useEffect(() => {
+    if (formik?.values["name"] === "") {
+      formik.setFieldValue(["name"], uuidKey);
+    }
+  }, [formik?.values["name"]]);
+
+  useEffect(() => {
+    if (formik?.values["label"] && formik?.values["name"] !== "") {
+      if (formik?.values["label"]) {
+        formik.setFieldValue(
+          ["name"],
+          `${toCamelCase(formik?.values["label"])}`
+        );
       }
-    });
-  }, []);
+    }
+
+    if (formik?.values["label"] === "") {
+      formik.setFieldValue(["name"], uuidKey);
+    }
+  }, [formik?.values["label"]]);
 
   return (
     <div className="bg-light">
@@ -1714,6 +1726,7 @@ const FieldBuilder = ({
                       className="form-control"
                       onChange={formik.handleChange}
                       value={formik.values[field.name]}
+                      disabled={field.isDisabled ?? false}
                       {...field.events}
                     />
                     {formik.errors[field.name] && formik.touched[field.name] ? (
@@ -1803,7 +1816,11 @@ const FieldBuilder = ({
                               value={option.value} // Use option.value here
                               onChange={formik.handleChange}
                               checked={
-                                formik.values[field.name] === option.value
+                                checkRadioEquality(
+                                  formik.values[field.name],
+                                  option.value
+                                )
+                                //  formik?.values[field.name] === option.value
                               }
                               {...field.events}
                             />
@@ -2732,7 +2749,11 @@ const FieldBuilder = ({
               Update Field
             </button>
           ) : (
-            <button type="submit" className="btn btn-custom-primary">
+            <button
+              type="submit"
+              className="btn btn-custom-primary"
+              // onClick={firstHandleFormSubmit}
+            >
               Create Field
             </button>
           )}

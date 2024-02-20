@@ -151,7 +151,10 @@ const generateValidationSchema2 = (
         fieldValidation = fieldValidation.required(field.requiredErrorMessage);
       }
 
-      if ((field.required === "false" || field.required === false) && field.type === "file") {
+      if (
+        (field.required === "false" || field.required === false) &&
+        field.type === "file"
+      ) {
         // Make it nullable
         fieldValidation = fieldValidation.nullable();
       }
@@ -191,12 +194,15 @@ const generateValidationSchema2 = (
           field.maxLengthErrorMessage
         );
       }
-      if (field.emailValidation) {
-        fieldValidation = fieldValidation.email(
-          field.emailValidationErrorMessage
-        );
+
+      if (field.type === "email") {
+        if (field.emailValidation) {
+          fieldValidation = fieldValidation.email(
+            field.emailValidationErrorMessage
+          );
+        }
       }
-      
+
       if (field.pattern && isString()) {
         fieldValidation = fieldValidation.matches(
           field.pattern,
@@ -390,7 +396,7 @@ const generateValidationSchema2 = (
 };
 
 // Generate validation schema for field Builder
-const generateValidationSchemaForFieldBuilder = (schema, type) => {
+const generateValidationSchemaForFieldBuilder = (schema, type, formFields, formBuilderUpdateData) => {
   const validationSchema = Yup.object(
     schema?.reduce((acc, field) => {
       if (!field.apply.includes(type)) return acc;
@@ -400,6 +406,12 @@ const generateValidationSchemaForFieldBuilder = (schema, type) => {
         case "text":
           fieldValidation = Yup.string();
           break;
+        // case "number":
+        //   fieldValidation = Yup.number();
+        //   break;
+        // default:
+        //   fieldValidation = Yup.string();
+        //   break;
       }
 
       field?.validation?.forEach((validation) => {
@@ -420,6 +432,23 @@ const generateValidationSchemaForFieldBuilder = (schema, type) => {
         }
         if (validation.email) {
           fieldValidation = fieldValidation.email(validation.message);
+        }
+
+        // Check for key duplication in main key and sub key for the entire form, only 
+        // if field id is not the same as the field being updated (formBuilderUpdateData)
+        if (validation.keyDuplication) {
+          fieldValidation = fieldValidation.test(
+            "keyDuplication",
+            validation.message,
+            (value) => {
+              if (value === "") return true;
+              if (formFields.length === 0) return true;
+              const isDuplicate = formFields.filter(
+                (field) => (field.name === value || field?.subName === value) && (formBuilderUpdateData?.fieldId !== field?.fieldId)
+              );
+              return isDuplicate?.length > 0 ? false : true;
+            }
+          );
         }
       });
 

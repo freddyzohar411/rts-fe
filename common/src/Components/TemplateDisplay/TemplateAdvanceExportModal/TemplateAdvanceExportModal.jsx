@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import * as TemplateActions from "../../../../../template/src/store/template/action";
 import * as TemplateHelper from "../templateDisplayHelper";
 import "./TemplateAdvanceExportModal.scss";
+import { toHaveStyle } from "@testing-library/jest-dom/matchers";
+import { toast } from "react-toastify";
 
 const TemplateAdvanceExportModal = ({
   content,
@@ -24,6 +26,7 @@ const TemplateAdvanceExportModal = ({
   toExport = true,
   attachmentCallback,
   allData,
+  closeModalCallback = null,
 }) => {
   const dispatch = useDispatch();
   const [templateSettings, setTemplateSettings] = useState({
@@ -58,6 +61,20 @@ const TemplateAdvanceExportModal = ({
   );
 
   useEffect(() => {
+    setTemplateContent(content);
+  }, [content]);
+
+  useEffect(() => {
+    if (templateContent == null) {
+      setShowContent({
+        oldHtml: content,
+        html: "",
+        styleTag: "",
+      });
+    }
+  }, [templateContent]);
+
+  useEffect(() => {
     if (showInsertModal) {
       dispatch(TemplateActions.fetchTemplateCategories());
     }
@@ -87,10 +104,27 @@ const TemplateAdvanceExportModal = ({
 
   const closeModal = () => {
     setShowInsertModal(false);
-    // setShowContent("");
+    setTemplateSelected("");
+    setCategorySelected("");
+    if (!toExport) {
+      setTemplateContent("");
+      setShowContent({
+        oldHtml: content,
+        html: "",
+        styleTag: "",
+      });
+    }
+
+    if (closeModalCallback) {
+      closeModalCallback();
+    }
   };
 
   const handleExport = async () => {
+    if (!showContent.html) {
+      toast.error("Please select a template first");
+      return;
+    }
     if (templateSettings.exportType === "pdf") {
       if (toExport) {
         await ExportHelper.exportBackendHtml2Pdf(
@@ -257,9 +291,10 @@ const TemplateAdvanceExportModal = ({
       setSelectedContentAndProcessed();
       return;
     }
-    if (content || templateContent) {
+    // if (content || templateContent) {
+    if (templateContent && templateContent !== "") {
       const removeEditableContent =
-        TemplateHelper.removeContentEditableAndStyles(content);
+        TemplateHelper.removeContentEditableAndStyles(templateContent);
 
       const convertTableAttributesContent =
         TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
@@ -275,6 +310,29 @@ const TemplateAdvanceExportModal = ({
       }));
     }
   }, [templateContent, allData, content]);
+
+  // Template selected will show the preview
+  useEffect(() => {
+    if (toExport) {
+      return;
+    }
+    if (
+      !templateSelected ||
+      templateSelected === "" ||
+      templateSelected === null
+    ) {
+      setTemplateContent("");
+      return;
+    }
+    const template = templatesByCategory.filter(
+      (template) =>
+        template.name == templateSelected.value &&
+        template.category === categorySelected.value
+    )[0];
+    if (template) {
+      setTemplateContent(template?.content);
+    }
+  }, [templateSelected]);
 
   return (
     <Modal
@@ -322,7 +380,8 @@ const TemplateAdvanceExportModal = ({
                 module={typeData}
               />
             </Col>
-            <Col>
+            {/* // Preview Button Do not delete*/}
+            {/* <Col>
               <Button
                 type="button"
                 className="self-end btn-primary"
@@ -340,7 +399,7 @@ const TemplateAdvanceExportModal = ({
               >
                 Preview
               </Button>
-            </Col>
+            </Col> */}
           </Row>
         )}
       </ModalHeader>

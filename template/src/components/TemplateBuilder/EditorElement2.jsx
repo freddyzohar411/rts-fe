@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { ExportHelper } from "@workspace/common";
 import { generateOptions } from "./pdfOption";
 import { TemplateAdvanceExportModal } from "@workspace/common";
+import AvensysLogo from "../../../assets/images/AvensysLogo.png";
 
 const EditorElement2 = ({
   name,
@@ -20,6 +21,7 @@ const EditorElement2 = ({
 }) => {
   const editorRef = useRef(null);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [base64ImgLogo, setBase64ImgLogo] = useState(null);
 
   // Apply canvas style
   function applyCanvasStyle(editor, size, orientation) {
@@ -296,6 +298,92 @@ const EditorElement2 = ({
     };
   }, []);
 
+  // Remove header style
+  useEffect(() => {
+    const imageUrl = "/AvensysLogo.png"; // It is in main public file
+    fetch(imageUrl)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          const base64data = reader.result;
+          setBase64ImgLogo(base64data);
+        };
+        reader.readAsDataURL(blob);
+      })
+      .catch((error) =>
+        console.error("Error converting image to Base64:", error)
+      );
+  }, []);
+
+  function getLogoBase64Data() {
+    const imageUrl = "/AvensysLogo.png"; // Adjust the path as necessary
+    return fetch(imageUrl) // Return the fetch promise
+      .then((response) => response.blob())
+      .then((blob) => {
+        return new Promise((resolve, reject) => {
+          // Return a new promise that resolves with the Base64 data
+          const reader = new FileReader();
+          reader.onloadend = function () {
+            resolve(reader.result); // Resolve the promise with the Base64 data
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      })
+      .catch((error) => {
+        console.error("Error converting image to Base64:", error);
+        throw error; // Ensure errors are propagated
+      });
+  }
+
+  const insertLogo = async (editor, position) => {
+    let existingHeader = editor.getContent().includes('title="header"');
+    if (!existingHeader) {
+      let base64ImgLogoData;
+      try {
+        base64ImgLogoData = await getLogoBase64Data();
+      } catch (error) {
+        console.error("Error converting image to Base64:", error);
+        return;
+      }
+      let headerHtml;
+      // Insert an empty header section with a placeholder
+      // if (position === "center") {
+      //   headerHtml = `<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><div style="text-align: center;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      // } else if (position === "right") {
+      //   headerHtml = `<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><div style="text-align: right;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      // } else {
+      //   headerHtml = `<div title="header" contenteditable="true" style="background-color: #f0f0f0;"><div style="text-align: left;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      // }
+
+      if (position === "center") {
+        headerHtml = `<div title="header" contenteditable="true"><div style="text-align: center;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      } else if (position === "right") {
+        headerHtml = `<div title="header" contenteditable="true"><div style="text-align: right;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      } else {
+        headerHtml = `<div title="header" contenteditable="true"><div style="text-align: left;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      }
+
+      // Insert the header at the beginning of the content
+      var content = editor.getContent();
+
+      // Insert the header at the beginning of the content
+      var content = editor.getContent();
+      editor.setContent(headerHtml + content);
+    }
+
+    // Focus the editor on the header section for immediate editing
+    editor.focus();
+
+    // If a header already exists, move the cursor to it
+    var headerSection = editor.getBody().querySelector('div[title="header"] p');
+    if (headerSection) {
+      editor.selection.select(headerSection, true);
+      editor.selection.collapse(false);
+    }
+  };
+
   return (
     <>
       <TemplateAdvanceExportModal
@@ -397,6 +485,39 @@ const EditorElement2 = ({
                 callback(items);
               },
             });
+
+            editor.ui.registry.addMenuButton("insertLogo", {
+              text: "Insert Logo",
+              fetch: function (callback) {
+                var items = [
+                  {
+                    type: "menuitem",
+                    text: "Left",
+                    onAction: function () {
+                      insertLogo(editor, "left");
+                    },
+                  },
+                  {
+                    type: "menuitem",
+                    text: "Center",
+                    onAction: function () {
+                      insertLogo(editor, "center");
+                    },
+                  },
+                  {
+                    type: "menuitem",
+                    text: "Right",
+                    onAction: function () {
+                      insertLogo(editor, "right");
+                    },
+                  },
+
+                  // ... similarly for A3 and other sizes
+                ];
+                callback(items);
+              },
+            });
+
             editor.on("keydown", (event) => handleNodeChange(event, editor));
             // Register Icons
             editor.ui.registry.addIcon(
@@ -542,8 +663,8 @@ const EditorElement2 = ({
               },
             });
 
-            editor.ui.registry.addButton("insertCustomHeader", {
-              text: "Insert Custom Header",
+            editor.ui.registry.addButton("insertHeader", {
+              text: "Insert Header",
               onAction: function () {
                 // Check if a header already exists
                 var existingHeader = editor
@@ -602,6 +723,20 @@ const EditorElement2 = ({
               },
             });
 
+            editor.ui.registry.addButton("removeHeader", {
+              text: "Remove Header",
+              onAction: function () {
+                // Check if we're currently in the header
+                var headerSection = editor
+                  .getBody()
+                  .querySelector('div[title="header"]');
+                if (headerSection) {
+                  // Remove the header section
+                  headerSection.remove();
+                }
+              },
+            });
+
             // editor.on("GetContent", function (e) {
             //   var content = e.content;
             //   // A simple example to add inline style to paragraphs
@@ -637,9 +772,9 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "insertCustomHeader exitHeader | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
+            "undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
-            "bullist numlist outdent indent | hr | pagebreak |" +
+            "bullist numlist outdent indent | hr | pagebreak | insertLogo insertHeader exitHeader removeHeader |" +
             "removeformat | searchreplace |" +
             "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPreviewButton | help",
           // newline_behavior: "invert",
@@ -718,6 +853,7 @@ const EditorElement2 = ({
           images_upload_handler: imageUploadHandler,
           file_picker_types: "image, media",
           table_use_colgroups: false,
+          link_assume_external_targets: true
         }}
         onEditorChange={(value) => {
           formik.setFieldValue(name, value);

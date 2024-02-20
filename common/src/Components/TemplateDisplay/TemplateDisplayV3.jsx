@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Spinner } from "reactstrap";
 import { Editor } from "@tinymce/tinymce-react";
 import useMutationObserver from "./useMutationObserverHook";
 import ReactHtmlParser from "react-html-parser";
@@ -22,6 +23,8 @@ const TemplateDisplayV3 = ({
   onChange,
   value, // Value - Used with formik
   initialValues,
+  isAllLoading,
+  showLoading = true,
 }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
@@ -29,6 +32,8 @@ const TemplateDisplayV3 = ({
   const displayRef = useRef(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [editorContent, setEditorContent] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   /**
    * Set the parsedContent when  content props changes
    */
@@ -75,6 +80,7 @@ const TemplateDisplayV3 = ({
       if (!content) return;
       if (!processContent) return;
       try {
+        // setIsLoading(true);
         const result = await TemplateDisplayHelper.runEffects(
           content,
           null,
@@ -84,6 +90,8 @@ const TemplateDisplayV3 = ({
         setParsedContent(result);
       } catch (error) {
         console.error("Error applying effects:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -116,6 +124,66 @@ const TemplateDisplayV3 = ({
     }
   }
 
+  function getLogoBase64Data() {
+    const imageUrl = "/AvensysLogo.png"; // Adjust the path as necessary
+    return fetch(imageUrl) // Return the fetch promise
+      .then((response) => response.blob())
+      .then((blob) => {
+        return new Promise((resolve, reject) => {
+          // Return a new promise that resolves with the Base64 data
+          const reader = new FileReader();
+          reader.onloadend = function () {
+            resolve(reader.result); // Resolve the promise with the Base64 data
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      })
+      .catch((error) => {
+        console.error("Error converting image to Base64:", error);
+        throw error; // Ensure errors are propagated
+      });
+  }
+
+  const insertLogo = async (editor, position) => {
+    let existingHeader = editor.getContent().includes('title="header"');
+    if (!existingHeader) {
+      let base64ImgLogoData;
+      try {
+        base64ImgLogoData = await getLogoBase64Data();
+      } catch (error) {
+        console.error("Error converting image to Base64:", error);
+        return;
+      }
+      let headerHtml;
+      // Insert an empty header section with a placeholder
+      if (position === "center") {
+        headerHtml = `<div title="header" contenteditable="true"><div style="text-align: center;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      } else if (position === "right") {
+        headerHtml = `<div title="header" contenteditable="true"><div style="text-align: right;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      } else {
+        headerHtml = `<div title="header" contenteditable="true"><div style="text-align: left;"> <img src="${base64ImgLogoData}" alt="Avensys Logo" width="150"/></div></div>`;
+      }
+
+      // Insert the header at the beginning of the content
+      var content = editor.getContent();
+
+      // Insert the header at the beginning of the content
+      var content = editor.getContent();
+      editor.setContent(headerHtml + content);
+    }
+
+    // Focus the editor on the header section for immediate editing
+    editor.focus();
+
+    // If a header already exists, move the cursor to it
+    var headerSection = editor.getBody().querySelector('div[title="header"] p');
+    if (headerSection) {
+      editor.selection.select(headerSection, true);
+      editor.selection.collapse(false);
+    }
+  };
+
   // Set Plugins
   let plugins = [
     "advlist",
@@ -147,10 +215,20 @@ const TemplateDisplayV3 = ({
 
   return (
     <>
-      {isView ? (
-        <div className="tinyCME">
-          <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
+      {showLoading && isLoading && (
+        <div className="d-flex justify-content-center align-items-center vh-100">
+          <Spinner
+            style={{ width: "100px", height: "100px", color: "black" }}
+          />
         </div>
+      )}
+      {isView ? (
+        !isLoading &&
+        !isAllLoading && (
+          <div className="tinyCME">
+            <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
+          </div>
+        )
       ) : (
         <>
           <TemplateAdvanceExportModal
@@ -313,6 +391,38 @@ const TemplateDisplayV3 = ({
                     }
                   },
                 });
+
+                editor.ui.registry.addMenuButton("insertLogo", {
+                  text: "Insert Logo",
+                  fetch: function (callback) {
+                    var items = [
+                      {
+                        type: "menuitem",
+                        text: "Left",
+                        onAction: function () {
+                          insertLogo(editor, "left");
+                        },
+                      },
+                      {
+                        type: "menuitem",
+                        text: "Center",
+                        onAction: function () {
+                          insertLogo(editor, "center");
+                        },
+                      },
+                      {
+                        type: "menuitem",
+                        text: "Right",
+                        onAction: function () {
+                          insertLogo(editor, "right");
+                        },
+                      },
+
+                      // ... similarly for A3 and other sizes
+                    ];
+                    callback(items);
+                  },
+                });
               },
               height: height, // Set the initial height to 100% of the parent container
               min_height: minHeight,
@@ -322,7 +432,7 @@ const TemplateDisplayV3 = ({
               toolbar:
                 "undo redo | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsizeinput styles | " +
                 "bold italic underline forecolor backcolor | align lineheight |" +
-                "bullist numlist outdent indent | hr | pagebreak |" +
+                "bullist numlist outdent indent | hr | insertLogo | pagebreak |" +
                 "removeformat | searchreplace |" +
                 "table | code codesample | emoticons charmap | image | fullscreen | preview | exportPreviewButton | help",
               content_style:

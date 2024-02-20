@@ -10,7 +10,6 @@ import {
   DropdownItem,
   DropdownToggle,
   DropdownMenu,
-  Spinner,
 } from "reactstrap";
 import {
   TemplateDisplayV3,
@@ -31,8 +30,6 @@ import * as ExportHelper from "../../helpers/export_helper";
 import TemplatePreviewModal from "../TemplateDisplay/TemplatePreviewModal/TemplatePreviewModal";
 import { generateOptions } from "./pdfOption";
 import TemplateAdvanceExportModal from "../TemplateDisplay/TemplateAdvanceExportModal/TemplateAdvanceExportModal";
-import * as BackendHelper from "../../helpers/backend_helper";
-import "./EmailComponent.scss";
 
 function EmailComponent() {
   const dispatch = useDispatch();
@@ -45,44 +42,13 @@ function EmailComponent() {
   const [formSchema, setFormSchema] = useState(schema);
   const [templateData, setTemplateData] = useState(null);
   const [attachments, setAttachments] = useState([]);
-  const [attachmentTemplateSelected, setAttachmentTemplateSelected] =
-    useState(null);
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData();
   const [templateAttachmentModalShow, setTemplateAttachmentModalShow] =
     useState(false);
-  const [attachmentTemplates, setAttachmentTemplates] = useState([]);
-  const [attachmentLoading, setAttachmentLoading] = useState(false);
 
-  const {
-    loading,
-    isEmailOpen,
-    category,
-    subCategory,
-    success,
-    attachmentCategory,
-    attachmentSubcategory,
-  } = useSelector((state) => state.EmailCommonReducer);
-
-  useEffect(() => {
-    if (attachmentCategory && attachmentSubcategory) {
-      BackendHelper.getTemplatesByCategoryAndSubCategory(
-        attachmentCategory,
-        attachmentSubcategory
-      )
-        .then((res) => setAttachmentTemplates(res.data))
-        .catch((err) => {
-          console.log(err);
-        });
-      return;
-    }
-    if (attachmentCategory) {
-      BackendHelper.getTemplatesByCategory(attachmentCategory)
-        .then((res) => setAttachmentTemplates(res.data))
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [attachmentCategory, attachmentSubcategory]);
+  const { loading, isEmailOpen, category, subCategory, success } = useSelector(
+    (state) => state.EmailCommonReducer
+  );
 
   /**
    * Handle form submit event (Formik)
@@ -218,62 +184,6 @@ function EmailComponent() {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
-  };
-  //   const processedContent = await TemplateHelper.runEffects(
-  //     templateContent,
-  //     null,
-  //     allData,
-  //     true
-  //   );
-  //   const removeEditableContent =
-  //     TemplateHelper.removeContentEditableAndStyles(processedContent);
-
-  //   const convertTableAttributesContent =
-  //     TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
-
-  //   const convertInlineStylesContent =
-  //     TemplateHelper.convertInlineStylesToClasses(
-  //       convertTableAttributesContent
-  //     );
-  //   return convertInlineStylesContent;
-  // };
-
-  const attachmentTemplate = async (id) => {
-    const filterTemplate = attachmentTemplates.find(
-      (template) => template.id === id
-    );
-    if (!filterTemplate) return;
-    setAttachmentLoading(true);
-    try {
-      const processedTemplate =
-        await TemplateHelper.setSelectedContentAndProcessed(
-          filterTemplate.content,
-          allModuleData
-        );
-
-      if (processedTemplate) {
-        const file = await ExportHelper.exportBackendHtml2PdfFile(
-          processedTemplate.html,
-          {
-            unit: "in",
-            pageType: "A4",
-            pageOrientation: "portrait",
-            marginTop: 0,
-            marginBottom: 0,
-            marginLeft: 0,
-            marginRight: 0,
-            exportType: "pdf",
-            fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`,
-          },
-          processedTemplate.styleTag
-        );
-        setAttachments([...attachments, file]);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setAttachmentLoading(false);
-    }
   };
 
   return (
@@ -499,19 +409,10 @@ function EmailComponent() {
                           attachmentRef.current.click();
                         }}
                       >
-                        {attachmentLoading ? (
-                          <Spinner
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                            }}
-                          />
-                        ) : (
-                          <i
-                            style={{ fontSize: "1rem" }}
-                            className="ri-attachment-2"
-                          />
-                        )}
+                        <i
+                          style={{ fontSize: "1rem" }}
+                          className="ri-attachment-2"
+                        />
                       </Button>
                       <DropdownToggle
                         tag="button"
@@ -522,44 +423,12 @@ function EmailComponent() {
                         <span className="visually-hidden">Toggle Dropdown</span>
                       </DropdownToggle>
                       <DropdownMenu className="dropdown-menu-end">
+
                         {/* Start here */}
-                        {attachmentTemplates.map((template) => {
-                          return (
-                            <li key={template.id}>
-                              <DropdownItem>
-                                <div
-                                  className="d-flex justify-content-between align-items-center"
-                                  style={{ width: "175px" }}
-                                >
-                                  <span
-                                    onClick={async () => {
-                                      attachmentTemplate(template.id);
-                                    }}
-                                    className="cursor-pointer template-name flex-grow-1"
-                                  >
-                                    {template.name}
-                                  </span>
-                                  <div className="d-flex gap-1 align-items-center">
-                                    <span style={{ color: "#D3D3D3" }}>|</span>
-                                    <i
-                                      className="ri-more-line fs-5 more-icon cursor-pointer"
-                                      onClick={() => {
-                                        setAttachmentTemplateSelected(
-                                          template.content
-                                        );
-                                        setTemplateAttachmentModalShow(true);
-                                      }}
-                                    ></i>
-                                  </div>
-                                </div>
-                              </DropdownItem>
-                            </li>
-                          );
-                        })}
-                        <hr style={{ margin: 0 }} />
+                        
                         <li>
                           <DropdownItem
-                            onClick={() => {
+                            onClick={async () => {
                               setTemplateAttachmentModalShow(true);
                             }}
                           >
@@ -608,7 +477,6 @@ function EmailComponent() {
           </Modal>
         )}
         <TemplateAdvanceExportModal
-          content={attachmentTemplateSelected}
           showInsertModal={templateAttachmentModalShow}
           setShowInsertModal={setTemplateAttachmentModalShow}
           toExport={false}
@@ -617,9 +485,6 @@ function EmailComponent() {
             setAttachments([...attachments, file]);
           }}
           allData={allModuleData}
-          closeModalCallback={() => {
-            setAttachmentTemplateSelected("");
-          }}
         />
         {isMinimized && (
           <div

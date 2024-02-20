@@ -414,6 +414,7 @@ function JobOverview() {
             templateData={templateData}
             closeOffcanvas={closeOffcanvas}
             candidateId={candidateId}
+            jobId={parseInt(jobId)}
           />
         );
       case 12:
@@ -674,6 +675,7 @@ function JobOverview() {
                       ></th>
                     </tr>
                   </thead>
+
                   {jobTimelineMeta?.isLoading ? (
                     <tr>
                       <td colSpan={rtsStatusHeaders.length}>
