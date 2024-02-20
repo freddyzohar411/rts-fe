@@ -10,7 +10,6 @@ import { v4 as uuid } from "uuid";
 import CountrySelectField from "../../fieldbuilders/CountrySelectField";
 import UserGroupSelectField from "../../fieldbuilders/UserGroupSelectField";
 import FormCategorySelectField from "../../fieldbuilders/FormCategorySelectField";
-import * as FieldBuilderHelper from "./fieldBuilderValidation_helper";
 import useFieldBuilderValidationHook from "./FieldBuilderValidationHook";
 
 const FieldBuilder = ({
@@ -36,7 +35,7 @@ const FieldBuilder = ({
       setUuidKey(uuid());
     }
   }, [uuidKey]);
-  
+
   //========================= States ================================
   // Condition validation state
   const [validationConditionList, setValidationConditionList] = useState(
@@ -1637,9 +1636,37 @@ const FieldBuilder = ({
     }
   }, [formik?.values["name"]]);
 
+  // Do not delete (Need for reference)
+  // useEffect(() => {
+  //   if (formik?.values["label"] && formik?.values["name"] !== "") {
+  //     if (formik?.values["label"]) {
+  //       formik.setFieldValue(
+  //         ["name"],
+  //         `${toCamelCase(formik?.values["label"])}`
+  //       );
+  //     }
+  //   }
+
+  //   if (formik?.values["label"] === "") {
+  //     formik.setFieldValue(["name"], uuidKey);
+  //   }
+  // }, [formik?.values["label"]]);
+
   useEffect(() => {
-    if (formik?.values["label"] && formik?.values["name"] !== "") {
-      if (formik?.values["label"]) {
+    if (
+      formBuilderUpdateData &&
+      formBuilderUpdateData?.label !== formik?.values["label"]
+    ) {
+      if (formik?.values["label"] && formik?.values["name"] !== "") {
+        formik.setFieldValue(
+          ["name"],
+          `${toCamelCase(formik?.values["label"])}`
+        );
+      }
+    }
+
+    if (!formBuilderUpdateData) {
+      if (formik?.values["label"] && formik?.values["name"] !== "") {
         formik.setFieldValue(
           ["name"],
           `${toCamelCase(formik?.values["label"])}`
