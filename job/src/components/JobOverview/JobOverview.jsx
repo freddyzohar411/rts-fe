@@ -42,7 +42,7 @@ import SubmitToClient from "../SubmitToClient/SubmitToClient";
 import ProfileFeedbackPending from "../ProfileFeedbackPending/ProfileFeedbackPending";
 import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
 import FirstInterviewFeedbackPending from "../FirstInterviewFeedback/FirstInterviewFeedback";
-import ThirdInterviewFeedbackPending from "../ThirdinterviewFeedback/ThirdinterviewFeedback";
+import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterviewFeedback";
 import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
@@ -226,7 +226,7 @@ function JobOverview() {
         setStepperState("Schedule Third Interview");
         break;
       case 10:
-        setStepperState("Update 3rd Interview Feedback");
+        setStepperState("Interview Feedback Pending");
         break;
       case 11:
         setStepperState("Conditional Offer");
@@ -360,6 +360,7 @@ function JobOverview() {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
+            activeStep={step}
           />
         );
       case 6:
@@ -368,6 +369,7 @@ function JobOverview() {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
+            handleIconClick={handleIconClick}
           />
         );
       case 7:
@@ -376,6 +378,7 @@ function JobOverview() {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
+            activeStep={step}
           />
         );
       case 8:
@@ -384,6 +387,7 @@ function JobOverview() {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
+            handleIconClick={handleIconClick}
           />
         );
       case 9:
@@ -392,6 +396,7 @@ function JobOverview() {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
+            activeStep={step}
           />
         );
       case 10:
@@ -712,7 +717,14 @@ function JobOverview() {
                                     onClick={() =>
                                       handleIconClick(
                                         data?.candidate?.id,
-                                        data?.id
+                                        data?.id,
+                                        originalOrder === 6
+                                          ? 6
+                                          : originalOrder === 7
+                                          ? 8
+                                          : originalOrder === 8
+                                          ? 10
+                                          : null
                                       )
                                     }
                                     id="next-step"

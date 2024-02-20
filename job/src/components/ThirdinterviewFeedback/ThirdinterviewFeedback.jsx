@@ -11,26 +11,18 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-function ThirdInterviewFeedbackPending({
-  closeOffcanvas,
-  jobId,
-  candidateId,
-}) {
+function ThirdInterviewFeedbackPending({ closeOffcanvas, jobId, candidateId }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const linkState = location.state;
-  const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
+  const { getAllUserGroups } = useUserAuth();
 
-  const [view, setView] = useState(
+  const [view] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
       : false
   );
-
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
 
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
@@ -57,8 +49,8 @@ function ThirdInterviewFeedbackPending({
   ) => {
     const payload = {
       jobId: jobId,
-      jobStageId: JOB_STAGE_IDS?.THIRD_INTERVIEW_SCHEDULED,
-      status: values?.secondInterviewStatus ?? JOB_STAGE_STATUS?.COMPLETED,
+      jobStageId: JOB_STAGE_IDS?.INTERVIEW_FEEDBACK_PENDING,
+      status: values?.profileFeedbackStatus ?? JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),

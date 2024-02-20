@@ -21,9 +21,9 @@ function ProfileFeedbackPending({
   const dispatch = useDispatch();
   const location = useLocation();
   const linkState = location.state;
-  const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
+  const { getAllUserGroups } = useUserAuth();
 
-  const [view, setView] = useState(
+  const [view] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
       : false

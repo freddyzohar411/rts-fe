@@ -1,5 +1,5 @@
 import { Form } from "@workspace/common";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SECOND_INTERVIEW_FEEDBACK_PENDING } from "./constants";
@@ -15,24 +15,30 @@ function SecondInterviewFeedbackPending({
   closeOffcanvas,
   jobId,
   candidateId,
+  handleIconClick,
 }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const linkState = location.state;
-  const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
+  const { getAllUserGroups } = useUserAuth();
 
-  const [view, setView] = useState(
+  const [view] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
       : false
   );
 
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
+  const formikRef = useCallback((node) => {
+    if (node?.formik?.values?.profileFeedbackStatus === "COMPLETED") {
+      handleIconClick(candidateId, jobId, 9, true);
+    } else if (
+      node?.formik?.values?.profileFeedbackStatus === "SECOND_INTERVIEW"
+    ) {
+      handleIconClick(candidateId, jobId, 7, true);
+    }
+  }, []);
 
-  const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
 

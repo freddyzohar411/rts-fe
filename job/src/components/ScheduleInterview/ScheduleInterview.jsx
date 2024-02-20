@@ -11,22 +11,18 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-function ScheduleInterview({ closeOffcanvas, jobId, candidateId }) {
+function ScheduleInterview({ closeOffcanvas, jobId, candidateId, activeStep }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const linkState = location.state;
-  const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
+  const { getAllUserGroups } = useUserAuth();
 
-  const [view, setView] = useState(
+  const [view] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
       : false
   );
-
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
 
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
@@ -51,14 +47,27 @@ function ScheduleInterview({ closeOffcanvas, jobId, candidateId }) {
     formStateHook,
     rerenderTable
   ) => {
+    let stageId = JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED;
+    let type = "first_interview_scheduled";
+
+    if (activeStep === 7) {
+      stageId = JOB_STAGE_IDS?.SECOND_INTERVIEW_SCHEDULED;
+      type = "second_interview_scheduled";
+    }
+
+    if (activeStep === 9) {
+      stageId = JOB_STAGE_IDS?.THIRD_INTERVIEW_SCHEDULED;
+      type = "third_interview_scheduled";
+    }
+
     const payload = {
       jobId: jobId,
-      jobStageId: JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED,
-      status: JOB_STAGE_STATUS?.COMPLETED,
+      jobStageId: stageId,
+      status: values?.profileFeedbackStatus ?? JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),
-      jobType: "schedule_interview",
+      jobType: type,
     };
     dispatch(tagJob({ payload, navigate }));
   };

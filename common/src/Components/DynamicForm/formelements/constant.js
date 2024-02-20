@@ -43,7 +43,7 @@ export const FIRST_INTERVIEW_FEEDBACK_OPTIONS = [
   },
   { value: "REJECTED", label: "Profile Rejected" },
   {
-    value: "2nd Interview Scheduled",
+    value: "COMPLETED",
     label: "Scheduled 2nd Interview",
   },
 ];
@@ -55,11 +55,11 @@ export const SECOND_INTERVIEW_FEEDBACK_OPTIONS = [
   },
   { value: "REJECTED", label: "Profile Rejected" },
   {
-    value: "3rd Interview Scheduled",
+    value: "COMPLETED",
     label: "Scheduled 3rd Interview",
   },
   {
-    value: "2nd Interview Scheduled",
+    value: "SECOND_INTERVIEW",
     label: "Rescheduled 2nd Interview",
   },
 ];
