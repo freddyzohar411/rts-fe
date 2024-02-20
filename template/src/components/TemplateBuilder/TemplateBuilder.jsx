@@ -286,7 +286,7 @@ const TemplateBuilder = forwardRef(
         const inlineContent2 =
           TemplateHelper.addCssStyleForAlignAttribute(inlineContent);
 
-          console.log("Inline Content 2: ", inlineContent2)
+        console.log("Inline Content 2: ", inlineContent2);
         setTemplateContent(inlineContent2);
       } catch (err) {
         console.log(err);
@@ -303,6 +303,21 @@ const TemplateBuilder = forwardRef(
       } catch (error) {
         console.error("Error converting Word to HTML:", error);
       }
+    };
+
+    const injectTemplates = async () => {
+      // Get Content from editor
+      let content = editorRef.current.getContent();
+      if (content === "") {
+        return;
+      }
+
+      try {
+        content = await TemplateHelper.setOnlyTemplateInjection(content);
+      } catch (err) {
+        console.log(err);
+      }
+      editorRef.current.setContent(content);
     };
 
     return (
@@ -526,17 +541,27 @@ const TemplateBuilder = forwardRef(
               <Col>
                 <div className="d-flex align-items-center justify-content-between">
                   <span className="h6 fw-bold">Template</span>
-                  <Button
-                    className="btn-custom-primary"
-                    style={{ padding: "5px 10px 5px 10px" }}
-                    onClick={() => {
-                      setTemplateSelected("");
-                      setCategorySelected("");
-                      setShowInsertModal(true);
-                    }}
-                  >
-                    + Insert Template
-                  </Button>
+                  <div className="d-flex gap-2">
+                    {" "}
+                    <Button
+                      className="btn-custom-primary"
+                      style={{ padding: "5px 10px 5px 10px" }}
+                      onClick={injectTemplates}
+                    >
+                      Load all Templates
+                    </Button>
+                    <Button
+                      className="btn-custom-primary"
+                      style={{ padding: "5px 10px 5px 10px" }}
+                      onClick={() => {
+                        setTemplateSelected("");
+                        setCategorySelected("");
+                        setShowInsertModal(true);
+                      }}
+                    >
+                      + Insert Template
+                    </Button>
+                  </div>
                 </div>
               </Col>
             </Row>

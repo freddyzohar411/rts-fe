@@ -47,6 +47,48 @@ export async function replaceTemplate(htmlString, mappedVariableData) {
 }
 
 /**
+ *
+ * @param {*} htmlString
+ * @param {*} mappedVariableData
+ * @returns
+ */
+export async function replaceTemplateOnly(htmlString) {
+  // Check if htmlString is provided
+  if (!htmlString) return;
+
+  // Assuming getTemplateData is an async function that retrieves template data
+  const templateData = await getTemplateData(htmlString);
+
+  // Pattern to match template variables
+  const pattern = /{{([^:]*?)}}/g;
+  const matches = htmlString.match(pattern) || [];
+  // const matches = htmlString.match(pattern);
+  console.log("matches", matches);
+  let result = htmlString;
+
+  // Function to replace variables if exists, otherwise return the original value
+  // const replaceValue = (value, mappedVariableData) => {
+  //   if (typeof replaceVariables === "function") {
+  //     return replaceVariables(value, mappedVariableData);
+  //   } else {
+  //     return value; // Return original value if replaceVariables is not a function
+  //   }
+  // };
+
+  // Iterate over matches and replace them
+  matches.forEach((match) => {
+    const key = match.replace("{{", "").replace("}}", "");
+    const keys = key.split(".");
+    const value =
+      keys.reduce((acc, keyPart) => acc?.[keyPart], templateData) || "-";
+    // const replacedValue = replaceValue(value, mappedVariableData);
+    result = result.replace(match, value);
+  });
+
+  return result;
+}
+
+/**
  * Replace template placeholders {{xxx.yyy:zzz}} in html with templateData
  * Get zzz array data from variableData and generate html for each item in the array (loop)
  * Within each html, if there is a variable placeholder ${xxx.yyy.zzz} then replace it with variableData
@@ -222,6 +264,51 @@ export async function runEffects(
 }
 
 /**
+ *
+ * @param {*} htmlString
+ * @param {*} currentContent
+ * @param {*} mappedVariableData
+ * @param {*} recursive
+ * @returns
+ */
+export async function runEffectsTemplateInjection(
+  htmlString,
+  currentContent = null,
+  recursive = true
+) {
+  if (!htmlString) {
+    return currentContent;
+  }
+
+  const templateListCriteria = getAllTemplatesToRenderFromHTML(htmlString);
+  console.log("templateListCriteria", templateListCriteria);
+
+  // Effect 1: Replace variables with mappedVariableData
+  let updatedContent = htmlString;
+
+  if (templateListCriteria.length > 0) {
+    // Effect 2: Replace templateListCriteria without data
+    updatedContent = await replaceTemplateOnly(updatedContent);
+  }
+
+  // Check if the content has been updated and if recursive is true
+  if (currentContent !== updatedContent && recursive) {
+    // Recursive call for nested templates
+    const nestedTemplates = getAllTemplatesToRenderFromHTML(updatedContent);
+    if (nestedTemplates.length > 0) {
+      // Pass the updatedContent as an argument for the recursive call
+      return runEffectsTemplateInjection(
+        updatedContent,
+        updatedContent,
+        recursive
+      );
+    }
+  }
+
+  return updatedContent;
+}
+
+/**
  * Replace page breaks in html string with page break divs
  * @param {*} htmlString
  * @returns
@@ -376,6 +463,15 @@ export async function setSelectedContentAndProcessed(templateContent, allData) {
     convertTableAttributesContent
   );
   return convertInlineStylesContent;
+}
+
+export async function setOnlyTemplateInjection(templateContent) {
+    const processedContent = await runEffectsTemplateInjection(
+      templateContent,
+      null,
+      true
+    );
+    return processedContent;
 }
 
 // ============================== Helper Function ===============================
