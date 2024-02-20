@@ -28,7 +28,7 @@ function* forgetUser({ payload: { user, history } }) {
     if (response) {
       yield put(
         userForgetPasswordSuccess(
-          "Reset link are sended to your mailbox, check there first"
+          "Password reset link has been sent to your email."
         )
       );
     }

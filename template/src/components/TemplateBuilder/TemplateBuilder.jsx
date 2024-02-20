@@ -17,7 +17,7 @@ import {
   Container,
 } from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
-import { moduleConstants } from "./constants";
+import { moduleConstants, injectionVariables } from "./constants";
 import { TemplateDisplayV3, TemplateHelper } from "@workspace/common";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,6 +51,7 @@ const TemplateBuilder = forwardRef(
     const [selectedSection, setSelectedSection] = useState("");
     const [fields, setFields] = useState([]);
     const [selectedField, setSelectedField] = useState("");
+    const [selectedVariable, setSelectedVariable] = useState("");
     const templateCategories = useSelector(
       (state) => state.TemplateReducer.templateCategories
     );
@@ -419,6 +420,32 @@ const TemplateBuilder = forwardRef(
             </Row>
             <Row className="align-items-end mb-3">
               <Col>
+                <Label>Variables</Label>
+                <SelectElement
+                  optionsData={injectionVariables}
+                  setSelectedOptionData={setSelectedVariable}
+                  placeholder="Select a variable"
+                  value={selectedVariable}
+                />
+              </Col>
+              <Col>
+                <Button
+                  type="button"
+                  className="self-end"
+                  disabled={selectedVariable === null}
+                  onClick={() => {
+                    setInjectVariable(
+                      "{{" + `${selectedVariable.value}` + "}}"
+                    );
+                    setSelectedVariable("");
+                  }}
+                >
+                  Add Variable
+                </Button>
+              </Col>
+            </Row>
+            <Row className="align-items-end mb-3">
+              <Col>
                 <Label>Category</Label>
                 <SelectElement
                   optionsData={templateCategories.map((category) => ({
@@ -450,8 +477,8 @@ const TemplateBuilder = forwardRef(
                         `${categorySelected.value}.${templateSelected.value}` +
                         "}}"
                     );
-                    setFieldName("");
-                    setTypeData("");
+                    setCategorySelected("");
+                    setTemplateSelected("");
                   }}
                 >
                   Add Template
@@ -526,6 +553,8 @@ const TemplateBuilder = forwardRef(
                     );
                     setFieldName("");
                     setTypeData("");
+                    setCategorySelected("");
+                    setTemplateSelected("");
                   }}
                 >
                   Add template + Variable
@@ -542,7 +571,6 @@ const TemplateBuilder = forwardRef(
                 <div className="d-flex align-items-center justify-content-between">
                   <span className="h6 fw-bold">Template</span>
                   <div className="d-flex gap-2">
-                    {" "}
                     <Button
                       className="btn-custom-primary"
                       style={{ padding: "5px 10px 5px 10px" }}

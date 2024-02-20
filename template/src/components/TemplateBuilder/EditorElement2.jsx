@@ -853,6 +853,7 @@ const EditorElement2 = ({
           images_upload_handler: imageUploadHandler,
           file_picker_types: "image, media",
           table_use_colgroups: false,
+          link_assume_external_targets: true
         }}
         onEditorChange={(value) => {
           formik.setFieldValue(name, value);
