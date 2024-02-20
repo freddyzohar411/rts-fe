@@ -13,6 +13,20 @@ export const JOB_TIMELINE_INITIAL_OPTIONS = [
   },
 ];
 
+export const TAG = "Tag";
+export const ASSOCIATE = "Associate";
+export const SUBMIT_TO_SALES = "Submit to Sales";
+export const SUBMIT_TO_CLIENT = "Submit to Client";
+export const PROFILE_FEEDBACK_PENDING = "Profile Feedback Pending";
+export const FIRST_INTERVIEW_SCHEDULED = "First Interview Scheduled";
+export const SECOND_INTERVIEW_SCHEDULED = "Second Interview Scheduled";
+export const THIRD_INTERVIEW_SCHEDULED = "Third Interview Scheduled";
+export const INTERVIEW_FEEDBACK_PENDING = "Interview Feedback Pending";
+export const CONDITIONAL_OFFER_SENT = "Conditional Offer Sent";
+export const CONDITIONAL_OFFER_ACCEPTED_DECLINED =
+  "Conditional Offer Accepted/Declined";
+export const INTERVIEWS = "Interviews";
+
 export const steps = {
   Tag: "Tag",
   Associate: "Associate",

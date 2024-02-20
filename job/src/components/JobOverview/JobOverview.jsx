@@ -714,6 +714,7 @@ function JobOverview() {
                                     candidateId={data?.candidate?.id}
                                     timeline={data?.timeline}
                                     originalOrder={originalOrder}
+                                    step={step}
                                   />
                                 </td>
                               );
