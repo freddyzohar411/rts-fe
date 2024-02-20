@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Row,
   Col,
-  Card,
-  CardBody,
   Button,
   Input,
   Nav,
@@ -28,7 +26,7 @@ import {
   tagReset,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 import "./StepComponent.scss";
 import Skeleton from "react-loading-skeleton";
@@ -61,11 +59,11 @@ import "./JobOverview.scss";
 import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
 import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
+import { truncate } from "@workspace/common/src/helpers/string_helper";
 
 function JobOverview() {
   document.title = "Job Timeline | RTS";
 
-  const [isLoading, setIsLoading] = useState(true);
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
@@ -73,12 +71,10 @@ function JobOverview() {
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
-  const location = useLocation();
 
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
   const [stepperState, setStepperState] = useState("");
-  const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
 
   const [templateData, setTemplateData] = useState(null);
@@ -90,6 +86,9 @@ function JobOverview() {
   const [isPreviewCV, setIsPreviewCV] = useState(false);
   const [skipComboOptions, setSkipComboOptions] = useState({});
 
+  const jobTimelineMeta = useSelector(
+    (state) => state.JobStageReducer.jobTimelineMeta
+  );
   const form = useSelector((state) => state.JobFormReducer.form);
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
@@ -109,16 +108,6 @@ function JobOverview() {
         ),
     },
   ];
-
-  useEffect(() => {
-    if (jobTimelineData && jobTimelineData.length === 0) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    } else {
-      setIsLoading(true);
-    }
-  }, [jobTimelineData]);
 
   // Table Hooks
   const {
@@ -383,13 +372,6 @@ function JobOverview() {
 
   const deliveryTeam = "Ganesh, Priya, Vinod";
 
-  const truncate = (input, length) =>
-    input
-      ? input.length > length
-        ? `${input.substring(0, length)}...`
-        : input
-      : "";
-
   const renderLegend = () => {
     return (
       <div className="d-flex flex-wrap">
@@ -405,7 +387,7 @@ function JobOverview() {
                 width: "9px",
                 height: "9px",
                 backgroundColor: `${item.color}`,
-                border: "1px solid #36454F",
+                border: `1px solid ${item.color}`,
               }}
             ></div>
             <div>
@@ -448,10 +430,13 @@ function JobOverview() {
                       : formSubmissionData?.accountName}
                   </span>
                   <span>|</span>
-                  <span title={formSubmissionData?.jobTitle}>
+                  <span
+                    title={formSubmissionData?.jobTitle}
+                    className="cursor-pointer"
+                  >
                     {isMobile | isTablet
                       ? truncate(formSubmissionData?.jobTitle, 8)
-                      : formSubmissionData?.jobTitle}
+                      : truncate(formSubmissionData?.jobTitle, 35)}
                   </span>
                   <span>|</span>
                   <span>
@@ -596,8 +581,13 @@ function JobOverview() {
                     </tr>
                   </thead>
 
-                  {/* // FIX */}
-                  {jobTimelineData && jobTimelineData?.jobs?.length > 0 ? (
+                  {jobTimelineMeta?.isLoading ? (
+                    <tr>
+                      <td colSpan={rtsStatusHeaders.length}>
+                        <Skeleton count={1} />
+                      </td>
+                    </tr>
+                  ) : jobTimelineData?.jobs?.length > 0 ? (
                     jobTimelineData?.jobs?.map((data, index) => {
                       let maxOrder = getMaxOrder(data);
                       const status = getStatus(data, maxOrder);
@@ -621,6 +611,7 @@ function JobOverview() {
                                   maxOrder={maxOrder}
                                   isRejected={isRejected}
                                   data={data?.timeline?.[step]}
+                                  candidateId={data?.candidate?.id}
                                 />
                               </td>
                             ))}
@@ -666,16 +657,10 @@ function JobOverview() {
                         </tbody>
                       );
                     })
-                  ) : isLoading ? (
-                    <tr>
-                      <td colSpan={rtsStatusHeaders.length}>
-                        <Skeleton count={1} />
-                      </td>
-                    </tr>
                   ) : (
                     <tr>
                       <td colSpan={rtsStatusHeaders.length}>
-                        No data available.
+                        <span className="pt-3">No data available.</span>
                       </td>
                     </tr>
                   )}
@@ -761,8 +746,11 @@ function JobOverview() {
                       <span className="h6 fw-semibold text-nowrap">
                         Job ID - {formSubmissionData?.clientJobId}
                       </span>
-                      <span className="h6 fw-semibold text-nowrap">
-                        Job Title - {formSubmissionData?.jobTitle}
+                      <span
+                        className="h6 fw-semibold text-nowrap cursor-pointer"
+                        title={formSubmissionData?.jobTitle}
+                      >
+                        Job Title - {truncate(formSubmissionData?.jobTitle, 55)}
                       </span>
                     </div>
                   </Row>

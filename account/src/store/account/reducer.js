@@ -43,6 +43,7 @@ const initialState = {
   account: {},
   accountData: null,
   accounts: [],
+  accountsMeta: {},
   accountsFields: [],
   accountsFieldsAll: [],
   meta: {},
@@ -79,21 +80,19 @@ const AccountReducer = (state = initialState, action) => {
     case FETCH_ACCOUNTS:
       return {
         ...state,
-        loading: true,
-        error: false,
+        accountsMeta: pendingMetaData(),
       };
     case FETCH_ACCOUNTS_SUCCESS:
       return {
         ...state,
-        loading: false,
+        accountsMeta: successMetaData(action.payload),
         accounts: action.payload,
       };
     case FETCH_ACCOUNTS_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        accounts: [],
+        accountsMeta: errorMetaData(action.payload),
       };
 
     // Create an Account
@@ -251,21 +250,19 @@ const AccountReducer = (state = initialState, action) => {
     case FETCH_ACCOUNTS_ADMIN:
       return {
         ...state,
-        loading: true,
-        error: false,
+        accountsMeta: pendingMetaData(),
       };
     case FETCH_ACCOUNTS_ADMIN_SUCCESS:
       return {
         ...state,
-        loading: false,
+        accountsMeta: successMetaData(action.payload),
         accounts: action.payload,
       };
     case FETCH_ACCOUNTS_ADMIN_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        accounts: [],
+        accountsMeta: errorMetaData(action.payload),
       };
     default:
       return state;

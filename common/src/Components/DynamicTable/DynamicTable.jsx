@@ -10,18 +10,13 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./DynamicTable.scss";
 
-const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    if (data && data.length === 0) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    } else {
-      setIsLoading(true);
-    }
-  }, [data]);
-
+const DynamicTable = ({
+  data,
+  config,
+  pageInfo,
+  pageRequestSet,
+  isLoading = false,
+}) => {
   // ========================================= Table Configuration ===========================
   // Generate Header
   const generateHeaderJSX = (config) => (
@@ -56,7 +51,11 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
         return (
           <td
             key={option.name}
-            style={option?.name === "action" ? { overflow: "visible" } : {}}
+            style={
+              option?.name === "action"
+                ? { overflow: "visible", maxWidth: "100%" }
+                : { maxWidth: "150px" }
+            }
           >
             {option.render(rowData)}
           </td>
@@ -82,14 +81,14 @@ const DynamicTable = ({ data, config, pageInfo, pageRequestSet }) => {
             <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
           </thead>
           <tbody className="list form-check-all">
-            {data && data.length > 0 ? (
-              generateBodyJSX(config, data)
-            ) : isLoading ? (
+            {isLoading ? (
               <tr>
                 <td colSpan={config.length}>
                   <Skeleton className="pb-3" count={2} />
                 </td>
               </tr>
+            ) : data?.length > 0 ? (
+              generateBodyJSX(config, data)
             ) : (
               <tr>
                 <td colSpan={config.length}>No data available.</td>

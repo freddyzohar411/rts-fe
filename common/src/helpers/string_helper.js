@@ -20,3 +20,10 @@ export const encode = (str) => {
     hashedStr.substring(0, 4) + randomStr + hashedStr.substring(4);
   return updatedStr;
 };
+
+export const truncate = (input, length) =>
+  input
+    ? input.length > length
+      ? `${input.substring(0, length)}...`
+      : input
+    : "";

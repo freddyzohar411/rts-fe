@@ -8,12 +8,13 @@ const InterviewPopUp = ({ currentStep }) => {
     "Third Interview Scheduled",
     "Interview Feedback Pending",
   ];
-  
+
   return (
     <React.Fragment>
       <div className="d-flex">
         {stepHeaders.map((header, index) => (
           <InterviewStepComponent
+            key={index}
             header={header}
             index={index}
             currentStep={currentStep}

@@ -19,6 +19,7 @@ import { CANDIDATE_INITIAL_OPTIONS } from "../../pages/CandidateListing/candidat
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const DynamicTableWrapper = ({
   data,
@@ -38,8 +39,10 @@ const DynamicTableWrapper = ({
   );
 
   const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [isRefresh, setIsRefresh] = useState(false);
+
+  const candidateMeta = useSelector(
+    (state) => state.CandidateReducer.candidateMeta
+  );
 
   const handleChange = (selected) => {
     const selectedObjects = selected.map((value) => {
@@ -221,6 +224,7 @@ const DynamicTableWrapper = ({
                       data={data}
                       pageRequestSet={pageRequestSet}
                       pageInfo={pageInfo}
+                      isLoading={candidateMeta?.isLoading}
                     />
                   </div>
                 </CardBody>

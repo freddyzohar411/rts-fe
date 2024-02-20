@@ -201,9 +201,9 @@ const AccountListing = () => {
       dispatch(
         fetchAccountsAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
       );
-      return;
+    } else {
+      dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
-    dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
   }, [pageRequest]);
 
   // Update the page info when account Data changes
