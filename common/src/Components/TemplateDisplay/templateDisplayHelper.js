@@ -62,8 +62,6 @@ export async function replaceTemplateOnly(htmlString) {
   // Pattern to match template variables
   const pattern = /{{([^:]*?)}}/g;
   const matches = htmlString.match(pattern) || [];
-  // const matches = htmlString.match(pattern);
-  console.log("matches", matches);
   let result = htmlString;
 
   // Iterate over matches and replace them
@@ -272,7 +270,6 @@ export async function runEffectsTemplateInjection(
   }
 
   const templateListCriteria = getAllTemplatesToRenderFromHTML(htmlString);
-  console.log("templateListCriteria", templateListCriteria);
 
   // Effect 1: Replace variables with mappedVariableData
   let updatedContent = htmlString;
@@ -466,7 +463,7 @@ export async function setOnlyTemplateInjection(templateContent) {
 }
 
 // ============================== Helper Function ===============================
-
+// Do not delete these methods
 // function wrapTextWithIns(htmlString) {
 //   let el = "ins";
 //   const root = parse(htmlString); // Assuming parse is defined elsewhere to parse the HTML string.

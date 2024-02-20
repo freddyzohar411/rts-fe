@@ -334,9 +334,6 @@ const TemplateAdvanceExportModal = ({
     }
   }, [templateSelected]);
 
-  // console.log("Style Tag", showContent.styleTag);
-  // console.log("showContent", showContent.html);
-
   return (
     <Modal
       isOpen={showInsertModal}
@@ -383,7 +380,7 @@ const TemplateAdvanceExportModal = ({
                 module={typeData}
               />
             </Col>
-            {/* // Preview Button */}
+            {/* // Preview Button Do not delete*/}
             {/* <Col>
               <Button
                 type="button"

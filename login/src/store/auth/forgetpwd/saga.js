@@ -57,7 +57,6 @@ function* validateResetToken({ payload: { token, navigate } }) {
 }
 
 function* forgetPasswordReset({ payload: data }) {
-  console.log("data", data)
   try {
     yield call(postForgetPasswordReset, data);
     yield put(forgetPasswordResetSuccess("Password reset successfully"));

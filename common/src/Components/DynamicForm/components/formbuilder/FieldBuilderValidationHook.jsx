@@ -159,9 +159,6 @@ const useFieldBuilderValidation = (formik, config, setConfig) => {
       );
     }
   }, [formik.values["fileSizeValidation"]]);
-
-  // Show all formik erro
-  console.log("formik.errors", formik.errors);
 };
 
 export default useFieldBuilderValidation;

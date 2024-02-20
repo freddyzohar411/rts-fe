@@ -47,7 +47,6 @@ const PageSettingViewBackend = ({ settings, content }) => {
       fetchData();
     }
 
-    console.log("Is Loading", isLoading);
     return () => {
       isMounted = false; // Update flag on component unmount
       if (iframeRef.current) {
@@ -68,7 +67,13 @@ const PageSettingViewBackend = ({ settings, content }) => {
   return (
     <>
       {content?.html ? (
-        <iframe ref={iframeRef} title="PDF Viewer" width="80%" height="635px" className={isLoading ? "d-none" : "d-block" } />
+        <iframe
+          ref={iframeRef}
+          title="PDF Viewer"
+          width="80%"
+          height="635px"
+          className={isLoading ? "d-none" : "d-block"}
+        />
       ) : (
         <div
           style={{ height: "635px" }}
@@ -77,16 +82,16 @@ const PageSettingViewBackend = ({ settings, content }) => {
           <h2>Please select template to load</h2>
         </div>
       )}
-      {
-        isLoading && (
-          <div
-            style={{ height: "635px" }}
-            className="d-flex justify-content-center align-items-center"
-          >
-            <Spinner style={{ width: '100px', height: '100px', color: "black"}}/>
-          </div>
-        )
-      }
+      {isLoading && (
+        <div
+          style={{ height: "635px" }}
+          className="d-flex justify-content-center align-items-center"
+        >
+          <Spinner
+            style={{ width: "100px", height: "100px", color: "black" }}
+          />
+        </div>
+      )}
     </>
   );
 };

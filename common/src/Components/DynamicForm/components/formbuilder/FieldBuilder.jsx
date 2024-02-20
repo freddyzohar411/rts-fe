@@ -1489,35 +1489,9 @@ const FieldBuilder = ({
 
   useEffect(() => {
     if (formBuilderUpdateData) {
-      console.log("Form Builder Update Data", formBuilderUpdateData);
       setInitialValues(returnUpdateDataWithoutNull(formBuilderUpdateData));
     }
   }, [formBuilderUpdateData]);
-
-  //   console.log("First Handle Form Submit");
-  //   console.log("Formik Error", formik.errors);
-  //   console.log("Formik Touched", formik.touched);
-  //   console.log(Object.keys(formik.values));
-  //   e.preventDefault();
-
-  //   // Mark all fields as touched
-  //   const touchedFields = Object.keys(formik.values).reduce(
-  //     (acc, fieldName) => {
-  //       acc[fieldName] = true;
-  //       return acc;
-  //     },
-  //     {}
-  //   );
-  //   formik.setTouched(touchedFields);
-
-  //   // Validate the form and then submit if there are no errors
-  //   formik.validateForm().then((errors) => {
-  //     if (Object.keys(errors).length === 0) {
-  //       // If no validation errors, proceed with form submission
-  //       formik.submitForm(); // Use submitForm instead of handleSubmit for explicit submission
-  //     }
-  //   });
-  // };
 
   // Handle Submit
   const handleFormSchemaSubmit = (values) => {
@@ -1583,8 +1557,6 @@ const FieldBuilder = ({
     }
     setShowModalSchema(false);
   };
-
-  console.log("Initial Values", initialValues);
 
   // Formik for form field creation
   const formik = useFormik({
@@ -1659,22 +1631,6 @@ const FieldBuilder = ({
 
   useEffect(() => {
     if (formik?.values["label"] && formik?.values["name"] !== "") {
-      // console.log("Formik Name", formik?.values["name"]);
-      // const getUUIDArray = formik?.values["name"].split(":");
-      // if (getUUIDArray?.length === 2) {
-      //   const getUUID = getUUIDArray[1];
-      //   formik.setFieldValue(
-      //     ["name"],
-      //     `${toCamelCase(formik?.values["label"])}:${getUUID}`
-      //   );
-      // }
-      // if (getUUIDArray?.length === 1) {
-      //   formik.setFieldValue(
-      //     ["name"],
-      //     `${toCamelCase(formik?.values["label"])}:${getUUIDArray[0]}`
-      //   );
-      // }
-
       if (formik?.values["label"]) {
         formik.setFieldValue(
           ["name"],

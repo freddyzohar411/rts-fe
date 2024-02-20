@@ -73,9 +73,6 @@ const ForgetPasswordPage = (props) => {
   // Inside your component
   const { forgetError, forgetSuccessMsg } = useSelector(selectLayoutProperties);
 
-  console.log("forgetError", forgetError);
-  console.log("forgetSuccessMsg", forgetSuccessMsg);
-
   document.title = "Reset Password | RTS";
 
   return (
