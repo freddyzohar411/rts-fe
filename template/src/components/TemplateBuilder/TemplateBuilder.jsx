@@ -81,9 +81,23 @@ const TemplateBuilder = forwardRef(
         setSelectedField("");
       }
       if (typeData) {
+        setSelectedSection("")
         dispatch(moduleActions[typeData.label]());
       }
     }, [typeData]);
+
+    useEffect(() => {
+      if (categorySelected == null || categorySelected == "") {
+        setTemplateList([]);
+        setTemplateSelected("");
+      }
+      if (categorySelected) {
+        setTemplateSelected("");
+        dispatch(
+          TemplateActions.fetchTemplateByCategory(categorySelected.value)
+        );
+      }
+    }, [categorySelected]);
 
     // Check section data
     useEffect(() => {
@@ -105,6 +119,7 @@ const TemplateBuilder = forwardRef(
         setSelectedField("");
       }
       if (selectedSection) {
+        setSelectedField("")
         setFields(sectionData[selectedSection.value]);
       }
     }, [selectedSection]);
