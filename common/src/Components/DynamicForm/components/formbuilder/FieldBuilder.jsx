@@ -27,8 +27,16 @@ const FieldBuilder = ({
 }) => {
   const [validationSchema, setValidationSchema] = useState(null);
   const [initialValues, setInitialValues] = useState({});
-  const [uuidKey, setUuidKey] = useState(!formBuilderUpdateData.label ? formBuilderUpdateData.name : uuid());
+  const [uuidKey, setUuidKey] = useState(
+    !formBuilderUpdateData?.label ? formBuilderUpdateData?.name : uuid()
+  );
 
+  useEffect(() => {
+    if (!uuidKey) {
+      setUuidKey(uuid());
+    }
+  }, [uuidKey]);
+  
   //========================= States ================================
   // Condition validation state
   const [validationConditionList, setValidationConditionList] = useState(
