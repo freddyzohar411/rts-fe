@@ -227,6 +227,9 @@ const Form = forwardRef(
             formik.setFieldValue(field.name, copyField);
           }
         });
+        if (onFormikChange) {
+          onFormikChange(formik);
+        }
       }
     }, [formik.values]);
 

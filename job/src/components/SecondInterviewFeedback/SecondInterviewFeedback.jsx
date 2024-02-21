@@ -29,16 +29,7 @@ function SecondInterviewFeedbackPending({
       : false
   );
 
-  const formikRef = useCallback((node) => {
-    if (node?.formik?.values?.profileFeedbackStatus === "COMPLETED") {
-      handleIconClick(candidateId, jobId, 9, true);
-    } else if (
-      node?.formik?.values?.profileFeedbackStatus === "SECOND_INTERVIEW"
-    ) {
-      handleIconClick(candidateId, jobId, 7, true);
-    }
-  }, []);
-
+  const formikRef = useRef();
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
 
@@ -52,6 +43,14 @@ function SecondInterviewFeedbackPending({
     }
   }, [form]);
 
+  const onFormikChange = (formik) => {
+    if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
+      handleIconClick(candidateId, jobId, 9, true);
+    } else if (formik?.values?.profileFeedbackStatus === "SECOND_INTERVIEW") {
+      handleIconClick(candidateId, jobId, 7, true);
+    }
+  };
+
   // Handle form submit
   const handleFormSubmit = async (
     event,
@@ -64,7 +63,7 @@ function SecondInterviewFeedbackPending({
     const payload = {
       jobId: jobId,
       jobStageId: JOB_STAGE_IDS?.SECOND_INTERVIEW_SCHEDULED,
-      status: values?.secondInterviewStatus ?? JOB_STAGE_STATUS?.COMPLETED,
+      status: values?.profileFeedbackStatus ?? JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),
@@ -88,7 +87,7 @@ function SecondInterviewFeedbackPending({
               country={null}
               editData={null}
               onSubmit={handleFormSubmit}
-              onFormFieldsChange={null}
+              onFormikChange={onFormikChange}
               errorMessage={null}
               view={view}
               ref={formikRef}

@@ -2,10 +2,14 @@ import React from "react";
 import { Progress } from "reactstrap";
 import Moment from "react-moment";
 import "../JobOverview/StepComponent.scss";
+import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
 
 function InterviewStepComponent({ header, index, maxOrder, data }) {
   const date = data?.date;
   const status = data?.status;
+  const isRejected =
+    status === JOB_STAGE_STATUS.REJECTED ||
+    status === JOB_STAGE_STATUS.WITHDRAWN;
   const inProgress = maxOrder + 1;
 
   const getBulletBgColor = () => {
@@ -53,7 +57,7 @@ function InterviewStepComponent({ header, index, maxOrder, data }) {
             )}
             <div
               className={`rounded-pill border border-primary ${
-                index === maxOrder
+                index === maxOrder && !isRejected
                   ? "bg-warning border-warning"
                   : getBulletBgColor()
               }`}

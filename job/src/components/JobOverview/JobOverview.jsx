@@ -31,10 +31,8 @@ import { JOB_FORM_NAME } from "../JobCreation/constants";
 import "./StepComponent.scss";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
 // Elements
 import { TemplateSelectByCategoryElement } from "@workspace/common";
-
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
 import SubmitToSales from "../SubmitToSales/SubmitToSales";
@@ -65,7 +63,7 @@ import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
 import { truncate } from "@workspace/common/src/helpers/string_helper";
 
-function JobOverview() {
+const JobOverview = () => {
   document.title = "Job Timeline | RTS";
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
@@ -140,7 +138,7 @@ function JobOverview() {
 
   useEffect(() => {
     if (jobTagMeta?.isSuccess) {
-      setOffcanvasForm(!offcanvasForm);
+      setOffcanvasForm(false);
       dispatch(
         fetchJobTimelineList({
           ...DynamicTableHelper.cleanPageRequest(pageRequest),
@@ -303,7 +301,7 @@ function JobOverview() {
     return status;
   };
 
-  const getFormComponent = (step, closeOffcanvas, maxOrder) => {
+  const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
       case 1:
         return (
@@ -415,10 +413,18 @@ function JobOverview() {
             closeOffcanvas={closeOffcanvas}
             candidateId={candidateId}
             jobId={parseInt(jobId)}
+            activeStep={step}
           />
         );
       case 12:
-        return <ConditionalOfferStatus closeOffcanvas={closeOffcanvas} />;
+        return (
+          <ConditionalOfferStatus
+            closeOffcanvas={closeOffcanvas}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+          />
+        );
       default:
         return null;
     }
@@ -458,6 +464,9 @@ function JobOverview() {
         break;
       case 9:
         index = 11;
+        break;
+      case 10:
+        index = 12;
         break;
       default:
         break;
@@ -714,12 +723,13 @@ function JobOverview() {
                                     candidateId={data?.candidate?.id}
                                     timeline={data?.timeline}
                                     originalOrder={originalOrder}
+                                    step={step}
                                   />
                                 </td>
                               );
                             })}
                             <td>
-                              {!isRejected && (
+                              {!isRejected && maxOrder < 11 && (
                                 <div className="d-flex flex-row gap-3 align-items-center">
                                   <Input
                                     type="select"
@@ -734,7 +744,10 @@ function JobOverview() {
                                     <option value="">Select</option>
                                     {Object.keys(timelineSkip).map(
                                       (item, index) => {
-                                        if (maxOrder > timelineSkip[item] + 1) {
+                                        if (
+                                          maxOrder >=
+                                          timelineSkip[item] + 1
+                                        ) {
                                           return null;
                                         }
                                         return (
@@ -753,7 +766,12 @@ function JobOverview() {
                                       handleIconClick(
                                         data?.candidate?.id,
                                         data?.id,
-                                        getFormIndex(originalOrder)
+                                        getFormIndex(
+                                          skipComboOptions[data.id] <
+                                            originalOrder
+                                            ? originalOrder
+                                            : skipComboOptions[data.id]
+                                        )
                                       )
                                     }
                                     id="next-step"
@@ -896,6 +914,6 @@ function JobOverview() {
       </div>
     </React.Fragment>
   );
-}
+};
 
 export default JobOverview;

@@ -1,5 +1,5 @@
 import { Form } from "@workspace/common";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FIRST_INTERVIEW_FEEDBACK_PENDING } from "./constants";
@@ -29,12 +29,7 @@ function FirstInterviewFeedbackPending({
       : false
   );
 
-  const formikRef = useCallback((node) => {
-    if (node?.formik?.values?.profileFeedbackStatus === "COMPLETED") {
-      handleIconClick(candidateId, jobId, 7, true);
-    }
-  }, []);
-
+  const formikRef = useRef();
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
 
@@ -47,6 +42,12 @@ function FirstInterviewFeedbackPending({
       setFormTemplate(JSON.parse(JSON.stringify(form)));
     }
   }, [form]);
+
+  const onFormikChange = (formik) => {
+    if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
+      handleIconClick(candidateId, jobId, 7, true);
+    }
+  };
 
   // Handle form submit
   const handleFormSubmit = async (
@@ -84,7 +85,7 @@ function FirstInterviewFeedbackPending({
               country={null}
               editData={null}
               onSubmit={handleFormSubmit}
-              onFormFieldsChange={null}
+              onFormikChange={onFormikChange}
               errorMessage={null}
               view={view}
               ref={formikRef}
