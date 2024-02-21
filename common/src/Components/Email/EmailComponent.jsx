@@ -480,6 +480,7 @@ function EmailComponent() {
                         setTemplateData(null);
                         setAttachments([]);
                         setModal(false);
+                        dispatch(setEmailClose());
                       }}
                     >
                       Discard
