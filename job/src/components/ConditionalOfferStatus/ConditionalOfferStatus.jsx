@@ -6,25 +6,26 @@ import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Button, Input } from "reactstrap";
 import { Form } from "@workspace/common";
+import { JOB_STAGE_IDS, JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
 
-function ConditionalOfferStatus() {
+function ConditionalOfferStatus({
+  closeOffcanvas,
+  candidateId,
+  jobId,
+  activeStep,
+}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const linkState = location.state;
-  const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
+  const { getAllUserGroups } = useUserAuth();
 
-  const [view, setView] = useState(
+  const [view] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
       : false
   );
-
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
-
-  const formikRef = useRef(null);
+  const formikRef = useRef();
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
 
@@ -37,6 +38,27 @@ function ConditionalOfferStatus() {
       setFormTemplate(JSON.parse(JSON.stringify(form)));
     }
   }, [form]);
+
+  // Handle form submit
+  const handleFormSubmit = async (
+    event,
+    values,
+    newValues,
+    buttonNameHook,
+    formStateHook,
+    rerenderTable
+  ) => {
+    const payload = {
+      jobId: jobId,
+      jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_SENT,
+      status: values?.candidateStatus ?? JOB_STAGE_STATUS?.COMPLETED,
+      candidateId,
+      formData: JSON.stringify(values),
+      formId: parseInt(form.formId),
+      jobType: "conditional offer_sent",
+    };
+    dispatch(tagJob({ payload, navigate }));
+  };
   return (
     <React.Fragment>
       <div>
@@ -47,7 +69,7 @@ function ConditionalOfferStatus() {
               userDetails={getAllUserGroups()}
               country={null}
               editData={null}
-              onSubmit={null}
+              onSubmit={handleFormSubmit}
               onFormFieldsChange={null}
               errorMessage={null}
               view={view}
@@ -58,15 +80,7 @@ function ConditionalOfferStatus() {
         <Row>
           <Col>
             <div className="p-2">
-              <div>
-                <span className="text-muted">Time to Take Action*</span>
-              </div>
               <div className="d-flex flex-row gap-3">
-                <Input
-                  type="text"
-                  placeholder="30 Min"
-                  className="form-control w-25"
-                />
                 <Link to="/jobs/pre-offer-verification">
                   <Button className="btn btn-custom-primary">
                     Preview Pre-Offer Verification

@@ -1,28 +1,27 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Button, Input } from "reactstrap";
+import { Row, Col, Button } from "reactstrap";
 import { fetchJobForm } from "../../store/actions";
-import { CONDITIONAL_OFFER, REVIEW_TOS } from "./constants";
-import { useNavigate, useLocation } from "react-router-dom";
+import { REVIEW_TOS } from "./constants";
+import { useLocation } from "react-router-dom";
 import { useUserAuth } from "@workspace/login";
 import { Form } from "@workspace/common";
+import {
+  JOB_STAGE_IDS,
+  JOB_STAGE_STATUS,
+} from "../JobListing/JobListingConstants";
 
-function ReviewTos() {
-  const navigate = useNavigate();
+const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const linkState = location.state;
-  const { getAllUserGroups, Permission, checkAllPermission } = useUserAuth();
+  const { getAllUserGroups } = useUserAuth();
 
-  const [view, setView] = useState(
+  const [view] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
       : false
   );
-
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
 
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
@@ -38,6 +37,27 @@ function ReviewTos() {
     }
   }, [form]);
 
+  // Handle form submit
+  const handleFormSubmit = async (
+    event,
+    values,
+    newValues,
+    buttonNameHook,
+    formStateHook,
+    rerenderTable
+  ) => {
+    const payload = {
+      jobId: jobId,
+      jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
+      status: JOB_STAGE_STATUS?.COMPLETED,
+      candidateId,
+      formData: JSON.stringify(values),
+      formId: parseInt(form.formId),
+      jobType: "conditional_offer",
+    };
+    dispatch(tagJob({ payload, navigate }));
+  };
+
   return (
     <React.Fragment>
       <div>
@@ -48,7 +68,7 @@ function ReviewTos() {
               userDetails={getAllUserGroups()}
               country={null}
               editData={null}
-              onSubmit={null}
+              onSubmit={handleFormSubmit}
               onFormFieldsChange={null}
               errorMessage={null}
               view={view}
@@ -59,13 +79,20 @@ function ReviewTos() {
         <Row>
           <Col>
             <div className="d-flex justify-content-end">
-              <Button className="btn btn-custom-primary">Save</Button>
+              <Button
+                className="btn btn-custom-primary"
+                onClick={() => {
+                  formikRef?.current?.formik?.submitForm();
+                }}
+              >
+                Save
+              </Button>
             </div>
           </Col>
         </Row>
       </div>
     </React.Fragment>
   );
-}
+};
 
 export default ReviewTos;

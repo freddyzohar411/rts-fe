@@ -28,14 +28,14 @@ function StepComponent({
   const getInterviewStatus = () => {
     let status = data?.status;
     if (step === INTERVIEWS && !status) {
-      if (timeline?.[FIRST_INTERVIEW_SCHEDULED]) {
-        status = timeline?.[FIRST_INTERVIEW_SCHEDULED]?.["status"];
-      } else if (timeline?.[SECOND_INTERVIEW_SCHEDULED]) {
-        status = timeline?.[SECOND_INTERVIEW_SCHEDULED]?.["status"];
+      if (timeline?.[INTERVIEW_FEEDBACK_PENDING]) {
+        status = timeline?.[INTERVIEW_FEEDBACK_PENDING]?.["status"];
       } else if (timeline?.[THIRD_INTERVIEW_SCHEDULED]) {
         status = timeline?.[THIRD_INTERVIEW_SCHEDULED]?.["status"];
-      } else if (timeline?.[INTERVIEW_FEEDBACK_PENDING]) {
-        status = timeline?.[INTERVIEW_FEEDBACK_PENDING]?.["status"];
+      } else if (timeline?.[SECOND_INTERVIEW_SCHEDULED]) {
+        status = timeline?.[SECOND_INTERVIEW_SCHEDULED]?.["status"];
+      } else if (timeline?.[FIRST_INTERVIEW_SCHEDULED]) {
+        status = timeline?.[FIRST_INTERVIEW_SCHEDULED]?.["status"];
       }
     }
     return status;

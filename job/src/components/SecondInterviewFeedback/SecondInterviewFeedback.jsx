@@ -63,7 +63,7 @@ function SecondInterviewFeedbackPending({
     const payload = {
       jobId: jobId,
       jobStageId: JOB_STAGE_IDS?.SECOND_INTERVIEW_SCHEDULED,
-      status: values?.secondInterviewStatus ?? JOB_STAGE_STATUS?.COMPLETED,
+      status: values?.profileFeedbackStatus ?? JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),
