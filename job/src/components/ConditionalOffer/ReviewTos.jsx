@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Button } from "reactstrap";
-import { fetchJobForm } from "../../store/actions";
+import { fetchJobForm, tagJob } from "../../store/actions";
 import { REVIEW_TOS } from "./constants";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useUserAuth } from "@workspace/login";
 import { Form } from "@workspace/common";
 import {
@@ -12,6 +12,7 @@ import {
 } from "../JobListing/JobListingConstants";
 
 const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const linkState = location.state;

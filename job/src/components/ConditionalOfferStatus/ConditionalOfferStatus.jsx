@@ -2,11 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { CONDITIONAL_OFFER_STATUS } from "./constants";
-import { fetchJobForm } from "../../store/actions";
+import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Button, Input } from "reactstrap";
 import { Form } from "@workspace/common";
-import { JOB_STAGE_IDS, JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
+import {
+  JOB_STAGE_IDS,
+  JOB_STAGE_STATUS,
+} from "../JobListing/JobListingConstants";
 
 function ConditionalOfferStatus({
   closeOffcanvas,
@@ -86,7 +89,14 @@ function ConditionalOfferStatus({
                     Preview Pre-Offer Verification
                   </Button>
                 </Link>
-                <Button className="btn btn-custom-primary">Update</Button>
+                <Button
+                  className="btn btn-custom-primary"
+                  onClick={() => {
+                    formikRef?.current?.formik?.submitForm();
+                  }}
+                >
+                  Update
+                </Button>
               </div>
             </div>
           </Col>

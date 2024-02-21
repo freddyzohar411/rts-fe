@@ -729,7 +729,7 @@ const JobOverview = () => {
                               );
                             })}
                             <td>
-                              {!isRejected && (
+                              {!isRejected && maxOrder < 11 && (
                                 <div className="d-flex flex-row gap-3 align-items-center">
                                   <Input
                                     type="select"
@@ -744,7 +744,10 @@ const JobOverview = () => {
                                     <option value="">Select</option>
                                     {Object.keys(timelineSkip).map(
                                       (item, index) => {
-                                        if (maxOrder > timelineSkip[item] + 1) {
+                                        if (
+                                          maxOrder >=
+                                          timelineSkip[item] + 1
+                                        ) {
                                           return null;
                                         }
                                         return (
@@ -763,7 +766,12 @@ const JobOverview = () => {
                                       handleIconClick(
                                         data?.candidate?.id,
                                         data?.id,
-                                        getFormIndex(originalOrder)
+                                        getFormIndex(
+                                          skipComboOptions[data.id] <
+                                            originalOrder
+                                            ? originalOrder
+                                            : skipComboOptions[data.id]
+                                        )
                                       )
                                     }
                                     id="next-step"
