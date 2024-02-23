@@ -34,18 +34,18 @@ const ResetPassword = () => {
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
 
   const handleFormSubmit = async (values) => {
-      const authUser = JSON.parse(sessionStorage.getItem("authUser"));
-      if (authUser) {
-        const payload = {
-          userId: authUser?.user?.id,
-          password: encode(values?.password),
-          confirmPassword: encode(values?.confirmPassword),
-        };
-        dispatch(loginResetPassword(payload, navigate));
-      } else {
-        toast.error("Please do login first.");
-        navigate("/login");
-      }
+    const authUser = JSON.parse(sessionStorage.getItem("authUser"));
+    if (authUser) {
+      const payload = {
+        userId: authUser?.user?.id,
+        password: encode(values?.password),
+        confirmPassword: encode(values?.confirmPassword),
+      };
+      dispatch(loginResetPassword(payload, navigate));
+    } else {
+      toast.error("Please do login first.");
+      navigate("/login");
+    }
   };
 
   return (
@@ -176,6 +176,7 @@ const ResetPassword = () => {
                             <Button
                               className="btn btn-custom-primary w-100 d-flex justify-content-center align-items-center"
                               type="submit"
+                              disabled={resetPasswordMeta?.isLoading}
                             >
                               <span style={{ marginRight: "5px" }}>
                                 Create New Password

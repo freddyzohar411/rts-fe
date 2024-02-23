@@ -20,6 +20,7 @@ import {
 import { initialValues, schema } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser, fetchUsers } from "../../../../store/users/action";
+import { encode } from "@workspace/common/src/helpers/string_helper";
 
 function CreateUser() {
   document.title = "Create New User | RTS";
@@ -33,7 +34,7 @@ function CreateUser() {
     if (!allUsers) return;
     setSelectedOption([
       {
-        options: allUsers.map((user) => ({
+        options: allUsers?.map((user) => ({
           label: `${user.firstName} (${user.mobile})`,
           value: user.id.toString(),
         })),
@@ -49,8 +50,8 @@ function CreateUser() {
       email: values.email,
       mobile: values.mobile,
       employeeId: values.employeeId,
-      password: values.password,
-      confirmPassword: values.confirmPassword,
+      password: encode(values.password),
+      confirmPassword: encode(values.confirmPassword),
       managerId: parseInt(values.managerId),
     };
     dispatch(createUser({ newUser, navigate: navigate }));

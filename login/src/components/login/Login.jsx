@@ -158,6 +158,7 @@ const Login = (props) => {
                               color="success"
                               className="btn btn-next-button border-next-button-border w-100 py-3 fw-semibold fs-5"
                               type="submit"
+                              disabled={loginMeta?.isLoading}
                             >
                               <span style={{ marginRight: "5px" }}>
                                 Sign In
