@@ -23,6 +23,7 @@ import {
   updateUser,
   fetchUsers,
 } from "../../../../store/users/action";
+import { encode } from "@workspace/common/src/helpers/string_helper";
 
 function UpdateUser() {
   const { userId } = useParams();
@@ -106,7 +107,7 @@ function UpdateUser() {
       employeeId: values.employeeId,
       id: values.id,
       keycloackId: values.keycloackId,
-      password: values.password,
+      password: encode(values.password),
       managerId: parseInt(values.managerId) ?? null,
     };
     dispatch(updateUser({ updatedUser, navigate: navigate }));
