@@ -70,7 +70,7 @@ const TemplateBuilder = forwardRef(
       if (typeData?.label === categoryConstants.CANDIDATES) {
         return state.CandidateReducer.candidatesFieldsAll;
       }
-    });
+    }); 
 
     // Get field All if type exist
     useEffect(() => {
@@ -447,7 +447,7 @@ const TemplateBuilder = forwardRef(
                   disabled={selectedVariable === null}
                   onClick={() => {
                     setInjectVariable(
-                      "{{" + `${selectedVariable.value}` + "}}"
+                      "${{" + `${selectedVariable.value}` + "}}"
                     );
                     setSelectedVariable("");
                   }}
