@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getTemplateFromCategoryAndName } from "./url_helper";
 import { parse, HTMLElement } from "node-html-parser";
+import { toast } from "react-toastify";
 
 /**
  * Replace variables placeholders( ${xxx.yyy.zzz} in html with variabledata
@@ -80,12 +81,9 @@ export async function replaceTemplate(htmlString, mappedVariableData) {
 export async function replaceTemplateOnly(htmlString) {
   // Check if htmlString is provided
   if (!htmlString) return;
-  console.log("222")
   // Assuming getTemplateData is an async function that retrieves template data
   const templateData = await getTemplateData(htmlString);
-  console.log("333")
   // Pattern to match template variables, ensuring not to match ${{}}
-  // This uses negative lookbehind to ensure we do not have a $ right before {{
   const pattern = /(?<!\$){{([^:]*?)}}/g;
 
   // Replace all matches using a callback function
@@ -214,10 +212,7 @@ export function removeContentEditableAndStyles(htmlString) {
 export function getTemplateData(htmlString) {
   if (!htmlString) return;
   return new Promise((resolve, reject) => {
-    console.log("444")
     const templateCriteriaList = getAllTemplatesToRenderFromHTML(htmlString);
-    console.log("555")
-    console.log("templateCriteriaList", templateCriteriaList)
     if (templateCriteriaList.length > 0) {
       const templateData = {};
       axios
@@ -234,6 +229,7 @@ export function getTemplateData(htmlString) {
           resolve(mappedData);
         })
         .catch((err) => {
+          toast.error("Error in fetching template data");
           reject([]);
         });
     } else {
@@ -322,11 +318,9 @@ export async function runEffectsTemplateInjection(
   // Effect 1: Replace variables with mappedVariableData
   let updatedContent = htmlString;
 
-  console.log("000")
   if (templateListCriteria.length > 0) {
     // Effect 2: Replace templateListCriteria without data
     updatedContent = await replaceTemplateOnly(updatedContent);
-    console.log("111")
   }
 
   // Check if the content has been updated and if recursive is true
