@@ -52,29 +52,60 @@ export async function replaceTemplate(htmlString, mappedVariableData) {
  * @param {*} mappedVariableData
  * @returns
  */
+// export async function replaceTemplateOnly(htmlString) {
+//   // Check if htmlString is provided
+//   if (!htmlString) return;
+
+//   // Assuming getTemplateData is an async function that retrieves template data
+//   const templateData = await getTemplateData(htmlString);
+
+//   // Pattern to match template variables
+//   const pattern = /{{([^:]*?)}}/g;
+//   const matches = htmlString.match(pattern) || [];
+//   let result = htmlString;
+
+//   // Iterate over matches and replace them
+//   matches.forEach((match) => {
+//     const key = match.replace("{{", "").replace("}}", "");
+//     const keys = key.split(".");
+//     const value =
+//       keys.reduce((acc, keyPart) => acc?.[keyPart], templateData) || "-";
+//     // const replacedValue = replaceValue(value, mappedVariableData);
+//     result = result.replace(match, value);
+//   });
+
+//   return result;
+// }
+
 export async function replaceTemplateOnly(htmlString) {
   // Check if htmlString is provided
   if (!htmlString) return;
-
+  console.log("222")
   // Assuming getTemplateData is an async function that retrieves template data
   const templateData = await getTemplateData(htmlString);
+  console.log("333")
+  // Pattern to match template variables, ensuring not to match ${{}}
+  // This uses negative lookbehind to ensure we do not have a $ right before {{
+  const pattern = /(?<!\$){{([^:]*?)}}/g;
 
-  // Pattern to match template variables
-  const pattern = /{{([^:]*?)}}/g;
-  const matches = htmlString.match(pattern) || [];
-  let result = htmlString;
-
-  // Iterate over matches and replace them
-  matches.forEach((match) => {
-    const key = match.replace("{{", "").replace("}}", "");
+  // Replace all matches using a callback function
+  const result = htmlString.replace(pattern, (match, key) => {
+    console.log("match", match);
+    console.log("key", key);
     const keys = key.split(".");
-    const value =
-      keys.reduce((acc, keyPart) => acc?.[keyPart], templateData) || "-";
-    // const replacedValue = replaceValue(value, mappedVariableData);
-    result = result.replace(match, value);
+    // Navigate through the nested properties of templateData to find the value
+    let value = keys.reduce((acc, keyPart) => acc?.[keyPart], templateData);
+    // If the value is undefined (data not found), use a default value or placeholder
+    // You can adjust this to be an empty string or any other placeholder as needed
+    if (value === undefined) {
+      value = "-"; // or "", or "N/A", or any other placeholder
+    }
+    return value;
   });
 
   return result;
+
+  return null
 }
 
 /**
@@ -120,12 +151,25 @@ export async function replaceTemplateArray(htmlString, variableData) {
 
 /**
  * Get all the templates to render from the html string ({{xxx.yyy}} and {{xxx.yyy:zzz}})
+ * Old method
+ * @param {*} htmlString
+ * @returns
+ */
+// export function getAllTemplatesToRenderFromHTML(htmlString) {
+//   return getTemplateListCriteriaByCategoryAndNameToList(
+//     extractStringLiteralsDoubleBracketsToList(htmlString)
+//   );
+// }
+
+/**
+ * Get all the templates to render from the html string ({{xxx.yyy}} and {{xxx.yyy:zzz}})
+ * New 26022024
  * @param {*} htmlString
  * @returns
  */
 export function getAllTemplatesToRenderFromHTML(htmlString) {
   return getTemplateListCriteriaByCategoryAndNameToList(
-    extractStringLiteralsDoubleBracketsToList(htmlString)
+    extractStringLiteralsDoubleBracketsToListOnly(htmlString)
   );
 }
 
@@ -170,7 +214,10 @@ export function removeContentEditableAndStyles(htmlString) {
 export function getTemplateData(htmlString) {
   if (!htmlString) return;
   return new Promise((resolve, reject) => {
+    console.log("444")
     const templateCriteriaList = getAllTemplatesToRenderFromHTML(htmlString);
+    console.log("555")
+    console.log("templateCriteriaList", templateCriteriaList)
     if (templateCriteriaList.length > 0) {
       const templateData = {};
       axios
@@ -270,13 +317,16 @@ export async function runEffectsTemplateInjection(
   }
 
   const templateListCriteria = getAllTemplatesToRenderFromHTML(htmlString);
+ 
 
   // Effect 1: Replace variables with mappedVariableData
   let updatedContent = htmlString;
 
+  console.log("000")
   if (templateListCriteria.length > 0) {
     // Effect 2: Replace templateListCriteria without data
     updatedContent = await replaceTemplateOnly(updatedContent);
+    console.log("111")
   }
 
   // Check if the content has been updated and if recursive is true
@@ -1297,6 +1347,23 @@ function convertAlignmentToAttributesTable(htmlString) {
 function extractStringLiteralsDoubleBracketsToList(htmlString) {
   if (!htmlString) return;
   var pattern = /{{(.*?)(?:\..*?)?}}/g;
+  var matches = htmlString.match(pattern) || [];
+
+  // Remove the {{ and }} from the matches
+  var result = matches.map(function (match) {
+    return match.replace("{{", "").replace("}}", "");
+  });
+
+  // Filter out null values (cases where the regex didn't match)
+  result = result.filter(Boolean);
+
+  return result;
+}
+
+function extractStringLiteralsDoubleBracketsToListOnly(htmlString) {
+  if (!htmlString) return;
+  // Updated pattern to exclude cases preceded by $ and match exactly two { followed by any character until two } are found
+  var pattern = /(?<!\$){{(.*?)(?:\..*?)?}}/g;
   var matches = htmlString.match(pattern) || [];
 
   // Remove the {{ and }} from the matches
