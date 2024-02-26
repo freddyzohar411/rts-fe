@@ -72,6 +72,8 @@ const TemplateBuilder = forwardRef(
       }
     });
 
+    console.log("Hello")
+
     // Get field All if type exist
     useEffect(() => {
       if (typeData === "" || typeData === null) {
