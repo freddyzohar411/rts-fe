@@ -83,21 +83,14 @@ function ConditionalOfferStatus({
         <Row>
           <Col>
             <div className="p-2">
-              <div className="d-flex flex-row gap-3">
-                <Link to="/jobs/pre-offer-verification">
-                  <Button className="btn btn-custom-primary">
-                    Preview Pre-Offer Verification
-                  </Button>
-                </Link>
-                <Button
-                  className="btn btn-custom-primary"
-                  onClick={() => {
-                    formikRef?.current?.formik?.submitForm();
-                  }}
-                >
-                  Update
-                </Button>
-              </div>
+              <Button
+                className="btn btn-custom-primary"
+                onClick={() => {
+                  formikRef?.current?.formik?.submitForm();
+                }}
+              >
+                Update
+              </Button>
             </div>
           </Col>
         </Row>

@@ -88,6 +88,8 @@ const JobOverview = () => {
   const [isPreviewCV, setIsPreviewCV] = useState(false);
   const [skipComboOptions, setSkipComboOptions] = useState({});
 
+  const [deliveryTeam, setDeliveryTeam] = useState();
+
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
   );
@@ -164,6 +166,11 @@ const JobOverview = () => {
   useEffect(() => {
     if (jobTimelineData) {
       setPageInfoData(jobTimelineData);
+      const uniqueNames = [
+        ...new Set(jobTimelineData?.jobs?.map((item) => item?.createdByName)),
+      ];
+      setDeliveryTeam(uniqueNames);
+
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
@@ -474,8 +481,6 @@ const JobOverview = () => {
     return index;
   };
 
-  const deliveryTeam = "Ganesh, Priya, Vinod";
-
   const renderLegend = () => {
     return (
       <div className="d-flex flex-wrap">
@@ -528,47 +533,66 @@ const JobOverview = () => {
                 style={{ whiteSpace: "nowrap" }}
               >
                 <div className="d-flex flex-row gap-1">
-                  <span title={formSubmissionData?.accountName}>
-                    {isMobile | isTablet
-                      ? truncate(formSubmissionData?.accountName, 8)
-                      : formSubmissionData?.accountName}
-                  </span>
-                  <span>|</span>
-                  <span
-                    title={formSubmissionData?.jobTitle}
-                    className="cursor-pointer"
-                  >
-                    {isMobile | isTablet
-                      ? truncate(formSubmissionData?.jobTitle, 8)
-                      : truncate(formSubmissionData?.jobTitle, 35)}
-                  </span>
-                  <span>|</span>
-                  <span>
-                    {formSubmissionData?.clientJobId
-                      ? formSubmissionData?.clientJobId
-                      : "Not Available"}
-                  </span>
-                  {isMobile || <span>|</span>}
+                  <div className="d-flex flex-column">
+                    <span className="fw-medium h6 text-muted">Account</span>
+                    <span
+                      title={formSubmissionData?.accountName}
+                      className="cursor-pointer"
+                    >
+                      {isMobile | isTablet
+                        ? truncate(formSubmissionData?.accountName, 8)
+                        : truncate(formSubmissionData?.accountName, 35)}
+                      <span> | </span>
+                    </span>
+                  </div>
+                  <div className="d-flex flex-column">
+                    <span className="fw-medium h6 text-muted">Job Title</span>
+                    <span
+                      title={formSubmissionData?.jobTitle}
+                      className="cursor-pointer"
+                    >
+                      {isMobile | isTablet
+                        ? truncate(formSubmissionData?.jobTitle, 8)
+                        : truncate(formSubmissionData?.jobTitle, 35)}
+                      <span> | </span>
+                    </span>
+                  </div>
+                  <div className="d-flex flex-column">
+                    <span className="fw-medium h6 text-muted">Job Id</span>
+                    <span
+                      title={formSubmissionData?.clientJobId}
+                      className="cursor-pointer"
+                    >
+                      {isMobile | isTablet
+                        ? truncate(formSubmissionData?.clientJobId, 8)
+                        : truncate(formSubmissionData?.clientJobId, 35)}
+                      {isMobile || <span> | </span>}
+                    </span>
+                  </div>
                 </div>
                 <div className="d-flex flex-row gap-1">
                   <div className="d-flex flex-column">
                     <span className="fw-medium h6 text-muted">Sales</span>
-                    <span title={formSubmissionData?.salesManager}>
+                    <span
+                      title={formSubmissionData?.accountOwner}
+                      className="cursor-pointer"
+                    >
                       {isMobile | isTablet
-                        ? truncate(formSubmissionData?.salesManager, 8)
-                        : formSubmissionData?.salesManager
-                        ? formSubmissionData?.salesManager
-                        : "Not Available"}
+                        ? truncate(formSubmissionData?.accountOwner, 8)
+                        : truncate(formSubmissionData?.accountOwner, 35)}
                     </span>
                   </div>
                   <div className="d-flex align-items-end gap-1">
                     <span>|</span>
                     <div className="d-flex flex-column">
                       <span className="fw-medium h6 text-muted">Delivery</span>
-                      <span>
+                      <span
+                        title={deliveryTeam?.join(", ")}
+                        className="cursor-pointer"
+                      >
                         {isMobile | isTablet
-                          ? truncate(deliveryTeam, 8)
-                          : deliveryTeam}
+                          ? truncate(deliveryTeam?.join(", "), 8)
+                          : truncate(deliveryTeam?.join(", "), 25)}
                       </span>
                     </div>
                   </div>
