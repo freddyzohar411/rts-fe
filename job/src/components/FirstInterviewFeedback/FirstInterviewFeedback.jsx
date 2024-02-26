@@ -1,17 +1,22 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Button } from "reactstrap";
-import { fetchJobForm, tagJob } from "../../store/actions";
-import { REVIEW_TOS } from "./constants";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useUserAuth } from "@workspace/login";
 import { Form } from "@workspace/common";
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FIRST_INTERVIEW_FEEDBACK_PENDING } from "./constants";
+import { fetchJobForm, tagJob } from "../../store/actions";
+import { useUserAuth } from "@workspace/login";
+import { Row, Col, Button } from "reactstrap";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
+function FirstInterviewFeedbackPending({
+  closeOffcanvas,
+  jobId,
+  candidateId,
+  handleIconClick,
+}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -24,12 +29,12 @@ const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
       : false
   );
 
-  const formikRef = useRef(null);
+  const formikRef = useRef();
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchJobForm(REVIEW_TOS));
+    dispatch(fetchJobForm(FIRST_INTERVIEW_FEEDBACK_PENDING));
   }, []);
 
   useEffect(() => {
@@ -37,6 +42,12 @@ const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
       setFormTemplate(JSON.parse(JSON.stringify(form)));
     }
   }, [form]);
+
+  const onFormikChange = (formik) => {
+    if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
+      handleIconClick(candidateId, jobId, 7, true);
+    }
+  };
 
   // Handle form submit
   const handleFormSubmit = async (
@@ -49,14 +60,18 @@ const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
   ) => {
     const payload = {
       jobId: jobId,
-      jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
-      status: JOB_STAGE_STATUS?.COMPLETED,
+      jobStageId: JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED,
+      status: values?.profileFeedbackStatus ?? JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),
-      jobType: "conditional_offer",
+      jobType: "first_interview_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
+  };
+
+  const handleCancel = () => {
+    closeOffcanvas();
   };
 
   return (
@@ -70,7 +85,7 @@ const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
               country={null}
               editData={null}
               onSubmit={handleFormSubmit}
-              onFormFieldsChange={null}
+              onFormikChange={onFormikChange}
               errorMessage={null}
               view={view}
               ref={formikRef}
@@ -79,21 +94,31 @@ const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
         </Row>
         <Row>
           <Col>
-            <div className="d-flex justify-content-end">
-              <Button
-                className="btn btn-custom-primary"
-                onClick={() => {
-                  formikRef?.current?.formik?.submitForm();
-                }}
-              >
-                Save
-              </Button>
+            <div className="d-flex flex-row justify-content-end gap-4 m-2">
+              <div className="d-flex flex-row gap-2 flex-nowrap">
+                <Button
+                  type="submit"
+                  className="btn btn-custom-primary"
+                  onClick={() => {
+                    formikRef?.current?.formik?.submitForm();
+                  }}
+                >
+                  Update
+                </Button>
+                <Button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => handleCancel()}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </Col>
         </Row>
       </div>
     </React.Fragment>
   );
-};
+}
 
-export default ReviewTos;
+export default FirstInterviewFeedbackPending;

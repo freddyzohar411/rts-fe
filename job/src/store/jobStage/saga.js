@@ -36,10 +36,8 @@ function* workTagJob(action) {
         toast.success("Job has been submitted to sales.");
       } else if (payload?.jobType === "submit_to_client") {
         toast.success("Job has been submitted to client.");
-      } else if (payload?.jobType === "profile_feedback_pending") {
-        toast.success("Profile feedback is pending.");
-      } else if (payload?.jobType === "schedule_interview") {
-        toast.success("The interview has been scheduled.");
+      } else {
+        toast.success("Operation submitted successfully.");
       }
     } else {
       toast.success(response?.message);

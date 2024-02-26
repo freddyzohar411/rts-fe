@@ -151,11 +151,13 @@ const ForgetPasswordPage = (props) => {
                         <button
                           className="btn btn-success w-100"
                           type="submit"
-                          isDisabled={forgetPasswordData?.isLoading}
+                          disabled={forgetPasswordData?.isLoading}
                         >
                           {forgetPasswordData.isLoading ? (
                             <>
-                              <span style={{marginRight:"10px"}}>Sending Link</span>
+                              <span style={{ marginRight: "10px" }}>
+                                Sending Link
+                              </span>
                               <Spinner size="sm">Loading...</Spinner>
                             </>
                           ) : (

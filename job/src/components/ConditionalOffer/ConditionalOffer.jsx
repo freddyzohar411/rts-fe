@@ -16,9 +16,8 @@ import {
   DropdownToggle,
   DropdownMenu,
 } from "reactstrap";
-import classnames from "classnames";
 import ReviewTos from "./ReviewTos";
-import { TemplateDisplayV3, TemplateExportButtons } from "@workspace/common";
+import { TemplateDisplayV3 } from "@workspace/common";
 import { UseTemplateModuleDataHook } from "@workspace/common";
 import { TemplateAdvanceExportModal } from "@workspace/common";
 import { ExportHelper, TemplateHelper } from "@workspace/common";
@@ -28,6 +27,7 @@ function ConditionalOffer({
   closeOffcanvas,
   candidateId,
   jobId,
+  activeStep,
 }) {
   const [activeTab, setActiveTab] = useState("1");
   const [conditionalOfferContent, setConditionalOfferContent] = useState("");
@@ -74,7 +74,8 @@ function ConditionalOffer({
         },
         processedTemplate.styleTag
       );
-    }s
+    }
+    s;
   };
 
   return (
@@ -124,7 +125,12 @@ function ConditionalOffer({
           </TabPane>
           <TabPane tabId="2">
             <div className="mt-4">
-              <ReviewTos />
+              <ReviewTos
+                activeStep={activeStep}
+                closeOffcanvas={closeOffcanvas}
+                candidateId={candidateId}
+                jobId={jobId}
+              />
             </div>
           </TabPane>
           <TabPane tabId="3">
@@ -144,9 +150,6 @@ function ConditionalOffer({
         </TabContent>
         <div className="d-flex justify-content-end gap-3">
           {activeTab == "3" && (
-            // <Button onClick={() => setTemplateDownloadModalShow(true)}>
-            //   Download
-            // </Button>
             <UncontrolledDropdown className="btn-group">
               <Button
                 type="submit"

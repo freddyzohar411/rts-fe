@@ -215,26 +215,24 @@ const DynamicTableWrapper = ({
                               <i className="ri-search-line search-icon"></i>
                             </div>
                           )}
-                          {jobType && (
-                            <div className="select-width">
-                              <Input
-                                type="select"
-                                className="form-select border-secondary"
-                                onChange={handleTableViewChange}
-                                value={gridView}
-                              >
-                                <option value="">Select View</option>
-                                {JOB_FILTERS?.map((ob, index) => {
-                                  const key = Object.keys(ob);
-                                  return (
-                                    <option key={index} value={key}>
-                                      {ob[key]}
-                                    </option>
-                                  );
-                                })}
-                              </Input>
-                            </div>
-                          )}
+                          <div className="select-width">
+                            <Input
+                              type="select"
+                              className="form-select border-secondary"
+                              onChange={handleTableViewChange}
+                              value={gridView}
+                            >
+                              <option value="">Select View</option>
+                              {JOB_FILTERS?.map((ob, index) => {
+                                const key = Object.keys(ob);
+                                return (
+                                  <option key={index} value={key}>
+                                    {ob[key]}
+                                  </option>
+                                );
+                              })}
+                            </Input>
+                          </div>
                         </div>
                       </Col>
                       <Col>

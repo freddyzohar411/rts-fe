@@ -1,8 +1,8 @@
 import { Form } from "@workspace/common";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PROFILE_FEEDBACK_PENDING } from "./constants";
+import { SECOND_INTERVIEW_FEEDBACK_PENDING } from "./constants";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Row, Col, Button } from "reactstrap";
@@ -11,7 +11,7 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-function ProfileFeedbackPending({
+function SecondInterviewFeedbackPending({
   closeOffcanvas,
   jobId,
   candidateId,
@@ -34,18 +34,20 @@ function ProfileFeedbackPending({
   const [formTemplate, setFormTemplate] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchJobForm(PROFILE_FEEDBACK_PENDING));
+    dispatch(fetchJobForm(SECOND_INTERVIEW_FEEDBACK_PENDING));
   }, []);
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(form);
+      setFormTemplate(JSON.parse(JSON.stringify(form)));
     }
   }, [form]);
 
   const onFormikChange = (formik) => {
     if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
-      handleIconClick(candidateId, jobId, 5, true);
+      handleIconClick(candidateId, jobId, 9, true);
+    } else if (formik?.values?.profileFeedbackStatus === "SECOND_INTERVIEW") {
+      handleIconClick(candidateId, jobId, 7, true);
     }
   };
 
@@ -60,12 +62,12 @@ function ProfileFeedbackPending({
   ) => {
     const payload = {
       jobId: jobId,
-      jobStageId: JOB_STAGE_IDS?.PROFILE_FEEDBACK_PENDING,
+      jobStageId: JOB_STAGE_IDS?.SECOND_INTERVIEW_SCHEDULED,
       status: values?.profileFeedbackStatus ?? JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),
-      jobType: "profile_feedback_pending",
+      jobType: "second_interview_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
   };
@@ -121,4 +123,4 @@ function ProfileFeedbackPending({
   );
 }
 
-export default ProfileFeedbackPending;
+export default SecondInterviewFeedbackPending;

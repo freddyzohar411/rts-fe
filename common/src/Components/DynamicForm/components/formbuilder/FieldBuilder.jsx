@@ -132,6 +132,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "submit",
         "table",
@@ -191,6 +194,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "table",
@@ -244,6 +250,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -290,6 +299,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "button",
@@ -340,6 +352,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         // "button",
@@ -414,20 +429,6 @@ const FieldBuilder = ({
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
       ],
-      // events: {
-      // onChange: (e) => {
-      //   formik.setValues({ ...formik.values, required: e.target.value });
-      //   if (e.target.value === "false") {
-      //     document.getElementsByName(
-      //       "requiredErrorMessage"
-      //     )[0].disabled = true;
-      //   } else {
-      //     document.getElementsByName(
-      //       "requiredErrorMessage"
-      //     )[0].disabled = false;
-      //   }
-      // },
-      // },
       apply: [
         "text",
         "email",
@@ -451,6 +452,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -491,6 +495,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -570,49 +577,17 @@ const FieldBuilder = ({
       type: "number",
       name: "maxValue",
       apply: ["number"],
-      // events: {
-      //   onChange: (e) => {
-      //     formik.setValues({ ...formik.values, maxValue: e.target.value });
-      //     if (e.target.value === "") {
-      //       document.getElementsByName(
-      //         "maxValueErrorMessage"
-      //       )[0].disabled = true;
-      //     } else {
-      //       document.getElementsByName(
-      //         "maxValueErrorMessage"
-      //       )[0].disabled = false;
-      //     }
-      //   },
-      // },
-      apply: ["number"],
     },
     {
       label: "Max Value Error Message",
       type: "text",
       name: "maxValueErrorMessage",
-      // events: {
-      //   disabled: true,
-      // },
       apply: ["number"],
     },
     {
       label: "Min Value",
       type: "number",
       name: "minValue",
-      // events: {
-      //   onChange: (e) => {
-      //     formik.setValues({ ...formik.values, minValue: e.target.value });
-      //     if (e.target.value === "") {
-      //       document.getElementsByName(
-      //         "minValueErrorMessage"
-      //       )[0].disabled = true;
-      //     } else {
-      //       document.getElementsByName(
-      //         "minValueErrorMessage"
-      //       )[0].disabled = false;
-      //     }
-      //   },
-      // },
       apply: ["number"],
     },
     {
@@ -713,6 +688,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -853,6 +831,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "selectstate",
         "selectdepartment",
@@ -865,38 +846,6 @@ const FieldBuilder = ({
         "multiinput",
       ],
     },
-    // {
-    //   label: "User Group Access",
-    //   type: "checkbox",
-    //   name: "userGroup",
-    //   options: [
-    //     { label: "Admin", value: "admin" },
-    //     { label: "User", value: "user" },
-    //   ],
-    //   apply: [
-    //     "text",
-    //     "email",
-    //     "number",
-    //     "textarea",
-    //     "file",
-    //     "select",
-    //     "radio",
-    //     "checkbox",
-    //     "password",
-    //     "date",
-    //     "selectindustry",
-    //     "selectsubindustry",
-    //     "selectcountry",
-    //     "selectcity",
-    //     "selectcurrency",
-    //     "selectlandline",
-    //     "selectstate",
-    //     "selectdepartment",
-    //     "editor",
-    //     "parentcompany",
-    //     "searchselect",
-    //   ],
-    // },
     {
       label: "User Group Access",
       type: "usergroupselect",
@@ -924,6 +873,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -980,6 +932,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "parentcompany",
         "multiselect",
@@ -1029,6 +984,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -1073,6 +1031,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "submit",
         "table",
@@ -1121,6 +1082,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -1161,6 +1125,9 @@ const FieldBuilder = ({
         "selectaccountnameall",
         "selectaccountcontact",
         "selectcandidatestatus",
+        "selectprofilefeedbackstatus",
+        "selectfirstintrvfdbkstatus",
+        "selectsecondintrvfdbkstatus",
         "accountowner",
         "editor",
         "parentcompany",
@@ -1197,18 +1164,6 @@ const FieldBuilder = ({
       defaultValue: formBuilderUpdateData?.buttonType || "button",
       apply: ["button", "buttonupdate"],
     },
-    // {
-    //   label: "Button Location",
-    //   type: "radio",
-    //   name: "buttonLocation",
-    //   options: [
-    //     { label: "Left", value: "left" },
-    //     { label: "Center", value: "center" },
-    //     { label: "Right", value: "right" },
-    //   ],
-    //   defaultValue: formBuilderUpdateData?.buttonLocation || "left",
-    //   apply: ["button", "buttonupdate"],
-    // },
     {
       label: "Button Class",
       type: "text",
@@ -1277,6 +1232,15 @@ const FieldBuilder = ({
       break;
     case "selectcandidatestatus":
       header = "Select Candidate Status";
+      break;
+    case "selectprofilefeedbackstatus":
+      header = "Select Profile Feedback Status";
+      break;
+    case "selectfirstintrvfdbkstatus":
+      header = "Select First Interview Feedback Status";
+      break;
+    case "selectsecondintrvfdbkstatus":
+      header = "Select Second Interview Feedback Status";
       break;
     case "accountowner":
       header = "Account Owner";
@@ -1442,13 +1406,6 @@ const FieldBuilder = ({
   const [conditionList, setConditionList] = useState(
     formBuilderUpdateData?.visible ? formBuilderUpdateData.visible : []
   );
-
-  // // Condition validation state
-  // const [validationConditionList, setValidationConditionList] = useState(
-  //   formBuilderUpdateData?.conditionValidation
-  //     ? formBuilderUpdateData.conditionValidation
-  //     : []
-  // );
 
   // Key copy condition state
   const [copyConditionList, setCopyConditionList] = useState(
@@ -1635,22 +1592,6 @@ const FieldBuilder = ({
       formik.setFieldValue(["name"], uuidKey);
     }
   }, [formik?.values["name"]]);
-
-  // Do not delete (Need for reference)
-  // useEffect(() => {
-  //   if (formik?.values["label"] && formik?.values["name"] !== "") {
-  //     if (formik?.values["label"]) {
-  //       formik.setFieldValue(
-  //         ["name"],
-  //         `${toCamelCase(formik?.values["label"])}`
-  //       );
-  //     }
-  //   }
-
-  //   if (formik?.values["label"] === "") {
-  //     formik.setFieldValue(["name"], uuidKey);
-  //   }
-  // }, [formik?.values["label"]]);
 
   useEffect(() => {
     if (

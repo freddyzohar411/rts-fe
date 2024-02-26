@@ -17,7 +17,7 @@ import {
 import {
   getforgetPassword,
   getValidateResetToken,
-  postForgetPasswordReset
+  postForgetPasswordReset,
 } from "../../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
@@ -36,8 +36,6 @@ function* forgetUser({ payload: { user, history } }) {
     yield put(
       userForgetPasswordError(error?.message || "Something went wrong")
     );
-    console.log("error", error);
-    // toast.error(error?.message || "Something went wrong, Please try again");
   }
 }
 
