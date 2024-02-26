@@ -450,7 +450,7 @@ const TemplateBuilder = forwardRef(
                   disabled={selectedVariable === null}
                   onClick={() => {
                     setInjectVariable(
-                      "{{" + `${selectedVariable.value}` + "}}"
+                      "${{" + `${selectedVariable.value}` + "}}"
                     );
                     setSelectedVariable("");
                   }}
