@@ -70,9 +70,7 @@ const TemplateBuilder = forwardRef(
       if (typeData?.label === categoryConstants.CANDIDATES) {
         return state.CandidateReducer.candidatesFieldsAll;
       }
-    });
-
-    console.log("Hello")
+    }); 
 
     // Get field All if type exist
     useEffect(() => {
