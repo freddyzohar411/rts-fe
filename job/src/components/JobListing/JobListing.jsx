@@ -212,6 +212,15 @@ const JobListing = () => {
   const generateJobListConfig = (customConfig) => {
     return [
       {
+        header: "#",
+        name: "indexing",
+        sort: false,
+        sortValue: "indexing",
+        render: (data, index) => (
+          <div className="d-flex column-gap-2">{index + 1}</div>
+        ),
+      },
+      {
         header: (
           <div className="form-check">
             <Input

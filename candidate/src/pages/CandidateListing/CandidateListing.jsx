@@ -8,7 +8,7 @@ import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapp
 import { DynamicTableHelper, DateHelper } from "@workspace/common";
 import { CANDIDATE_INITIAL_OPTIONS } from "./candidateListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
-import "./CandidateListing.scss"
+import "./CandidateListing.scss";
 import {
   deleteCandidate,
   fetchCandidates,
@@ -72,6 +72,15 @@ function CandidateListing() {
   // This will vary with the table main page. Each table have it own config with additional columns
   const generateCandidateConfig = (customConfig) => {
     return [
+      {
+        header: "#",
+        name: "indexing",
+        sort: false,
+        sortValue: "indexing",
+        render: (data, index) => (
+          <div className="d-flex column-gap-2">{index + 1}</div>
+        ),
+      },
       {
         header: (
           <div className="form-check">
@@ -143,9 +152,7 @@ function CandidateListing() {
                   type="button"
                   className="btn btn-custom-primary table-btn"
                 >
-                  <i
-                    className="mdi mdi-pencil"
-                  ></i>
+                  <i className="mdi mdi-pencil"></i>
                 </Button>
               </Link>
             )}
@@ -159,9 +166,7 @@ function CandidateListing() {
                 }}
               >
                 <span>
-                  <i
-                    className="mdi mdi-delete"
-                  ></i>
+                  <i className="mdi mdi-delete"></i>
                 </span>
               </Button>
             )}
