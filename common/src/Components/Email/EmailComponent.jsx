@@ -284,10 +284,11 @@ function EmailComponent() {
             isOpen={isEmailOpen}
             toggle={() => dispatch(setEmailClose())}
             backdrop="false"
-            style={{ position: "fixed", bottom: 0, right: 0, minWidth: "50%" }}
+            style={{ position: "fixed", top: 0, right: 0, minWidth: "50%" }}
             fullscreen={isFullscreen}
+            scrollable
           >
-            <div className="modal-header d-flex flex-row justify-content-between align-items-center">
+            <div className="modal-header d-flex flex-row justify-content-between align-items-center" style={{paddingTop:0, paddingBottom:0}}>
               <span className="modal-title h5">New Message</span>
               <div className="d-flex flex-row gap-2">
                 <button
@@ -414,7 +415,9 @@ function EmailComponent() {
                 isView={false}
                 handleOutputContent={setEmailContent}
                 autoResize={false}
-                height={350}
+                height={280}
+                // minHeight={100}
+                // maxHeight={300}
                 onChange={(content) => {
                   formik.setFieldValue("content", content);
                 }}
