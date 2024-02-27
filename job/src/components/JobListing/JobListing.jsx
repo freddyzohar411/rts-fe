@@ -36,6 +36,7 @@ const JobListing = () => {
   const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
   const dispatch = useDispatch();
   const { jobType } = useParams();
+  console.log("Job Type: ", jobType);
 
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
@@ -118,6 +119,8 @@ const JobListing = () => {
     dispatch(fetchUserGroupByName(RECRUITER_GROUP));
   }, []);
 
+  console.log("Grid View: ", gridView);
+
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     const request = { ...pageRequest, jobType: gridView };
@@ -126,7 +129,7 @@ const JobListing = () => {
     } else {
       dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
     }
-  }, [pageRequest]);
+  }, [pageRequest, gridView]);
 
   // Update the page info when job Data changes
   useEffect(() => {
@@ -217,7 +220,7 @@ const JobListing = () => {
         sort: false,
         sortValue: "indexing",
         render: (data, index) => (
-          <div className="d-flex column-gap-2">{index + 1}</div>
+          <div className="d-flex column-gap-2">{index + 1}.</div>
         ),
       },
       {

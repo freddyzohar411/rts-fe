@@ -78,7 +78,7 @@ function CandidateListing() {
         sort: false,
         sortValue: "indexing",
         render: (data, index) => (
-          <div className="d-flex column-gap-2">{index + 1}</div>
+          <div className="d-flex column-gap-2">{index + 1}.</div>
         ),
       },
       {
