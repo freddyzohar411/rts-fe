@@ -24,8 +24,22 @@ const Dashboard = () => {
 
   document.title = "Dashboard | RTS";
 
+  // useEffect(() => {
+  //   if (checkAllPermission([Permission.JOB_READ]) && !newJobs) {
+  //     dispatch(fetchNewJobsCount());
+  //     dispatch(fetchActiveJobsCount());
+  //     dispatch(fetchInactiveJobsCount());
+  //     dispatch(fetchClosedJobsCount());
+  //     dispatch(fetchAssignedJobsCount());
+  //     dispatch(fetchFODCount());
+  //     dispatch(fetchAllJobsCount());
+  //     dispatch(fetchTotalAssignedJobsCount());
+  //     dispatch(fetchTotalFODCount());
+  //   }
+  // }, [checkAllPermission([Permission.JOB_READ])]);
+
   useEffect(() => {
-    if (checkAllPermission([Permission.JOB_READ]) && !newJobs) {
+    // if (checkAllPermission([Permission.JOB_READ]) && !newJobs) {
       dispatch(fetchNewJobsCount());
       dispatch(fetchActiveJobsCount());
       dispatch(fetchInactiveJobsCount());
@@ -35,8 +49,10 @@ const Dashboard = () => {
       dispatch(fetchAllJobsCount());
       dispatch(fetchTotalAssignedJobsCount());
       dispatch(fetchTotalFODCount());
-    }
-  }, [checkAllPermission([Permission.JOB_READ])]);
+    // }
+  }, []);
+
+  console.log("I AM HERE")
 
   return (
     <React.Fragment>

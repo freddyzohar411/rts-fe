@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CountUp from "react-countup";
 import { Row, Badge, Card, CardBody, Col, Button } from "reactstrap";
 import { Link } from "react-router-dom";
@@ -155,6 +155,7 @@ const Widgets = () => {
                           <span className="counter-value" data-target="559.25">
                             {item?.key !== "offer_status" && (
                               <CountUp
+                                key={getCount(item?.key)}
                                 start={0}
                                 prefix={item.prefix}
                                 suffix={item.suffix}
