@@ -48,9 +48,9 @@ import {
 } from "../../helpers/backend_helper";
 
 // Fetch new jobs count
-function* workNewJobsCount() {
+function* workNewJobsCount({ payload }) {
   try {
-    const response = yield call(newJobsCount);
+    const response = yield call(newJobsCount, payload.isGetAll);
     yield put(fetchNewJobsCountSuccess(response.data));
   } catch (error) {
     yield put(fetchNewJobsCountFailure(error));
@@ -58,9 +58,9 @@ function* workNewJobsCount() {
 }
 
 // Fetch active jobs count
-function* workActiveJobsCount() {
+function* workActiveJobsCount({ payload }) {
   try {
-    const response = yield call(activeJobsCount);
+    const response = yield call(activeJobsCount, payload.isGetAll);
     yield put(fetchActiveJobsCountSuccess(response.data));
   } catch (error) {
     yield put(fetchActiveJobsCountFailure(error));
@@ -98,9 +98,9 @@ function* workAssignedJobsCount() {
 }
 
 // Fetch fod jobs count
-function* workFODJobsCount() {
+function* workFODJobsCount({ payload }) {
   try {
-    const response = yield call(fodJobsCount);
+    const response = yield call(fodJobsCount, payload.isGetAll);
     yield put(fetchFODCountSuccess(response.data));
   } catch (error) {
     yield put(fetchFODCountFailure(error));

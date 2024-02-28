@@ -19,12 +19,24 @@ import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { Permission, checkAllPermission } = useUserAuth();
+  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
   const newJobs = useSelector((state) => state.JobsCount.newJobs);
 
   document.title = "Dashboard | RTS";
 
   useEffect(() => {
+    if (checkAnyRole([Role.ADMIN])) {
+      dispatch(fetchNewJobsCount(true));
+      dispatch(fetchActiveJobsCount(true));
+      dispatch(fetchInactiveJobsCount());
+      dispatch(fetchClosedJobsCount());
+      dispatch(fetchAssignedJobsCount());
+      dispatch(fetchFODCount(true));
+      dispatch(fetchAllJobsCount());
+      dispatch(fetchTotalAssignedJobsCount());
+      dispatch(fetchTotalFODCount());
+      return 
+    }
     if (checkAllPermission([Permission.JOB_READ])) {
       dispatch(fetchNewJobsCount());
       dispatch(fetchActiveJobsCount());
