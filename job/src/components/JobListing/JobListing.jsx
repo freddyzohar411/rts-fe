@@ -36,8 +36,6 @@ const JobListing = () => {
   const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
   const dispatch = useDispatch();
   const { jobType } = useParams();
-  console.log("Job Type: ", jobType);
-
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
   const recruiterGroup = useSelector(
@@ -49,7 +47,7 @@ const JobListing = () => {
   const [namesData, setNamesData] = useState([]);
   const [activeJob, setActiveJob] = useState([]);
   const [selectedRecruiter, setSelectedRecruiter] = useState([]);
-  const [gridView, setGridView] = useState(jobType);
+  const [gridView, setGridView] = useState(jobType ?? "new_job");
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -118,8 +116,6 @@ const JobListing = () => {
     dispatch(fetchJobListsFields());
     dispatch(fetchUserGroupByName(RECRUITER_GROUP));
   }, []);
-
-  console.log("Grid View: ", gridView);
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
