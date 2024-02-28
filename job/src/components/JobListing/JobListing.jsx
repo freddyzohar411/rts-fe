@@ -117,11 +117,13 @@ const JobListing = () => {
     dispatch(fetchUserGroupByName(RECRUITER_GROUP));
   }, []);
 
+  console.log("Grid View", gridView)
+
   // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, jobType: gridView };
+    const request = { ...pageRequest, jobType: gridView};
     if (checkAnyRole([Role.ADMIN])) {
-      dispatch(fetchJobsAdmin(DynamicTableHelper.cleanPageRequest(request)));
+      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest({...request, isGetAll: true})));
     } else {
       dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
     }
