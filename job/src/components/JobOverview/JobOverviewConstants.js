@@ -111,15 +111,15 @@ export const timelineLegend = [
     tooltip: "Candidate is in progress in this stage.",
   },
   {
-    color: "gray",
+    color: "withdrawn",
     borderColor: "dark",
     legend: "Candidate Withdrawn",
     tooltip: "Candidate has withdrawn.",
   },
   {
-    color: "success",
+    color: "gray",
     borderColor: "dark",
-    legend: "Completed All Stages",
-    tooltip: "Candidate has completed all stages.",
+    legend: "Skipped",
+    tooltip: "The step has been skipped.",
   },
 ];
