@@ -511,7 +511,7 @@ const JobOverview = () => {
   return (
     <React.Fragment>
       <div>
-        <Row>
+        <Row lg={12} className="m-0 p-0">
           <TimelineHeader data={jobHeaders} />
         </Row>
         <hr className="border border-dashed border-dark" />
