@@ -483,7 +483,12 @@ function CreateUser() {
                               <Button
                                 className="btn btn-custom-primary"
                                 type="button"
-                                onClick={() => resetForm()}
+                                onClick={() => {
+                                  resetForm();
+                                  setSelectedGroups([]);
+                                  setSortByCountry(null);
+                                  setSortBy(null);
+                                }}
                               >
                                 Reset
                               </Button>
