@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import {
   fetchCandidates,
   fetchCandidatesFields,
@@ -106,6 +105,15 @@ const FODTagTable = ({ selectedRowData }) => {
   // Candidate Config
   const generateCandidateConfig = (customConfig) => {
     return [
+      {
+        header: "#",
+        name: "indexing",
+        sort: false,
+        sortValue: "indexing",
+        render: (data, index) => (
+          <div className="d-flex column-gap-2">{index + 1}.</div>
+        ),
+      },
       {
         header: (
           <div className="form-check">

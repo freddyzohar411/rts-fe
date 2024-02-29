@@ -1,11 +1,5 @@
 const CANDIDATE_INITIAL_OPTIONS = [
   {
-    label: "Candidate First Name",
-    value: "candidateSubmissionData.firstName",
-    sort: true,
-    sortValue: "candidate_submission_data.firstName",
-  },
-  {
     label: "Candidate Last Name",
     value: "candidateSubmissionData.lastName",
     sort: true,

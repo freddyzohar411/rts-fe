@@ -182,7 +182,7 @@ const DynamicTableWrapper = ({
                             <span>
                               <i className="mdi mdi-download me-1"></i>
                             </span>
-                            Imports
+                            Export
                           </Button>
                           <Button
                             type="button"
@@ -216,12 +216,6 @@ const DynamicTableWrapper = ({
                               </Button>
                             </Link>
                           )}
-                          <Button
-                            type="button"
-                            className="btn btn-custom-primary d-flex align-items-center"
-                          >
-                            <i className="ri-filter-line"></i>
-                          </Button>
                         </div>
                       </Col>
                     </Row>
