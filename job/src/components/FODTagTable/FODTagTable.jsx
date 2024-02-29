@@ -3,6 +3,7 @@ import { Button, Input } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   fetchCandidates,
   fetchCandidatesFields,
@@ -131,6 +132,22 @@ const FODTagTable = ({ selectedRowData }) => {
                 checked={selected?.includes(data?.id)}
               />
             </div>
+          );
+        },
+      },
+      {
+        header: "Candidate First Name",
+        name: "candidateFirstName",
+        sort: true,
+        sortValue: "candidate_submission_data.firstName",
+        render: (data) => {
+          return (
+            <Link
+              to={`/candidates/${data?.id}/snapshot`}
+              className="text-custom-primary text-decoration-underline"
+            >
+              <span>{data?.candidateSubmissionData?.firstName}</span>
+            </Link>
           );
         },
       },
