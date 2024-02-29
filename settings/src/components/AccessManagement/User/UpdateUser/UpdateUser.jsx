@@ -114,6 +114,7 @@ function UpdateUser() {
         designation: user?.designation,
         location: user?.location,
         country: user?.country,
+        status: user?.status ? "true" : "false",
       };
       setUserInitialValues(populateForm(fetchInitialValues));
     }
