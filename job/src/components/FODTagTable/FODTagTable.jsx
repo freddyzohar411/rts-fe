@@ -3,7 +3,6 @@ import { Button, Input } from "reactstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import {
   fetchCandidates,
   fetchCandidatesFields,
