@@ -36,7 +36,6 @@ const JobListing = () => {
   const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
   const dispatch = useDispatch();
   const { jobType } = useParams();
-
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
   const recruiterGroup = useSelector(
@@ -48,7 +47,7 @@ const JobListing = () => {
   const [namesData, setNamesData] = useState([]);
   const [activeJob, setActiveJob] = useState([]);
   const [selectedRecruiter, setSelectedRecruiter] = useState([]);
-  const [gridView, setGridView] = useState(jobType);
+  const [gridView, setGridView] = useState(jobType ?? "new_job");
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -120,13 +119,13 @@ const JobListing = () => {
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, jobType: gridView };
+    const request = { ...pageRequest, jobType: gridView};
     if (checkAnyRole([Role.ADMIN])) {
-      dispatch(fetchJobsAdmin(DynamicTableHelper.cleanPageRequest(request)));
+      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest({...request, isGetAll: true})));
     } else {
       dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
     }
-  }, [pageRequest]);
+  }, [pageRequest, gridView]);
 
   // Update the page info when job Data changes
   useEffect(() => {
@@ -211,6 +210,15 @@ const JobListing = () => {
   // This will vary with the table main page. Each table have it own config with additional columns
   const generateJobListConfig = (customConfig) => {
     return [
+      {
+        header: "#",
+        name: "indexing",
+        sort: false,
+        sortValue: "indexing",
+        render: (data, index) => (
+          <div className="d-flex column-gap-2">{index + 1}.</div>
+        ),
+      },
       {
         header: (
           <div className="form-check">

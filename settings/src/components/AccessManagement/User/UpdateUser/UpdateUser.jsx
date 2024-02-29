@@ -15,7 +15,8 @@ import {
   Label,
   Row,
 } from "reactstrap";
-import { initialValues, schema, populateForm } from "../constants";
+import { initialValues, updateSchema, populateForm } from "../constants";
+import { fetchCountryCurrency } from "@workspace/common/src/store/actions";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -34,8 +35,26 @@ function UpdateUser() {
   );
   const [sortBy, setSortBy] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  // Country Dropdown
+  const [sortByCountry, setSortByCountry] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const allUsers = useSelector((state) => state?.UserReducer?.users);
   const user = useSelector((state) => state.UserReducer.user);
+  const allCountries = useSelector(
+    (state) => state?.CountryCurrencyReducer?.countryCurrency
+  );
+
+  useEffect(() => {
+    if (!allCountries) return;
+    setSelectedCountry([
+      {
+        options: allCountries?.map((country) => ({
+          label: country.name,
+          value: country.name,
+        })),
+      },
+    ]);
+  }, [allCountries]);
 
   useEffect(() => {
     if (!allUsers) return;
@@ -54,11 +73,18 @@ function UpdateUser() {
     const manager = allUsers?.find(
       (singleUser) => singleUser.id === parseInt(user.managerId)
     );
-    if (!manager) return;
-    setSortBy({
-      label: `${manager.firstName} (${manager.mobile})`,
-      value: manager?.id?.toString(),
-    });
+    if (manager) {
+      setSortBy({
+        label: `${manager.firstName} (${manager.mobile})`,
+        value: manager?.id?.toString(),
+      });
+    }
+    if (user?.country) {
+      setSortByCountry({
+        label: user?.country,
+        value: user?.country,
+      });
+    }
   }, [user, allUsers]);
 
   useEffect(() => {
@@ -69,6 +95,7 @@ function UpdateUser() {
 
   useEffect(() => {
     dispatch(fetchUsers());
+    dispatch(fetchCountryCurrency());
   }, []);
 
   // Set User Initial Values
@@ -84,6 +111,9 @@ function UpdateUser() {
         keycloackId: user?.keycloackId,
         id: user?.id,
         managerId: user?.managerId,
+        designation: user?.designation,
+        location: user?.location,
+        country: user?.country,
       };
       setUserInitialValues(populateForm(fetchInitialValues));
     }
@@ -109,7 +139,11 @@ function UpdateUser() {
       keycloackId: values.keycloackId,
       password: encode(values.password),
       managerId: parseInt(values.managerId) ?? null,
+      designation: values.designation,
+      location: values.location,
+      country: values.country,
     };
+    console.log("Update User: ", updatedUser);
     dispatch(updateUser({ updatedUser, navigate: navigate }));
   };
 
@@ -139,7 +173,7 @@ function UpdateUser() {
                 <Formik
                   validateOnBlur
                   validateOnChange={false}
-                  validationSchema={schema}
+                  validationSchema={updateSchema}
                   initialValues={userInitialValues}
                   enableReinitialize={true}
                   onSubmit={handleSubmit}
@@ -281,6 +315,72 @@ function UpdateUser() {
                               )}
                             </div>
                           </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Designation</Label>
+                              <Field
+                                name="designation"
+                                type="text"
+                                placeholder="Enter Designation"
+                                className={`form-control ${
+                                  touched.designation && errors.designation
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.designation && touched.designation && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.designation}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <FormSelection
+                                label="Country"
+                                type="text"
+                                name="country"
+                                options={selectedCountry}
+                                value={sortByCountry}
+                                onChange={(selectedCountry) => {
+                                  setSortByCountry(selectedCountry);
+                                  if (!selectedCountry) {
+                                    handleChange("country")("");
+                                  } else {
+                                    handleChange("country")(
+                                      selectedCountry?.value
+                                    );
+                                  }
+                                }}
+                                isClearable
+                              />
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Location</Label>
+                              <Field
+                                name="location"
+                                type="text"
+                                placeholder="Enter Location"
+                                className={`form-control ${
+                                  touched.location && errors.location
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                            </div>
+                            {errors.location && touched.location && (
+                              <FormFeedback typeof="invalid">
+                                {errors.location}
+                              </FormFeedback>
+                            )}
+                          </Col>
+                        </Row>
+                        <Row>
                           <Col lg={4}>
                             <div className="mb-3">
                               <Label className="fw-semibold">

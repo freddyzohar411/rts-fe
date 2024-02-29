@@ -88,8 +88,6 @@ export async function replaceTemplateOnly(htmlString) {
 
   // Replace all matches using a callback function
   const result = htmlString.replace(pattern, (match, key) => {
-    console.log("match", match);
-    console.log("key", key);
     const keys = key.split(".");
     // Navigate through the nested properties of templateData to find the value
     let value = keys.reduce((acc, keyPart) => acc?.[keyPart], templateData);
