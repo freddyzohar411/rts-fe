@@ -3,7 +3,6 @@ import { Button, Card, CardBody, Col, Container, Input, Row } from "reactstrap";
 import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
 
-
 const DynamicTableWrapper = ({
   data,
   pageInfo,
@@ -28,7 +27,6 @@ const DynamicTableWrapper = ({
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-   
           {optGroup && optGroup.length > 0 && customViewShow && (
             <div>
               <Row>
@@ -146,11 +144,11 @@ const DynamicTableWrapper = ({
                             </span>
                             Custom View
                           </Button>
-                          <Button type="button" className="btn btn-custom-primary">
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                          >
                             Create New Account
-                          </Button>
-                          <Button type="button" className="btn btn-custom-primary">
-                            <i className="ri-filter-line"></i>
                           </Button>
                         </div>
                       </Col>

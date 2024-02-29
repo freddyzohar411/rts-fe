@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -106,6 +106,15 @@ const FODTagTable = ({ selectedRowData }) => {
   const generateCandidateConfig = (customConfig) => {
     return [
       {
+        header: "#",
+        name: "indexing",
+        sort: false,
+        sortValue: "indexing",
+        render: (data, index) => (
+          <div className="d-flex column-gap-2">{index + 1}.</div>
+        ),
+      },
+      {
         header: (
           <div className="form-check">
             <Input
@@ -133,6 +142,22 @@ const FODTagTable = ({ selectedRowData }) => {
             </div>
           );
         },
+      },
+      {
+        header: "Candidate First Name",
+        name: "firstName",
+        sort: true,
+        sortValue: "candidate_submission_data.firstName",
+        render: (data) => (
+          <div className="d-flex column-gap-2">
+            <Link
+              to={`/candidates/${data?.id}/snapshot`}
+              style={{ color: "black", textDecoration: "underline" }}
+            >
+              {data?.firstName}
+            </Link>
+          </div>
+        ),
       },
       ...customConfig,
       {
