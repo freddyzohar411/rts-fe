@@ -8,6 +8,10 @@ export const GEO_COUNTRY_CURRENCY_URL = `${GEO_BASE_URL}/country-currency`;
 export const GEO_BUSINESS_COUNTRIES_URL = `${GEO_BASE_URL}/offer-country`;
 export const GEO_CITIES_URL = (countryId) =>
   `${GEO_BASE_URL}/cities/country/${countryId}`;
+  export const GEO_STATES_URL = (countryId) =>
+  `${GEO_BASE_URL}/states/${countryId}`;
+export const GEO_STATECITIES_URL = (stateid) =>
+  `${GEO_BASE_URL}/cities/state/${stateid}`;
 
 // Industry Service endpoints
 export const INDUSTRY_BASE_URL = `${configURL.INDUSTRY_URL}/${baseURL.INDUSTRY}`;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIndustry, resetMetaData } from "../../../store/industry/action";
 import { useNavigate } from "react-router-dom";
-const IndustrySelectElement = ({ formik, field, formStateHook }) => {
+const IndustrySelectElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { formState } = formStateHook;
@@ -41,6 +41,7 @@ const IndustrySelectElement = ({ formik, field, formStateHook }) => {
               : ""
           }`}
           disabled={formState === "view" ? true : false}
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
           {industry.map((item, index) => (

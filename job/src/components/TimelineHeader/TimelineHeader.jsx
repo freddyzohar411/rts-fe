@@ -11,11 +11,11 @@ function TimelineHeader({ data }) {
 
   useEffect(() => {
     if (isMobile) {
-      setItemsPerPage(1)
+      setItemsPerPage(1);
     } else if (isTablet) {
-      setItemsPerPage(4)
+      setItemsPerPage(4);
     } else {
-      setItemsPerPage(6)
+      setItemsPerPage(6);
     }
   }, [itemsPerPage]);
 
@@ -35,60 +35,38 @@ function TimelineHeader({ data }) {
     }
   }, [jobTimelineCount]);
 
-  const handlePrevClick = () => {
-    setStartIndex(Math.max(0, startIndex - itemsPerPage));
-  };
+  // const handlePrevClick = () => {
+  //   setStartIndex(Math.max(0, startIndex - itemsPerPage));
+  // };
 
-  const handleNextClick = () => {
-    setStartIndex(
-      Math.min(data.length - itemsPerPage, startIndex + itemsPerPage)
-    );
-  };
+  // const handleNextClick = () => {
+  //   setStartIndex(
+  //     Math.min(data.length - itemsPerPage, startIndex + itemsPerPage)
+  //   );
+  // };
 
   return (
-    <Row
-      className="align-items-stretch w-100 m-0"
-      style={{ height: "60px" }}
+    <div
+      className={`d-flex p-0 justify-content-around ${isMobile ? "flex-wrap align-items-start" : "flex-nowrap align-items-start"}`}
     >
-      <Col xs="auto" className="d-flex align-items-stretch flex-nowrap">
-        <Button
-          onClick={handlePrevClick}
-          disabled={startIndex === 0}
-          className="h-100 btn btn-custom-primary px-1"
+      {data.map((item, index) => (
+        <div
+          key={index}
+          className={`d-flex flex-column align-items-center justify-content-top gap-3 p-1 ${isMobile ? "" : "h-100"}`}
+          style={{ width: "120px" }}
         >
-          <i className="ri-arrow-left-s-line fs-5"></i>
-        </Button>
-      </Col>
-      <Col>
-        <div className={`${isMobile || "d-flex flex-row justify-content-between mx-2"}`}>
-          {data
-            .slice(startIndex, startIndex + itemsPerPage)
-            .map((item, index) => (
-              <div
-                key={index}
-                className="d-flex flex-column align-items-center mt-2 gap-2 text-center"
-              >
-                <div
-                  className="rounded rounded-pill bg-primary text-white d-flex align-items-center justify-content-center"
-                  style={{ width: "30px", height: "30px" }}
-                >
-                  <span>{counts?.[item] ?? 0}</span>
-                </div>
-                <span className="text-nowrap">{item}</span>
-              </div>
-            ))}
+          <div
+            className="rounded rounded-circle bg-custom-primary text-white d-flex justify-content-center align-items-center"
+            style={{ width: "28px", height: "28px" }}
+          >
+            {counts?.[item] ?? 0}
+          </div>
+          <div className="text-center" style={{ fontSize: "12px" }}>
+            {item}
+          </div>
         </div>
-      </Col>
-      <Col xs="auto" className="d-flex align-items-stretch">
-        <Button
-          onClick={handleNextClick}
-          disabled={startIndex >= data.length - itemsPerPage}
-          className="h-100 btn btn-custom-primary px-1"
-        >
-          <i className="ri-arrow-right-s-line fs-5"></i>
-        </Button>
-      </Col>
-    </Row>
+      ))}
+    </div>
   );
 }
 

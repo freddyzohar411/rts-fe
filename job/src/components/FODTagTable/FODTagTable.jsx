@@ -3,6 +3,7 @@ import { Button, Input } from "reactstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   fetchCandidates,
   fetchCandidatesFields,
@@ -145,19 +146,19 @@ const FODTagTable = ({ selectedRowData }) => {
       },
       {
         header: "Candidate First Name",
-        name: "firstName",
+        name: "candidateFirstName",
         sort: true,
         sortValue: "candidate_submission_data.firstName",
-        render: (data) => (
-          <div className="d-flex column-gap-2">
+        render: (data) => {
+          return (
             <Link
               to={`/candidates/${data?.id}/snapshot`}
-              style={{ color: "black", textDecoration: "underline" }}
+              className="text-custom-primary text-decoration-underline"
             >
-              {data?.firstName}
+              <span>{data?.candidateSubmissionData?.firstName}</span>
             </Link>
-          </div>
-        ),
+          );
+        },
       },
       ...customConfig,
       {

@@ -10,7 +10,7 @@ const MultiFileInputElement = ({
   formStateHook,
   formFieldsHook,
 }) => {
-  const { formFields, setFormFields } = formFieldsHook;
+  const { formFields, setFormFields, tabIndexData } = formFieldsHook;
   const { formState } = formStateHook;
   const [files, setFiles] = useState([]); //
   const [existingFiles, setExistingFiles] = useState([]);
@@ -33,7 +33,7 @@ const MultiFileInputElement = ({
 
   useEffect(() => {
     const fieldValue = formik?.values?.[field.name];
-  
+
     if (
       fieldValue === "" ||
       fieldValue === null ||
@@ -41,14 +41,18 @@ const MultiFileInputElement = ({
       // typeof fieldValue !== "object"
     ) {
       // Check if an update is needed before updating the state
-      if (files.length > 0 || existingFiles.length > 0 || deletedIds.length > 0) {
+      if (
+        files.length > 0 ||
+        existingFiles.length > 0 ||
+        deletedIds.length > 0
+      ) {
         setFiles([]);
         setExistingFiles([]);
         setDeletedIds([]);
       }
     }
-  // }, [formik?.values?.[field.name], files, existingFiles, deletedIds]);
-}, [formik?.values?.[field.name]]);
+    // }, [formik?.values?.[field.name], files, existingFiles, deletedIds]);
+  }, [formik?.values?.[field.name]]);
 
   useEffect(() => {
     if (field?.multiFileEnity) {
@@ -191,6 +195,7 @@ const MultiFileInputElement = ({
               fileInputRef.current.click();
             }}
             disabled={formState === "view" ? true : false}
+            tabIndex={tabIndexData?.[field?.fieldId]}
           >
             Add Files
           </button>

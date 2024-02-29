@@ -9,6 +9,7 @@ const FormTemplateSelectElement = ({
   formik,
   field,
   formStateHook,
+  tabIndexData,
   ...props
 }) => {
   const { formState } = formStateHook;
@@ -133,6 +134,7 @@ const FormTemplateSelectElement = ({
         options={options}
         noOptionsMessage={noOptionsMessage}
         isDisabled={formState === "view" ? true : false}
+        tabIndex={tabIndexData?.[field?.fieldId]}
       />
       {props?.error && (
         <FormFeedback type="invalid">{props?.error}</FormFeedback>

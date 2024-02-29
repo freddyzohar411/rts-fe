@@ -9,7 +9,7 @@ import {
 import { fetchCountryCurrency } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 
-const CurrencyElement = ({ field, formik, formStateHook }) => {
+const CurrencyElement = ({ field, formik, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const dispatch = useDispatch();
   const countryData = useSelector(
@@ -79,6 +79,7 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
         className="btn btn-custom-primary arrow-none border border-primary"
         disabled={formState === "view" ? true : false}
         color="primary"
+        tabIndex={tabIndexData?.[field.fieldId]}
       >
         <span>{selectedCurrency}</span>
       </DropdownToggle>
@@ -92,6 +93,7 @@ const CurrencyElement = ({ field, formik, formStateHook }) => {
         onChange={formik.handleChange}
         value={formik?.values?.[field.name]}
         disabled={formState === "view" ? true : false}
+        tabIndex={tabIndexData?.[field.fieldId]}
       />
 
       <DropdownMenu

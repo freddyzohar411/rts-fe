@@ -4,7 +4,7 @@ import { fieldLocation, fieldSize } from "./constant";
 // i want to import actions from account module
 import { fetchParentCompany } from "../../../store/actions";
 
-const AccountParentElement = ({ formik, field, formStateHook }) => {
+const AccountParentElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const dispatch = useDispatch();
   const [parentCompanyData, setParentCompanyData] = useState([]);
@@ -37,6 +37,7 @@ const AccountParentElement = ({ formik, field, formStateHook }) => {
         value={formik?.values?.[field.name]}
         placeholder={field.placeholder}
         disabled={formState === "view" ? true : false}
+        tabIndex={tabIndexData?.[field?.fieldId]}
       >
         <option value="">{field.placeholder}</option>
         {parentCompanyData?.map((option) => (

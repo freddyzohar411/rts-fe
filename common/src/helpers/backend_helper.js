@@ -7,6 +7,7 @@ import {
   INDUSTRY_SUB_URL,
   DEPARTMENT_BASE_URL,
   GEO_CITIES_URL,
+  GEO_STATES_URL,
 } from "../endpoint";
 
 // import { Axios } from "@workspace/common";
@@ -24,6 +25,7 @@ export const getAccountNamesFromUser = () =>
 export const getCountryCurrency = () => api.get(GEO_COUNTRY_CURRENCY_URL);
 export const getBusinessCountries = () => api.get(GEO_BUSINESS_COUNTRIES_URL);
 export const getCities = (countryId) => api.get(GEO_CITIES_URL(countryId));
+export const getStates = (countryId) => api.get(GEO_STATES_URL(countryId));
 
 // Industry Microservice
 export const getParentIndustries = () => api.get(INDUSTRY_PARENT_URL);
