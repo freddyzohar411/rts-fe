@@ -139,6 +139,9 @@ function UpdateUser() {
       keycloackId: values.keycloackId,
       password: encode(values.password),
       managerId: parseInt(values.managerId) ?? null,
+      designation: values.designation,
+      location: values.location,
+      country: values.country,
     };
     console.log("Update User: ", updatedUser);
     dispatch(updateUser({ updatedUser, navigate: navigate }));
