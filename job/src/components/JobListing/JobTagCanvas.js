@@ -1,22 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import {
-  Container,
-  Card,
-  CardBody,
   Row,
   Col,
-  Input,
-  Button,
-  Breadcrumb,
-  BreadcrumbItem,
   Offcanvas,
   OffcanvasHeader,
   OffcanvasBody,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  Label,
 } from "reactstrap";
 import FODTagTable from "../FODTagTable/FODTagTable";
 
