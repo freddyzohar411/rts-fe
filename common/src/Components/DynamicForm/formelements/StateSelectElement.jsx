@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const StateSelectElement = ({ formik, field, formStateHook }) => {
+const StateSelectElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const [fetchedData, setFetchData] = useState([]);
   useEffect(() => {
@@ -27,6 +27,7 @@ const StateSelectElement = ({ formik, field, formStateHook }) => {
           onBlur={formik.handleBlur}
           className="form-select"
           disabled={formState === "view" ? true : false}
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
           {fetchedData.map((item, index) => (

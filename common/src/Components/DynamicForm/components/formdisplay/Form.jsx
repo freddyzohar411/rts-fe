@@ -46,6 +46,39 @@ const Form = forwardRef(
     const [formName, setFormName] = useState(template?.formName || "");
     const [buttonName, setButtonName] = useState("");
     const [editDataValues, setEditDataValues] = useState(null);
+    const [tabIndexData, setTabIndexData] = useState({});
+
+    // 'fieldTabIndex' is now your desired object
+    useEffect(() => {
+      if (formLayoutSchema) {
+        const formSchemaList = formLayoutSchema;
+
+        const fieldTabIndex = {};
+
+        // Iterate through each section and assign tab indexes
+        formSchemaList.forEach((section) => {
+          // Find the maximum number of fields in any droppable zone for this section
+          const maxFieldsInZone = Math.max(
+            ...section.droppableZones.map((zone) => zone.fieldIds.length)
+          );
+
+          // Assign tab indexes, going horizontally across columns (zones)
+          for (let rowIndex = 0; rowIndex < maxFieldsInZone; rowIndex++) {
+            section.droppableZones.forEach((zone) => {
+              // If there is a field at the current row index in this zone, assign it the next tabIndex
+              if (rowIndex < zone.fieldIds.length) {
+                const fieldId = zone.fieldIds[rowIndex];
+                fieldTabIndex[fieldId] = Object.keys(fieldTabIndex).length + 1;
+              }
+            });
+          }
+        });
+
+        // 'fieldTabIndex' now contains the field IDs as keys and their tab order as values
+        // console.log(fieldTabIndex);
+        setTabIndexData(fieldTabIndex);
+      }
+    }, [formLayoutSchema]);
 
     // Reset button name and form state when form name changes in case user did not cancel the form
     useEffect(() => {
@@ -307,6 +340,7 @@ const Form = forwardRef(
                                     formState,
                                     setFormState,
                                   }}
+                                  tabIndexData={tabIndexData}
                                 />
                               </Row>
                             ))}

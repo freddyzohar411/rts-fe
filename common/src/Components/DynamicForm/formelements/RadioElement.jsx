@@ -1,6 +1,6 @@
 import React from "react";
 
-const RadioElement = ({ formik, field, formStateHook }) => {
+const RadioElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   return (
     <div className="d-flex gap-3">
@@ -15,6 +15,7 @@ const RadioElement = ({ formik, field, formStateHook }) => {
             onChange={formik.handleChange}
             checked={formik?.values?.[field.name] === option.value}
             disabled={formState === "view" ? true : false}
+            tabIndex={tabIndexData?.[field?.fieldId]}
           />
           <label className="form-check-label" htmlFor={option.value}>
             {option.label}

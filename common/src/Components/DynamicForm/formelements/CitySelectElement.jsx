@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCity } from "../../../store/actions";
 
-const CitySelectElement = ({ formik, field, formStateHook }) => {
+const CitySelectElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const dispatch = useDispatch();
   const cityData = useSelector((state) => state.CityReducer.city);
@@ -46,6 +46,7 @@ const CitySelectElement = ({ formik, field, formStateHook }) => {
           }`}
           value={formik?.values?.[field.name]}
           disabled={formState === "view" ? true : false}
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
           {fetchedData.map((item, index) => (

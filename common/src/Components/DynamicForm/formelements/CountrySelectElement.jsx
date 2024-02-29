@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCountryCurrency } from "../../../store/actions";
 
-const CountrySelectElement = ({ formik, field, formStateHook }) => {
+const CountrySelectElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const countryData = useSelector(
     (state) => state.CountryCurrencyReducer.countryCurrency
@@ -35,6 +35,7 @@ const CountrySelectElement = ({ formik, field, formStateHook }) => {
           }`}
           value={formik?.values?.[field.name]}
           disabled={formState === "view" ? true : false}
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
           {fetchData.map((item, index) => (

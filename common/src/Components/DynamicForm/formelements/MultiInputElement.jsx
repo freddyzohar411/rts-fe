@@ -6,6 +6,7 @@ const MultiInputElement = ({
   isString = true,
   formStateHook,
   field,
+  tabIndexData,
   ...props
 }) => {
   const [selectedOptions, setSelectedOptions] = useState("");
@@ -85,6 +86,7 @@ const MultiInputElement = ({
       onBlur={formik.handleBlur}
       styles={customStyles}
       components={{ DropdownIndicator, Menu }} // Override dropdown indicator and menu
+      tabIndexData={tabIndexData?.[field?.fieldId]}
     />
   );
 };

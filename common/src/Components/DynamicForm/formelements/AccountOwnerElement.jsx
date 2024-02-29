@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { fieldSize } from "./constant";
 
-const AccountOwnerElement = ({ formik, field, formStateHook, ...props }) => {
+const AccountOwnerElement = ({
+  formik,
+  field,
+  formStateHook,
+  tabIndexData,
+  ...props
+}) => {
   const data = useSelector((state) => state.AccountNamesReducer.accountById);
 
   useEffect(() => {
@@ -32,6 +38,7 @@ const AccountOwnerElement = ({ formik, field, formStateHook, ...props }) => {
         value={data?.accountSubmissionData?.accountOwner ?? "NA"}
         placeholder={field?.placeholder}
         disabled={true}
+        tabIndex={tabIndexData?.[field?.fieldId]}
       />
       {props?.error && (
         <FormFeedback type="invalid">{props?.error}</FormFeedback>

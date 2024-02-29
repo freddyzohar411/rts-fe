@@ -3,7 +3,7 @@ import { Label, FormFeedback } from "reactstrap";
 import Select from "react-select";
 import axios from "axios";
 
-const SearchSelect = ({ formik, field, ...props }) => {
+const SearchSelect = ({ formik, field, tabIndexData,  ...props }) => {
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -81,6 +81,7 @@ const SearchSelect = ({ formik, field, ...props }) => {
         placeholder="Search..."
         options={options}
         noOptionsMessage={noOptionsMessage}
+        tabIndex={tabIndexData?.[field?.fieldId]}
       />
 
       {props?.error && (

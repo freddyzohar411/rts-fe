@@ -6,6 +6,7 @@ const ButtonUpdateElement = ({
   formik,
   buttonNameHook,
   formStateHook,
+  tabIndexData,
 }) => {
   const { buttonName, setButtonName } = buttonNameHook;
   const { formState, setFormState } = formStateHook;
@@ -16,6 +17,7 @@ const ButtonUpdateElement = ({
       type={field.buttonType}
       className={`${field.buttonClass}`}
       name={field.buttonName}
+      tabIndexData={tabIndexData?.[field?.fieldId]}
     >
       {field.buttonText}
     </button>
@@ -28,6 +30,7 @@ const ButtonUpdateElement = ({
         type={`submit`}
         className="btn btn-secondary"
         name="updateButton"
+        tabIndexData={tabIndexData?.[field?.fieldId]}
       >
         Update
       </button>
@@ -36,6 +39,7 @@ const ButtonUpdateElement = ({
         className="btn btn-danger"
         name="cancelButton"
         onClick={(e) => setButtonName("cancel")}
+        tabIndexData={tabIndexData?.[field?.fieldId]}
       >
         Cancel
       </button>

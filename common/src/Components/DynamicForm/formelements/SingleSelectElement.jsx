@@ -3,7 +3,13 @@ import { Label, FormFeedback } from "reactstrap";
 import Select from "react-select";
 import { Lists } from "./listOptions";
 
-const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
+const SingleSelectElement = ({
+  formik,
+  field,
+  formStateHook,
+  tabIndexData,
+  ...props
+}) => {
   const { formState } = formStateHook;
   const getInitialOptions = (field) => {
     if (!field) return [];
@@ -61,7 +67,7 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
   const customStyles = {
     menu: (provided) => ({
       ...provided,
-      zIndex: 9999, 
+      zIndex: 9999,
     }),
     control: (base, state) => ({
       ...base,
@@ -71,11 +77,11 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
       "&:hover": {
         borderColor: state.isFocused ? "#8AAED6" : isValid ? "#8AAED6" : "red",
       },
-      backgroundColor: state.isDisabled ? '#EFF2F7' : base.backgroundColor,
+      backgroundColor: state.isDisabled ? "#EFF2F7" : base.backgroundColor,
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      color: state.isDisabled ? 'black !important' : provided.color,
+      color: state.isDisabled ? "black !important" : provided.color,
     }),
   };
 
@@ -101,6 +107,7 @@ const SingleSelectElement = ({ formik, field, formStateHook, ...props }) => {
         options={options}
         noOptionsMessage={noOptionsMessage}
         isDisabled={formState === "view" ? true : false}
+        tabIndex={tabIndexData?.[field.fieldId]}
       />
       {props?.error && (
         <FormFeedback type="invalid">{props?.error}</FormFeedback>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchDepartment } from "../../../store/actions";
 
-const DepartmentSelectElement = ({ field, formik, formStateHook }) => {
+const DepartmentSelectElement = ({ field, formik, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const departmentData = useSelector(
     (state) => state.DepartmentReducer.department
@@ -36,6 +36,7 @@ const DepartmentSelectElement = ({ field, formik, formStateHook }) => {
           value={formik?.values?.[field.name]}
           disabled={formState === "view" ? true : false}
           defaultValue=""
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
           {fetchData.map((item, index) => (
