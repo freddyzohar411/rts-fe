@@ -16,6 +16,7 @@ export const populateForm = (value) => {
     confirmPassword: value.confirmPassword,
     employeeId: value.employeeId,
     managerId: value.managerId,
+    status: value.status,
     // groups: value.groups,
   };
 };
@@ -33,6 +34,7 @@ export const initialValues = {
   confirmPassword: "",
   employeeId: "",
   managerId: null,
+  status: null,
   groups: [],
 };
 
@@ -61,6 +63,7 @@ export const schema = yup.object().shape({
   employeeId: yup.string().required("Please enter the Employee ID."),
   // Id is a number
   managerId: yup.number().nullable().notRequired(),
+  status: yup.bool().required("Please select a status."),
   groups: yup.array().nullable().notRequired(),
 });
 
