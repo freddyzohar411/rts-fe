@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSubIndustry } from "../../../store/industry/action";
 
-const SubIndustrySelectElement = ({ formik, field, formStateHook }) => {
+const SubIndustrySelectElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const dispatch = useDispatch();
   const { formState } = formStateHook;
   const [subIndustry, setSubIndustry] = useState([]);
@@ -52,6 +52,7 @@ const SubIndustrySelectElement = ({ formik, field, formStateHook }) => {
               : ""
           }`}
           disabled={formState === "view" ? true : false}
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
           {subIndustry.map((item, index) => (

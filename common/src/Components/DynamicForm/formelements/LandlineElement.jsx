@@ -9,7 +9,7 @@ import {
 import { fetchCountryCurrency } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 
-const LandlineElement = ({ field, formik, formStateHook }) => {
+const LandlineElement = ({ field, formik, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const dispatch = useDispatch();
   const countryData = useSelector(
@@ -113,6 +113,7 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
         className="btn btn-custom-primary arrow-none border border"
         disabled={formState === "view" ? true : false}
         color="primary"
+        tabIndex={tabIndexData?.[field?.fieldId]}
       >
         <span>{selectedLandline}</span>
       </DropdownToggle>
@@ -125,6 +126,7 @@ const LandlineElement = ({ field, formik, formStateHook }) => {
         onChange={formik.handleChange}
         value={formik?.values?.[field.name]}
         disabled={formState === "view" ? true : false}
+        tabIndex={tabIndexData?.[field.fieldId]}
       />
       <DropdownMenu
         as="ul"

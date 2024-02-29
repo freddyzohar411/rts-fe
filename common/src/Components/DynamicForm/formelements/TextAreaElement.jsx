@@ -1,6 +1,6 @@
 import React from "react";
 
-const TextAreaElement = ({ formik, field, formStateHook }) => {
+const TextAreaElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   return (
     <textarea
@@ -11,6 +11,7 @@ const TextAreaElement = ({ formik, field, formStateHook }) => {
       value={formik?.values?.[field.name]}
       placeholder={field.placeholder}
       disabled={formState === "view" ? true : false}
+      tabIndex={tabIndexData?.[field?.fieldId]}
     />
   );
 };

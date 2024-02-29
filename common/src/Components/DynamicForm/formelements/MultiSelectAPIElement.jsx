@@ -7,7 +7,13 @@ import { fetchDepartment } from "../../../store/actions";
 import { fetchCountryCurrency } from "../../../store/countrycurrency/action";
 import { getSubIndustries, getCities } from "../../../helpers/backend_helper";
 
-const MultiSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
+const MultiSelectAPIElement = ({
+  formik,
+  field,
+  formStateHook,
+  tabIndexData,
+  ...props
+}) => {
   const { formState } = formStateHook;
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
@@ -166,6 +172,7 @@ const MultiSelectAPIElement = ({ formik, field, formStateHook, ...props }) => {
         options={options}
         noOptionsMessage={noOptionsMessage}
         isDisabled={formState === "view" ? true : false}
+        tabIndex={tabIndexData?.[field?.fieldId]}
       />
       {props?.error && (
         <FormFeedback type="invalid">{props?.error}</FormFeedback>

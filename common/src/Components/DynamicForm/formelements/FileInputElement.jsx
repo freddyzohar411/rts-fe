@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-const FileInputElement = ({ formik, field, formStateHook }) => {
+const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const fileInputRef = useRef();
   const truncateString = (str, num) => {
@@ -43,6 +43,7 @@ const FileInputElement = ({ formik, field, formStateHook }) => {
             fileInputRef.current.click();
           }}
           disabled={formState === "view" ? true : false}
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           Add File
         </button>

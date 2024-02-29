@@ -3,7 +3,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 // import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Ckeditor as ClassicEditor } from "@workspace/common";
 
-const EditorElement = ({ field, formik, formStateHook }) => {
+const EditorElement = ({ field, formik, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   return (
     <div className="">
@@ -23,6 +23,7 @@ const EditorElement = ({ field, formik, formStateHook }) => {
         config={{
           removePlugins: ["Title"], // Replace 'PluginName' with the name of the plugin you wish to disable
           placeholder: field?.placeholder,
+          tabIndex:tabIndexData[field?.fieldId],
         }}
         disabled={formState === "view" ? true : false}
       />

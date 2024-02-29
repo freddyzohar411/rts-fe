@@ -1,7 +1,7 @@
 import React from "react";
 import { fieldLocation } from "./constant";
 
-const ButtonElement = ({ field, buttonNameHook }) => {
+const ButtonElement = ({ field, buttonNameHook, tabIndexData }) => {
   const { buttonName, setButtonName } = buttonNameHook;
 
 
@@ -13,6 +13,7 @@ const ButtonElement = ({ field, buttonNameHook }) => {
         type={field.buttonType}
         className={`${field.buttonClass}`}
         name={field.buttonName}
+        tabIndex={tabIndexData?.[field?.fieldId]}
       >
         {field.buttonText}
       </button>

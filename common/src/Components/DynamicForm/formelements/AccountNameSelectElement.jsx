@@ -5,7 +5,7 @@ import {
   fetchAccountNames,
 } from "../../../store/actions";
 
-const AccountNameSelectElement = ({ formik, field, formStateHook }) => {
+const AccountNameSelectElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const accountNamesData = useSelector(
     (state) => state.AccountNamesReducer.accountNames
@@ -59,6 +59,7 @@ const AccountNameSelectElement = ({ formik, field, formStateHook }) => {
           }`}
           value={formik?.values?.[field.name]}
           disabled={formState === "view" ? true : false}
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
           {fetchData?.map((item, index) => (

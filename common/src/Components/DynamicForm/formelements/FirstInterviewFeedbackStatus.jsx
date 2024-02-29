@@ -9,6 +9,7 @@ const FirstInterviewFeedbackStatus = ({
   formik,
   field,
   formStateHook,
+  tabIndexData,
   ...props
 }) => {
   const { formState } = formStateHook;
@@ -34,6 +35,7 @@ const FirstInterviewFeedbackStatus = ({
           value={formik?.values?.[field.name]}
           placeholder={field.placeholder}
           disabled={formState === "view" ? true : false}
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
           {FIRST_INTERVIEW_FEEDBACK_OPTIONS?.map((option, index) => (

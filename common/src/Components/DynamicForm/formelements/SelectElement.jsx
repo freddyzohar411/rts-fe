@@ -1,7 +1,7 @@
 import React from "react";
 import { fieldLocation, fieldSize } from "./constant";
 
-const SelectElement = ({ formik, field, formStateHook }) => {
+const SelectElement = ({ formik, field, formStateHook, tabIndexData}) => {
   const { formState } = formStateHook;
   return (
     <div className={fieldLocation[field.fieldLocation]}>
@@ -18,6 +18,7 @@ const SelectElement = ({ formik, field, formStateHook }) => {
         value={formik?.values?.[field.name]}
         placeholder={field.placeholder}
         disabled={formState === "view" ? true : false}
+        tabIndex={tabIndexData?.[field?.fieldId]}
       >
         <option value="">{field.placeholder}</option>
         {field?.options?.map((option, index) => (

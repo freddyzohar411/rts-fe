@@ -1,6 +1,6 @@
 import React from "react";
 
-const CheckboxElement = ({ formik, field, formStateHook }) => {
+const CheckboxElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
 
   const arrayToString = (array) => {
@@ -56,6 +56,7 @@ const CheckboxElement = ({ formik, field, formStateHook }) => {
                   );
                 }
               }}
+              tabIndex={tabIndexData?.[field?.fieldId]}
             />
             <label className="form-check-label" htmlFor={option.value}>
               {option.label}

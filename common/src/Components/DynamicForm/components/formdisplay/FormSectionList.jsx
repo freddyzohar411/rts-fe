@@ -20,9 +20,12 @@ const FormSectionList = ({
   buttonNameHook,
   formStateHook,
   formFieldsHook,
+  tabIndexData
 }) => {
   const { rowId, title, isTitle } = row;
   const col = row.droppableZones.length;
+
+  console.log("tabIndexData", tabIndexData)
 
   const colSize = 12 / col;
 
@@ -54,7 +57,8 @@ const FormSectionList = ({
                     deleteTableData,
                     buttonNameHook,
                     formStateHook,
-                    formFieldsHook
+                    formFieldsHook,
+                    tabIndexData
                   )}
                   <div style={{ minHeight: "25px" }}>
                     {formik.errors[field.name] && formik.touched[field.name] ? (

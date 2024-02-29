@@ -5,6 +5,7 @@ const CandidateStatusSelectElement = ({
   formik,
   field,
   formStateHook,
+  tabIndexData,
   ...props
 }) => {
   const { formState } = formStateHook;
@@ -30,6 +31,7 @@ const CandidateStatusSelectElement = ({
           value={formik?.values?.[field.name]}
           placeholder={field.placeholder}
           disabled={formState === "view" ? true : false}
+          tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
           {candidateStatus?.map((option, index) => (
