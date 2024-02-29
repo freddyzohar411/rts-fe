@@ -47,6 +47,7 @@ const Dashboard = () => {
       dispatch(fetchAllJobsCount());
       dispatch(fetchTotalAssignedJobsCount());
       dispatch(fetchTotalFODCount());
+      return
     }
   }, [checkAllPermission([Permission.JOB_READ])]);
 

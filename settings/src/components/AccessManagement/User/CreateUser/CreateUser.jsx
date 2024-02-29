@@ -86,7 +86,6 @@ function CreateUser() {
       confirmPassword: encode(values.confirmPassword),
       managerId: parseInt(values.managerId),
     };
-    console.log(newUser, "newUser")
     dispatch(createUser({ newUser, navigate: navigate }));
   };
 
