@@ -95,7 +95,7 @@ function UserDetails() {
                       </div>
                     </Col>
                   </Row>
-                  <Row className="mb-3">
+                  <Row>
                     <Col lg={4}>
                       <div className="mb-3 d-flex flex-column gap-1">
                         <span className="fw-semibold">Email Address</span>
@@ -108,6 +108,34 @@ function UserDetails() {
                         <span>{user?.mobile}</span>
                       </div>
                     </Col>
+                    <Col lg={4}>
+                      <div className="mb-3 d-flex flex-column gap-1">
+                        <span className="fw-semibold">Designation</span>
+                        <span>{user?.designation}</span>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg={4}>
+                      <div className="mb-3 d-flex flex-column gap-1">
+                        <span className="fw-semibold">Country</span>
+                        <span>{user?.country}</span>
+                      </div>
+                    </Col>
+                    <Col lg={4}>
+                      <div className="mb-3 d-flex flex-column gap-1">
+                        <span className="fw-semibold">Location</span>
+                        <span>{user?.location}</span>
+                      </div>
+                    </Col>
+                    <Col lg={4}>
+                      <div className="mb-3 d-flex flex-column gap-1">
+                        <span className="fw-semibold">Status</span>
+                        <span>{user?.status}</span>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
                     <Col lg={4}>
                       <div className="mb-3 d-flex flex-column gap-1">
                         <span className="fw-semibold">Manager</span>

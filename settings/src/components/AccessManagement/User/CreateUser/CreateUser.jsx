@@ -85,6 +85,7 @@ function CreateUser() {
       password: encode(values.password),
       confirmPassword: encode(values.confirmPassword),
       managerId: parseInt(values.managerId),
+      status: values.status === "true" ? true : false,
     };
     dispatch(createUser({ newUser, navigate: navigate }));
   };
@@ -352,6 +353,29 @@ function CreateUser() {
                               />
                             </div>
                           </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Status</Label>
+                              <Field
+                                name="status"
+                                as="select"
+                                className={`form-select ${
+                                  errors.status && touched.status
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              >
+                                <option value="">Select Status</option>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                              </Field>
+                              {errors.status && touched.status && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.status}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
                         </Row>
                         <Row className="mb-2">
                           <span className="fw-bold">Set Password</span>
@@ -483,7 +507,12 @@ function CreateUser() {
                               <Button
                                 className="btn btn-custom-primary"
                                 type="button"
-                                onClick={() => resetForm()}
+                                onClick={() => {
+                                  resetForm();
+                                  setSelectedGroups([]);
+                                  setSortByCountry(null);
+                                  setSortBy(null);
+                                }}
                               >
                                 Reset
                               </Button>

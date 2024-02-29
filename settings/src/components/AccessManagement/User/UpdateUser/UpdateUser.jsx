@@ -142,8 +142,8 @@ function UpdateUser() {
       designation: values.designation,
       location: values.location,
       country: values.country,
+      status: values.status === "true" ? true : false
     };
-    console.log("Update User: ", updatedUser);
     dispatch(updateUser({ updatedUser, navigate: navigate }));
   };
 
@@ -181,14 +181,14 @@ function UpdateUser() {
                   {({ errors, touched, resetForm, values, handleChange }) => (
                     <Form>
                       <CardBody>
-                        <Row className="mb-3">
+                        <Row>
                           <Col>
                             <span className="h6 fw-bold">
                               General Information
                             </span>
                           </Col>
                         </Row>
-                        <Row className="mb-3">
+                        <Row>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3 mb-3">
                               <Label className="fw-semibold">First Name</Label>
@@ -250,7 +250,7 @@ function UpdateUser() {
                             </div>
                           </Col>
                         </Row>
-                        <Row className="mb-3">
+                        <Row>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3">
                               <Label className="fw-semibold">
@@ -380,7 +380,32 @@ function UpdateUser() {
                             )}
                           </Col>
                         </Row>
-                        <Row>
+                        <Row className="mb-3">
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Status</Label>
+                              <Field
+                                as="select"
+                                name="status"
+                                className={`form-select ${
+                                  errors.status && touched.status
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              >
+                                <option value="">Select Status</option>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                              </Field>
+                              {errors.status && touched.status && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.status}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
                           <Col lg={4}>
                             <div className="mb-3">
                               <Label className="fw-semibold">
