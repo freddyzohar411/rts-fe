@@ -117,8 +117,6 @@ const JobListing = () => {
     dispatch(fetchUserGroupByName(RECRUITER_GROUP));
   }, []);
 
-  console.log("Grid View", gridView)
-
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     const request = { ...pageRequest, jobType: gridView};
