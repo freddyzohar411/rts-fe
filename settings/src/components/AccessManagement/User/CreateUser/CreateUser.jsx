@@ -20,15 +20,31 @@ import {
 import { initialValues, schema } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser, fetchUsers } from "../../../../store/users/action";
+import { fetchGroups } from "../../../../store/group/action";
+import { fetchCountryCurrency } from "@workspace/common/src/store/actions";
 import { encode } from "@workspace/common/src/helpers/string_helper";
+import { Actions } from "@workspace/common";
+import "react-dual-listbox/lib/react-dual-listbox.css";
+import DualListBox from "react-dual-listbox";
 
 function CreateUser() {
   document.title = "Create New User | RTS";
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const allUsers = useSelector((state) => state?.UserReducer?.users);
+  const allGroups = useSelector((state) => state?.GroupReducer?.groups);
+  const allCountries = useSelector(
+    (state) => state?.CountryCurrencyReducer?.countryCurrency
+  );
+  // Manager Dropdown
   const [sortBy, setSortBy] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  // Dual List Box
+  const [formattedGroups, setFormattedGroups] = useState([]);
+  const [selectedGroups, setSelectedGroups] = useState([]);
+  // Country Dropdown
+  const [sortByCountry, setSortByCountry] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   useEffect(() => {
     if (!allUsers) return;
@@ -42,6 +58,18 @@ function CreateUser() {
     ]);
   }, [allUsers]);
 
+  useEffect(() => {
+    if (!allCountries) return;
+    setSelectedCountry([
+      {
+        options: allCountries?.map((country) => ({
+          label: country.name,
+          value: country.name,
+        })),
+      },
+    ]);
+  }, [allCountries]);
+
   const handleSubmit = async (values) => {
     const newUser = {
       firstName: values.firstName,
@@ -49,6 +77,10 @@ function CreateUser() {
       username: values.username,
       email: values.email,
       mobile: values.mobile,
+      location: values.location,
+      country: values.country,
+      designation: values.designation,
+      groups: selectedGroups,
       employeeId: values.employeeId,
       password: encode(values.password),
       confirmPassword: encode(values.confirmPassword),
@@ -60,8 +92,20 @@ function CreateUser() {
   useEffect(() => {
     // if (!allUsers) {
     dispatch(fetchUsers());
+    dispatch(fetchGroups());
+    dispatch(fetchCountryCurrency());
     // }
   }, []);
+
+  useEffect(() => {
+    if (allGroups?.length) {
+      const groupsData = allGroups?.map((group) => ({
+        value: group?.id,
+        label: group?.userGroupName,
+      }));
+      setFormattedGroups(groupsData);
+    }
+  }, [allGroups]);
 
   return (
     <React.Fragment>
@@ -223,6 +267,98 @@ function CreateUser() {
                         <Row>
                           <Col lg={4}>
                             <div className="mb-3">
+                              <Label>Designation</Label>
+                              <Field
+                                name="designation"
+                                type="text"
+                                placeholder="Enter Designation"
+                                className={`form-control ${
+                                  touched.designation && errors.designation
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                              {errors.designation && touched.designation && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.designation}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <FormSelection
+                                label="Country"
+                                type="text"
+                                name="country"
+                                options={selectedCountry}
+                                value={sortByCountry}
+                                onChange={(selectedCountry) => {
+                                  setSortByCountry(selectedCountry);
+                                  if (!selectedCountry) {
+                                    handleChange("country")("");
+                                  } else {
+                                    handleChange("country")(
+                                      selectedCountry?.value
+                                    );
+                                  }
+                                }}
+                                isClearable
+                              />
+                            </div>
+                          </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Location</Label>
+                              <Field
+                                name="location"
+                                type="text"
+                                placeholder="Enter Location"
+                                className={`form-control ${
+                                  touched.location && errors.location
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              />
+                            </div>
+                            {errors.location && touched.location && (
+                              <FormFeedback typeof="invalid">
+                                {errors.location}
+                              </FormFeedback>
+                            )}
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <FormSelection
+                                name="managerId"
+                                value={sortBy}
+                                onChange={(selectedOption) => {
+                                  setSortBy(selectedOption);
+                                  if (!selectedOption) {
+                                    handleChange("managerId")("");
+                                  } else {
+                                    handleChange("managerId")(
+                                      selectedOption?.value
+                                    );
+                                  }
+                                }}
+                                label="Select Manager"
+                                options={selectedOption}
+                                style={{ borderColor: "#8aaed6" }}
+                                className="js-example-basic-single mb-3"
+                                isClearable
+                              />
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row className="mb-2">
+                          <span className="fw-bold">Set Password</span>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col lg={4}>
+                            <div className="mb-3">
                               <Label>Password</Label>
                               <Field
                                 name="password"
@@ -263,28 +399,80 @@ function CreateUser() {
                                 )}
                             </div>
                           </Col>
-                          <Col lg={4}>
-                            <div className="mb-3">
-                              <FormSelection
-                                name="managerId"
-                                value={sortBy}
-                                onChange={(selectedOption) => {
-                                  setSortBy(selectedOption);
-                                  if (!selectedOption) {
-                                    handleChange("managerId")("");
-                                  } else {
-                                    handleChange("managerId")(
-                                      selectedOption?.value
-                                    );
-                                  }
-                                }}
-                                label="Select Manager"
-                                options={selectedOption}
-                                style={{ borderColor: "#8aaed6" }}
-                                className="js-example-basic-single mb-0"
-                                isClearable
-                              />
-                            </div>
+                        </Row>
+                        <Row className="mb-3">
+                          <div className="d-flex flex-column gap-1">
+                            <span className="fw-bold">Select Group</span>
+                            <span className="text-muted">
+                              Groups will determine the roles that this user
+                              will be assigned to.
+                            </span>
+                          </div>
+                        </Row>
+                        <Row className="mb-2">
+                          <div className="d-flex flex-row justify-content-around fw-semibold">
+                            <span>All Groups</span>
+                            <span>Assigned Groups</span>
+                          </div>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col>
+                            <DualListBox
+                              options={formattedGroups}
+                              selected={selectedGroups}
+                              onChange={(e) => setSelectedGroups(e)}
+                              canFilter={true}
+                              icons={{
+                                moveLeft: (
+                                  <span
+                                    className="mdi mdi-chevron-left"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllLeft: [
+                                  <span
+                                    className="mdi mdi-chevron-double-left"
+                                    key="key"
+                                  />,
+                                ],
+                                moveRight: (
+                                  <span
+                                    className="mdi mdi-chevron-right"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllRight: [
+                                  <span
+                                    className="mdi mdi-chevron-double-right"
+                                    key="key"
+                                  />,
+                                ],
+                                moveDown: (
+                                  <span
+                                    className="mdi mdi-chevron-down"
+                                    key="key"
+                                  />
+                                ),
+                                moveUp: (
+                                  <span
+                                    className="mdi mdi-chevron-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveTop: (
+                                  <span
+                                    className="mdi mdi-chevron-double-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveBottom: (
+                                  <span
+                                    className="mdi mdi-chevron-double-down"
+                                    key="key"
+                                  />
+                                ),
+                              }}
+                            />
                           </Col>
                         </Row>
                       </CardBody>

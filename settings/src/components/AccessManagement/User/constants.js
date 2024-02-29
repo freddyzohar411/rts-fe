@@ -9,10 +9,14 @@ export const populateForm = (value) => {
     username: value.username,
     email: value.email,
     mobile: value.mobile,
+    designation: value.designation,
+    country: value.country,
+    location: value.location,
     password: value.password,
     confirmPassword: value.confirmPassword,
     employeeId: value.employeeId,
     managerId: value.managerId,
+    // groups: value.groups,
   };
 };
 
@@ -22,10 +26,14 @@ export const initialValues = {
   username: "",
   email: "",
   mobile: "",
+  designation: "",
+  location: "",
+  country: "",
   password: "",
   confirmPassword: "",
   employeeId: "",
   managerId: null,
+  groups: [],
 };
 
 export const schema = yup.object().shape({
@@ -39,6 +47,9 @@ export const schema = yup.object().shape({
     .string()
     .required("Please enter a contact number.")
     .min(10, "Mobile number must be at least 10 digits long."),
+  designation: yup.string().required("Please enter a designation."),
+  location: yup.string().required("Please enter a location."),
+  country: yup.string().nullable().notRequired(),
   password: yup
     .string()
     .required("Please enter a password.")
@@ -47,7 +58,34 @@ export const schema = yup.object().shape({
     .string()
     .required("Please confirm your password.")
     .oneOf([yup.ref("password")], "Passwords must match."),
+  employeeId: yup.string().required("Please enter the Employee ID."),
+  // Id is a number
+  managerId: yup.number().nullable().notRequired(),
+  groups: yup.array().nullable().notRequired(),
+});
 
+export const updateSchema = yup.object().shape({
+  id: yup.number().nullable().notRequired(),
+  keycloackId: yup.string().nullable().notRequired(),
+  firstName: yup.string().required("Please enter a first name."),
+  lastName: yup.string().required("Please enter a last name."),
+  username: yup.string().required("Please enter a username."),
+  email: yup.string().required("Please enter an email address."),
+  mobile: yup
+    .string()
+    .required("Please enter a contact number.")
+    .min(10, "Mobile number must be at least 10 digits long."),
+  designation: yup.string().required("Please enter a designation."),
+  location: yup.string().nullable().notRequired(),
+  country: yup.string().nullable().notRequired(),
+  password: yup
+    .string()
+    .required("Please enter a password.")
+    .min(8, "Password must be at least 8 characters long."),
+  confirmPassword: yup
+    .string()
+    .required("Please confirm your password.")
+    .oneOf([yup.ref("password")], "Passwords must match."),
   employeeId: yup.string().required("Please enter the Employee ID."),
   // Id is a number
   managerId: yup.number().nullable().notRequired(),

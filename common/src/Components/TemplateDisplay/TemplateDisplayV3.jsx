@@ -18,6 +18,7 @@ const TemplateDisplayV3 = ({
   cleanContent = true, // Remove contenteditable and styles
   recursive = false,
   minHeight,
+  maxHeight,
   height = "100%",
   autoResize = false,
   onChange,
@@ -426,6 +427,7 @@ const TemplateDisplayV3 = ({
               },
               height: height, // Set the initial height to 100% of the parent container
               min_height: minHeight,
+              // max_height: maxHeight,
               botton_margin: 10,
               menubar: false,
               plugins: plugins,

@@ -21,11 +21,23 @@ export const getHalfYearRevenueData = () => api.get(GET_HALFYEARREVENUE_DATA);
 export const getYearRevenueData = () => api.get(GET_YEARREVENUE_DATA);
 
 // Dashboard Jobs count
-export const newJobsCount = () =>
-  api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/newjobs`);
+export const newJobsCount = (isGetAll) => {
+  if (isGetAll) {
+    return api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/newjobs?isGetAll=true`);
+  } else {
+    return api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/newjobs`);
+  }
+};
 
-export const activeJobsCount = () =>
-  api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/activejobs`);
+export const activeJobsCount = (isGetAll) => {
+  if (isGetAll) {
+    return api.get(
+      `${DASHBOARD_URL}${BASE_DASHBOARD}/activejobs?isGetAll=true`
+    );
+  } else {
+    return api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/activejobs`);
+  }
+};
 
 export const inactiveJobsCount = () =>
   api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/inactivejobs`);
@@ -36,8 +48,13 @@ export const closedJobsCount = () =>
 export const assignedJobsCount = () =>
   api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/assignedjobs`);
 
-export const fodJobsCount = () =>
-  api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/fod`);
+export const fodJobsCount = (isGetAll) => {
+  if (isGetAll) {
+    return api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/fod?isGetAll=true`);
+  } else {
+    return api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/fod`);
+  }
+};
 
 export const allJobsCount = () =>
   api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/alljobs`);

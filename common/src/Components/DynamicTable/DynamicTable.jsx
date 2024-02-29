@@ -46,7 +46,7 @@ const DynamicTable = ({
 
   // Generate Body
   const generateBodyJSX = (config, data) => {
-    return data.map((rowData) => {
+    return data.map((rowData, i) => {
       const rowdata = config.map((option) => {
         return (
           <td
@@ -57,7 +57,7 @@ const DynamicTable = ({
                 : { maxWidth: "150px" }
             }
           >
-            {option.render(rowData)}
+            {option.render(rowData,i)}
           </td>
         );
       });

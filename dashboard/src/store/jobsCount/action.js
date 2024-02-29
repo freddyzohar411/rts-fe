@@ -29,8 +29,9 @@ import {
 } from "./actionType";
 
 // Fetch New Jobs count
-export const fetchNewJobsCount = () => ({
+export const fetchNewJobsCount = (isGetAll) => ({
   type: NEW_JOBS_COUNT,
+  payload: { isGetAll },
 });
 
 export const fetchNewJobsCountSuccess = (jobCounts) => ({
@@ -44,8 +45,9 @@ export const fetchNewJobsCountFailure = (error) => ({
 });
 
 // Fetch Active Jobs count
-export const fetchActiveJobsCount = () => ({
+export const fetchActiveJobsCount = (isGetAll) => ({
   type: ACTIVE_JOBS_COUNT,
+  payload: { isGetAll },
 });
 
 export const fetchActiveJobsCountSuccess = (jobCounts) => ({
@@ -104,8 +106,9 @@ export const fetchAssignedJobsCountFailure = (error) => ({
 });
 
 // Fetch FOD count
-export const fetchFODCount = () => ({
+export const fetchFODCount = (isGetAll) => ({
   type: FOD_COUNT,
+  payload: { isGetAll },
 });
 
 export const fetchFODCountSuccess = (jobCounts) => ({
