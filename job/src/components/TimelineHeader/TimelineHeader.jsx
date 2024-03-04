@@ -35,15 +35,6 @@ function TimelineHeader({ data }) {
     }
   }, [jobTimelineCount]);
 
-  // const handlePrevClick = () => {
-  //   setStartIndex(Math.max(0, startIndex - itemsPerPage));
-  // };
-
-  // const handleNextClick = () => {
-  //   setStartIndex(
-  //     Math.min(data.length - itemsPerPage, startIndex + itemsPerPage)
-  //   );
-  // };
 
   return (
     <div
