@@ -169,8 +169,8 @@ function CreateNewRole() {
                             <Row>
                               <Col>
                                 <div className="mb-3">
-                                  <Label className="fw-semibold">
-                                    Role Name
+                                  <Label>
+                                    Role Name*
                                   </Label>
                                   <Field
                                     name="roleName"
@@ -193,8 +193,8 @@ function CreateNewRole() {
                             <Row>
                               <Col>
                                 <div className="mb-3">
-                                  <Label className="fw-semibold">
-                                    Role Description
+                                  <Label>
+                                    Role Description*
                                   </Label>
                                   <Field
                                     name="roleDescription"

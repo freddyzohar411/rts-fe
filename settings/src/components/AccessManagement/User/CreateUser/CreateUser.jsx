@@ -142,9 +142,14 @@ function CreateUser() {
                     <Form>
                       <CardBody>
                         <Row>
+                          <div className="mb-3">
+                            <span className="h6 fw-bold">General Information</span>
+                          </div>
+                        </Row>
+                        <Row>
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>First Name</Label>
+                              <Label>First Name*</Label>
                               <Field
                                 type="text"
                                 name="firstName"
@@ -164,7 +169,7 @@ function CreateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Last Name</Label>
+                              <Label>Last Name*</Label>
                               <Field
                                 name="lastName"
                                 type="text"
@@ -184,7 +189,7 @@ function CreateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Username</Label>
+                              <Label>Username*</Label>
                               <Field
                                 name="username"
                                 type="text"
@@ -206,7 +211,7 @@ function CreateUser() {
                         <Row>
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Employee ID</Label>
+                              <Label>Employee ID*</Label>
                               <Field
                                 name="employeeId"
                                 type="text"
@@ -226,7 +231,7 @@ function CreateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Email Address</Label>
+                              <Label>Email Address*</Label>
                               <Field
                                 name="email"
                                 type="email"
@@ -246,7 +251,7 @@ function CreateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Contact Number</Label>
+                              <Label>Contact Number*</Label>
                               <Field
                                 name="mobile"
                                 type="text"
@@ -355,7 +360,7 @@ function CreateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Status</Label>
+                              <Label>Status*</Label>
                               <Field
                                 name="status"
                                 as="select"
@@ -378,12 +383,12 @@ function CreateUser() {
                           </Col>
                         </Row>
                         <Row className="mb-2">
-                          <span className="fw-bold">Set Password</span>
+                          <span className="h6 fw-bold">Set Password</span>
                         </Row>
                         <Row className="mb-3">
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Password</Label>
+                              <Label>Password*</Label>
                               <Field
                                 name="password"
                                 type="password"
@@ -403,7 +408,7 @@ function CreateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Confirm Password</Label>
+                              <Label>Confirm Password*</Label>
                               <Field
                                 type="password"
                                 name="confirmPassword"
@@ -426,7 +431,7 @@ function CreateUser() {
                         </Row>
                         <Row className="mb-3">
                           <div className="d-flex flex-column gap-1">
-                            <span className="fw-bold">Select Group</span>
+                            <span className="h6 fw-bold">Select Group</span>
                             <span className="text-muted">
                               Groups will determine the roles that this user
                               will be assigned to.

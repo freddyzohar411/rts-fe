@@ -49,7 +49,7 @@ export const schema = yup.object().shape({
     .string()
     .required("Please enter a contact number.")
     .min(10, "Mobile number must be at least 10 digits long."),
-  designation: yup.string().required("Please enter a designation."),
+  designation: yup.string().nullable().notRequired(),
   location: yup.string().nullable().notRequired(),
   country: yup.string().nullable().notRequired(),
   password: yup
@@ -78,7 +78,7 @@ export const updateSchema = yup.object().shape({
     .string()
     .required("Please enter a contact number.")
     .min(10, "Mobile number must be at least 10 digits long."),
-  designation: yup.string().required("Please enter a designation."),
+  designation: yup.string().nullable().notRequired(),
   location: yup.string().nullable().notRequired(),
   country: yup.string().nullable().notRequired(),
   password: yup

@@ -143,7 +143,7 @@ function UpdateUser() {
       designation: values.designation,
       location: values.location,
       country: values.country,
-      status: values.status === "true" ? true : false
+      status: values.status === "true" ? true : false,
     };
     dispatch(updateUser({ updatedUser, navigate: navigate }));
   };
@@ -182,17 +182,15 @@ function UpdateUser() {
                   {({ errors, touched, resetForm, values, handleChange }) => (
                     <Form>
                       <CardBody>
-                        <Row>
+                        <Row className="mb-3">
                           <Col>
-                            <span className="h6 fw-bold">
-                              General Information
-                            </span>
+                            <span className="h6 fw-bold">General Information</span>
                           </Col>
                         </Row>
                         <Row>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3 mb-3">
-                              <Label className="fw-semibold">First Name</Label>
+                              <Label>First Name*</Label>
                               <Field
                                 name="firstName"
                                 type="text"
@@ -212,7 +210,7 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3">
-                              <Label className="fw-semibold">Last Name</Label>
+                              <Label>Last Name*</Label>
                               <Field
                                 name="lastName"
                                 type="text"
@@ -232,7 +230,7 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3">
-                              <Label className="fw-semibold">Username</Label>
+                              <Label>Username*</Label>
                               <Field
                                 name="username"
                                 type="text"
@@ -254,8 +252,8 @@ function UpdateUser() {
                         <Row>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3">
-                              <Label className="fw-semibold">
-                                Email Address
+                              <Label>
+                                Email Address*
                               </Label>
                               <Field
                                 name="email"
@@ -276,8 +274,8 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3">
-                              <Label className="fw-semibold">
-                                Contact Number
+                              <Label>
+                                Contact Number*
                               </Label>
                               <Field
                                 name="mobile"
@@ -298,7 +296,9 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3">
-                              <Label className="fw-semibold">Employee ID</Label>
+                              <Label>
+                                Employee ID*
+                              </Label>
                               <Field
                                 name="employeeId"
                                 type="text"
@@ -340,8 +340,8 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="mb-3">
+                              <Label>Country</Label>
                               <FormSelection
-                                label="Country"
                                 type="text"
                                 name="country"
                                 options={selectedCountry}
@@ -384,32 +384,7 @@ function UpdateUser() {
                         <Row className="mb-3">
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Status</Label>
-                              <Field
-                                as="select"
-                                name="status"
-                                className={`form-select ${
-                                  errors.status && touched.status
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
-                              >
-                                <option value="">Select Status</option>
-                                <option value="true">Active</option>
-                                <option value="false">Inactive</option>
-                              </Field>
-                              {errors.status && touched.status && (
-                                <FormFeedback typeof="invalid">
-                                  {errors.status}
-                                </FormFeedback>
-                              )}
-                            </div>
-                          </Col>
-                        </Row>
-                        <Row className="mb-3">
-                          <Col lg={4}>
-                            <div className="mb-3">
-                              <Label className="fw-semibold">
+                              <Label>
                                 Select Manager
                               </Label>
                               <FormSelection
@@ -432,6 +407,29 @@ function UpdateUser() {
                               />
                             </div>
                           </Col>
+                          <Col lg={4}>
+                            <div className="mb-3">
+                              <Label>Status</Label>
+                              <Field
+                                as="select"
+                                name="status"
+                                className={`form-select ${
+                                  errors.status && touched.status
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                              >
+                                <option value="">Select Status</option>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                              </Field>
+                              {errors.status && touched.status && (
+                                <FormFeedback typeof="invalid">
+                                  {errors.status}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </Col>
                         </Row>
 
                         <Row className="mb-3">
@@ -442,8 +440,8 @@ function UpdateUser() {
                         <Row className="mb-3">
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3 ">
-                              <Label className="fw-semibold">
-                                Set New Password
+                              <Label>
+                                Set New Password*
                               </Label>
                               <Field
                                 name="password"
@@ -464,8 +462,8 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3 ">
-                              <Label className="fw-semibold">
-                                Confirm Password
+                              <Label>
+                                Confirm Password*
                               </Label>
                               <Field
                                 name="confirmPassword"

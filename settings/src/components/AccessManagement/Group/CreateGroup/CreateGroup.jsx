@@ -141,7 +141,7 @@ function CreateGroup() {
                             <Col>
                               <Row className="mb-3">
                                 <Col>
-                                  <span className="h6 fw-bold">
+                                  <span className="fw-bold">
                                     General Information
                                   </span>
                                 </Col>
@@ -149,7 +149,7 @@ function CreateGroup() {
                               <Row className="mb-3">
                                 <Col>
                                   <Label htmlFor="groupName">
-                                    Group Name *
+                                    Group Name*
                                   </Label>
                                   <Field
                                     name="groupName"
@@ -171,7 +171,7 @@ function CreateGroup() {
                               <Row>
                                 <Col>
                                   <Label htmlFor="groupDescription">
-                                    Group Description
+                                    Group Description*
                                   </Label>
                                   <Field
                                     component="textarea"
@@ -198,7 +198,7 @@ function CreateGroup() {
                             <Col>
                               <Row className="mb-3">
                                 <Col>
-                                  <span className="h6 fw-bold">
+                                  <span className="fw-bold">
                                     Members and Roles
                                   </span>
                                 </Col>
