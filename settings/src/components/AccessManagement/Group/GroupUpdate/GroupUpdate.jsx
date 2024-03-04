@@ -17,6 +17,7 @@ import {
   TabPane,
   Breadcrumb,
   BreadcrumbItem,
+  FormFeedback
 } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import DualListBox from "react-dual-listbox";
@@ -170,7 +171,7 @@ function GroupUpdate() {
                             </Row>
                             <Row className="mb-3">
                               <Col>
-                                <Label>Group Name *</Label>
+                                <Label>Group Name*</Label>
                                 <Field
                                   name="groupName"
                                   type="text"
@@ -190,7 +191,7 @@ function GroupUpdate() {
                             </Row>
                             <Row className="mb-3">
                               <Col>
-                                <Label>Group Description</Label>
+                                <Label>Group Description*</Label>
                                 <Field
                                   component="textarea"
                                   name="groupDescription"

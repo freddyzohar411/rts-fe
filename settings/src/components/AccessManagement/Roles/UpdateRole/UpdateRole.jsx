@@ -138,13 +138,13 @@ function UpdateRole() {
                       <CardBody>
                         <Row className="mb-3">
                           <Col>
-                            <span className="fw-bold">General Information</span>
+                            <span className="h6 fw-bold">General Information</span>
                           </Col>
                         </Row>
                         <Row className="mb-3">
                           <Col>
                             <div>
-                              <Label className="fw-semibold">Role Name</Label>
+                              <Label>Role Name*</Label>
                               <Field
                                 placeholder="Enter Role Name"
                                 type="text"
@@ -166,8 +166,8 @@ function UpdateRole() {
                         <Row className="mb-3">
                           <Col>
                             <div>
-                              <Label className="fw-semibold">
-                                Role Description
+                              <Label>
+                                Role Description*
                               </Label>
                               <Field
                                 placeholder="Enter Role Description"
@@ -202,7 +202,7 @@ function UpdateRole() {
                         </Row>
                         <Row className="mb-3">
                           <Col>
-                            <span className="fw-bold">
+                            <span className="h6 fw-bold">
                               Permissions and Groups
                             </span>
                           </Col>
