@@ -278,7 +278,7 @@ const JobListing = () => {
                 toggle={() => handleFodAssignDropdown(data.id)}
               >
                 <DropdownToggle
-                  className="btn btn-sm btn-custom-primary"
+                  className="btn btn-sm btn-custom-primary table-btn" style={{fontSize: "0.65rem"}}
                   onClick={() => {
                     setActiveJob([data.id]);
                     setSelectedRecruiter([]);
