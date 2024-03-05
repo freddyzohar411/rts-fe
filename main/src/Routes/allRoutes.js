@@ -11,7 +11,7 @@ import {
   UserProfile,
   ForgetPassword,
   ResetPassword,
-  ForgetResetPassword
+  ForgetResetPassword,
 } from "@workspace/login";
 
 // Account
@@ -23,6 +23,7 @@ import {
   CandidateListing,
   EditCandidate,
   CandidateManage,
+  CreateCandidateOptions,
 } from "@workspace/candidate";
 
 // Job
@@ -88,6 +89,11 @@ const authProtectedRoutes = [
     path: "/candidates/:candidateId/:slug",
     component: <CandidateManage />,
     requiredPermissions: [Permission.CANDIDATE_READ],
+  },
+  {
+    path: "/candidates/new",
+    component: <CreateCandidateOptions />,
+    requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
 
   // Account
