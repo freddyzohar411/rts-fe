@@ -15,11 +15,12 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Spinner,
 } from "reactstrap";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDropzone } from "react-dropzone";
-// import { BsFillArrowLeftSquareFill, BsFillArrowRightSquareFill } from "react-icons/bs";
-// import { BsFillArrowRightSquareFill, BsFillArrowLeftSquareFill } from "react-icons/bs";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const CandidateResumeParse = () => {
   const navigate = useNavigate();
@@ -31,6 +32,8 @@ const CandidateResumeParse = () => {
   const [currentUploadCount, setCurrentUploadCount] = useState(0);
   const [isValidAttachment, setIsValidAttachment] = useState(false);
   const [fileUrl, setFileUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [parseData, setParseData] = useState([]);
 
   const onDrop = useCallback((acceptedFiles) => {
     console.log("Accedpted Files: ", acceptedFiles);
@@ -151,6 +154,51 @@ const CandidateResumeParse = () => {
     }
   };
 
+  const getFilesArray = () => {
+    const files = [];
+    for (let i = 0; i < fileObjects.length; i++) {
+      files.push(fileObjects[i].file);
+    }
+    return files;
+  };
+
+  const handleResumeSubmit = () => {
+    if (fileObjects.length === 0) {
+      toast.error("Please select a file before uploading.");
+      return;
+    }
+
+    const fileArray = getFilesArray();
+    const formData = new FormData();
+
+    for (let i = 0; i < fileObjects.length; i++) {
+      formData.append(`resumes[${i}].file`, fileObjects[i].file);
+      formData.append(`resumes[${i}].fileName`, fileObjects[i].nameNoExt);
+    }
+    setLoading(true);
+    axios
+      .post("http://localhost:8181/api/resumes2/parse-normal/multi", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        setParseData(convertFlattenArray(res.data));
+      })
+      .catch((err) => {})
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const convertFlattenArray = (arr) => {
+    return arr.map((item) => {
+      return item.data;
+    });
+  };
+
+  console.log("Parse Data: ", parseData)
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -216,7 +264,8 @@ const CandidateResumeParse = () => {
                             <div className="text-center">
                               <p className="mb-0">
                                 <strong>Drag 'n' drop</strong> some resumes
-                                here, or <strong>click</strong> to select resumes.
+                                here, or <strong>click</strong> to select
+                                resumes.
                               </p>
                               <p>
                                 Only <strong>PDF, DOC, and DOCX</strong> files
@@ -330,14 +379,18 @@ const CandidateResumeParse = () => {
                         Reset
                       </Button>
                       <Button
-                        type="submit"
+                        type="button"
                         className="btn btn-custom-primary"
                         disabled={
                           !isValidAttachment || fileObjects.length === 0
                         }
-                        // onClick={() => formikRef.current.formik.submitForm()}
+                        onClick={handleResumeSubmit}
                       >
-                        Parse Resumes
+                        {loading ? (
+                          <Spinner size="sm"></Spinner>
+                        ) : (
+                          "Parse Resumes"
+                        )}
                       </Button>
                     </div>
                   </div>
