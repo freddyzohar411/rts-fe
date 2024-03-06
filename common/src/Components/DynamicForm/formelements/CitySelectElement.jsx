@@ -19,7 +19,10 @@ const CitySelectElement = ({ formik, field, formStateHook, tabIndexData }) => {
 
   useEffect(() => {
     if (formik?.values?.[field.parent]) {
-      dispatch(fetchCity(getIdfromCountry(formik?.values?.[field.parent])));
+      const id = getIdfromCountry(formik?.values?.[field.parent]);
+      if (id) {
+        dispatch(fetchCity(id));
+      }
     }
   }, [formik?.values?.[field.parent]]);
 
