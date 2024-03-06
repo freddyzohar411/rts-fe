@@ -68,7 +68,11 @@ const CandidateResumeParse = () => {
 
   // Confirm Reset Template
   const confirmResetTemplate = () => {
-    formikRef.current.clearForm();
+    setFileObjects([]);
+    setCurrentUploadCount(0);
+    setTotalUploadCount(0);
+    setFileUrl("");
+    s;
     setIsResetModalOpen(false);
   };
 
@@ -154,8 +158,8 @@ const CandidateResumeParse = () => {
           isOpen={isResetModalOpen}
           setIsOpen={setIsResetModalOpen}
           confirmDelete={confirmResetTemplate}
-          header="Reset Template"
-          deleteText={"Are you sure you would like to reset the template?"}
+          header="Remove all files"
+          deleteText={"Are you sure you would like to remove all files?"}
         />
         <Container fluid>
           <Row>
@@ -186,21 +190,39 @@ const CandidateResumeParse = () => {
                 </CardHeader>
                 <CardBody>
                   <Row>
-                    <Col md={6} className="p-5" style={{borderRight:"1px solid #B8B8B8"}}>
+                    <Col
+                      md={6}
+                      className="p-5"
+                      style={{ borderRight: "1px solid #B8B8B8" }}
+                    >
                       <div
                         {...getRootProps()}
-                        className="d-flex justify-content-center align-items-center cursor-pointer"
+                        className="d-flex flex-column justify-content-center align-items-center cursor-pointer"
                         style={{ border: "2px dashed grey", height: "375px" }}
                       >
                         <input {...getInputProps()} />
+                        {totalUploadCount === 0 && (
+                          <div>
+                            <i
+                              className="ri-file-upload-line"
+                              style={{ fontSize: "4rem" }}
+                            ></i>
+                          </div>
+                        )}
                         {totalUploadCount === 0 &&
                           (isDragActive ? (
-                            <p>Drop the files here ...</p>
+                            <p>Drop the resummes here ...</p>
                           ) : (
-                            <p>
-                              Drag 'n' drop some files here, or click to select
-                              files
-                            </p>
+                            <div className="text-center">
+                              <p className="mb-0">
+                                <strong>Drag 'n' drop</strong> some resumes
+                                here, or <strong>click</strong> to select resumes.
+                              </p>
+                              <p>
+                                Only <strong>PDF, DOC, and DOCX</strong> files
+                                are allowed
+                              </p>
+                            </div>
                           ))}
                         <div className="text-center">
                           {totalUploadCount > 0 && (
@@ -277,7 +299,7 @@ const CandidateResumeParse = () => {
                         ) : (
                           <div
                             className="text-center"
-                            style={{ fontSize: "1rem", marginTop: "50%"}}
+                            style={{ fontSize: "1rem", marginTop: "50%" }}
                           >
                             File cannot be displayed
                           </div>
@@ -310,9 +332,12 @@ const CandidateResumeParse = () => {
                       <Button
                         type="submit"
                         className="btn btn-custom-primary"
+                        disabled={
+                          !isValidAttachment || fileObjects.length === 0
+                        }
                         // onClick={() => formikRef.current.formik.submitForm()}
                       >
-                        Submit
+                        Parse Resumes
                       </Button>
                     </div>
                   </div>
