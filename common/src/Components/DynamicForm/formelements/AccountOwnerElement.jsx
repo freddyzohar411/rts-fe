@@ -18,6 +18,10 @@ const AccountOwnerElement = ({
           field.name,
           data?.accountSubmissionData?.accountOwner ?? "NA"
         );
+        formik?.setFieldValue(
+          "accountOwnerId",
+          data?.accountSubmissionData?.accountOwnerId ?? null
+        );
       } catch {}
     }
   }, [data]);

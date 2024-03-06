@@ -39,6 +39,9 @@ export const getDepartments = () => api.get(DEPARTMENT_BASE_URL);
 export const getUserGroup = () =>
   api.get(`${configURL.GROUP_URL}/${baseURL.USERGROUP}`);
 
+// User Microservice
+export const getUsers = () => api.get(`${configURL.API_URL}/${baseURL.USER}`);
+
 // Account Names Microservice
 export const getAccountNames = () =>
   api.get(`${configURL.ACCOUNT_URL}/${baseURL.ACCOUNT}/names`);

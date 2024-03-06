@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
+import { fetchUsers } from "../../../store/actions";
 
-const AccountContactSelectElement = ({
+const AccountOwnerSelectElement = ({
   formik,
   field,
   formStateHook,
@@ -10,18 +11,18 @@ const AccountContactSelectElement = ({
   ...props
 }) => {
   const { formState } = formStateHook;
-  const data = useSelector(
-    (state) => state.AccountContactReducer.accountContacts
-  );
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.UserGroupReducer.users);
+
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   // Helper Functions
   function mapToOptionFormat(apiData) {
-    return apiData.map((item) => ({
-      label: item?.fullName,
-      value: item?.fullName,
+    return apiData?.map((item) => ({
+      label: `${item?.firstName} ${item?.lastName} (${item?.email})`,
+      value: item?.id,
     }));
   }
 
@@ -30,9 +31,13 @@ const AccountContactSelectElement = ({
     return options?.find((option) => option.label === data);
   }
 
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, []);
+
   // Get Data for normal API calls without parents
   useEffect(() => {
-    if (data) {
+    if (data?.length > 0) {
       setOptions(mapToOptionFormat(data));
     }
   }, [data]);
@@ -45,8 +50,10 @@ const AccountContactSelectElement = ({
     setSelectedOptions(selectedOptions);
     if (selectedOptions == null) {
       formik?.setFieldValue(field.name, "");
+      formik?.setFieldValue("accountOwnerId", null);
     } else {
       formik?.setFieldValue(field.name, selectedOptions.label);
+      formik?.setFieldValue("accountOwnerId", selectedOptions.value);
     }
   };
 
@@ -124,4 +131,4 @@ const AccountContactSelectElement = ({
   );
 };
 
-export default AccountContactSelectElement;
+export default AccountOwnerSelectElement;

@@ -278,6 +278,7 @@ const EditAccount = () => {
           ...accountData,
           formData: JSON.stringify(formValues),
           formId: parseInt(form.formId),
+          accountOwnerId: newValues.accountOwnerId,
         };
 
         const formDataUpdate =
