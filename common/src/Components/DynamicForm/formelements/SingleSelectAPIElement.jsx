@@ -88,21 +88,32 @@ const SingleSelectAPIElement = ({
   // Get Data for data based on parents
   useEffect(() => {
     setSelectedOptions(null);
-    if (formik?.values?.[field.parent] && parentAPIData) {
+    if (
+      formik?.values?.[field.parent] &&
+      parentAPIData &&
+      parentAPIData.length > 0
+    ) {
+      console.log("parentAPIData", parentAPIData);
       if (field.list === "subIndustry") {
         getSubIndustries(
           getIdFromName(parentAPIData, formik?.values?.[field.parent])
-        ).then((res) => {
-          setOptions(mapToOptionFormat(res.data));
-        });
+        )
+          .then((res) => {
+            setOptions(mapToOptionFormat(res.data));
+          })
+          .catch((err) => {
+            console.log("err", err);
+          });
       }
 
-      if (field.list === "city") {
-        getCities(
-          getIdFromName(parentAPIData, formik?.values?.[field.parent])
-        ).then((res) => {
-          setOptions(mapToOptionFormat(res.data));
-        });
+      if (field.list === "city" && formik?.values?.[field.parent]) {
+        getCities(getIdFromName(parentAPIData, formik?.values?.[field.parent]))
+          .then((res) => {
+            setOptions(mapToOptionFormat(res.data));
+          })
+          .catch((err) => {
+            console.log("err", err);
+          });
       }
     }
   }, [

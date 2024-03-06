@@ -24,6 +24,7 @@ import {
   EditCandidate,
   CandidateManage,
   CreateCandidateOptions,
+  CandidateResumeParse,
 } from "@workspace/candidate";
 
 // Job
@@ -83,6 +84,11 @@ const authProtectedRoutes = [
   {
     path: "/candidates/create",
     component: <CreateCandidate />,
+    requiredPermissions: [Permission.CANDIDATE_WRITE],
+  },
+  {
+    path: "/candidates/parse-resume",
+    component: <CandidateResumeParse />,
     requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
   {

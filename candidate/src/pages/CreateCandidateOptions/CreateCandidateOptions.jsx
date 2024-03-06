@@ -30,7 +30,7 @@ function CreateCandidateOptions() {
           </Col>
 
           <Col>
-            <Link to="/candidates/create">
+            <Link to="/candidates/parse-resume">
               <Card
                 className=" d-flex flex-column justify-content-center"
                 style={{ height: "300px" }}
