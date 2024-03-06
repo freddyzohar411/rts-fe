@@ -34,6 +34,7 @@ const CandidateResumeParse = () => {
   const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [parseData, setParseData] = useState([]);
+  const [tab, setTab] = useState(1);
 
   const onDrop = useCallback((acceptedFiles) => {
     console.log("Accedpted Files: ", acceptedFiles);
@@ -184,8 +185,11 @@ const CandidateResumeParse = () => {
       })
       .then((res) => {
         setParseData(convertFlattenArray(res.data));
+        setTab(2);
       })
-      .catch((err) => {})
+      .catch((err) => {
+        toast.error("Error parsing resumes. Please try again.");
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -197,7 +201,7 @@ const CandidateResumeParse = () => {
     });
   };
 
-  console.log("Parse Data: ", parseData)
+  console.log("Parse Data: ", parseData);
 
   return (
     <React.Fragment>
@@ -237,161 +241,184 @@ const CandidateResumeParse = () => {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <Row>
-                    <Col
-                      md={6}
-                      className="p-5"
-                      style={{ borderRight: "1px solid #B8B8B8" }}
-                    >
-                      <div
-                        {...getRootProps()}
-                        className="d-flex flex-column justify-content-center align-items-center cursor-pointer"
-                        style={{ border: "2px dashed grey", height: "375px" }}
+                  {tab === 1 && (
+                    <Row>
+                      <Col
+                        md={5}
+                        className="p-5"
+                        style={{ borderRight: "1px solid #B8B8B8" }}
                       >
-                        <input {...getInputProps()} />
-                        {totalUploadCount === 0 && (
-                          <div>
-                            <i
-                              className="ri-file-upload-line"
-                              style={{ fontSize: "4rem" }}
-                            ></i>
+                        <div
+                          {...getRootProps()}
+                          className="d-flex flex-column justify-content-center align-items-center cursor-pointer"
+                          style={{ border: "2px dashed grey", height: "275px" }}
+                        >
+                          <input {...getInputProps()} />
+                          {totalUploadCount === 0 && (
+                            <div>
+                              <i
+                                className="ri-file-upload-line"
+                                style={{ fontSize: "4rem" }}
+                              ></i>
+                            </div>
+                          )}
+                          {totalUploadCount === 0 &&
+                            (isDragActive ? (
+                              <p>Drop the resummes here ...</p>
+                            ) : (
+                              <div className="text-center">
+                                <p className="mb-0">
+                                  <strong>Drag 'n' drop</strong> some resumes
+                                  here, or <strong>click</strong> to select
+                                  resumes.
+                                </p>
+                                <p>
+                                  Only <strong>PDF, DOC, and DOCX</strong> files
+                                  are allowed
+                                </p>
+                              </div>
+                            ))}
+                          <div className="text-center">
+                            {totalUploadCount > 0 && (
+                              <span
+                                style={{ fontSize: "1.2rem" }}
+                              >{`${totalUploadCount} files attached`}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div
+                          className="mt-3"
+                          style={{ height: "150px", overflow: "auto" }}
+                        >
+                          {fileObjects.length > 0 && (
+                            <div className="mt-3">
+                              {fileObjects.map((fileobj, index) => {
+                                return (
+                                  <div
+                                    className="d-flex align-items-center gap-2 mb-1"
+                                    style={{ fontSize: "1rem" }}
+                                  >
+                                    <i
+                                      onClick={() => deleteFile(index)}
+                                      className="ri-delete-bin-line cursor-pointer"
+                                    ></i>
+                                    <span>{fileobj.name}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      </Col>
+                      <Col md={7} className="px-5">
+                        {fileObjects.length > 0 && (
+                          <div className="d-flex justify-content-center align-items-center gap-5 arrows">
+                            {currentUploadCount < 1 ? (
+                              <i
+                                className=" ri-arrow-left-circle-fill"
+                                style={{ fontSize: "30px", opacity: "70%" }}
+                              ></i>
+                            ) : (
+                              <i
+                                className="ri-arrow-left-circle-fill"
+                                onClick={prevCount}
+                                style={{ cursor: "pointer", fontSize: "30px" }}
+                              ></i>
+                            )}
+                            <div className="count" style={{ fontSize: "1rem" }}>
+                              {currentUploadCount + 1}
+                            </div>
+                            {currentUploadCount === totalUploadCount - 1 ? (
+                              <i
+                                className=" ri-arrow-right-circle-fill"
+                                style={{ fontSize: "30px", opacity: "70%" }}
+                              ></i>
+                            ) : (
+                              <i
+                                className="ri-arrow-right-circle-fill"
+                                onClick={nextCount}
+                                style={{ cursor: "pointer", fontSize: "30px" }}
+                              ></i>
+                            )}
                           </div>
                         )}
-                        {totalUploadCount === 0 &&
-                          (isDragActive ? (
-                            <p>Drop the resummes here ...</p>
+                        {fileObjects.length > 0 &&
+                          (fileUrl !== "" ? (
+                            <object
+                              data={fileUrl}
+                              type="application/pdf"
+                              width="100%"
+                              height="575px"
+                            ></object>
                           ) : (
-                            <div className="text-center">
-                              <p className="mb-0">
-                                <strong>Drag 'n' drop</strong> some resumes
-                                here, or <strong>click</strong> to select
-                                resumes.
-                              </p>
-                              <p>
-                                Only <strong>PDF, DOC, and DOCX</strong> files
-                                are allowed
-                              </p>
+                            <div
+                              className="text-center"
+                              style={{ fontSize: "1rem", marginTop: "50%" }}
+                            >
+                              File cannot be displayed
                             </div>
                           ))}
-                        <div className="text-center">
-                          {totalUploadCount > 0 && (
-                            <span
-                              style={{ fontSize: "1.2rem" }}
-                            >{`${totalUploadCount} files attached`}</span>
-                          )}
-                        </div>
-                      </div>
-                      <div
-                        className="mt-3"
-                        style={{ height: "150px", overflow: "auto" }}
-                      >
-                        {fileObjects.length > 0 && (
-                          <div className="mt-3">
-                            {fileObjects.map((fileobj, index) => {
-                              return (
-                                <div
-                                  className="d-flex align-items-center gap-2 mb-1"
-                                  style={{ fontSize: "1rem" }}
-                                >
-                                  <i
-                                    onClick={() => deleteFile(index)}
-                                    className="ri-delete-bin-line cursor-pointer"
-                                  ></i>
-                                  <span>{fileobj.name}</span>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    </Col>
-                    <Col md={6} className="px-5">
-                      {fileObjects.length > 0 && (
-                        <div className="d-flex justify-content-center align-items-center gap-5 arrows">
-                          {currentUploadCount < 1 ? (
-                            <i
-                              className=" ri-arrow-left-circle-fill"
-                              style={{ fontSize: "30px", opacity: "70%" }}
-                            ></i>
-                          ) : (
-                            <i
-                              className="ri-arrow-left-circle-fill"
-                              onClick={prevCount}
-                              style={{ cursor: "pointer", fontSize: "30px" }}
-                            ></i>
-                          )}
-                          <div className="count" style={{ fontSize: "1rem" }}>
-                            {currentUploadCount + 1}
-                          </div>
-                          {currentUploadCount === totalUploadCount - 1 ? (
-                            <i
-                              className=" ri-arrow-right-circle-fill"
-                              style={{ fontSize: "30px", opacity: "70%" }}
-                            ></i>
-                          ) : (
-                            <i
-                              className="ri-arrow-right-circle-fill"
-                              onClick={nextCount}
-                              style={{ cursor: "pointer", fontSize: "30px" }}
-                            ></i>
-                          )}
-                        </div>
-                      )}
-                      {fileObjects.length > 0 &&
-                        (fileUrl !== "" ? (
-                          <object
-                            data={fileUrl}
-                            type="application/pdf"
-                            width="100%"
-                            height="575px"
-                          ></object>
-                        ) : (
-                          <div
-                            className="text-center"
-                            style={{ fontSize: "1rem", marginTop: "50%" }}
-                          >
-                            File cannot be displayed
-                          </div>
-                        ))}
-                    </Col>
-                  </Row>
+                      </Col>
+                    </Row>
+                  )}
+                  {tab === 2 && <h1>Hello World</h1>}
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex flex-row justify-content-between">
-                    <Link to="/settings/templates">
+                    <Link to="/candidates/new">
                       <Button type="button" className="btn btn-custom-primary">
                         Back
                       </Button>
                     </Link>
                     <div className="d-flex flex-row gap-2">
-                      <Button
-                        type="button"
-                        className="btn btn-custom-primary"
-                        onClick={() => setShowModalSchema(true)}
-                      >
-                        Preview
-                      </Button>
-                      <Button
-                        type="button"
-                        className="btn btn-custom-primary"
-                        onClick={() => setIsResetModalOpen(true)}
-                      >
-                        Reset
-                      </Button>
-                      <Button
-                        type="button"
-                        className="btn btn-custom-primary"
-                        disabled={
-                          !isValidAttachment || fileObjects.length === 0
-                        }
-                        onClick={handleResumeSubmit}
-                      >
-                        {loading ? (
-                          <Spinner size="sm"></Spinner>
-                        ) : (
-                          "Parse Resumes"
-                        )}
-                      </Button>
+                      {tab === 1 && (
+                        <>
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                            onClick={() => setShowModalSchema(true)}
+                          >
+                            Preview
+                          </Button>
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                            onClick={() => setTab(2)}
+                          >
+                            View Parse Data
+                          </Button>
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                            onClick={() => setIsResetModalOpen(true)}
+                          >
+                            Reset
+                          </Button>
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                            disabled={
+                              !isValidAttachment || fileObjects.length === 0
+                            }
+                            onClick={handleResumeSubmit}
+                          >
+                            {loading ? (
+                              <Spinner size="sm"></Spinner>
+                            ) : (
+                              "Parse Resumes"
+                            )}
+                          </Button>
+                        </>
+                      )}
+                      {tab === 2 && (
+                        <Button
+                          type="button"
+                          className="btn btn-custom-primary"
+                          onClick={() => setTab(1)}
+                        >
+                          Back to Upload
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </CardFooter>
@@ -415,12 +442,14 @@ const CandidateResumeParse = () => {
               toggle={() => setShowModalSchema(!showModalSchema)}
             >
               <div className="d-flex flex-column text-dark">
-                <span className="h5 fw-bold">Template Preview</span>
+                <span className="h5 fw-bold">Parse Data JSON Preview</span>
               </div>
             </ModalHeader>
             <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
               <div>
-                <h1>World</h1>
+                <pre style={{ fontSize: "1.1rem" }}>
+                  {JSON.stringify(parseData, null, 2)}
+                </pre>
               </div>
             </ModalBody>
           </Modal>
