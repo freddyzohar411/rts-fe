@@ -27,328 +27,309 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
   const [showCompaniesDetails, setShowCompaniesDetails] = useState(false);
   const [spokenLanguage, setSpokenLanguage] = useState("");
   const [spokenLanguages, setSpokenLanguages] = useState([]);
-  //   const [resumeData, setResumeData] = useState(
-  //     resumeParseDataList?.[0] ?? null
-  //   );
+  const [sortedCompanies, setSortedCompanies] = useState([]);
+  // const [resumeData, setResumeData] = useState(
+  //   resumeParseDataList?.[0] ?? null
+  // );
   const [resumeData, setResumeData] = useState(jsonData[1]);
 
+  // Sort Companies by endDate
+  const sortCompaniesByEndDate = (companies, sort = "asc") => {
+    if (sort === "desc") {
+      return companies.sort((a, b) => {
+        const aArr = a.endDate.split("/");
+        const bArr = b.endDate.split("/");
+        return new Date(bArr[1], bArr[0] - 1) - new Date(aArr[1], aArr[0] - 1);
+      });
+    } else {
+      return companies.sort((a, b) => {
+        const aArr = a.endDate.split("/");
+        const bArr = b.endDate.split("/");
+        return new Date(aArr[1], aArr[0] - 1) - new Date(bArr[1], bArr[0] - 1);
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (resumeData) {
+      setSortedCompanies(
+        sortCompaniesByEndDate(resumeData.companiesDetails, "desc")
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (resumeParseDataList) {
+      setResumeData(resumeParseDataList?.[resumeCount]);
+    }
+  }, [resumeCount]);
+
   return (
-    <div>
-      <Container fluid>
-        <Row>
-          <Col>
-            <Card>
-              {/* <CardHeader>
-              <h3>Resume Parse</h3>
-            </CardHeader> */}
-              <CardBody>
-                <Row>
-                  <Col>
-                    <div className="resume-main-section">
-                      <div class="resume-personal-details-section">
-                        {/* About me */}
-                        <div class="resume-details-part">
-                          <div className="d-flex align-items-center gap-2">
-                            <h3>About Me</h3>
-                          </div>
-                          <p className="textarea-input" type="text">
-                            {resumeData?.profile}
-                          </p>
-                        </div>
+    <>
+      {resumeParseDataList?.length > 0 ? (
+        <div>
+          <Container fluid>
+            <Row>
+              <Col>
+                <div className="d-flex align-items-center gap-3 justify-content-center">
+                  {resumeCount < 1 ? (
+                    <i
+                      className=" ri-arrow-left-circle-fill"
+                      style={{ fontSize: "40px", opacity: "70%" }}
+                    ></i>
+                  ) : (
+                    <i
+                      className="ri-arrow-left-circle-fill"
+                      onClick={() => setResumeCount((prev) => prev - 1)}
+                      style={{ cursor: "pointer", fontSize: "40px" }}
+                    ></i>
+                  )}
+                  <div className="count" style={{ fontSize: "1rem" }}>
+                    {resumeCount + 1}
+                  </div>
+                  {resumeCount === resumeParseDataList?.length - 1 ? (
+                    <i
+                      className=" ri-arrow-right-circle-fill"
+                      style={{ fontSize: "40px", opacity: "70%" }}
+                    ></i>
+                  ) : (
+                    <i
+                      className="ri-arrow-right-circle-fill"
+                      onClick={() => setResumeCount((prev) => prev + 1)}
+                      style={{ cursor: "pointer", fontSize: "40px" }}
+                    ></i>
+                  )}
+                </div>
+                <Card> 
+                  <CardBody>
+                    <Row>
+                      <Col>
+                        <div className="resume-main-section">
+                          <div class="resume-personal-details-section">
+                            {/* About me */}
+                            <div class="resume-details-part">
+                              <div className="d-flex align-items-center gap-2">
+                                <h3>About Me</h3>
+                              </div>
+                              <p className="textarea-input" type="text">
+                                {resumeData?.profile}
+                              </p>
+                            </div>
 
-                        {/* Firstname and lastname */}
-                        <div className="d-flex">
-                          <div class="resume-details-part w-100">
-                            <div className="d-flex align-items-center gap-2">
-                              <h3>First Name</h3>
+                            {/* Firstname and lastname */}
+                            <div className="d-flex">
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>First Name</h3>
+                                </div>
+                                <p>{resumeData?.firstName || "-"}</p>
+                              </div>
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>Last Name</h3>
+                                </div>
+                                <p>{resumeData?.lastName || "-"}</p>
+                              </div>
                             </div>
-                            <p>{resumeData?.firstName || "-"}</p>
-                          </div>
-                          <div class="resume-details-part w-100">
-                            <div className="d-flex align-items-center gap-2">
-                              <h3>Last Name</h3>
-                            </div>
-                            <p>{resumeData?.lastName || "-"}</p>
-                          </div>
-                        </div>
 
-                        {/* //Email and mobile */}
-                        <div className="d-flex">
-                          <div class="resume-details-part w-100">
-                            <div className="d-flex align-items-center gap-2">
-                              <h3>Email</h3>
+                            {/* //Email and mobile */}
+                            <div className="d-flex">
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>Email</h3>
+                                </div>
+                                <p>{resumeData?.email || "-"}</p>
+                              </div>
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>Mobile</h3>
+                                </div>
+                                <div className="d-flex align-items-center justify-content-between gap-5">
+                                  <p>{resumeData?.mobile || "-"}</p>
+                                </div>
+                              </div>
                             </div>
-                            <p>{resumeData?.email || "-"}</p>
-                          </div>
-                          <div class="resume-details-part w-100">
-                            <div className="d-flex align-items-center gap-2">
-                              <h3>Mobile</h3>
-                            </div>
-                            <div className="d-flex align-items-center justify-content-between gap-5">
-                              <p>{resumeData?.mobile || "-"}</p>
-                            </div>
-                          </div>
-                        </div>
 
-                        {/* Gender and nationality */}
-                        <div className="d-flex">
-                          <div class="resume-details-part w-100">
-                            <div className="d-flex align-items-center gap-2">
-                              <h3>Gender</h3>
-                            </div>
-                            <p>{resumeData?.gender || "-"}</p>
-                          </div>
+                            {/* Gender and nationality */}
+                            <div className="d-flex">
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>Gender</h3>
+                                </div>
+                                <p>{resumeData?.gender || "-"}</p>
+                              </div>
 
-                          <div class="resume-details-part w-100">
-                            <div className="d-flex align-items-center gap-2">
-                              <h3>Nationality</h3>
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>Nationality</h3>
+                                </div>
+                                <div className="d-flex align-items-center justify-content-between gap-5">
+                                  <p>{resumeData?.nationality || "-"}</p>
+                                </div>
+                              </div>
                             </div>
-                            <div className="d-flex align-items-center justify-content-between gap-5">
-                              <p>{resumeData?.nationality || "-"}</p>
-                            </div>
-                          </div>
-                        </div>
 
-                        {/* Current Location and Years of experience */}
-                        <div className="d-flex">
-                          <div class="resume-details-part w-100">
-                            <div className="d-flex align-items-center gap-2">
-                              <h3>Current Location</h3>
-                            </div>
-                            <div className="d-flex align-items-center justify-content-between gap-5">
-                              <p>{resumeData?.currentLocation || "-"}</p>
-                            </div>
-                          </div>
+                            {/* Current Location and Years of experience */}
+                            <div className="d-flex">
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>Current Location</h3>
+                                </div>
+                                <div className="d-flex align-items-center justify-content-between gap-5">
+                                  <p>{resumeData?.currentLocation || "-"}</p>
+                                </div>
+                              </div>
 
-                          <div class="resume-details-part w-100">
-                            <div className="d-flex align-items-center gap-2">
-                              <h3>Years of Experience</h3>
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>Years of Experience</h3>
+                                </div>
+                                <div className="d-flex align-items-center justify-content-between gap-5">
+                                  <p>{resumeData?.yearsOfExperience || "-"}</p>
+                                </div>
+                              </div>
                             </div>
-                            <div className="d-flex align-items-center justify-content-between gap-5">
-                              <p>{resumeData?.yearsOfExperience || "-"}</p>
-                            </div>
-                          </div>
-                        </div>
 
-                        {/* Highest Qualification */}
-                        <div class="resume-details-part">
-                          <div className="d-flex align-items-center gap-2">
-                            <h3 className="m-0">Highest Qualification</h3>
-                            <button
-                              className="btn btn-custom-primary btn-sm d-flex align-items-center gap-2"
-                              onClick={() =>
-                                setShowEducationDetails(!showEducationDetails)
-                              }
-                            >
-                              <span> Show more</span>
-                              {showEducationDetails ? (
-                                <i
-                                  className="ri-arrow-up-s-fill"
-                                  style={{ fontSize: "1rem" }}
-                                ></i>
-                              ) : (
-                                <i
-                                  className="ri-arrow-down-s-fill"
-                                  style={{ fontSize: "1rem" }}
-                                ></i>
-                              )}
-                            </button>
-                          </div>
-                          <div className="d-flex align-items-center justify-content-between gap-5">
-                            <p>{resumeData?.qualification || "-"}</p>
-                          </div>
-                        </div>
-                        {showEducationDetails && (
-                          //   <div className="companies-details-card mb-3">
-                          <>
-                            {resumeData &&
-                              resumeData?.educationDetails?.length > 0 &&
-                              resumeData?.educationDetails.map(
-                                (education, index) => {
-                                  return (
-                                    <ResumeEducationField
-                                      education={education}
-                                      index={index}
-                                    />
-                                  );
-                                }
-                              )}
-                          </>
-                          //   </div>
-                        )}
-
-                        {/* Last Job Title */}
-                        <div className="flex-form">
-                          <div class="resume-details-part w-100">
-                            <div className="d-flex align-items-center gap-2">
-                              <h3>Last Job Title</h3>
+                            {/* Highest Qualification */}
+                            <div class="resume-details-part">
+                              <div className="d-flex align-items-center gap-2">
+                                <h3 className="m-0">Highest Qualification</h3>
+                                <button
+                                  className="btn btn-custom-primary btn-sm d-flex align-items-center gap-2"
+                                  onClick={() =>
+                                    setShowEducationDetails(
+                                      !showEducationDetails
+                                    )
+                                  }
+                                >
+                                  <span> Show more</span>
+                                  {showEducationDetails ? (
+                                    <i
+                                      className="ri-arrow-up-s-fill"
+                                      style={{ fontSize: "1rem" }}
+                                    ></i>
+                                  ) : (
+                                    <i
+                                      className="ri-arrow-down-s-fill"
+                                      style={{ fontSize: "1rem" }}
+                                    ></i>
+                                  )}
+                                </button>
+                              </div>
+                              <div className="d-flex align-items-center justify-content-between gap-5">
+                                <p>{resumeData?.qualification || "-"}</p>
+                              </div>
                             </div>
-                            <div className="d-flex align-items-center justify-content-between gap-5">
-                              <p>{resumeData?.jobTitle || "-"}</p>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Spoken Languages */}
-                        <div class="resume-skills-section">
-                          <div className="d-flex align-items-center gap-2">
-                            <h3>Spoken Languages</h3>
-                          </div>
-                          <ResumeFieldList data={resumeData?.spokenLanguages} />
-                        </div>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    {/* Companies */}
-                    <div className="resume-main-section mt-4">
-                      <div class="resume-companies-section mt-2">
-                        <div className="d-flex align-items-center gap-2">
-                          <h3 className="m-0">Companies</h3>
-                          <button
-                            className="btn btn-custom-primary btn-sm d-flex align-items-center gap-2"
-                            onClick={() =>
-                              setShowCompaniesDetails(!showCompaniesDetails)
-                            }
-                          >
-                            Show more
-                            {showCompaniesDetails ? (
-                              <i
-                                className="ri-arrow-up-s-fill"
-                                style={{ fontSize: "1rem" }}
-                              ></i>
-                            ) : (
-                              <i
-                                className="ri-arrow-down-s-fill"
-                                style={{ fontSize: "1rem" }}
-                              ></i>
+                            {showEducationDetails && (
+                              //   <div className="companies-details-card mb-3">
+                              <>
+                                {resumeData &&
+                                  resumeData?.educationDetails?.length > 0 &&
+                                  resumeData?.educationDetails.map(
+                                    (education, index) => {
+                                      return (
+                                        <ResumeEducationField
+                                          education={education}
+                                          index={index}
+                                        />
+                                      );
+                                    }
+                                  )}
+                              </>
+                              //   </div>
                             )}
-                          </button>
+
+                            {/* Last Job Title */}
+                            <div className="flex-form">
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>Last Job Title</h3>
+                                </div>
+                                <div className="d-flex align-items-center justify-content-between gap-5">
+                                  <p>{resumeData?.jobTitle || "-"}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Spoken Languages */}
+                            <div class="resume-skills-section">
+                              <div className="d-flex align-items-center gap-2">
+                                <h3>Spoken Languages</h3>
+                              </div>
+                              <ResumeFieldList
+                                data={resumeData?.spokenLanguages}
+                              />
+                            </div>
+                          </div>
                         </div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        {/* Companies */}
+                        <div className="resume-main-section mt-4">
+                          <div class="resume-companies-section mt-2 mb-3">
+                            <div className="d-flex align-items-center gap-2">
+                              <h3 className="m-0">Companies</h3>
+                              <button
+                                className="btn btn-custom-primary btn-sm d-flex align-items-center gap-2"
+                                onClick={() =>
+                                  setShowCompaniesDetails(!showCompaniesDetails)
+                                }
+                              >
+                                Show more
+                                {showCompaniesDetails ? (
+                                  <i
+                                    className="ri-arrow-up-s-fill"
+                                    style={{ fontSize: "1rem" }}
+                                  ></i>
+                                ) : (
+                                  <i
+                                    className="ri-arrow-down-s-fill"
+                                    style={{ fontSize: "1rem" }}
+                                  ></i>
+                                )}
+                              </button>
+                            </div>
 
-                        {/* <div>
-                          <div className="d-flex align-items-center gap-2 mt-2">
-                            <span className="list-index">1)</span>
-                            <input
-                              disabled={!company1.isEditing}
-                              className="fileName-input"
-                              type="text"
-                              value={company1.value}
-                              onChange={(e) =>
-                                setCompany1((prev) => ({
-                                  ...prev,
-                                  value: e.target.value,
-                                }))
-                              }
-                            />
-                            <AiFillEdit
-                              className="edit-icons-md"
-                              onClick={() =>
-                                setCompany1((prev) => ({
-                                  ...prev,
-                                  isEditing: !prev.isEditing,
-                                }))
-                              }
-                            />
-                          </div>
-                          <div className="d-flex align-items-center gap-2 mt-2">
-                            <span className="list-index">2)</span>
-                            <input
-                              disabled={!company2.isEditing}
-                              className="fileName-input"
-                              type="text"
-                              value={company2.value}
-                              onChange={(e) =>
-                                setCompany2((prev) => ({
-                                  ...prev,
-                                  value: e.target.value,
-                                }))
-                              }
-                            />
-                            <AiFillEdit
-                              className="edit-icons-md"
-                              onClick={() =>
-                                setCompany2((prev) => ({
-                                  ...prev,
-                                  isEditing: !prev.isEditing,
-                                }))
-                              }
-                            />
-                          </div>
-                          <div className="d-flex align-items-center gap-2 mt-2">
-                            <span className="list-index">3)</span>
-                            <input
-                              disabled={!company3.isEditing}
-                              className="fileName-input"
-                              type="text"
-                              value={company3.value}
-                              onChange={(e) =>
-                                setCompany3((prev) => ({
-                                  ...prev,
-                                  value: e.target.value,
-                                }))
-                              }
-                            />
-                            <AiFillEdit
-                              className="edit-icons-md"
-                              onClick={() =>
-                                setCompany3((prev) => ({
-                                  ...prev,
-                                  isEditing: !prev.isEditing,
-                                }))
-                              }
-                            />
-                          </div>
-                        </div> */}
-                      </div>
-
-                      {showCompaniesDetails && (
-                        <div className="companies-details-card">
-                          <div className="text-end mb-3">
-                            <button
-                              onClick={() =>
-                                setCompaniesDetails((prev) => {
-                                  return [
-                                    {
-                                      name: "",
-                                      startDate: "",
-                                      endDate: "",
-                                      noOfYears: 0,
-                                      jobTitle: "",
-                                      responsibilities: [],
-                                    },
-                                    ...prev,
-                                  ];
-                                })
-                              }
-                              className="btn btn-secondary btn-sm"
-                            >
-                              + Add a company
-                            </button>
+                            <div className="mt-3">
+                              {/* <span style={{marginRight:"10px"}}>Last 3 Companies: </span> */}
+                              <span>
+                                {sortedCompanies
+                                  ?.map((company) => company.name)
+                                  .join(", ")}
+                              </span>
+                            </div>
                           </div>
 
-                          {resumeData?.companiesDetails.length > 0 &&
-                            resumeData?.companiesDetails.map((company, index) => {
-                              return (
-                                <ResumeCompanyField
-                                  company={company}
-                                  index={index}
-                                />
-                              );
-                            })}
+                          {showCompaniesDetails && (
+                            <>
+                              {resumeData?.companiesDetails.length > 0 &&
+                                resumeData?.companiesDetails.map(
+                                  (company, index) => {
+                                    return (
+                                      <ResumeCompanyField
+                                        company={company}
+                                        index={index}
+                                      />
+                                    );
+                                  }
+                                )}
+                            </>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      ) : (
+        <p>No Parsed Data...</p>
+      )}
+    </>
   );
 };
 

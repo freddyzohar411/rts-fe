@@ -21,10 +21,7 @@ const monthTable = {
   12: "Dec",
 };
 
-const ResumeCompanyField = ({
-  company,
-  index,
-}) => {
+const ResumeCompanyField = ({ company, index }) => {
   // Convert date format from  Nov 2023 to 2023-11
   console.log("I Render");
   console.log("Company", company);
@@ -50,11 +47,12 @@ const ResumeCompanyField = ({
     startDate: company.startDate,
     endDate: company.endDate,
     noOfYears: parseFloat(company.noOfYears).toFixed(1),
+    noOfMonths: company.noOfMonths,
     jobTitle: company.jobTitle,
     responsibilities: company.responsibilities,
   });
 
-    // Set company detail state when company props changes
+  // Set company detail state when company props changes
   useEffect(() => {
     if (company) {
       setCompanyDetail({
@@ -62,6 +60,7 @@ const ResumeCompanyField = ({
         startDate: company.startDate,
         endDate: company.endDate,
         noOfYears: parseFloat(company.noOfYears).toFixed(1),
+        noOfMonths: company.noOfMonths,
         jobTitle: company.jobTitle,
         responsibilities: company.responsibilities,
       });
@@ -148,152 +147,84 @@ const ResumeCompanyField = ({
     targetElement.focus();
   }, [addNew]);
 
-  // Store the previous companyDetail state using useRef
-  const prevCompanyDetailRef = useRef();
-  useEffect(() => {
-    // Check if the companyDetail state actually changed
-    if (
-      JSON.stringify(companyDetail) !==
-      JSON.stringify(prevCompanyDetailRef.current)
-    ) {
-      companiesDetailChange(companyDetail, index);
-      prevCompanyDetailRef.current = companyDetail;
-    }
-  }, [companyDetail, companiesDetailChange, index]);
+  function convertMonthsToString(totalMonths) {
+    // Calculate the years and remaining months
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
 
-
-
+    // Create and return the formatted string
+    return `${years} Yrs and ${months} months`;
+  }
 
   return (
     <div className="companies-details-single">
       <div className="d-flex justify-content-between align-items-center">
         <p className="company-name">
           <span>{index + 1}) Company Name: </span>
-          <input
-            disabled={!editable}
-            className="w-50 field-input"
-            type="text"
-            value={companyDetail.name}
-            onChange={(e) =>
-              setCompanyDetail((prev) => {
-                return { ...prev, name: e.target.value };
-              })
-            }
-          />
+          <span>{companyDetail?.name}</span>
         </p>
       </div>
 
       <div className="companies-details-card-details">
         {/* Designation */}
-        <p className="d-flex gap-2 align-items-center">
-          <span> Designation:</span>
-          <input
-            disabled={!editable}
-            className="w-50 field-input my-1"
-            type="text"
-            value={companyDetail.jobTitle}
-            onChange={(e) =>
-              setCompanyDetail((prev) => {
-                return { ...prev, jobTitle: e.target.value };
-              })
-            }
-          />
+        <p className="d-flex gap-1">
+          <span style={{ marginRight: "10px", fontWeight: "500" }}>
+            Designation:
+          </span>
+          <span>{companyDetail?.jobTitle}</span>
         </p>
 
         {/* Start Date */}
         <p className="d-flex align-items-center gap-2">
-          <span>Start Date:</span>
-          <input
-            className="w-50 my-1 date-input date-fit"
-            disabled={!editable}
-            type="month"
-            onChange={(e) =>
-              setCompanyDetail((prev) => {
-                console.log(e.target.value);
-                return { ...prev, startDate: e.target.value };
-              })
-            }
-            value={companyDetail.startDate}
-          />
+          <span style={{ marginRight: "10px", fontWeight: "500" }}>
+            Start Date:
+          </span>
+          <span>{companyDetail?.startDate}</span>
         </p>
 
         {/* End Date */}
         <p className="d-flex align-items-center gap-2">
-          <span>End Date:</span>
-          <input
-            className="w-50 my-1 date-input"
-            disabled={!editable}
-            type="month"
-            onChange={(e) =>
-              setCompanyDetail((prev) => {
-                console.log(e.target.value);
-                return { ...prev, endDate: e.target.value };
-              })
-            }
-            value={companyDetail.endDate}
-          />
+          <span style={{ marginRight: "10px", fontWeight: "500" }}>
+            End Date:
+          </span>
+          <span>{companyDetail?.endDate}</span>
         </p>
 
         {/* No of Years */}
+        {/* <p className="d-flex gap-2 align-items-center">
+          <span style={{ marginRight: "10px", fontWeight: "500" }}>
+            {" "}
+            No of Years:{" "}
+          </span>
+          <span>{companyDetail?.noOfYears}</span>
+        </p> */}
+
+        {/* No of Months */}
         <p className="d-flex gap-2 align-items-center">
-          <span> No of Years: </span>
-          <input
-            disabled={!editable}
-            className="w-fit field-input my-1"
-            type="number"
-            step="0.1"
-            value={companyDetail.noOfYears}
-            onChange={(e) =>
-              setCompanyDetail((prev) => {
-                const value = parseFloat(e.target.value);
-                return { ...prev, noOfYears: value.toFixed(1) };
-              })
-            }
-          />
-          {editable && (
-            <button
-              className="btn btn-secondary btn-sm btn-custom"
-              onClick={() =>
-                computeNoOfYears(companyDetail.startDate, companyDetail.endDate)
-              }
-            >
-              Compute
-            </button>
-          )}
+          <span style={{ marginRight: "10px", fontWeight: "500" }}>
+            No of Months:{" "}
+          </span>
+          <span>{companyDetail?.noOfMonths}</span>
+        </p>
+
+          {/* Period */}
+          <p className="d-flex gap-2 align-items-center">
+          <span style={{ marginRight: "10px", fontWeight: "500" }}>
+            Period:{" "}
+          </span>
+          <span>{convertMonthsToString(companyDetail?.noOfMonths)}</span>
         </p>
 
         <div className="d-flex align-items-center gap-2">
           <p className="mt-2 text-decoration-underline mb-2">
             Responsibilities
           </p>
-          {editable && (
-            <RiAddCircleFill
-              onClick={addResponsibility}
-              className="cursor-pointer add-responsibility-icon"
-            />
-          )}
         </div>
-        <ul className="px-5 list-container">
+        <ul className="px-5" style={{listStyleType:"circle"}}>
           {companyDetail.responsibilities.map((responsibility, i) => (
-            <li className="d-flex align-items-center">
+            <li className="d-flex gap-2 m-1">
               <span class="bullet">&#8226;</span>
-              {editable ? (
-                <div className="extend d-flex gap-3">
-                  <textarea
-                    rows="2"
-                    className="textarea-custom"
-                    value={responsibility}
-                    onChange={(e) => handleEditResponsibility(e, i)}
-                    id={
-                      i + 1 === companyDetail.responsibilities.length &&
-                      `last-responsibility-${index}`
-                    }
-                  ></textarea>
-                  <AiFillDelete onClick={() => deleteResponsibility(i)} />
-                </div>
-              ) : (
-                <span>{responsibility}</span>
-              )}
+              <span>{responsibility}</span>
             </li>
           ))}
         </ul>

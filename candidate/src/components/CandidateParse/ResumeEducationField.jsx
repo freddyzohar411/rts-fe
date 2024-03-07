@@ -72,6 +72,15 @@ const ResumeEducationField = ({
     setEducationDetail((prev) => ({ ...prev, noOfYears: Years }));
   };
 
+  function convertMonthsToString(totalMonths) {
+    // Calculate the years and remaining months
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    // Create and return the formatted string
+    return `${years} Yrs and ${months} months`;
+  }
+
   return (
     <div className="companies-details-single">
       <div className="d-flex align-items-center">
@@ -110,6 +119,12 @@ const ResumeEducationField = ({
          <p className="d-flex gap-1 align-items-center mt-1">
           <span style={{marginRight:"10px", fontWeight:"500"}}> No of Months: </span>
           <span>{educationDetail?.noOfMonths}</span>
+        </p>
+
+          {/* Period */}
+          <p className="d-flex gap-1 align-items-center mt-1">
+          <span style={{marginRight:"10px", fontWeight:"500"}}> Period: </span>
+          <span>{convertMonthsToString(educationDetail?.noOfMonths)}</span>
         </p>
       </div>
     </div>
