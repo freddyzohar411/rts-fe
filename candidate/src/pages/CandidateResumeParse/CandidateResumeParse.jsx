@@ -20,6 +20,7 @@ import {
 import { DeleteCustomModal } from "@workspace/common";
 import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
+import CandidateParseDisplay from "../../components/CandidateParse/CandidateParseDisplay";
 import axios from "axios";
 
 const CandidateResumeParse = () => {
@@ -361,7 +362,9 @@ const CandidateResumeParse = () => {
                       </Col>
                     </Row>
                   )}
-                  {tab === 2 && <h1>Hello World</h1>}
+                  {tab === 2 && (
+                    <CandidateParseDisplay resumeParseDataList={parseData} />
+                  )}
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex flex-row justify-content-between">

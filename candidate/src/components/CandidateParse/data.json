@@ -1,0 +1,222 @@
+[
+    {
+      "profile": "I am responsible and meticulous, with an enthusiasm for life-long learning. My studies and internships in Accountancy and experience in UX/UI Design has equipped me with a unique set of skills. I am systematic and detail-oriented, with the ability to problem-solve through Design Thinking. I look forward to learning, growing and contributing my best to the team that I join.",
+      "name": "Ying Li Loh",
+      "firstName": "Ying",
+      "lastName": "Li Loh",
+      "gender": "Female",
+      "spokenLanguages": [
+        "English"
+      ],
+      "email": "yl16296@hotmail.com",
+      "mobile": "(+ 65) 9339 8622",
+      "currentLocation": "Singapore",
+      "nationality": "",
+      "skills": [
+        "UX Research",
+        "Wireframing",
+        "Prototyping",
+        "SAP",
+        "QA Testing"
+      ],
+      "primarySkills": [
+        "UX Research",
+        "Wireframing",
+        "Prototyping"
+      ],
+      "secondarySkills": [
+        "SAP",
+        "QA Testing"
+      ],
+      "companiesDetails": [
+        {
+          "name": "Wishbone Digital Group",
+          "startDate": "10/2019",
+          "endDate": "12/2019",
+          "noOfMonths": 2,
+          "jobTitle": "UX Executive",
+          "responsibilities": [
+            "Worked on multiple projects in parallel, both independently and in a team",
+            "Monitored the revamp progress of a website and CMS",
+            "Edited and developed mockups in the revamp of a government agency's internet system using Adobe XD",
+            "Collaborated with developers on bugs, aesthetic issues and mobile responsiveness",
+            "Liaised with clients regarding project progress through email and during client meetings",
+            "Assisted teammate with mockup edits using Figma"
+          ]
+        },
+        {
+          "name": "Oangle Pte Ltd",
+          "startDate": "06/2019",
+          "endDate": "09/2019",
+          "noOfMonths": 3,
+          "jobTitle": "UI/UX Intern",
+          "responsibilities": [
+            "Conducted research to gather references to determine the most suitable solution for the task",
+            "Developed website wireframes and mockups with Adobe XD",
+            "Built web pages using Elementor on WordPress",
+            "Ensured websites’ mobile responsiveness",
+            "Ran quality assurance tests for websites by coordinating with the development team"
+          ]
+        },
+        {
+          "name": "NBCUniversal",
+          "startDate": "06/2018",
+          "endDate": "01/2019",
+          "noOfMonths": 7,
+          "jobTitle": "Finance Intern",
+          "responsibilities": [
+            "Responsible for payments pertaining to company's activities in Australia",
+            "Assisted with the reconciliation of withholding tax accounts",
+            "Supported audit processes",
+            "Communicated with the tech team to suggest SAP process improvements"
+          ]
+        },
+        {
+          "name": "Far East Organization",
+          "startDate": "05/2017",
+          "endDate": "07/2017",
+          "noOfMonths": 2,
+          "jobTitle": "Accounts Payable Intern",
+          "responsibilities": [
+            "Assisted the posting team with the posting of invoices through SAP",
+            "Liaised with various business units regarding problem invoices",
+            "Received Certificate of Commendation from Nanyang Technological University"
+          ]
+        }
+      ],
+      "monthsOfExperience": 14,
+      "yearsOfExperience": 1.2,
+      "jobTitle": "Accounts Payable Intern",
+      "educationDetails": [
+        {
+          "name": "Nanyang Technological University",
+          "startDate": "08/2015",
+          "endDate": "06/2018",
+          "noOfMonths": 35,
+          "qualification": "Degree Programme in Accountancy"
+        }
+      ],
+      "education": "Degree Programme in Accountancy",
+      "urls": [
+        {
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/yingli-loh/"
+        },
+        {
+          "name": "Personal Website",
+          "link": "https://yingli-loh.com/"
+        }
+      ],
+      "certifications": [],
+      "awards": [],
+      "achievements": [],
+      "trainings": []
+    },
+    {
+      "profile": "I’m a UI & UX Designer who is passionate about creating digital strategies, products and services for companies and startups. For me, the most enjoyable part of a designer's work is being able to create something new. I believe that design is one of the many ways to solve digital problems. I am currently working full time at HomiEx Digital Exchange Company. I am working on projects including web design, branding & identity, environmental graphics. Before this, I worked as a graphic designer for about 10 years and performed many different tasks in various categories. I am a person who is always keen to learn and pick up new skills, and used to working in fast--paced working environment. Thus i am confident that i can adapt to new working environment and take on new challenges in my career.",
+      "name": "Meigan Wong",
+      "firstName": "Meigan",
+      "lastName": "Wong",
+      "gender": "Female",
+      "spokenLanguages": [
+        "English",
+        "Mandarin",
+        "Bahasa",
+        "Cantonese"
+      ],
+      "email": "mgfoong638@gmail.com",
+      "mobile": "+65 9787 0191",
+      "currentLocation": "Singapore",
+      "nationality": "Singaporean",
+      "skills": [
+        "Adobe Creative Suite",
+        "Animation / Video",
+        "UI & UX Software",
+        "Web Development"
+      ],
+      "primarySkills": [
+        "UI & UX Software"
+      ],
+      "secondarySkills": [
+        "Adobe Creative Suite",
+        "Web Development",
+        "Animation / Video"
+      ],
+      "companiesDetails": [
+        {
+          "name": "Hogarth Worldwide Pte Ltd",
+          "startDate": "03/2009",
+          "endDate": "03/2013",
+          "noOfMonths": 48,
+          "jobTitle": "Graphic Designer",
+          "responsibilities": [
+            "Performed visual analysis visualize, create and adaptation for different languages and different sizes",
+            "Managed the production, creation and finalization of creative artworks and Ads (News paper)",
+            "Color and images retouching before color proofing",
+            "Performed visual eBanner, Facebook & eDM for Digital artwork",
+            "Submission of ads to SPH using the Automation Engine, ensure the quality of the artwork and colours"
+          ]
+        },
+        {
+          "name": "ecxx.com",
+          "startDate": "03/2017",
+          "endDate": "03/2019",
+          "noOfMonths": 24,
+          "jobTitle": "UI & UX Designer",
+          "responsibilities": [
+            "Works closely with Developer, and Marketing Manager to develop user-centered features. Monitor work against the production schedule, provide updates to the design and development manager and report any technical difficulties.",
+            "Create inspiring design work and maintains a positive role in our company culture. Execute all visual design stages from concept to working with backend developers."
+          ]
+        },
+        {
+          "name": "HomiEx",
+          "startDate": "03/2019",
+          "endDate": "03/2024",
+          "noOfMonths": 60,
+          "jobTitle": "Product Designer",
+          "responsibilities": [
+            "Responsible for designing different type of website and social media banners. I am also partially responsible for editing our website front-end page by coding.",
+            "Designing HomiEx platform collaborating with the developer team to define use cases and turn conceptual ideas into data visualizations and workflows.",
+            "Work with engineers on edge cases, error states, loading & empty states etc. Make sure designs are consistent with the design system."
+          ]
+        }
+      ],
+      "monthsOfExperience": 132,
+      "yearsOfExperience": 11,
+      "jobTitle": "Product Designer",
+      "educationDetails": [
+        {
+          "name": "Lithan Academy Pte Ltd, Singapore",
+          "startDate": "07/2017",
+          "endDate": "04/2018",
+          "noOfMonths": 9,
+          "qualification": "Design and develop an interactive front-end of a website or web application using HTML, CSS, Javascript and Jquery. Learn object oriented programming using PHP. Design, develop, deploy and test web applications using PHP & MySQL. Design, implement and test procedural programming solutions using Python."
+        },
+        {
+          "name": "First Media Academy, Singapore",
+          "startDate": "03/2016",
+          "endDate": "12/2017",
+          "noOfMonths": 21,
+          "qualification": "This course is designed to teach without technical knowledge to design and build a friendly and functional website. Emphasis is rooted on design aesthetics, functionality and navigation friendliness using Adobe Dreamweaver. Learn basic web programming language via CSS and HTML coding. Create user friendly user interface through wireframe planning."
+        },
+        {
+          "name": "Palin School of Arts & Design, Singapore",
+          "startDate": "04/1997",
+          "endDate": "03/1999",
+          "noOfMonths": 24,
+          "qualification": "Diploma of Graphic Design (Print)"
+        }
+      ],
+      "education": "Diploma of Graphic Design (Print)",
+      "urls": [
+        {
+          "name": "Portfolio Website",
+          "link": "http://www.meiganwong.com"
+        }
+      ],
+      "certifications": [],
+      "awards": [],
+      "achievements": [],
+      "trainings": []
+    }
+  ]
