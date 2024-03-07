@@ -100,7 +100,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                     ></i>
                   )}
                 </div>
-                <Card> 
+                <Card>
                   <CardBody>
                     <Row>
                       <Col>
@@ -217,7 +217,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                                 </button>
                               </div>
                               <div className="d-flex align-items-center justify-content-between gap-5">
-                                <p>{resumeData?.qualification || "-"}</p>
+                                <p>{resumeData?.education || "-"}</p>
                               </div>
                             </div>
                             {showEducationDetails && (
@@ -317,6 +317,29 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                                 )}
                             </>
                           )}
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <div class="resume-skills-section">
+                          <div className="d-flex align-items-center gap-2">
+                            <h3>Primary Skills</h3>
+                          </div>
+                          <ResumeFieldList data={resumeData?.primarySkills} />
+                        </div>
+                      </Col>
+                    </Row>
+
+                    <Row>
+                      <Col>
+                        <div class="resume-skills-section mt-4">
+                          <div className="d-flex align-items-center gap-2">
+                            <h3>Secondary Skills</h3>
+                          </div>
+                          <ResumeFieldList
+                            data={resumeData?.secondarySkills}
+                          />
                         </div>
                       </Col>
                     </Row>
