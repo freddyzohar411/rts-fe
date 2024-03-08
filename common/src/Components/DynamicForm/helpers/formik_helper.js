@@ -47,7 +47,7 @@ const populateInitialValues = (formFieldData, editData) => {
       return {
         ...acc,
         [field.name]: editData[field.name] ?? "",
-        [field.subName]: editData[field.name] ?? "",
+        [field.subName]: editData[field.subName] ?? "",
       };
     }
 
@@ -495,4 +495,5 @@ export {
   generateValidationSchema,
   generateValidationSchema2,
   generateValidationSchemaForFieldBuilder,
+  populateInitialValues
 };
