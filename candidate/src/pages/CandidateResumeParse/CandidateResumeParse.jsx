@@ -21,6 +21,7 @@ import { DeleteCustomModal } from "@workspace/common";
 import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
 import CandidateParseDisplay from "../../components/CandidateParse/CandidateParseDisplay";
+import Select from "react-select";
 import axios from "axios";
 
 const CandidateResumeParse = () => {
@@ -36,6 +37,24 @@ const CandidateResumeParse = () => {
   const [loading, setLoading] = useState(false);
   const [parseData, setParseData] = useState([]);
   const [tab, setTab] = useState(1);
+  const [search, setSearch] = useState("");
+  const [options, setOptions] = useState([
+    { value: "v1", label: "v1" },
+    { value: "v2", label: "v2" },
+  ]);
+  const [selectedOptions, setSelectedOptions] = useState({
+    value: "v1",
+    label: "v1",
+  });
+
+  const handleInputChange = (inputValue) => {
+    setSearch(inputValue);
+  };
+
+  const handleChange = (selectedOptions) => {
+    setSelectedOptions(selectedOptions);
+    console.log("Selected Options", selectedOptions);
+  };
 
   const onDrop = useCallback((acceptedFiles) => {
     console.log("Accedpted Files: ", acceptedFiles);
@@ -77,7 +96,6 @@ const CandidateResumeParse = () => {
     setCurrentUploadCount(0);
     setTotalUploadCount(0);
     setFileUrl("");
-    s;
     setIsResetModalOpen(false);
   };
 
@@ -177,6 +195,14 @@ const CandidateResumeParse = () => {
       formData.append(`resumes[${i}].file`, fileObjects[i].file);
       formData.append(`resumes[${i}].fileName`, fileObjects[i].nameNoExt);
     }
+
+    // Set Version
+    if (selectedOptions?.value) {
+      formData.append("parseVer", selectedOptions?.value);
+    } else {
+      formData.append("parseVer", "v1");
+    }
+
     setLoading(true);
     axios
       .post("http://localhost:8181/api/resumes2/parse-normal/multi", formData, {
@@ -202,7 +228,26 @@ const CandidateResumeParse = () => {
     });
   };
 
-  console.log("Parse Data: ", parseData);
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+    }),
+    control: (base, state) => ({
+      ...base,
+      // state.isFocused can display different borderColor if you need it
+      borderColor: state.isFocused ? "#8AAED6" : "#8AAED6",
+      // overwrittes hover style
+      "&:hover": {
+        borderColor: state.isFocused ? "#8AAED6" : "#8AAED6",
+      },
+      backgroundColor: state.isDisabled ? "#EFF2F7" : base.backgroundColor,
+    }),
+    singleValue: (provided, state) => ({
+      ...provided,
+      color: state.isDisabled ? "black !important" : provided.color,
+    }),
+  };
 
   return (
     <React.Fragment>
@@ -239,6 +284,19 @@ const CandidateResumeParse = () => {
                     <span className="fw-medium fs-6 text-dark">
                       Begin by parsing resumes
                     </span>
+                    <Select
+                      styles={customStyles}
+                      value={selectedOptions}
+                      onChange={handleChange}
+                      onInputChange={handleInputChange}
+                      inputValue={search}
+                      menuShouldScrollIntoView={false}
+                      isClearable
+                      isSearchable
+                      placeholder="Select parsing version"
+                      options={options}
+                      //   noOptionsMessage={noOptionsMessage}
+                    />
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -354,7 +412,7 @@ const CandidateResumeParse = () => {
                           ) : (
                             <div
                               className="text-center"
-                              style={{ fontSize: "1rem", marginTop: "50%" }}
+                              style={{ fontSize: "1rem", marginTop: "30%" }}
                             >
                               File cannot be displayed
                             </div>
