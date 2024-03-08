@@ -85,6 +85,54 @@ export const candidateBasicInfoMap = {
   },
 };
 
+export const candidateWorkExperienceMap = {
+  companyName: {
+    key: "name",
+    map: "string",
+  },
+  title: {
+    key: "jobTitle",
+    map: "string",
+  },
+  startDate: {
+    key: "startDate",
+    render: (data) => {
+      if (!data) {
+        return "";
+      }
+      // Data is in mm/yyyy format
+      const [month, year] = data.split("/");
+      return new Date(year, month - 1, 1).toISOString();
+    }
+  },
+  endDate: {
+    key: "endDate",
+    map: "string",
+    render: (data) => {
+      if (!data) {
+        return "";
+      }
+      // Data is in mm/yyyy format
+      const [month, year] = data.split("/");
+      return new Date(year, month - 1, 1).toISOString();
+    }
+  },
+  industry: {
+    key: "industry",
+    map: "string",
+  },
+  description: {
+    key: "responsibilities",
+    map: "string",
+    render: (data) => {
+      if (data?.length > 0) {
+        return data.join(". ");
+      }
+      return "";
+    }
+  },
+};
+
 function calculateUniqueWorkMonths(periods) {
   const uniqueMonths = new Set();
 

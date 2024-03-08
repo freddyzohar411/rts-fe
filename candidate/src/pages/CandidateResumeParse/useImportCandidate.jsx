@@ -6,13 +6,16 @@ import {
   putCandidateDraftStatus,
   resetMetaData,
 } from "../../store/candidate/action";
-import { candidateBasicInfoMap } from "./importCandidateHelper";
+import {
+  candidateBasicInfoMap,
+  candidateWorkExperienceMap,
+} from "./importCandidateHelper";
 import { ObjectHelper } from "@workspace/common";
 import {
-    CandidateFormConstant,
-    CandidateEntityConstant,
-    CandidateTableListConstant,
-  } from "../../constants/candidateConstant";
+  CandidateFormConstant,
+  CandidateEntityConstant,
+  CandidateTableListConstant,
+} from "../../constants/candidateConstant";
 import axios from "axios";
 
 const useImportCandidate = () => {
@@ -42,6 +45,7 @@ const useImportCandidate = () => {
   console.log(formNameId);
 
   function importCandidate(candidateData) {
+    // Get candidate basic info Object
     const candidateBasicInfo = {};
     for (const [field, value] of Object.entries(candidateBasicInfoMap)) {
       console.log(field, value);
@@ -51,29 +55,54 @@ const useImportCandidate = () => {
         candidateBasicInfo[field] = candidateData[value.key];
       }
     }
-    console.log(candidateBasicInfo);
+    const candidateBasicInfoOut = {
+      ...candidateBasicInfo,
+      formData: JSON.stringify(candidateBasicInfo),
+      formId: parseInt(formNameId["Candidate_basic_info"]),
+    };
+    const candidateBasicInfoOutFormData = ObjectHelper.convertObjectToFormData(
+      candidateBasicInfoOut
+    );
 
-    // Call Axios and import it
-    // Basic info
-    const candidateDataOut = {
-        ...candidateBasicInfo,
-        formData: JSON.stringify(candidateBasicInfo),
-        formId: parseInt(formNameId["Candidate_basic_info"]),
+    // Get work experience object array
+    const workExperienceArray = [];
+    candidateData.companiesDetails.forEach((company) => {
+      const workExperience = {};
+      for (const [field, value] of Object.entries(candidateWorkExperienceMap)) {
+        if (value.render) {
+          workExperience[field] = value.render(company[value.key]);
+        } else {
+          workExperience[field] = company[value.key];
+        }
+      }
+      workExperienceArray.push(workExperience);
+    });
+
+    const workExperienceArrayOut = workExperienceArray.map((workExperience) => {
+      const workExperienceFormSubmit = { ...workExperience, multiFiles: "" };
+      return {
+        ...workExperience,
+        multiFiles: [],
+        entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+        formData: JSON.stringify(workExperienceFormSubmit),
+        formId: parseInt(formNameId["Candidate_work_experience"]),
       };
-      const formData1 =
-        ObjectHelper.convertObjectToFormData(candidateDataOut);
+    });
 
-      dispatch(
-        postCandidate({
-          entity: CandidateEntityConstant.CANDIDATE_BASIC_INFO,
-          newData: formData1,
-          config: {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          },
-        })
-      );
+    console.log("Work experience", workExperienceArrayOut);
+
+
+    //   dispatch(
+    //     postCandidate({
+    //       entity: CandidateEntityConstant.CANDIDATE_BASIC_INFO,
+    //       newData: formData1,
+    //       config: {
+    //         headers: {
+    //           "Content-Type": "multipart/form-data",
+    //         },
+    //       },
+    //     })
+    //   );
 
     return "Import Candidate";
   }
