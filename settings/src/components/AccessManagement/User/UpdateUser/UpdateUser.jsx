@@ -45,45 +45,48 @@ function UpdateUser() {
   );
 
   useEffect(() => {
-    if (!allCountries) return;
-    setSelectedCountry([
-      {
-        options: allCountries?.map((country) => ({
-          label: country.name,
-          value: country.name,
-        })),
-      },
-    ]);
+    if (allCountries && allCountries?.length > 0) {
+      setSelectedCountry([
+        {
+          options: allCountries?.map((country) => ({
+            label: country.name,
+            value: country.name,
+          })),
+        },
+      ]);
+    }
   }, [allCountries]);
 
   useEffect(() => {
-    if (!allUsers) return;
-    setSelectedOption([
-      {
-        options: allUsers.map((user) => ({
-          label: `${user.firstName} (${user.mobile})`,
-          value: user?.id?.toString(),
-        })),
-      },
-    ]);
+    if (allUsers && allUsers?.length > 0) {
+      setSelectedOption([
+        {
+          options: allUsers?.map((user) => ({
+            label: `${user?.firstName} (${user?.mobile})`,
+            value: user?.id?.toString(),
+          })),
+        },
+      ]);
+    }
   }, [allUsers]);
 
   useEffect(() => {
-    if (!user) return;
-    const manager = allUsers?.find(
-      (singleUser) => singleUser.id === parseInt(user.managerId)
-    );
-    if (manager) {
-      setSortBy({
-        label: `${manager.firstName} (${manager.mobile})`,
-        value: manager?.id?.toString(),
-      });
-    }
-    if (user?.country) {
-      setSortByCountry({
-        label: user?.country,
-        value: user?.country,
-      });
+    if (user && allUsers && allUsers?.length > 0) {
+      const manager = allUsers?.find(
+        (singleUser) => singleUser.id === parseInt(user.managerId)
+      );
+      if (manager) {
+        setSortBy({
+          label: `${manager.firstName} (${manager.mobile})`,
+          value: manager?.id?.toString(),
+        });
+      }
+      if (user?.country) {
+        setSortByCountry({
+          label: user?.country,
+          value: user?.country,
+        });
+      }
     }
   }, [user, allUsers]);
 
@@ -184,7 +187,9 @@ function UpdateUser() {
                       <CardBody>
                         <Row className="mb-3">
                           <Col>
-                            <span className="h6 fw-bold">General Information</span>
+                            <span className="h6 fw-bold">
+                              General Information
+                            </span>
                           </Col>
                         </Row>
                         <Row>
@@ -252,9 +257,7 @@ function UpdateUser() {
                         <Row>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3">
-                              <Label>
-                                Email Address*
-                              </Label>
+                              <Label>Email Address*</Label>
                               <Field
                                 name="email"
                                 type="text"
@@ -274,9 +277,7 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3">
-                              <Label>
-                                Contact Number*
-                              </Label>
+                              <Label>Contact Number*</Label>
                               <Field
                                 name="mobile"
                                 type="text"
@@ -296,9 +297,7 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3">
-                              <Label>
-                                Employee ID*
-                              </Label>
+                              <Label>Employee ID*</Label>
                               <Field
                                 name="employeeId"
                                 type="text"
@@ -384,9 +383,7 @@ function UpdateUser() {
                         <Row className="mb-3">
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>
-                                Select Manager
-                              </Label>
+                              <Label>Select Manager</Label>
                               <FormSelection
                                 name="managerId"
                                 value={sortBy}
@@ -440,9 +437,7 @@ function UpdateUser() {
                         <Row className="mb-3">
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3 ">
-                              <Label>
-                                Set New Password*
-                              </Label>
+                              <Label>Set New Password*</Label>
                               <Field
                                 name="password"
                                 type="password"
@@ -462,9 +457,7 @@ function UpdateUser() {
                           </Col>
                           <Col lg={4}>
                             <div className="d-flex flex-column mb-3 ">
-                              <Label>
-                                Confirm Password*
-                              </Label>
+                              <Label>Confirm Password*</Label>
                               <Field
                                 name="confirmPassword"
                                 type="password"
