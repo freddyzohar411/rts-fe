@@ -33,6 +33,9 @@ import {
   FETCH_CANDIDATES_ADMIN,
   FETCH_CANDIDATES_ADMIN_SUCCESS,
   FETCH_CANDIDATES_ADMIN_FAILURE,
+  IMPORT_CANDIDATE,
+  IMPORT_CANDIDATE_SUCCESS,
+  IMPORT_CANDIDATE_FAILURE,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -209,6 +212,22 @@ export const fetchCandidatesAdminSuccess = (candidates) => ({
 
 export const fetchCandidatesAdminFailure = (error) => ({
   type: FETCH_CANDIDATES_ADMIN_FAILURE,
+  payload: error,
+});
+
+// Import Candidate
+export const importCandidate = (candidateRequest) => ({
+  type: IMPORT_CANDIDATE,
+  payload: candidateRequest,
+});
+
+export const importCandidateSuccess = (candidate) => ({
+  type: IMPORT_CANDIDATE_SUCCESS,
+  payload: candidate,
+});
+
+export const importCandidateFailure = (error) => ({
+  type: IMPORT_CANDIDATE_FAILURE,
   payload: error,
 });
 

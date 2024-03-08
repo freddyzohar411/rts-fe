@@ -5,6 +5,7 @@ import {
   putCandidate,
   putCandidateDraftStatus,
   resetMetaData,
+  importCandidate as importCandidateAction,
 } from "../../store/candidate/action";
 import {
   candidateBasicInfoMap,
@@ -45,6 +46,8 @@ const useImportCandidate = () => {
   console.log(formNameId);
 
   function importCandidate(candidateData) {
+    console.log("Candidate Data", candidateData);
+
     // Get candidate basic info Object
     const candidateBasicInfo = {};
     for (const [field, value] of Object.entries(candidateBasicInfoMap)) {
@@ -82,15 +85,42 @@ const useImportCandidate = () => {
       const workExperienceFormSubmit = { ...workExperience, multiFiles: "" };
       return {
         ...workExperience,
-        multiFiles: [],
+        // multiFiles: [],
         entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
         formData: JSON.stringify(workExperienceFormSubmit),
         formId: parseInt(formNameId["Candidate_work_experience"]),
       };
     });
 
+
+    // const workExperienceFormDataArray = workExperienceArrayOut.map(
+    //   (workExperience) => ObjectHelper.convertObjectToFormData(workExperience)
+    // );
+
     console.log("Work experience", workExperienceArrayOut);
 
+    const candidateRequestArray = [
+      {
+        entity: CandidateEntityConstant.CANDIDATE_BASIC_INFO,
+        newData: candidateBasicInfoOutFormData,
+        config: {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      },
+      {
+        entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+        newData: workExperienceArrayOut,
+        config: {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      }
+    ];
+
+    dispatch(importCandidateAction(candidateRequestArray));
 
     //   dispatch(
     //     postCandidate({

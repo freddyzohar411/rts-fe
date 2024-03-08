@@ -11,7 +11,8 @@ import {
   PUT_CANDIDATE_DRAFT_STATUS,
   FETCH_CANDIDATE_DATA,
   FETCH_CANDIDATES_FIELDS_ALL,
-  FETCH_CANDIDATES_ADMIN
+  FETCH_CANDIDATES_ADMIN,
+  IMPORT_CANDIDATE,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -46,7 +47,7 @@ import {
   completeCandidateRegistration,
   getCandidateDataById,
   getCandidateFieldAll,
-  getCandidatesAdmin
+  getCandidatesAdmin,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -55,6 +56,7 @@ import {
   deleteCandidateCountry,
 } from "../candidateregistration/action";
 import { toast } from "react-toastify";
+import { ObjectHelper } from "@workspace/common";
 
 // Post account
 function* workPostCandidate(action) {
@@ -192,6 +194,57 @@ function* workFetchCandidatesAdmin(action) {
   }
 }
 
+// Import Candidate
+function* workImportCandidate(action) {
+  const candidateData = action.payload; // Array of candidate data
+  let candidateId = null;
+  // Set Basic Info
+  console.log("Candidate Data [0]", candidateData[0]);
+  try {
+    const response = yield call(
+      createCandidate,
+      candidateData[0].entity,
+      candidateData[0]?.id,
+      candidateData[0].newData,
+      candidateData[0].config
+    );
+    candidateId = response?.data?.id;
+  } catch (error) {
+    toast.error("Error creating candidate");
+    console.log("Error creating candidate", error);
+  }
+
+  console.log("Candidate Id", candidateId);
+
+  console.log("Candidate Data [1]", candidateData[1]);
+  // Set Work Experience candidateData[1] which is an array
+  if (candidateId) {
+    for (const workExperience of candidateData[1].newData) {
+      const workExperienceFormData = ObjectHelper.convertObjectToFormData({
+        ...workExperience,
+        entityId: candidateId,
+      });
+      try {
+        const response = yield call(
+          createCandidate,
+          candidateData[1].entity,
+          null,
+          workExperienceFormData,
+          candidateData[1].config
+        );
+      } catch (error) {
+        toast.error("Error creating candidate");
+        console.log("Error creating candidate", error);
+      }
+    }
+  }
+
+  // if (candidateId) {
+  //   yield put(setCandidateId(candidateId));
+  //   toast.success("Candidate created successfully");
+  // }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -203,4 +256,5 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATE_DATA, workFetchCandidateData);
   yield takeEvery(FETCH_CANDIDATES_FIELDS_ALL, workFetchCandidatesFieldsAll);
   yield takeEvery(FETCH_CANDIDATES_ADMIN, workFetchCandidatesAdmin);
+  yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
 }
