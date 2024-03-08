@@ -23,6 +23,8 @@ import { toast } from "react-toastify";
 import CandidateParseDisplay from "../../components/CandidateParse/CandidateParseDisplay";
 import Select from "react-select";
 import axios from "axios";
+import jsonData from "../../components/CandidateParse/data.json";
+import useImportCandidate from "./useImportCandidate";
 
 const CandidateResumeParse = () => {
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ const CandidateResumeParse = () => {
   const [isValidAttachment, setIsValidAttachment] = useState(false);
   const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [parseData, setParseData] = useState([]);
+  const [parseData, setParseData] = useState(jsonData ?? []);
   const [tab, setTab] = useState(1);
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([
@@ -46,6 +48,8 @@ const CandidateResumeParse = () => {
     value: "v1",
     label: "v1",
   });
+
+  const { importCandidate } = useImportCandidate();
 
   const handleInputChange = (inputValue) => {
     setSearch(inputValue);
@@ -472,13 +476,24 @@ const CandidateResumeParse = () => {
                         </>
                       )}
                       {tab === 2 && (
-                        <Button
-                          type="button"
-                          className="btn btn-custom-primary"
-                          onClick={() => setTab(1)}
-                        >
-                          Back to Upload
-                        </Button>
+                        <>
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                            onClick={() => setTab(1)}
+                          >
+                            Back to Upload
+                          </Button>
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                            onClick={() =>
+                              importCandidate(parseData[0])
+                            }
+                          >
+                            Import Candidates
+                          </Button>
+                        </>
                       )}
                     </div>
                   </div>

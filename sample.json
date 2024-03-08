@@ -113,12 +113,7 @@
       "Flinto",
       "Bootstrap"
     ],
-    "spokenLanguages": [
-      "English",
-      "Mandarin",
-      "Bahasa",
-      "Cantonese"
-    ],
+    "spokenLanguages": ["English", "Mandarin", "Bahasa", "Cantonese"],
     "companiesDetails": [
       {
         "name": "HomiEx",

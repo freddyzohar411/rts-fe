@@ -15,7 +15,7 @@ import {
   ModalBody,
   Spinner,
 } from "reactstrap";
-import jsonData from "./data.json";
+// import jsonData from "./data.json";
 import ResumeEducationField from "./ResumeEducationField";
 import ResumeCompanyField from "./ResumeCompanyField";
 import ResumeFieldInput from "./ResumeFieldInput";
@@ -31,7 +31,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
   const [resumeData, setResumeData] = useState(
     resumeParseDataList?.[0] ?? null
   );
-  //   const [resumeData, setResumeData] = useState(jsonData[1]);
+    // const [resumeData, setResumeData] = useState(jsonData[0]);
 
   // Sort Companies by endDate
   const sortCompaniesByEndDate = (companies, sort = "asc") => {
