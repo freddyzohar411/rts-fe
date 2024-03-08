@@ -233,7 +233,10 @@ const JobListing = () => {
               className="form-check-input"
               type="checkbox"
               id="checkbox"
-              checked={activeJob?.length === jobsData?.jobs?.length}
+              checked={
+                activeJob?.length > 0 &&
+                activeJob?.length === jobsData?.jobs?.length
+              }
               onChange={(e) => selectAllJobs(e?.target?.checked)}
             />
           </div>
