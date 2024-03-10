@@ -17,6 +17,8 @@ import {
   Table,
 } from "reactstrap";
 import axios from "axios";
+import { SelectElement } from "@workspace/common";
+import { candidateParseFields } from "./candidateMappingObject";
 
 const CandidateMappingTable = () => {
   const [candidateFormFieldsData, setCandidateFormFieldsData] = useState(null);
@@ -24,6 +26,7 @@ const CandidateMappingTable = () => {
   const [open, setOpen] = useState(null);
   const [data, setData] = useState([1, 2, 3, 4, 5]);
   const [isLoading, setIsLoading] = useState(false);
+  const [mappingData, setMappingData] = useState(null);
 
   useEffect(() => {
     // Fetch data
@@ -38,7 +41,6 @@ const CandidateMappingTable = () => {
         console.log(err);
       });
   }, []);
-
 
   const getKeysArrayFromObj = (obj) => {
     return Object.keys(obj);
@@ -61,6 +63,27 @@ const CandidateMappingTable = () => {
   const toggle = (module) => {
     setOpen(open === module ? null : module);
   };
+
+  const deletedNestedObjectIfEmpty = (obj) => {
+    Object.keys(obj).map((key) => {
+      if (Object.keys(obj[key]).length === 0) {
+        delete obj[key];
+      }
+    });
+    return obj;
+  };
+
+  function getLabelValueFromArray(labelValueArray,value) {
+    if (!labelValueArray) return null;
+    for (let group of labelValueArray) {
+      for (let option of group.options) {
+        if (option.value === value) {
+          return option;
+        }
+      }
+    }
+    return null; // Return null if the value is not found in any group
+  }
 
   const config = [
     {
@@ -87,7 +110,51 @@ const CandidateMappingTable = () => {
       value: "name",
       sort: false,
       render: (data) => {
-        return <span>{data.name}</span>;
+        return (
+          <SelectElement
+            optionsData={candidateParseFields}
+            value={getLabelValueFromArray(
+              candidateParseFields,
+              mappingData?.[data?.category]?.[data?.value]
+            )}
+            setSelectedOptionData={(selectedOptions) => {
+              // console.log("Selected Options", selectedOptions);
+              // console.log("Row Data", data);
+
+              if (selectedOptions) {
+                setMappingData((prev) => {
+                  return {
+                    ...prev,
+                    [data?.category]: {
+                      ...prev?.[data?.category],
+                      [data?.value]: selectedOptions["value"],
+                    },
+                  };
+                });
+              } else {
+                // setMappingData((prev) => {
+                //   return deletedNestedObjectIfEmpty({
+                //     ...prev,
+                //     [data?.category]: {
+                //       ...prev?.[data?.category],
+                //       [data?.value]: "",
+                //     },
+                //   });
+                // });
+                console.log("Deleting")
+                setMappingData((prev) => {
+                  delete prev[data?.category][data?.value];
+                  const newObj = deletedNestedObjectIfEmpty(prev);
+                  return {
+                    ...newObj,
+                  };  
+                  
+                });
+              }
+            }}
+            disabled={false}
+          />
+        );
       },
     },
   ];
@@ -133,8 +200,6 @@ const CandidateMappingTable = () => {
       const categoryData = data.filter(
         (rowData) => (rowData.category || "No Category") === category
       );
-
-      console.log("Category Data", categoryData);
 
       return (
         <React.Fragment key={category}>
@@ -218,6 +283,7 @@ const CandidateMappingTable = () => {
   //   });
   // };
 
+  console.log("Mapping Data", mappingData);
   return (
     <Container fluid>
       <Row>

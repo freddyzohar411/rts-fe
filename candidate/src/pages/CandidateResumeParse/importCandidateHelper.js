@@ -85,6 +85,7 @@ export const candidateBasicInfoMap = {
   },
 };
 
+// Key [companiesDetails] is the key from the parsed data
 export const candidateWorkExperienceMap = {
   companyName: {
     key: "name",
@@ -132,6 +133,12 @@ export const candidateWorkExperienceMap = {
     }
   },
 };
+
+export const candidateMapping = {
+  basicInfo: candidateBasicInfoMap,
+  workExperience: candidateWorkExperienceMap,
+};
+
 
 function calculateUniqueWorkMonths(periods) {
   const uniqueMonths = new Set();
