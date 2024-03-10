@@ -16,6 +16,7 @@ import {
   ModalHeader,
   ModalBody,
   Spinner,
+  Label,
 } from "reactstrap";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDropzone } from "react-dropzone";
@@ -25,6 +26,7 @@ import Select from "react-select";
 import axios from "axios";
 import jsonData from "../../components/CandidateParse/data.json";
 import useImportCandidate from "./useImportCandidate";
+import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
 
 const CandidateResumeParse = () => {
   const navigate = useNavigate();
@@ -48,6 +50,7 @@ const CandidateResumeParse = () => {
     value: "v1",
     label: "v1",
   });
+  const [prevTab, setPrevTab] = useState(null);
 
   const { importCandidate } = useImportCandidate();
 
@@ -246,6 +249,7 @@ const CandidateResumeParse = () => {
         borderColor: state.isFocused ? "#8AAED6" : "#8AAED6",
       },
       backgroundColor: state.isDisabled ? "#EFF2F7" : base.backgroundColor,
+      minWidth: "100%",
     }),
     singleValue: (provided, state) => ({
       ...provided,
@@ -281,26 +285,26 @@ const CandidateResumeParse = () => {
             <Col>
               <Card>
                 <CardHeader className="bg-header">
-                  <div className="d-flex flex-column">
-                    <span className="fw-bold fs-5 text-dark">
-                      Resume Parser
-                    </span>
-                    <span className="fw-medium fs-6 text-dark">
-                      Begin by parsing resumes
-                    </span>
-                    <Select
-                      styles={customStyles}
-                      value={selectedOptions}
-                      onChange={handleChange}
-                      onInputChange={handleInputChange}
-                      inputValue={search}
-                      menuShouldScrollIntoView={false}
-                      isClearable
-                      isSearchable
-                      placeholder="Select parsing version"
-                      options={options}
-                      //   noOptionsMessage={noOptionsMessage}
-                    />
+                  <div className="d-flex justify-content-between">
+                    <div className="d-flex flex-column">
+                      <span className="fw-bold fs-5 text-dark">
+                        Resume Parser
+                      </span>
+                      <span className="fw-medium fs-6 text-dark">
+                        Begin by parsing resumes
+                      </span>
+                    </div>
+                    <div>
+                      <Button
+                        className="btn btn-secondary"
+                        onClick={() => {
+                          setTab(3);
+                          setPrevTab(tab);
+                        }}
+                      >
+                        Mapping Setting
+                      </Button>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -308,9 +312,36 @@ const CandidateResumeParse = () => {
                     <Row>
                       <Col
                         md={5}
-                        className="p-5"
-                        style={{ borderRight: "1px solid #B8B8B8" }}
+                        className="px-5"
+                        style={{
+                          borderRight: "1px solid #B8B8B8",
+                          paddingTop: "10px",
+                        }}
                       >
+                        <div className="d-flex gap-3 align-items-center mb-4">
+                          <label
+                            style={{
+                              fontSize: "1rem",
+                              fontWeight: "500",
+                              margin: 0,
+                            }}
+                          >
+                            Parsing Version
+                          </label>
+                          <Select
+                            className="flex-grow-1"
+                            styles={customStyles}
+                            value={selectedOptions}
+                            onChange={handleChange}
+                            onInputChange={handleInputChange}
+                            inputValue={search}
+                            menuShouldScrollIntoView={false}
+                            isClearable
+                            isSearchable
+                            placeholder="Select parsing version"
+                            options={options}
+                          />
+                        </div>
                         <div
                           {...getRootProps()}
                           className="d-flex flex-column justify-content-center align-items-center cursor-pointer"
@@ -427,6 +458,7 @@ const CandidateResumeParse = () => {
                   {tab === 2 && (
                     <CandidateParseDisplay resumeParseDataList={parseData} />
                   )}
+                  {tab === 3 && <CandidateMappingTable />}
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex flex-row justify-content-between">
@@ -487,11 +519,20 @@ const CandidateResumeParse = () => {
                           <Button
                             type="button"
                             className="btn btn-custom-primary"
-                            onClick={() =>
-                              importCandidate(parseData[0])
-                            }
+                            onClick={() => importCandidate(parseData[0])}
                           >
                             Import Candidates
+                          </Button>
+                        </>
+                      )}
+                      {tab === 3 && (
+                        <>
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                            onClick={() => setTab(prevTab)}
+                          >
+                            Back to Upload
                           </Button>
                         </>
                       )}
