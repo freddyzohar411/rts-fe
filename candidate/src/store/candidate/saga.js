@@ -196,7 +196,7 @@ function* workFetchCandidatesAdmin(action) {
 
 // Import Candidate
 function* workImportCandidate(action) {
-  const candidateData = action.payload; // Array of candidate data
+  const { candidateRequestArray: candidateData, navigate } = action.payload; // Array of candidate data
   let candidateId = null;
   // Set Basic Info
   console.log("Candidate Data [0]", candidateData[0]);

@@ -52,7 +52,7 @@ const CandidateResumeParse = () => {
   });
   const [prevTab, setPrevTab] = useState(null);
 
-  const { importCandidate } = useImportCandidate();
+  const { importCandidate, setCandidateMappingData } = useImportCandidate();
 
   const handleInputChange = (inputValue) => {
     setSearch(inputValue);
@@ -458,7 +458,7 @@ const CandidateResumeParse = () => {
                   {tab === 2 && (
                     <CandidateParseDisplay resumeParseDataList={parseData} />
                   )}
-                  {tab === 3 && <CandidateMappingTable />}
+                  {tab === 3 && <CandidateMappingTable setCandidateMappingData={setCandidateMappingData}/>}
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex flex-row justify-content-between">

@@ -19,8 +19,9 @@ import {
 import axios from "axios";
 import { SelectElement } from "@workspace/common";
 import { candidateParseFields } from "./candidateMappingObject";
+import { toast } from "react-toastify";
 
-const CandidateMappingTable = () => {
+const CandidateMappingTable = ({setCandidateMappingData}) => {
   const [candidateFormFieldsData, setCandidateFormFieldsData] = useState(null);
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(null);
@@ -28,14 +29,29 @@ const CandidateMappingTable = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [mappingData, setMappingData] = useState(null);
 
+  // Fetch data For dynamic form fields
   useEffect(() => {
     // Fetch data
     axios
       .get("http://localhost:8050/api/candidates/fields/all")
       .then((res) => {
-        // console.log("Candidate Headings", convertObjToArray(res.data));
         setCandidateFormFieldsData(convertObjToArray(res.data));
         setCategories(getKeysArrayFromObj(res.data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // Fetch data for mapping
+  useEffect(() => {
+    // Fetch data
+    axios
+      .get("http://localhost:8050/api/candidates/mapping/get")
+      .then((res) => {
+        if (res.data.candidateMapping) {
+          setMappingData(res.data.candidateMapping);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -73,7 +89,7 @@ const CandidateMappingTable = () => {
     return obj;
   };
 
-  function getLabelValueFromArray(labelValueArray,value) {
+  function getLabelValueFromArray(labelValueArray, value) {
     if (!labelValueArray) return null;
     for (let group of labelValueArray) {
       for (let option of group.options) {
@@ -118,9 +134,6 @@ const CandidateMappingTable = () => {
               mappingData?.[data?.category]?.[data?.value]
             )}
             setSelectedOptionData={(selectedOptions) => {
-              // console.log("Selected Options", selectedOptions);
-              // console.log("Row Data", data);
-
               if (selectedOptions) {
                 setMappingData((prev) => {
                   return {
@@ -132,23 +145,12 @@ const CandidateMappingTable = () => {
                   };
                 });
               } else {
-                // setMappingData((prev) => {
-                //   return deletedNestedObjectIfEmpty({
-                //     ...prev,
-                //     [data?.category]: {
-                //       ...prev?.[data?.category],
-                //       [data?.value]: "",
-                //     },
-                //   });
-                // });
-                console.log("Deleting")
                 setMappingData((prev) => {
                   delete prev[data?.category][data?.value];
                   const newObj = deletedNestedObjectIfEmpty(prev);
                   return {
                     ...newObj,
-                  };  
-                  
+                  };
                 });
               }
             }}
@@ -191,8 +193,6 @@ const CandidateMappingTable = () => {
       return str.toUpperCase();
     });
   };
-
-  console.log("Categories State", categories);
 
   // Generate Body
   const generateBodyJsx = (config, data, categories, openModule) => {
@@ -239,51 +239,21 @@ const CandidateMappingTable = () => {
     });
   };
 
-  // const generateBodyJsx = (config, data, openModule) => {
-  //   return Object.keys(candidateFormFields).map((category) => {
-  //     // const categoryData = data.filter(
-  //     //   (rowData) => (rowData.category || "No Category") === category
-  //     // );
+  const saveCandidateMapping = () => {
+    axios
+      .post("http://localhost:8050/api/candidates/mapping/save", {
+        candidateMapping: mappingData,
+      })
+      .then((res) => {
+        setCandidateMappingData(res.data.candidateMapping);
+        toast.success("Candidate Mapping Data Saved Successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  //     return (
-  //       <React.Fragment key={category}>
-  //         <tr style={{ cursor: "pointer" }} onClick={() => toggle(category)}>
-  //           <td colSpan={config.length + 1}>
-  //             <div className="d-flex flex-row align-items-middle gap-3">
-  //               {openModule === module ? (
-  //                 <i className="ri-arrow-up-s-line"></i>
-  //               ) : (
-  //                 <i className="ri-arrow-down-s-line"></i>
-  //               )}
-  //               <span>{convertCamelCaseToNormal(category)}</span>
-  //             </div>
-  //           </td>
-  //         </tr>
-  //         {openModule === category && (
-  //           <>
-  //             {data[category] && data[category].length > 0 ? (
-  //               data[category]?.map((rowData) => (
-  //                 // console.log("Row Data", rowData)
-  //                 <tr key={rowData.formId}>
-  //                   <td key={rowData} style={{ verticalAlign: "middle" }}>
-  //                     {/* {option.render(rowData)} */}
-  //                     {rowData.label}
-  //                   </td>
-  //                 </tr>
-  //               ))
-  //             ) : (
-  //               <tr>
-  //                 <td colSpan={config.length + 1}>No form templates found.</td>
-  //               </tr>
-  //             )}
-  //           </>
-  //         )}
-  //       </React.Fragment>
-  //     );
-  //   });
-  // };
 
-  console.log("Mapping Data", mappingData);
   return (
     <Container fluid>
       <Row>
@@ -309,6 +279,12 @@ const CandidateMappingTable = () => {
             )}
           </tbody>
         </Table>
+        <Button
+          className="btn btn-custom-primary"
+          onClick={saveCandidateMapping}
+        >
+          Save
+        </Button>
       </Row>
     </Container>
   );

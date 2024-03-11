@@ -39,6 +39,6 @@ export const candidateParseFields = [
   },
   {
     label: "Companies Detail",
-    options: [{ label: "Company Name", value: "companiesDetail__companyName" }],
+    options: [{ label: "Company Name", value: "workExperience__companyName" }],
   },
 ];
