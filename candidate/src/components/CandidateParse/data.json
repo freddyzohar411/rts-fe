@@ -196,7 +196,23 @@
         "activities": []
       }
     ],
-    "certifications": [],
+    "certifications": [
+      {
+        "name": "Certified Information Systems Security Professional (CISSP)",
+        "from": "International Information System Security Certification Consortium (ISC)²",
+        "date": "05/2023"
+      },
+      {
+        "name": "Project Management Professional (PMP)",
+        "from": "Project Management Institute",
+        "date": "11/2022"
+      },
+      {
+        "name": "Certified Data Professional (CDP)",
+        "from": "Institute for Certification of Computing Professionals",
+        "date": "02/2023"
+      }
+    ],
     "trainings": [
       {
         "name": "Design and develop an interactive front-end of a website or web application using HTML, CSS, Javascript and Jquery. Learn object oriented programming using PHP. Design, develop, deploy and test web applications using PHP & MySQL. Design, implement and test procedural programming solutions using Python.",

@@ -162,6 +162,9 @@ const useImportCandidate = () => {
     formToParseFieldMapping,
     parseFieldToDataMapping
   ) {
+    console.log("resumeData", resumeData);
+    console.log("formToParseFieldMapping", formToParseFieldMapping);
+
     if (
       formToParseFieldMapping === null ||
       formToParseFieldMapping === undefined
@@ -169,21 +172,18 @@ const useImportCandidate = () => {
       return;
     const dataOut = {};
 
-    console.log("resumeData", resumeData);
-    console.log("formToParseFieldMapping", formToParseFieldMapping);
-
     for (const [field, value] of Object.entries(formToParseFieldMapping)) {
-      console.log("Field Value", field, value);
+      // console.log("Field Value", field, value);
       const [parseKey, parseValue] = value.split("__");
-      console.log(
-        "parseFieldToDataMapping[parseKey][parseValue]",
-        parseFieldToDataMapping[parseKey][parseValue]
-      );
+      // console.log(
+      //   "parseFieldToDataMapping[parseKey][parseValue]",
+      //   parseFieldToDataMapping[parseKey][parseValue]
+      // );
       if (
         parseFieldToDataMapping[parseKey][parseValue]?.map === "none" &&
         parseFieldToDataMapping[parseKey][parseValue]?.render
       ) {
-        console.log("None", resumeData);
+        // console.log("None", resumeData);
         // dataOut[field] = resumeData;
         dataOut[field] =
           parseFieldToDataMapping[parseKey][parseValue]?.render(resumeData);
@@ -201,6 +201,7 @@ const useImportCandidate = () => {
 
   function importCandidate(candidateData) {
     console.log("Candidate Data", candidateData);
+    console.log("candidateMappingData", candidateMappingData);
 
     // Get candidate basic info
     const candidateBasicInfo = mapResumeDataToFormData(
@@ -243,7 +244,7 @@ const useImportCandidate = () => {
       };
     });
 
-    // console.log("Work experience", workExperienceArrayOut);
+    console.log("Work experience", workExperienceArrayOut);
 
     // Get Language object
     const languagesArray = [];
@@ -262,7 +263,7 @@ const useImportCandidate = () => {
       }
     });
 
-    console.log("lanagaugesArray", languagesArray);
+    // console.log("lanagaugesArray", languagesArray);
 
     const languageArrayOut = languagesArray.map((language) => {
       return {
@@ -286,7 +287,7 @@ const useImportCandidate = () => {
       }
     });
 
-    console.log("educationDetailsArray", educationDetailsArray);
+    // console.log("educationDetailsArray", educationDetailsArray);
 
     const educationDetailsArrayOut = educationDetailsArray.map((education) => {
       return {
@@ -294,6 +295,31 @@ const useImportCandidate = () => {
         entityType: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
         formData: JSON.stringify(education),
         formId: parseInt(formNameId["Candidate_education_details"]),
+      };
+    });
+
+    // Certification
+    const certificationArray = [];
+    console.log("candidateData?.certifications", candidateData?.certifications);
+    candidateData?.certifications.forEach((certification) => {
+      const certificationData = mapResumeDataToFormData(
+        certification,
+        candidateMappingData?.certification,
+        candidateMapping
+      );
+      if (certificationData) {
+        certificationArray.push(certificationData);
+      }
+    });
+
+    // console.log("certificationArray", certificationArray);
+
+    const certificationArrayOut = certificationArray.map((certification) => {
+      return {
+        ...certification,
+        entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+        formData: JSON.stringify(certification),
+        formId: parseInt(formNameId["Candidate_certification"]),
       };
     });
 
@@ -325,10 +351,14 @@ const useImportCandidate = () => {
         entity: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
         newData: educationDetailsArrayOut,
       },
+      {
+        entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+        newData: certificationArrayOut,
+      }
     ];
 
     dispatch(
-      importCandidateAction({ candidateRequestArray, navidate: navigate })
+      importCandidateAction({ candidateRequestArray, navigate: navigate })
     );
 
     //   dispatch(

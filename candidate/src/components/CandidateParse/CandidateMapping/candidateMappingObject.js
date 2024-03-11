@@ -18,6 +18,7 @@
 export const candidateParseFields = [
   {
     label: "Basic Info",
+    // value: "basicInfo__firstName", => basicInfo[key] of the candidateMapping and firstName is the Key within the value
     options: [
       { label: "First Name", value: "basicInfo__firstName" },
       { label: "Last Name", value: "basicInfo__lastName" },
@@ -61,10 +62,19 @@ export const candidateParseFields = [
       { label: "End Date", value: "educationDetails__endDate" },
       { label: "Description", value: "educationDetails__description" },
       {
-        label: "Qualification", value: "educationDetails__qualification",
+        label: "Qualification",
+        value: "educationDetails__qualification",
       },
       { label: "Grade", value: "educationDetails__grade" },
-      {label: "Activities", value: "educationDetails__activities" },
+      { label: "Activities", value: "educationDetails__activities" },
     ],
-  }
+  },
+  {
+    label: "Certifications",
+    options: [
+      { label: "Certification Name", value: "certifications__name" },
+      { label: "Issuing Organization", value: "certifications__from" },
+      { label: "Date", value: "certifications__date" },
+    ],
+  },
 ];

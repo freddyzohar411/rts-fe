@@ -206,7 +206,30 @@ const candidateEducationDetailsMap = {
       }
       return "";
     },
-  }
+  },
+};
+
+const candidateCertificationsMap = {
+  name: {
+    key: "name",
+    map: "string",
+  },
+  from: {
+    key: "from",
+    map: "string",
+  },
+  date: {
+    key: "date",
+    map: "string",
+    render: (data) => {
+      if (!data) {
+        return "";
+      }
+      // Data is in mm/yyyy format
+      const [month, year] = data.split("/");
+      return getCurrentDate(new Date(year, month - 1, 1));
+    },
+  },
 };
 
 export const candidateMapping = {
@@ -214,7 +237,9 @@ export const candidateMapping = {
   workExperience: candidateWorkExperienceMap,
   languages: candidateLanguageMap,
   educationDetails: candidateEducationDetailsMap,
-};
+  certifications: candidateCertificationsMap,
+}
+;
 
 function calculateUniqueWorkMonths(periods) {
   const uniqueMonths = new Set();

@@ -8,7 +8,7 @@ import {
   BASE_CANDIDATE_EDUCATION_DETAILS,
   BASE_CERTIFICATE,
   BASE_LANGUAGES,
-  BASE_EMPLOYER_DETAILS
+  BASE_EMPLOYER_DETAILS,
 } from "./url_helper";
 
 import {
@@ -19,7 +19,7 @@ import {
   CANDIDATE_EDUCATION_DETAILS_URL,
   CANDIDATE_CERTIFICATE_URL,
   CANDIDATE_LANGUAGES_URL,
-  CANDIDATE_EMPLOYER_DETAILS_URL
+  CANDIDATE_EMPLOYER_DETAILS_URL,
 } from "@workspace/common/src/config";
 
 import { generateCandidateModuleURL, candidateModuleURL } from "./constant";
@@ -46,9 +46,13 @@ export const getFormByFormName = (formName) =>
 /**
  * Candidate
  */
-// Create a new candidate 
+// Create a new candidate
 export const createCandidate = (entity, id, data, config) =>
   api.create(`${generateCandidateModuleURL(entity, id)}/add`, data, config);
+
+// Create candidate List
+export const createCandidateList = (entity, id, data, config) =>
+  api.create(`${generateCandidateModuleURL(entity, id)}/add/list`, data, config);
 
 // Update an candidate
 export const updateCandidate = (entity, id, data, config) =>
@@ -82,13 +86,17 @@ export const GET_DOCUMENT_BY_ENTITY_URL = (entityType, entityId) =>
 
 // Candidate work experience
 export const CANDIDATE_WORK_EXPERIENCE_BASE_URL = `${CANDIDATE_WORK_EXPERIENCE_URL}${BASE_CANDIDATE_WORK_EXPERIENCE}`;
-export const GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL = (entityType, entityId) =>
-  `${CANDIDATE_WORK_EXPERIENCE_BASE_URL}/entity/${entityType}/${entityId}`;
+export const GET_CANDIDATE_WORK_EXPERIENCE_BY_ENTITY_URL = (
+  entityType,
+  entityId
+) => `${CANDIDATE_WORK_EXPERIENCE_BASE_URL}/entity/${entityType}/${entityId}`;
 
 // Candidate education details
 export const CANDIDATE_EDUCATION_DETAILS_BASE_URL = `${CANDIDATE_EDUCATION_DETAILS_URL}${BASE_CANDIDATE_EDUCATION_DETAILS}`;
-export const GET_CANDIDATE_EDUCATION_DETAILS_BY_ENTITY_URL = (entityType, entityId) =>
-  `${CANDIDATE_EDUCATION_DETAILS_BASE_URL}/entity/${entityType}/${entityId}`;
+export const GET_CANDIDATE_EDUCATION_DETAILS_BY_ENTITY_URL = (
+  entityType,
+  entityId
+) => `${CANDIDATE_EDUCATION_DETAILS_BASE_URL}/entity/${entityType}/${entityId}`;
 
 // Candidate certificate
 export const CANDIDATE_CERTIFICATE_BASE_URL = `${CANDIDATE_CERTIFICATE_URL}${BASE_CERTIFICATE}`;
@@ -102,8 +110,10 @@ export const GET_CANDIDATE_LANGUAGES_BY_ENTITY_URL = (entityType, entityId) =>
 
 // Candidate employer details
 export const CANDIDATE_EMPLOYER_DETAILS_BASE_URL = `${CANDIDATE_EMPLOYER_DETAILS_URL}${BASE_EMPLOYER_DETAILS}`;
-export const GET_CANDIDATE_EMPLOYER_DETAILS_BY_ENTITY_URL = (entityType, entityId) =>
-  `${CANDIDATE_EMPLOYER_DETAILS_BASE_URL}/entity/${entityType}/${entityId}`;
+export const GET_CANDIDATE_EMPLOYER_DETAILS_BY_ENTITY_URL = (
+  entityType,
+  entityId
+) => `${CANDIDATE_EMPLOYER_DETAILS_BASE_URL}/entity/${entityType}/${entityId}`;
 
 // Get candidate data by Id
 export const getCandidateDataById = (id) =>
@@ -113,7 +123,7 @@ export const getCandidateDataById = (id) =>
 export const getCandidateFieldAll = () =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/fields/all`);
 
-    // Admin
+// Admin
 // Get candidates
 export const getCandidatesAdmin = (data) =>
-api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/all`, data);
+  api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/all`, data);
