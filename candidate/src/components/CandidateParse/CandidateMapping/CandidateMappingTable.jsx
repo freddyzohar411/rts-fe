@@ -21,7 +21,7 @@ import { SelectElement } from "@workspace/common";
 import { candidateParseFields } from "./candidateMappingObject";
 import { toast } from "react-toastify";
 
-const CandidateMappingTable = ({setCandidateMappingData}) => {
+const CandidateMappingTable = ({ setCandidateMappingData }) => {
   const [candidateFormFieldsData, setCandidateFormFieldsData] = useState(null);
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(null);
@@ -127,35 +127,41 @@ const CandidateMappingTable = ({setCandidateMappingData}) => {
       sort: false,
       render: (data) => {
         return (
-          <SelectElement
-            optionsData={candidateParseFields}
-            value={getLabelValueFromArray(
-              candidateParseFields,
-              mappingData?.[data?.category]?.[data?.value]
-            )}
-            setSelectedOptionData={(selectedOptions) => {
-              if (selectedOptions) {
-                setMappingData((prev) => {
-                  return {
-                    ...prev,
-                    [data?.category]: {
-                      ...prev?.[data?.category],
-                      [data?.value]: selectedOptions["value"],
-                    },
-                  };
-                });
-              } else {
-                setMappingData((prev) => {
-                  delete prev[data?.category][data?.value];
-                  const newObj = deletedNestedObjectIfEmpty(prev);
-                  return {
-                    ...newObj,
-                  };
-                });
-              }
-            }}
-            disabled={false}
-          />
+          <div>
+            <SelectElement
+              optionsData={candidateParseFields}
+              value={getLabelValueFromArray(
+                candidateParseFields,
+                mappingData?.[data?.category]?.[data?.value]
+              )}
+              setSelectedOptionData={(selectedOptions) => {
+                if (selectedOptions) {
+                  setMappingData((prev) => {
+                    return {
+                      ...prev,
+                      [data?.category]: {
+                        ...prev?.[data?.category],
+                        [data?.value]: selectedOptions["value"],
+                      },
+                    };
+                  });
+                } else {
+                  setMappingData((prev) => {
+                    delete prev[data?.category][data?.value];
+                    const newObj = deletedNestedObjectIfEmpty(prev);
+                    return {
+                      ...newObj,
+                    };
+                  });
+                }
+              }}
+              disabled={false}
+            />
+            {/* <span>{getLabelValueFromArray(
+                candidateParseFields,
+                mappingData?.[data?.category]?.[data?.value]
+              ) && `Done`}</span> */}
+          </div>
         );
       },
     },
@@ -211,7 +217,9 @@ const CandidateMappingTable = ({setCandidateMappingData}) => {
                 ) : (
                   <i className="ri-arrow-down-s-line"></i>
                 )}
-                <span>{convertCamelCaseToNormal(category)}</span>
+                <span>{`${convertCamelCaseToNormal(
+                  category
+                )}  (${countMappingData(mappingData, category)})`}</span>
               </div>
             </td>
           </tr>
@@ -253,6 +261,11 @@ const CandidateMappingTable = ({setCandidateMappingData}) => {
       });
   };
 
+  const countMappingData = (mappingData, category) => {
+    return mappingData?.[category]
+      ? Object.keys(mappingData[category]).length
+      : 0;
+  };
 
   return (
     <Container fluid>

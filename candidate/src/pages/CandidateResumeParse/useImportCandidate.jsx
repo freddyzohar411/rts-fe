@@ -186,6 +186,7 @@ const useImportCandidate = () => {
   function importCandidate(candidateData) {
     console.log("Candidate Data", candidateData);
 
+    // Get candidate basic info 
     const candidateBasicInfo = mapResumeDataToFormData(
       candidateData,
       candidateMappingData?.basicInfo,
@@ -203,7 +204,7 @@ const useImportCandidate = () => {
       candidateBasicInfoOut
     );
 
-    // Start here------
+    // Get work experience object array
     const workExperienceArray = [];
     candidateData.companiesDetails.forEach((company) => {
       const workExperience = mapResumeDataToFormData(
@@ -224,12 +225,10 @@ const useImportCandidate = () => {
       };
     });
 
-    const workExperienceFormDataArray = workExperienceArrayOut.map(
-      (workExperience) => ObjectHelper.convertObjectToFormData(workExperience)
-    );
-
     console.log("Work experience", workExperienceArrayOut);
 
+
+    // Consolidate the request array
     const candidateRequestArray = [
       {
         entity: CandidateEntityConstant.CANDIDATE_BASIC_INFO,
