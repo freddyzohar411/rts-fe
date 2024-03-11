@@ -228,7 +228,9 @@ const useImportCandidate = () => {
         candidateMappingData?.workExperiences,
         candidateMapping
       );
-      workExperienceArray.push(workExperience);
+      if (workExperience) {
+        workExperienceArray.push(workExperience);
+      }
     });
 
     const workExperienceArrayOut = workExperienceArray.map((workExperience) => {
@@ -244,7 +246,7 @@ const useImportCandidate = () => {
     // console.log("Work experience", workExperienceArrayOut);
 
     // Get Language object
-    const lanagaugesArray = [];
+    const languagesArray = [];
     console.log(
       "candidateData?.spokenLanguages",
       candidateData?.spokenLanguages
@@ -255,12 +257,14 @@ const useImportCandidate = () => {
         candidateMappingData?.languages,
         candidateMapping
       );
-      lanagaugesArray.push(languageData);
+      if (languageData) {
+        languagesArray.push(languageData);
+      }
     });
 
-    console.log("lanagaugesArray", lanagaugesArray);
+    console.log("lanagaugesArray", languagesArray);
 
-    const languageArrayOut = lanagaugesArray.map((language) => {
+    const languageArrayOut = languagesArray.map((language) => {
       return {
         ...language,
         entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,

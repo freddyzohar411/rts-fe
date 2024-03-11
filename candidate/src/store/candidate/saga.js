@@ -245,6 +245,7 @@ function* workImportCandidate(action) {
     console.log("Languages Data", candidateData[2].newData)
     for (const language of candidateData[2].newData) {
       const languageFormData = {
+        formData:"",
         ...language,
         entityId: candidateId,
       };
