@@ -78,3 +78,9 @@ export const candidateParseFields = [
     ],
   },
 ];
+
+export function candidateParseFieldsFilter(includeArray = []) {
+  return candidateParseFields.filter(
+    (field) => includeArray.includes(field.label)
+  );
+}

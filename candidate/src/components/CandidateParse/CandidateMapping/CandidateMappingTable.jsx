@@ -18,7 +18,10 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import { SelectElement } from "@workspace/common";
-import { candidateParseFields } from "./candidateMappingObject";
+import {
+  candidateParseFields,
+  candidateParseFieldsFilter,
+} from "./candidateMappingObject";
 import { toast } from "react-toastify";
 
 const CandidateMappingTable = ({ setCandidateMappingData }) => {
@@ -29,19 +32,45 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [mappingData, setMappingData] = useState(null);
 
+  // ===================== User Setting ======================
+  console.log("candidateFormFieldsData", candidateFormFieldsData);
+  const exlcudeDynamicFields = [
+    { category: "educationDetails", value: "educationList" },
+    { category: "educationDetails", value: "educationDetailsList" },
+    { category: "educationDetails", value: "description" },
+  ];
+  // =========================================================
+
   // Fetch data For dynamic form fields
   useEffect(() => {
     // Fetch data
     axios
       .get("http://localhost:8050/api/candidates/fields/all")
       .then((res) => {
-        setCandidateFormFieldsData(convertObjToArray(res.data));
+        setCandidateFormFieldsData(
+          convertObjectToArrayFilter(res.data, exlcudeDynamicFields)
+        );
         setCategories(getKeysArrayFromObj(res.data));
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+
+
+  const convertObjectToArrayFilter = (obj, exlcude = []) => {
+    const data = convertObjToArray(obj);
+    // Filter data based on label and exlude array
+    return data.filter((item) => {
+      return !exlcude.some((excludeItem) => {
+        return (
+          excludeItem.category === item.category &&
+          excludeItem.value === item.value
+        );
+      });
+    });
+  };
 
   // Fetch data for mapping
   useEffect(() => {
@@ -125,11 +154,13 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
       label: "Parse Field Name",
       value: "name",
       sort: false,
-      render: (data) => {
+      render: (data, i, category) => {
         return (
           <div>
             <SelectElement
-              optionsData={candidateParseFields}
+              optionsData={candidateParseFieldsFilter([
+                convertCamelCaseToNormal(category),
+              ])}
               value={getLabelValueFromArray(
                 candidateParseFields,
                 mappingData?.[data?.category]?.[data?.value]
@@ -230,7 +261,7 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
                   <tr key={rowData.formId}>
                     {config.map((option) => (
                       <td key={option.name} style={{ verticalAlign: "middle" }}>
-                        {option.render(rowData, i)}
+                        {option.render(rowData, i, category)}
                       </td>
                     ))}
                   </tr>
