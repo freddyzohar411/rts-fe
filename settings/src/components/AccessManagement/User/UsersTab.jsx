@@ -199,7 +199,6 @@ function UsersTab() {
                       </td>
 
                       <td>{DateHelper.formatDateStandard2(user.createdAt)}</td>
-                      {/* <td>11/01/2023</td> */}
                       <td>
                         {user?.enabled ? (
                           <Badge color="success">Active</Badge>
@@ -209,6 +208,12 @@ function UsersTab() {
                       </td>
                       <td>
                         <div className="d-flex flex-start gap-2">
+                          <Button className="btn btn-custom-primary  px-2 py-1">
+                            <i
+                              className="mdi mdi-content-copy"
+                              style={{ fontSize: "0.65rem" }}
+                            ></i>
+                          </Button>
                           <Link to={`/settings/access/user/${user.id}`}>
                             <Button className="btn btn-custom-primary px-2 py-1">
                               <i

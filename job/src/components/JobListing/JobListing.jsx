@@ -388,6 +388,9 @@ const JobListing = () => {
                 <i className="ri-parent-fill"></i>
               </Button>
             )}
+            <Button className="btn btn-custom-primary table-btn">
+              <i className="mdi mdi-content-copy"></i>
+            </Button>
 
             <Link
               to={`/jobs/${data.id}/snapshot`}
