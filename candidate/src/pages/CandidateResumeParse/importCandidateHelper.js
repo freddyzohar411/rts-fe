@@ -105,8 +105,8 @@ export const candidateWorkExperienceMap = {
       }
       // Data is in mm/yyyy format
       const [month, year] = data.split("/");
-      return getCurrentDate(new Date(year, month - 1, 1))
-    }
+      return getCurrentDate(new Date(year, month - 1, 1));
+    },
   },
   endDate: {
     key: "endDate",
@@ -117,8 +117,8 @@ export const candidateWorkExperienceMap = {
       }
       // Data is in mm/yyyy format
       const [month, year] = data.split("/");
-      return getCurrentDate(new Date(year, month - 1, 1))
-    }
+      return getCurrentDate(new Date(year, month - 1, 1));
+    },
   },
   industry: {
     key: "industry",
@@ -132,27 +132,89 @@ export const candidateWorkExperienceMap = {
         return data.join(". ");
       }
       return "";
-    }
+    },
   },
 };
 
 export const candidateLanguageMap = {
   languages: {
     key: "languages",
-    map:"none",
+    map: "none",
     render: (data) => {
-      return capitalizeFirstLetter(data)
-    }
-  }
-}
+      return capitalizeFirstLetter(data);
+    },
+  },
+};
 
+const candidateEducationDetailsMap = {
+  name: {
+    key: "name",
+    map: "string",
+  },
+  fieldOfStudy: {
+    key: "fieldOfStudy",
+    map: "string",
+  },
+  startDate: {
+    key: "startDate",
+    map: "string",
+    render: (data) => {
+      if (!data) {
+        return "";
+      }
+      // Data is in mm/yyyy format
+      const [month, year] = data.split("/");
+      return getCurrentDate(new Date(year, month - 1, 1));
+    },
+  },
+  endDate: {
+    key: "endDate",
+    map: "string",
+    render: (data) => {
+      if (!data) {
+        return "";
+      }
+      // Data is in mm/yyyy format
+      const [month, year] = data.split("/");
+      return getCurrentDate(new Date(year, month - 1, 1));
+    },
+  },
+  grade: {
+    key: "grade",
+    map: "string",
+  },
+  qualification: {
+    key: "qualification",
+    map: "string",
+  },
+  description: {
+    key: "description",
+    map: "string",
+    render: (data) => {
+      if (data?.length > 0) {
+        return data.join(". ");
+      }
+      return "";
+    },
+  },
+  activities: {
+    key: "activities",
+    map: "string",
+    render: (data) => {
+      if (data?.length > 0) {
+        return data.join(". ");
+      }
+      return "";
+    },
+  }
+};
 
 export const candidateMapping = {
   basicInfo: candidateBasicInfoMap,
   workExperience: candidateWorkExperienceMap,
-  languages: candidateLanguageMap
+  languages: candidateLanguageMap,
+  educationDetails: candidateEducationDetailsMap,
 };
-
 
 function calculateUniqueWorkMonths(periods) {
   const uniqueMonths = new Set();
@@ -181,9 +243,7 @@ function calculateUniqueWorkMonths(periods) {
 function getCurrentDate() {
   const today = new Date();
   const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0'); // JavaScript months are 0-based.
-  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // JavaScript months are 0-based.
+  const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
-
-

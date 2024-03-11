@@ -273,6 +273,30 @@ const useImportCandidate = () => {
       };
     });
 
+    // Education Details
+    const educationDetailsArray = [];
+    candidateData?.educationDetails.forEach((education) => {
+      const educationData = mapResumeDataToFormData(
+        education,
+        candidateMappingData?.educationDetails,
+        candidateMapping
+      );
+      if (educationData) {
+        educationDetailsArray.push(educationData);
+      }
+    });
+
+    console.log("educationDetailsArray", educationDetailsArray);
+
+    const educationDetailsArrayOut = educationDetailsArray.map((education) => {
+      return {
+        ...education,
+        entityType: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+        formData: JSON.stringify(education),
+        formId: parseInt(formNameId["Candidate_education_details"]),
+      };
+    });
+
     // Consolidate the request array
     const candidateRequestArray = [
       {
@@ -296,6 +320,10 @@ const useImportCandidate = () => {
       {
         entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
         newData: languageArrayOut,
+      },
+      {
+        entity: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+        newData: educationDetailsArrayOut,
       },
     ];
 

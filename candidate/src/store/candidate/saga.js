@@ -242,10 +242,10 @@ function* workImportCandidate(action) {
 
   // Languages
   if (candidateId) {
-    console.log("Languages Data", candidateData[2].newData)
+    console.log("Languages Data", candidateData[2].newData);
     for (const language of candidateData[2].newData) {
       const languageFormData = {
-        formData:"",
+        formData: "",
         ...language,
         entityId: candidateId,
       };
@@ -262,8 +262,29 @@ function* workImportCandidate(action) {
         console.log("Error creating candidate", error);
       }
     }
+  }
 
-
+  // Education
+  if (candidateId) {
+    for (const education of candidateData[3].newData) {
+      const educationFormData = {
+        formData: "",
+        ...education,
+        entityId: candidateId,
+      };
+      try {
+        const response = yield call(
+          createCandidate,
+          candidateData[3].entity,
+          null,
+          educationFormData,
+          candidateData[3].config
+        );
+      } catch (error) {
+        toast.error("Error creating candidate");
+        console.log("Error creating candidate", error);
+      }
+    }
   }
 
   // if (candidateId) {

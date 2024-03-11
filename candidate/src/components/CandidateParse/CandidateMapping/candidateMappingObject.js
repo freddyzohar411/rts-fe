@@ -52,4 +52,19 @@ export const candidateParseFields = [
     label: "Languages",
     options: [{ label: "Languages", value: "languages__languages" }],
   },
+  {
+    label: "Education Details",
+    options: [
+      { label: "Institute Name", value: "educationDetails__name" },
+      { label: "Field of Study", value: "educationDetails__fieldOfStudy" },
+      { label: "Start Date", value: "educationDetails__startDate" },
+      { label: "End Date", value: "educationDetails__endDate" },
+      { label: "Description", value: "educationDetails__description" },
+      {
+        label: "Qualification", value: "educationDetails__qualification",
+      },
+      { label: "Grade", value: "educationDetails__grade" },
+      {label: "Activities", value: "educationDetails__activities" },
+    ],
+  }
 ];
