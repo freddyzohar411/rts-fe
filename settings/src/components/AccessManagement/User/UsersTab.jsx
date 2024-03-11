@@ -91,7 +91,7 @@ function UsersTab() {
   return (
     <div>
       <Row className="d-flex flex-row align-items-center">
-        <Col>
+        <Col lg={10}>
           <div className="search-box my-2">
             <Input
               type="text"
@@ -103,6 +103,13 @@ function UsersTab() {
             <i className="ri-search-line search-icon"></i>
           </div>
           <div className="table-responsive"></div>
+        </Col>
+        <Col lg={2}>
+          <Input type="select" className="form-select">
+            <option value="active">Active Users</option>
+            <option value="inactive">Inactive Users</option>
+            <option value="active">Deleted Users</option>
+          </Input>
         </Col>
       </Row>
       <Row className="mb-1">
@@ -148,8 +155,6 @@ function UsersTab() {
                       }}
                     ></i>
                   </th>
-                  {/* <th scope="col">Last Login</th> */}
-
                   <th scope="col" style={{ width: "30px" }}>
                     Status
                   </th>
