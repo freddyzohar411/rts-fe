@@ -51,6 +51,7 @@ import {
   UpdateRole,
   UpdateUser,
   CustomisationNew,
+  ImportUsers,
 } from "@workspace/settings";
 
 // Form Builder
@@ -168,6 +169,7 @@ const authProtectedRoutes = [
   { path: "/settings/access/user/:userId", component: <UserDetails /> },
   { path: "/settings/access/user/user-creation", component: <CreateUser /> },
   { path: "/settings/access/user/update/:userId", component: <UpdateUser /> },
+  { path: "/settings/access/user/import-users", component: <ImportUsers />},
 
   // Template in Settings
   { path: "/settings/templates", component: <TemplateListingPage /> },
