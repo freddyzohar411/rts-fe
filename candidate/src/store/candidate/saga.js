@@ -366,7 +366,6 @@ function* workImportCandidate(action) {
   let candidateId = null;
   
   // Set Basic Info
-  console.log("Candidate Data [0]", candidateData[0]);
   try {
     const response = yield call(
       createCandidate,

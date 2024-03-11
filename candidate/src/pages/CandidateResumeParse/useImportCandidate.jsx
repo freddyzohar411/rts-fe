@@ -199,167 +199,353 @@ const useImportCandidate = () => {
     return dataOut;
   }
 
-  function importCandidate(candidateData) {
-    console.log("Candidate Data", candidateData);
-    console.log("candidateMappingData", candidateMappingData);
-
-    // Get candidate basic info
-    const candidateBasicInfo = mapResumeDataToFormData(
-      candidateData,
-      candidateMappingData?.basicInfo,
-      candidateMapping
-    );
-
-    const candidateBasicInfoOut = {
-      ...candidateBasicInfo,
-      formData: JSON.stringify(candidateBasicInfo),
-      formId: parseInt(formNameId["Candidate_basic_info"]),
-    };
-
-    // console.log("candidateBasicInfoOut", candidateBasicInfoOut);
-    const candidateBasicInfoOutFormData = ObjectHelper.convertObjectToFormData(
-      candidateBasicInfoOut
-    );
-
-    // Get work experience object array
-    const workExperienceArray = [];
-    candidateData.companiesDetails.forEach((company) => {
-      const workExperience = mapResumeDataToFormData(
-        company,
-        candidateMappingData?.workExperiences,
+  function convertCandidateDataToRequestArray(candidatesData) {
+    if (!candidatesData) return;
+    if (candidatesData.length === 0) return;
+    const candidateRequestArrayAll = [];
+    candidatesData.forEach((candidateData) => {
+      const candidateBasicInfo = mapResumeDataToFormData(
+        candidateData,
+        candidateMappingData?.basicInfo,
         candidateMapping
       );
-      if (workExperience) {
-        workExperienceArray.push(workExperience);
-      }
-    });
 
-    const workExperienceArrayOut = workExperienceArray.map((workExperience) => {
-      const workExperienceFormSubmit = { ...workExperience, multiFiles: "" };
-      return {
-        ...workExperience,
-        entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-        formData: JSON.stringify(workExperienceFormSubmit),
-        formId: parseInt(formNameId["Candidate_work_experience"]),
+      const candidateBasicInfoOut = {
+        ...candidateBasicInfo,
+        formData: JSON.stringify(candidateBasicInfo),
+        formId: parseInt(formNameId["Candidate_basic_info"]),
       };
-    });
 
-    console.log("Work experience", workExperienceArrayOut);
+      // console.log("candidateBasicInfoOut", candidateBasicInfoOut);
+      const candidateBasicInfoOutFormData =
+        ObjectHelper.convertObjectToFormData(candidateBasicInfoOut);
 
-    // Get Language object
-    const languagesArray = [];
-    console.log(
-      "candidateData?.spokenLanguages",
-      candidateData?.spokenLanguages
-    );
-    candidateData?.spokenLanguages.forEach((language) => {
-      const languageData = mapResumeDataToFormData(
-        language,
-        candidateMappingData?.languages,
-        candidateMapping
+      // Get work experience object array
+      const workExperienceArray = [];
+      candidateData.companiesDetails.forEach((company) => {
+        const workExperience = mapResumeDataToFormData(
+          company,
+          candidateMappingData?.workExperiences,
+          candidateMapping
+        );
+        if (workExperience) {
+          workExperienceArray.push(workExperience);
+        }
+      });
+
+      const workExperienceArrayOut = workExperienceArray.map(
+        (workExperience) => {
+          const workExperienceFormSubmit = {
+            ...workExperience,
+            multiFiles: "",
+          };
+          return {
+            ...workExperience,
+            entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+            formData: JSON.stringify(workExperienceFormSubmit),
+            formId: parseInt(formNameId["Candidate_work_experience"]),
+          };
+        }
       );
-      if (languageData) {
-        languagesArray.push(languageData);
-      }
-    });
 
-    // console.log("lanagaugesArray", languagesArray);
+      console.log("Work experience", workExperienceArrayOut);
 
-    const languageArrayOut = languagesArray.map((language) => {
-      return {
-        ...language,
-        entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-        formData: JSON.stringify(language),
-        formId: parseInt(formNameId["Candidate_languages"]),
-      };
-    });
-
-    // Education Details
-    const educationDetailsArray = [];
-    candidateData?.educationDetails.forEach((education) => {
-      const educationData = mapResumeDataToFormData(
-        education,
-        candidateMappingData?.educationDetails,
-        candidateMapping
+      // Get Language object
+      const languagesArray = [];
+      console.log(
+        "candidateData?.spokenLanguages",
+        candidateData?.spokenLanguages
       );
-      if (educationData) {
-        educationDetailsArray.push(educationData);
-      }
-    });
+      candidateData?.spokenLanguages.forEach((language) => {
+        const languageData = mapResumeDataToFormData(
+          language,
+          candidateMappingData?.languages,
+          candidateMapping
+        );
+        if (languageData) {
+          languagesArray.push(languageData);
+        }
+      });
 
-    // console.log("educationDetailsArray", educationDetailsArray);
+      // console.log("lanagaugesArray", languagesArray);
 
-    const educationDetailsArrayOut = educationDetailsArray.map((education) => {
-      return {
-        ...education,
-        entityType: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
-        formData: JSON.stringify(education),
-        formId: parseInt(formNameId["Candidate_education_details"]),
-      };
-    });
+      const languageArrayOut = languagesArray.map((language) => {
+        return {
+          ...language,
+          entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+          formData: JSON.stringify(language),
+          formId: parseInt(formNameId["Candidate_languages"]),
+        };
+      });
 
-    // Certification
-    const certificationArray = [];
-    console.log("candidateData?.certifications", candidateData?.certifications);
-    candidateData?.certifications.forEach((certification) => {
-      const certificationData = mapResumeDataToFormData(
-        certification,
-        candidateMappingData?.certification,
-        candidateMapping
+      // Education Details
+      const educationDetailsArray = [];
+      candidateData?.educationDetails.forEach((education) => {
+        const educationData = mapResumeDataToFormData(
+          education,
+          candidateMappingData?.educationDetails,
+          candidateMapping
+        );
+        if (educationData) {
+          educationDetailsArray.push(educationData);
+        }
+      });
+
+      // console.log("educationDetailsArray", educationDetailsArray);
+
+      const educationDetailsArrayOut = educationDetailsArray.map(
+        (education) => {
+          return {
+            ...education,
+            entityType: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+            formData: JSON.stringify(education),
+            formId: parseInt(formNameId["Candidate_education_details"]),
+          };
+        }
       );
-      if (certificationData) {
-        certificationArray.push(certificationData);
-      }
-    });
 
-    // console.log("certificationArray", certificationArray);
+      // Certification
+      const certificationArray = [];
+      console.log(
+        "candidateData?.certifications",
+        candidateData?.certifications
+      );
+      candidateData?.certifications.forEach((certification) => {
+        const certificationData = mapResumeDataToFormData(
+          certification,
+          candidateMappingData?.certification,
+          candidateMapping
+        );
+        if (certificationData) {
+          certificationArray.push(certificationData);
+        }
+      });
 
-    const certificationArrayOut = certificationArray.map((certification) => {
-      return {
-        ...certification,
-        entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
-        formData: JSON.stringify(certification),
-        formId: parseInt(formNameId["Candidate_certification"]),
-      };
-    });
+      // console.log("certificationArray", certificationArray);
 
-    // Consolidate the request array
-    const candidateRequestArray = [
-      {
-        entity: CandidateEntityConstant.CANDIDATE_BASIC_INFO,
-        newData: candidateBasicInfoOutFormData,
-        config: {
-          headers: {
-            "Content-Type": "multipart/form-data",
+      const certificationArrayOut = certificationArray.map((certification) => {
+        return {
+          ...certification,
+          entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+          formData: JSON.stringify(certification),
+          formId: parseInt(formNameId["Candidate_certification"]),
+        };
+      });
+
+      // Consolidate the request array
+      const candidateRequestArray = [
+        {
+          entity: CandidateEntityConstant.CANDIDATE_BASIC_INFO,
+          newData: candidateBasicInfoOutFormData,
+          config: {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           },
         },
-      },
-      {
-        entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
-        newData: workExperienceArrayOut,
-        config: {
-          headers: {
-            "Content-Type": "multipart/form-data",
+        {
+          entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+          newData: workExperienceArrayOut,
+          config: {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           },
         },
-      },
-      {
-        entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
-        newData: languageArrayOut,
-      },
-      {
-        entity: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
-        newData: educationDetailsArrayOut,
-      },
-      {
-        entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
-        newData: certificationArrayOut,
-      }
-    ];
+        {
+          entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+          newData: languageArrayOut,
+        },
+        {
+          entity: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+          newData: educationDetailsArrayOut,
+        },
+        {
+          entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+          newData: certificationArrayOut,
+        },
+      ];
 
-    dispatch(
-      importCandidateAction({ candidateRequestArray, navigate: navigate })
-    );
+      candidateRequestArrayAll.push(candidateRequestArray);
+    });
+
+    return candidateRequestArrayAll;
+  }
+
+  function importCandidate(candidatesData) {
+    // console.log("Candidate Data", candidateData);
+    // console.log("candidateMappingData", candidateMappingData);
+    const candidateRequestArrayAll =
+      convertCandidateDataToRequestArray(candidatesData);
+
+    // // Get candidate basic info
+    // const candidateBasicInfo = mapResumeDataToFormData(
+    //   candidateData,
+    //   candidateMappingData?.basicInfo,
+    //   candidateMapping
+    // );
+
+    // const candidateBasicInfoOut = {
+    //   ...candidateBasicInfo,
+    //   formData: JSON.stringify(candidateBasicInfo),
+    //   formId: parseInt(formNameId["Candidate_basic_info"]),
+    // };
+
+    // // console.log("candidateBasicInfoOut", candidateBasicInfoOut);
+    // const candidateBasicInfoOutFormData = ObjectHelper.convertObjectToFormData(
+    //   candidateBasicInfoOut
+    // );
+
+    // // Get work experience object array
+    // const workExperienceArray = [];
+    // candidateData.companiesDetails.forEach((company) => {
+    //   const workExperience = mapResumeDataToFormData(
+    //     company,
+    //     candidateMappingData?.workExperiences,
+    //     candidateMapping
+    //   );
+    //   if (workExperience) {
+    //     workExperienceArray.push(workExperience);
+    //   }
+    // });
+
+    // const workExperienceArrayOut = workExperienceArray.map((workExperience) => {
+    //   const workExperienceFormSubmit = { ...workExperience, multiFiles: "" };
+    //   return {
+    //     ...workExperience,
+    //     entityType: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+    //     formData: JSON.stringify(workExperienceFormSubmit),
+    //     formId: parseInt(formNameId["Candidate_work_experience"]),
+    //   };
+    // });
+
+    // console.log("Work experience", workExperienceArrayOut);
+
+    // // Get Language object
+    // const languagesArray = [];
+    // console.log(
+    //   "candidateData?.spokenLanguages",
+    //   candidateData?.spokenLanguages
+    // );
+    // candidateData?.spokenLanguages.forEach((language) => {
+    //   const languageData = mapResumeDataToFormData(
+    //     language,
+    //     candidateMappingData?.languages,
+    //     candidateMapping
+    //   );
+    //   if (languageData) {
+    //     languagesArray.push(languageData);
+    //   }
+    // });
+
+    // // console.log("lanagaugesArray", languagesArray);
+
+    // const languageArrayOut = languagesArray.map((language) => {
+    //   return {
+    //     ...language,
+    //     entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+    //     formData: JSON.stringify(language),
+    //     formId: parseInt(formNameId["Candidate_languages"]),
+    //   };
+    // });
+
+    // // Education Details
+    // const educationDetailsArray = [];
+    // candidateData?.educationDetails.forEach((education) => {
+    //   const educationData = mapResumeDataToFormData(
+    //     education,
+    //     candidateMappingData?.educationDetails,
+    //     candidateMapping
+    //   );
+    //   if (educationData) {
+    //     educationDetailsArray.push(educationData);
+    //   }
+    // });
+
+    // // console.log("educationDetailsArray", educationDetailsArray);
+
+    // const educationDetailsArrayOut = educationDetailsArray.map((education) => {
+    //   return {
+    //     ...education,
+    //     entityType: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+    //     formData: JSON.stringify(education),
+    //     formId: parseInt(formNameId["Candidate_education_details"]),
+    //   };
+    // });
+
+    // // Certification
+    // const certificationArray = [];
+    // console.log("candidateData?.certifications", candidateData?.certifications);
+    // candidateData?.certifications.forEach((certification) => {
+    //   const certificationData = mapResumeDataToFormData(
+    //     certification,
+    //     candidateMappingData?.certification,
+    //     candidateMapping
+    //   );
+    //   if (certificationData) {
+    //     certificationArray.push(certificationData);
+    //   }
+    // });
+
+    // // console.log("certificationArray", certificationArray);
+
+    // const certificationArrayOut = certificationArray.map((certification) => {
+    //   return {
+    //     ...certification,
+    //     entityType: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+    //     formData: JSON.stringify(certification),
+    //     formId: parseInt(formNameId["Candidate_certification"]),
+    //   };
+    // });
+
+    // // Consolidate the request array
+    // const candidateRequestArray = [
+    //   {
+    //     entity: CandidateEntityConstant.CANDIDATE_BASIC_INFO,
+    //     newData: candidateBasicInfoOutFormData,
+    //     config: {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     },
+    //   },
+    //   {
+    //     entity: CandidateEntityConstant.CANDIDATE_WORK_EXPERIENCE,
+    //     newData: workExperienceArrayOut,
+    //     config: {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     },
+    //   },
+    //   {
+    //     entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+    //     newData: languageArrayOut,
+    //   },
+    //   {
+    //     entity: CandidateEntityConstant.CANDIDATE_EDUCATION_DETAILS,
+    //     newData: educationDetailsArrayOut,
+    //   },
+    //   {
+    //     entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
+    //     newData: certificationArrayOut,
+    //   },
+    // ];
+
+    if (candidateRequestArrayAll.length === 0) return;
+
+    if (candidateRequestArrayAll.length === 1) {
+      dispatch(
+        importCandidateAction({
+          candidateRequestArray: candidateRequestArrayAll[0],
+          navigate: navigate,
+        })
+      );
+    }
+
+    // dispatch(
+    //   importCandidateAction({ candidateRequestArray, navigate: navigate })
+    // );
 
     //   dispatch(
     //     postCandidate({

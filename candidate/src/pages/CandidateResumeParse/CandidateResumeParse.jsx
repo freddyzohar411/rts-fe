@@ -52,6 +52,8 @@ const CandidateResumeParse = () => {
   });
   const [prevTab, setPrevTab] = useState(null);
 
+  console.log("parseData", parseData);
+
   const { importCandidate, setCandidateMappingData } = useImportCandidate();
 
   const handleInputChange = (inputValue) => {
@@ -519,7 +521,7 @@ const CandidateResumeParse = () => {
                           <Button
                             type="button"
                             className="btn btn-custom-primary"
-                            onClick={() => importCandidate(parseData[0])}
+                            onClick={() => importCandidate(parseData)}
                           >
                             Import Candidates
                           </Button>
