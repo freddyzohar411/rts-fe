@@ -50,7 +50,7 @@ const JobListing = () => {
   const [namesData, setNamesData] = useState([]);
   const [activeJob, setActiveJob] = useState([]);
   const [selectedRecruiter, setSelectedRecruiter] = useState([]);
-  const [gridView, setGridView] = useState(jobType ?? "new_job");
+  const [gridView, setGridView] = useState(jobType ?? "");
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -233,7 +233,10 @@ const JobListing = () => {
               className="form-check-input"
               type="checkbox"
               id="checkbox"
-              checked={activeJob?.length === jobsData?.jobs?.length}
+              checked={
+                activeJob?.length > 0 &&
+                activeJob?.length === jobsData?.jobs?.length
+              }
               onChange={(e) => selectAllJobs(e?.target?.checked)}
             />
           </div>
@@ -278,7 +281,8 @@ const JobListing = () => {
                 toggle={() => handleFodAssignDropdown(data.id)}
               >
                 <DropdownToggle
-                  className="btn btn-sm btn-custom-primary table-btn" style={{fontSize: "0.65rem"}}
+                  className="btn btn-sm btn-custom-primary table-btn"
+                  style={{ fontSize: "0.65rem" }}
                   onClick={() => {
                     setActiveJob([data.id]);
                     setSelectedRecruiter([]);

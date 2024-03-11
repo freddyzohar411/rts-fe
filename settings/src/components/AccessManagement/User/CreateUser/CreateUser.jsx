@@ -47,27 +47,29 @@ function CreateUser() {
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   useEffect(() => {
-    if (!allUsers) return;
-    setSelectedOption([
-      {
-        options: allUsers?.map((user) => ({
-          label: `${user.firstName} (${user.mobile})`,
-          value: user.id.toString(),
-        })),
-      },
-    ]);
+    if (allUsers && allUsers?.length > 0) {
+      setSelectedOption([
+        {
+          options: allUsers?.map((user) => ({
+            label: `${user.firstName} (${user.mobile})`,
+            value: user.id.toString(),
+          })),
+        },
+      ]);
+    }
   }, [allUsers]);
 
   useEffect(() => {
-    if (!allCountries) return;
-    setSelectedCountry([
-      {
-        options: allCountries?.map((country) => ({
-          label: country.name,
-          value: country.name,
-        })),
-      },
-    ]);
+    if (allCountries && allCountries?.length > 0) {
+      setSelectedCountry([
+        {
+          options: allCountries?.map((country) => ({
+            label: country.name,
+            value: country.name,
+          })),
+        },
+      ]);
+    }
   }, [allCountries]);
 
   const handleSubmit = async (values) => {
@@ -91,11 +93,9 @@ function CreateUser() {
   };
 
   useEffect(() => {
-    // if (!allUsers) {
     dispatch(fetchUsers());
     dispatch(fetchGroups());
     dispatch(fetchCountryCurrency());
-    // }
   }, []);
 
   useEffect(() => {
@@ -143,7 +143,9 @@ function CreateUser() {
                       <CardBody>
                         <Row>
                           <div className="mb-3">
-                            <span className="h6 fw-bold">General Information</span>
+                            <span className="h6 fw-bold">
+                              General Information
+                            </span>
                           </div>
                         </Row>
                         <Row>
