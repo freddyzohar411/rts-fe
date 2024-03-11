@@ -218,6 +218,7 @@ function* workImportCandidate(action) {
 
   console.log("Candidate Data [1]", candidateData[1]);
   // Set Work Experience candidateData[1] which is an array
+  // Work experience
   if (candidateId) {
     for (const workExperience of candidateData[1].newData) {
       const workExperienceFormData = ObjectHelper.convertObjectToFormData({
@@ -237,6 +238,31 @@ function* workImportCandidate(action) {
         console.log("Error creating candidate", error);
       }
     }
+  }
+
+  // Languages
+  if (candidateId) {
+    console.log("Languages Data", candidateData[2].newData)
+    for (const language of candidateData[2].newData) {
+      const languageFormData = {
+        ...language,
+        entityId: candidateId,
+      };
+      try {
+        const response = yield call(
+          createCandidate,
+          candidateData[2].entity,
+          null,
+          languageFormData,
+          candidateData[2]?.config
+        );
+      } catch (error) {
+        toast.error("Error creating candidate");
+        console.log("Error creating candidate", error);
+      }
+    }
+
+
   }
 
   // if (candidateId) {

@@ -1,3 +1,5 @@
+import { capitalizeFirstLetter } from "@workspace/common/src/helpers/string_helper";
+
 export const candidateBasicInfoMap = {
   // Key: Dynamic form
   // Value: parseKey
@@ -134,9 +136,21 @@ export const candidateWorkExperienceMap = {
   },
 };
 
+export const candidateLanguageMap = {
+  languages: {
+    key: "languages",
+    map:"none",
+    render: (data) => {
+      return capitalizeFirstLetter(data)
+    }
+  }
+}
+
+
 export const candidateMapping = {
   basicInfo: candidateBasicInfoMap,
   workExperience: candidateWorkExperienceMap,
+  languages: candidateLanguageMap
 };
 
 
@@ -171,3 +185,5 @@ function getCurrentDate() {
   const day = String(today.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+
+

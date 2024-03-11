@@ -48,4 +48,8 @@ export const candidateParseFields = [
       { label: "Description", value: "workExperience__description" },
     ],
   },
+  {
+    label: "Languages",
+    options: [{ label: "Languages", value: "languages__languages" }],
+  },
 ];

@@ -168,10 +168,26 @@ const useImportCandidate = () => {
     )
       return;
     const dataOut = {};
+
+    console.log("resumeData", resumeData);
+    console.log("formToParseFieldMapping", formToParseFieldMapping);
+
     for (const [field, value] of Object.entries(formToParseFieldMapping)) {
-      console.log(field, value);
+      console.log("Field Value", field, value);
       const [parseKey, parseValue] = value.split("__");
-      if (parseFieldToDataMapping[parseKey][parseValue].render) {
+      console.log(
+        "parseFieldToDataMapping[parseKey][parseValue]",
+        parseFieldToDataMapping[parseKey][parseValue]
+      );
+      if (
+        parseFieldToDataMapping[parseKey][parseValue]?.map === "none" &&
+        parseFieldToDataMapping[parseKey][parseValue]?.render
+      ) {
+        console.log("None", resumeData);
+        // dataOut[field] = resumeData;
+        dataOut[field] =
+          parseFieldToDataMapping[parseKey][parseValue]?.render(resumeData);
+      } else if (parseFieldToDataMapping[parseKey][parseValue]?.render) {
         dataOut[field] = parseFieldToDataMapping[parseKey][parseValue]?.render(
           resumeData[parseFieldToDataMapping[parseKey][parseValue].key]
         );
@@ -186,7 +202,7 @@ const useImportCandidate = () => {
   function importCandidate(candidateData) {
     console.log("Candidate Data", candidateData);
 
-    // Get candidate basic info 
+    // Get candidate basic info
     const candidateBasicInfo = mapResumeDataToFormData(
       candidateData,
       candidateMappingData?.basicInfo,
@@ -199,7 +215,7 @@ const useImportCandidate = () => {
       formId: parseInt(formNameId["Candidate_basic_info"]),
     };
 
-    console.log("candidateBasicInfoOut", candidateBasicInfoOut);
+    // console.log("candidateBasicInfoOut", candidateBasicInfoOut);
     const candidateBasicInfoOutFormData = ObjectHelper.convertObjectToFormData(
       candidateBasicInfoOut
     );
@@ -225,8 +241,33 @@ const useImportCandidate = () => {
       };
     });
 
-    console.log("Work experience", workExperienceArrayOut);
+    // console.log("Work experience", workExperienceArrayOut);
 
+    // Get Language object
+    const lanagaugesArray = [];
+    console.log(
+      "candidateData?.spokenLanguages",
+      candidateData?.spokenLanguages
+    );
+    candidateData?.spokenLanguages.forEach((language) => {
+      const languageData = mapResumeDataToFormData(
+        language,
+        candidateMappingData?.languages,
+        candidateMapping
+      );
+      lanagaugesArray.push(languageData);
+    });
+
+    console.log("lanagaugesArray", lanagaugesArray);
+
+    const languageArrayOut = lanagaugesArray.map((language) => {
+      return {
+        ...language,
+        entityType: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+        formData: JSON.stringify(language),
+        formId: parseInt(formNameId["Candidate_languages"]),
+      };
+    });
 
     // Consolidate the request array
     const candidateRequestArray = [
@@ -247,6 +288,10 @@ const useImportCandidate = () => {
             "Content-Type": "multipart/form-data",
           },
         },
+      },
+      {
+        entity: CandidateEntityConstant.CANDIDATE_LANGUAGES,
+        newData: languageArrayOut,
       },
     ];
 
