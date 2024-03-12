@@ -37,6 +37,7 @@ export const candidateParseFields = [
       { label: "Primary Skills", value: "basicInfo__primarySkills" },
       { label: "Secondary Skills", value: "basicInfo__secondarySkills" },
       { label: "Current Position Title", value: "basicInfo__jobTitle" },
+      { label: "Expected Salary", value: "basicInfo__expectedSalary" },
     ],
   },
   {

@@ -54,7 +54,7 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
     { category: "basicInfo", value: "visaStatus" },
     { category: "basicInfo", value: "source" },
     { category: "basicInfo", value: "RelevantExperience" },
-    { category: "basicInfo", value: "expectedSalary" },
+    // { category: "basicInfo", value: "expectedSalary" },
     { category: "basicInfo", value: "noticePeriod" },
     { category: "basicInfo", value: "reasonForChange" },
     { category: "basicInfo", value: "emailOutput" },
@@ -65,9 +65,6 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
     { category: "certification", value: "certificationList" },
     { category: "certification", value: "comment"},
     { category: "certification", value: "uploadCertificate" },
-    
-    
-
   ];
   // =========================================================
 

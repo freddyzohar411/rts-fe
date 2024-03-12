@@ -24,7 +24,7 @@ import { toast } from "react-toastify";
 import CandidateParseDisplay from "../../components/CandidateParse/CandidateParseDisplay";
 import Select from "react-select";
 import axios from "axios";
-import jsonData from "../../components/CandidateParse/data2.json";
+import jsonData from "../../components/CandidateParse/data.json";
 import useImportCandidate from "./useImportCandidate";
 import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
 
@@ -47,8 +47,8 @@ const CandidateResumeParse = () => {
     { value: "v2", label: "v2" },
   ]);
   const [selectedOptions, setSelectedOptions] = useState({
-    value: "v1",
-    label: "v1",
+    value: "v2",
+    label: "v2",
   });
   const [prevTab, setPrevTab] = useState(null);
   const { importLoading, importMultiLoading }= useSelector(

@@ -1,8 +1,6 @@
 import { capitalizeFirstLetter } from "@workspace/common/src/helpers/string_helper";
 
 export const candidateBasicInfoMap = {
-  // Key: Dynamic form
-  // Value: parseKey
   firstName: {
     key: "firstName",
     map: "string",
@@ -27,8 +25,10 @@ export const candidateBasicInfoMap = {
     key: "mobileExt",
     map: "string",
     render: (data) => {
+      // Convert to string and parse the digits out only 0-9. Not in array
       if (data) {
-        return `+ ${data}`;
+        const digitString = data.toString().match(/\d+/g).join("");
+        return `+ ${digitString}`;
       }
       return data;
     },
@@ -88,6 +88,18 @@ export const candidateBasicInfoMap = {
   jobTitle: {
     key: "jobTitle",
     map: "string",
+  },
+  expectedSalary: {
+    key: "expectedSalary",
+    map: "integer",
+    render: (data) => {
+      // Parse out the digits only 0-9
+      if (data) {
+        const digitString = data?.toString().match(/\d+/g).join("");
+        return parseInt(digitString);
+      }
+      return data;
+    },
   },
 };
 
@@ -242,8 +254,7 @@ export const candidateMapping = {
   languages: candidateLanguageMap,
   educationDetails: candidateEducationDetailsMap,
   certifications: candidateCertificationsMap,
-}
-;
+};
 
 function calculateUniqueWorkMonths(periods) {
   const uniqueMonths = new Set();

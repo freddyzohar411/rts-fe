@@ -21,6 +21,7 @@ import ResumeCompanyField from "./ResumeCompanyField";
 import ResumeFieldInput from "./ResumeFieldInput";
 import ResumeFieldList from "./ResumeFieldList";
 import * as CandidateParsingHelper from "../../helpers/candidate_parsing_helper";
+import ResumeCertificationField from "./ResumeCertificationField";
 
 const CandidateParseDisplay = ({ resumeParseDataList }) => {
   const [resumeCount, setResumeCount] = useState(0);
@@ -64,7 +65,6 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
       setResumeData(resumeParseDataList?.[resumeCount]);
     }
   }, [resumeCount]);
-
 
   return (
     <>
@@ -147,7 +147,11 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                                   <h3>Mobile</h3>
                                 </div>
                                 <div className="d-flex align-items-center justify-content-between gap-5">
-                                  <p>{resumeData?.mobile || "-"}</p>
+                                  <p>
+                                    {resumeData?.mobileExt}{" "}
+                                    {resumeData?.mobile || "-"}
+                                  </p>
+                                  {/* <p>{resumeData?.mobile || "-"}</p> */}
                                 </div>
                               </div>
                             </div>
@@ -184,6 +188,18 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
 
                               <div class="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
+                                  <h3>Age</h3>
+                                </div>
+                                <div className="d-flex align-items-center justify-content-between gap-5">
+                                  <p>{resumeData?.age || "-"}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Expected Salary & Years of Experience*/}
+                            <div className="d-flex">
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
                                   <h3>Years of Experience</h3>
                                 </div>
                                 <div className="d-flex align-items-center justify-content-between gap-5">
@@ -200,13 +216,22 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                                       )
                                     )})`}
                                   </p> */}
-                                   <p>
+                                  <p>
                                     {`${CandidateParsingHelper.convertMonthsToString(
                                       CandidateParsingHelper.calculateUniqueWorkMonths(
                                         sortedCompanies
                                       )
                                     )}`}
                                   </p>
+                                </div>
+                              </div>
+
+                              <div class="resume-details-part w-100">
+                                <div className="d-flex align-items-center gap-2">
+                                  <h3>Expected Salary</h3>
+                                </div>
+                                <div className="d-flex align-items-center justify-content-between gap-5">
+                                  <p>{resumeData?.expectedSalary || "-"}</p>
                                 </div>
                               </div>
                             </div>
@@ -361,6 +386,33 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                             <h3>Secondary Skills</h3>
                           </div>
                           <ResumeFieldList data={resumeData?.secondarySkills} />
+                        </div>
+                      </Col>
+                    </Row>
+
+                    {/* Certifications */}
+                    <Row>
+                      <Col>
+                        <div class="resume-skills-section mt-4">
+                          <div className="d-flex align-items-center gap-2">
+                            <h3>Certifications</h3>
+                          </div>
+                          <div className="px-2 mt-2">
+                            {resumeData?.certifications.length > 0 ? (
+                              resumeData?.certifications.map(
+                                (certification, index) => {
+                                  return (
+                                    <ResumeCertificationField
+                                      section={certification}
+                                      index={index}
+                                    />
+                                  );
+                                }
+                              )
+                            ) : (
+                              <p>No certifications</p>
+                            )}
+                          </div>
                         </div>
                       </Col>
                     </Row>
