@@ -55,6 +55,10 @@ function UsersTab() {
     setPage(0);
   };
 
+  const handleFilterType = (data) => {
+    setFilterType(data);
+  };
+
   useEffect(() => {
     const pageRequest = {
       page,
@@ -62,9 +66,11 @@ function UsersTab() {
       sortBy,
       sortDirection,
       searchTerm: search,
+      filterType,
     };
+    console.log("Page Request", pageRequest);
     dispatch(listUsers(pageRequest));
-  }, [page, pageSize, sortBy, sortDirection, search]);
+  }, [page, pageSize, sortBy, sortDirection, search,filterType]);
 
   // Handle Delete
   const [selectedUser, setSelectedUser] = useState(null);
@@ -106,10 +112,10 @@ function UsersTab() {
           <div className="table-responsive"></div>
         </Col>
         <Col lg={2}>
-          <Input type="select" className="form-select">
+          <Input type="select" className="form-select" onChange={(e) => handleFilterType(e.target.value)}>
             <option value="active">Active Users</option>
             <option value="inactive">Inactive Users</option>
-            <option value="active">Deleted Users</option>
+            <option value="deleted">Deleted Users</option>
           </Input>
         </Col>
       </Row>
