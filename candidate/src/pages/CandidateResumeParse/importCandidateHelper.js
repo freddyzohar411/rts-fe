@@ -85,6 +85,10 @@ export const candidateBasicInfoMap = {
       return "";
     },
   },
+  jobTitle: {
+    key: "jobTitle",
+    map: "string",
+  },
 };
 
 // Key [companiesDetails] is the key from the parsed data

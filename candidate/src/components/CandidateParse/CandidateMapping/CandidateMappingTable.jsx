@@ -38,6 +38,36 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
     { category: "educationDetails", value: "educationList" },
     { category: "educationDetails", value: "educationDetailsList" },
     { category: "educationDetails", value: "description" },
+    { category: "languages", value: "proficiency" },
+    { category: "languages", value: "languageList" },
+    { category: "languages", value: "languagesList" },
+    { category: "workExperiences", value: "workExperienceList" },
+    { category: "workExperiences", value: "multiFiles" },
+    { category: "workExperiences", value: "locationType" },
+    { category: "workExperiences", value: "employmentType" },
+    { category: "workExperiences", value: "experienceList" },
+    { category: "workExperiences", value: "deletedFiles" },
+    { category: "workExperiences", value: "currentRole" },
+    { category: "basicInfo", value: "referrerName" },
+    { category: "basicInfo", value: "candidateOwner" },
+    { category: "basicInfo", value: "candidateStatus" },
+    { category: "basicInfo", value: "visaStatus" },
+    { category: "basicInfo", value: "source" },
+    { category: "basicInfo", value: "RelevantExperience" },
+    { category: "basicInfo", value: "expectedSalary" },
+    { category: "basicInfo", value: "noticePeriod" },
+    { category: "basicInfo", value: "reasonForChange" },
+    { category: "basicInfo", value: "emailOutput" },
+    { category: "basicInfo", value: "currentSalary" },
+    { category: "basicInfo", value: "additionalInfo" },
+    { category: "basicInfo", value: "countryList" },
+    { category: "basicInfo", value: "currentEmployer" },
+    { category: "certification", value: "certificationList" },
+    { category: "certification", value: "comment"},
+    { category: "certification", value: "uploadCertificate" },
+    
+    
+
   ];
   // =========================================================
 

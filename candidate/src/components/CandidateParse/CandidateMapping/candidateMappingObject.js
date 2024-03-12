@@ -36,10 +36,11 @@ export const candidateParseFields = [
       { label: "Total Experience", value: "basicInfo__totalExperience" },
       { label: "Primary Skills", value: "basicInfo__primarySkills" },
       { label: "Secondary Skills", value: "basicInfo__secondarySkills" },
+      { label: "Current Position Title", value: "basicInfo__jobTitle" },
     ],
   },
   {
-    label: "Work Experience",
+    label: "Work Experiences",
     options: [
       { label: "Company Name", value: "workExperience__companyName" },
       { label: "Job Title", value: "workExperience__jobTitle" },
