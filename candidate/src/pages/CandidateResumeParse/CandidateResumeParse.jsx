@@ -24,7 +24,7 @@ import { toast } from "react-toastify";
 import CandidateParseDisplay from "../../components/CandidateParse/CandidateParseDisplay";
 import Select from "react-select";
 import axios from "axios";
-import jsonData from "../../components/CandidateParse/data.json";
+import jsonData from "../../components/CandidateParse/data2.json";
 import useImportCandidate from "./useImportCandidate";
 import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
 
@@ -51,9 +51,11 @@ const CandidateResumeParse = () => {
     label: "v1",
   });
   const [prevTab, setPrevTab] = useState(null);
-  const importLoading = useSelector((state) => state.CandidateReducer.importLoading);
-  console.log("Import Loading", importLoading);
-  console.log("parseData", parseData);
+  const { importLoading, importMultiLoading }= useSelector(
+    (state) => state.CandidateReducer
+  );
+//   console.log("Import Loading", importLoading);
+//   console.log("parseData", parseData);
 
   const { importCandidate, setCandidateMappingData } = useImportCandidate();
 
@@ -63,11 +65,9 @@ const CandidateResumeParse = () => {
 
   const handleChange = (selectedOptions) => {
     setSelectedOptions(selectedOptions);
-    console.log("Selected Options", selectedOptions);
   };
 
   const onDrop = useCallback((acceptedFiles) => {
-    console.log("Accedpted Files: ", acceptedFiles);
     // Do something with the files
     setCurrentUploadCount(0);
     setTotalUploadCount(0);
@@ -121,7 +121,6 @@ const CandidateResumeParse = () => {
     reader.onload = () => {
       setFileUrl(reader.result);
     };
-    console.log("fileObjects", fileObjects);
     if (type === 2) {
       reader.readAsDataURL(fileObjects[index].file);
     } else {
@@ -461,7 +460,11 @@ const CandidateResumeParse = () => {
                   {tab === 2 && (
                     <CandidateParseDisplay resumeParseDataList={parseData} />
                   )}
-                  {tab === 3 && <CandidateMappingTable setCandidateMappingData={setCandidateMappingData}/>}
+                  {tab === 3 && (
+                    <CandidateMappingTable
+                      setCandidateMappingData={setCandidateMappingData}
+                    />
+                  )}
                 </CardBody>
                 <CardFooter>
                   <div className="d-flex flex-row justify-content-between">
@@ -524,7 +527,7 @@ const CandidateResumeParse = () => {
                             className="btn btn-custom-primary"
                             onClick={() => importCandidate(parseData)}
                           >
-                             {importLoading ? (
+                            {(importLoading || importMultiLoading) ? (
                               <Spinner size="sm"></Spinner>
                             ) : (
                               "Import Candidates"

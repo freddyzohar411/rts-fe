@@ -36,6 +36,9 @@ import {
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_SUCCESS,
   IMPORT_CANDIDATE_FAILURE,
+  IMPORT_CANDIDATE_MULTI,
+  IMPORT_CANDIDATE_MULTI_SUCCESS,
+  IMPORT_CANDIDATE_MULTI_FAILURE,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -230,6 +233,22 @@ export const importCandidateFailure = (error) => ({
   type: IMPORT_CANDIDATE_FAILURE,
   payload: error,
 });
+
+export const importCandidateMulti = (candidateRequestAll) => ({
+  type: IMPORT_CANDIDATE_MULTI,
+  payload: candidateRequestAll,
+});
+
+export const importCandidateMultiSuccess = () => ({
+  type: IMPORT_CANDIDATE_MULTI_SUCCESS,
+});
+
+export const importCandidateMultiFailure = (error) => ({
+  type: IMPORT_CANDIDATE_MULTI_FAILURE,
+  payload: error,
+});
+
+
 
 
 

@@ -13,6 +13,7 @@ import {
   FETCH_CANDIDATES_FIELDS_ALL,
   FETCH_CANDIDATES_ADMIN,
   IMPORT_CANDIDATE,
+  IMPORT_CANDIDATE_MULTI,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -38,6 +39,8 @@ import {
   fetchCandidatesAdminFailure,
   importCandidateSuccess,
   importCandidateFailure,
+  importCandidateMultiFailure,
+  importCandidateMultiSuccess,
 } from "./action";
 import {
   getCandidates,
@@ -364,9 +367,9 @@ function* workFetchCandidatesAdmin(action) {
 
 // Import Candidate
 function* workImportCandidate(action) {
-  const { candidateRequestArray: candidateData, navigate } = action.payload; // Array of candidate data
-  let candidateId = null;
   try {
+    const { candidateRequestArray: candidateData, navigate } = action.payload; // Array of candidate data
+    let candidateId = null;
     // Set Basic Info
     try {
       const response = yield call(
@@ -489,20 +492,47 @@ function* workImportCandidate(action) {
         completeCandidateRegistration,
         parseInt(candidateId)
       );
-      toast.success("Candidate created successfully");
+
       yield put(importCandidateSuccess());
-      navigate(`/candidates/${candidateId}/snapshot`, {
-        state: { view: false },
-      });
+      // Check if navgate exist
+      if (typeof navigate === "function") {
+        toast.success("Candidate created successfully");
+        navigate(`/candidates/${candidateId}/snapshot`, {
+          state: { view: false },
+        });
+      }
     } catch (error) {
       toast.error("Error creating candidate");
       console.log("Error creating candidate", error);
     }
-
   } catch (error) {
     console.log("Error creating candidate", error);
     yield put(importCandidateFailure());
-  } 
+  }
+}
+
+// Import Candidate multiples
+function* workImportCandidateMulti(action) {
+  try {
+    const { candidateRequestArrayAll, navigate } = action.payload;
+    // Loop workImportCandidate
+    for (const candidateRequestArray of candidateRequestArrayAll) {
+      yield call(workImportCandidate, {
+        payload: {
+          candidateRequestArray,
+        },
+      });
+    }
+    yield put(importCandidateMultiSuccess());
+
+    if (typeof navigate === "function") {
+      toast.success("Candidates created successfully");
+      navigate("/candidates");
+    }
+  } catch (error) {
+    console.log("Error creating candidate", error);
+    yield put(importCandidateMultiFailure());
+  }
 }
 
 export default function* watchFetchCandidateSaga() {
@@ -517,4 +547,5 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATES_FIELDS_ALL, workFetchCandidatesFieldsAll);
   yield takeEvery(FETCH_CANDIDATES_ADMIN, workFetchCandidatesAdmin);
   yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
+  yield takeEvery(IMPORT_CANDIDATE_MULTI, workImportCandidateMulti);
 }

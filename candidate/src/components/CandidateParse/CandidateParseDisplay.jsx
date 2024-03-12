@@ -20,6 +20,7 @@ import ResumeEducationField from "./ResumeEducationField";
 import ResumeCompanyField from "./ResumeCompanyField";
 import ResumeFieldInput from "./ResumeFieldInput";
 import ResumeFieldList from "./ResumeFieldList";
+import * as CandidateParsingHelper from "../../helpers/candidate_parsing_helper";
 
 const CandidateParseDisplay = ({ resumeParseDataList }) => {
   const [resumeCount, setResumeCount] = useState(0);
@@ -31,7 +32,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
   const [resumeData, setResumeData] = useState(
     resumeParseDataList?.[0] ?? null
   );
-    // const [resumeData, setResumeData] = useState(jsonData[0]);
+  // const [resumeData, setResumeData] = useState(jsonData[0]);
 
   // Sort Companies by endDate
   const sortCompaniesByEndDate = (companies, sort = "asc") => {
@@ -64,38 +65,6 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
     }
   }, [resumeCount]);
 
-  function calculateUniqueWorkMonths(periods) {
-    const uniqueMonths = new Set();
-
-    periods.forEach((period) => {
-      const [startMonth, startYear] = period?.startDate.split("/");
-      const [endMonth, endYear] = period?.endDate.split("/");
-      let currentDate = new Date(startYear, startMonth - 1, 1); // Months are 0-indexed in JavaScript Date
-
-      const endDate = new Date(endYear, endMonth - 1, 1);
-
-      while (currentDate < endDate) {
-        // Add the month/year string to the Set
-        uniqueMonths.add(
-          currentDate.getFullYear() + "/" + (currentDate.getMonth() + 1)
-        );
-        // Move to the next month
-        currentDate.setMonth(currentDate.getMonth() + 1);
-      }
-    });
-
-    // The size of the Set represents the total number of unique months worked
-    return uniqueMonths.size;
-  }
-
-  function convertMonthsToString(totalMonths) {
-    // Calculate the years and remaining months
-    const years = Math.floor(totalMonths / 12);
-    const months = totalMonths % 12;
-
-    // Create and return the formatted string
-    return `${years} Yrs and ${months} months`;
-  }
 
   return (
     <>
@@ -218,11 +187,25 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                                   <h3>Years of Experience</h3>
                                 </div>
                                 <div className="d-flex align-items-center justify-content-between gap-5">
-                                  <p>
-                                    {(calculateUniqueWorkMonths(sortedCompanies)/12).toFixed(1) || "-"}{"  "}
-                                    {` (${convertMonthsToString(
-                                      calculateUniqueWorkMonths(sortedCompanies)
+                                  {/* <p>
+                                    {(
+                                      CandidateParsingHelper.calculateUniqueWorkMonths(
+                                        sortedCompanies
+                                      ) / 12
+                                    ).toFixed(1) || "-"}
+                                    {"  "}
+                                    {` (${CandidateParsingHelper.convertMonthsToString(
+                                      CandidateParsingHelper.calculateUniqueWorkMonths(
+                                        sortedCompanies
+                                      )
                                     )})`}
+                                  </p> */}
+                                   <p>
+                                    {`${CandidateParsingHelper.convertMonthsToString(
+                                      CandidateParsingHelper.calculateUniqueWorkMonths(
+                                        sortedCompanies
+                                      )
+                                    )}`}
                                   </p>
                                 </div>
                               </div>

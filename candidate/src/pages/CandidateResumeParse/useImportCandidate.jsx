@@ -6,6 +6,7 @@ import {
   putCandidateDraftStatus,
   resetMetaData,
   importCandidate as importCandidateAction,
+  importCandidateMulti
 } from "../../store/candidate/action";
 import {
   candidateBasicInfoMap,
@@ -384,6 +385,14 @@ const useImportCandidate = () => {
       dispatch(
         importCandidateAction({
           candidateRequestArray: candidateRequestArrayAll[0],
+          navigate: navigate,
+        })
+      );
+    } else {
+      console.log("Multi Dispatch")
+      dispatch(
+        importCandidateMulti({
+          candidateRequestArrayAll: candidateRequestArrayAll,
           navigate: navigate,
         })
       );

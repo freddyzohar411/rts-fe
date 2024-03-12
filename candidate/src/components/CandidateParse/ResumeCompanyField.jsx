@@ -1,25 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AiFillEdit } from "react-icons/ai";
 import "./ResumeCompanyField.scss";
-import { AiFillDelete } from "react-icons/ai";
-import { RiAddCircleFill } from "react-icons/ri";
-import { AiOutlineDown } from "react-icons/ai";
-import { AiOutlineUp } from "react-icons/ai";
-
-const monthTable = {
-  1: "Jan",
-  2: "Feb",
-  3: "Mar",
-  4: "Apr",
-  5: "May",
-  6: "Jun",
-  7: "July",
-  8: "Aug",
-  9: "Sep",
-  10: "Oct",
-  11: "Nov",
-  12: "Dec",
-};
+import * as CandidateParsingHelper from "../../helpers/candidate_parsing_helper";
 
 const ResumeCompanyField = ({ company, index }) => {
   // Convert date format from  Nov 2023 to 2023-11
@@ -147,14 +128,6 @@ const ResumeCompanyField = ({ company, index }) => {
     targetElement.focus();
   }, [addNew]);
 
-  function convertMonthsToString(totalMonths) {
-    // Calculate the years and remaining months
-    const years = Math.floor(totalMonths / 12);
-    const months = totalMonths % 12;
-
-    // Create and return the formatted string
-    return `${years} Yrs and ${months} months`;
-  }
 
   return (
     <div className="companies-details-single">
@@ -204,15 +177,27 @@ const ResumeCompanyField = ({ company, index }) => {
           <span style={{ marginRight: "10px", fontWeight: "500" }}>
             No of Months:{" "}
           </span>
-          <span>{companyDetail?.noOfMonths}</span>
+          {/* <span>{`${companyDetail?.noOfMonths} (${computeMonthsDiff(companyDetail?.startDate, companyDetail?.endDate)})`}</span> */}
+          <span>{`${CandidateParsingHelper.computeMonthsDiff(
+            companyDetail?.startDate,
+            companyDetail?.endDate
+          )}`}</span>
         </p>
 
-          {/* Period */}
-          <p className="d-flex gap-2 align-items-center">
+        {/* Period */}
+        <p className="d-flex gap-2 align-items-center">
           <span style={{ marginRight: "10px", fontWeight: "500" }}>
             Period:{" "}
           </span>
-          <span>{convertMonthsToString(companyDetail?.noOfMonths)}</span>
+          {/* <span>{convertMonthsToString(companyDetail?.noOfMonths)}</span> */}
+          <span>
+            {CandidateParsingHelper.convertMonthsToString(
+              CandidateParsingHelper.computeMonthsDiff(
+                companyDetail?.startDate,
+                companyDetail?.endDate
+              )
+            )}
+          </span>
         </p>
 
         <div className="d-flex align-items-center gap-2">
@@ -220,7 +205,7 @@ const ResumeCompanyField = ({ company, index }) => {
             Responsibilities
           </p>
         </div>
-        <ul className="px-5" style={{listStyleType:"circle"}}>
+        <ul className="px-5" style={{ listStyleType: "circle" }}>
           {companyDetail.responsibilities.map((responsibility, i) => (
             <li className="d-flex gap-2 m-1">
               <span class="bullet">&#8226;</span>
