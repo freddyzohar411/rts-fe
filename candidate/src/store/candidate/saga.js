@@ -81,6 +81,7 @@ function* workPostCandidate(action) {
     }
   } catch (error) {
     yield put(postCandidateFailure(error));
+    toast.error(error?.message);
   }
 }
 
