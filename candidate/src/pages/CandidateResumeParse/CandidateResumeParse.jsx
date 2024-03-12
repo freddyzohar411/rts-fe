@@ -17,6 +17,7 @@ import {
   ModalBody,
   Spinner,
   Label,
+  Table,
 } from "reactstrap";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDropzone } from "react-dropzone";
@@ -24,7 +25,7 @@ import { toast } from "react-toastify";
 import CandidateParseDisplay from "../../components/CandidateParse/CandidateParseDisplay";
 import Select from "react-select";
 import axios from "axios";
-import jsonData from "../../components/CandidateParse/data.json";
+import jsonData from "../../components/CandidateParse/data2.json";
 import useImportCandidate from "./useImportCandidate";
 import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
 
@@ -51,13 +52,51 @@ const CandidateResumeParse = () => {
     label: "v2",
   });
   const [prevTab, setPrevTab] = useState(null);
-  const { importLoading, importMultiLoading }= useSelector(
+  const [importSelectModalShow, setImportSelectModalShow] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
+  const [checkedItems, setCheckedItems] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const { importLoading, importMultiLoading } = useSelector(
     (state) => state.CandidateReducer
   );
-//   console.log("Import Loading", importLoading);
-//   console.log("parseData", parseData);
+  //   console.log("Import Loading", importLoading);
+  //   console.log("parseData", parseData);
 
   const { importCandidate, setCandidateMappingData } = useImportCandidate();
+
+  console.log("Filtered Data", filteredData);
+  useEffect(() => {
+    // Initialize all items as unchecked and update filteredData initially
+    const initialCheckedItems = new Array(parseData.length).fill(false);
+    setCheckedItems(initialCheckedItems);
+    setFilteredData(
+      parseData.filter((item, index) => initialCheckedItems[index])
+    );
+  }, [parseData]);
+
+  useEffect(() => {
+    // Filter parseData based on checkedItems and update filteredData
+    const newFilteredData = parseData.filter(
+      (item, index) => checkedItems[index]
+    );
+    setFilteredData(newFilteredData);
+  }, [checkedItems, parseData]);
+
+  const handleSelectAll = (e) => {
+    const isChecked = e.target.checked;
+    setSelectAll(isChecked);
+    const newCheckedItems = parseData.map(() => isChecked);
+    setCheckedItems(newCheckedItems);
+  };
+
+  const handleSingleCheck = (checked, index) => {
+    const updatedCheckedItems = [...checkedItems];
+    updatedCheckedItems[index] = checked;
+    setCheckedItems(updatedCheckedItems);
+
+    // Update selectAll based on whether all items are checked
+    setSelectAll(updatedCheckedItems.every(Boolean));
+  };
 
   const handleInputChange = (inputValue) => {
     setSearch(inputValue);
@@ -525,9 +564,20 @@ const CandidateResumeParse = () => {
                           <Button
                             type="button"
                             className="btn btn-custom-primary"
-                            onClick={() => importCandidate(parseData)}
+                            // onClick={() => importCandidate(parseData)}
+                            onClick={() => {
+                              if (parseData.length === 0) {
+                                toast.error("No data to import");
+                                return;
+                              }
+                              if (parseData.length === 1) {
+                                importCandidate(parseData[0]);
+                              } else {
+                                setImportSelectModalShow(true);
+                              }
+                            }}
                           >
-                            {(importLoading || importMultiLoading) ? (
+                            {importLoading || importMultiLoading ? (
                               <Spinner size="sm"></Spinner>
                             ) : (
                               "Import Candidates"
@@ -577,6 +627,82 @@ const CandidateResumeParse = () => {
                 <pre style={{ fontSize: "1.1rem" }}>
                   {JSON.stringify(parseData, null, 2)}
                 </pre>
+              </div>
+            </ModalBody>
+          </Modal>
+
+          <Modal
+            isOpen={importSelectModalShow}
+            closeModal={() => {
+              setImportSelectModalShow(false);
+            }}
+            centered
+            scrollable
+            size="xl"
+          >
+            <ModalHeader
+              className="bg-primary pb-3"
+              toggle={() => setImportSelectModalShow(!importSelectModalShow)}
+            >
+              <div className="d-flex flex-column text-dark">
+                <span className="h5 fw-bold">Select candidate to import</span>
+              </div>
+            </ModalHeader>
+            <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
+              <div>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Resume</th>
+                      <th>
+                        <input
+                          type="checkbox"
+                          name="import"
+                          checked={selectAll}
+                          onChange={handleSelectAll}
+                        />
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {parseData.map((item, index) => (
+                      <tr key={index}>
+                        <td>
+                          {item?.firstName} {item?.lastName}
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            name="import"
+                            value={item?.fileName}
+                            checked={checkedItems[index]}
+                            onChange={(e) =>
+                              handleSingleCheck(e.target.checked, index)
+                            }
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                <div className="d-flex justify-content-end">
+                  <Button
+                    className="btn btn-custom-primary"
+                    onClick={() => {
+                      if (filteredData.length === 0) {
+                        toast.error("No data to import");
+                        return;
+                      }
+                      importCandidate(filteredData);
+                    }}
+                  >
+                    {importLoading || importMultiLoading ? (
+                      <Spinner size="sm"></Spinner>
+                    ) : (
+                      "Import Candidates"
+                    )}
+                  </Button>
+                </div>
               </div>
             </ModalBody>
           </Modal>
