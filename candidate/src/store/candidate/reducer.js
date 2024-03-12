@@ -33,6 +33,9 @@ import {
   FETCH_CANDIDATES_ADMIN,
   FETCH_CANDIDATES_ADMIN_SUCCESS,
   FETCH_CANDIDATES_ADMIN_FAILURE,
+  IMPORT_CANDIDATE,
+  IMPORT_CANDIDATE_SUCCESS,
+  IMPORT_CANDIDATE_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -54,6 +57,7 @@ const initialState = {
   updateMeta: {},
   deleteMeta: {},
   tableMeta: {},
+  importLoading: false,
 };
 
 const CandidateReducer = (state = initialState, action) => {
@@ -281,6 +285,21 @@ const CandidateReducer = (state = initialState, action) => {
         ...state,
         candidates: {},
         candidateMeta: errorMetaData(action.payload),
+      };
+    case IMPORT_CANDIDATE:
+      return {
+        ...state,
+        importLoading: true,
+      };
+    case IMPORT_CANDIDATE_SUCCESS:
+      return {
+        ...state,
+        importLoading: false,
+      };
+    case IMPORT_CANDIDATE_FAILURE:
+      return {
+        ...state,
+        importLoading: false,
       };
     default:
       return state;

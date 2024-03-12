@@ -51,7 +51,8 @@ const CandidateResumeParse = () => {
     label: "v1",
   });
   const [prevTab, setPrevTab] = useState(null);
-
+  const importLoading = useSelector((state) => state.CandidateReducer.importLoading);
+  console.log("Import Loading", importLoading);
   console.log("parseData", parseData);
 
   const { importCandidate, setCandidateMappingData } = useImportCandidate();
@@ -523,7 +524,11 @@ const CandidateResumeParse = () => {
                             className="btn btn-custom-primary"
                             onClick={() => importCandidate(parseData)}
                           >
-                            Import Candidates
+                             {importLoading ? (
+                              <Spinner size="sm"></Spinner>
+                            ) : (
+                              "Import Candidates"
+                            )}
                           </Button>
                         </>
                       )}
