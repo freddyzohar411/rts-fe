@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Formik, Form, Field } from "formik";
 import {
   Input,
   Row,
@@ -8,6 +9,7 @@ import {
   Card,
   CardHeader,
   CardBody,
+  FormFeedback,
   Pagination,
   PaginationItem,
   PaginationLink,
@@ -135,6 +137,18 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
     return start + index;
   };
 
+  const handleInputChange = (e, field, index) => {
+    const value = e.target.value;
+    setEditedData((prevData) => {
+      const newData = [...prevData];
+      newData[getUserIndex(index)] = {
+        ...newData[getUserIndex(index)],
+        [field]: value,
+      };
+      return newData;
+    });
+  };
+
   const handleEditing = (index) => {
     setEditingRow(index);
     const newData = [...editedData];
@@ -154,19 +168,32 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
       return updatedData;
     });
     setEditedData([]);
+    toast.success("User saved successfully!");
   };
 
-  const handleInputChange = (e, field, index) => {
-    const value = e.target.value;
-    setEditedData((prevData) => {
-      const newData = [...prevData];
-      newData[getUserIndex(index)] = {
-        ...newData[getUserIndex(index)],
-        [field]: value,
-      };
-      return newData;
-    });
-  };
+  // const handleSave = (index) => {
+  //   setEditingRow(-1);
+  //   const newData = [...fileUserDataArray[activeFileIndex]];
+  //   newData[getUserIndex(index)] = { ...editedData[getUserIndex(index)] };
+  //   setFileUserDataArray((prevData) => {
+  //     const updatedData = [...prevData];
+  //     updatedData[activeFileIndex] = newData;
+  //     return updatedData;
+  //   });
+  //   setEditedData([]);
+  // };
+
+  // const handleInputChange = (e, field, index) => {
+  //   const value = e.target.value;
+  //   setEditedData((prevData) => {
+  //     const newData = [...prevData];
+  //     newData[getUserIndex(index)] = {
+  //       ...newData[getUserIndex(index)],
+  //       [field]: value,
+  //     };
+  //     return newData;
+  //   });
+  // };
 
   // Editing User - End
 
@@ -206,10 +233,6 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
       return fileUserDataArray[activeFileIndex].slice(start, end);
     }
     return [];
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
   };
 
   const handleNext = () => {
@@ -308,7 +331,7 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                                     )}
                                     onChange={(e) => {
                                       const updatedIndexes = [
-                                        ...selectedFileIndexes,
+                                        ...selectedFilesIndexes,
                                       ];
                                       if (e.target.checked) {
                                         updatedIndexes.push(index);
@@ -322,7 +345,7 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                                           );
                                         }
                                       }
-                                      setSelectedFileIndexes(updatedIndexes);
+                                      setSelectedFilesIndexes(updatedIndexes);
                                     }}
                                   />
                                 </td>
@@ -370,6 +393,7 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                   </div>
                 </Col>
               </Row>
+              {/* Manage Users Table */}
               <Row className="mb-3">
                 <Col>
                   <SimpleBar style={{ overflowX: "auto" }} autoHide={false}>
@@ -389,165 +413,361 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {getCurrentPageData().map((user, index) => (
-                          <tr key={index}>
-                            <td>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                value={
-                                  editingRow === index
-                                    ? editedData[index]?.firstName || ""
-                                    : user.firstName || "N/A"
-                                }
-                                disabled={editingRow !== index}
-                                onChange={(e) =>
-                                  handleInputChange(e, "firstName", index)
-                                }
-                              />
-                            </td>
-                            <td>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                value={
-                                  editingRow === index
-                                    ? editedData[index]?.lastName || ""
-                                    : user.lastName || "N/A"
-                                }
-                                disabled={editingRow !== index}
-                                onChange={(e) =>
-                                  handleInputChange(e, "lastName", index)
-                                }
-                              />
-                            </td>
-                            <td>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                value={
-                                  editingRow === index
-                                    ? editedData[index]?.username || ""
-                                    : user.username || "N/A"
-                                }
-                                disabled={editingRow !== index}
-                                onChange={(e) =>
-                                  handleInputChange(e, "username", index)
-                                }
-                              />
-                            </td>
-                            <td>
-                              <Input
-                                type="email"
-                                className="form-control"
-                                value={
-                                  editingRow === index
-                                    ? editedData[index]?.email || ""
-                                    : user.email || "N/A"
-                                }
-                                disabled={editingRow !== index}
-                                onChange={(e) =>
-                                  handleInputChange(e, "email", index)
-                                }
-                              />
-                            </td>
-                            <td>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                value={
-                                  editingRow === index
-                                    ? editedData[index]?.mobile || ""
-                                    : user.mobile || "N/A"
-                                }
-                                disabled={editingRow !== index}
-                                onChange={(e) =>
-                                  handleInputChange(e, "mobile", index)
-                                }
-                              />
-                            </td>
-                            <td>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                value={
-                                  editingRow === index
-                                    ? editedData[index]?.employeeId || ""
-                                    : user.employeeId || "N/A"
-                                }
-                                disabled={editingRow !== index}
-                                onChange={(e) =>
-                                  handleInputChange(e, "employeeId", index)
-                                }
-                              />
-                            </td>
-                            <td>
-                              <Input
-                                type="email"
-                                className="form-control"
-                                value={
-                                  editingRow === index
-                                    ? editedData[index]?.managerEmail || ""
-                                    : user.managerEmail || "N/A"
-                                }
-                                disabled={editingRow !== index}
-                                onChange={(e) =>
-                                  handleInputChange(e, "managerEmail", index)
-                                }
-                              />
-                            </td>
-                            <td>
-                              <Input
-                                type="select"
-                                className="form-select"
-                                value={
-                                  editingRow === index
-                                    ? editedData[index]?.groupName || ""
-                                    : user.groupName || "N/A"
-                                }
-                                disabled={editingRow !== index}
-                                onChange={(e) =>
-                                  handleInputChange(e, "groupName", index)
-                                }
-                              >
-                                <option value="">Select Group</option>
-                                {allGroups.map((group, index) => (
-                                  <option
-                                    key={index}
-                                    value={group?.userGroupName}
+                        <Formik
+                          initialValues={initialValues}
+                          validateOnChange={false}
+                          validateOnBlur
+                          validationSchema={schema}
+                          onSubmit={handleSave}
+                        >
+                          {({ errors, touched, isValid, setFieldValue }) =>
+                            getCurrentPageData().map((user, index) => (
+                              <tr key={index}>
+                                <td>
+                                  <Field
+                                    name="firstName"
+                                    type="text"
+                                    placeholder="Enter First Name"
+                                    value={
+                                      editingRow === index
+                                        ? editedData[getUserIndex(index)]
+                                            ?.firstName || ""
+                                        : user.firstName || "N/A"
+                                    }
+                                    disabled={editingRow !== index}
+                                    className={`form-control ${
+                                      editingRow === index &&
+                                      errors.firstName &&
+                                      touched.firstName
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        "firstName",
+                                        e.target.value,
+                                        true
+                                      );
+                                      handleInputChange(e, "firstName", index);
+                                    }}
+                                  />
+                                  {errors.firstName && touched.firstName && (
+                                    <FormFeedback type="invalid">
+                                      {errors.firstName}
+                                    </FormFeedback>
+                                  )}
+                                </td>
+                                <td>
+                                  <Field
+                                    name="lastName"
+                                    type="text"
+                                    placeholder="Enter Last Name"
+                                    value={
+                                      editingRow === index
+                                        ? editedData[getUserIndex(index)]
+                                            ?.lastName || ""
+                                        : user.lastName || "N/A"
+                                    }
+                                    disabled={editingRow !== index}
+                                    className={`form-control ${
+                                      editingRow === index &&
+                                      errors.lastName &&
+                                      touched.lastName
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        "lastName",
+                                        e.target.value,
+                                        true
+                                      );
+                                      handleInputChange(e, "lastName", index);
+                                    }}
+                                  />
+                                  {errors.lastName && touched.lastName && (
+                                    <FormFeedback type="invalid">
+                                      {errors.lastName}
+                                    </FormFeedback>
+                                  )}
+                                </td>
+                                <td>
+                                  <Field
+                                    name="username"
+                                    type="text"
+                                    placeholder="Enter Username"
+                                    value={
+                                      editingRow === index
+                                        ? editedData[getUserIndex(index)]
+                                            ?.username || ""
+                                        : user.username || "N/A"
+                                    }
+                                    disabled={editingRow !== index}
+                                    className={`form-control ${
+                                      editingRow === index &&
+                                      errors.username &&
+                                      touched.username
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        "username",
+                                        e.target.value,
+                                        true
+                                      );
+                                      handleInputChange(e, "username", index);
+                                    }}
+                                  />
+                                  {errors.username && touched.username && (
+                                    <FormFeedback type="invalid">
+                                      {errors.username}
+                                    </FormFeedback>
+                                  )}
+                                </td>
+                                <td>
+                                  <Field
+                                    name="email"
+                                    type="email"
+                                    placeholder="Enter Email"
+                                    value={
+                                      editingRow === index
+                                        ? editedData[getUserIndex(index)]
+                                            ?.email || ""
+                                        : user.email || "N/A"
+                                    }
+                                    disabled={editingRow !== index}
+                                    className={`form-control ${
+                                      editingRow === index &&
+                                      errors.email &&
+                                      touched.email
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        "email",
+                                        e.target.value,
+                                        true
+                                      );
+                                      handleInputChange(e, "email", index);
+                                    }}
+                                  />
+                                  {errors.email && touched.email && (
+                                    <FormFeedback type="invalid">
+                                      {errors.email}
+                                    </FormFeedback>
+                                  )}
+                                </td>
+                                <td>
+                                  <Field
+                                    name="mobile"
+                                    type="text"
+                                    placeholder="Enter Mobile"
+                                    value={
+                                      editingRow === index
+                                        ? editedData[getUserIndex(index)]
+                                            ?.mobile || ""
+                                        : user.mobile || "N/A"
+                                    }
+                                    disabled={editingRow !== index}
+                                    className={`form-control ${
+                                      editingRow === index &&
+                                      errors.mobile &&
+                                      touched.mobile
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        "mobile",
+                                        e.target.value,
+                                        true
+                                      );
+                                      handleInputChange(e, "mobile", index);
+                                    }}
+                                  />
+                                  {errors.mobile && touched.mobile && (
+                                    <FormFeedback type="invalid">
+                                      {errors.mobile}
+                                    </FormFeedback>
+                                  )}
+                                </td>
+                                <td>
+                                  <Field
+                                    name="employeeId"
+                                    type="text"
+                                    placeholder="Enter Employee ID"
+                                    value={
+                                      editingRow === index
+                                        ? editedData[getUserIndex(index)]
+                                            ?.employeeId || ""
+                                        : user.employeeId || "N/A"
+                                    }
+                                    disabled={editingRow !== index}
+                                    className={`form-control ${
+                                      editingRow === index &&
+                                      errors.employeeId &&
+                                      touched.employeeId
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        "employeeId",
+                                        e.target.value,
+                                        true
+                                      );
+                                      handleInputChange(e, "employeeId", index);
+                                    }}
+                                  />
+                                  {errors.employeeId && touched.employeeId && (
+                                    <FormFeedback type="invalid">
+                                      {errors.employeeId}
+                                    </FormFeedback>
+                                  )}
+                                </td>
+                                <td>
+                                  <Field
+                                    name="managerEmail"
+                                    type="email"
+                                    placeholder="Enter Manager Email"
+                                    value={
+                                      editingRow === index
+                                        ? editedData[getUserIndex(index)]
+                                            ?.managerEmail || ""
+                                        : user.managerEmail || "N/A"
+                                    }
+                                    disabled={editingRow !== index}
+                                    className={`form-control ${
+                                      editingRow === index &&
+                                      errors.managerEmail &&
+                                      touched.managerEmail
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        "managerEmail",
+                                        e.target.value,
+                                        true
+                                      );
+                                      handleInputChange(
+                                        e,
+                                        "managerEmail",
+                                        index
+                                      );
+                                    }}
+                                  />
+                                  {errors.managerEmail &&
+                                    touched.managerEmail && (
+                                      <FormFeedback type="invalid">
+                                        {
+                                          errors?.[getUserIndex(index)]
+                                            ?.managerEmail
+                                        }
+                                      </FormFeedback>
+                                    )}
+                                </td>
+                                <td>
+                                  <Field
+                                    as="select"
+                                    className={`form-select ${
+                                      editingRow === index &&
+                                      errors?.[getUserIndex(index)]
+                                        ?.groupName &&
+                                      touched?.[getUserIndex(index)]?.groupName
+                                        ? "is-invalid"
+                                        : ""
+                                    }`}
+                                    name="groupName"
+                                    disabled={editingRow !== index}
+                                    value={
+                                      editingRow === index
+                                        ? editedData[getUserIndex(index)]
+                                            ?.groupName || ""
+                                        : user.groupName || ""
+                                    }
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        "groupName",
+                                        e.target.value,
+                                        true
+                                      );
+                                      handleInputChange(e, "groupName", index);
+                                    }}
                                   >
-                                    {group?.userGroupName}
-                                  </option>
-                                ))}
-                              </Input>
-                            </td>
-                            <td>
-                              <div className="d-flex flex-row gap-2">
-                                <Button
-                                  className="btn btn-custom-primary d-flex justify-content-center align-items-center"
-                                  style={{ width: "30px", height: "30px" }}
-                                  onClick={() => handleEditing(index)}
-                                >
-                                  <i className="ri-pencil-line"></i>
-                                </Button>
-                                <Button
-                                  className="btn btn-custom-primary d-flex justify-content-center align-items-center"
-                                  style={{ width: "30px", height: "30px" }}
-                                  onClick={() => handleSave(index)}
-                                >
-                                  <i className="ri-save-line"></i>
-                                </Button>
-                                <Button
-                                  className="btn btn-danger d-flex justify-content-center align-items-center"
-                                  style={{ width: "30px", height: "30px" }}
-                                  onClick={() => confirmDelete(index)}
-                                >
-                                  <i className="ri-delete-back-2-line"></i>
-                                </Button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
+                                    <option value="">Select Group</option>
+                                    {allGroups.map((group, groupIndex) => (
+                                      <option
+                                        key={groupIndex}
+                                        value={group?.userGroupName}
+                                        selected={
+                                          editingRow === index &&
+                                          editedData[index]?.groupName ===
+                                            group?.userGroupName
+                                        }
+                                      >
+                                        {group?.userGroupName}
+                                      </option>
+                                    ))}
+                                  </Field>
+
+                                  {errors.groupName && touched.groupName && (
+                                    <FormFeedback type="invalid">
+                                      {errors.groupName}
+                                    </FormFeedback>
+                                  )}
+                                </td>
+
+                                <td>
+                                  <div className="d-flex flex-row gap-2">
+                                    <Button
+                                      type="button"
+                                      className="btn btn-custom-primary d-flex justify-content-center align-items-center"
+                                      style={{
+                                        width: "30px",
+                                        height: "30px",
+                                      }}
+                                      onClick={() => {
+                                        handleEditing(index);
+                                      }}
+                                    >
+                                      <i className="ri-pencil-line"></i>
+                                    </Button>
+                                    <Button
+                                      type="submit"
+                                      className="btn btn-custom-primary d-flex justify-content-center align-items-center"
+                                      style={{
+                                        width: "30px",
+                                        height: "30px",
+                                      }}
+                                      onClick={() => {
+                                        if (isValid) {
+                                          handleSave(index);
+                                        }
+                                      }}
+                                      disabled={editingRow !== index}
+                                    >
+                                      <i className="ri-save-line"></i>
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      className="btn btn-danger d-flex justify-content-center align-items-center"
+                                      style={{
+                                        width: "30px",
+                                        height: "30px",
+                                      }}
+                                      onClick={() => confirmDelete(index)}
+                                    >
+                                      <i className="ri-delete-back-2-line"></i>
+                                    </Button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          }
+                        </Formik>
                       </tbody>
                     </Table>
                   </SimpleBar>
@@ -568,7 +788,10 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                     </Input>
                     <Pagination>
                       <PaginationItem disabled={currentPage === 1}>
-                        <PaginationLink onClick={handlePrev}>
+                        <PaginationLink
+                          onClick={handlePrev}
+                          disabled={editingRow > -1}
+                        >
                           Prev
                         </PaginationLink>
                       </PaginationItem>
@@ -576,7 +799,9 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                         <PaginationLink active>{currentPage}</PaginationLink>
                       </PaginationItem>
                       <PaginationItem
-                        disabled={currentPage === getTotalPages()}
+                        disabled={
+                          currentPage === getTotalPages() || editingRow > -1
+                        }
                       >
                         <PaginationLink onClick={handleNext}>
                           Next
@@ -600,23 +825,6 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
           </Card>
         </Col>
       </Row>
-
-      {/* <Row>
-        <Col>
-          <Card>
-            <CardHeader>
-              <h6 className="fw-bold">Preview Imported Users</h6>
-              <span className="text-muted">
-                Preview all imported user accounts.
-              </span>
-            </CardHeader>
-            <CardBody>
-              
-              <Row><Col><span></span></Col></Row>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row> */}
       {/* XLSX Reader */}
       <Input
         hidden

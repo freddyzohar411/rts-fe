@@ -1,39 +1,34 @@
 import React from "react";
-import { Button, Col, Input, Label, Progress, Row, Table } from "reactstrap";
+import { Col, Progress, Row } from "reactstrap";
 
 function FinaliseMassUsers({ importedUsers }) {
-  console.log(importedUsers, "importedUsers");
-
   return (
     <React.Fragment>
       <hr />
-      <div>
+      <div className="mb-5">
         <Row>
           <Col>
-            <span className="h6  fw-bold">Generated Mass Import Users</span>
-          </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
             {importedUsers && importedUsers.length > 0 ? (
-              <span>Generated {importedUsers?.length} users.</span>
+              <div className="d-flex flex-column align-items-center justify-content-center gap-3">
+                <i className="ri-checkbox-circle-line display-4 text-success fw-medium"></i>
+                <span className="fs-5 text-center">
+                  Generated {importedUsers?.length} users.
+                </span>
+                <div className="d-flex flex-column gap-3 w-75">
+                  <span className="text-muted text-center">
+                    Mass Import User Account Progress
+                  </span>
+                  <Progress value={60} color="primary" striped animated />
+                </div>
+              </div>
             ) : (
-              <span>No users generated.</span>
+              <div className="d-flex flex-column align-items-center justify-content-center">
+                <i className="ri-error-warning-line display-4 text-danger"></i>
+                <span className="fs-5 text-center">No users generated.</span>
+              </div>
             )}
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Button type="button" className="btn btn-custom-primary">
-              Mass Create User Accounts
-            </Button>
-          </Col>
-        </Row>
-        {/* <Row>
-          <Col>
-            <Progress />
-          </Col>
-        </Row> */}
       </div>
     </React.Fragment>
   );

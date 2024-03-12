@@ -14,9 +14,6 @@ import {
   TabContent,
   TabPane,
   Button,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
 } from "reactstrap";
 import classnames from "classnames";
 import ImportFiles from "./ImportFiles";
@@ -202,6 +199,7 @@ function ImportUsers() {
                                 onClick={() =>
                                   toggleArrowTab(activeArrowTab + 1)
                                 }
+                                disabled={importedUsers.length === 0}
                               >
                                 Next
                               </Button>
@@ -230,6 +228,7 @@ function ImportUsers() {
                               </Button>
                               <Button
                                 className="btn btn-custom-primary"
+                                disabled={importedUsers.length === 0}
                                 onClick={() =>
                                   toggleArrowTab(activeArrowTab + 1)
                                 }
