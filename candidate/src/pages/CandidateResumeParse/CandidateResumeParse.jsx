@@ -68,6 +68,7 @@ const CandidateResumeParse = () => {
   useEffect(() => {
     // Initialize all items as unchecked and update filteredData initially
     const initialCheckedItems = new Array(parseData.length).fill(false);
+    console.log("Initial Checked Items", initialCheckedItems);
     setCheckedItems(initialCheckedItems);
     setFilteredData(
       parseData.filter((item, index) => initialCheckedItems[index])
@@ -360,7 +361,7 @@ const CandidateResumeParse = () => {
                         }}
                       >
                         <div className="d-flex gap-3 align-items-center mb-4">
-                          <label
+                          {/* <label
                             style={{
                               fontSize: "1rem",
                               fontWeight: "500",
@@ -368,8 +369,8 @@ const CandidateResumeParse = () => {
                             }}
                           >
                             Parsing Version
-                          </label>
-                          <Select
+                          </label> */}
+                          {/* <Select
                             className="flex-grow-1"
                             styles={customStyles}
                             value={selectedOptions}
@@ -381,7 +382,7 @@ const CandidateResumeParse = () => {
                             isSearchable
                             placeholder="Select parsing version"
                             options={options}
-                          />
+                          /> */}
                         </div>
                         <div
                           {...getRootProps()}
@@ -571,7 +572,7 @@ const CandidateResumeParse = () => {
                                 return;
                               }
                               if (parseData.length === 1) {
-                                importCandidate(parseData[0]);
+                                importCandidate(parseData);
                               } else {
                                 setImportSelectModalShow(true);
                               }
