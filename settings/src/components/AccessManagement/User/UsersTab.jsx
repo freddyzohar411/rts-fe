@@ -36,6 +36,7 @@ function UsersTab() {
   const [pageSize, setPageSize] = useState(5);
   const [sortBy, setSortBy] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
+  const [filterType, setFilterType] = useState("active");
 
   const handleSortAndDirection = (column) => {
     // Get the name of the column
