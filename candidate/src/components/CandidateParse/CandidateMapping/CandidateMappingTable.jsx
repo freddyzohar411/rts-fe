@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,8 +24,14 @@ import {
   candidateParseFieldsFilter,
 } from "./candidateMappingObject";
 import { toast } from "react-toastify";
+import {
+  getCandidateMapping,
+  postCandidateMapping,
+} from "../../../store/candidateMapping/action";
+import { getCandidateFieldAll } from "../../../helpers/backend_helper";
 
 const CandidateMappingTable = ({ setCandidateMappingData }) => {
+  const dispatch = useDispatch();
   const [candidateFormFieldsData, setCandidateFormFieldsData] = useState(null);
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(null);
@@ -32,8 +39,11 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [mappingData, setMappingData] = useState(null);
 
+  const candidateMappingData = useSelector(
+    (state) => state.CandidateMappingReducer.candidateMapping
+  );
+
   // ===================== User Setting ======================
-  console.log("candidateFormFieldsData", candidateFormFieldsData);
   const exlcudeDynamicFields = [
     { category: "educationDetails", value: "educationList" },
     { category: "educationDetails", value: "educationDetailsList" },
@@ -63,18 +73,17 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
     { category: "basicInfo", value: "countryList" },
     { category: "basicInfo", value: "currentEmployer" },
     { category: "certification", value: "certificationList" },
-    { category: "certification", value: "comment"},
+    { category: "certification", value: "comment" },
     { category: "certification", value: "uploadCertificate" },
-    { category:"documents", value: "documentsList" },
-    { category:"documents", value: "description" },
+    { category: "documents", value: "documentsList" },
+    { category: "documents", value: "description" },
   ];
   // =========================================================
 
   // Fetch data For dynamic form fields
   useEffect(() => {
     // Fetch data
-    axios
-      .get("http://localhost:8050/api/candidates/fields/all")
+    getCandidateFieldAll()
       .then((res) => {
         setCandidateFormFieldsData(
           convertObjectToArrayFilter(res.data, exlcudeDynamicFields)
@@ -85,8 +94,6 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
         console.log(err);
       });
   }, []);
-
-
 
   const convertObjectToArrayFilter = (obj, exlcude = []) => {
     const data = convertObjToArray(obj);
@@ -103,18 +110,16 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
 
   // Fetch data for mapping
   useEffect(() => {
-    // Fetch data
-    axios
-      .get("http://localhost:8050/api/candidates/mapping/get")
-      .then((res) => {
-        if (res.data.candidateMapping) {
-          setMappingData(res.data.candidateMapping);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (!candidateMappingData) {
+      dispatch(getCandidateMapping());
+    }
   }, []);
+
+  useEffect(() => {
+    if (candidateMappingData) {
+      setMappingData(candidateMappingData);
+    }
+  }, [candidateMappingData]);
 
   const getKeysArrayFromObj = (obj) => {
     return Object.keys(obj);
@@ -308,17 +313,11 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
   };
 
   const saveCandidateMapping = () => {
-    axios
-      .post("http://localhost:8050/api/candidates/mapping/save", {
+    dispatch(
+      postCandidateMapping({
         candidateMapping: mappingData,
       })
-      .then((res) => {
-        setCandidateMappingData(res.data.candidateMapping);
-        toast.success("Candidate Mapping Data Saved Successfully");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    );
   };
 
   const countMappingData = (mappingData, category) => {

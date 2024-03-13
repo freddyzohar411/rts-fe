@@ -24,12 +24,29 @@ import {
   getCandidateMapping,
   getCandidateFormIdMap,
 } from "../../helpers/backend_helper";
+import { getCandidateMapping as getCandidateMappingAction } from "../../store/candidateMapping/action";
 
 const useImportCandidate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formNameId, setFormNameId] = useState(null);
   const [candidateMappingData, setCandidateMappingData] = useState(null);
+  const candidateMappingFetchData = useSelector(
+    (state) => state.CandidateMappingReducer.candidateMapping
+  );
+
+  useEffect(() => {
+    if (!candidateMappingFetchData) {
+      dispatch(getCandidateMappingAction());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (candidateMappingFetchData) {
+      setCandidateMappingData(candidateMappingFetchData);
+    }
+  }, [candidateMappingFetchData]);
+
 
   const formNames = [
     "Candidate_basic_info",
@@ -52,17 +69,17 @@ const useImportCandidate = () => {
   }, []);
 
   // Fetch data for mapping
-  useEffect(() => {
-    getCandidateMapping()
-      .then((res) => {
-        if (res.data.candidateMapping) {
-          setCandidateMappingData(res.data.candidateMapping);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   getCandidateMapping()
+  //     .then((res) => {
+  //       if (res.data.candidateMapping) {
+  //         setCandidateMappingData(res.data.candidateMapping);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   function mapResumeDataToFormData(
     resumeData,
@@ -326,7 +343,7 @@ const useImportCandidate = () => {
       );
     }
   }
-  
+
   return { importCandidate, setCandidateMappingData };
 };
 

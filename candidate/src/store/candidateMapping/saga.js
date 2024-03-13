@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 function* workPostCandidateMapping(action) {
   try {
     const response = yield call(postCandidateMapping, action.payload);
-    yield put(postCandidateMappingSuccess(response.data));
+    yield put(postCandidateMappingSuccess(response.data?.candidateMapping));
     toast.success("Candidate Mapping Updated Successfully");
   } catch (error) {
     yield put(postCandidateMappingFailure(error));
@@ -27,7 +27,7 @@ function* workPostCandidateMapping(action) {
 function* workGetCandidateMapping() {
   try {
     const response = yield call(getCandidateMapping);
-    yield put(getCandidateMappingSuccess(response.data));
+    yield put(getCandidateMappingSuccess(response.data?.candidateMapping));
   } catch (error) {
     yield put(getCandidateMappingFailure(error));
   }

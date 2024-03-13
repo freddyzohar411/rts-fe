@@ -54,7 +54,7 @@ const CandidateResumeParse = () => {
     value: "v2",
     label: "v2",
   });
-  const [prevTab, setPrevTab] = useState(null);
+  const prevTab = useRef(null);
   const [importSelectModalShow, setImportSelectModalShow] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
@@ -350,7 +350,7 @@ const CandidateResumeParse = () => {
                         className="btn btn-secondary"
                         onClick={() => {
                           setTab(3);
-                          setPrevTab(tab);
+                          prevTab.current = tab;
                         }}
                       >
                         Mapping Setting
@@ -654,7 +654,7 @@ const CandidateResumeParse = () => {
                           <Button
                             type="button"
                             className="btn btn-custom-primary"
-                            onClick={() => setTab(prevTab)}
+                            onClick={() => setTab(prevTab.current ?? 1)}
                           >
                             Back to Upload
                           </Button>
