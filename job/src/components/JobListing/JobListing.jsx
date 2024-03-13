@@ -304,7 +304,7 @@ const JobListing = () => {
         render: (data) => (
           <div className="d-flex column-gap-2">
             {checkAllPermission([Permission.CANDIDATE_WRITE]) &&
-              gridView !== "fod" && (
+              gridView === "new_job" && (
                 <Dropdown
                   isOpen={fodAssign[data.id] || false}
                   toggle={() => handleFodAssignDropdown(data.id)}
