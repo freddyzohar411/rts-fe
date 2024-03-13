@@ -18,6 +18,10 @@ import {
   Spinner,
   Label,
   Table,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDropzone } from "react-dropzone";
@@ -57,11 +61,8 @@ const CandidateResumeParse = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const { importLoading, importMultiLoading, parseAndImportLoading } = useSelector(
-    (state) => state.CandidateReducer
-  );
-  //   console.log("Import Loading", importLoading);
-  //   console.log("parseData", parseData);
+  const { importLoading, importMultiLoading, parseAndImportLoading } =
+    useSelector((state) => state.CandidateReducer);
 
   const { importCandidate, setCandidateMappingData } = useImportCandidate();
 
@@ -69,7 +70,6 @@ const CandidateResumeParse = () => {
   useEffect(() => {
     // Initialize all items as unchecked and update filteredData initially
     const initialCheckedItems = new Array(parseData.length).fill(false);
-    console.log("Initial Checked Items", initialCheckedItems);
     setCheckedItems(initialCheckedItems);
     setFilteredData(
       parseData.filter((item, index) => initialCheckedItems[index])
@@ -193,7 +193,6 @@ const CandidateResumeParse = () => {
   const checkFileExtension = (file) => {
     // Check if file extension is correct
     const fileType = file.name.split(".").pop().toLowerCase();
-    // console.log(fileType)
     if (fileType !== "pdf" && fileType !== "doc" && fileType !== "docx") {
       toast.error("Only PDF, DOC, and DOCX file types are allowed.");
       return false;
@@ -231,8 +230,6 @@ const CandidateResumeParse = () => {
     }
     return files;
   };
-
-  // const handleResumeSubmit = (isDirect = false) => {
   //   if (fileObjects.length === 0) {
   //     toast.error("Please select a file before uploading.");
   //     return;
@@ -622,7 +619,9 @@ const CandidateResumeParse = () => {
                           >
                             Reset
                           </Button>
-                          <Button
+
+                          {/* //Old buttons */}
+                          {/* <Button
                             type="button"
                             className="btn btn-custom-primary"
                             disabled={
@@ -649,7 +648,45 @@ const CandidateResumeParse = () => {
                             ) : (
                               "Parse Resumes & Import"
                             )}
-                          </Button>
+                          </Button> */}
+
+                          <UncontrolledDropdown className="btn-group">
+                            <Button
+                              type="submit"
+                              className="btn btn-custom-primary"
+                              onClick={() => handleResumeSubmit(true)}
+                              disabled={parseAndImportLoading || loading}
+                            >
+                              {parseAndImportLoading || loading ? (
+                                <Spinner size="sm"></Spinner>
+                              ) : (
+                                "Parse and Import"
+                              )}
+                            </Button>
+                            <DropdownToggle
+                              tag="button"
+                              type="button"
+                              className="btn btn-custom-primary"
+                              split
+                              disabled={parseAndImportLoading || loading}
+                            >
+                              <span className="visually-hidden">
+                                Toggle Dropdown
+                              </span>
+                            </DropdownToggle>
+                            <DropdownMenu className="dropdown-menu-end">
+                              {/* Start here */}
+                              <li>
+                                <DropdownItem
+                                  onClick={() => {
+                                    handleResumeSubmit(false);
+                                  }}
+                                >
+                                  Parse and View
+                                </DropdownItem>
+                              </li>
+                            </DropdownMenu>
+                          </UncontrolledDropdown>
                         </>
                       )}
                       {tab === 2 && (
