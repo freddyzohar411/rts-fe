@@ -39,6 +39,7 @@ import {
   IMPORT_CANDIDATE_MULTI,
   IMPORT_CANDIDATE_MULTI_SUCCESS,
   IMPORT_CANDIDATE_MULTI_FAILURE,
+  SET_PARSE_AND_IMPORT_LOADING,
 } from "./actionTypes";
 
 import {
@@ -62,6 +63,7 @@ const initialState = {
   tableMeta: {},
   importLoading: false,
   importMultiLoading: false,
+  parseAndImportLoading: false,
 };
 
 const CandidateReducer = (state = initialState, action) => {
@@ -320,7 +322,11 @@ const CandidateReducer = (state = initialState, action) => {
         ...state,
         importMultiLoading: false,
       };
-    
+    case SET_PARSE_AND_IMPORT_LOADING:
+      return {
+        ...state,
+        parseAndImportLoading: action.payload,
+      };
     default:
       return state;
   }

@@ -28,6 +28,7 @@ import axios from "axios";
 import jsonData from "../../components/CandidateParse/data.json";
 import useImportCandidate from "./useImportCandidate";
 import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
+import { setParseAndImportLoading } from "../../store/candidate/action";
 
 const CandidateResumeParse = () => {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ const CandidateResumeParse = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const { importLoading, importMultiLoading } = useSelector(
+  const { importLoading, importMultiLoading, parseAndImportLoading } = useSelector(
     (state) => state.CandidateReducer
   );
   //   console.log("Import Loading", importLoading);
@@ -302,6 +303,8 @@ const CandidateResumeParse = () => {
     }
     if (!isDirect) {
       setLoading(true);
+    } else {
+      dispatch(setParseAndImportLoading(true));
     }
 
     try {
@@ -641,7 +644,7 @@ const CandidateResumeParse = () => {
                             }
                             onClick={() => handleResumeSubmit(true)}
                           >
-                            {loading ? (
+                            {parseAndImportLoading ? (
                               <Spinner size="sm"></Spinner>
                             ) : (
                               "Parse Resumes & Import"

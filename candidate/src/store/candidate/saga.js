@@ -41,6 +41,7 @@ import {
   importCandidateFailure,
   importCandidateMultiFailure,
   importCandidateMultiSuccess,
+  setParseAndImportLoading,
 } from "./action";
 import {
   getCandidates,
@@ -544,6 +545,7 @@ function* workImportCandidate(action) {
       yield put(importCandidateSuccess());
       // Check if navgate exist
       if (typeof navigate === "function") {
+        yield put(setParseAndImportLoading(false))
         toast.success("Candidate created successfully");
         navigate(`/candidates/${candidateId}/snapshot`, {
           state: { view: false },
@@ -556,6 +558,7 @@ function* workImportCandidate(action) {
   } catch (error) {
     console.log("Error creating candidate", error);
     yield put(importCandidateFailure());
+    yield put(setParseAndImportLoading(false))
   }
 }
 
@@ -575,11 +578,13 @@ function* workImportCandidateMulti(action) {
 
     if (typeof navigate === "function") {
       toast.success("Candidates created successfully");
+      yield put(setParseAndImportLoading(false))
       navigate("/candidates");
     }
   } catch (error) {
     console.log("Error creating candidate", error);
     yield put(importCandidateMultiFailure());
+    yield put(setParseAndImportLoading(false))
   }
 }
 

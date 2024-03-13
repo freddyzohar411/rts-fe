@@ -201,9 +201,9 @@ const useImportCandidate = () => {
   }
 
   function convertCandidateDataToRequestArray(candidatesData, fileObjects) {
-    console.log("22candidatesMappingData", candidateMappingData);
-    console.log("22candidatesData", candidatesData);
-    console.log("22fileObjects", fileObjects);
+    // console.log("22candidatesMappingData", candidateMappingData);
+    // console.log("22candidatesData", candidatesData);
+    // console.log("22fileObjects", fileObjects);
     if (!candidatesData) return;
     if (candidatesData.length === 0) return;
 

@@ -39,6 +39,7 @@ import {
   IMPORT_CANDIDATE_MULTI,
   IMPORT_CANDIDATE_MULTI_SUCCESS,
   IMPORT_CANDIDATE_MULTI_FAILURE,
+  SET_PARSE_AND_IMPORT_LOADING
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -246,6 +247,11 @@ export const importCandidateMultiSuccess = () => ({
 export const importCandidateMultiFailure = (error) => ({
   type: IMPORT_CANDIDATE_MULTI_FAILURE,
   payload: error,
+});
+
+export const setParseAndImportLoading = (loading) => ({
+  type: SET_PARSE_AND_IMPORT_LOADING,
+  payload: loading,
 });
 
 
