@@ -11,7 +11,7 @@ import {
   PUT_CANDIDATE_DRAFT_STATUS,
   FETCH_CANDIDATE_DATA,
   FETCH_CANDIDATES_FIELDS_ALL,
-  FETCH_CANDIDATES_ADMIN
+  FETCH_CANDIDATES_ADMIN,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -46,7 +46,7 @@ import {
   completeCandidateRegistration,
   getCandidateDataById,
   getCandidateFieldAll,
-  getCandidatesAdmin
+  getCandidatesAdmin,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -81,6 +81,7 @@ function* workPostCandidate(action) {
     }
   } catch (error) {
     yield put(postCandidateFailure(error));
+    toast.error(error.message);
   }
 }
 
