@@ -39,11 +39,13 @@ import {
   DELETE_FOD_SUCCESS,
   DELETE_FOD_FAILURE,
   DELETE_FOD_RESET,
+  CREATE_JOB_FOD_RESET,
 } from "./actionTypes";
 
 const initialState = {
   job: {},
   jobFOD: {},
+  jobFODMeta: {},
   jobs: [],
   jobsMeta: {},
   jobsFields: [],
@@ -145,21 +147,24 @@ const JobListReducer = (state = initialState, action) => {
     case CREATE_JOB_FOD:
       return {
         ...state,
-        loading: true,
-        error: false,
+        jobFODMeta: pendingMetaData(),
+      };
+    case CREATE_JOB_FOD_RESET:
+      return {
+        ...state,
+        jobFODMeta: resetMetaData(),
       };
     case CREATE_JOB_FOD_SUCCESS:
       return {
         ...state,
-        loading: false,
+        jobFODMeta: successMetaData(action.payload),
         jobFOD: action.payload,
       };
     case CREATE_JOB_FOD_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        jobFODMeta: errorMetaData(action.payload),
+        jobFOD: action.payload,
       };
 
     // Post an JobList

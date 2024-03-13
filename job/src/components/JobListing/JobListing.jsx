@@ -28,6 +28,7 @@ import {
   fetchUserGroupByName,
   deleteFOD,
   deleteFODReset,
+  createJobFODReset,
 } from "../../store/jobList/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
@@ -45,6 +46,7 @@ const JobListing = () => {
   const recruiterGroup = useSelector(
     (state) => state.JobListReducer.recruiterGroup
   );
+  const jobFODMeta = useSelector((state) => state.JobListReducer.jobFODMeta);
   const deleteFODMeta = useSelector(
     (state) => state.JobListReducer.deleteFODMeta
   );
@@ -149,8 +151,17 @@ const JobListing = () => {
     if (deleteFODMeta?.isSuccess) {
       setGridView("new_job");
       dispatch(deleteFODReset());
+      setActiveJob([]);
     }
   }, [deleteFODMeta]);
+
+  useEffect(() => {
+    if (jobFODMeta?.isSuccess) {
+      setGridView("fod");
+      dispatch(createJobFODReset());
+      setActiveJob([]);
+    }
+  }, [jobFODMeta]);
 
   const handleTableViewChange = (e) => {
     setGridView(e.target.value);

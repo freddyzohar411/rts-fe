@@ -33,6 +33,7 @@ import {
   DELETE_FOD_SUCCESS,
   DELETE_FOD_FAILURE,
   DELETE_FOD_RESET,
+  CREATE_JOB_FOD_RESET,
 } from "./actionTypes";
 
 // Fetch User Group by name
@@ -165,6 +166,10 @@ export const fetchJobListsFieldsFailure = (error) => ({
 export const createJobFOD = (request) => ({
   type: CREATE_JOB_FOD,
   payload: request,
+});
+
+export const createJobFODReset = () => ({
+  type: CREATE_JOB_FOD_RESET,
 });
 
 export const createJobFODSuccess = (job) => ({
