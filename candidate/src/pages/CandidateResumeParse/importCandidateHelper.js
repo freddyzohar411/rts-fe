@@ -121,7 +121,7 @@ export const candidateWorkExperienceMap = {
       }
       // Data is in mm/yyyy format
       const [month, year] = data.split("/");
-      return getCurrentDate(new Date(year, month - 1, 1));
+      return getDateWithFormat(new Date(year, month - 1, 1));
     },
   },
   endDate: {
@@ -133,7 +133,7 @@ export const candidateWorkExperienceMap = {
       }
       // Data is in mm/yyyy format
       const [month, year] = data.split("/");
-      return getCurrentDate(new Date(year, month - 1, 1));
+      return getDateWithFormat(new Date(year, month - 1, 1));
     },
   },
   industry: {
@@ -180,7 +180,7 @@ const candidateEducationDetailsMap = {
       }
       // Data is in mm/yyyy format
       const [month, year] = data.split("/");
-      return getCurrentDate(new Date(year, month - 1, 1));
+      return getDateWithFormat(new Date(year, month - 1, 1));
     },
   },
   endDate: {
@@ -192,7 +192,7 @@ const candidateEducationDetailsMap = {
       }
       // Data is in mm/yyyy format
       const [month, year] = data.split("/");
-      return getCurrentDate(new Date(year, month - 1, 1));
+      return getDateWithFormat(new Date(year, month - 1, 1));
     },
   },
   grade: {
@@ -243,7 +243,7 @@ const candidateCertificationsMap = {
       }
       // Data is in mm/yyyy format
       const [month, year] = data.split("/");
-      return getCurrentDate(new Date(year, month - 1, 1));
+      return getDateWithFormat(new Date(year, month - 1, 1));
     },
   },
 };
@@ -285,5 +285,12 @@ function getCurrentDate() {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0"); // JavaScript months are 0-based.
   const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getDateWithFormat(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // JavaScript months are 0-based.
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }

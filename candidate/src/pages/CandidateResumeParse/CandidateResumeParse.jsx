@@ -361,7 +361,7 @@ const CandidateResumeParse = () => {
                         }}
                       >
                         <div className="d-flex gap-3 align-items-center mb-4">
-                          {/* <label
+                          <label
                             style={{
                               fontSize: "1rem",
                               fontWeight: "500",
@@ -369,8 +369,8 @@ const CandidateResumeParse = () => {
                             }}
                           >
                             Parsing Version
-                          </label> */}
-                          {/* <Select
+                          </label>
+                          <Select
                             className="flex-grow-1"
                             styles={customStyles}
                             value={selectedOptions}
@@ -382,7 +382,7 @@ const CandidateResumeParse = () => {
                             isSearchable
                             placeholder="Select parsing version"
                             options={options}
-                          /> */}
+                          />
                         </div>
                         <div
                           {...getRootProps()}
