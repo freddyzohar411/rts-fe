@@ -57,7 +57,7 @@ const DynamicTable = ({
                 : { maxWidth: "150px" }
             }
           >
-            {option.render(rowData,i)}
+            {option.render(rowData, i)}
           </td>
         );
       });
