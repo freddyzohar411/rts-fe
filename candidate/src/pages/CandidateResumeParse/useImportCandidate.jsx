@@ -1,29 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  postCandidate,
-  putCandidate,
-  putCandidateDraftStatus,
-  resetMetaData,
   importCandidate as importCandidateAction,
   importCandidateMulti,
 } from "../../store/candidate/action";
-import {
-  candidateBasicInfoMap,
-  candidateWorkExperienceMap,
-  candidateMapping,
-} from "./importCandidateHelper";
-import { ObjectHelper, FileHelper } from "@workspace/common";
+import { candidateMapping } from "./importCandidateHelper";
+import { ObjectHelper } from "@workspace/common";
 import {
   CandidateEntityConstant,
   CandidateFormNameConstant,
 } from "../../constants/candidateConstant";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {
-  getCandidateMapping,
-  getCandidateFormIdMap,
-} from "../../helpers/backend_helper";
+import { getCandidateFormIdMap } from "../../helpers/backend_helper";
 import { getCandidateMapping as getCandidateMappingAction } from "../../store/candidateMapping/action";
 
 const useImportCandidate = () => {
@@ -47,7 +35,6 @@ const useImportCandidate = () => {
     }
   }, [candidateMappingFetchData]);
 
-
   const formNames = [
     "Candidate_basic_info",
     "Candidate_work_experience",
@@ -68,27 +55,11 @@ const useImportCandidate = () => {
       });
   }, []);
 
-  // Fetch data for mapping
-  // useEffect(() => {
-  //   getCandidateMapping()
-  //     .then((res) => {
-  //       if (res.data.candidateMapping) {
-  //         setCandidateMappingData(res.data.candidateMapping);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
-
   function mapResumeDataToFormData(
     resumeData,
     formToParseFieldMapping,
     parseFieldToDataMapping
   ) {
-    console.log("resumeData", resumeData);
-    console.log("formToParseFieldMapping", formToParseFieldMapping);
-
     if (
       formToParseFieldMapping === null ||
       formToParseFieldMapping === undefined
@@ -97,18 +68,11 @@ const useImportCandidate = () => {
     const dataOut = {};
 
     for (const [field, value] of Object.entries(formToParseFieldMapping)) {
-      // console.log("Field Value", field, value);
       const [parseKey, parseValue] = value.split("__");
-      // console.log(
-      //   "parseFieldToDataMapping[parseKey][parseValue]",
-      //   parseFieldToDataMapping[parseKey][parseValue]
-      // );
       if (
         parseFieldToDataMapping[parseKey][parseValue]?.map === "none" &&
         parseFieldToDataMapping[parseKey][parseValue]?.render
       ) {
-        // console.log("None", resumeData);
-        // dataOut[field] = resumeData;
         dataOut[field] =
           parseFieldToDataMapping[parseKey][parseValue]?.render(resumeData);
       } else if (parseFieldToDataMapping[parseKey][parseValue]?.render) {
@@ -311,10 +275,8 @@ const useImportCandidate = () => {
           newData: certificationArrayOut,
         },
       ];
-
       candidateRequestArrayAll.push(candidateRequestArray);
     });
-
     return candidateRequestArrayAll;
   }
 

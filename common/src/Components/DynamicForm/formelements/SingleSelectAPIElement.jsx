@@ -93,7 +93,6 @@ const SingleSelectAPIElement = ({
       parentAPIData &&
       parentAPIData.length > 0
     ) {
-      console.log("parentAPIData", parentAPIData);
       if (field.list === "subIndustry") {
         getSubIndustries(
           getIdFromName(parentAPIData, formik?.values?.[field.parent])

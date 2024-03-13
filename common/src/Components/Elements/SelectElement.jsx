@@ -26,7 +26,6 @@ const SingleSelectElement = ({
   };
 
   const handleChange = (selectedOptions) => {
-    console.log("Selected Options", selectedOptions);
     setSelectedOptions(selectedOptions);
     setSelectedOptionData(selectedOptions);
   };

@@ -1,24 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Col,
-  Container,
-  Row,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Spinner,
-} from "reactstrap";
+import { Card, CardBody, Col, Container, Row } from "reactstrap";
 // import jsonData from "./data.json";
 import ResumeEducationField from "./ResumeEducationField";
 import ResumeCompanyField from "./ResumeCompanyField";
-import ResumeFieldInput from "./ResumeFieldInput";
 import ResumeFieldList from "./ResumeFieldList";
 import * as CandidateParsingHelper from "../../helpers/candidate_parsing_helper";
 import ResumeCertificationField from "./ResumeCertificationField";
@@ -27,8 +11,6 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
   const [resumeCount, setResumeCount] = useState(0);
   const [showEducationDetails, setShowEducationDetails] = useState(false);
   const [showCompaniesDetails, setShowCompaniesDetails] = useState(false);
-  const [spokenLanguage, setSpokenLanguage] = useState("");
-  const [spokenLanguages, setSpokenLanguages] = useState([]);
   const [sortedCompanies, setSortedCompanies] = useState([]);
   const [resumeData, setResumeData] = useState(
     resumeParseDataList?.[0] ?? null

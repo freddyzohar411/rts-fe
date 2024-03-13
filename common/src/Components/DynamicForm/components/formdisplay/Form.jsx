@@ -76,7 +76,6 @@ const Form = forwardRef(
         });
 
         // 'fieldTabIndex' now contains the field IDs as keys and their tab order as values
-        // console.log(fieldTabIndex);
         setTabIndexData(fieldTabIndex);
       }
     }, [formLayoutSchema]);
@@ -245,7 +244,9 @@ const Form = forwardRef(
           generateValidationSchema2(formFields, formik)
         );
       } else {
-        setFormikInitialValues(populateInitialValues(formFields, editDataValues));
+        setFormikInitialValues(
+          populateInitialValues(formFields, editDataValues)
+        );
         setFormikValidationSchema(
           generateValidationSchema2(formFields, formik)
         );

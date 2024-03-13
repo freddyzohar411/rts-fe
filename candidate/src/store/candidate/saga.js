@@ -255,142 +255,6 @@ function* workFetchCandidatesAdmin(action) {
 }
 
 // Import Candidate
-// function* workImportCandidate(action) {
-//   const { candidateRequestArray: candidateData, navigate } = action.payload; // Array of candidate data
-//   let candidateId = null;
-//   // Set Basic Info
-//   console.log("Candidate Data [0]", candidateData[0]);
-//   try {
-//     const response = yield call(
-//       createCandidate,
-//       candidateData[0].entity,
-//       candidateData[0]?.id,
-//       candidateData[0].newData,
-//       candidateData[0].config
-//     );
-//     candidateId = response?.data?.id;
-//   } catch (error) {
-//     toast.error("Error creating candidate");
-//     console.log("Error creating candidate", error);
-//   }
-
-//   console.log("Candidate Id", candidateId);
-
-//   console.log("Candidate Data [1]", candidateData[1]);
-//   // Set Work Experience candidateData[1] which is an array
-//   // Work experience
-//   if (candidateId) {
-//     for (const workExperience of candidateData[1].newData) {
-//       const workExperienceFormData = ObjectHelper.convertObjectToFormData({
-//         ...workExperience,
-//         entityId: candidateId,
-//       });
-//       try {
-//         const response = yield call(
-//           createCandidate,
-//           candidateData[1].entity,
-//           null,
-//           workExperienceFormData,
-//           candidateData[1].config
-//         );
-//       } catch (error) {
-//         toast.error("Error creating candidate");
-//         console.log("Error creating candidate", error);
-//       }
-//     }
-//   }
-
-//   // Languages
-//   if (candidateId) {
-//     console.log("Languages Data", candidateData[2].newData);
-//     for (const language of candidateData[2].newData) {
-//       const languageFormData = {
-//         formData: "",
-//         ...language,
-//         entityId: candidateId,
-//       };
-//       try {
-//         const response = yield call(
-//           createCandidate,
-//           candidateData[2].entity,
-//           null,
-//           languageFormData,
-//           candidateData[2]?.config
-//         );
-//       } catch (error) {
-//         toast.error("Error creating candidate");
-//         console.log("Error creating candidate", error);
-//       }
-//     }
-//   }
-
-//   // Education
-//   if (candidateId) {
-//     for (const education of candidateData[3].newData) {
-//       const educationFormData = {
-//         formData: "",
-//         ...education,
-//         entityId: candidateId,
-//       };
-//       try {
-//         const response = yield call(
-//           createCandidate,
-//           candidateData[3].entity,
-//           null,
-//           educationFormData,
-//           candidateData[3].config
-//         );
-//       } catch (error) {
-//         toast.error("Error creating candidate");
-//         console.log("Error creating candidate", error);
-//       }
-//     }
-//   }
-
-//   // Certification
-//   if (candidateId) {
-//     console.log("Certification Data", candidateData[4].newData);
-//     for (const certification of candidateData[4].newData) {
-//       console.log("Certification Data", certification);
-//       const certificationFormData = {
-//         formData: "",
-//         ...certification,
-//         entityId: candidateId,
-//       };
-//       try {
-//         const response = yield call(
-//           createCandidate,
-//           candidateData[4].entity,
-//           null,
-//           certificationFormData,
-//           candidateData[4]?.config
-//         );
-//       } catch (error) {
-//         toast.error("Error creating candidate");
-//         console.log("Error creating candidate", error);
-//       }
-//     }
-//   }
-
-//   // Complete candidate registration
-//   try {
-//     const response = yield call(
-//       completeCandidateRegistration,
-//       parseInt(candidateId)
-//     );
-//     toast.success("Candidate created successfully");
-//     // console.log(
-//     //   "Candidate Id EDit Link",
-//     //   `/candidates/${candidateId}/snapshot`
-//     // );
-//     navigate(`/candidates/${candidateId}/snapshot`, { state: { view: false } });
-//   } catch (error) {
-//     toast.error("Error creating candidate");
-//     console.log("Error creating candidate", error);
-//   }
-// }
-
-// Import Candidate
 function* workImportCandidate(action) {
   try {
     const { candidateRequestArray: candidateData, navigate } = action.payload; // Array of candidate data
@@ -410,11 +274,9 @@ function* workImportCandidate(action) {
       console.log("Error creating candidate", error);
     }
 
-    console.log("Candidate Id", candidateId);
-
-    // Work experience
     if (!candidateId) return;
 
+    // Work experience
     const workExperiences = candidateData[1].newData;
     const workExperienceFormData = generateFormDataArray(
       candidateData[1]?.newData,
@@ -445,7 +307,6 @@ function* workImportCandidate(action) {
         entityId: candidateId,
       });
     }
-    console.log("Languages Data Array", languageFormDataArray);
     if (languageFormDataArray.length > 0) {
       try {
         const response = yield call(
@@ -489,8 +350,6 @@ function* workImportCandidate(action) {
 
     // Document
     let documentFormData = candidateData[4].newData;
-    console.log("Check File", documentFormData.file);
-    console.log("candidateData[4].entity: ", candidateData[4].entity)
     if (documentFormData) {
       const documentFormDataArray = generateFormData(
         documentFormData,
@@ -545,7 +404,7 @@ function* workImportCandidate(action) {
       yield put(importCandidateSuccess());
       // Check if navgate exist
       if (typeof navigate === "function") {
-        yield put(setParseAndImportLoading(false))
+        yield put(setParseAndImportLoading(false));
         toast.success("Candidate created successfully");
         navigate(`/candidates/${candidateId}/snapshot`, {
           state: { view: false },
@@ -558,7 +417,7 @@ function* workImportCandidate(action) {
   } catch (error) {
     console.log("Error creating candidate", error);
     yield put(importCandidateFailure());
-    yield put(setParseAndImportLoading(false))
+    yield put(setParseAndImportLoading(false));
   }
 }
 
@@ -578,13 +437,13 @@ function* workImportCandidateMulti(action) {
 
     if (typeof navigate === "function") {
       toast.success("Candidates created successfully");
-      yield put(setParseAndImportLoading(false))
+      yield put(setParseAndImportLoading(false));
       navigate("/candidates");
     }
   } catch (error) {
     console.log("Error creating candidate", error);
     yield put(importCandidateMultiFailure());
-    yield put(setParseAndImportLoading(false))
+    yield put(setParseAndImportLoading(false));
   }
 }
 

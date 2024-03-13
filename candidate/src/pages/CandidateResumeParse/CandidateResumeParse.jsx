@@ -27,7 +27,7 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
 import CandidateParseDisplay from "../../components/CandidateParse/CandidateParseDisplay";
 import Select from "react-select";
-import jsonData from "../../components/CandidateParse/data.json";
+// import jsonData from "../../components/CandidateParse/data.json";
 import useImportCandidate from "./useImportCandidate";
 import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
 import { setParseAndImportLoading } from "../../store/candidate/action";
@@ -43,7 +43,8 @@ const CandidateResumeParse = () => {
   const [isValidAttachment, setIsValidAttachment] = useState(false);
   const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [parseData, setParseData] = useState(jsonData ?? []);
+  // const [parseData, setParseData] = useState(jsonData ?? []);
+  const [parseData, setParseData] = useState([]);
   const [tab, setTab] = useState(1);
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([

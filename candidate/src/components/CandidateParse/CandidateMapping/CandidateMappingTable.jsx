@@ -161,7 +161,7 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
         }
       }
     }
-    return null; // Return null if the value is not found in any group
+    return null;
   }
 
   const config = [
@@ -222,10 +222,6 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
               }}
               disabled={false}
             />
-            {/* <span>{getLabelValueFromArray(
-                candidateParseFields,
-                mappingData?.[data?.category]?.[data?.value]
-              ) && `Done`}</span> */}
           </div>
         );
       },
