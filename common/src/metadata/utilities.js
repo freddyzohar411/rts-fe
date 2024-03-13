@@ -1,10 +1,10 @@
-export const resetMetaData = () => {
-  isLoading: false;
-  isSuccess: false;
-  isError: false;
-  errorMessage: "";
-  successMessage: "";
-};
+export const resetMetaData = () => ({
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
+  errorMessage: "",
+  successMessage: "",
+});
 
 export const resetAllMetaData = () => ({
   isLoading: false,

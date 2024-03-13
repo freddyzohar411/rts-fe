@@ -37,6 +37,9 @@ export const updateJob = (id, data) =>
 
 export const deleteJob = (id) => api.delete(`${JOB_URL}${BASE_JOBS}/${id}`);
 
+export const deleteFOD = (id) =>
+  api.delete(`${JOB_URL}${BASE_JOBS}/deleteFOD/${id}`);
+
 export const getJobFields = () => api.get(`${JOB_URL}${BASE_JOBS}/fields`);
 
 export const postJobFOD = (data) =>
@@ -82,5 +85,4 @@ export const getJobTimelineCount = (jobId) =>
 
 // Get jobs Admin
 export const getJobsAdmin = (data) =>
-api.create(`${JOB_URL}${BASE_JOBS}/listing/all`, data);
-
+  api.create(`${JOB_URL}${BASE_JOBS}/listing/all`, data);

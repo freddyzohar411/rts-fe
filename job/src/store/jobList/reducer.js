@@ -1,6 +1,7 @@
 import {
   errorMetaData,
   pendingMetaData,
+  resetMetaData,
   successMetaData,
 } from "@workspace/common";
 import {
@@ -34,11 +35,17 @@ import {
   FETCH_JOBS_ADMIN,
   FETCH_JOBS_ADMIN_SUCCESS,
   FETCH_JOBS_ADMIN_FAILURE,
+  DELETE_FOD,
+  DELETE_FOD_SUCCESS,
+  DELETE_FOD_FAILURE,
+  DELETE_FOD_RESET,
+  CREATE_JOB_FOD_RESET,
 } from "./actionTypes";
 
 const initialState = {
   job: {},
   jobFOD: {},
+  jobFODMeta: {},
   jobs: [],
   jobsMeta: {},
   jobsFields: [],
@@ -47,6 +54,8 @@ const initialState = {
   loading: false,
   error: false,
   success: false,
+  deleteFOD: {},
+  deleteFODMeta: {},
 };
 
 const JobListReducer = (state = initialState, action) => {
@@ -138,21 +147,24 @@ const JobListReducer = (state = initialState, action) => {
     case CREATE_JOB_FOD:
       return {
         ...state,
-        loading: true,
-        error: false,
+        jobFODMeta: pendingMetaData(),
+      };
+    case CREATE_JOB_FOD_RESET:
+      return {
+        ...state,
+        jobFODMeta: resetMetaData(),
       };
     case CREATE_JOB_FOD_SUCCESS:
       return {
         ...state,
-        loading: false,
+        jobFODMeta: successMetaData(action.payload),
         jobFOD: action.payload,
       };
     case CREATE_JOB_FOD_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        jobFODMeta: errorMetaData(action.payload),
+        jobFOD: action.payload,
       };
 
     // Post an JobList
@@ -262,6 +274,30 @@ const JobListReducer = (state = initialState, action) => {
         ...state,
         jobs: [],
         jobsMeta: errorMetaData(action.payload),
+      };
+
+    // Delete FOD
+    case DELETE_FOD:
+      return {
+        ...state,
+        deleteFODMeta: pendingMetaData(),
+      };
+    case DELETE_FOD_RESET:
+      return {
+        ...state,
+        deleteFODMeta: resetMetaData(),
+      };
+    case DELETE_FOD_SUCCESS:
+      return {
+        ...state,
+        deleteFODMeta: successMetaData(action.payload),
+        deleteFOD: action.payload,
+      };
+    case DELETE_FOD_FAILURE:
+      return {
+        ...state,
+        deleteFODMeta: errorMetaData(action.payload),
+        deleteFOD: {},
       };
     default:
       return state;
