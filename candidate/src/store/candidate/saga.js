@@ -93,6 +93,30 @@ function generateFormDataArray(data, listName, addEnitityId = true, id = null) {
   return formData;
 }
 
+function generateFormData(data, addEnitityId = true, id = null) {
+  const formData = new FormData();
+  Object.keys(data).forEach((key) => {
+    // Check if the property is an array of files
+    if (
+      Array.isArray(data[key]) &&
+      data[key].length &&
+      data[key][0] instanceof File
+    ) {
+      data[key].forEach((file, fileIndex) => {
+        formData.append(`${key}[${fileIndex}]`, file);
+      });
+    } else {
+      // For non-file array or other types of properties
+      formData.append(key, data[key]);
+    }
+  });
+  if (addEnitityId) {
+    // Append the entityId
+    formData.append("entityId", id);
+  }
+  return formData;
+}
+
 // Post account
 function* workPostCandidate(action) {
   const { entity, newData, config, rerenderTable, id, resetForm } =
@@ -462,9 +486,33 @@ function* workImportCandidate(action) {
       console.log("Error creating candidate", error);
     }
 
+    // Document
+    let documentFormData = candidateData[4].newData;
+    console.log("Check File", documentFormData.file);
+    console.log("candidateData[4].entity: ", candidateData[4].entity)
+    if (documentFormData) {
+      const documentFormDataArray = generateFormData(
+        documentFormData,
+        true,
+        candidateId
+      );
+      try {
+        const response = yield call(
+          createCandidate,
+          candidateData[4].entity,
+          null,
+          documentFormDataArray,
+          candidateData[4].config
+        );
+      } catch (error) {
+        toast.error("Error creating candidate Document");
+        console.log("Error creating candidate", error);
+      }
+    }
+
     // Certification
     let certificationFormDataArray = [];
-    for (const certification of candidateData[4].newData) {
+    for (const certification of candidateData[5].newData) {
       certificationFormDataArray.push({
         formData: "",
         ...certification,
@@ -474,12 +522,12 @@ function* workImportCandidate(action) {
     try {
       const response = yield call(
         createCandidateList,
-        candidateData[4].entity,
+        candidateData[5].entity,
         null,
         {
           certificationsList: certificationFormDataArray,
         },
-        candidateData[4]?.config
+        candidateData[5]?.config
       );
     } catch (error) {
       toast.error("Error creating candidate");

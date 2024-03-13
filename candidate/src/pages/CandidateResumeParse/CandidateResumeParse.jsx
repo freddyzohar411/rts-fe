@@ -25,7 +25,7 @@ import { toast } from "react-toastify";
 import CandidateParseDisplay from "../../components/CandidateParse/CandidateParseDisplay";
 import Select from "react-select";
 import axios from "axios";
-import jsonData from "../../components/CandidateParse/data2.json";
+import jsonData from "../../components/CandidateParse/data.json";
 import useImportCandidate from "./useImportCandidate";
 import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
 
@@ -572,7 +572,7 @@ const CandidateResumeParse = () => {
                                 return;
                               }
                               if (parseData.length === 1) {
-                                importCandidate(parseData);
+                                importCandidate(parseData, fileObjects);
                               } else {
                                 setImportSelectModalShow(true);
                               }
@@ -694,7 +694,7 @@ const CandidateResumeParse = () => {
                         toast.error("No data to import");
                         return;
                       }
-                      importCandidate(filteredData);
+                      importCandidate(filteredData, fileObjects);
                     }}
                   >
                     {importLoading || importMultiLoading ? (

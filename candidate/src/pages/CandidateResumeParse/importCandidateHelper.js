@@ -1,4 +1,5 @@
 import { capitalizeFirstLetter } from "@workspace/common/src/helpers/string_helper";
+import { FileHelper } from "@workspace/common";
 
 export const candidateBasicInfoMap = {
   firstName: {
@@ -248,12 +249,43 @@ const candidateCertificationsMap = {
   },
 };
 
+const candidateDocumentMap = {
+  name: {
+    key: "name",
+    map: "none",
+    render: (data) => {
+      if (data) {
+        return FileHelper.getFilenameNoExtension(data);
+      }
+    },
+  },
+  type: {
+    key: "type",
+    map: "none",
+    render: (data) => {
+      if (data) {
+        return capitalizeFirstLetter(FileHelper.getFileExtension(data));
+      }
+    },
+  },
+  file: {
+    key: "file",
+    map: "none",
+    render: (data) => {
+      if (data) {
+        return data.name;
+      }
+    },
+  },
+};
+
 export const candidateMapping = {
   basicInfo: candidateBasicInfoMap,
   workExperience: candidateWorkExperienceMap,
   languages: candidateLanguageMap,
   educationDetails: candidateEducationDetailsMap,
   certifications: candidateCertificationsMap,
+  documents: candidateDocumentMap,
 };
 
 function calculateUniqueWorkMonths(periods) {

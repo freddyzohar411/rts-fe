@@ -6,14 +6,14 @@ import {
   putCandidateDraftStatus,
   resetMetaData,
   importCandidate as importCandidateAction,
-  importCandidateMulti
+  importCandidateMulti,
 } from "../../store/candidate/action";
 import {
   candidateBasicInfoMap,
   candidateWorkExperienceMap,
   candidateMapping,
 } from "./importCandidateHelper";
-import { ObjectHelper } from "@workspace/common";
+import { ObjectHelper, FileHelper } from "@workspace/common";
 import {
   CandidateFormConstant,
   CandidateEntityConstant,
@@ -200,11 +200,17 @@ const useImportCandidate = () => {
     return dataOut;
   }
 
-  function convertCandidateDataToRequestArray(candidatesData) {
+  function convertCandidateDataToRequestArray(candidatesData, fileObjects) {
+    console.log("22candidatesMappingData", candidateMappingData);
+    console.log("22candidatesData", candidatesData);
+    console.log("22fileObjects", fileObjects);
     if (!candidatesData) return;
     if (candidatesData.length === 0) return;
+
+    // Initialize the request array
     const candidateRequestArrayAll = [];
-    candidatesData.forEach((candidateData) => {
+    candidatesData.forEach((candidateData, i) => {
+      // Get candidate basic info Object
       const candidateBasicInfo = mapResumeDataToFormData(
         candidateData,
         candidateMappingData?.basicInfo,
@@ -217,7 +223,6 @@ const useImportCandidate = () => {
         formId: parseInt(formNameId["Candidate_basic_info"]),
       };
 
-      // console.log("candidateBasicInfoOut", candidateBasicInfoOut);
       const candidateBasicInfoOutFormData =
         ObjectHelper.convertObjectToFormData(candidateBasicInfoOut);
 
@@ -249,7 +254,7 @@ const useImportCandidate = () => {
         }
       );
 
-      console.log("Work experience", workExperienceArrayOut);
+      // console.log("Work experience", workExperienceArrayOut);
 
       // Get Language object
       const languagesArray = [];
@@ -304,6 +309,22 @@ const useImportCandidate = () => {
           };
         }
       );
+
+      // Document
+      const file = fileObjects[i];
+      const documentFormData = mapResumeDataToFormData(
+        file?.file,
+        candidateMappingData?.documents,
+        candidateMapping
+      );
+      // console.log("documentFormData", documentFormData);
+
+      const documentData = {
+        file: fileObjects[i]?.file,
+        entityType: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+        formData: JSON.stringify(documentFormData),
+        formId: parseInt(formNameId["Candidate_documents"]),
+      };
 
       // Certification
       const certificationArray = [];
@@ -362,6 +383,15 @@ const useImportCandidate = () => {
           newData: educationDetailsArrayOut,
         },
         {
+          entity: CandidateEntityConstant.CANDIDATE_DOCUMENTS,
+          newData: documentData,
+          config: {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        },
+        {
           entity: CandidateEntityConstant.CANDIDATE_CERTIFICATION,
           newData: certificationArrayOut,
         },
@@ -373,12 +403,17 @@ const useImportCandidate = () => {
     return candidateRequestArrayAll;
   }
 
-  function importCandidate(candidatesData) {
+  function importCandidate(candidatesData, fileObjects) {
     // console.log("Candidate Data", candidateData);
     // console.log("candidateMappingData", candidateMappingData);
-    const candidateRequestArrayAll =
-      convertCandidateDataToRequestArray(candidatesData);
 
+    const candidateRequestArrayAll = convertCandidateDataToRequestArray(
+      candidatesData,
+      fileObjects
+    );
+
+    console.log("candidateRequestArrayAll", candidateRequestArrayAll);
+    if (!candidateRequestArrayAll) return;
     if (candidateRequestArrayAll.length === 0) return;
 
     if (candidateRequestArrayAll.length === 1) {
@@ -389,7 +424,7 @@ const useImportCandidate = () => {
         })
       );
     } else {
-      console.log("Multi Dispatch")
+      console.log("Multi Dispatch");
       dispatch(
         importCandidateMulti({
           candidateRequestArrayAll: candidateRequestArrayAll,

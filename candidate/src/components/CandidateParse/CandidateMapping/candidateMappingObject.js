@@ -79,6 +79,14 @@ export const candidateParseFields = [
       { label: "Date", value: "certifications__date" },
     ],
   },
+  {
+    label: "Documents",
+    options: [
+      { label: "Document Name", value: "documents__name" },
+      { label: "Document Type", value: "documents__type" },
+      { label: "Document File", value: "documents__file" },
+    ],
+  },
 ];
 
 export function candidateParseFieldsFilter(includeArray = []) {

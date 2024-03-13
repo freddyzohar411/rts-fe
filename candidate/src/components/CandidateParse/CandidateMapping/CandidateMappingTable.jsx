@@ -65,6 +65,8 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
     { category: "certification", value: "certificationList" },
     { category: "certification", value: "comment"},
     { category: "certification", value: "uploadCertificate" },
+    { category:"documents", value: "documentsList" },
+    { category:"documents", value: "description" },
   ];
   // =========================================================
 
