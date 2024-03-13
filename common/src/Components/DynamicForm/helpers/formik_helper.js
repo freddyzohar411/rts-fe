@@ -35,7 +35,7 @@ const generateInitialValues = (formFieldData, formik) => {
 const populateInitialValues = (formFieldData, editData) => {
   const initialValues = formFieldData?.reduce((acc, field) => {
     if (field.type === "checkbox") {
-      return { ...acc, [field.name]: editData[field.name] ?? [] };
+      return { ...acc, [field?.name]: editData?.[field.name] ?? [] };
     }
 
     // if (field.type === "multifile") {
@@ -43,15 +43,15 @@ const populateInitialValues = (formFieldData, editData) => {
     // }
 
     // If there is a subname, then add it to the initial values
-    if (field.subName && field.subName !== "") {
+    if (field?.subName && field?.subName !== "") {
       return {
         ...acc,
-        [field.name]: editData[field.name] ?? "",
-        [field.subName]: editData[field.subName] ?? "",
+        [field?.name]: editData?.[field.name] ?? "",
+        [field?.subName]: editData?.[field.subName] ?? "",
       };
     }
 
-    return { ...acc, [field.name]: editData[field.name] ?? "" };
+    return { ...acc, [field?.name]: editData?.[field.name] ?? "" };
   }, {});
 
   return initialValues;

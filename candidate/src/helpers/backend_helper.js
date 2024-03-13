@@ -9,6 +9,7 @@ import {
   BASE_CERTIFICATE,
   BASE_LANGUAGES,
   BASE_EMPLOYER_DETAILS,
+  BASE_RESUME_PARSING,
 } from "./url_helper";
 
 import {
@@ -20,6 +21,7 @@ import {
   CANDIDATE_CERTIFICATE_URL,
   CANDIDATE_LANGUAGES_URL,
   CANDIDATE_EMPLOYER_DETAILS_URL,
+  COMMON_URL,
 } from "@workspace/common/src/config";
 
 import { generateCandidateModuleURL, candidateModuleURL } from "./constant";
@@ -52,7 +54,11 @@ export const createCandidate = (entity, id, data, config) =>
 
 // Create candidate List
 export const createCandidateList = (entity, id, data, config) =>
-  api.create(`${generateCandidateModuleURL(entity, id)}/add/list`, data, config);
+  api.create(
+    `${generateCandidateModuleURL(entity, id)}/add/list`,
+    data,
+    config
+  );
 
 // Update an candidate
 export const updateCandidate = (entity, id, data, config) =>
@@ -127,3 +133,24 @@ export const getCandidateFieldAll = () =>
 // Get candidates
 export const getCandidatesAdmin = (data) =>
   api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/all`, data);
+
+// Candidate Mapping
+// Get candidate mapping
+export const getCandidateMapping = () =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/mapping/get`);
+
+// Post candidate mapping
+export const postCandidateMapping = (data) =>
+  api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/mapping/save`, data);
+
+// Get candidate form Id Map
+export const getCandidateFormIdMap = (data) =>
+  api.create(`${FORM_URL}${BASE_FORMS}/formname/idmap`, data);
+
+// Resume Parsing
+export const parseResumeMulti = (data, config) =>
+  api.create(
+    `${COMMON_URL}${BASE_RESUME_PARSING}/parse-normal/multi`,
+    data,
+    config
+  );

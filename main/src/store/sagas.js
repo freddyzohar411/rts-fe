@@ -51,7 +51,7 @@ const { FormSaga } = FormBuilderSagas;
 const { UserSaga, RoleSaga, ModuleSaga, PermissionSaga, GroupSaga } =
   SettingSagas;
 
-const { CandidateFormSaga, CandidateSaga, CandidateRegistrationSaga } =
+const { CandidateFormSaga, CandidateSaga, CandidateRegistrationSaga, CandidateMappingSaga } =
   CandidateSagas;
 
 const { TemplateSaga } = TemplateSagas;
@@ -104,6 +104,7 @@ export default function* rootSaga() {
     fork(CandidateFormSaga),
     fork(CandidateSaga),
     fork(CandidateRegistrationSaga),
+    fork(CandidateMappingSaga),
 
     // Template 
     fork(TemplateSaga),

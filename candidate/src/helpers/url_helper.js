@@ -28,3 +28,5 @@ export const BASE_CANDIDATE_WORK_EXPERIENCE = "/api/work-experience";
 // Candidate education details
 export const BASE_CANDIDATE_EDUCATION_DETAILS = "/api/education-details";
 
+// Resume Parsing
+export const BASE_RESUME_PARSING = "/api/resumes";

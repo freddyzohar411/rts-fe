@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Breadcrumb,
@@ -16,7 +16,6 @@ import {
   ModalHeader,
   ModalBody,
   Spinner,
-  Label,
   Table,
   UncontrolledDropdown,
   DropdownToggle,
@@ -28,14 +27,13 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
 import CandidateParseDisplay from "../../components/CandidateParse/CandidateParseDisplay";
 import Select from "react-select";
-import axios from "axios";
 import jsonData from "../../components/CandidateParse/data.json";
 import useImportCandidate from "./useImportCandidate";
 import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
 import { setParseAndImportLoading } from "../../store/candidate/action";
+import { parseResumeMulti } from "../../helpers/backend_helper";
 
 const CandidateResumeParse = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showModalSchema, setShowModalSchema] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -66,9 +64,7 @@ const CandidateResumeParse = () => {
 
   const { importCandidate, setCandidateMappingData } = useImportCandidate();
 
-  console.log("Filtered Data", filteredData);
   useEffect(() => {
-    // Initialize all items as unchecked and update filteredData initially
     const initialCheckedItems = new Array(parseData.length).fill(false);
     setCheckedItems(initialCheckedItems);
     setFilteredData(
@@ -108,6 +104,9 @@ const CandidateResumeParse = () => {
     setSelectedOptions(selectedOptions);
   };
 
+  /**
+   * Dropzone function to handle file upload
+   */
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
     setCurrentUploadCount(0);
@@ -142,7 +141,7 @@ const CandidateResumeParse = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   // Confirm Reset Template
-  const confirmResetTemplate = () => {
+  const confirmClearResumeParse = () => {
     setFileObjects([]);
     setCurrentUploadCount(0);
     setTotalUploadCount(0);
@@ -176,6 +175,7 @@ const CandidateResumeParse = () => {
     }
   }, [fileObjects]);
 
+  // Move to next file to display
   const nextCount = () => {
     if (currentUploadCount < totalUploadCount) {
       setCurrentUploadCount((prev) => prev + 1);
@@ -183,6 +183,7 @@ const CandidateResumeParse = () => {
     }
   };
 
+  // Move to previous file to display
   const prevCount = () => {
     if (currentUploadCount > 0) {
       setCurrentUploadCount((prev) => prev - 1);
@@ -190,6 +191,7 @@ const CandidateResumeParse = () => {
     }
   };
 
+  // Check if file extension is correct (doc, docx or pdf). If not, display error message
   const checkFileExtension = (file) => {
     // Check if file extension is correct
     const fileType = file.name.split(".").pop().toLowerCase();
@@ -213,6 +215,7 @@ const CandidateResumeParse = () => {
     setFileObjects(fileObjStore);
   };
 
+  // Delete file that was selected for parsing
   const deleteFile = (index) => {
     setFileObjects(fileObjects.filter((file, i) => i !== index));
     setCurrentUploadCount(0);
@@ -223,68 +226,17 @@ const CandidateResumeParse = () => {
     }
   };
 
-  const getFilesArray = () => {
-    const files = [];
-    for (let i = 0; i < fileObjects.length; i++) {
-      files.push(fileObjects[i].file);
-    }
-    return files;
-  };
-  //   if (fileObjects.length === 0) {
-  //     toast.error("Please select a file before uploading.");
-  //     return;
-  //   }
-
-  //   const fileArray = getFilesArray();
-  //   const formData = new FormData();
-
-  //   for (let i = 0; i < fileObjects.length; i++) {
-  //     formData.append(`resumes[${i}].file`, fileObjects[i].file);
-  //     formData.append(`resumes[${i}].fileName`, fileObjects[i].nameNoExt);
-  //   }
-
-  //   // Set Version
-  //   if (selectedOptions?.value) {
-  //     formData.append("parseVer", selectedOptions?.value);
-  //   } else {
-  //     formData.append("parseVer", "v1");
-  //   }
-  //   if (!isDirect) {
-  //     setLoading(true);
-  //   }
-  //   axios
-  //     .post("http://localhost:8181/api/resumes2/parse-normal/multi", formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     })
-  //     .then((res) => {
-  //       const fetchParsedData = convertFlattenArray(res.data);
-  //       setParseData(fetchParsedData);
-  //       if (isDirect) {
-  //         importCandidate(fetchParsedData, fileObjects);
-  //       } else {
-  //         setTab(2);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Error parsing resumes. Please try again.");
-  //     })
-  //     .finally(() => {
-  //       if (!isDirect) {
-  //         setLoading(false);
-  //       }
-  //     });
-
-  // };
-
+  /**
+   * Handle submit of parsing. If isDirect is true, it will import the candidate
+   * @param {*} isDirect
+   * @returns
+   */
   const handleResumeSubmit = async (isDirect = false) => {
     if (fileObjects.length === 0) {
       toast.error("Please select a file before uploading.");
       return;
     }
 
-    const fileArray = getFilesArray();
     const formData = new FormData();
 
     for (let i = 0; i < fileObjects.length; i++) {
@@ -305,15 +257,12 @@ const CandidateResumeParse = () => {
     }
 
     try {
-      const result = await axios.post(
-        "http://localhost:8181/api/resumes2/parse-normal/multi",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const result = await parseResumeMulti(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       setLoading(false);
 
       const fetchParsedData = convertFlattenArray(result.data);
@@ -325,34 +274,12 @@ const CandidateResumeParse = () => {
       }
     } catch (error) {
       setLoading(false);
+      dispatch(setParseAndImportLoading(false));
       toast.error("Error parsing resumes. Please try again.");
     }
-
-    // axios
-    //   .post("http://localhost:8181/api/resumes2/parse-normal/multi", formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   })
-    //   .then((res) => {
-    //     const fetchParsedData = convertFlattenArray(res.data);
-    //     setParseData(fetchParsedData);
-    //     if (isDirect) {
-    //       importCandidate(fetchParsedData, fileObjects);
-    //     } else {
-    //       setTab(2);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     toast.error("Error parsing resumes. Please try again.");
-    //   })
-    //   .finally(() => {
-    //     if (!isDirect) {
-    //       setLoading(false);
-    //     }
-    //   });
   };
 
+  // Flatten the array to 1 level deep array
   const convertFlattenArray = (arr) => {
     return arr.map((item) => {
       return item.data;
@@ -387,7 +314,7 @@ const CandidateResumeParse = () => {
         <DeleteCustomModal
           isOpen={isResetModalOpen}
           setIsOpen={setIsResetModalOpen}
-          confirmDelete={confirmResetTemplate}
+          confirmDelete={confirmClearResumeParse}
           header="Remove all files"
           deleteText={"Are you sure you would like to remove all files?"}
         />
