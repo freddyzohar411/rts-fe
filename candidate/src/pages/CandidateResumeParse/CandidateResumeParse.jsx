@@ -231,7 +231,56 @@ const CandidateResumeParse = () => {
     return files;
   };
 
-  const handleResumeSubmit = () => {
+  // const handleResumeSubmit = (isDirect = false) => {
+  //   if (fileObjects.length === 0) {
+  //     toast.error("Please select a file before uploading.");
+  //     return;
+  //   }
+
+  //   const fileArray = getFilesArray();
+  //   const formData = new FormData();
+
+  //   for (let i = 0; i < fileObjects.length; i++) {
+  //     formData.append(`resumes[${i}].file`, fileObjects[i].file);
+  //     formData.append(`resumes[${i}].fileName`, fileObjects[i].nameNoExt);
+  //   }
+
+  //   // Set Version
+  //   if (selectedOptions?.value) {
+  //     formData.append("parseVer", selectedOptions?.value);
+  //   } else {
+  //     formData.append("parseVer", "v1");
+  //   }
+  //   if (!isDirect) {
+  //     setLoading(true);
+  //   }
+  //   axios
+  //     .post("http://localhost:8181/api/resumes2/parse-normal/multi", formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     })
+  //     .then((res) => {
+  //       const fetchParsedData = convertFlattenArray(res.data);
+  //       setParseData(fetchParsedData);
+  //       if (isDirect) {
+  //         importCandidate(fetchParsedData, fileObjects);
+  //       } else {
+  //         setTab(2);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       toast.error("Error parsing resumes. Please try again.");
+  //     })
+  //     .finally(() => {
+  //       if (!isDirect) {
+  //         setLoading(false);
+  //       }
+  //     });
+
+  // };
+
+  const handleResumeSubmit = async (isDirect = false) => {
     if (fileObjects.length === 0) {
       toast.error("Please select a file before uploading.");
       return;
@@ -251,24 +300,57 @@ const CandidateResumeParse = () => {
     } else {
       formData.append("parseVer", "v1");
     }
+    if (!isDirect) {
+      setLoading(true);
+    }
 
-    setLoading(true);
-    axios
-      .post("http://localhost:8181/api/resumes2/parse-normal/multi", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        setParseData(convertFlattenArray(res.data));
+    try {
+      const result = await axios.post(
+        "http://localhost:8181/api/resumes2/parse-normal/multi",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setLoading(false);
+
+      const fetchParsedData = convertFlattenArray(result.data);
+      setParseData(fetchParsedData);
+      if (isDirect) {
+        importCandidate(fetchParsedData, fileObjects);
+      } else {
         setTab(2);
-      })
-      .catch((err) => {
-        toast.error("Error parsing resumes. Please try again.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error("Error parsing resumes. Please try again.");
+    }
+
+    // axios
+    //   .post("http://localhost:8181/api/resumes2/parse-normal/multi", formData, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //   })
+    //   .then((res) => {
+    //     const fetchParsedData = convertFlattenArray(res.data);
+    //     setParseData(fetchParsedData);
+    //     if (isDirect) {
+    //       importCandidate(fetchParsedData, fileObjects);
+    //     } else {
+    //       setTab(2);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     toast.error("Error parsing resumes. Please try again.");
+    //   })
+    //   .finally(() => {
+    //     if (!isDirect) {
+    //       setLoading(false);
+    //     }
+    //   });
   };
 
   const convertFlattenArray = (arr) => {
@@ -543,12 +625,26 @@ const CandidateResumeParse = () => {
                             disabled={
                               !isValidAttachment || fileObjects.length === 0
                             }
-                            onClick={handleResumeSubmit}
+                            onClick={() => handleResumeSubmit(false)}
                           >
                             {loading ? (
                               <Spinner size="sm"></Spinner>
                             ) : (
                               "Parse Resumes"
+                            )}
+                          </Button>
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary"
+                            disabled={
+                              !isValidAttachment || fileObjects.length === 0
+                            }
+                            onClick={() => handleResumeSubmit(true)}
+                          >
+                            {loading ? (
+                              <Spinner size="sm"></Spinner>
+                            ) : (
+                              "Parse Resumes & Import"
                             )}
                           </Button>
                         </>
