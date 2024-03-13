@@ -26,7 +26,8 @@ import {
   fetchJobLists,
   fetchJobListsFields,
   fetchUserGroupByName,
-  fetchJobsAdmin,
+  deleteFOD,
+  deleteFODReset,
 } from "../../store/jobList/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
@@ -43,6 +44,9 @@ const JobListing = () => {
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
   const recruiterGroup = useSelector(
     (state) => state.JobListReducer.recruiterGroup
+  );
+  const deleteFODMeta = useSelector(
+    (state) => state.JobListReducer.deleteFODMeta
   );
 
   // Dropdown State
@@ -141,10 +145,18 @@ const JobListing = () => {
     }
   }, [jobsData]);
 
+  useEffect(() => {
+    if (deleteFODMeta?.isSuccess) {
+      setGridView("new_job");
+      dispatch(deleteFODReset());
+    }
+  }, [deleteFODMeta]);
+
   const handleTableViewChange = (e) => {
     setGridView(e.target.value);
     const request = { ...pageRequest, page: 0, jobType: e.target.value };
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+    setActiveJob([]);
   };
 
   const handleFodAssignDropdown = (dataId) => {
@@ -209,8 +221,13 @@ const JobListing = () => {
 
   // Modal Delete
   const confirmDelete = () => {
-    dispatch(deleteJobList({ deleteId, isDraft: false }));
-    setIsDeleteModalOpen(false);
+    if (gridView === "fod") {
+      dispatch(deleteFOD({ jobId: deleteId }));
+      setIsDeleteModalOpen(false);
+    } else {
+      dispatch(deleteJobList({ deleteId, isDraft: false }));
+      setIsDeleteModalOpen(false);
+    }
   };
 
   //========================== User Setup ============================
@@ -275,107 +292,110 @@ const JobListing = () => {
         sortValue: "action",
         render: (data) => (
           <div className="d-flex column-gap-2">
-            {checkAllPermission([Permission.CANDIDATE_WRITE]) && (
-              <Dropdown
-                isOpen={fodAssign[data.id] || false}
-                toggle={() => handleFodAssignDropdown(data.id)}
-              >
-                <DropdownToggle
-                  className="btn btn-sm btn-custom-primary table-btn"
-                  style={{ fontSize: "0.65rem" }}
-                  onClick={() => {
-                    setActiveJob([data.id]);
-                    setSelectedRecruiter([]);
-                  }}
+            {checkAllPermission([Permission.CANDIDATE_WRITE]) &&
+              gridView !== "fod" && (
+                <Dropdown
+                  isOpen={fodAssign[data.id] || false}
+                  toggle={() => handleFodAssignDropdown(data.id)}
                 >
-                  FOD
-                </DropdownToggle>
-                <DropdownMenu className="p-3" style={{ width: "200px" }}>
-                  {/* Map Recruiter Checkbox Here */}
-                  <Row className="mb-2">
-                    <Col>
-                      <div className="search-box">
-                        <Input
-                          className="form-control form-control-sm"
-                          placeholder="Search.."
-                          type="text"
-                        />
-                        <i className="ri-search-eye-line search-icon"></i>
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <ul className="ps-0 list-unstyled">
-                        {namesData?.map((item, index) => (
-                          <li key={index}>
-                            <div
-                              className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
-                              onClick={() => toggleNested(index)}
-                            >
-                              <span>{item.name}</span>
-                              <span>{nestedVisible[index] ? "-" : "+"}</span>
-                            </div>
-                            {nestedVisible[index] && (
-                              <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
-                                <div className="ps-0 ms-0 w-100">
-                                  <SimpleBar
-                                    className="simplebar-hght"
-                                    autoHide={false}
-                                  >
-                                    {item.subNames.map((subName, subIndex) => {
-                                      const split = subName?.split("@");
-                                      return (
-                                        <li
-                                          key={subIndex}
-                                          className="d-flex flew-row align-items-center justify-content-between me-3"
-                                        >
-                                          {truncate(split[1], 16)}
-                                          <Label
-                                            check
-                                            className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
-                                          >
-                                            <Input
-                                              type="checkbox"
-                                              checked={selectedRecruiter.includes(
-                                                parseInt(split[0])
-                                              )}
-                                              onChange={(e) =>
-                                                handleFODCheck(
-                                                  parseInt(split[0]),
-                                                  e.target.checked
-                                                )
-                                              }
-                                            />
-                                          </Label>
-                                        </li>
-                                      );
-                                    })}
-                                  </SimpleBar>
-                                </div>
-                              </ul>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <div className="d-flex justify-content-end">
-                        <Button
-                          type="submit"
-                          className="btn btn-sm btn-custom-primary px-3"
-                          onClick={() => handleFODAssign()}
-                        >
-                          Assign
-                        </Button>
-                      </div>
-                    </Col>
-                  </Row>
-                </DropdownMenu>
-              </Dropdown>
-            )}
+                  <DropdownToggle
+                    className="btn btn-sm btn-custom-primary table-btn"
+                    style={{ fontSize: "0.65rem" }}
+                    onClick={() => {
+                      setActiveJob([data.id]);
+                      setSelectedRecruiter([]);
+                    }}
+                  >
+                    FOD
+                  </DropdownToggle>
+                  <DropdownMenu className="p-3" style={{ width: "200px" }}>
+                    {/* Map Recruiter Checkbox Here */}
+                    <Row className="mb-2">
+                      <Col>
+                        <div className="search-box">
+                          <Input
+                            className="form-control form-control-sm"
+                            placeholder="Search.."
+                            type="text"
+                          />
+                          <i className="ri-search-eye-line search-icon"></i>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <ul className="ps-0 list-unstyled">
+                          {namesData?.map((item, index) => (
+                            <li key={index}>
+                              <div
+                                className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
+                                onClick={() => toggleNested(index)}
+                              >
+                                <span>{item.name}</span>
+                                <span>{nestedVisible[index] ? "-" : "+"}</span>
+                              </div>
+                              {nestedVisible[index] && (
+                                <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+                                  <div className="ps-0 ms-0 w-100">
+                                    <SimpleBar
+                                      className="simplebar-hght"
+                                      autoHide={false}
+                                    >
+                                      {item.subNames.map(
+                                        (subName, subIndex) => {
+                                          const split = subName?.split("@");
+                                          return (
+                                            <li
+                                              key={subIndex}
+                                              className="d-flex flew-row align-items-center justify-content-between me-3"
+                                            >
+                                              {truncate(split[1], 16)}
+                                              <Label
+                                                check
+                                                className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                              >
+                                                <Input
+                                                  type="checkbox"
+                                                  checked={selectedRecruiter.includes(
+                                                    parseInt(split[0])
+                                                  )}
+                                                  onChange={(e) =>
+                                                    handleFODCheck(
+                                                      parseInt(split[0]),
+                                                      e.target.checked
+                                                    )
+                                                  }
+                                                />
+                                              </Label>
+                                            </li>
+                                          );
+                                        }
+                                      )}
+                                    </SimpleBar>
+                                  </div>
+                                </ul>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <div className="d-flex justify-content-end">
+                          <Button
+                            type="submit"
+                            className="btn btn-sm btn-custom-primary px-3"
+                            onClick={() => handleFODAssign()}
+                          >
+                            Assign
+                          </Button>
+                        </div>
+                      </Col>
+                    </Row>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
             {checkAllPermission([Permission.JOB_EDIT]) && (
               <Button
                 tag="button"
@@ -416,7 +436,6 @@ const JobListing = () => {
                 </Button>
               </Link>
             )}
-
             {checkAllPermission([Permission.JOB_DELETE]) && (
               <Button
                 type="button"
@@ -444,8 +463,10 @@ const JobListing = () => {
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
-        header="Delete Job"
-        deleteText={"Are you sure you would like to delete this job?"}
+        header={gridView === "fod" ? "Delete FOD" : "Delete Job"}
+        deleteText={`Are you sure you would like to delete this ${
+          gridView === "fod" ? "fod" : "job"
+        }?`}
       />
       <DynamicTableWrapper
         data={jobsData?.jobs ?? []}
