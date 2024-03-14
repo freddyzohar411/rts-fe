@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import CountUp from "react-countup";
 import { Row, Badge, Card, CardBody, Col, Button } from "reactstrap";
 import { Link } from "react-router-dom";

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import Widget from "./Widgets";
-import { useUserAuth } from "@workspace/login";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import {
@@ -19,37 +18,19 @@ import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
-  const newJobs = useSelector((state) => state.JobsCount.newJobs);
-
   document.title = "Dashboard | RTS";
 
   useEffect(() => {
-    if (checkAnyRole([Role.ADMIN])) {
-      dispatch(fetchNewJobsCount(true));
-      dispatch(fetchActiveJobsCount(true));
-      dispatch(fetchInactiveJobsCount());
-      dispatch(fetchClosedJobsCount());
-      dispatch(fetchAssignedJobsCount());
-      dispatch(fetchFODCount(true));
-      dispatch(fetchAllJobsCount());
-      dispatch(fetchTotalAssignedJobsCount());
-      dispatch(fetchTotalFODCount());
-      return 
-    }
-    if (checkAllPermission([Permission.JOB_READ])) {
-      dispatch(fetchNewJobsCount());
-      dispatch(fetchActiveJobsCount());
-      dispatch(fetchInactiveJobsCount());
-      dispatch(fetchClosedJobsCount());
-      dispatch(fetchAssignedJobsCount());
-      dispatch(fetchFODCount());
-      dispatch(fetchAllJobsCount());
-      dispatch(fetchTotalAssignedJobsCount());
-      dispatch(fetchTotalFODCount());
-      return
-    }
-  }, [checkAllPermission([Permission.JOB_READ])]);
+    dispatch(fetchNewJobsCount());
+    dispatch(fetchActiveJobsCount());
+    dispatch(fetchInactiveJobsCount());
+    dispatch(fetchClosedJobsCount());
+    dispatch(fetchAssignedJobsCount());
+    dispatch(fetchFODCount());
+    dispatch(fetchAllJobsCount());
+    dispatch(fetchTotalAssignedJobsCount());
+    dispatch(fetchTotalFODCount());
+  }, []);
 
   return (
     <React.Fragment>

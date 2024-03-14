@@ -68,7 +68,6 @@ function UsersTab() {
       searchTerm: search,
       filterType,
     };
-    console.log("Page Request", pageRequest);
     dispatch(listUsers(pageRequest));
   }, [page, pageSize, sortBy, sortDirection, search, filterType]);
 

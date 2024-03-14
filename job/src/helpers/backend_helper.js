@@ -82,7 +82,3 @@ export const getJobTimeline = (data) =>
 
 export const getJobTimelineCount = (jobId) =>
   api.get(`${JOB_URL}${BASE_JOB_TIMELINE}/jobtimelinecount/${jobId}`);
-
-// Get jobs Admin
-export const getJobsAdmin = (data) =>
-  api.create(`${JOB_URL}${BASE_JOBS}/listing/all`, data);
