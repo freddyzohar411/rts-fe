@@ -225,7 +225,6 @@ const DynamicTableWrapper = ({
                               onChange={handleTableViewChange}
                               value={gridView}
                             >
-                              <option value="">Select View</option>
                               {JOB_FILTERS?.map((ob, index) => {
                                 const key = Object.keys(ob);
                                 return (

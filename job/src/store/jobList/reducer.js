@@ -257,25 +257,6 @@ const JobListReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
 
-    // Admin
-    case FETCH_JOBS_ADMIN:
-      return {
-        ...state,
-        jobsMeta: pendingMetaData(),
-      };
-    case FETCH_JOBS_ADMIN_SUCCESS:
-      return {
-        ...state,
-        jobsMeta: successMetaData(action.payload),
-        jobs: action.payload,
-      };
-    case FETCH_JOBS_ADMIN_FAILURE:
-      return {
-        ...state,
-        jobs: [],
-        jobsMeta: errorMetaData(action.payload),
-      };
-
     // Delete FOD
     case DELETE_FOD:
       return {

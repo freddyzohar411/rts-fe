@@ -38,7 +38,7 @@ import "simplebar/dist/simplebar.min.css";
 import { truncate } from "@workspace/common/src/helpers/string_helper";
 
 const JobListing = () => {
-  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
+  const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const { jobType } = useParams();
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
@@ -56,7 +56,7 @@ const JobListing = () => {
   const [namesData, setNamesData] = useState([]);
   const [activeJob, setActiveJob] = useState([]);
   const [selectedRecruiter, setSelectedRecruiter] = useState([]);
-  const [gridView, setGridView] = useState(jobType ?? "");
+  const [gridView, setGridView] = useState(jobType ?? "new_job");
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -128,16 +128,8 @@ const JobListing = () => {
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, jobType: gridView };
-    if (checkAnyRole([Role.ADMIN])) {
-      dispatch(
-        fetchJobLists(
-          DynamicTableHelper.cleanPageRequest({ ...request, isGetAll: true })
-        )
-      );
-    } else {
-      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-    }
+    const request = { ...pageRequest, page: 0, jobType: gridView };
+    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
   }, [pageRequest, gridView]);
 
   // Update the page info when job Data changes
@@ -165,8 +157,6 @@ const JobListing = () => {
 
   const handleTableViewChange = (e) => {
     setGridView(e.target.value);
-    const request = { ...pageRequest, page: 0, jobType: e.target.value };
-    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
     setActiveJob([]);
   };
 
