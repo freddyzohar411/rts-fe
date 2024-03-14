@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Container, Row, Col } from "reactstrap";
 import Widget from "./Widgets";
 import { useDispatch } from "react-redux";
@@ -11,10 +11,7 @@ import {
   fetchFODCount,
   fetchInactiveJobsCount,
   fetchNewJobsCount,
-  fetchTotalAssignedJobsCount,
-  fetchTotalFODCount,
 } from "../../store/jobsCount/action";
-import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -28,8 +25,6 @@ const Dashboard = () => {
     dispatch(fetchAssignedJobsCount());
     dispatch(fetchFODCount());
     dispatch(fetchAllJobsCount());
-    dispatch(fetchTotalAssignedJobsCount());
-    dispatch(fetchTotalFODCount());
   }, []);
 
   return (

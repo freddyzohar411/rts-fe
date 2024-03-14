@@ -17,10 +17,6 @@ const Widgets = () => {
   const assignedJobs = useSelector((state) => state.JobsCount.assignedJobs);
   const fodJobs = useSelector((state) => state.JobsCount.fodJobs);
   const allJobs = useSelector((state) => state.JobsCount.allJobs);
-  const totalAssignedJobs = useSelector(
-    (state) => state.JobsCount.totalAssignedJobs
-  );
-  const totalFODJobs = useSelector((state) => state.JobsCount.totalFODJobs);
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -48,12 +44,6 @@ const Widgets = () => {
         break;
       case "all_jobs":
         jobCount = allJobs ?? 0;
-        break;
-      case "total_assigned_jobs":
-        jobCount = totalAssignedJobs ?? 0;
-        break;
-      case "total_fod":
-        jobCount = totalFODJobs ?? 0;
         break;
       default:
         jobCount = 0;
