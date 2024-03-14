@@ -65,7 +65,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
-    key: "all_job_status",
+    key: "all_jobs",
   },
   {
     id: 5,

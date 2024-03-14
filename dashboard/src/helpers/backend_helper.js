@@ -58,9 +58,3 @@ export const fodJobsCount = (isGetAll) => {
 
 export const allJobsCount = () =>
   api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/alljobs`);
-
-export const totalAssignedJobsCount = () =>
-  api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/totalassignedjobs`);
-
-export const totalFODJobsCount = () =>
-  api.get(`${DASHBOARD_URL}${BASE_DASHBOARD}/totalfodjobs`);

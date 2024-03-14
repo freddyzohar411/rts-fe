@@ -56,7 +56,7 @@ const JobListing = () => {
   const [namesData, setNamesData] = useState([]);
   const [activeJob, setActiveJob] = useState([]);
   const [selectedRecruiter, setSelectedRecruiter] = useState([]);
-  const [gridView, setGridView] = useState(jobType ?? "new_job");
+  const [gridView, setGridView] = useState(jobType ?? "all_jobs");
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
