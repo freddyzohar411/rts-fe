@@ -23,7 +23,7 @@ const EditorElement = ({ field, formik, formStateHook, tabIndexData }) => {
         config={{
           removePlugins: ["Title"], // Replace 'PluginName' with the name of the plugin you wish to disable
           placeholder: field?.placeholder,
-          tabIndex:tabIndexData[field?.fieldId],
+          tabIndex: tabIndexData?.[field?.fieldId],
         }}
         disabled={formState === "view" ? true : false}
       />

@@ -20,18 +20,11 @@ import {
   ALL_JOBS_COUNT,
   ALL_JOBS_COUNT_SUCCESS,
   ALL_JOBS_COUNT_FAILURE,
-  TOTAL_ASSIGNED_JOBS_COUNT,
-  TOTAL_ASSIGNED_JOBS_COUNT_SUCCESS,
-  TOTAL_ASSIGNED_JOBS_COUNT_FAILURE,
-  TOTAL_FOD_JOBS_COUNT,
-  TOTAL_FOD_JOBS_COUNT_SUCCESS,
-  TOTAL_FOD_JOBS_COUNT_FAILURE,
 } from "./actionType";
 
 import {
   errorMetaData,
   pendingMetaData,
-  resetAllMetaData,
   successMetaData,
 } from "@workspace/common";
 
@@ -50,10 +43,6 @@ const INIT_STATE = {
   fodJobsMeta: {},
   allJobs: null,
   allJobsMeta: {},
-  totalAssignedJobs: null,
-  totalAssignedJobsMeta: {},
-  totalFODJobs: null,
-  totalFODJobsMeta: {},
 };
 
 const JobsCount = (state = INIT_STATE, action) => {
@@ -189,44 +178,6 @@ const JobsCount = (state = INIT_STATE, action) => {
         ...state,
         allJobsMeta: errorMetaData(action.payload),
         allJobs: 0,
-      };
-
-    // Fetch Total Assigned Job count
-    case TOTAL_ASSIGNED_JOBS_COUNT:
-      return {
-        ...state,
-        totalAssignedJobsMeta: pendingMetaData(),
-      };
-    case TOTAL_ASSIGNED_JOBS_COUNT_SUCCESS:
-      return {
-        ...state,
-        totalAssignedJobsMeta: successMetaData(action.payload),
-        totalAssignedJobs: action.payload,
-      };
-    case TOTAL_ASSIGNED_JOBS_COUNT_FAILURE:
-      return {
-        ...state,
-        totalAssignedJobsMeta: errorMetaData(action.payload),
-        totalAssignedJobs: 0,
-      };
-
-    // Fetch Total FOD Job count
-    case TOTAL_FOD_JOBS_COUNT:
-      return {
-        ...state,
-        totalFODJobsMeta: pendingMetaData(),
-      };
-    case TOTAL_FOD_JOBS_COUNT_SUCCESS:
-      return {
-        ...state,
-        totalFODJobsMeta: successMetaData(action.payload),
-        totalFODJobs: action.payload,
-      };
-    case TOTAL_FOD_JOBS_COUNT_FAILURE:
-      return {
-        ...state,
-        totalFODJobsMeta: errorMetaData(action.payload),
-        totalFODJobs: 0,
       };
 
     default:

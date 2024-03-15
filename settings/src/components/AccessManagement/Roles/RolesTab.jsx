@@ -45,7 +45,7 @@ function RolesTab() {
   // Pagination
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(20);
   const [sortBy, setSortBy] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
 
@@ -259,7 +259,7 @@ function RolesTab() {
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="20">20</option>
-                <option value="20">30</option>
+                <option value="30">30</option>
               </Input>
             </div>
             <div>

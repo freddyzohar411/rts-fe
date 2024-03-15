@@ -57,6 +57,9 @@ const JOB_INITIAL_OPTIONS = [
 
 const JOB_FILTERS = [
   {
+    all_jobs: "All Jobs",
+  },
+  {
     new_job: "New Job Openings",
   },
   {

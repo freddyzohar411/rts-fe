@@ -72,7 +72,7 @@ const AccountListing = () => {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 5,
+      pageSize: 20,
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
