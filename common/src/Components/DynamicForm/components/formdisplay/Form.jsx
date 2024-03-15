@@ -16,6 +16,7 @@ import {
 import {
   generateInitialValues,
   generateValidationSchema2,
+  populateInitialValues,
 } from "../../helpers/formik_helper";
 import { Col, Card, CardBody, Label, Row, Alert, Container } from "reactstrap";
 import SimpleBar from "simplebar-react";
@@ -137,7 +138,9 @@ const Form = forwardRef(
         setFormikInitialValues(generateInitialValues(formFields));
         setFormikValidationSchema(generateValidationSchema2(formFields));
       } else {
-        setFormikInitialValues(editDataValues);
+        setFormikInitialValues(
+          populateInitialValues(formFields, editDataValues)
+        );
         setFormikValidationSchema(generateValidationSchema2(formFields));
       }
     }, [formFields, editDataValues]);
@@ -241,7 +244,9 @@ const Form = forwardRef(
           generateValidationSchema2(formFields, formik)
         );
       } else {
-        setFormikInitialValues(editDataValues);
+        setFormikInitialValues(
+          populateInitialValues(formFields, editDataValues)
+        );
         setFormikValidationSchema(
           generateValidationSchema2(formFields, formik)
         );

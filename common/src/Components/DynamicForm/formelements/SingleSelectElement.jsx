@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Label, FormFeedback } from "reactstrap";
 import Select from "react-select";
 import { Lists } from "./listOptions";
+import CreatableSelect from "react-select/creatable";
 
 const SingleSelectElement = ({
   formik,
@@ -25,9 +26,17 @@ const SingleSelectElement = ({
   const [options, setOptions] = useState(getInitialOptions(field));
   const [selectedOptions, setSelectedOptions] = useState([]);
 
+  // function getSingleExistingDataOptions(data) {
+  //   if (!data) return undefined;
+  //   return options?.find((option) => option.label === data);
+  // }
+
   function getSingleExistingDataOptions(data) {
     if (!data) return undefined;
-    return options?.find((option) => option.label === data);
+    return options?.find((option) => option.value === data) || {
+      label: data,
+      value: data,
+    };
   }
 
   const mapToOptionFormat = (data) => {
@@ -94,7 +103,22 @@ const SingleSelectElement = ({
           {props?.label}
         </Label>
       )}
-      <Select
+      {/* <Select
+        styles={customStyles}
+        value={selectedOptions}
+        onChange={handleChange}
+        onInputChange={handleInputChange}
+        inputValue={search}
+        menuShouldScrollIntoView={false}
+        isClearable
+        isSearchable
+        placeholder={field.placeholder ?? "Search..."}
+        options={options}
+        noOptionsMessage={noOptionsMessage}
+        isDisabled={formState === "view" ? true : false}
+        tabIndex={tabIndexData?.[field.fieldId]}
+      /> */}
+      <CreatableSelect
         styles={customStyles}
         value={selectedOptions}
         onChange={handleChange}

@@ -1,0 +1,257 @@
+[
+  {
+    "profile": "I’m a UI & UX Designer who is passionate about creating digital strategies, products and services for companies and startups. For me, the most enjoyable part of a designer's work is being able to create something new. I believe that design is one of the many ways to solve digital problems. I am currently working full time at HomiEx Digital Exchange Company. I am working on projects including web design, branding & identity, environmental graphics. Before this, I worked as a graphic designer for about 10 years and performed many different tasks in various categories. I am a person who is always keen to learn and pick up new skills, and used to working in fast-paced working environment. Thus I am confident that I can adapt to new working environment and take on new challenges in my career.",
+    "name": "Meigan Wong",
+    "firstName": "Meigan",
+    "lastName": "Wong",
+    "gender": "Female",
+    "email": "mgfoong638@gmail.com",
+    "mobileExt": 65,
+    "mobile": 97870191,
+    "currentLocation": "Singapore",
+    "nationality": "Singaporean",
+    "dateOfBirth": "",
+    "age": "",
+    "skills": [
+      "Adobe Creative Suite",
+      "Animation / Video",
+      "UI & UX Software",
+      "Web Development",
+      "HTML5",
+      "CSS",
+      "Javascript",
+      "Jquery",
+      "PHP",
+      "MySQL",
+      "Python",
+      "Sketch",
+      "Axure",
+      "Zeplin",
+      "Invision",
+      "Flinto",
+      "Bootstrap"
+    ],
+    "experience": [
+      {
+        "title": "Product Designer",
+        "company": "HomiEx",
+        "startDate": "01/2019",
+        "endDate": "present",
+        "responsibilities": [
+          "Responsible for designing different type of website and social media banners.",
+          "Partially responsible for editing our website front-end page by coding.",
+          "Designing HomiEx platform collaborating with the developer team to define use cases and turn conceptual ideas into data visualizations and workflows.",
+          "Work with engineers on edge cases, error states, loading & empty states etc.",
+          "Make sure designs are consistent with the design system."
+        ]
+      },
+      {
+        "title": "UI & UX Designer",
+        "company": "ecxx.com",
+        "startDate": "",
+        "endDate": "",
+        "responsibilities": [
+          "Works closely with Developer, and Marketing Manager to develop user-centered features.",
+          "Monitor work against the production schedule, provide updates to the design and development manager and report any technical difficulties.",
+          "Create inspiring design work and maintains a positive role in our company culture.",
+          "Execute all visual design stages from concept to working with backend developers."
+        ]
+      },
+      {
+        "title": "Freelance Graphic Designer",
+        "company": "Freelancing anywhere in Singapore",
+        "startDate": "2013",
+        "endDate": "2017",
+        "responsibilities": [
+          "Experienced working on different type of company such as Advertising Company, Local Agencies and Retail In-house company.",
+          "Boosted confidence for future challenges in the society.",
+          "Performed job includes both above and below-the lines."
+        ]
+      },
+      {
+        "title": "FA Designer",
+        "company": "Ogilvy & Mather Pte Ltd",
+        "startDate": "2009",
+        "endDate": "2013",
+        "responsibilities": [
+          "Performed visual analysis on a day-to-day basis for a wide range of advertising collaterals for clients from multiple industries.",
+          "Engaged in the creation of both above-the-line and below-the line designs.",
+          "Created Artwork in OOH such as Bus, Taxi, Outdoor Banners, Box packaging and provide mock-ups for clients.",
+          "Assist the artworks using Powerpoint for presentation."
+        ]
+      },
+      {
+        "title": "FA Artist",
+        "company": "Crush Advertising",
+        "startDate": "2007",
+        "endDate": "2009",
+        "responsibilities": [
+          "Coordinated with Art Directors, Account Managers, Studio and Project Managers to ensure a high level of client satisfaction with adaptation and finished artworks.",
+          "Performed visual analysis on a day-to-day basis for a wide range of advertising collaterals for clients from multiple industries."
+        ]
+      }
+    ],
+    "education": "Diploma of Graphic Design (Print)",
+    "primarySkills": [
+      "Adobe Creative Suite",
+      "UI & UX Software",
+      "Web Development"
+    ],
+    "secondarySkills": [
+      "Animation / Video",
+      "HTML5",
+      "CSS",
+      "Javascript",
+      "Jquery",
+      "PHP",
+      "MySQL",
+      "Python",
+      "Sketch",
+      "Axure",
+      "Zeplin",
+      "Invision",
+      "Flinto",
+      "Bootstrap"
+    ],
+    "spokenLanguages": ["English", "Mandarin", "Bahasa", "Cantonese"],
+    "companiesDetails": [
+      {
+        "name": "HomiEx",
+        "industry": "Product Design",
+        "startDate": "03/2019",
+        "endDate": "03/2024",
+        "noOfMonths": 60,
+        "jobTitle": "Product Designer",
+        "responsibilities": [
+          "Responsible for designing different type of website and social media banners. I am also partially responsible for editing our website front-end page by coding.",
+          "Designing HomiEx platform collaborating with the developer team to define use cases and turn conceptual ideas into data visualizations and workflows.",
+          "Work with engineers on edge cases, error states, loading & empty states etc. Make sure designs are consistent with the design system."
+        ]
+      },
+      {
+        "name": "ecxx.com",
+        "industry": "UI & UX Design",
+        "startDate": "03/2009",
+        "endDate": "03/2019",
+        "noOfMonths": 120,
+        "jobTitle": "UI & UX Designer",
+        "responsibilities": [
+          "Works closely with Developer, and Marketing Manager to develop user-centered features. Monitor work against the production schedule, provide updates to the design and development manager and report any technical difficulties.",
+          "Create inspiring design work and maintains a positive role in our company culture. Execute all visual design stages from concept to working with backend developers."
+        ]
+      },
+      {
+        "name": "Hogarth Worldwide Pte Ltd",
+        "industry": "Graphic Design",
+        "startDate": "04/1999",
+        "endDate": "03/2009",
+        "noOfMonths": 120,
+        "jobTitle": "Graphic Designer",
+        "responsibilities": [
+          "Performed visual analysis visualize, create and adaptation for different languages and different sizes",
+          "Managed the production, creation and finalization of creative artworks and Ads (News paper)",
+          "Color and images retouching before color proofing",
+          "Performed visual eBanner, Facebook & eDM for Digital artwork",
+          "Submission of ads to SPH using the Automation Engine, ensure the quality of the artwork and colours"
+        ]
+      }
+    ],
+    "monthsOfExperience": 300,
+    "yearsOfExperience": 25,
+    "jobTitle": "Product Designer",
+    "educationDetails": [
+      {
+        "name": "Lithan Academy Pte Ltd, Singapore",
+        "fieldOfStudy": "Web Development",
+        "startDate": "07/2017",
+        "endDate": "04/2018",
+        "noOfMonths": 9,
+        "qualification": "",
+        "grade": "",
+        "activities": []
+      },
+      {
+        "name": "First Media Academy, Singapore",
+        "fieldOfStudy": "Web Design",
+        "startDate": "03/2016",
+        "endDate": "12/2017",
+        "noOfMonths": 21,
+        "qualification": "",
+        "grade": "",
+        "activities": []
+      },
+      {
+        "name": "Palin School of Arts & Design, Singapore",
+        "fieldOfStudy": "Graphic Design",
+        "startDate": "04/1997",
+        "endDate": "03/1999",
+        "noOfMonths": 23,
+        "qualification": "Diploma of Graphic Design (Print)",
+        "grade": "",
+        "activities": []
+      }
+    ],
+    "certifications": [],
+    "trainings": [
+      {
+        "name": "Design and develop an interactive front-end of a website or web application using HTML, CSS, Javascript and Jquery. Learn object oriented programming using PHP. Design, develop, deploy and test web applications using PHP & MySQL. Design, implement and test procedural programming solutions using Python.",
+        "from": "Lithan Academy Pte Ltd, Singapore",
+        "date": "07/2017"
+      },
+      {
+        "name": "This course is designed to teach without technical knowledge to design and build a friendly and functional website. Emphasis is rooted on design aesthetics, functionality and navigation friendliness using Adobe Dreamweaver. Learn basic web programming language via CSS and HTML coding. Create user friendly user interface through wireframe planning.",
+        "from": "First Media Academy, Singapore",
+        "date": "03/2016"
+      },
+      {
+        "name": "Diploma of Graphic Design (Print)",
+        "from": "Palin School of Arts & Design, Singapore",
+        "date": "04/1997"
+      }
+    ],
+    "awards": [],
+    "achievements": [
+      {
+        "name": "Designed and developed an interactive front-end of a website or web application using HTML, CSS, Javascript, and Jquery."
+      },
+      {
+        "name": "Designed, developed, deployed, and tested web applications using PHP & MySQL."
+      },
+      {
+        "name": "Designed and implemented procedural programming solutions using Python."
+      },
+      {
+        "name": "Learned basic web programming language via CSS and HTML coding."
+      },
+      {
+        "name": "Created user-friendly user interface through wireframe planning."
+      },
+      {
+        "name": "Learned basic and intermediate software operations of Adobe Photoshop, Adobe Illustrator, and Freehand."
+      },
+      {
+        "name": "Developed marketing collaterals via image editing and composition techniques."
+      },
+      {
+        "name": "Adopted a holistic approach to appreciate and apply design basics, brand building, and product packaging in photoshop formats."
+      }
+    ],
+    "urls": [
+      {
+        "name": "Portfolio Website",
+        "link": "http://www.meiganwong.com"
+      }
+    ],
+    "projects": [
+      {
+        "name": "Product Designer",
+        "date": "01/2019",
+        "description": "Responsible for designing different type of website and social media banners. Partially responsible for editing website front-end page by coding. Designing HomiEx platform collaborating with developer team to define use cases and turn conceptual ideas into data visualizations and workflows. Work with engineers on edge cases, error states, loading & empty states etc. Make sure designs are consistent with the design system."
+      }
+    ],
+    "publications": [],
+    "availability": "",
+    "reasonToLeave": "",
+    "expectedSalary": ""
+  }
+]

@@ -60,10 +60,20 @@ const displayFileSize = (size) => {
   return `${(size / 1000000).toFixed(2)} MB`;
 };
 
+const getFilenameNoExtension = (file) => {
+  return file.name.split(".").slice(0, -1).join(".");
+}
+
+const getFileExtension = (file) => {
+  return file.name.split(".").pop();
+}
+
 export {
   checkFileFormatValid,
   checkFileSizeLimit,
   convertJSONFileToJSONObject,
   checkFileWithMimeType,
-  displayFileSize
+  displayFileSize,
+  getFilenameNoExtension,
+  getFileExtension
 };

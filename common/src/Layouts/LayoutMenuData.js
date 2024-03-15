@@ -240,7 +240,7 @@ const Navdata = () => {
         checkAllPermission([Permission.CANDIDATE_WRITE]) && {
           id: "newCandidate",
           label: "Create New Candidate",
-          link: "/candidates/create",
+          link: "/candidates/new",
           parentId: "candidates",
         },
       ].filter(Boolean),

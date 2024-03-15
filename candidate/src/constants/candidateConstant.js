@@ -26,3 +26,13 @@ export const CandidateTableListConstant = {
   LANGUAGES_LIST: "languagesList",
   EMPLOYER_DETAILS_LIST: "employerDetailsList",
 };
+
+export const CandidateFormNameConstant = {
+  CANDIDATE_BASIC_INFO: "Candidate_basic_info",
+  CANDIDATE_DOCUMENTS: "Candidate_documents",
+  CANDIDATE_WORK_EXPERIENCE: "Candidate_work_experience",
+  CANDIDATE_EDUCATION_DETAILS: "Candidate_education_details",
+  CANDIDATE_CERTIFICATION: "Candidate_certification",
+  CANDIDATE_LANGUAGES: "Candidate_languages",
+  CANDIDATE_EMPLOYER_DETAILS: "Candidate_employer_details",
+}

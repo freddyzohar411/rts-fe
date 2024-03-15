@@ -33,6 +33,13 @@ import {
   FETCH_CANDIDATES_ADMIN,
   FETCH_CANDIDATES_ADMIN_SUCCESS,
   FETCH_CANDIDATES_ADMIN_FAILURE,
+  IMPORT_CANDIDATE,
+  IMPORT_CANDIDATE_SUCCESS,
+  IMPORT_CANDIDATE_FAILURE,
+  IMPORT_CANDIDATE_MULTI,
+  IMPORT_CANDIDATE_MULTI_SUCCESS,
+  IMPORT_CANDIDATE_MULTI_FAILURE,
+  SET_PARSE_AND_IMPORT_LOADING
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -211,6 +218,43 @@ export const fetchCandidatesAdminFailure = (error) => ({
   type: FETCH_CANDIDATES_ADMIN_FAILURE,
   payload: error,
 });
+
+// Import Candidate
+export const importCandidate = (candidateRequest) => ({
+  type: IMPORT_CANDIDATE,
+  payload: candidateRequest,
+});
+
+export const importCandidateSuccess = (candidate) => ({
+  type: IMPORT_CANDIDATE_SUCCESS,
+  payload: candidate,
+});
+
+export const importCandidateFailure = (error) => ({
+  type: IMPORT_CANDIDATE_FAILURE,
+  payload: error,
+});
+
+export const importCandidateMulti = (candidateRequestAll) => ({
+  type: IMPORT_CANDIDATE_MULTI,
+  payload: candidateRequestAll,
+});
+
+export const importCandidateMultiSuccess = () => ({
+  type: IMPORT_CANDIDATE_MULTI_SUCCESS,
+});
+
+export const importCandidateMultiFailure = (error) => ({
+  type: IMPORT_CANDIDATE_MULTI_FAILURE,
+  payload: error,
+});
+
+export const setParseAndImportLoading = (loading) => ({
+  type: SET_PARSE_AND_IMPORT_LOADING,
+  payload: loading,
+});
+
+
 
 
 

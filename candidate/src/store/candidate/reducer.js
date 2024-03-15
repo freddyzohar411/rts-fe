@@ -33,6 +33,13 @@ import {
   FETCH_CANDIDATES_ADMIN,
   FETCH_CANDIDATES_ADMIN_SUCCESS,
   FETCH_CANDIDATES_ADMIN_FAILURE,
+  IMPORT_CANDIDATE,
+  IMPORT_CANDIDATE_SUCCESS,
+  IMPORT_CANDIDATE_FAILURE,
+  IMPORT_CANDIDATE_MULTI,
+  IMPORT_CANDIDATE_MULTI_SUCCESS,
+  IMPORT_CANDIDATE_MULTI_FAILURE,
+  SET_PARSE_AND_IMPORT_LOADING,
 } from "./actionTypes";
 
 import {
@@ -54,6 +61,9 @@ const initialState = {
   updateMeta: {},
   deleteMeta: {},
   tableMeta: {},
+  importLoading: false,
+  importMultiLoading: false,
+  parseAndImportLoading: false,
 };
 
 const CandidateReducer = (state = initialState, action) => {
@@ -281,6 +291,41 @@ const CandidateReducer = (state = initialState, action) => {
         ...state,
         candidates: {},
         candidateMeta: errorMetaData(action.payload),
+      };
+    case IMPORT_CANDIDATE:
+      return {
+        ...state,
+        importLoading: true,
+      };
+    case IMPORT_CANDIDATE_SUCCESS:
+      return {
+        ...state,
+        importLoading: false,
+      };
+    case IMPORT_CANDIDATE_FAILURE:
+      return {
+        ...state,
+        importLoading: false,
+      };
+    case IMPORT_CANDIDATE_MULTI:
+      return {
+        ...state,
+        importMultiLoading: true,
+      };
+    case IMPORT_CANDIDATE_MULTI_SUCCESS:
+      return {
+        ...state,
+        importMultiLoading: false,
+      };
+    case IMPORT_CANDIDATE_MULTI_FAILURE:
+      return {
+        ...state,
+        importMultiLoading: false,
+      };
+    case SET_PARSE_AND_IMPORT_LOADING:
+      return {
+        ...state,
+        parseAndImportLoading: action.payload,
       };
     default:
       return state;
