@@ -270,7 +270,8 @@ function* workImportCandidate(action) {
       );
       candidateId = response?.data?.id;
     } catch (error) {
-      toast.error("Error creating candidate");
+      yield put(importCandidateFailure());
+      toast.error("Error creating candidate basic info");
       console.log("Error creating candidate", error);
     }
 
@@ -278,49 +279,56 @@ function* workImportCandidate(action) {
 
     // Work experience
     const workExperiences = candidateData[1].newData;
-    const workExperienceFormData = generateFormDataArray(
-      candidateData[1]?.newData,
-      "workExperienceList",
-      true,
-      candidateId
-    );
-
-    try {
-      const response = yield call(
-        createCandidateList,
-        candidateData[1].entity,
-        null,
-        workExperienceFormData,
-        candidateData[1].config
+    if (workExperiences.length > 0) {
+      const workExperienceFormData = generateFormDataArray(
+        candidateData[1]?.newData,
+        "workExperienceList",
+        true,
+        candidateId
       );
-    } catch (error) {
-      toast.error("Error creating candidate");
-      console.log("Error creating candidate", error);
-    }
 
-    // Languages
-    let languageFormDataArray = [];
-    for (const language of candidateData[2].newData) {
-      languageFormDataArray.push({
-        formData: "",
-        ...language,
-        entityId: candidateId,
-      });
-    }
-    if (languageFormDataArray.length > 0) {
       try {
         const response = yield call(
           createCandidateList,
-          candidateData[2].entity,
+          candidateData[1].entity,
           null,
-          {
-            languagesList: languageFormDataArray,
-          },
-          candidateData[2]?.config
+          workExperienceFormData,
+          candidateData[1].config
         );
       } catch (error) {
-        toast.error("Error creating candidate");
+        yield put(importCandidateFailure());
+        toast.error("Error creating candidate work experiences");
         console.log("Error creating candidate", error);
+      }
+    }
+
+    // Languages
+    const languages = candidateData[2].newData;
+    if (languages.length > 0) {
+      let languageFormDataArray = [];
+      for (const language of candidateData[2].newData) {
+        languageFormDataArray.push({
+          formData: "",
+          ...language,
+          entityId: candidateId,
+        });
+      }
+      if (languageFormDataArray.length > 0) {
+        try {
+          const response = yield call(
+            createCandidateList,
+            candidateData[2].entity,
+            null,
+            {
+              languagesList: languageFormDataArray,
+            },
+            candidateData[2]?.config
+          );
+        } catch (error) {
+          yield put(importCandidateFailure());
+          toast.error("Error creating candidate languages");
+          console.log("Error creating candidate", error);
+        }
       }
     }
 
@@ -344,54 +352,62 @@ function* workImportCandidate(action) {
         candidateData[3].config
       );
     } catch (error) {
-      toast.error("Error creating candidate");
+      yield put(importCandidateFailure());
+      toast.error("Error creating candidate education details");
       console.log("Error creating candidate", error);
     }
 
     // Document
     let documentFormData = candidateData[4].newData;
-    if (documentFormData) {
-      const documentFormDataArray = generateFormData(
-        documentFormData,
-        true,
-        candidateId
-      );
-      try {
-        const response = yield call(
-          createCandidate,
-          candidateData[4].entity,
-          null,
-          documentFormDataArray,
-          candidateData[4].config
+    if (documentFormData?.file) {
+      if (documentFormData) {
+        const documentFormDataArray = generateFormData(
+          documentFormData,
+          true,
+          candidateId
         );
-      } catch (error) {
-        toast.error("Error creating candidate Document");
-        console.log("Error creating candidate", error);
+        try {
+          const response = yield call(
+            createCandidate,
+            candidateData[4].entity,
+            null,
+            documentFormDataArray,
+            candidateData[4].config
+          );
+        } catch (error) {
+          yield put(importCandidateFailure());
+          toast.error("Error creating candidate Document");
+          console.log("Error creating candidate", error);
+        }
       }
     }
 
     // Certification
-    let certificationFormDataArray = [];
-    for (const certification of candidateData[5].newData) {
-      certificationFormDataArray.push({
-        formData: "",
-        ...certification,
-        entityId: candidateId,
-      });
-    }
-    try {
-      const response = yield call(
-        createCandidateList,
-        candidateData[5].entity,
-        null,
-        {
-          certificationsList: certificationFormDataArray,
-        },
-        candidateData[5]?.config
-      );
-    } catch (error) {
-      toast.error("Error creating candidate");
-      console.log("Error creating candidate", error);
+    const certifications = candidateData[5].newData;
+    if (certifications.length > 0) {
+      let certificationFormDataArray = [];
+      for (const certification of candidateData[5].newData) {
+        certificationFormDataArray.push({
+          formData: "",
+          ...certification,
+          entityId: candidateId,
+        });
+      }
+      try {
+        const response = yield call(
+          createCandidateList,
+          candidateData[5].entity,
+          null,
+          {
+            certificationsList: certificationFormDataArray,
+          },
+          candidateData[5]?.config
+        );
+      } catch (error) {
+        yield put(importCandidateFailure());
+        toast.error("Error creating candidate certificates");
+        console.log("Error creating candidate", error);
+      }
     }
 
     // Complete candidate registration
@@ -411,12 +427,14 @@ function* workImportCandidate(action) {
         });
       }
     } catch (error) {
-      toast.error("Error creating candidate");
+      yield put(importCandidateFailure());
+      toast.error("Error creating candidate registration");
       console.log("Error creating candidate", error);
     }
   } catch (error) {
     console.log("Error creating candidate", error);
     yield put(importCandidateFailure());
+    yield put(importCandidateMultiFailure());
     yield put(setParseAndImportLoading(false));
   }
 }
@@ -442,6 +460,7 @@ function* workImportCandidateMulti(action) {
     }
   } catch (error) {
     console.log("Error creating candidate", error);
+    yield put(importCandidateFailure());
     yield put(importCandidateMultiFailure());
     yield put(setParseAndImportLoading(false));
   }

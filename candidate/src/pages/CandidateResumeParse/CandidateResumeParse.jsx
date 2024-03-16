@@ -32,6 +32,7 @@ import useImportCandidate from "./useImportCandidate";
 import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
 import { setParseAndImportLoading } from "../../store/candidate/action";
 import { parseResumeMulti } from "../../helpers/backend_helper";
+import jsonData from "../../components/CandidateParse/data2.json";
 
 const CandidateResumeParse = () => {
   const dispatch = useDispatch();
@@ -43,8 +44,8 @@ const CandidateResumeParse = () => {
   const [isValidAttachment, setIsValidAttachment] = useState(false);
   const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  // const [parseData, setParseData] = useState(jsonData ?? []);
-  const [parseData, setParseData] = useState([]);
+  const [parseData, setParseData] = useState(jsonData ?? []);
+  // const [parseData, setParseData] = useState([]);
   const [tab, setTab] = useState(1);
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([
@@ -642,7 +643,7 @@ const CandidateResumeParse = () => {
                               }
                             }}
                           >
-                            {importLoading || importMultiLoading ? (
+                            {importLoading ? (
                               <Spinner size="sm"></Spinner>
                             ) : (
                               "Import Candidates"

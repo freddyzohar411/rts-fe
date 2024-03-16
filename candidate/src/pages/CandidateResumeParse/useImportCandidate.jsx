@@ -13,6 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getCandidateFormIdMap } from "../../helpers/backend_helper";
 import { getCandidateMapping as getCandidateMappingAction } from "../../store/candidateMapping/action";
+import { toast } from "react-toastify";
 
 const useImportCandidate = () => {
   const navigate = useNavigate();
@@ -88,8 +89,39 @@ const useImportCandidate = () => {
   }
 
   function convertCandidateDataToRequestArray(candidatesData, fileObjects) {
+    console.log("Mapping data", candidateMappingData);
+    console.log("Candidates data basic info", candidateMappingData?.basicInfo);
+    console.log("Candidate First Name mapping", candidateMappingData?.basicInfo["firstName"]);
+    console.log("Candidate Last Name mapping", candidateMappingData?.basicInfo["lastName"]);
     if (!candidatesData) return;
-    if (candidatesData.length === 0) return;
+    if (candidatesData.length === 0) {
+      toast.error("No candidate data found");
+    }
+
+    // Check Mapping Data
+    if (!candidateMappingData) {
+      toast.error(
+        "Candidate Mapping Data not found. Please set up mapping data before importing candidate."
+      );
+      return;
+    }
+
+    if (candidateMappingData?.basicInfo === undefined) {
+      toast.error(
+        "Candidate basic info not mapped. Cannot import candidate. Please map the basic info fields and try again."
+      );
+      return;
+    }
+
+    if (
+      candidateMappingData?.basicInfo["firstName"] === undefined ||
+      candidateMappingData?.basicInfo["lastName"] === undefined
+    ) {
+      toast.error(
+        "Candidate basic info not mapped. Cannot import candidate. Please map the first name and last name fields and try again."
+      );
+      return;
+    }
 
     // Initialize the request array
     const candidateRequestArrayAll = [];
