@@ -89,10 +89,6 @@ const useImportCandidate = () => {
   }
 
   function convertCandidateDataToRequestArray(candidatesData, fileObjects) {
-    console.log("Mapping data", candidateMappingData);
-    console.log("Candidates data basic info", candidateMappingData?.basicInfo);
-    console.log("Candidate First Name mapping", candidateMappingData?.basicInfo["firstName"]);
-    console.log("Candidate Last Name mapping", candidateMappingData?.basicInfo["lastName"]);
     if (!candidatesData) return;
     if (candidatesData.length === 0) {
       toast.error("No candidate data found");
