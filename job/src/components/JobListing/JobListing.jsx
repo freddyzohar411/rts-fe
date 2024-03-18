@@ -65,6 +65,8 @@ const JobListing = () => {
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
+  const isFOD = gridView === "fod" || gridView === "assigned_jobs";
+
   // Custom renders
   const customRenderList = [
     {
@@ -222,7 +224,7 @@ const JobListing = () => {
 
   // Modal Delete
   const confirmDelete = () => {
-    if (gridView === "fod") {
+    if (isFOD) {
       dispatch(deleteFOD({ jobId: deleteId }));
       setIsDeleteModalOpen(false);
     } else {
@@ -467,9 +469,9 @@ const JobListing = () => {
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
-        header={gridView === "fod" ? "Delete FOD" : "Delete Job"}
+        header={isFOD ? "Delete FOD" : "Delete Job"}
         deleteText={`Are you sure you would like to delete this ${
-          gridView === "fod" ? "fod" : "job"
+          isFOD ? "fod" : "job"
         }?`}
       />
       <DynamicTableWrapper
