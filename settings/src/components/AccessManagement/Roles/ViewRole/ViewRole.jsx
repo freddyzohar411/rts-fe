@@ -212,7 +212,21 @@ function ViewRole() {
                                     <th>Group Description</th>
                                   </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody>
+                                  {role?.userGroups &&
+                                  role.userGroups?.length > 0 ? (
+                                    role?.userGroups?.map((group, index) => (
+                                      <tr key={index}>
+                                        <td>{group.userGroupName}</td>
+                                        <td>{group.userGroupDescription}</td>
+                                      </tr>
+                                    ))
+                                  ) : (
+                                    <tr>
+                                      <td colSpan={2}>No groups assigned to this role.</td>
+                                    </tr>
+                                  )}
+                                </tbody>
                               </Table>
                             </Col>
                           </Row>
