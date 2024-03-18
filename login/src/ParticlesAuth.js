@@ -1,6 +1,5 @@
 import React from "react";
 import { withRouter } from "@workspace/common";
-import { ParticlesComponent } from "./components";
 
 const ParticlesAuth = ({ children }) => {
   return (
@@ -20,7 +19,6 @@ const ParticlesAuth = ({ children }) => {
             </svg>
           </div>
         </div>
-        
 
         {/* pass the children */}
         {children}
