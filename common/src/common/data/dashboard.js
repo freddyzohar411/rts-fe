@@ -25,13 +25,13 @@ const recruiterDashboard = [
     badgeClass: "",
     percentage: " ",
     counter: "350897",
-    link: "/jobs/filter/all_jobs",
+    link: "/jobs/filter/active_jobs",
     bgcolor: "primary",
     icon: "bx bxs-select-multiple",
     decimals: 0,
     prefix: "",
     suffix: "",
-    key: "all_jobs",
+    key: "active_jobs",
   },
   {
     id: 3,
@@ -42,13 +42,13 @@ const recruiterDashboard = [
     badgeClass: "",
     percentage: "",
     counter: "350897",
-    link: "/jobs/filter/total_assigned_jobs",
+    link: "/jobs/filter/assigned_jobs",
     bgcolor: "info",
     icon: "bx bxs-group",
     decimals: 0,
     prefix: "",
     suffix: "",
-    key: "total_assigned_jobs",
+    key: "assigned_jobs",
   },
   {
     id: 4,
@@ -65,7 +65,7 @@ const recruiterDashboard = [
     decimals: 0,
     prefix: "",
     suffix: "",
-    key: "all_job_status",
+    key: "all_jobs",
   },
   {
     id: 5,
@@ -76,13 +76,13 @@ const recruiterDashboard = [
     badgeClass: "",
     percentage: "",
     counter: "300",
-    link: "/jobs/filter/total_fod",
+    link: "/jobs/filter/new_job",
     bgcolor: "success",
     icon: "bx bxs-sun",
     decimals: 0,
     prefix: "",
     suffix: "",
-    key: "total_fod",
+    key: "new_job",
   },
   {
     id: 6,
@@ -158,7 +158,8 @@ const recruiterDashboard = [
     suffix: "",
     key: "offer_review_by_recruiter",
   },
-  ,{
+  ,
+  {
     id: 10,
     cardColor: "primary",
     label: "Reminders",
@@ -174,7 +175,7 @@ const recruiterDashboard = [
     prefix: "",
     suffix: "",
     key: "offer_review_by_recruiter",
-  }
+  },
 ];
 
 const salesDashboard = [

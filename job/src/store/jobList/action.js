@@ -29,6 +29,11 @@ import {
   FETCH_JOBS_ADMIN,
   FETCH_JOBS_ADMIN_SUCCESS,
   FETCH_JOBS_ADMIN_FAILURE,
+  DELETE_FOD,
+  DELETE_FOD_SUCCESS,
+  DELETE_FOD_FAILURE,
+  DELETE_FOD_RESET,
+  CREATE_JOB_FOD_RESET,
 } from "./actionTypes";
 
 // Fetch User Group by name
@@ -163,6 +168,10 @@ export const createJobFOD = (request) => ({
   payload: request,
 });
 
+export const createJobFODReset = () => ({
+  type: CREATE_JOB_FOD_RESET,
+});
+
 export const createJobFODSuccess = (job) => ({
   type: CREATE_JOB_FOD_SUCCESS,
   payload: job,
@@ -173,19 +182,22 @@ export const createJobFODFailure = (error) => ({
   payload: error,
 });
 
-
-// Fetch job admin
-export const fetchJobsAdmin = (params) => ({
-  type: FETCH_JOBS_ADMIN,
-  payload: params,
+//Delete FOD
+export const deleteFOD = (jobId) => ({
+  type: DELETE_FOD,
+  payload: jobId,
 });
 
-export const fetchJobsAdminSuccess = (jobs) => ({
-  type: FETCH_JOBS_ADMIN_SUCCESS,
-  payload: jobs,
+export const deleteFODReset = () => ({
+  type: DELETE_FOD_RESET,
 });
 
-export const fetchJobsAdminFailure = (error) => ({
-  type: FETCH_JOBS_ADMIN_FAILURE,
+export const deleteFODSuccess = (jobId) => ({
+  type: DELETE_FOD_SUCCESS,
+  payload: jobId,
+});
+
+export const deleteFODFailure = (error) => ({
+  type: DELETE_FOD_FAILURE,
   payload: error,
 });

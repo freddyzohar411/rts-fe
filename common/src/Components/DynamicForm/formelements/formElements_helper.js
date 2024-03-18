@@ -34,6 +34,7 @@ import CandidateStatusSelectElement from "./CandidateStatusSelectElement";
 import ProfileFeedbackStatusSelectElement from "./ProfileFeedbackStatusSelectElement";
 import FirstInterviewFeedbackStatus from "./FirstInterviewFeedbackStatus";
 import SecondInterviewFeedbackStatus from "./SecondInterviewFeedbackStatus";
+import AccountOwnerSelectElement from "./AccountOwnerSelectElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -225,6 +226,17 @@ const generateFormField = (
   if (type === "selectsubindustry") {
     return (
       <SubIndustrySelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+        tabIndexData={tabIndexData}
+      />
+    );
+  }
+
+  if (type === "selectaccountowner") {
+    return (
+      <AccountOwnerSelectElement
         formik={formik}
         field={field}
         formStateHook={formStateHook}

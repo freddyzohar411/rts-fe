@@ -20,7 +20,7 @@ const FormSectionList = ({
   buttonNameHook,
   formStateHook,
   formFieldsHook,
-  tabIndexData
+  tabIndexData,
 }) => {
   const { rowId, title, isTitle } = row;
   const col = row.droppableZones.length;

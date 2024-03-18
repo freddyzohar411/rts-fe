@@ -56,7 +56,6 @@ export const jobHeaders = [
   "Submit to Client",
   "Profile Feedback Pending",
   "Interview Scheduled",
-  "Interview Scheduled - Future",
   "Interview Happened",
   "Interview Cancelled/Backout",
   "Interview Pending Feedback",
