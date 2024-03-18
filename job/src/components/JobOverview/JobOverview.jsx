@@ -833,7 +833,7 @@ const JobOverview = () => {
               type="select"
               className="form-select border-secondary"
               style={{ height: "34px", marginRight: "10px", width: "70px" }}
-              value={pageSize}
+              defaultValue="20"
             >
               <option value="5">5</option>
               <option value="10">10</option>
