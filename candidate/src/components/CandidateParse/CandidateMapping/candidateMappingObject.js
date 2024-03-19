@@ -55,7 +55,7 @@ export const candidateParseFields = [
     ],
   },
   {
-    label: "Certifications",
+    label: "Certification",
     options: [
       { label: "Certification Name", value: "certifications__name" },
       { label: "Issuing Organization", value: "certifications__from" },
