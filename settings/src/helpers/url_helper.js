@@ -5,6 +5,7 @@ export const GET_FORMS = "/api/forms";
 export const GET_USER = "/api/user";
 export const GET_USERS = "/api/user";
 export const CREATE_USER = "/api/user";
+export const CREATE_USERS = "/api/user";
 export const DELETE_USER = "/api/user";
 export const UPDATE_USER = "/api/user";
 export const LIST_USERS = "/api/user/listing";

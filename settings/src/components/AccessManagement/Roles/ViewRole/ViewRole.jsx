@@ -25,6 +25,7 @@ import { fetchRole, removeRole } from "../../../../store/roles/action";
 import { fetchGroups } from "../../../../store/group/action";
 import { fetchModules } from "../../../../store/module/action";
 import { fetchPermissions } from "../../../../store/permissions/action";
+import RolesTab from "../RolesTab";
 
 function ViewRole() {
   const { roleId } = useParams();
@@ -212,7 +213,14 @@ function ViewRole() {
                                     <th>Group Description</th>
                                   </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody>
+                                  {role?.userGroups?.map((group, index) => (
+                                    <tr key={index}>
+                                      <td>{group?.userGroupName}</td>
+                                      <td>{group?.userGroupDescription}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
                               </Table>
                             </Col>
                           </Row>

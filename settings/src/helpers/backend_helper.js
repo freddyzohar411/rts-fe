@@ -5,6 +5,7 @@ import {
   // User
   GET_USER,
   CREATE_USER,
+  CREATE_USERS,
   DELETE_USER,
   UPDATE_USER,
   GET_USERS,
@@ -48,8 +49,12 @@ export const getUsers = () => api.get(`${API_URL}${GET_USERS}`);
 // Create User
 export const createUser = (data) =>
   api.create(`${API_URL}${CREATE_USER}/add`, data);
+// Create Users
+export const createUsers = (data) =>
+  api.create(`${API_URL}${CREATE_USERS}/add/massImport`, data);
 // Update User
-export const updateUser = (data) => api.put(`${API_URL}${UPDATE_USER}/edit`, data);
+export const updateUser = (data) =>
+  api.put(`${API_URL}${UPDATE_USER}/edit`, data);
 // Delete User
 export const deleteUser = (data) =>
   api.delete(`${API_URL}${DELETE_USER}/${data}/delete`);
@@ -97,6 +102,6 @@ export const updateGroup = (data) =>
 // Delete Group
 export const deleteGroup = (id) =>
   api.delete(`${GROUP_URL}${GET_USER_GROUP}/${id}/delete`);
-  // List Groups
+// List Groups
 export const listGroups = (data) =>
   api.create(`${GROUP_URL}${LIST_GROUPS}`, data);

@@ -15,6 +15,10 @@ import {
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAILURE,
+  // Create Users
+  CREATE_USERS,
+  CREATE_USERS_SUCCESS,
+  CREATE_USERS_FAILURE,
   // Delete
   DELETE_USER,
   DELETE_USER_SUCCESS,
@@ -120,6 +124,29 @@ const UserReducer = (state = initialState, action) => {
       };
 
     case CREATE_USER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        message: action.payload,
+      };
+
+    // Create Users
+    case CREATE_USERS:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+
+    case CREATE_USERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        users: action.payload,
+      };
+      
+    case CREATE_USERS_FAILURE:
       return {
         ...state,
         loading: false,
