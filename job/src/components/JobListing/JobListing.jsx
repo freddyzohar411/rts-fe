@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingOverlay from "react-loading-overlay";
 import {
   Badge,
   Button,
@@ -465,7 +466,11 @@ const JobListing = () => {
   // ==================================================================
 
   return (
-    <>
+    <LoadingOverlay
+      active={jobFODMeta?.isLoading || deleteFODMeta?.isLoading}
+      spinner
+      text="Please wait..."
+    >
       <DeleteCustomModal
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
@@ -502,7 +507,7 @@ const JobListing = () => {
         setTagOffcanvas={setTagOffcanvas}
         selectedRowData={selectedRowData}
       />
-    </>
+    </LoadingOverlay>
   );
 };
 

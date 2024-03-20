@@ -14,18 +14,16 @@ import Error500 from "./component/Error500";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <StrictMode>
-    <ErrorBoundary
-      FallbackComponent={Error500}
-      onReset={() => (window.location.href = "/dashboard")}
-    >
-      <Provider store={configureStore({})}>
-        <React.Fragment>
-          <Route />
-        </React.Fragment>
-      </Provider>
-    </ErrorBoundary>
-  </StrictMode>
+  <ErrorBoundary
+    FallbackComponent={Error500}
+    onReset={() => (window.location.href = "/dashboard")}
+  >
+    <Provider store={configureStore({})}>
+      <React.Fragment>
+        <Route />
+      </React.Fragment>
+    </Provider>
+  </ErrorBoundary>
 );
 
 // If you want to start measuring performance in your app, pass a function
