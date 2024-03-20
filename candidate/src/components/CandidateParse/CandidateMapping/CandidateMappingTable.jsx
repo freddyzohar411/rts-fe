@@ -17,7 +17,6 @@ import {
   Spinner,
   Table,
 } from "reactstrap";
-import axios from "axios";
 import { SelectElement } from "@workspace/common";
 import {
   candidateParseFields,
