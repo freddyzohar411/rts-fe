@@ -6,10 +6,6 @@ const PermissionProtected = ({ requiredPermissions = [], children }) => {
   const navigate = useNavigate();
   const { checkAllPermission } = useUserAuth();
 
-  useEffect(() => {
-    navigate("/dashboard");
-  }, []);
-
   // Check if requiredPermissions is empty
   if (requiredPermissions.length === 0) {
     return children;
@@ -18,6 +14,8 @@ const PermissionProtected = ({ requiredPermissions = [], children }) => {
     const hasPermission = checkAllPermission(requiredPermissions);
     if (hasPermission) {
       return children;
+    } else {
+      navigate("/dashboard");
     }
   }
 };

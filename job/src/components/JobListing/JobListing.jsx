@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingOverlay from "react-loading-overlay";
 import {
   Badge,
   Button,
@@ -65,7 +66,8 @@ const JobListing = () => {
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
-  const isFOD = gridView === "fod" || gridView === "assigned_jobs";
+  const isFOD = gridView === "fod";
+  const showDelete = gridView === "fod" || gridView === "active_jobs";
 
   // Custom renders
   const customRenderList = [
@@ -442,7 +444,7 @@ const JobListing = () => {
                 </Button>
               </Link>
             )}
-            {checkAllPermission([Permission.JOB_DELETE]) && (
+            {checkAllPermission([Permission.JOB_DELETE]) && showDelete && (
               <Button
                 type="button"
                 className="btn btn-danger table-btn"
@@ -464,7 +466,11 @@ const JobListing = () => {
   // ==================================================================
 
   return (
-    <>
+    <LoadingOverlay
+      active={jobFODMeta?.isLoading || deleteFODMeta?.isLoading}
+      spinner
+      text="Please wait..."
+    >
       <DeleteCustomModal
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
@@ -501,7 +507,7 @@ const JobListing = () => {
         setTagOffcanvas={setTagOffcanvas}
         selectedRowData={selectedRowData}
       />
-    </>
+    </LoadingOverlay>
   );
 };
 

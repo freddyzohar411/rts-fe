@@ -151,8 +151,15 @@ const FODTagTable = ({ selectedRowData }) => {
         render: (data) => {
           return (
             <Link
-              to={`/candidates/${data?.id}/snapshot`}
+              to=""
               className="text-custom-primary text-decoration-underline"
+              onClick={() => {
+                const win = window.open(
+                  `/candidates/${data?.id}/snapshot`,
+                  "_blank"
+                );
+                win.focus();
+              }}
             >
               <span>{data?.candidateSubmissionData?.firstName}</span>
             </Link>
