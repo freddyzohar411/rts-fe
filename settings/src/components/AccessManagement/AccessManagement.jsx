@@ -119,7 +119,7 @@ function AccessManagement() {
                               <span>New User Group</span>
                             </Button>
                           </Link>
-                          <Link to="/settings/access/user/import-users">
+                          <Link to="/settings/access/import-users">
                             <Button
                               className="btn btn-sm btn-custom-primary"
                               type="button"

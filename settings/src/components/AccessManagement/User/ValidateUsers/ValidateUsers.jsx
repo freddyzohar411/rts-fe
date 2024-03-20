@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Field } from "formik";
 import {
   Input,
   Row,
@@ -16,17 +16,19 @@ import {
 } from "reactstrap";
 import * as XLSX from "xlsx";
 import SimpleBar from "simplebar-react";
-import { useNavigate } from "react-router-dom";
 import { fetchGroups } from "../../../../store/group/action";
+import { fetchUsers } from "../../../../store/users/action";
 import { useDispatch, useSelector } from "react-redux";
 import { userDataHeader } from "./ValidateUsersData";
 import { initialValues, schema } from "./constants";
 import { toast } from "react-toastify";
 import { truncate } from "@workspace/common/src/helpers/string_helper";
+import { FormSelection } from "@workspace/common";
 
 function ValidateUsers({ selectedFiles, onImportUsers }) {
   const dispatch = useDispatch();
   const allGroups = useSelector((state) => state?.GroupReducer?.groups);
+  const allUsers = useSelector((state) => state?.UserReducer?.users);
   const fileInputRef = useRef(null);
   const [fileUserDataArray, setFileUserDataArray] = useState([]);
   const [activeFileIndex, setActiveFileIndex] = useState(0);
@@ -35,14 +37,27 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [editingRow, setEditingRow] = useState(-1);
   const [editedData, setEditedData] = useState([]);
-  const [importedUsers, setImportedUsers] = useState([]);
+  const [sortBy, setSortBy] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [updatedSelectedFiles, setUpdatedSelectedFiles] = useState([]);
 
   useEffect(() => {
     dispatch(fetchGroups());
+    dispatch(fetchUsers());
   }, []);
 
-  // File Handling - Start
+  useEffect(() => {
+    if (allUsers && allUsers?.length > 0) {
+      setSelectedOption([
+        {
+          options: allUsers?.map((user) => ({
+            label: `${user.firstName} (${user.mobile})`,
+            value: user.id.toString(),
+          })),
+        },
+      ]);
+    }
+  }, [allUsers]);
 
   useEffect(() => {
     if (selectedFiles && selectedFiles.length > 0) {
@@ -88,6 +103,7 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
   };
 
   const handleDeletedSelected = () => {
+    // Filter out selected files that are not marked for deletion
     const updatedSelectedFiles = selectedFiles.filter(
       (_, index) => !selectedFilesIndexes.includes(index)
     );
@@ -110,9 +126,20 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
       );
 
       const updatedData = fileData.map((user, userIndex) => {
-        return editedDataForFile[userIndex]
-          ? { ...user, ...editedDataForFile[userIndex] }
-          : user;
+        const updatedUser = { ...user };
+        // Convert mobile and employeeId to strings
+        updatedUser.employeeId = String(updatedUser.employeeId);
+        updatedUser.mobile = String(updatedUser.mobile);
+        // Check if groups is null, if so, assign an empty array
+        updatedUser.groups = updatedUser.groups
+          ? [parseInt(updatedUser.groups)]
+          : [];
+        // Check if managerId is null, if so, assign an empty array
+        updatedUser.managerId = parseInt(updatedUser.managerId)
+        if (editedDataForFile[userIndex]) {
+          Object.assign(updatedUser, editedDataForFile[userIndex]);
+        }
+        return updatedUser;
       });
 
       result.push(updatedData);
@@ -127,11 +154,6 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
     onImportUsers(flattenedData);
   };
 
-  // File Handling - End
-
-  // Editing User - Start
-
-  // Get Index of User
   const getUserIndex = (index) => {
     const start = (currentPage - 1) * itemsPerPage;
     return start + index;
@@ -158,9 +180,17 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
     setEditedData(newData);
   };
 
+  const handleEditingCancel = (index) => {
+    setEditingRow(-1);
+    const newData = [...editedData];
+    newData[getUserIndex(index)] = {};
+    setEditedData(newData);
+  };
+
   const handleSave = (index) => {
     setEditingRow(-1);
     const newData = [...fileUserDataArray[activeFileIndex]];
+    console.log("New Data", newData);
     newData[getUserIndex(index)] = { ...editedData[getUserIndex(index)] };
     setFileUserDataArray((prevData) => {
       const updatedData = [...prevData];
@@ -170,32 +200,6 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
     setEditedData([]);
     toast.success("User saved successfully!");
   };
-
-  // const handleSave = (index) => {
-  //   setEditingRow(-1);
-  //   const newData = [...fileUserDataArray[activeFileIndex]];
-  //   newData[getUserIndex(index)] = { ...editedData[getUserIndex(index)] };
-  //   setFileUserDataArray((prevData) => {
-  //     const updatedData = [...prevData];
-  //     updatedData[activeFileIndex] = newData;
-  //     return updatedData;
-  //   });
-  //   setEditedData([]);
-  // };
-
-  // const handleInputChange = (e, field, index) => {
-  //   const value = e.target.value;
-  //   setEditedData((prevData) => {
-  //     const newData = [...prevData];
-  //     newData[getUserIndex(index)] = {
-  //       ...newData[getUserIndex(index)],
-  //       [field]: value,
-  //     };
-  //     return newData;
-  //   });
-  // };
-
-  // Editing User - End
 
   const confirmDelete = (index) => {
     let confirmation = confirm("Are you sure you want to delete this user?");
@@ -214,8 +218,6 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
     });
     toast.success("User deleted successfully.");
   };
-
-  // Pagination - Start
 
   const getTotalPages = () => {
     if (fileUserDataArray[activeFileIndex]) {
@@ -247,8 +249,6 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
       setCurrentPage(currentPage - 1);
     }
   };
-
-  // Pagination - End
 
   return (
     <React.Fragment>
@@ -420,7 +420,7 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                           validationSchema={schema}
                           onSubmit={handleSave}
                         >
-                          {({ errors, touched, isValid, setFieldValue }) =>
+                          {({ errors, touched, setFieldValue, handleChange }) =>
                             getCurrentPageData().map((user, index) => (
                               <tr key={index}>
                                 <td>
@@ -432,7 +432,7 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                                       editingRow === index
                                         ? editedData[getUserIndex(index)]
                                             ?.firstName || ""
-                                        : user.firstName || "N/A"
+                                        : user.firstName || ""
                                     }
                                     disabled={editingRow !== index}
                                     className={`form-control ${
@@ -629,82 +629,74 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                                 </td>
                                 <td>
                                   <Field
-                                    name="managerEmail"
+                                    name="managerId"
                                     type="email"
                                     placeholder="Enter Manager Email"
                                     value={
                                       editingRow === index
                                         ? editedData[getUserIndex(index)]
-                                            ?.managerEmail || ""
-                                        : user.managerEmail || "N/A"
+                                            ?.managerId || ""
+                                        : user.managerId || "N/A"
                                     }
                                     disabled={editingRow !== index}
                                     className={`form-control ${
                                       editingRow === index &&
-                                      errors.managerEmail &&
-                                      touched.managerEmail
+                                      errors.managerId &&
+                                      touched.managerId
                                         ? "is-invalid"
                                         : ""
                                     }`}
                                     onChange={(e) => {
                                       setFieldValue(
-                                        "managerEmail",
+                                        "managerId",
                                         e.target.value,
                                         true
                                       );
-                                      handleInputChange(
-                                        e,
-                                        "managerEmail",
-                                        index
-                                      );
+                                      handleInputChange(e, "managerId", index);
                                     }}
                                   />
-                                  {errors.managerEmail &&
-                                    touched.managerEmail && (
-                                      <FormFeedback type="invalid">
-                                        {
-                                          errors?.[getUserIndex(index)]
-                                            ?.managerEmail
-                                        }
-                                      </FormFeedback>
-                                    )}
+                                  {errors.managerId && touched.managerId && (
+                                    <FormFeedback type="invalid">
+                                      {errors?.[getUserIndex(index)]?.managerId}
+                                    </FormFeedback>
+                                  )}
                                 </td>
+
                                 <td>
                                   <Field
                                     as="select"
                                     className={`form-select ${
                                       editingRow === index &&
-                                      errors?.[getUserIndex(index)]
-                                        ?.groupName &&
-                                      touched?.[getUserIndex(index)]?.groupName
+                                      errors?.[getUserIndex(index)]?.groups &&
+                                      touched?.[getUserIndex(index)]?.groups
                                         ? "is-invalid"
                                         : ""
                                     }`}
-                                    name="groupName"
+                                    name="groups"
                                     disabled={editingRow !== index}
                                     value={
                                       editingRow === index
                                         ? editedData[getUserIndex(index)]
-                                            ?.groupName || ""
-                                        : user.groupName || ""
+                                            ?.groups || ""
+                                        : user.groups || ""
                                     }
                                     onChange={(e) => {
                                       setFieldValue(
-                                        "groupName",
+                                        "groups",
                                         e.target.value,
                                         true
                                       );
-                                      handleInputChange(e, "groupName", index);
+                                      handleInputChange(e, "groups", index);
                                     }}
                                   >
                                     <option value="">Select Group</option>
                                     {allGroups.map((group, groupIndex) => (
                                       <option
                                         key={groupIndex}
-                                        value={group?.userGroupName}
+                                        value={group?.id}
                                         selected={
                                           editingRow === index &&
-                                          editedData[index]?.groupName ===
+                                          editedData[index]?.groups ===
                                             group?.userGroupName
                                         }
                                       >
@@ -713,9 +705,9 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                                     ))}
                                   </Field>
 
-                                  {errors.groupName && touched.groupName && (
+                                  {errors.groups && touched.groups && (
                                     <FormFeedback type="invalid">
-                                      {errors.groupName}
+                                      {errors.groups}
                                     </FormFeedback>
                                   )}
                                 </td>
@@ -731,26 +723,24 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
                                       }}
                                       onClick={() => {
                                         handleEditing(index);
+                                        editingRow === index &&
+                                          handleEditingCancel(index);
                                       }}
                                     >
                                       <i className="ri-pencil-line"></i>
                                     </Button>
-                                    <Button
+                                    <button
                                       type="submit"
                                       className="btn btn-custom-primary d-flex justify-content-center align-items-center"
                                       style={{
                                         width: "30px",
                                         height: "30px",
                                       }}
-                                      onClick={() => {
-                                        if (isValid) {
-                                          handleSave(index);
-                                        }
-                                      }}
+                                      onClick={() => handleSave(index)}
                                       disabled={editingRow !== index}
                                     >
                                       <i className="ri-save-line"></i>
-                                    </Button>
+                                    </button>
                                     <Button
                                       type="button"
                                       className="btn btn-danger d-flex justify-content-center align-items-center"

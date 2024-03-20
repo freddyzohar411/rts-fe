@@ -17,7 +17,7 @@ function ImportFiles({ onImportFiles }) {
   return (
     <React.Fragment>
       <hr/>
-      {/* <Row>
+      <Row>
         <Col>
           <FilePond
             files={files}
@@ -27,7 +27,7 @@ function ImportFiles({ onImportFiles }) {
             className="filepond filepond-input-multiple"
           />
         </Col>
-      </Row> */}
+      </Row>
     </React.Fragment>
   );
 }

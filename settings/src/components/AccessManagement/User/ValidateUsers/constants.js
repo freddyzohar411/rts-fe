@@ -7,8 +7,8 @@ export const initialValues = {
     email:"",
     mobile: "",
     employeeId: "",
-    managerId: "",
-    groupName: "",
+    managerId: null,
+    groups: [],
 }
 
 export const schema = yup.object().shape({
@@ -22,6 +22,6 @@ export const schema = yup.object().shape({
         .required("Please enter a contact number.")
         .min(10, "Mobile number must be at least 10 digits long."),
     employeeId: yup.string().required("Please enter an employee ID."),
-    managerId: yup.string().notRequired().nullable(),
-    groupName: yup.string().notRequired().nullable(),
+    managerId: yup.number().nullable().notRequired(),
+    groups: yup.array().nullable().notRequired(),
 });

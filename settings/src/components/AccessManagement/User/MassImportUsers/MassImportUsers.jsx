@@ -22,7 +22,7 @@ import { Link } from "react-router-dom";
 import ManageUsers from "../ManageUsers/ManageUsers";
 import ValidateUsers from "../ValidateUsers/ValidateUsers";
 
-function ImportUsers() {
+function MassImportUsers() {
   document.title = "Import Users | RTS";
   const [activeArrowTab, setactiveArrowTab] = useState(0);
   const [passedarrowSteps, setPassedarrowSteps] = useState([0]);
@@ -181,13 +181,13 @@ function ImportUsers() {
                       <div className="py-3">
                         <Row className="mb-3">
                           <Col>
-                            <ValidateUsers
+                            <ManageUsers
                               selectedFiles={selectedFiles}
                               onImportUsers={handleImportedUsers}
                             />
-                            {/* <ManageUsers
+                            {/* <ValidateUsers
                               selectedFiles={selectedFiles}
-                              onImportUsers={handleImportedUsers}
+                              onImportUsers={handleImportFiles}
                             /> */}
                           </Col>
                         </Row>
@@ -250,4 +250,4 @@ function ImportUsers() {
   );
 }
 
-export default ImportUsers;
+export default MassImportUsers;

@@ -148,8 +148,6 @@ function UsersTab() {
                       }}
                     ></i>
                   </th>
-                  {/* <th scope="col">Last Login</th> */}
-
                   <th scope="col" style={{ width: "30px" }}>
                     Status
                   </th>
@@ -194,7 +192,6 @@ function UsersTab() {
                       </td>
 
                       <td>{DateHelper.formatDateStandard2(user.createdAt)}</td>
-                      {/* <td>11/01/2023</td> */}
                       <td>
                         {user?.enabled ? (
                           <Badge color="success">Active</Badge>
