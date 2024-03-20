@@ -65,7 +65,8 @@ const JobListing = () => {
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
-  const isFOD = gridView === "fod" || gridView === "assigned_jobs";
+  const isFOD = gridView === "fod";
+  const showDelete = gridView === "fod" || gridView === "active_jobs";
 
   // Custom renders
   const customRenderList = [
@@ -442,7 +443,7 @@ const JobListing = () => {
                 </Button>
               </Link>
             )}
-            {checkAllPermission([Permission.JOB_DELETE]) && (
+            {checkAllPermission([Permission.JOB_DELETE]) && showDelete && (
               <Button
                 type="button"
                 className="btn btn-danger table-btn"
