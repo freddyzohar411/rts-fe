@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Row,
   Table,
@@ -12,13 +12,13 @@ import {
 } from "reactstrap";
 import SimpleBar from "simplebar-react";
 import { schema, initialValues, populateForm } from "./constants";
-import { Formik, Field } from "formik";
+import { Formik, Field, Form } from "formik";
 import { userColumns } from "./ManageUsersData";
 import { fetchGroups } from "../../../../store/group/action";
 import { fetchUsers } from "../../../../store/users/action";
 import { useDispatch, useSelector } from "react-redux";
 
-function ManageUsersTable({ extractedUserData, selectedFile }) {
+function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
   const [selectedUserData, setSelectedUserData] = useState(
     extractedUserData[selectedFile] || []
   );
@@ -31,6 +31,10 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
   );
   const [editingRow, setEditingRow] = useState(-1);
   const [formikArray, setFormikArray] = useState([]);
+  const [newUser, setNewUser] = useState([]);
+  const [submitUsers, setSubmitUsers] = useState([]);
+
+  const formikRefs = useRef([]);
 
   useEffect(() => {
     // Populate initial values for each user in selectedUserData
@@ -83,30 +87,45 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
   }, []);
 
   const deleteUserData = (index) => {
-    // const updatedUserData = selectedUserData.filter((_, i) => i !== index);
-    // setSelectedUserData(updatedUserData);
+    const updatedUserData = selectedUserData.filter((_, i) => i !== index);
+    setSelectedUserData(updatedUserData);
+    const updatedFormikRefs = formikRefs.current.filter((_, i) => i !== index);
+    formikRefs.current = updatedFormikRefs;
   };
 
-  const handleSubmit = async (index, values) => {
+  //   const updateUserData = [...selectedUserData];
+  //   updateUserData[index] = {
+  //     firstName: values.firstName,
+  //     lastName: values.lastName,
+  //     username: values.username,
+  //     email: values.email,
+  //     mobile: values.mobile,
+  //     employeeId: values.employeeId,
+  //     managerId: values.managerId,
+  //     groups: values.groups,
+  //   };
+  //   setSelectedUserData(updateUserData);
+  //   console.log("Submitted - User Data Now:", selectedUserData);
+  // };
+
+  const handleSubmit = (values, index) => {
     const updateUserData = [...selectedUserData];
-    updateUserData[index] = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      username: values.username,
-      email: values.email,
-      mobile: values.mobile,
-      employeeId: values.employeeId,
-      managerId: values.managerId,
-      groups: values.groups,
-    };
-    setSelectedUserData(updateUserData);
-    console.log("Submitted - User Data Now:", selectedUserData);
+    updateUserData[index] = values;
+    setNewUser(updateUserData);
   };
 
   const handleSubmitAll = async () => {
-    const formikValuesArray = formikArray.map((formik) => formik.values);
-    console.log("All Formik Values", formikValuesArray);
+    formikRefs.current.forEach((formik) => {
+      formik?.handleSubmit();
+    });
   };
+
+  useEffect(() => {
+    if (newUser.length === formikRefs.current.length) {
+      console.log("Submitted - User Data Now:", newUser)
+      onImportUsers(newUser);
+    }
+  }, [newUser]);
 
   return (
     <React.Fragment>
@@ -139,32 +158,36 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {getCurrentPageData()?.map((userData, index) => {
-                    return (
+                  {selectedUserData?.map((userData, index) => (
+                    <tr>
                       <Formik
-                        key={index}
                         initialValues={userInitialValues[index]}
                         validateOnBlur
                         validateOnChange={false}
+                        // Uncomment the following line if you have a validation schema
                         validationSchema={schema}
                         enableReinitialize={true}
+                        onSubmit={(values) => handleSubmit(values, index)}
+                        innerRef={(el) => {
+                          if (el) {
+                            formikRefs.current[index] = el;
+                          }
+                        }} // Use innerRef here
                       >
-                        {({ errors, touched, setFieldValue, values }) => {
-                          return (
-                            <tr>
-                              <td>
-                                {Object.values(errors).some(
-                                  (error) => error
-                                ) ? (
-                                  <i
-                                    className="ri-error-warning-line text-danger fs-5"
-                                    onClick={() => console.log(errors)}
-                                  ></i>
-                                ) : (
-                                  <i className="ri-checkbox-circle-line text-success"></i>
-                                )}
-                              </td>
-                              <td>
+                        {({ errors, touched, handleSubmit, setFieldValue }) => (
+                          <>
+                            <td>
+                              {Object.values(errors).some((error) => error) ? (
+                                <i
+                                  className="ri-error-warning-line text-danger fs-5"
+                                  onClick={() => console.log(errors)}
+                                ></i>
+                              ) : (
+                                <i className="ri-checkbox-circle-line text-success"></i>
+                              )}
+                            </td>
+                            <td>
+                              <Form onSubmit={handleSubmit}>
                                 <Field
                                   name="firstName"
                                   type="text"
@@ -177,12 +200,14 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
                                   disabled={editingRow !== index}
                                 />
                                 {errors.firstName && touched.firstName && (
-                                  <FormFeedback typeof="invalid">
+                                  <div className="invalid-feedback">
                                     {errors.firstName}
-                                  </FormFeedback>
+                                  </div>
                                 )}
-                              </td>
-                              <td>
+                              </Form>
+                            </td>
+                            <td>
+                              <Form onSubmit={handleSubmit}>
                                 <Field
                                   name="lastName"
                                   type="text"
@@ -195,12 +220,14 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
                                   disabled={editingRow !== index}
                                 />
                                 {errors.lastName && touched.lastName && (
-                                  <FormFeedback typeof="invalid">
+                                  <div className="invalid-feedback">
                                     {errors.lastName}
-                                  </FormFeedback>
+                                  </div>
                                 )}
-                              </td>
-                              <td>
+                              </Form>
+                            </td>
+                            <td>
+                              <Form onSubmit={handleSubmit}>
                                 <Field
                                   name="username"
                                   type="text"
@@ -213,12 +240,14 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
                                   disabled={editingRow !== index}
                                 />
                                 {errors.username && touched.username && (
-                                  <FormFeedback typeof="invalid">
+                                  <div className="invalid-feedback">
                                     {errors.username}
-                                  </FormFeedback>
+                                  </div>
                                 )}
-                              </td>
-                              <td>
+                              </Form>
+                            </td>
+                            <td>
+                              <Form onSubmit={handleSubmit}>
                                 <Field
                                   name="email"
                                   type="email"
@@ -231,12 +260,14 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
                                   disabled={editingRow !== index}
                                 />
                                 {errors.email && touched.email && (
-                                  <FormFeedback typeof="invalid">
+                                  <div className="invalid-feedback">
                                     {errors.email}
-                                  </FormFeedback>
+                                  </div>
                                 )}
-                              </td>
-                              <td>
+                              </Form>
+                            </td>
+                            <td>
+                              <Form onSubmit={handleSubmit}>
                                 <Field
                                   name="mobile"
                                   type="text"
@@ -253,8 +284,10 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
                                     {errors.mobile}
                                   </FormFeedback>
                                 )}
-                              </td>
-                              <td>
+                              </Form>
+                            </td>
+                            <td>
+                              <Form onSubmit={handleSubmit}>
                                 <Field
                                   name="employeeId"
                                   type="text"
@@ -271,8 +304,10 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
                                     {errors.employeeId}
                                   </FormFeedback>
                                 )}
-                              </td>
-                              <td>
+                              </Form>
+                            </td>
+                            <td>
+                              <Form onSubmit={handleSubmit}>
                                 <Field
                                   name="managerId"
                                   as="select"
@@ -303,8 +338,10 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
                                     </option>
                                   ))}
                                 </Field>
-                              </td>
-                              <td>
+                              </Form>
+                            </td>
+                            <td>
+                              <Form onSubmit={handleSubmit}>
                                 <Field
                                   name="groups"
                                   as="select"
@@ -335,41 +372,45 @@ function ManageUsersTable({ extractedUserData, selectedFile }) {
                                     </option>
                                   ))}
                                 </Field>
-                              </td>
-                              <td>
-                                <div className="d-flex justify-content-between gap-2">
-                                  <Button
-                                    className="btn btn-sm btn-custom-primary"
-                                    type="button"
-                                    onClick={() => {
-                                      setEditingRow(index);
-                                    }}
-                                  >
-                                    <i className="ri-pencil-line"></i>
-                                  </Button>
-                                  <Button
-                                    className="btn btn-sm btn-custom-primary"
+                              </Form>
+                            </td>
+
+                            <td>
+                              <div className="d-flex justify-content-between gap-2">
+                                <Button
+                                  className="btn btn-sm btn-custom-primary"
+                                  type="button"
+                                  onClick={() => {
+                                    setEditingRow(index);
+                                  }}
+                                >
+                                  <i className="ri-pencil-line"></i>
+                                </Button>
+
+                                <Form onSubmit={handleSubmit}>
+                                  <button
                                     type="submit"
+                                    className="btn btn-sm btn-custom-primary"
                                     disabled={editingRow !== index}
-                                    onClick={() => handleSubmit(index, formik.values)}
                                   >
                                     <i className="ri-save-line"></i>
-                                  </Button>
-                                  <Button
-                                    className="btn btn-sm btn-danger"
-                                    type="button"
-                                    onClick={() => deleteUserData(index)}
-                                  >
-                                    <i className="ri-delete-back-2-line"></i>
-                                  </Button>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        }}
+                                  </button>
+                                </Form>
+
+                                <Button
+                                  className="btn btn-sm btn-danger"
+                                  type="button"
+                                  onClick={() => deleteUserData(index)}
+                                >
+                                  <i className="ri-delete-back-2-line"></i>
+                                </Button>
+                              </div>
+                            </td>
+                          </>
+                        )}
                       </Formik>
-                    );
-                  })}
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </SimpleBar>

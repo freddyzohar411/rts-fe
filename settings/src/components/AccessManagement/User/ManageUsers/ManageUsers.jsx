@@ -16,45 +16,13 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
   const [extractedUserData, setExtractedUserData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
 
+
   const handleExtractedUserData = (data) => {
     setExtractedUserData(data);
   };
 
   const handleViewUsers = (filename) => {
     setSelectedFile(filename);
-  };
-
-  const handleSubmitAll = () => {
-    const newUsersImported = [];
-
-    Object.values(extractedUserData).forEach((users) => {
-      users.forEach((user) => {
-        const managerId = user.managerEmail
-          ? isNaN(parseInt(user.managerEmail))
-            ? null
-            : parseInt(user.managerEmail)
-          : null;
-        const groups = user.groupName
-          ? isNaN(parseInt(user.groupName))
-            ? []
-            : [parseInt(user.groupName)]
-          : [];
-
-        const newUser = {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          username: user.username,
-          email: user.email,
-          mobile: user.mobile.toString(),
-          employeeId: user.employeeId.toString(),
-          managerId: managerId,
-          groups: groups,
-        };
-        newUsersImported.push(newUser);
-        onImportUsers(newUsersImported);
-        console.log("newUsersImported", newUsersImported);
-      });
-    });
   };
 
   return (
@@ -133,6 +101,7 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
                       <ManageUsersTable
                         extractedUserData={extractedUserData}
                         selectedFile={selectedFile}
+                        onImportUsers={onImportUsers}
                       />
                     ) : (
                       <div>
@@ -157,7 +126,7 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
           <Col>
             <div className="d-flex justify-content-end">
               <Button
-                onClick={handleSubmitAll}
+                // onClick={handleSubmitAll}
                 className="btn btn-custom-primary"
               >
                 Confirm User Data
