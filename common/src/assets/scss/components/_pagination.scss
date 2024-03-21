@@ -12,6 +12,36 @@
     }
 }
 
+.page-link {
+    color: #ffffff;
+    background-color: var(--vz-custom-primary);
+    border: var(--vz-pagination-border-width) solid var(--vz-custom-primary-hover);
+}
+
+.pagination {
+    --vz-pagination-color: #ffffff;
+    --vz-pagination-bg: var(--vz-custom-primary);
+    --vz-pagination-border-width: var(--vz-border-width);
+    --vz-pagination-border-color: var(--vz-custom-primary);
+    --vz-pagination-border-radius: var(--vz-border-radius);
+
+    --vz-pagination-hover-color: var(--vz-dark);
+    --vz-pagination-hover-bg: var(--vz-custom-primary-hover);
+    --vz-pagination-hover-border-color: var(--vz-custom-primary-hover);
+
+    --vz-pagination-focus-color: var(--vz-dark);
+    --vz-pagination-focus-bg: var(--vz-custom-primary-hover);
+    --vz-pagination-focus-box-shadow: 0 0 1 0.25rem rgba(var(--vz-primary-rgb), 0.25);
+
+    --vz-pagination-active-color: #fff;
+    --vz-pagination-active-bg: var(--vz-custom-primary-hover);
+    --vz-pagination-active-border-color: var(--vz-custom-primary);
+
+    --vz-pagination-disabled-color: $gray-600;
+    --vz-pagination-disabled-bg: var(--#{$prefix}tertiary-bg);
+    --vz-pagination-disabled-border-color: var(--#{$prefix}tertiary-bg);
+}
+
 // Pagination rounded (Custom)
 .pagination-rounded {
     .page-link {
@@ -32,7 +62,7 @@
 }
 
 .page-item.active {
-    .page-link{
+    .page-link {
         box-shadow: $element-shadow;
     }
 }

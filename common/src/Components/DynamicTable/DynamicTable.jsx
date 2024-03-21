@@ -112,7 +112,6 @@ const DynamicTable = ({
           <option value="20">20</option>
           <option value="30">30</option>
         </Input>
-
         <Pagination>
           <PaginationItem
             disabled={pageInfo.currentPage === 0}
