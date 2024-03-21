@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import {
   Table,
   Button,
@@ -16,14 +16,17 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { debounce } from "lodash";
 import { deleteUser, listUsers } from "../../../store/users/action";
 import { DateHelper } from "@workspace/common";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function UsersTab() {
-  const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
+  const usersListingMeta = useSelector(
+    (state) => state?.UserReducer?.usersListingMeta
+  );
   const usersListing =
     useSelector((state) => state?.UserReducer?.usersListing) ?? {};
   const users = usersListing?.users;
@@ -59,6 +62,7 @@ function UsersTab() {
 
   const handleFilterType = (data) => {
     setFilterType(data);
+    setPage(0);
   };
 
   useEffect(() => {
@@ -73,8 +77,25 @@ function UsersTab() {
     dispatch(listUsers(pageRequest));
   }, [page, pageSize, sortBy, sortDirection, search, filterType]);
 
+  /**
+   * Added by Rahul Sahu to debounce the search
+   */
+  const handleSearchDebounce = useRef(
+    debounce(async (value) => {
+      setSearch(value);
+      setPage(0);
+    }, 300)
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      handleSearchDebounce.cancel();
+    };
+  }, [handleSearchDebounce]);
+
   // Handle Delete
   const [selectedUser, setSelectedUser] = useState(null);
+
   const openDeleteUserModal = (userId) => {
     setSelectedUser(userId);
     setModal(!modal);
@@ -86,16 +107,6 @@ function UsersTab() {
     setModal(!modal);
   };
 
-  useEffect(() => {
-    if (users && users.length === 0) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    } else {
-      setIsLoading(true);
-    }
-  }, [users]);
-
   return (
     <div>
       <Row className="d-flex flex-row align-items-center">
@@ -105,8 +116,9 @@ function UsersTab() {
               type="text"
               placeholder="Search.."
               className="form-control"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                handleSearchDebounce(e.target.value);
+              }}
             />
             <i className="ri-search-line search-icon"></i>
           </div>
@@ -179,7 +191,13 @@ function UsersTab() {
                 </tr>
               </thead>
               <tbody>
-                {users && users?.length > 0 ? (
+                {usersListingMeta?.isLoading ? (
+                  <tr>
+                    <td colSpan={8}>
+                      <Skeleton count={5} />
+                    </td>
+                  </tr>
+                ) : users?.length > 0 ? (
                   users?.map((user, index) => {
                     const indexNum = page * pageSize + (index + 1);
                     return (
@@ -217,7 +235,6 @@ function UsersTab() {
                             <span>Not Assigned</span>
                           )}
                         </td>
-
                         <td>
                           {DateHelper.formatDateStandard2(user.createdAt)}
                         </td>
@@ -268,12 +285,6 @@ function UsersTab() {
                       </tr>
                     );
                   })
-                ) : isLoading ? (
-                  <tr>
-                    <td colSpan={8}>
-                      <Skeleton count={5} />
-                    </td>
-                  </tr>
                 ) : (
                   <tr>
                     <td colSpan="8">No users found!</td>
@@ -308,63 +319,67 @@ function UsersTab() {
           </div>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <div className="d-flex flex-row justify-content-between align-items-baseline">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `Showing <b>${page * pageSize + 1}</b> - <b>${
-                  endPage < totalElements ? endPage : totalElements
-                }</b> of <b>${totalElements}</b> results`,
-              }}
-            ></div>
-            <div className="d-flex flex-row justify-content-end align-items-baseline">
-              <div style={{ marginRight: 10 }}>Rows per page:</div>
-              <div style={{ marginRight: 10 }}>
-                <Input
-                  type="select"
-                  className="form-select form-select-md"
-                  onChange={handleChangePageSize}
-                  value={pageSize}
-                >
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                </Input>
-              </div>
+      {users?.length > 0 && (
+        <Row>
+          <Col>
+            <div className="d-flex flex-row justify-content-between align-items-baseline">
               <div
-                style={{ marginRight: 10 }}
                 dangerouslySetInnerHTML={{
-                  __html: `Page <b>${page + 1}</b> of <b>${totalPages}</b>`,
+                  __html: `Showing <b>${page * pageSize + 1}</b> - <b>${
+                    endPage < totalElements ? endPage : totalElements
+                  }</b> of <b>${totalElements}</b> results`,
                 }}
               ></div>
-              <div>
-                <Pagination>
-                  <PaginationItem>
-                    <PaginationLink
-                      disabled={page === 0}
-                      onClick={() => setPage(page - 1)}
-                      className={`${page === 0 ? "disabled" : ""}`}
-                    >
-                      Previous
-                    </PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink
-                      disabled={page + 1 === totalPages}
-                      onClick={() => setPage(page + 1)}
-                      className={`${page + 1 === totalPages ? "disabled" : ""}`}
-                    >
-                      Next
-                    </PaginationLink>
-                  </PaginationItem>
-                </Pagination>
+              <div className="d-flex flex-row justify-content-end align-items-baseline">
+                <div style={{ marginRight: 10 }}>Rows per page:</div>
+                <div style={{ marginRight: 10 }}>
+                  <Input
+                    type="select"
+                    className="form-select form-select-md"
+                    onChange={handleChangePageSize}
+                    value={pageSize}
+                  >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                  </Input>
+                </div>
+                <div
+                  style={{ marginRight: 10 }}
+                  dangerouslySetInnerHTML={{
+                    __html: `Page <b>${page + 1}</b> of <b>${totalPages}</b>`,
+                  }}
+                ></div>
+                <div>
+                  <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        disabled={page === 0}
+                        onClick={() => setPage(page - 1)}
+                        className={`${page === 0 ? "disabled" : ""}`}
+                      >
+                        Previous
+                      </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink
+                        disabled={page + 1 === totalPages}
+                        onClick={() => setPage(page + 1)}
+                        className={`${
+                          page + 1 === totalPages ? "disabled" : ""
+                        }`}
+                      >
+                        Next
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                </div>
               </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 }

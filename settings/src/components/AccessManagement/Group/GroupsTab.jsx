@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Button,
   Col,
@@ -14,6 +14,7 @@ import {
   ModalFooter,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { debounce } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteGroup, listGroups } from "../../../store/group/action";
 import { useEffect } from "react";
@@ -21,10 +22,11 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function GroupsTab() {
-  const [isLoading, setIsLoading] = useState(false);
   const deleteMeta = useSelector((state) => state.GroupReducer.deleteMeta);
   const groupListing =
-    useSelector((state) => state?.GroupReducer.groupListing) ?? [];
+    useSelector((state) => state?.GroupReducer.groupListing) ?? {};
+  const meta = useSelector((state) => state?.GroupReducer.meta);
+
   const groups = groupListing?.userGroups ?? [];
   const dispatch = useDispatch();
   const totalElements = groupListing?.totalElements;
@@ -76,6 +78,22 @@ function GroupsTab() {
     setPage(0);
   };
 
+  /**
+   * Added by Rahul Sahu to debounce the search
+   */
+  const handleSearchDebounce = useRef(
+    debounce(async (value) => {
+      setSearch(value);
+      setPage(0);
+    }, 300)
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      handleSearchDebounce.cancel();
+    };
+  }, [handleSearchDebounce]);
+
   // Handle Delete
   const [modal, setModal] = useState(false);
   const [deletedId, setDeletedId] = useState();
@@ -84,16 +102,6 @@ function GroupsTab() {
     setModal(false);
     dispatch(deleteGroup(deletedId));
   };
-
-  useEffect(() => {
-    if (groups && groups.length === 0) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    } else {
-      setIsLoading(true);
-    }
-  }, [groups]);
 
   return (
     <div>
@@ -104,8 +112,9 @@ function GroupsTab() {
               type="text"
               placeholder="Search.."
               className="form-control"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                handleSearchDebounce(e.target.value);
+              }}
             />
             <i className="ri-search-line search-icon"></i>
           </div>
@@ -139,7 +148,13 @@ function GroupsTab() {
                 </tr>
               </thead>
               <tbody>
-                {groups && groups?.length > 0 ? (
+                {meta?.isLoading ? (
+                  <tr>
+                    <td colSpan={3}>
+                      <Skeleton count={5} />
+                    </td>
+                  </tr>
+                ) : groups?.length > 0 ? (
                   groups?.map((item, idx) => {
                     const indexNum = page * pageSize + (idx + 1);
                     return (
@@ -190,12 +205,6 @@ function GroupsTab() {
                       </tr>
                     );
                   })
-                ) : isLoading ? (
-                  <tr>
-                    <td colSpan={3}>
-                      <Skeleton count={5} />
-                    </td>
-                  </tr>
                 ) : (
                   <tr>
                     <td colSpan="3">No groups found!</td>

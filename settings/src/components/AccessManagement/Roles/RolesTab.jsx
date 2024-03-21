@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Input,
@@ -15,14 +15,17 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchRoles, deleteRole, listRoles } from "../../../store/roles/action";
+import { debounce } from "lodash";
+import { deleteRole, listRoles } from "../../../store/roles/action";
 import { fetchModules } from "../../../store/module/action";
 import { fetchPermissions } from "../../../store/permissions/action";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function RolesTab() {
-  const [isLoading, setIsLoading] = useState(false);
+  const rolesListingMeta = useSelector(
+    (state) => state.RoleReducer.rolesListingMeta
+  );
   const rolesListing = useSelector((state) => state.RoleReducer.rolesListing);
   const roles = rolesListing.roles;
   const totalPages = rolesListing.totalPages;
@@ -32,6 +35,7 @@ function RolesTab() {
   );
   const dispatch = useDispatch();
   const totalElements = rolesListing?.totalElements;
+
   useEffect(() => {
     // Fetch modules if not available
     if (!modulesData) {
@@ -44,7 +48,7 @@ function RolesTab() {
 
   // Pagination
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(0);
+  const [page] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [sortBy, setSortBy] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
@@ -75,9 +79,26 @@ function RolesTab() {
     dispatch(listRoles(pageRequest));
   }, [page, pageSize, sortBy, sortDirection, search]);
 
+  /**
+   * Added by Rahul Sahu to debounce the search
+   */
+  const handleSearchDebounce = useRef(
+    debounce(async (value) => {
+      setSearch(value);
+      setPage(0);
+    }, 300)
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      handleSearchDebounce.cancel();
+    };
+  }, [handleSearchDebounce]);
+
   // Delete
   const [modal, setModal] = useState(false);
   const [selectedRole, setSelectedRole] = useState([]);
+
   const confirmDelete = (role) => {
     setSelectedRole(role);
     setModal(!modal);
@@ -87,16 +108,6 @@ function RolesTab() {
     dispatch(deleteRole(role));
     setModal(!modal);
   };
-
-  useEffect(() => {
-    if (roles && roles.length === 0) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    } else {
-      setIsLoading(true);
-    }
-  }, [roles]);
 
   return (
     <div>
@@ -130,8 +141,9 @@ function RolesTab() {
               type="text"
               placeholder="Search.."
               className="form-control"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                handleSearchDebounce(e.target.value);
+              }}
             />
             <i className="ri-search-line search-icon"></i>
           </div>
@@ -167,7 +179,13 @@ function RolesTab() {
                 </tr>
               </thead>
               <tbody>
-                {roles && roles?.length > 0 ? (
+                {rolesListingMeta?.isLoading ? (
+                  <tr>
+                    <td colSpan={3}>
+                      <Skeleton count={5} />
+                    </td>
+                  </tr>
+                ) : roles?.length > 0 ? (
                   roles?.map((role, index) => {
                     const indexNum = page * pageSize + (index + 1);
                     return (
@@ -221,12 +239,6 @@ function RolesTab() {
                       </tr>
                     );
                   })
-                ) : isLoading ? (
-                  <tr>
-                    <td colSpan={3}>
-                      <Skeleton count={5} />
-                    </td>
-                  </tr>
                 ) : (
                   <tr>
                     <td colSpan={3}>No roles found!</td>
@@ -256,63 +268,67 @@ function RolesTab() {
           </div>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <div className="d-flex flex-row justify-content-between align-items-baseline">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `Showing <b>${page * pageSize + 1}</b> - <b>${
-                  endPage < totalElements ? endPage : totalElements
-                }</b> of <b>${totalElements}</b> results`,
-              }}
-            ></div>
-            <div className="d-flex flex-row justify-content-end align-items-baseline">
-              <div style={{ marginRight: 10 }}>Rows per page:</div>
-              <div style={{ marginRight: 10 }}>
-                <Input
-                  type="select"
-                  className="form-select form-select-md"
-                  onChange={handlePageSize}
-                  value={pageSize}
-                >
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                </Input>
-              </div>
+      {roles?.length > 0 && (
+        <Row>
+          <Col>
+            <div className="d-flex flex-row justify-content-between align-items-baseline">
               <div
-                style={{ marginRight: 10 }}
                 dangerouslySetInnerHTML={{
-                  __html: `Page <b>${page + 1}</b> of <b>${totalPages}</b>`,
+                  __html: `Showing <b>${page * pageSize + 1}</b> - <b>${
+                    endPage < totalElements ? endPage : totalElements
+                  }</b> of <b>${totalElements}</b> results`,
                 }}
               ></div>
-              <div>
-                <Pagination>
-                  <PaginationItem>
-                    <PaginationLink
-                      disabled={page === 0}
-                      onClick={() => setPage(page - 1)}
-                      className={`${page === 0 ? "disabled" : ""}`}
-                    >
-                      Previous
-                    </PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink
-                      disabled={page + 1 === totalPages}
-                      onClick={() => setPage(page + 1)}
-                      className={`${page + 1 === totalPages ? "disabled" : ""}`}
-                    >
-                      Next
-                    </PaginationLink>
-                  </PaginationItem>
-                </Pagination>
+              <div className="d-flex flex-row justify-content-end align-items-baseline">
+                <div style={{ marginRight: 10 }}>Rows per page:</div>
+                <div style={{ marginRight: 10 }}>
+                  <Input
+                    type="select"
+                    className="form-select form-select-md"
+                    onChange={handlePageSize}
+                    value={pageSize}
+                  >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                  </Input>
+                </div>
+                <div
+                  style={{ marginRight: 10 }}
+                  dangerouslySetInnerHTML={{
+                    __html: `Page <b>${page + 1}</b> of <b>${totalPages}</b>`,
+                  }}
+                ></div>
+                <div>
+                  <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        disabled={page === 0}
+                        onClick={() => setPage(page - 1)}
+                        className={`${page === 0 ? "disabled" : ""}`}
+                      >
+                        Previous
+                      </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink
+                        disabled={page + 1 === totalPages}
+                        onClick={() => setPage(page + 1)}
+                        className={`${
+                          page + 1 === totalPages ? "disabled" : ""
+                        }`}
+                      >
+                        Next
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                </div>
               </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 }
