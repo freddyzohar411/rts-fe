@@ -64,9 +64,7 @@ const MultiFileInputElement = ({
           setFiles([]);
           setDeletedIds([]);
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((error) => {});
     }
   }, [field?.multiFileEnity]);
 
@@ -131,9 +129,7 @@ const MultiFileInputElement = ({
       if (!checkifFileExists()) {
         setShowFiles(false);
       }
-    } catch (error) {
-      console.log("Error deleting file: ", error);
-    }
+    } catch (error) {}
   };
 
   /**

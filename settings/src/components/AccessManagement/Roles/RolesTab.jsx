@@ -31,7 +31,7 @@ function RolesTab() {
     (state) => state.PermissionReducer.permissions
   );
   const dispatch = useDispatch();
-
+  const totalElements = rolesListing?.totalElements;
   useEffect(() => {
     // Fetch modules if not available
     if (!modulesData) {
@@ -48,6 +48,7 @@ function RolesTab() {
   const [pageSize, setPageSize] = useState(20);
   const [sortBy, setSortBy] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
+  const endPage = (page + 1) * pageSize;
 
   const handleSortAndDirection = (column) => {
     setSortBy(column);
@@ -138,14 +139,17 @@ function RolesTab() {
         </Col>
       </Row>
       <Row className="mb-1">
-        <Col>
-          <div className="table-responsive">
+        <Col lg={12}>
+          <div className="table-responsive mb-1">
             <Table
               className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3"
               id="rolesTable"
             >
               <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
                 <tr>
+                  <th>
+                    <span className="me-1">#</span>
+                  </th>
                   <th scope="col">
                     <span className="me-1">Roles</span>
                     <i
@@ -164,53 +168,59 @@ function RolesTab() {
               </thead>
               <tbody>
                 {roles && roles?.length > 0 ? (
-                  roles?.map((role, index) => (
-                    <tr key={index}>
-                      <td>{role?.roleName}</td>
-                      <td className="text-truncate">
-                        {role.roleDescription.length > 100
-                          ? `${role.roleDescription.substring(0, 100)}...`
-                          : role.roleDescription}
-                      </td>
-                      <td className="d-flex align-items-center justify-content-center">
-                        <div className="d-flex flex-start gap-2">
-                          <Link
-                            to={role ? `/settings/access/role/${role.id}` : "#"}
-                          >
-                            <Button className="btn btn-custom-primary px-2 py-1">
+                  roles?.map((role, index) => {
+                    const indexNum = page * pageSize + (index + 1);
+                    return (
+                      <tr key={indexNum}>
+                        <td>{indexNum}.</td>
+                        <td>{role?.roleName}</td>
+                        <td className="text-truncate">
+                          {role.roleDescription.length > 100
+                            ? `${role.roleDescription.substring(0, 100)}...`
+                            : role.roleDescription}
+                        </td>
+                        <td className="d-flex align-items-center justify-content-center">
+                          <div className="d-flex flex-start gap-2">
+                            <Link
+                              to={
+                                role ? `/settings/access/role/${role.id}` : "#"
+                              }
+                            >
+                              <Button className="btn btn-custom-primary px-2 py-1">
+                                <i
+                                  className="ri-eye-line"
+                                  style={{ fontSize: "0.65rem" }}
+                                ></i>
+                              </Button>
+                            </Link>
+                            <Link
+                              to={
+                                role
+                                  ? `/settings/access/role/update/${role.id}`
+                                  : "#"
+                              }
+                            >
+                              <Button className="btn btn-custom-primary px-2 py-1">
+                                <i
+                                  className="ri-pencil-line"
+                                  style={{ fontSize: "0.65rem" }}
+                                ></i>
+                              </Button>
+                            </Link>
+                            <Button
+                              className="btn btn-danger px-2 py-0"
+                              onClick={() => confirmDelete(role?.id)}
+                            >
                               <i
-                                className="ri-eye-line"
+                                className="ri-delete-bin-2-line"
                                 style={{ fontSize: "0.65rem" }}
                               ></i>
                             </Button>
-                          </Link>
-                          <Link
-                            to={
-                              role
-                                ? `/settings/access/role/update/${role.id}`
-                                : "#"
-                            }
-                          >
-                            <Button className="btn btn-custom-primary px-2 py-1">
-                              <i
-                                className="ri-pencil-line"
-                                style={{ fontSize: "0.65rem" }}
-                              ></i>
-                            </Button>
-                          </Link>
-                          <Button
-                            className="btn btn-danger px-2 py-0"
-                            onClick={() => confirmDelete(role?.id)}
-                          >
-                            <i
-                              className="ri-delete-bin-2-line"
-                              style={{ fontSize: "0.65rem" }}
-                            ></i>
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : isLoading ? (
                   <tr>
                     <td colSpan={3}>
@@ -249,38 +259,56 @@ function RolesTab() {
       <Row>
         <Col>
           <div className="d-flex flex-row justify-content-between align-items-baseline">
-            <div>
-              <Input
-                type="select"
-                className="form-select form-select-md"
-                onChange={handlePageSize}
-                value={pageSize}
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-              </Input>
-            </div>
-            <div>
-              <Pagination>
-                <PaginationItem>
-                  <PaginationLink
-                    disabled={page === 0}
-                    onClick={() => setPage(page - 1)}
-                  >
-                    Previous
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    disabled={page + 1 === totalPages}
-                    onClick={() => setPage(page + 1)}
-                  >
-                    Next
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: `Showing <b>${page * pageSize + 1}</b> - <b>${
+                  endPage < totalElements ? endPage : totalElements
+                }</b> of <b>${totalElements}</b> results`,
+              }}
+            ></div>
+            <div className="d-flex flex-row justify-content-end align-items-baseline">
+              <div style={{ marginRight: 10 }}>Rows per page:</div>
+              <div style={{ marginRight: 10 }}>
+                <Input
+                  type="select"
+                  className="form-select form-select-md"
+                  onChange={handlePageSize}
+                  value={pageSize}
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                </Input>
+              </div>
+              <div
+                style={{ marginRight: 10 }}
+                dangerouslySetInnerHTML={{
+                  __html: `Page <b>${page + 1}</b> of <b>${totalPages}</b>`,
+                }}
+              ></div>
+              <div>
+                <Pagination>
+                  <PaginationItem>
+                    <PaginationLink
+                      disabled={page === 0}
+                      onClick={() => setPage(page - 1)}
+                      className={`${page === 0 ? "disabled" : ""}`}
+                    >
+                      Previous
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink
+                      disabled={page + 1 === totalPages}
+                      onClick={() => setPage(page + 1)}
+                      className={`${page + 1 === totalPages ? "disabled" : ""}`}
+                    >
+                      Next
+                    </PaginationLink>
+                  </PaginationItem>
+                </Pagination>
+              </div>
             </div>
           </div>
         </Col>
