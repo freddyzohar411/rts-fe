@@ -25,18 +25,20 @@ function UsersTab() {
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const usersListing =
-    useSelector((state) => state?.UserReducer?.usersListing) || [];
-  const users = usersListing.users;
-  const totalPages = usersListing.totalPages;
+    useSelector((state) => state?.UserReducer?.usersListing) ?? {};
+  const users = usersListing?.users;
+  const totalElements = usersListing?.totalElements;
+  const totalPages = usersListing?.totalPages;
   const dispatch = useDispatch();
 
   // Pagination
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(5);
   const [sortBy, setSortBy] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [filterType, setFilterType] = useState("active");
+  const endPage = (page + 1) * pageSize;
 
   const handleSortAndDirection = (column) => {
     // Get the name of the column
@@ -132,6 +134,9 @@ function UsersTab() {
               <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
                 <tr>
                   <th>
+                    <span className="me-1">#</span>
+                  </th>
+                  <th>
                     <span className="me-1">Name</span>
                     <i
                       className="mdi mdi-sort"
@@ -175,84 +180,94 @@ function UsersTab() {
               </thead>
               <tbody>
                 {users && users?.length > 0 ? (
-                  users?.map((user, index) => (
-                    <tr key={index}>
-                      <td>
-                        {user?.firstName} {user?.lastName}
-                      </td>
-                      <td>{user?.employeeId}</td>
-                      <td hidden>
-                        {user?.userGroup.length > 0 ? (
-                          <>
-                            {user.userGroup.map((group, groupIndex) => (
-                              <Fragment key={groupIndex}>
-                                {group.roles.map((role, roleIndex) => (
-                                  <span key={roleIndex}>{role?.roleName}</span>
-                                ))}
-                              </Fragment>
-                            ))}
-                          </>
-                        ) : (
-                          <span>Not Assigned</span>
-                        )}
-                      </td>
-                      <td>
-                        {user?.userGroup.length > 0 ? (
-                          user?.userGroup
-                            .map((group, index) => (
-                              <span key={index}>{group?.groupName}</span>
-                            ))
-                            .reduce((prev, curr) => [prev, ", ", curr])
-                        ) : (
-                          <span>Not Assigned</span>
-                        )}
-                      </td>
+                  users?.map((user, index) => {
+                    const indexNum = page * pageSize + (index + 1);
+                    return (
+                      <tr key={indexNum}>
+                        <td>{indexNum}.</td>
+                        <td>
+                          {user?.firstName} {user?.lastName}
+                        </td>
+                        <td>{user?.employeeId}</td>
+                        <td hidden>
+                          {user?.userGroup.length > 0 ? (
+                            <>
+                              {user.userGroup.map((group, groupIndex) => (
+                                <Fragment key={groupIndex}>
+                                  {group.roles.map((role, roleIndex) => (
+                                    <span key={roleIndex}>
+                                      {role?.roleName}
+                                    </span>
+                                  ))}
+                                </Fragment>
+                              ))}
+                            </>
+                          ) : (
+                            <span>Not Assigned</span>
+                          )}
+                        </td>
+                        <td>
+                          {user?.userGroup.length > 0 ? (
+                            user?.userGroup
+                              .map((group, index) => (
+                                <span key={index}>{group?.groupName}</span>
+                              ))
+                              .reduce((prev, curr) => [prev, ", ", curr])
+                          ) : (
+                            <span>Not Assigned</span>
+                          )}
+                        </td>
 
-                      <td>{DateHelper.formatDateStandard2(user.createdAt)}</td>
-                      <td>
-                        {user?.enabled ? (
-                          <Badge color="success">Active</Badge>
-                        ) : (
-                          <Badge color="danger">Inactive</Badge>
-                        )}
-                      </td>
-                      <td>
-                        <div className="d-flex flex-start gap-2">
-                          <Button className="btn btn-custom-primary  px-2 py-1">
-                            <i
-                              className="mdi mdi-content-copy"
-                              style={{ fontSize: "0.65rem" }}
-                            ></i>
-                          </Button>
-                          <Link to={`/settings/access/user/${user.id}`}>
-                            <Button className="btn btn-custom-primary px-2 py-1">
-                              <i
-                                className="ri-eye-line"
-                                style={{ fontSize: "0.65rem" }}
-                              ></i>
-                            </Button>
-                          </Link>
-                          <Link to={`/settings/access/user/update/${user.id}`}>
+                        <td>
+                          {DateHelper.formatDateStandard2(user.createdAt)}
+                        </td>
+                        <td>
+                          {user?.enabled ? (
+                            <Badge color="success">Active</Badge>
+                          ) : (
+                            <Badge color="danger">Inactive</Badge>
+                          )}
+                        </td>
+                        <td>
+                          <div className="d-flex flex-start gap-2">
                             <Button className="btn btn-custom-primary  px-2 py-1">
                               <i
-                                className="ri-pencil-line"
+                                className="mdi mdi-content-copy"
                                 style={{ fontSize: "0.65rem" }}
                               ></i>
                             </Button>
-                          </Link>
-                          <Button
-                            className="btn btn-danger  px-2 py-0"
-                            onClick={() => openDeleteUserModal(user.id)}
-                          >
-                            <i
-                              className="ri-delete-bin-2-line"
-                              style={{ fontSize: "0.65rem" }}
-                            ></i>
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                            <Link to={`/settings/access/user/${user.id}`}>
+                              <Button className="btn btn-custom-primary px-2 py-1">
+                                <i
+                                  className="ri-eye-line"
+                                  style={{ fontSize: "0.65rem" }}
+                                ></i>
+                              </Button>
+                            </Link>
+                            <Link
+                              to={`/settings/access/user/update/${user.id}`}
+                            >
+                              <Button className="btn btn-custom-primary  px-2 py-1">
+                                <i
+                                  className="ri-pencil-line"
+                                  style={{ fontSize: "0.65rem" }}
+                                ></i>
+                              </Button>
+                            </Link>
+                            <Button
+                              className="btn btn-danger  px-2 py-0"
+                              onClick={() => openDeleteUserModal(user.id)}
+                            >
+                              <i
+                                className="ri-delete-bin-2-line"
+                                style={{ fontSize: "0.65rem" }}
+                              ></i>
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : isLoading ? (
                   <tr>
                     <td colSpan={8}>
@@ -266,7 +281,6 @@ function UsersTab() {
                 )}
               </tbody>
             </Table>
-
             <Modal isOpen={modal} toggle={() => setModal(!modal)} centered>
               <ModalHeader>Are you sure?</ModalHeader>
               <ModalBody>
@@ -297,38 +311,56 @@ function UsersTab() {
       <Row>
         <Col>
           <div className="d-flex flex-row justify-content-between align-items-baseline">
-            <div>
-              <Input
-                type="select"
-                className="form-select form-select-md"
-                onChange={handleChangePageSize}
-                value={pageSize}
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-              </Input>
-            </div>
-            <div>
-              <Pagination>
-                <PaginationItem>
-                  <PaginationLink
-                    disabled={page === 0}
-                    onClick={() => setPage(page - 1)}
-                  >
-                    Previous
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    disabled={page + 1 === totalPages}
-                    onClick={() => setPage(page + 1)}
-                  >
-                    Next
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: `Showing <b>${page * pageSize + 1}</b> - <b>${
+                  endPage < totalElements ? endPage : totalElements
+                }</b> of <b>${totalElements}</b> results`,
+              }}
+            ></div>
+            <div className="d-flex flex-row justify-content-end align-items-baseline">
+              <div style={{ marginRight: 10 }}>Rows per page:</div>
+              <div style={{ marginRight: 10 }}>
+                <Input
+                  type="select"
+                  className="form-select form-select-md"
+                  onChange={handleChangePageSize}
+                  value={pageSize}
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                </Input>
+              </div>
+              <div
+                style={{ marginRight: 10 }}
+                dangerouslySetInnerHTML={{
+                  __html: `Page <b>${page + 1}</b> of <b>${totalPages}</b>`,
+                }}
+              ></div>
+              <div>
+                <Pagination>
+                  <PaginationItem>
+                    <PaginationLink
+                      disabled={page === 0}
+                      onClick={() => setPage(page - 1)}
+                      className={`${page === 0 ? "disabled" : ""}`}
+                    >
+                      Previous
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink
+                      disabled={page + 1 === totalPages}
+                      onClick={() => setPage(page + 1)}
+                      className={`${page + 1 === totalPages ? "disabled" : ""}`}
+                    >
+                      Next
+                    </PaginationLink>
+                  </PaginationItem>
+                </Pagination>
+              </div>
             </div>
           </div>
         </Col>
