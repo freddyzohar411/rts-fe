@@ -13,7 +13,7 @@ const useTableHook = (
   // Set state for page request
   const [pageRequest, setPageRequest] = useState({
     page: initialPageRequest?.page || 0,
-    pageSize: initialPageRequest?.pageSize || 5,
+    pageSize: initialPageRequest?.pageSize || 20,
     sortBy: initialPageRequest?.sortBy || null,
     sortDirection: initialPageRequest?.sortDirection || "asc",
     searchTerm: initialPageRequest?.searchTerm || null,
@@ -85,6 +85,7 @@ const useTableHook = (
     e.preventDefault();
     setPageRequest((prev) => ({
       ...prev,
+      page: 0,
       searchTerm: search,
     }));
   };
