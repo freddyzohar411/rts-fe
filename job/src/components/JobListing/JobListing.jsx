@@ -132,9 +132,14 @@ const JobListing = () => {
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
+    const request = { ...pageRequest, jobType: gridView };
+    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+  }, [pageRequest]);
+
+  useEffect(() => {
     const request = { ...pageRequest, page: 0, jobType: gridView };
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-  }, [pageRequest, gridView]);
+  }, [gridView]);
 
   // Update the page info when job Data changes
   useEffect(() => {
@@ -245,7 +250,9 @@ const JobListing = () => {
         sort: false,
         sortValue: "indexing",
         render: (data, index) => (
-          <div className="d-flex column-gap-2">{index + 1}.</div>
+          <div className="d-flex column-gap-2">
+            {pageInfo?.currentPage * pageInfo?.pageSize + (index + 1)}.
+          </div>
         ),
       },
       {

@@ -24,6 +24,7 @@ const useTableHook = (
     currentPage: 0,
     totalPages: 0,
     totalElements: 0,
+    pageSize: 0,
   });
 
   const [search, setSearch] = useState("");
@@ -45,6 +46,7 @@ const useTableHook = (
       currentPage: data.page,
       totalPages: data.totalPages,
       totalElements: data.totalElements,
+      pageSize: data?.pageSize,
     }));
   };
 

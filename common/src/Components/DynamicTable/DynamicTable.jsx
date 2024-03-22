@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Input,
   Table,
@@ -17,6 +17,12 @@ const DynamicTable = ({
   pageRequestSet,
   isLoading = false,
 }) => {
+  const page = pageInfo?.currentPage;
+  const totalElements = pageInfo?.totalElements;
+  const totalPages = pageInfo?.totalPages;
+  const pageSize = pageInfo?.pageSize;
+  const endPage = (page + 1) * pageSize;
+
   // ========================================= Table Configuration ===========================
   // Generate Header
   const generateHeaderJSX = (config) => (
@@ -99,50 +105,64 @@ const DynamicTable = ({
       </div>
 
       {/* Table Pagination */}
-      <div className="d-flex flex-row justify-content-end my-3">
-        <Input
-          onChange={(e) => pageRequestSet.setPageSize(parseInt(e.target.value))}
-          type="select"
-          className="form-select border-secondary"
-          style={{ height: "34px", marginRight: "10px", width: "70px" }}
-          defaultValue="20"
-        >
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-        </Input>
-        <Pagination>
-          <PaginationItem
-            disabled={pageInfo.currentPage === 0}
-            onClick={pageRequestSet.setPreviousPage}
-          >
-            <PaginationLink
-              className={`${
-                pageInfo.currentPage === 0
-                  ? "bg-secondary border-primary text-muted disabled"
-                  : "bg-secondary border-primary text-dark"
-              }`}
-            >
-              Previous
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem
-            disabled={pageInfo.currentPage === pageInfo.totalPages - 1}
-            onClick={pageRequestSet.setNextPage}
-          >
-            <PaginationLink
-              className={`${
-                pageInfo.currentPage === pageInfo.totalPages - 1
-                  ? "bg-secondary border-primary text-muted disabled"
-                  : "bg-secondary border-primary text-dark"
-              }`}
-            >
-              Next
-            </PaginationLink>
-          </PaginationItem>
-        </Pagination>
-      </div>
+      {data?.length > 0 && (
+        <div className="d-flex flex-row justify-content-between align-items-baseline">
+          <div
+            dangerouslySetInnerHTML={{
+              __html: `Showing <b>${page * pageSize + 1}</b> - <b>${
+                endPage < totalElements ? endPage : totalElements
+              }</b> of <b>${totalElements}</b> results`,
+            }}
+          ></div>
+          <div className="d-flex flex-row justify-content-end align-items-baseline">
+            <div style={{ marginRight: 10 }}>Rows per page:</div>
+            <div style={{ marginRight: 10 }}>
+              <Input
+                onChange={(e) =>
+                  pageRequestSet.setPageSize(parseInt(e.target.value))
+                }
+                type="select"
+                className="form-select border-secondary"
+                style={{ height: "34px", marginRight: "10px", width: "70px" }}
+                defaultValue="20"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+              </Input>
+            </div>
+            <div
+              style={{ marginRight: 10 }}
+              dangerouslySetInnerHTML={{
+                __html: `Page <b>${page + 1}</b> of <b>${totalPages}</b>`,
+              }}
+            ></div>
+            <div>
+              <Pagination>
+                <PaginationItem
+                  disabled={pageInfo.currentPage === 0}
+                  onClick={pageRequestSet.setPreviousPage}
+                >
+                  <PaginationLink className={`${page === 0 ? "disabled" : ""}`}>
+                    Previous
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem
+                  disabled={pageInfo.currentPage === pageInfo.totalPages - 1}
+                  onClick={pageRequestSet.setNextPage}
+                >
+                  <PaginationLink
+                    className={`${page + 1 === totalPages ? "disabled" : ""}`}
+                  >
+                    Next
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
