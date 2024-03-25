@@ -18,6 +18,9 @@ import {
   FETCH_JOBS_FIELDS_ALL,
   FETCH_JOBS_FIELDS_ALL_FAILURE,
   FETCH_JOBS_FIELDS_ALL_SUCCESS,
+  CLONE_JOB, 
+  CLONE_JOB_SUCCESS, 
+  CLONE_JOB_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -69,6 +72,22 @@ export const createJobSuccess = (job) => ({
 
 export const createJobFailure = (error) => ({
   type: CREATE_JOB_FAILURE,
+  payload: error,
+});
+
+// Clone Job
+export const cloneJob = (jobRequest) => ({
+  type: CLONE_JOB,
+  payload: jobRequest,
+});
+
+export const cloneJobSuccess = (job) => ({
+  type: CLONE_JOB_SUCCESS,
+  payload: job,
+});
+
+export const cloneJobFailure = (error) => ({
+  type: CLONE_JOB_FAILURE,
   payload: error,
 });
 

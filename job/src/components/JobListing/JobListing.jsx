@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   Badge,
@@ -30,6 +30,7 @@ import {
   deleteFODReset,
   createJobFODReset,
 } from "../../store/jobList/action";
+import { cloneJob } from "../../store/job/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
 import JobTagCanvas from "./JobTagCanvas";
@@ -40,6 +41,7 @@ import { truncate } from "@workspace/common/src/helpers/string_helper";
 const JobListing = () => {
   const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { jobType } = useParams();
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
@@ -64,7 +66,6 @@ const JobListing = () => {
   const [nestedVisible, setNestedVisible] = useState([]);
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
-
   // Custom renders
   const customRenderList = [
     {
@@ -83,6 +84,15 @@ const JobListing = () => {
       ),
     },
   ];
+
+  // Clone Job Function
+  const handleCloneJob = (cloneJobId) => {
+    const payload = {
+      "id": cloneJobId,
+      "clone": true
+    }
+    dispatch(cloneJob({ payload, navigate: navigate }))
+  }
 
   // Table Hooks
   const {
@@ -419,7 +429,8 @@ const JobListing = () => {
                 <i className="ri-parent-fill"></i>
               </Button>
             )}
-            <Button className="btn btn-custom-primary table-btn">
+            {/* Clone Button */}
+            <Button className="btn btn-custom-primary table-btn" onClick={() => handleCloneJob(data.id)}>
               <i className="mdi mdi-content-copy"></i>
             </Button>
 
@@ -478,9 +489,8 @@ const JobListing = () => {
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
         header={gridView === "fod" ? "Delete FOD" : "Delete Job"}
-        deleteText={`Are you sure you would like to delete this ${
-          gridView === "fod" ? "fod" : "job"
-        }?`}
+        deleteText={`Are you sure you would like to delete this ${gridView === "fod" ? "fod" : "job"
+          }?`}
       />
       <DynamicTableWrapper
         data={jobsData?.jobs ?? []}
