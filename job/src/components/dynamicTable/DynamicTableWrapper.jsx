@@ -16,7 +16,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
 import DualListBox from "react-dual-listbox";
 import "./DynamicTableWrapper.scss";
@@ -47,7 +47,6 @@ const DynamicTableWrapper = ({
   handleTableViewChange,
   operations,
 }) => {
-  const { jobType } = useParams();
   const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);
   const [selectedOptGroup, setSelectedOptGroup] = useState(JOB_INITIAL_OPTIONS);
@@ -225,7 +224,6 @@ const DynamicTableWrapper = ({
                               onChange={handleTableViewChange}
                               value={gridView}
                             >
-                              <option value="">Select View</option>
                               {JOB_FILTERS?.map((ob, index) => {
                                 const key = Object.keys(ob);
                                 return (
@@ -240,123 +238,130 @@ const DynamicTableWrapper = ({
                       </Col>
                       <Col>
                         <div className="d-flex column-gap-2 justify-content-end">
-                          {gridView === "new_job" && (
-                            <ButtonDropdown
-                              isOpen={massFODOpen}
-                              toggle={() => setMassFODOpen(!massFODOpen)}
-                            >
-                              <DropdownToggle
-                                className="d-flex flex-row align-items-center gap-1 bg-custom-primary text-white"
-                                caret
+                          {gridView === "new_job" &&
+                            checkAllPermission([
+                              Permission.CANDIDATE_WRITE,
+                            ]) && (
+                              <ButtonDropdown
+                                isOpen={massFODOpen}
+                                toggle={() => setMassFODOpen(!massFODOpen)}
                               >
-                                <i className="bx bxs-user-account"></i>
-                                <span>FOD</span>
-                              </DropdownToggle>
-                              <DropdownMenu
-                                className="pt-3 px-3"
-                                style={{ width: "200px" }}
-                              >
-                                <Row className="mb-3">
-                                  <Col>
-                                    <div className="search-box">
-                                      <Input
-                                        type="text"
-                                        placeholder="Search.."
-                                        className="form-control form-control-sm"
-                                      />
-                                      <i className="bx bx-search search-icon"></i>
-                                    </div>
-                                  </Col>
-                                </Row>
-                                <Row>
-                                  <Col>
-                                    <ul className="ps-0 list-unstyled">
-                                      {namesData?.map((item, index) => (
-                                        <li key={index}>
-                                          <div
-                                            className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
-                                            onClick={() => toggleNested(index)}
-                                          >
-                                            <span>{item.name}</span>
-                                            <span>
-                                              {nestedVisible[index] ? "-" : "+"}
-                                            </span>
-                                          </div>
-                                          {nestedVisible[index] && (
-                                            <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
-                                              <div className="ps-0 ms-0 w-100">
-                                                <SimpleBar
-                                                  className="simplebar-hght"
-                                                  autoHide={false}
-                                                >
-                                                  {item.subNames.map(
-                                                    (subName, subIndex) => {
-                                                      const split =
-                                                        subName?.split("@");
-                                                      return (
-                                                        <li
-                                                          key={subIndex}
-                                                          className="d-flex flew-row align-items-center justify-content-between me-3"
-                                                        >
-                                                          {truncate(
-                                                            split[1],
-                                                            16
-                                                          )}
-
-                                                          <Label
-                                                            check
-                                                            className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                <DropdownToggle
+                                  className="d-flex flex-row align-items-center gap-1 bg-custom-primary text-white"
+                                  caret
+                                >
+                                  <i className="bx bxs-user-account"></i>
+                                  <span>FOD</span>
+                                </DropdownToggle>
+                                <DropdownMenu
+                                  className="pt-3 px-3"
+                                  style={{ width: "200px" }}
+                                >
+                                  <Row className="mb-3">
+                                    <Col>
+                                      <div className="search-box">
+                                        <Input
+                                          type="text"
+                                          placeholder="Search.."
+                                          className="form-control form-control-sm"
+                                        />
+                                        <i className="bx bx-search search-icon"></i>
+                                      </div>
+                                    </Col>
+                                  </Row>
+                                  <Row>
+                                    <Col>
+                                      <ul className="ps-0 list-unstyled">
+                                        {namesData?.map((item, index) => (
+                                          <li key={index}>
+                                            <div
+                                              className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
+                                              onClick={() =>
+                                                toggleNested(index)
+                                              }
+                                            >
+                                              <span>{item.name}</span>
+                                              <span>
+                                                {nestedVisible[index]
+                                                  ? "-"
+                                                  : "+"}
+                                              </span>
+                                            </div>
+                                            {nestedVisible[index] && (
+                                              <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+                                                <div className="ps-0 ms-0 w-100">
+                                                  <SimpleBar
+                                                    className="simplebar-hght"
+                                                    autoHide={false}
+                                                  >
+                                                    {item.subNames.map(
+                                                      (subName, subIndex) => {
+                                                        const split =
+                                                          subName?.split("@");
+                                                        return (
+                                                          <li
+                                                            key={subIndex}
+                                                            className="d-flex flew-row align-items-center justify-content-between me-3"
                                                           >
-                                                            <Input
-                                                              type="checkbox"
-                                                              checked={operations?.selectedRecruiter?.includes(
-                                                                parseInt(
-                                                                  split[0]
-                                                                )
-                                                              )}
-                                                              onChange={(e) =>
-                                                                operations?.handleFODCheck(
+                                                            {truncate(
+                                                              split[1],
+                                                              16
+                                                            )}
+
+                                                            <Label
+                                                              check
+                                                              className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                                            >
+                                                              <Input
+                                                                type="checkbox"
+                                                                checked={operations?.selectedRecruiter?.includes(
                                                                   parseInt(
                                                                     split[0]
-                                                                  ),
-                                                                  e.target
-                                                                    .checked
-                                                                )
-                                                              }
-                                                            />
-                                                          </Label>
-                                                        </li>
-                                                      );
-                                                    }
-                                                  )}
-                                                </SimpleBar>
-                                              </div>
-                                            </ul>
-                                          )}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </Col>
-                                </Row>
-                                <Row>
-                                  <Col className="d-flex justify-content-end">
-                                    <Button
-                                      type="submit"
-                                      className="btn btn-custom-primary btn-sm px-3"
-                                      onClick={() => {
-                                        operations?.handleFODAssign();
-                                        setMassFODOpen(!massFODOpen);
-                                        operations?.setActiveJob([]);
-                                        operations?.setSelectedRecruiter([]);
-                                      }}
-                                    >
-                                      Assign
-                                    </Button>
-                                  </Col>
-                                </Row>
-                              </DropdownMenu>
-                            </ButtonDropdown>
-                          )}
+                                                                  )
+                                                                )}
+                                                                onChange={(e) =>
+                                                                  operations?.handleFODCheck(
+                                                                    parseInt(
+                                                                      split[0]
+                                                                    ),
+                                                                    e.target
+                                                                      .checked
+                                                                  )
+                                                                }
+                                                              />
+                                                            </Label>
+                                                          </li>
+                                                        );
+                                                      }
+                                                    )}
+                                                  </SimpleBar>
+                                                </div>
+                                              </ul>
+                                            )}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </Col>
+                                  </Row>
+                                  <Row>
+                                    <Col className="d-flex justify-content-end">
+                                      <Button
+                                        type="submit"
+                                        className="btn btn-custom-primary btn-sm px-3"
+                                        onClick={() => {
+                                          operations?.handleFODAssign();
+                                          setMassFODOpen(!massFODOpen);
+                                          operations?.setActiveJob([]);
+                                          operations?.setSelectedRecruiter([]);
+                                        }}
+                                      >
+                                        Assign
+                                      </Button>
+                                    </Col>
+                                  </Row>
+                                </DropdownMenu>
+                              </ButtonDropdown>
+                            )}
                           <Button
                             type="button"
                             className="btn btn-custom-primary d-flex align-items-center header-btn"

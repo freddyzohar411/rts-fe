@@ -9,7 +9,6 @@ import {
   FETCH_JOB_LISTS_FIELDS,
   FETCH_USER_GROUP_BY_NAME,
   CREATE_JOB_FOD,
-  FETCH_JOBS_ADMIN,
   DELETE_FOD,
 } from "./actionTypes";
 import {
@@ -27,10 +26,7 @@ import {
   fetchJobListsFieldsFailure,
   fetchUserGroupByNameSuccess,
   fetchUserGroupByNameFailure,
-  createJobFOD,
   createJobFODSuccess,
-  fetchJobsAdminFailure,
-  fetchJobsAdminSuccess,
   createJobFODFailure,
   deleteFODSuccess,
   deleteFODFailure,
@@ -44,7 +40,6 @@ import {
   getJobById,
   getUserGroupByName,
   postJobFOD,
-  getJobsAdmin,
   deleteFOD,
 } from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
@@ -192,15 +187,6 @@ function* workFetchUserGroupByName(action) {
   }
 }
 
-function* workFetchJobsAdmin(action) {
-  try {
-    const response = yield call(getJobsAdmin, action.payload);
-    yield put(fetchJobsAdminSuccess(response.data));
-  } catch (error) {
-    yield put(fetchJobsAdminFailure(error));
-  }
-}
-
 export default function* watchFetchJobListSaga() {
   yield takeEvery(POST_JOB_LIST, workPostJobList);
   yield takeEvery(PUT_JOB_LIST, workPutJobList);
@@ -210,6 +196,5 @@ export default function* watchFetchJobListSaga() {
   yield takeEvery(FETCH_JOB_LIST, workFetchJobList);
   yield takeEvery(FETCH_USER_GROUP_BY_NAME, workFetchUserGroupByName);
   yield takeEvery(CREATE_JOB_FOD, workJobFOD);
-  yield takeEvery(FETCH_JOBS_ADMIN, workFetchJobsAdmin);
   yield takeEvery(DELETE_FOD, workDeleteFOD);
 }

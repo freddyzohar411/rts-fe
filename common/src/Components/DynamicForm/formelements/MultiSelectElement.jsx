@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Label, FormFeedback } from "reactstrap";
 import Select from "react-select";
 import { Lists } from "./listOptions";
+import CreatableSelect from "react-select/creatable";
 
 const MultiSelectElement = ({
   formik,
@@ -25,11 +26,15 @@ const MultiSelectElement = ({
 
   function getExistingDataOptions(data) {
     if (!data) return [];
-
     const existingData = data.split(",");
     if (existingData.length === 0) return [];
     return existingData.map((itemLabel) => {
-      return options?.find((option) => option.label === itemLabel);
+      return (
+        options?.find((option) => option.label === itemLabel) || {
+          label: itemLabel,
+          value: itemLabel,
+        }
+      );
     });
   }
 
@@ -81,7 +86,24 @@ const MultiSelectElement = ({
           {props?.label}
         </Label>
       )}
-      <Select
+      {/* <Select
+        isMulti
+        styles={customStyles}
+        value={selectedOptions}
+        onChange={handleChange}
+        onInputChange={handleInputChange}
+        inputValue={search}
+        menuShouldScrollIntoView={false}
+        closeMenuOnSelect={false}
+        isClearable
+        isSearchable
+        placeholder={field.placeholder ?? "Search..."}
+        options={options}
+        noOptionsMessage={noOptionsMessage}
+        isDisabled={formState === "view" ? true : false}
+        tabIndex={tabIndexData?.[field?.fieldId]}
+      /> */}
+      <CreatableSelect
         isMulti
         styles={customStyles}
         value={selectedOptions}

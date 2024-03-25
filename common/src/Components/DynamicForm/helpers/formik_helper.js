@@ -32,6 +32,31 @@ const generateInitialValues = (formFieldData, formik) => {
   return initialValues;
 };
 
+const populateInitialValues = (formFieldData, editData) => {
+  const initialValues = formFieldData?.reduce((acc, field) => {
+    if (field.type === "checkbox") {
+      return { ...acc, [field?.name]: editData?.[field.name] ?? [] };
+    }
+
+    // if (field.type === "multifile") {
+    //   return { ...acc, [field.name]: [] };
+    // }
+
+    // If there is a subname, then add it to the initial values
+    if (field?.subName && field?.subName !== "") {
+      return {
+        ...acc,
+        [field?.name]: editData?.[field.name] ?? "",
+        [field?.subName]: editData?.[field.subName] ?? "",
+      };
+    }
+
+    return { ...acc, [field?.name]: editData?.[field.name] ?? "" };
+  }, {});
+
+  return initialValues;
+};
+
 // Generate validation schema
 const generateValidationSchema = (formFieldData) => {
   const validationSchema = Yup.object(
@@ -396,7 +421,12 @@ const generateValidationSchema2 = (
 };
 
 // Generate validation schema for field Builder
-const generateValidationSchemaForFieldBuilder = (schema, type, formFields, formBuilderUpdateData) => {
+const generateValidationSchemaForFieldBuilder = (
+  schema,
+  type,
+  formFields,
+  formBuilderUpdateData
+) => {
   const validationSchema = Yup.object(
     schema?.reduce((acc, field) => {
       if (!field.apply.includes(type)) return acc;
@@ -434,7 +464,7 @@ const generateValidationSchemaForFieldBuilder = (schema, type, formFields, formB
           fieldValidation = fieldValidation.email(validation.message);
         }
 
-        // Check for key duplication in main key and sub key for the entire form, only 
+        // Check for key duplication in main key and sub key for the entire form, only
         // if field id is not the same as the field being updated (formBuilderUpdateData)
         if (validation.keyDuplication) {
           fieldValidation = fieldValidation.test(
@@ -444,7 +474,9 @@ const generateValidationSchemaForFieldBuilder = (schema, type, formFields, formB
               if (value === "") return true;
               if (formFields.length === 0) return true;
               const isDuplicate = formFields.filter(
-                (field) => (field.name === value || field?.subName === value) && (formBuilderUpdateData?.fieldId !== field?.fieldId)
+                (field) =>
+                  (field.name === value || field?.subName === value) &&
+                  formBuilderUpdateData?.fieldId !== field?.fieldId
               );
               return isDuplicate?.length > 0 ? false : true;
             }
@@ -463,4 +495,5 @@ export {
   generateValidationSchema,
   generateValidationSchema2,
   generateValidationSchemaForFieldBuilder,
+  populateInitialValues
 };

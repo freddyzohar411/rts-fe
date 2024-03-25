@@ -182,22 +182,7 @@ export const createJobFODFailure = (error) => ({
   payload: error,
 });
 
-// Fetch job admin
-export const fetchJobsAdmin = (params) => ({
-  type: FETCH_JOBS_ADMIN,
-  payload: params,
-});
-
-export const fetchJobsAdminSuccess = (jobs) => ({
-  type: FETCH_JOBS_ADMIN_SUCCESS,
-  payload: jobs,
-});
-
-export const fetchJobsAdminFailure = (error) => ({
-  type: FETCH_JOBS_ADMIN_FAILURE,
-  payload: error,
-});
-
+//Delete FOD
 export const deleteFOD = (jobId) => ({
   type: DELETE_FOD,
   payload: jobId,

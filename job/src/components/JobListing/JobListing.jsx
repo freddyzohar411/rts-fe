@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingOverlay from "react-loading-overlay";
 import {
   Badge,
   Button,
@@ -39,7 +40,7 @@ import "simplebar/dist/simplebar.min.css";
 import { truncate } from "@workspace/common/src/helpers/string_helper";
 
 const JobListing = () => {
-  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
+  const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { jobType } = useParams();
@@ -58,7 +59,7 @@ const JobListing = () => {
   const [namesData, setNamesData] = useState([]);
   const [activeJob, setActiveJob] = useState([]);
   const [selectedRecruiter, setSelectedRecruiter] = useState([]);
-  const [gridView, setGridView] = useState(jobType ?? "");
+  const [gridView, setGridView] = useState(jobType ?? "all_jobs");
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -66,6 +67,10 @@ const JobListing = () => {
   const [nestedVisible, setNestedVisible] = useState([]);
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
+
+  const isFOD = gridView === "fod";
+  const showDelete = gridView === "fod" || gridView === "active_jobs";
+
   // Custom renders
   const customRenderList = [
     {
@@ -107,7 +112,7 @@ const JobListing = () => {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 5,
+      pageSize: 20,
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
@@ -138,16 +143,8 @@ const JobListing = () => {
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, jobType: gridView };
-    if (checkAnyRole([Role.ADMIN])) {
-      dispatch(
-        fetchJobLists(
-          DynamicTableHelper.cleanPageRequest({ ...request, isGetAll: true })
-        )
-      );
-    } else {
-      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-    }
+    const request = { ...pageRequest, page: 0, jobType: gridView };
+    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
   }, [pageRequest, gridView]);
 
   // Update the page info when job Data changes
@@ -175,8 +172,6 @@ const JobListing = () => {
 
   const handleTableViewChange = (e) => {
     setGridView(e.target.value);
-    const request = { ...pageRequest, page: 0, jobType: e.target.value };
-    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
     setActiveJob([]);
   };
 
@@ -242,7 +237,7 @@ const JobListing = () => {
 
   // Modal Delete
   const confirmDelete = () => {
-    if (gridView === "fod") {
+    if (isFOD) {
       dispatch(deleteFOD({ jobId: deleteId }));
       setIsDeleteModalOpen(false);
     } else {
@@ -461,7 +456,7 @@ const JobListing = () => {
                 </Button>
               </Link>
             )}
-            {checkAllPermission([Permission.JOB_DELETE]) && (
+            {checkAllPermission([Permission.JOB_DELETE]) && showDelete && (
               <Button
                 type="button"
                 className="btn btn-danger table-btn"
@@ -483,14 +478,19 @@ const JobListing = () => {
   // ==================================================================
 
   return (
-    <>
+    <LoadingOverlay
+      active={jobFODMeta?.isLoading || deleteFODMeta?.isLoading}
+      spinner
+      text="Please wait..."
+    >
       <DeleteCustomModal
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
-        header={gridView === "fod" ? "Delete FOD" : "Delete Job"}
-        deleteText={`Are you sure you would like to delete this ${gridView === "fod" ? "fod" : "job"
-          }?`}
+        header={isFOD ? "Delete FOD" : "Delete Job"}
+        deleteText={`Are you sure you would like to delete this ${
+          isFOD ? "fod" : "job"
+        }?`}
       />
       <DynamicTableWrapper
         data={jobsData?.jobs ?? []}
@@ -519,7 +519,7 @@ const JobListing = () => {
         setTagOffcanvas={setTagOffcanvas}
         selectedRowData={selectedRowData}
       />
-    </>
+    </LoadingOverlay>
   );
 };
 

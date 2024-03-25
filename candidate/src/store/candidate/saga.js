@@ -12,6 +12,8 @@ import {
   FETCH_CANDIDATE_DATA,
   FETCH_CANDIDATES_FIELDS_ALL,
   FETCH_CANDIDATES_ADMIN,
+  IMPORT_CANDIDATE,
+  IMPORT_CANDIDATE_MULTI,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -35,6 +37,11 @@ import {
   fetchCandidatesFieldsAllFailure,
   fetchCandidatesAdminSuccess,
   fetchCandidatesAdminFailure,
+  importCandidateSuccess,
+  importCandidateFailure,
+  importCandidateMultiFailure,
+  importCandidateMultiSuccess,
+  setParseAndImportLoading,
 } from "./action";
 import {
   getCandidates,
@@ -47,6 +54,7 @@ import {
   getCandidateDataById,
   getCandidateFieldAll,
   getCandidatesAdmin,
+  createCandidateList,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -55,6 +63,60 @@ import {
   deleteCandidateCountry,
 } from "../candidateregistration/action";
 import { toast } from "react-toastify";
+import { ObjectHelper } from "@workspace/common";
+
+function generateFormDataArray(data, listName, addEnitityId = true, id = null) {
+  const formData = new FormData();
+  data.forEach((exp, expIndex) => {
+    Object.keys(exp).forEach((key) => {
+      // Check if the property is an array of files
+      if (
+        Array.isArray(exp[key]) &&
+        exp[key].length &&
+        exp[key][0] instanceof File
+      ) {
+        exp[key].forEach((file, fileIndex) => {
+          formData.append(
+            `${listName}[${expIndex}].${key}[${fileIndex}]`,
+            file
+          );
+        });
+      } else {
+        // For non-file array or other types of properties
+        formData.append(`${listName}[${expIndex}].${key}`, exp[key]);
+      }
+    });
+    if (addEnitityId) {
+      // Append the entityId
+      formData.append(`${listName}[${expIndex}].entityId`, id);
+    }
+  });
+  return formData;
+}
+
+function generateFormData(data, addEnitityId = true, id = null) {
+  const formData = new FormData();
+  Object.keys(data).forEach((key) => {
+    // Check if the property is an array of files
+    if (
+      Array.isArray(data[key]) &&
+      data[key].length &&
+      data[key][0] instanceof File
+    ) {
+      data[key].forEach((file, fileIndex) => {
+        formData.append(`${key}[${fileIndex}]`, file);
+      });
+    } else {
+      // For non-file array or other types of properties
+      formData.append(key, data[key]);
+    }
+  });
+  if (addEnitityId) {
+    // Append the entityId
+    formData.append("entityId", id);
+  }
+  return formData;
+}
 
 // Post account
 function* workPostCandidate(action) {
@@ -193,6 +255,218 @@ function* workFetchCandidatesAdmin(action) {
   }
 }
 
+// Import Candidate
+function* workImportCandidate(action) {
+  try {
+    const { candidateRequestArray: candidateData, navigate } = action.payload; // Array of candidate data
+    let candidateId = null;
+    // Set Basic Info
+    try {
+      const response = yield call(
+        createCandidate,
+        candidateData[0].entity,
+        candidateData[0]?.id,
+        candidateData[0].newData,
+        candidateData[0].config
+      );
+      candidateId = response?.data?.id;
+    } catch (error) {
+      yield put(importCandidateFailure());
+      toast.error("Error creating candidate basic info");
+      console.log("Error creating candidate", error);
+    }
+
+    if (!candidateId) return;
+
+    // Work experience
+    const workExperiences = candidateData[1].newData;
+    if (workExperiences.length > 0) {
+      const workExperienceFormData = generateFormDataArray(
+        candidateData[1]?.newData,
+        "workExperienceList",
+        true,
+        candidateId
+      );
+
+      try {
+        const response = yield call(
+          createCandidateList,
+          candidateData[1].entity,
+          null,
+          workExperienceFormData,
+          candidateData[1].config
+        );
+      } catch (error) {
+        yield put(importCandidateFailure());
+        toast.error("Error creating candidate work experiences");
+        console.log("Error creating candidate", error);
+      }
+    }
+
+    // Languages
+    const languages = candidateData[2].newData;
+    if (languages.length > 0) {
+      let languageFormDataArray = [];
+      for (const language of candidateData[2].newData) {
+        languageFormDataArray.push({
+          formData: "",
+          ...language,
+          entityId: candidateId,
+        });
+      }
+      if (languageFormDataArray.length > 0) {
+        try {
+          const response = yield call(
+            createCandidateList,
+            candidateData[2].entity,
+            null,
+            {
+              languagesList: languageFormDataArray,
+            },
+            candidateData[2]?.config
+          );
+        } catch (error) {
+          yield put(importCandidateFailure());
+          toast.error("Error creating candidate languages");
+          console.log("Error creating candidate", error);
+        }
+      }
+    }
+
+    // Education
+    let educationFormDataArray = [];
+    for (const education of candidateData[3].newData) {
+      educationFormDataArray.push({
+        formData: "",
+        ...education,
+        entityId: candidateId,
+      });
+    }
+    try {
+      const response = yield call(
+        createCandidateList,
+        candidateData[3].entity,
+        null,
+        {
+          educationDetailsList: educationFormDataArray,
+        },
+        candidateData[3].config
+      );
+    } catch (error) {
+      yield put(importCandidateFailure());
+      toast.error("Error creating candidate education details");
+      console.log("Error creating candidate", error);
+    }
+
+    // Document
+    let documentFormData = candidateData[4].newData;
+    if (documentFormData?.file) {
+      if (documentFormData) {
+        const documentFormDataArray = generateFormData(
+          documentFormData,
+          true,
+          candidateId
+        );
+        try {
+          const response = yield call(
+            createCandidate,
+            candidateData[4].entity,
+            null,
+            documentFormDataArray,
+            candidateData[4].config
+          );
+        } catch (error) {
+          yield put(importCandidateFailure());
+          toast.error("Error creating candidate Document");
+          console.log("Error creating candidate", error);
+        }
+      }
+    }
+
+    // Certification
+    const certifications = candidateData[5].newData;
+    if (certifications.length > 0) {
+      let certificationFormDataArray = [];
+      for (const certification of candidateData[5].newData) {
+        certificationFormDataArray.push({
+          formData: "",
+          ...certification,
+          entityId: candidateId,
+        });
+      }
+      try {
+        const response = yield call(
+          createCandidateList,
+          candidateData[5].entity,
+          null,
+          {
+            certificationsList: certificationFormDataArray,
+          },
+          candidateData[5]?.config
+        );
+      } catch (error) {
+        yield put(importCandidateFailure());
+        toast.error("Error creating candidate certificates");
+        console.log("Error creating candidate", error);
+      }
+    }
+
+    // Complete candidate registration
+    try {
+      const response = yield call(
+        completeCandidateRegistration,
+        parseInt(candidateId)
+      );
+
+      yield put(importCandidateSuccess());
+      // Check if navgate exist
+      if (typeof navigate === "function") {
+        yield put(setParseAndImportLoading(false));
+        toast.success("Candidate created successfully");
+        navigate(`/candidates/${candidateId}/snapshot`, {
+          state: { view: false },
+        });
+      }
+    } catch (error) {
+      yield put(importCandidateFailure());
+      toast.error("Error creating candidate registration");
+      console.log("Error creating candidate", error);
+    }
+  } catch (error) {
+    console.log("Error creating candidate", error);
+    yield put(importCandidateFailure());
+    yield put(importCandidateMultiFailure());
+    yield put(setParseAndImportLoading(false));
+  }
+}
+
+// Import Candidate multiples
+function* workImportCandidateMulti(action) {
+  try {
+    const { candidateRequestArrayAll, navigate } = action.payload;
+    // Loop workImportCandidate
+    for (const candidateRequestArray of candidateRequestArrayAll) {
+      yield call(workImportCandidate, {
+        payload: {
+          candidateRequestArray,
+        },
+      });
+    }
+    yield put(importCandidateMultiSuccess());
+
+    if (typeof navigate === "function") {
+      toast.success("Candidates created successfully");
+      yield put(setParseAndImportLoading(false));
+      navigate("/candidates");
+    }
+  } catch (error) {
+    console.log("Error creating candidate", error);
+    yield put(importCandidateFailure());
+    yield put(importCandidateMultiFailure());
+    yield put(setParseAndImportLoading(false));
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -204,4 +478,6 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATE_DATA, workFetchCandidateData);
   yield takeEvery(FETCH_CANDIDATES_FIELDS_ALL, workFetchCandidatesFieldsAll);
   yield takeEvery(FETCH_CANDIDATES_ADMIN, workFetchCandidatesAdmin);
+  yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
+  yield takeEvery(IMPORT_CANDIDATE_MULTI, workImportCandidateMulti);
 }

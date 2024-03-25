@@ -1,5 +1,4 @@
 import { call, put, takeEvery, all, fork } from "redux-saga/effects";
-import { toast } from "react-toastify";
 
 // Crypto Redux States
 import {
@@ -10,8 +9,6 @@ import {
   FOD_COUNT,
   INACTIVE_JOBS_COUNT,
   NEW_JOBS_COUNT,
-  TOTAL_ASSIGNED_JOBS_COUNT,
-  TOTAL_FOD_JOBS_COUNT,
 } from "./actionType";
 import {
   fetchNewJobsCountSuccess,
@@ -28,10 +25,6 @@ import {
   fetchFODCountFailure,
   fetchAllJobsCountSuccess,
   fetchAllJobsCountFailure,
-  fetchTotalAssignedJobsCountSuccess,
-  fetchTotalAssignedJobsCountFailure,
-  fetchTotalFODSuccess,
-  fetchTotalFODFailure,
 } from "./action";
 
 //Include Both Helper File with needed methods
@@ -43,8 +36,6 @@ import {
   fodJobsCount,
   inactiveJobsCount,
   newJobsCount,
-  totalAssignedJobsCount,
-  totalFODJobsCount,
 } from "../../helpers/backend_helper";
 
 // Fetch new jobs count
@@ -117,26 +108,6 @@ function* workAllJobsCount() {
   }
 }
 
-// Fetch new jobs count
-function* workTotalAssignedJobsCount() {
-  try {
-    const response = yield call(totalAssignedJobsCount);
-    yield put(fetchTotalAssignedJobsCountSuccess(response.data));
-  } catch (error) {
-    yield put(fetchTotalAssignedJobsCountFailure(error));
-  }
-}
-
-// Fetch new jobs count
-function* workTotalFODJobsCount() {
-  try {
-    const response = yield call(totalFODJobsCount);
-    yield put(fetchTotalFODSuccess(response.data));
-  } catch (error) {
-    yield put(fetchTotalFODFailure(error));
-  }
-}
-
 export function* watchGetRevenueChartsData() {
   yield takeEvery(NEW_JOBS_COUNT, workNewJobsCount);
   yield takeEvery(ACTIVE_JOBS_COUNT, workActiveJobsCount);
@@ -145,8 +116,6 @@ export function* watchGetRevenueChartsData() {
   yield takeEvery(ASSIGNED_JOBS_COUNT, workAssignedJobsCount);
   yield takeEvery(FOD_COUNT, workFODJobsCount);
   yield takeEvery(ALL_JOBS_COUNT, workAllJobsCount);
-  yield takeEvery(TOTAL_ASSIGNED_JOBS_COUNT, workTotalAssignedJobsCount);
-  yield takeEvery(TOTAL_FOD_JOBS_COUNT, workTotalFODJobsCount);
 }
 
 function* jobsCountSaga() {

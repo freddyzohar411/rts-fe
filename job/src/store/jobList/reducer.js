@@ -32,9 +32,6 @@ import {
   CREATE_JOB_FOD,
   CREATE_JOB_FOD_SUCCESS,
   CREATE_JOB_FOD_FAILURE,
-  FETCH_JOBS_ADMIN,
-  FETCH_JOBS_ADMIN_SUCCESS,
-  FETCH_JOBS_ADMIN_FAILURE,
   DELETE_FOD,
   DELETE_FOD_SUCCESS,
   DELETE_FOD_FAILURE,
@@ -255,25 +252,6 @@ const JobListReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
-      };
-
-    // Admin
-    case FETCH_JOBS_ADMIN:
-      return {
-        ...state,
-        jobsMeta: pendingMetaData(),
-      };
-    case FETCH_JOBS_ADMIN_SUCCESS:
-      return {
-        ...state,
-        jobsMeta: successMetaData(action.payload),
-        jobs: action.payload,
-      };
-    case FETCH_JOBS_ADMIN_FAILURE:
-      return {
-        ...state,
-        jobs: [],
-        jobsMeta: errorMetaData(action.payload),
       };
 
     // Delete FOD

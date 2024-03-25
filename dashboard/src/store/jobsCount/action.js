@@ -20,12 +20,6 @@ import {
   ALL_JOBS_COUNT,
   ALL_JOBS_COUNT_SUCCESS,
   ALL_JOBS_COUNT_FAILURE,
-  TOTAL_ASSIGNED_JOBS_COUNT,
-  TOTAL_ASSIGNED_JOBS_COUNT_SUCCESS,
-  TOTAL_ASSIGNED_JOBS_COUNT_FAILURE,
-  TOTAL_FOD_JOBS_COUNT,
-  TOTAL_FOD_JOBS_COUNT_SUCCESS,
-  TOTAL_FOD_JOBS_COUNT_FAILURE,
 } from "./actionType";
 
 // Fetch New Jobs count
@@ -133,35 +127,5 @@ export const fetchAllJobsCountSuccess = (jobCounts) => ({
 
 export const fetchAllJobsCountFailure = (error) => ({
   type: ALL_JOBS_COUNT_FAILURE,
-  payload: error,
-});
-
-// Fetch Total Assigned Jobs count
-export const fetchTotalAssignedJobsCount = () => ({
-  type: TOTAL_ASSIGNED_JOBS_COUNT,
-});
-
-export const fetchTotalAssignedJobsCountSuccess = (jobCounts) => ({
-  type: TOTAL_ASSIGNED_JOBS_COUNT_SUCCESS,
-  payload: jobCounts,
-});
-
-export const fetchTotalAssignedJobsCountFailure = (error) => ({
-  type: TOTAL_ASSIGNED_JOBS_COUNT_FAILURE,
-  payload: error,
-});
-
-// Fetch Total FOD count
-export const fetchTotalFODCount = () => ({
-  type: TOTAL_FOD_JOBS_COUNT,
-});
-
-export const fetchTotalFODSuccess = (jobCounts) => ({
-  type: TOTAL_FOD_JOBS_COUNT_SUCCESS,
-  payload: jobCounts,
-});
-
-export const fetchTotalFODFailure = (error) => ({
-  type: TOTAL_FOD_JOBS_COUNT_FAILURE,
   payload: error,
 });

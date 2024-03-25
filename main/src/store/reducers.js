@@ -59,7 +59,7 @@ const {
   GroupReducer,
 } = SettingReducers;
 
-const { CandidateFormReducer, CandidateReducer, CandidateRegistrationReducer } =
+const { CandidateFormReducer, CandidateReducer, CandidateRegistrationReducer, CandidateMappingReducer } =
   CandidateReducers;
 
 const { TemplateReducer } = TemplateReducers;
@@ -110,6 +110,7 @@ const rootReducer = combineReducers({
   CandidateFormReducer,
   CandidateReducer,
   CandidateRegistrationReducer,
+  CandidateMappingReducer,
   
   // Template
   TemplateReducer,

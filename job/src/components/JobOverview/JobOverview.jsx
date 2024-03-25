@@ -126,7 +126,7 @@ const JobOverview = () => {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 5,
+      pageSize: 20,
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
@@ -833,6 +833,7 @@ const JobOverview = () => {
               type="select"
               className="form-select border-secondary"
               style={{ height: "34px", marginRight: "10px", width: "70px" }}
+              defaultValue="20"
             >
               <option value="5">5</option>
               <option value="10">10</option>
