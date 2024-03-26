@@ -1,4 +1,10 @@
-import { call, put, takeEvery, takeLatest, cancelled  } from "redux-saga/effects";
+import {
+  call,
+  put,
+  takeEvery,
+  takeLatest,
+  cancelled,
+} from "redux-saga/effects";
 import { CandidateEntityConstant } from "../../constants/candidateConstant";
 
 import {
@@ -47,7 +53,7 @@ import {
   updateCandidateEmbeddingsSuccess,
   updateCandidateEmbeddingsFailure,
   candidateRecommendationListSuccess,
-  candidateRecommendationListFailure
+  candidateRecommendationListFailure,
 } from "./action";
 import {
   getCandidates,
@@ -62,7 +68,7 @@ import {
   getCandidatesAdmin,
   createCandidateList,
   updateCandidateEmbeddings,
-  getCandidateRecommendations
+  getCandidateRecommendations,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -486,8 +492,9 @@ function* workUpdateCandidateEmbeddings(action) {
 
 // Candidate Recommendation List
 function* workCandidateRecommendationList(action) {
+  const { params, signal } = action.payload;
   try {
-    const response = yield call(getCandidateRecommendations, action.payload);
+    const response = yield call(getCandidateRecommendations, params, signal);
     yield put(candidateRecommendationListSuccess(response.data));
   } catch (error) {
     yield put(candidateRecommendationListFailure(error));
@@ -508,5 +515,8 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
   yield takeEvery(IMPORT_CANDIDATE_MULTI, workImportCandidateMulti);
   yield takeEvery(UPDATE_CANIDATE_EMBEDDINGS, workUpdateCandidateEmbeddings);
-  yield takeEvery(CANDIDATE_RECOMMENDATION_LIST, workCandidateRecommendationList);
+  yield takeEvery(
+    CANDIDATE_RECOMMENDATION_LIST,
+    workCandidateRecommendationList
+  );
 }

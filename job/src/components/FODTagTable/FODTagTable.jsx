@@ -16,15 +16,18 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
-import FODCandidateRecommendation from "./FODCandidateRecommendation"
+import FODCandidateRecommendation from "./FODCandidateRecommendation";
 
-const FODTagTable = ({ selectedRowData, tagOffcanvas}) => {
+const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [abortController, setAbortController] = useState(null);
 
   // const candidatesData = useSelector(
   //   (state) => state.CandidateReducer.candidates
   // );
+
+  console.log("Tag Off canvas", tagOffcanvas);
 
   const {
     candidatesRecommendation: candidatesData,
@@ -33,7 +36,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas}) => {
     (state) => state.CandidateReducer
     // (state) => state.CandidateReducer
   );
-
 
   const candidatesFields = useSelector(
     (state) => state.CandidateReducer.candidatesFields
@@ -86,6 +88,36 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas}) => {
     },
     CANDIDATE_INITIAL_OPTIONS
   );
+
+  useEffect(() => {
+    // Only create a new abort controller when tagOffcanvas is true
+    if (tagOffcanvas) {
+      // Create a new AbortController
+      const newAbortController = new AbortController();
+      setAbortController(newAbortController);
+
+      // Create a payload that includes the job ID from selectedRowData
+      const jobPageRequest = { ...pageRequest, jobId: selectedRowData?.id };
+
+      // Dispatch the action with the signal from the new abort controller
+      dispatch(
+        candidateRecommendationList(
+          DynamicTableHelper.cleanPageRequest(jobPageRequest),
+          newAbortController.signal
+        )
+      );
+
+      // Cleanup function
+      return () => {
+        newAbortController.abort(); // Abort the request when the component unmounts or if tagOffcanvas changes to false
+      };
+    } else if (abortController) {
+      // Abort the existing request when tagOffcanvas changes to false
+      abortController.abort();
+      setAbortController(null); // Reset the abortController state
+    }
+    // Ensure useEffect is called again if pageRequest changes or tagOffcanvas changes
+  }, [pageRequest, selectedRowData?.id, tagOffcanvas]);
 
   const handleTag = (candidateId) => {
     const payload = {
@@ -155,17 +187,13 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas}) => {
           );
         },
       },
-      { 
+      {
         header: "Recommendation",
-        name: "Recommendation",
+        name: "action",
         sort: false,
         sortValue: "Recommendation",
         render: (data) => {
-          return (
-            <FODCandidateRecommendation
-              data={data}
-            />
-          );
+          return <FODCandidateRecommendation data={data} />;
         },
       },
       {
@@ -208,15 +236,15 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas}) => {
   }, []);
 
   // Fetch the candidate when the pageRequest changes
-  useEffect(() => {
-    // dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
-    const jobPageRequest = { ...pageRequest, jobId: selectedRowData?.id };
-    dispatch(
-      candidateRecommendationList(
-        DynamicTableHelper.cleanPageRequest(jobPageRequest)
-      )
-    );
-  }, [pageRequest, selectedRowData?.id]);
+  // useEffect(() => {
+  //   // dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
+  //   const jobPageRequest = { ...pageRequest, jobId: selectedRowData?.id };
+  //   dispatch(
+  //     candidateRecommendationList(
+  //       DynamicTableHelper.cleanPageRequest(jobPageRequest)
+  //     )
+  //   );
+  // }, [pageRequest, selectedRowData?.id]);
 
   // Update the page info when candidate Data changes
   useEffect(() => {

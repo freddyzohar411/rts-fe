@@ -5,7 +5,7 @@ const FODCandidateRecommendation = ({ data }) => {
 
   return (
     <div className="candidate-score-details">
-      <div className="d-flex flex-column">
+      <div className="summary-scores">
         <p>
           <strong>Overall Match: </strong>
           <span
@@ -14,15 +14,34 @@ const FODCandidateRecommendation = ({ data }) => {
             {(data.computedScore * 100).toFixed(2)}%
           </span>
         </p>
-        <button
+        {/* <p>
+          <strong>Similarity: </strong>
+          {(data.similarityScore * 100).toFixed(2)}%
+        </p>
+        <p>
+          <strong>Qualification: </strong>
+          {(data.qualificationScore * 100).toFixed(2)}%
+        </p>
+        <p>
+          <strong>Language Fit: </strong>
+          {(data.languageScore * 100).toFixed(2)}%
+        </p> */}
+        {/* <p>
+          <strong>Skills Match: </strong>
+          {(data.skillsScore * 100).toFixed(2)}%
+        </p> */}
+        {/* <p>
+          <strong>Job Title Relevance: </strong>
+          {(data.jobTitleScore * 100).toFixed(2)}%
+        </p> */}
+      </div>
+      <button
         onClick={() => setShowDetails(!showDetails)}
         className="btn btn-sm btn-custom-primary px-3 py-0"
         // style={{ marginTop: "10px" }}
       >
-        {showDetails ? "Hide" : "View More"}
+        {showDetails ? "Hide Details" : "View Detailed Scores"}
       </button>
-      </div>
-     
       {showDetails && (
         <div id="detailedScores" style={{ marginTop: "10px" }}>
           {data.languageScoreDetails &&

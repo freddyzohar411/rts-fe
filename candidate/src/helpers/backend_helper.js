@@ -158,8 +158,9 @@ export const parseResumeMulti = (data, config) =>
 export const updateCandidateEmbeddings = (id) =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/create-embeddings/${id}`);
 
-export const getCandidateRecommendations = (data) =>
+export const getCandidateRecommendations = (data, signal) =>
   api.create(
     `${CANDIDATE_URL}${BASE_CANDIDATES}/listing/similarity-search`,
-    data
+    data,
+    { signal }
   );

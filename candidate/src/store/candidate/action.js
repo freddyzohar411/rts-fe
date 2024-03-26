@@ -277,9 +277,9 @@ export const updateCandidateEmbeddingsFailure = (error) => ({
 });
 
 // Candidate Recommendation List
-export const candidateRecommendationList = (params) => ({
+export const candidateRecommendationList = (params, signal) => ({
   type: CANDIDATE_RECOMMENDATION_LIST,
-  payload: params,
+  payload: { params, signal },
 });
 
 export const candidateRecommendationListSuccess = (candidates) => ({
@@ -291,4 +291,3 @@ export const candidateRecommendationListFailure = (error) => ({
   type: CANDIDATE_RECOMMENDATION_LIST_FAILURE,
   payload: error,
 });
-
