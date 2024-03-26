@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Container, Button } from "reactstrap";
+import { Row, Col, Container, Button, Card, CardBody } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
 function PreSkillAssessment({ closeOffcanvas }) {
@@ -16,37 +16,38 @@ function PreSkillAssessment({ closeOffcanvas }) {
     <React.Fragment>
       <div>
         <Container>
-          <div className="d-flex flex-column gap-5">
-            <Row>
-              <Col>
-                <h6>Invite Candidate to Skill Assessment</h6>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <div className="d-flex flex-row justify-content-start gap-2">
-                  <Button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => {
-                      handleCancel();
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn btn-custom-primary"
-                    onClick={() => {
-                      handleUpdate();
-                    }}
-                  >
-                    Update
-                  </Button>
-                </div>
-              </Col>
-            </Row>
-          </div>
+              <div className="d-flex flex-column gap-4">
+                <Row>
+                  <Col>
+                    <h5>Invite Candidate to Skill Assessment</h5>
+                    <p className="text-muted">Begin inviting your candidate to partake in your assessments.</p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <div className="d-flex flex-row justify-content-start gap-2">
+                      <Button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={() => {
+                          handleCancel();
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="button"
+                        className="btn btn-custom-primary"
+                        onClick={() => {
+                          handleUpdate();
+                        }}
+                      >
+                        Invite Candidate
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
         </Container>
       </div>
     </React.Fragment>
