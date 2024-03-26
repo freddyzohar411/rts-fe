@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingOverlay from "react-loading-overlay";
 import {
@@ -31,6 +31,7 @@ import {
   deleteFODReset,
   createJobFODReset,
 } from "../../store/jobList/action";
+import { cloneJob } from "../../store/job/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
 import JobTagCanvas from "./JobTagCanvas";
@@ -41,6 +42,7 @@ import { truncate } from "@workspace/common/src/helpers/string_helper";
 const JobListing = () => {
   const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { jobType } = useParams();
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
@@ -88,6 +90,15 @@ const JobListing = () => {
       ),
     },
   ];
+
+  // Clone Job Function
+  const handleCloneJob = (cloneJobId) => {
+    const payload = {
+      "id": cloneJobId,
+      "clone": true
+    }
+    dispatch(cloneJob({ payload, navigate: navigate }))
+  }
 
   // Table Hooks
   const {
@@ -423,7 +434,8 @@ const JobListing = () => {
                 <i className="ri-parent-fill"></i>
               </Button>
             )}
-            <Button className="btn btn-custom-primary table-btn">
+            {/* Clone Button */}
+            <Button className="btn btn-custom-primary table-btn" onClick={() => handleCloneJob(data.id)}>
               <i className="mdi mdi-content-copy"></i>
             </Button>
 
