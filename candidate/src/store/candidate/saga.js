@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest, cancelled  } from "redux-saga/effects";
 import { CandidateEntityConstant } from "../../constants/candidateConstant";
 
 import {

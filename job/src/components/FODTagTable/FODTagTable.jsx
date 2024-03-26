@@ -18,7 +18,7 @@ import {
 } from "../JobListing/JobListingConstants";
 import FODCandidateRecommendation from "./FODCandidateRecommendation"
 
-const FODTagTable = ({ selectedRowData }) => {
+const FODTagTable = ({ selectedRowData, tagOffcanvas}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
