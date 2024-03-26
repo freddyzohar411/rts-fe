@@ -289,16 +289,16 @@ const JobListing = () => {
           );
         },
       },
-      {
-        name: "badges",
-        sort: false,
-        sortValue: "badges",
-        render: () => (
-          <div className="d-flex column-gap-2">
-            <Badge color="dark">10</Badge>
-          </div>
-        ),
-      },
+      // {
+      //   name: "badges",
+      //   sort: false,
+      //   sortValue: "badges",
+      //   render: () => (
+      //     <div className="d-flex column-gap-2">
+      //       <Badge color="dark">10</Badge>
+      //     </div>
+      //   ),
+      // },
       ...customConfig,
       {
         header: "Action",
