@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Progress, UncontrolledPopover, PopoverBody } from "reactstrap";
+import {
+  Progress,
+  UncontrolledPopover,
+  PopoverBody,
+  Popover,
+} from "reactstrap";
 import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
@@ -10,6 +15,7 @@ import {
   SECOND_INTERVIEW_SCHEDULED,
   THIRD_INTERVIEW_SCHEDULED,
 } from "./JobOverviewConstants";
+import AssessmentPopUp from "../AssessmentPopUp/AssessmentPopUp";
 
 function StepComponent({
   index,
@@ -22,11 +28,13 @@ function StepComponent({
   step,
 }) {
   const [toggleInterview, setToggleInterview] = useState(false);
+  const [toggleAssessment, setToggleAssessment] = useState(false);
   const date = data?.date;
   const inProgress = maxOrder + 1;
 
   const getInterviewStatus = () => {
     let status = data?.status;
+
     if (step === INTERVIEWS && !status) {
       if (timeline?.[INTERVIEW_FEEDBACK_PENDING]) {
         status = timeline?.[INTERVIEW_FEEDBACK_PENDING]?.["status"];
@@ -109,6 +117,17 @@ function StepComponent({
               {index === 5 && (
                 <span>
                   <i
+                    id="assessment-popover"
+                    className="ri-add-fill text-white fw-bold cursor-pointer"
+                    onClick={() => {
+                      setToggleAssessment(!toggleAssessment);
+                    }}
+                  ></i>
+                </span>
+              )}
+              {index === 9 && (
+                <span>
+                  <i
                     className="ri-add-fill text-white fw-bold cursor-pointer"
                     onClick={() => {
                       setToggleInterview(!toggleInterview);
@@ -117,7 +136,7 @@ function StepComponent({
                 </span>
               )}
             </div>
-            {index !== 7 ? (
+            {index !== 11 ? (
               <Progress
                 animated={false}
                 value={0}
@@ -138,9 +157,29 @@ function StepComponent({
           )}
         </div>
       </div>
-      {/* Interview Schedule Pop Up */}
+      {/* Odin Protocol Pop Up */}
       {index === 5 && (
-        <UncontrolledPopover
+        <Popover
+          className="custom-assessment-popover"
+          target="assessment-popover"
+          isOpen={toggleAssessment}
+          toggle={() => setToggleAssessment(!toggleAssessment)}
+          placement="bottom"
+        >
+          <PopoverBody>
+            <AssessmentPopUp
+              index={index}
+              timeline={timeline}
+              maxOrder={maxOrder}
+              originalOrder={originalOrder}
+            />
+          </PopoverBody>
+        </Popover>
+      )}
+
+      {/* Interview Schedule Pop Up */}
+      {index === 9 && (
+        <Popover
           className="custom-popover"
           placement="bottom"
           isOpen={toggleInterview}
@@ -156,7 +195,7 @@ function StepComponent({
               originalOrder={originalOrder}
             />
           </PopoverBody>
-        </UncontrolledPopover>
+        </Popover>
       )}
     </React.Fragment>
   );

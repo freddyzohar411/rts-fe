@@ -1,19 +1,19 @@
 import React from "react";
-import InterviewStepComponent from "./InterviewStepComponent";
+import AssessmentStepComponent from "./AssessmentStepComponent";
 
-const InterviewPopUp = ({ index, timeline, maxOrder, originalOrder }) => {
+function AssessmentPopUp({ index, timeline, maxOrder, originalOrder }) {
   const stepHeaders = {
-    "First Interview Scheduled": 11,
-    "Second Interview Scheduled": 12,
-    "Third Interview Scheduled": 13,
-    "Interview Feedback Pending": 14,
+    "Skills Assessment": 5,
+    "Coding Test": 6,
+    "Technical Interview": 7,
+    "Cultural Fit Test": 8,
   };
 
   return (
     <React.Fragment>
       <div className="d-flex">
         {Object.keys(stepHeaders).map((header, ind) => (
-          <InterviewStepComponent
+          <AssessmentStepComponent
             key={ind}
             header={header}
             index={stepHeaders[header] - 1}
@@ -24,5 +24,6 @@ const InterviewPopUp = ({ index, timeline, maxOrder, originalOrder }) => {
       </div>
     </React.Fragment>
   );
-};
-export default InterviewPopUp;
+}
+
+export default AssessmentPopUp;

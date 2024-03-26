@@ -62,6 +62,11 @@ import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
 import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
 import { truncate } from "@workspace/common/src/helpers/string_helper";
+import { SkillAssessment } from "../SkillAssessment";
+import { CodingTest } from "../CodingTest";
+import { CulturalFitTest } from "../CulturalFitTest";
+import { TechnicalInterview } from "../TechnicalInterview";
+import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -174,8 +179,8 @@ const JobOverview = () => {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
-        if (maxOrder >= 6 && maxOrder < 9) {
-          maxOrder = 5;
+        if (maxOrder >= 10 && maxOrder < 13) {
+          maxOrder = 9;
         }
         jsonObject[data?.id] = maxOrder;
       });
@@ -217,27 +222,42 @@ const JobOverview = () => {
         setStepperState("Profile Feedback Pending");
         break;
       case 5:
-        setStepperState("Schedule First Interview");
+        setStepperState("Pre-Skill Assessment");
         break;
       case 6:
-        setStepperState("Update 1st Interview Feedback");
+        setStepperState("Review Skill Assessment Results");
         break;
       case 7:
-        setStepperState("Schedule Second Interview");
+        setStepperState("Review Coding Test Results");
         break;
       case 8:
-        setStepperState("Update 2nd Interview Feedback");
+        setStepperState("Review Technical Interview Results");
         break;
       case 9:
-        setStepperState("Schedule Third Interview");
+        setStepperState("Review Cultural Fit Test Results");
         break;
       case 10:
-        setStepperState("Interview Feedback Pending");
+        setStepperState("Schedule First Interview");
         break;
       case 11:
-        setStepperState("Conditional Offer");
+        setStepperState("Update 1st Interview Feedback");
         break;
       case 12:
+        setStepperState("Schedule Second Interview");
+        break;
+      case 13:
+        setStepperState("Update 2nd Interview Feedback");
+        break;
+      case 14:
+        setStepperState("Schedule Third Interview");
+        break;
+      case 15:
+        setStepperState("Interview Feedback Pending");
+        break;
+      case 16:
+        setStepperState("Conditional Offer");
+        break;
+      case 17:
         setStepperState("Conditional Offer Status");
         break;
       default:
@@ -362,7 +382,7 @@ const JobOverview = () => {
         );
       case 5:
         return (
-          <ScheduleInterview
+          <PreSkillAssessment
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
@@ -371,16 +391,16 @@ const JobOverview = () => {
         );
       case 6:
         return (
-          <FirstInterviewFeedbackPending
+          <SkillAssessment
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            handleIconClick={handleIconClick}
+            activeStep={step}
           />
         );
       case 7:
         return (
-          <ScheduleInterview
+          <CodingTest
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
@@ -389,16 +409,16 @@ const JobOverview = () => {
         );
       case 8:
         return (
-          <SecondInterviewFeedbackPending
+          <TechnicalInterview
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            handleIconClick={handleIconClick}
+            activeStep={step}
           />
         );
       case 9:
         return (
-          <ScheduleInterview
+          <CulturalFitTest
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
@@ -407,13 +427,58 @@ const JobOverview = () => {
         );
       case 10:
         return (
+          <ScheduleInterview
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            activeStep={step}
+          />
+        );
+      case 11:
+        return (
+          <FirstInterviewFeedbackPending
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            handleIconClick={handleIconClick}
+          />
+        );
+      case 12:
+        return (
+          <ScheduleInterview
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            activeStep={step}
+          />
+        );
+      case 13:
+        return (
+          <SecondInterviewFeedbackPending
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            handleIconClick={handleIconClick}
+          />
+        );
+      case 14:
+        return (
+          <ScheduleInterview
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            activeStep={step}
+          />
+        );
+      case 15:
+        return (
           <ThirdInterviewFeedbackPending
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
           />
         );
-      case 11:
+      case 16:
         return (
           <ConditionalOffer
             templateData={templateData}
@@ -423,7 +488,7 @@ const JobOverview = () => {
             activeStep={step}
           />
         );
-      case 12:
+      case 17:
         return (
           <ConditionalOfferStatus
             closeOffcanvas={closeOffcanvas}
