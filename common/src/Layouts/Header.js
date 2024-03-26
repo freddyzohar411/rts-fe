@@ -6,6 +6,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, Form } from "reactstrap";
 import logoSm from "../assets/images/logo-sm.png";
 import logoDark from "../assets/images/logo-dark.png";
 import logoLight from "../assets/images/logo-light.png";
+import logoPulse from "../assets/images/logo-pulse.png";
 
 //import Components
 import SearchOption from "../Components/Common/SearchOption";
@@ -97,7 +98,7 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                     <img src={logoSm} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
-                    <img src={logoLight} alt="" height="50" />
+                    <img src={logoPulse} alt="" height="50" />
                   </span>
                 </Link>
               </div>
