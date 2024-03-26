@@ -125,7 +125,7 @@ function StepComponent({
                   ></i>
                 </span>
               )}
-              {index === 9 && (
+              {index === 10 && (
                 <span>
                   <i
                     className="ri-add-fill text-white fw-bold cursor-pointer"
@@ -165,6 +165,7 @@ function StepComponent({
           isOpen={toggleAssessment}
           toggle={() => setToggleAssessment(!toggleAssessment)}
           placement="bottom"
+          trigger="legacy"
         >
           <PopoverBody>
             <AssessmentPopUp
@@ -178,7 +179,7 @@ function StepComponent({
       )}
 
       {/* Interview Schedule Pop Up */}
-      {index === 9 && (
+      {index === 10 && (
         <Popover
           className="custom-popover"
           placement="bottom"
