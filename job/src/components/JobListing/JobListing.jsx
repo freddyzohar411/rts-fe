@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -65,6 +65,7 @@ const JobListing = () => {
   const [nestedVisible, setNestedVisible] = useState([]);
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
+  const hasPageRendered = useRef(false);
 
   const isFOD = gridView === "fod";
   const showDelete = gridView === "fod" || gridView === "active_jobs";
@@ -132,9 +133,16 @@ const JobListing = () => {
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, page: 0, jobType: gridView };
+    const request = { ...pageRequest, jobType: gridView };
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-  }, [pageRequest, gridView]);
+  }, [pageRequest]);
+
+  useEffect(() => {
+    if (hasPageRendered.current) {
+      pageRequestSet.setPage(0);
+    }
+    hasPageRendered.current = true;
+  }, [gridView]);
 
   // Update the page info when job Data changes
   useEffect(() => {
@@ -245,7 +253,9 @@ const JobListing = () => {
         sort: false,
         sortValue: "indexing",
         render: (data, index) => (
-          <div className="d-flex column-gap-2">{index + 1}.</div>
+          <div className="d-flex column-gap-2">
+            {pageInfo?.currentPage * pageInfo?.pageSize + (index + 1)}.
+          </div>
         ),
       },
       {
