@@ -8,6 +8,7 @@ import {
   postCandidate,
   putCandidate,
   resetMetaData,
+  updateCandidateEmbeddings
 } from "../../store/candidate/action";
 import { fetchCandidateForm } from "../../store/candidateForm/action";
 import {
@@ -77,6 +78,15 @@ const EditCandidate = () => {
    * Get candidate id from url
    */
   const { candidateId } = useParams();
+
+  // Update embedding when dismounting (NEW)
+  useEffect(() => {
+    return () => {
+      if (candidateId) {
+        dispatch(updateCandidateEmbeddings(parseInt(candidateId)));
+      }
+    };
+  }, []);
 
   /**
    * Fetch form template based on step

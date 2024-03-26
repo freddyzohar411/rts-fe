@@ -14,6 +14,7 @@ import {
   FETCH_CANDIDATES_ADMIN,
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_MULTI,
+  UPDATE_CANIDATE_EMBEDDINGS,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -42,6 +43,8 @@ import {
   importCandidateMultiFailure,
   importCandidateMultiSuccess,
   setParseAndImportLoading,
+  updateCandidateEmbeddingsSuccess,
+  updateCandidateEmbeddingsFailure,
 } from "./action";
 import {
   getCandidates,
@@ -55,6 +58,7 @@ import {
   getCandidateFieldAll,
   getCandidatesAdmin,
   createCandidateList,
+  updateCandidateEmbeddings,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -417,7 +421,7 @@ function* workImportCandidate(action) {
         completeCandidateRegistration,
         parseInt(candidateId)
       );
-
+      yield call(updateCandidateEmbeddings, candidateId);
       yield put(importCandidateSuccess());
       // Check if navgate exist
       if (typeof navigate === "function") {
@@ -467,6 +471,15 @@ function* workImportCandidateMulti(action) {
   }
 }
 
+// Update Candidate Embeddings
+function* workUpdateCandidateEmbeddings(action) {
+  try {
+    const response = yield call(updateCandidateEmbeddings, action.payload);
+  } catch (error) {
+    console.log("Error updating candidate embeddings", error);
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -480,4 +493,5 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATES_ADMIN, workFetchCandidatesAdmin);
   yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
   yield takeEvery(IMPORT_CANDIDATE_MULTI, workImportCandidateMulti);
+  yield takeEvery(UPDATE_CANIDATE_EMBEDDINGS, workUpdateCandidateEmbeddings);
 }

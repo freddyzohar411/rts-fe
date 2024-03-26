@@ -39,7 +39,10 @@ import {
   IMPORT_CANDIDATE_MULTI,
   IMPORT_CANDIDATE_MULTI_SUCCESS,
   IMPORT_CANDIDATE_MULTI_FAILURE,
-  SET_PARSE_AND_IMPORT_LOADING
+  SET_PARSE_AND_IMPORT_LOADING,
+  UPDATE_CANIDATE_EMBEDDINGS,
+  UPDATE_CANIDATE_EMBEDDINGS_SUCCESS,
+  UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -254,9 +257,18 @@ export const setParseAndImportLoading = (loading) => ({
   payload: loading,
 });
 
+// Update Candidate Embeddings
+export const updateCandidateEmbeddings = (candidateId) => ({
+  type: UPDATE_CANIDATE_EMBEDDINGS,
+  payload: candidateId,
+});
 
+export const updateCandidateEmbeddingsSuccess = (candidate) => ({
+  type: UPDATE_CANIDATE_EMBEDDINGS_SUCCESS,
+  payload: candidate,
+});
 
-
-
-
-
+export const updateCandidateEmbeddingsFailure = (error) => ({
+  type: UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
+  payload: error,
+});

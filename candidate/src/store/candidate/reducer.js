@@ -40,6 +40,9 @@ import {
   IMPORT_CANDIDATE_MULTI_SUCCESS,
   IMPORT_CANDIDATE_MULTI_FAILURE,
   SET_PARSE_AND_IMPORT_LOADING,
+  UPDATE_CANIDATE_EMBEDDINGS,
+  UPDATE_CANIDATE_EMBEDDINGS_SUCCESS,
+  UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -326,6 +329,18 @@ const CandidateReducer = (state = initialState, action) => {
       return {
         ...state,
         parseAndImportLoading: action.payload,
+      };
+    case UPDATE_CANIDATE_EMBEDDINGS:
+      return {
+        ...state,
+      };
+    case UPDATE_CANIDATE_EMBEDDINGS_SUCCESS:
+      return {
+        ...state,
+      };
+    case UPDATE_CANIDATE_EMBEDDINGS_FAILURE:
+      return {
+        ...state,
       };
     default:
       return state;

@@ -154,3 +154,7 @@ export const parseResumeMulti = (data, config) =>
     data,
     config
   );
+
+
+  export const updateCandidateEmbeddings = (id) =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/create-embeddings/${id}`, );
