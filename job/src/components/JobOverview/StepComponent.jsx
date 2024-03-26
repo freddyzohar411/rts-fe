@@ -161,7 +161,7 @@ function StepComponent({
       {index === 5 && (
         <Popover
           className="custom-assessment-popover"
-          target="assessment-popover"
+          target={`Popover-${index}-${candidateId}`}
           isOpen={toggleAssessment}
           toggle={() => setToggleAssessment(!toggleAssessment)}
           placement="bottom"
