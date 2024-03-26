@@ -13,7 +13,7 @@ const useTableHook = (
   // Set state for page request
   const [pageRequest, setPageRequest] = useState({
     page: initialPageRequest?.page || 0,
-    pageSize: initialPageRequest?.pageSize || 5,
+    pageSize: initialPageRequest?.pageSize || 20,
     sortBy: initialPageRequest?.sortBy || null,
     sortDirection: initialPageRequest?.sortDirection || "asc",
     searchTerm: initialPageRequest?.searchTerm || null,
@@ -24,6 +24,7 @@ const useTableHook = (
     currentPage: 0,
     totalPages: 0,
     totalElements: 0,
+    pageSize: 0,
   });
 
   const [search, setSearch] = useState("");
@@ -45,6 +46,7 @@ const useTableHook = (
       currentPage: data.page,
       totalPages: data.totalPages,
       totalElements: data.totalElements,
+      pageSize: data?.pageSize,
     }));
   };
 
@@ -83,6 +85,7 @@ const useTableHook = (
     e.preventDefault();
     setPageRequest((prev) => ({
       ...prev,
+      page: 0,
       searchTerm: search,
     }));
   };
