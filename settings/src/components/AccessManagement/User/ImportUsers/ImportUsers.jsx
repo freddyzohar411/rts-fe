@@ -181,14 +181,14 @@ function ImportUsers() {
                       <div className="py-3">
                         <Row className="mb-3">
                           <Col>
-                            <ValidateUsers
-                              selectedFiles={selectedFiles}
-                              onImportUsers={handleImportedUsers}
-                            />
-                            {/* <ManageUsers
+                            {/* <ValidateUsers
                               selectedFiles={selectedFiles}
                               onImportUsers={handleImportedUsers}
                             /> */}
+                            <ManageUsers
+                              selectedFiles={selectedFiles}
+                              onImportUsers={handleImportedUsers}
+                            />
                           </Col>
                         </Row>
                         <Row>

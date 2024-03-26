@@ -65,8 +65,6 @@ function* workListUsers(action) {
 
 function* workCreateUser(action) {
   const { newUser, navigate } = action.payload;
-  console.log("New User: ", newUser);
-  console.log("Payload: ", action.payload)
   try {
     const userResponse = yield call(createUser, newUser);
     yield put(createUserSuccess(userResponse.data));
@@ -97,8 +95,6 @@ function* workCreateUser(action) {
 
 function* workCreateUsers(action) {
   const { newUsers, navigate } = action.payload;
-  console.log("New Users: ", newUsers);
-  console.log("Payload: ", action.payload);
   try {
     const response = yield call(createUsers, newUsers);
     const { data } = response;

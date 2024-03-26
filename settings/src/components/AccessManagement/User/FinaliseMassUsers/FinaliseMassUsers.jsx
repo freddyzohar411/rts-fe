@@ -6,21 +6,16 @@ import { useDispatch } from "react-redux";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function FinaliseMassUsers({ newUsers }) {
-  console.log("Finalise Mass Users - Imported Users: ", newUsers);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  console.log("isLoading -- Mass Import", isLoading);
 
   const handleUsersCreation = () => {
-    setIsLoading(true);
-    dispatch(createUsers({ newUsers, navigate: navigate }))
+    dispatch(createUsers({ newUsers: newUsers, navigate: navigate }))
       .catch((error) => {
         console.error("Error creating users:", error);
         setShowAlert(true);
       })
-      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -60,21 +55,11 @@ function FinaliseMassUsers({ newUsers }) {
                   {newUsers?.length} users extracted and ready to be imported.
                 </span>
               </div>
-
-              {isLoading && (
-                <div className="d-flex flex-column align-items-center justify-content-center gap-3">
-                  <Spinner />
-                  <p>Creating user accounts..</p>
-                </div>
-              )}
-
               <Button
                 className="btn btn-custom-primary w-25"
                 onClick={() => handleUsersCreation()}
-                disabled={isLoading}
               >
                 <span className="me-2">Import Users</span>
-                {isLoading && <Spinner size="sm" color="light" />}
               </Button>
             </div>
           </Col>

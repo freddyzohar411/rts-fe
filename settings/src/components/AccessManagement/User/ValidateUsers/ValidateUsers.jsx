@@ -150,7 +150,6 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
     const flattenedData = combinedData.flat();
 
     // Log or use the flattenedData array as needed
-    console.log("Generated Imported Users:", flattenedData);
     onImportUsers(flattenedData);
   };
 
@@ -190,7 +189,6 @@ function ValidateUsers({ selectedFiles, onImportUsers }) {
   const handleSave = (index) => {
     setEditingRow(-1);
     const newData = [...fileUserDataArray[activeFileIndex]];
-    console.log("New Data", newData);
     newData[getUserIndex(index)] = { ...editedData[getUserIndex(index)] };
     setFileUserDataArray((prevData) => {
       const updatedData = [...prevData];

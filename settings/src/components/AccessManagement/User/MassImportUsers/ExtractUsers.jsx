@@ -37,8 +37,6 @@ function ExtractUsers({ selectedFiles, onExtractedUserData }) {
     }
   }, [selectedFiles]);
 
-  console.log("ExtractUsers -> extractedUserData", extractedUserData);
-
   return (
     <Input
       hidden

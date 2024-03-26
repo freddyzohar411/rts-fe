@@ -20,7 +20,6 @@ import ImportFiles from "./ImportFiles";
 import FinaliseMassUsers from "../FinaliseMassUsers/FinaliseMassUsers";
 import { Link } from "react-router-dom";
 import ManageUsers from "../ManageUsers/ManageUsers";
-import ValidateUsers from "../ValidateUsers/ValidateUsers";
 
 function MassImportUsers() {
   document.title = "Import Users | RTS";
@@ -40,9 +39,9 @@ function MassImportUsers() {
     setSelectedFiles(files);
   };
 
-  const handleImportedUsers = (users) => {
+  const handleNewUsers = (users) => {
     setNewUsers(users);
-  };
+  }
 
   return (
     <React.Fragment>
@@ -183,12 +182,8 @@ function MassImportUsers() {
                           <Col>
                             <ManageUsers
                               selectedFiles={selectedFiles}
-                              onImportUsers={handleImportedUsers}
+                              onHandleNewUsers={handleNewUsers}
                             />
-                            {/* <ValidateUsers
-                              selectedFiles={selectedFiles}
-                              onImportUsers={handleImportFiles}
-                            /> */}
                           </Col>
                         </Row>
                         <Row>

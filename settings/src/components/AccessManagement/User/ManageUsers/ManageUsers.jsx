@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Row,
   Col,
@@ -12,10 +12,10 @@ import {
 import ExtractUsers from "../ImportUsers/ExtractUsers";
 import ManageUsersTable from "./ManageUsersTable";
 
-function ManageUsers({ selectedFiles, onImportUsers }) {
+function ManageUsers({ selectedFiles, onHandleNewUsers }) {
   const [extractedUserData, setExtractedUserData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [submittedUsers, setSubmittedUsers] = useState([]);
 
   const handleExtractedUserData = (data) => {
     setExtractedUserData(data);
@@ -25,10 +25,15 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
     setSelectedFile(filename);
   };
 
+  const handleSubmittedUsers = (users) => {
+    setSubmittedUsers(users);
+    onHandleNewUsers(users);
+  };
+
   return (
     <React.Fragment>
       <div>
-        <hr/>
+        <hr />
         <Row>
           <Col lg={3}>
             <Card>
@@ -101,7 +106,7 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
                       <ManageUsersTable
                         extractedUserData={extractedUserData}
                         selectedFile={selectedFile}
-                        onImportUsers={onImportUsers}
+                        onSubmittedUsers={handleSubmittedUsers}
                       />
                     ) : (
                       <div>
@@ -120,18 +125,6 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
               selectedFiles={selectedFiles}
               onExtractedUserData={handleExtractedUserData}
             />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div className="d-flex justify-content-end">
-              <Button
-                // onClick={handleSubmitAll}
-                className="btn btn-custom-primary"
-              >
-                Confirm User Data
-              </Button>
-            </div>
           </Col>
         </Row>
       </div>

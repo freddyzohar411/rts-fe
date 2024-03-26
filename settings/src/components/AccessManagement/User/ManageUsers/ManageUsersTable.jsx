@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Row,
   Table,
+  InputGroup,
+  InputGroupText,
   Input,
   FormFeedback,
   Col,
@@ -9,6 +11,8 @@ import {
   PaginationItem,
   PaginationLink,
   Button,
+  Badge,
+  Label,
 } from "reactstrap";
 import SimpleBar from "simplebar-react";
 import { schema, initialValues, populateForm } from "./constants";
@@ -18,18 +22,25 @@ import { fetchGroups } from "../../../../store/group/action";
 import { fetchUsers } from "../../../../store/users/action";
 import { useDispatch, useSelector } from "react-redux";
 
-function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
-  const [selectedUserData, setSelectedUserData] = useState(
-    extractedUserData[selectedFile] || []
-  );
-  // const selectedUserData = extractedUserData[selectedFile] || [];
+function ManageUsersTable({
+  extractedUserData,
+  selectedFile,
+  onSubmittedUsers,
+}) {
+  const [selectedUserData, setSelectedUserData] = useState([]);
+  const [submittedForms, setSubmittedForms] = useState([]);
+  useEffect(() => {
+    const selectedData = extractedUserData[selectedFile || []];
+    setSelectedUserData(selectedData);
+  }, [selectedUserData, selectedFile, extractedUserData]);
   const dispatch = useDispatch();
   const allGroups = useSelector((state) => state?.GroupReducer?.groups);
   const allUsers = useSelector((state) => state?.UserReducer?.users);
   const [userInitialValues, setUserInitialValues] = useState(
     populateForm(initialValues)
   );
-  const [editingRow, setEditingRow] = useState(-1);
+  const [confirmedUsers, setConfirmedUsers] = useState([]);
+  const [editingRow, setEditingRow] = useState(false);
   const [formikArray, setFormikArray] = useState([]);
   const [newUser, setNewUser] = useState([]);
   const [submitUsers, setSubmitUsers] = useState([]);
@@ -37,21 +48,27 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
   const formikRefs = useRef([]);
 
   useEffect(() => {
-    // Populate initial values for each user in selectedUserData
-    const initialUserValues = selectedUserData.map((user, index) => ({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-      email: user.email,
-      mobile: user.mobile,
-      employeeId: user.employeeId,
-      managerId: user.managerId,
-      groups: user.groups,
-    }));
+    const initialUserValues = selectedUserData.map((user, index) => {
+      const userGroup = allGroups?.find(
+        (group) => group.userGroupName === user.groupName
+      );
+      const userManager = (Array.isArray(allUsers) ? allUsers : []).find(
+        (manager) => manager.email === user.managerEmail
+      );
+      return {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
+        mobile: user.mobile,
+        employeeId: user.employeeId,
+        managerId: userManager ? userManager?.id : null,
+        groups: userGroup ? [userGroup?.id] : [],
+      };
+    });
 
-    // Assuming setUserInitialValues is a state setter function
     setUserInitialValues(initialUserValues);
-  }, [selectedUserData]);
+  }, [selectedUserData, allGroups, allUsers]);
 
   //   PAGINATION - START
   const [currentPage, setCurrentPage] = useState(1);
@@ -93,21 +110,6 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
     formikRefs.current = updatedFormikRefs;
   };
 
-  //   const updateUserData = [...selectedUserData];
-  //   updateUserData[index] = {
-  //     firstName: values.firstName,
-  //     lastName: values.lastName,
-  //     username: values.username,
-  //     email: values.email,
-  //     mobile: values.mobile,
-  //     employeeId: values.employeeId,
-  //     managerId: values.managerId,
-  //     groups: values.groups,
-  //   };
-  //   setSelectedUserData(updateUserData);
-  //   console.log("Submitted - User Data Now:", selectedUserData);
-  // };
-
   const handleSubmit = (values, index) => {
     const updateUserData = [...selectedUserData];
     updateUserData[index] = values;
@@ -118,18 +120,46 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
     formikRefs.current.forEach((formik) => {
       formik?.handleSubmit();
     });
+    const newUsers = formikRefs.current.map((formik) => formik?.values);
+    setSubmittedForms((prevSubmittedForms) => [
+      ...prevSubmittedForms,
+      ...newUsers,
+    ]);
   };
 
   useEffect(() => {
-    if (newUser.length === formikRefs.current.length) {
-      console.log("Submitted - User Data Now:", newUser)
-      onImportUsers(newUser);
+    if (submittedForms) {
+      onSubmittedUsers(submittedForms);
     }
-  }, [newUser]);
+  }, [submittedForms]);
 
   return (
     <React.Fragment>
       <div>
+        <Row className="mb-3">
+          <Col>
+            <div className="d-flex flex-row justify-content-between align-items-baseline">
+              {editingRow ? (
+                <Badge color="success">Editing Row</Badge>
+              ) : (
+                <Badge color="dark">Read Only</Badge>
+              )}
+              <div>
+                <Button
+                  className="btn btn-custom-primary btn-sm me-2"
+                  onClick={() => setEditingRow(!editingRow)}
+                >
+                  {editingRow
+                    ? "Switch to Reading View"
+                    : "Switch to Editing View"}
+                </Button>
+                <Button className="btn btn-custom-primary btn-sm">
+                  Add User
+                </Button>
+              </div>
+            </div>
+          </Col>
+        </Row>
         <Row className="mb-3">
           <Col>
             <div className="search-box">
@@ -164,7 +194,6 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                         initialValues={userInitialValues[index]}
                         validateOnBlur
                         validateOnChange={false}
-                        // Uncomment the following line if you have a validation schema
                         validationSchema={schema}
                         enableReinitialize={true}
                         onSubmit={(values) => handleSubmit(values, index)}
@@ -172,7 +201,7 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                           if (el) {
                             formikRefs.current[index] = el;
                           }
-                        }} // Use innerRef here
+                        }}
                       >
                         {({ errors, touched, handleSubmit, setFieldValue }) => (
                           <>
@@ -197,7 +226,7 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                                       ? "is-invalid"
                                       : ""
                                   }`}
-                                  disabled={editingRow !== index}
+                                  disabled={!editingRow}
                                 />
                                 {errors.firstName && touched.firstName && (
                                   <div className="invalid-feedback">
@@ -217,7 +246,8 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                                       ? "is-invalid"
                                       : ""
                                   }`}
-                                  disabled={editingRow !== index}
+                                  // disabled={editingRow !== index}
+                                  disabled={!editingRow}
                                 />
                                 {errors.lastName && touched.lastName && (
                                   <div className="invalid-feedback">
@@ -237,7 +267,7 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                                       ? "is-invalid"
                                       : ""
                                   }`}
-                                  disabled={editingRow !== index}
+                                  disabled={!editingRow}
                                 />
                                 {errors.username && touched.username && (
                                   <div className="invalid-feedback">
@@ -257,7 +287,8 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                                       ? "is-invalid"
                                       : ""
                                   }`}
-                                  disabled={editingRow !== index}
+                                  // disabled={editingRow !== index}
+                                  disabled={!editingRow}
                                 />
                                 {errors.email && touched.email && (
                                   <div className="invalid-feedback">
@@ -277,7 +308,7 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                                       ? "is-invalid"
                                       : ""
                                   }`}
-                                  disabled={editingRow !== index}
+                                  disabled={!editingRow}
                                 />
                                 {errors.mobile && touched.mobile && (
                                   <FormFeedback typeof="invalid">
@@ -297,7 +328,7 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                                       ? "is-invalid"
                                       : ""
                                   }`}
-                                  disabled={editingRow !== index}
+                                  disabled={!editingRow}
                                 />
                                 {errors.employeeId && touched.employeeId && (
                                   <FormFeedback typeof="invalid">
@@ -316,7 +347,7 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                                     maxHeight: "100px",
                                     overflowY: "auto",
                                   }}
-                                  disabled={editingRow !== index}
+                                  disabled={!editingRow}
                                   onChange={(e) =>
                                     setFieldValue("managerId", e.target.value)
                                   }
@@ -350,7 +381,7 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                                     maxHeight: "100px",
                                     overflowY: "auto",
                                   }}
-                                  disabled={editingRow !== index}
+                                  disabled={!editingRow}
                                   onChange={(e) =>
                                     setFieldValue("groups", e.target.value)
                                   }
@@ -377,7 +408,7 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
 
                             <td>
                               <div className="d-flex justify-content-between gap-2">
-                                <Button
+                                {/* <Button
                                   className="btn btn-sm btn-custom-primary"
                                   type="button"
                                   onClick={() => {
@@ -395,7 +426,7 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
                                   >
                                     <i className="ri-save-line"></i>
                                   </button>
-                                </Form>
+                                </Form> */}
 
                                 <Button
                                   className="btn btn-sm btn-danger"
@@ -455,6 +486,12 @@ function ManageUsersTable({ extractedUserData, selectedFile, onImportUsers}) {
             >
               Confirm Users
             </Button>
+          </Col>
+          <Col>
+            <InputGroup className="w-25">
+              <InputGroupText>Total Confirmed Users</InputGroupText>
+              <Input disabled value={submittedForms?.length || 0} />
+            </InputGroup>
           </Col>
         </Row>
       </div>
