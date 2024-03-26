@@ -16,25 +16,14 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
-import FODCandidateRecommendation from "./FODCandidateRecommendation"
 
 const FODTagTable = ({ selectedRowData }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const candidatesData = useSelector(
-  //   (state) => state.CandidateReducer.candidates
-  // );
-
-  const {
-    candidatesRecommendation: candidatesData,
-    candidateRecommendationLoading: loading,
-  } = useSelector(
-    (state) => state.CandidateReducer
-    // (state) => state.CandidateReducer
+  const candidatesData = useSelector(
+    (state) => state.CandidateReducer.candidates
   );
-
-
   const candidatesFields = useSelector(
     (state) => state.CandidateReducer.candidatesFields
   );
@@ -78,7 +67,7 @@ const FODTagTable = ({ selectedRowData }) => {
       page: 0,
       pageSize: 20,
       sortBy: null,
-      sortDirection: null,
+      sortDirection: "asc",
       searchTerm: null,
       searchFields: DynamicTableHelper.generateSeachFieldArray(
         CANDIDATE_INITIAL_OPTIONS
@@ -155,19 +144,6 @@ const FODTagTable = ({ selectedRowData }) => {
           );
         },
       },
-      { 
-        header: "Recommendation",
-        name: "Recommendation",
-        sort: false,
-        sortValue: "Recommendation",
-        render: (data) => {
-          return (
-            <FODCandidateRecommendation
-              data={data}
-            />
-          );
-        },
-      },
       {
         header: "Candidate First Name",
         name: "candidateFirstName",
@@ -209,14 +185,8 @@ const FODTagTable = ({ selectedRowData }) => {
 
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    // dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
-    const jobPageRequest = { ...pageRequest, jobId: selectedRowData?.id };
-    dispatch(
-      candidateRecommendationList(
-        DynamicTableHelper.cleanPageRequest(jobPageRequest)
-      )
-    );
-  }, [pageRequest, selectedRowData?.id]);
+    dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
+  }, [pageRequest]);
 
   // Update the page info when candidate Data changes
   useEffect(() => {

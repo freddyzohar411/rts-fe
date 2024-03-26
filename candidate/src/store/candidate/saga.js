@@ -15,6 +15,7 @@ import {
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_MULTI,
   UPDATE_CANIDATE_EMBEDDINGS,
+  CANDIDATE_RECOMMENDATION_LIST,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -45,6 +46,8 @@ import {
   setParseAndImportLoading,
   updateCandidateEmbeddingsSuccess,
   updateCandidateEmbeddingsFailure,
+  candidateRecommendationListSuccess,
+  candidateRecommendationListFailure
 } from "./action";
 import {
   getCandidates,
@@ -59,6 +62,7 @@ import {
   getCandidatesAdmin,
   createCandidateList,
   updateCandidateEmbeddings,
+  getCandidateRecommendations
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -480,6 +484,16 @@ function* workUpdateCandidateEmbeddings(action) {
   }
 }
 
+// Candidate Recommendation List
+function* workCandidateRecommendationList(action) {
+  try {
+    const response = yield call(getCandidateRecommendations, action.payload);
+    yield put(candidateRecommendationListSuccess(response.data));
+  } catch (error) {
+    yield put(candidateRecommendationListFailure(error));
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -494,4 +508,5 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
   yield takeEvery(IMPORT_CANDIDATE_MULTI, workImportCandidateMulti);
   yield takeEvery(UPDATE_CANIDATE_EMBEDDINGS, workUpdateCandidateEmbeddings);
+  yield takeEvery(CANDIDATE_RECOMMENDATION_LIST, workCandidateRecommendationList);
 }

@@ -43,6 +43,9 @@ import {
   UPDATE_CANIDATE_EMBEDDINGS,
   UPDATE_CANIDATE_EMBEDDINGS_SUCCESS,
   UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
+  CANDIDATE_RECOMMENDATION_LIST,
+  CANDIDATE_RECOMMENDATION_LIST_SUCCESS,
+  CANDIDATE_RECOMMENDATION_LIST_FAILURE,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -272,3 +275,20 @@ export const updateCandidateEmbeddingsFailure = (error) => ({
   type: UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
   payload: error,
 });
+
+// Candidate Recommendation List
+export const candidateRecommendationList = (params) => ({
+  type: CANDIDATE_RECOMMENDATION_LIST,
+  payload: params,
+});
+
+export const candidateRecommendationListSuccess = (candidates) => ({
+  type: CANDIDATE_RECOMMENDATION_LIST_SUCCESS,
+  payload: candidates,
+});
+
+export const candidateRecommendationListFailure = (error) => ({
+  type: CANDIDATE_RECOMMENDATION_LIST_FAILURE,
+  payload: error,
+});
+

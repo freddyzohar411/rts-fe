@@ -43,6 +43,9 @@ import {
   UPDATE_CANIDATE_EMBEDDINGS,
   UPDATE_CANIDATE_EMBEDDINGS_SUCCESS,
   UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
+  CANDIDATE_RECOMMENDATION_LIST,
+  CANDIDATE_RECOMMENDATION_LIST_SUCCESS,
+  CANDIDATE_RECOMMENDATION_LIST_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -67,6 +70,8 @@ const initialState = {
   importLoading: false,
   importMultiLoading: false,
   parseAndImportLoading: false,
+  candidatesRecommendation: [],
+  candidateRecommendationLoading: false,
 };
 
 const CandidateReducer = (state = initialState, action) => {
@@ -341,6 +346,25 @@ const CandidateReducer = (state = initialState, action) => {
     case UPDATE_CANIDATE_EMBEDDINGS_FAILURE:
       return {
         ...state,
+      };
+    case CANDIDATE_RECOMMENDATION_LIST:
+      return {
+        ...state,
+        candidateRecommendationLoading: true,
+        error: false,
+      };
+    case CANDIDATE_RECOMMENDATION_LIST_SUCCESS:
+      return {
+        ...state,
+        candidateRecommendationLoading: false,
+        candidatesRecommendation: action.payload,
+      };
+    case CANDIDATE_RECOMMENDATION_LIST_FAILURE:
+      return {
+        ...state,
+        candidateRecommendationLoading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;

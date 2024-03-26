@@ -155,6 +155,11 @@ export const parseResumeMulti = (data, config) =>
     config
   );
 
+export const updateCandidateEmbeddings = (id) =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/create-embeddings/${id}`);
 
-  export const updateCandidateEmbeddings = (id) =>
-  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/create-embeddings/${id}`, );
+export const getCandidateRecommendations = (data) =>
+  api.create(
+    `${CANDIDATE_URL}${BASE_CANDIDATES}/listing/similarity-search`,
+    data
+  );
