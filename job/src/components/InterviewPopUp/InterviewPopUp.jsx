@@ -3,10 +3,10 @@ import InterviewStepComponent from "./InterviewStepComponent";
 
 const InterviewPopUp = ({ index, timeline, maxOrder, originalOrder }) => {
   const stepHeaders = {
-    "First Interview Scheduled": 11,
-    "Second Interview Scheduled": 12,
-    "Third Interview Scheduled": 13,
-    "Interview Feedback Pending": 14,
+    "First Interview Scheduled": 10,
+    "Second Interview Scheduled": 11,
+    "Third Interview Scheduled": 12,
+    "Interview Feedback Pending": 13,
   };
 
   return (

@@ -106,7 +106,7 @@ function GroupsTab() {
   return (
     <div>
       <Row>
-        <Col lg={12}>
+        <Col lg={3}>
           <div className="search-box my-2">
             <Input
               type="text"
@@ -124,7 +124,10 @@ function GroupsTab() {
 
       <Row className="mb-1">
         <Col lg={12}>
-          <div className="table-responsive mb-1">
+          <div
+            className="table-responsive table-hover table-card mt-1 mb-1"
+            style={{ height: "400px" }}
+          >
             <Table className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3">
               <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
                 <tr>

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button } from "reactstrap";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 
 function TimelineHeader({ data }) {
-  const [startIndex, setStartIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(0);
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -35,16 +33,20 @@ function TimelineHeader({ data }) {
     }
   }, [jobTimelineCount]);
 
-
   return (
     <div
-      className={`d-flex p-0 justify-content-around ${isMobile ? "flex-wrap align-items-start" : "flex-nowrap align-items-start"}`}
+      className={`d-flex p-0 justify-content-around ${
+        isMobile
+          ? "flex-wrap align-items-start"
+          : "flex-nowrap align-items-start"
+      }`}
     >
       {data.map((item, index) => (
         <div
           key={index}
-          className={`d-flex flex-column align-items-center justify-content-top gap-3 p-1 ${isMobile ? "" : "h-100"}`}
-          style={{ width: "120px" }}
+          className={`d-flex flex-column align-items-center justify-content-top gap-3 p-1 ${
+            isMobile ? "" : "h-100"
+          }`}
         >
           <div
             className="rounded rounded-circle bg-custom-primary text-white d-flex justify-content-center align-items-center"

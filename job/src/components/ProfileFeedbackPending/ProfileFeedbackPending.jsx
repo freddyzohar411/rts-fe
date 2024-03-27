@@ -68,6 +68,7 @@ function ProfileFeedbackPending({
       jobType: "profile_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

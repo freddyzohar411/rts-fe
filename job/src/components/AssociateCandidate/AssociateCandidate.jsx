@@ -81,6 +81,7 @@ function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
       jobType: "associate_candidate",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

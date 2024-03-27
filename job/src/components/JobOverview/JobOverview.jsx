@@ -179,7 +179,9 @@ const JobOverview = () => {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
-        if (maxOrder >= 10 && maxOrder < 13) {
+        if (maxOrder >= 6 && maxOrder < 9) {
+          maxOrder = 5;
+        } else if (maxOrder >= 10 && maxOrder < 13) {
           maxOrder = 9;
         }
         jsonObject[data?.id] = maxOrder;
@@ -792,9 +794,12 @@ const JobOverview = () => {
                       const isRejected =
                         status === JOB_STAGE_STATUS.REJECTED ||
                         status === JOB_STAGE_STATUS.WITHDRAWN;
+                      const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
                       const originalOrder = maxOrder;
                       if (maxOrder >= 6 && maxOrder < 9) {
                         maxOrder = 5;
+                      } else if (maxOrder >= 10 && maxOrder < 13) {
+                        maxOrder = 9;
                       }
                       return (
                         <tbody key={index}>
@@ -808,6 +813,7 @@ const JobOverview = () => {
                                     index={stepOrders[step]}
                                     maxOrder={maxOrder}
                                     isRejected={isRejected}
+                                    isInProgress={isInProgress}
                                     data={data?.timeline?.[steps[step]]}
                                     candidateId={data?.candidate?.id}
                                     timeline={data?.timeline}

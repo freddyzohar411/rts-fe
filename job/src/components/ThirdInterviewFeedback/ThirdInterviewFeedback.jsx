@@ -57,6 +57,7 @@ function ThirdInterviewFeedbackPending({ closeOffcanvas, jobId, candidateId }) {
       jobType: "third_interview_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

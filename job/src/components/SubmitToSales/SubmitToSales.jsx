@@ -75,6 +75,7 @@ function SubmitToSales({
       jobType: "submit_to_sales",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

@@ -70,6 +70,7 @@ function SecondInterviewFeedbackPending({
       jobType: "second_interview_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

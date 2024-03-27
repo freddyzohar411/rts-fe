@@ -77,6 +77,7 @@ function SubmitToClient({
       jobType: "submit_to_client",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

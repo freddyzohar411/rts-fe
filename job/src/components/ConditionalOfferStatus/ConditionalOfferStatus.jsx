@@ -61,6 +61,7 @@ function ConditionalOfferStatus({
       jobType: "conditional offer_sent",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
   return (
     <React.Fragment>

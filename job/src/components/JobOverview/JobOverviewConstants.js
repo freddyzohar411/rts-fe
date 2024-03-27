@@ -50,9 +50,9 @@ export const stepOrders = {
   "Submit to Client": 3,
   "Profile Feedback Pending": 4,
   "Odin Protocol": 5,
-  Interviews: 10,
-  "Conditional Offer Sent": 14,
-  "Conditional Offer Accepted/Declined": 15,
+  Interviews: 9,
+  "Conditional Offer Sent": 13,
+  "Conditional Offer Accepted/Declined": 14,
 };
 
 export const jobHeaders = [
@@ -61,7 +61,6 @@ export const jobHeaders = [
   "Submit to Sales",
   "Submit to Client",
   "Profile Feedback Pending",
-  "Odin Protocol",
   "Interview Scheduled",
   "Interview Happened",
   "Interview Cancelled/Backout",
@@ -88,9 +87,9 @@ export const timelineSkip = {
   "Submit to Client": 3,
   "Profile Feedback": 4,
   "Odin Protocol": 5,
-  Interviews: 10,
-  "Conditional Offer": 14,
-  "Conditional Offer Status": 15,
+  Interviews: 9,
+  "Conditional Offer": 13,
+  "Conditional Offer Status": 14,
 };
 
 export const timelineLegend = [
