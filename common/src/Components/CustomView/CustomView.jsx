@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Field, Form } from "formik";
 import { initialValues, schema } from "./constants";
-import { createAccountCustomView } from "../../../../account/src/store/account/action";
-import { fetchAccountsFields } from "@workspace/account/src/store/account/action";
+import {
+  fetchAccountsFields,
+  createAccountCustomView,
+} from "@workspace/account/src/store/account/action";
 import { fetchJobListsFields } from "../../../../job/src/store/jobList/action";
-import { fetchCandidatesFields } from "../../../../candidate/src/store/candidate/action";
+import { createJobCustomView } from "../../../../job/src/store/job/action";
+import {
+  fetchCandidatesFields,
+  createCandidateCustomView,
+} from "../../../../candidate/src/store/candidate/action";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Container,
@@ -38,6 +44,7 @@ function CustomView() {
     dispatch(fetchJobListsFields());
   }, []);
 
+  const [selectedType, setSelectedType] = useState("");
   const [selectedOption, setSelectedOption] = useState([]);
   const [getOptions, setGetOptions] = useState([]);
   const [dualListBoxError, setDualListBoxError] = useState(false);
@@ -57,32 +64,20 @@ function CustomView() {
         type: values.type,
         columnName: selectedOption,
       };
-      dispatch(createAccountCustomView({ payload: newCustomView }));
-      console.log(newCustomView);
+      if (selectedType === "Account") {
+        dispatch(createAccountCustomView({ payload: newCustomView }));
+      } else if (selectedType === "Job") {
+        dispatch(createJobCustomView({ payload: newCustomView }));
+      } else if (selectedType === "Candidate") {
+        dispatch(createCandidateCustomView({ payload: newCustomView }));
+      }
     }
-  };
-
-  const handleCreation = () => {
-    console.log("Test Click 1");
-    const test = {
-      "name":"Account List 5",
-      "type" : "Account",
-      "columnName":["AccountName","AccountNumber"]
-  };
-    console.log("Test Data:", test);
-    dispatch(createAccountCustomView({ test }));
-    console.log("Test Click 2");
   };
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Row>
-            <Col>
-              <Button onClick={() => handleCreation()}>Click</Button>
-            </Col>
-          </Row>
           <Row>
             <Col>
               <Card>
@@ -147,10 +142,13 @@ function CustomView() {
                                 }`}
                                 onChange={(e) => {
                                   if (e.target.value === "Account") {
+                                    setSelectedType("Account");
                                     setGetOptions(accountsFields);
                                   } else if (e.target.value === "Candidate") {
+                                    setSelectedType("Candidate");
                                     setGetOptions(candidatesFields);
                                   } else if (e.target.value === "Job") {
+                                    setSelectedType("Job");
                                     setGetOptions(jobsFields);
                                   }
                                   setFieldValue("type", e.target.value);
