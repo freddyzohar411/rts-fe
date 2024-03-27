@@ -27,6 +27,7 @@ function MassImportUsers() {
   const [passedarrowSteps, setPassedarrowSteps] = useState([0]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [newUsers, setNewUsers] = useState([]);
+  
 
   function toggleArrowTab(tab) {
     if (activeArrowTab !== tab && tab >= 0 && tab <= 2) {
@@ -168,6 +169,7 @@ function MassImportUsers() {
                                 onClick={() =>
                                   toggleArrowTab(activeArrowTab + 1)
                                 }
+                                disabled={selectedFiles.length === 0}
                               >
                                 Next
                               </Button>
