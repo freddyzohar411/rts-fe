@@ -10,6 +10,7 @@ import {
   fetchDraftJob,
   fetchJobForm,
   fetchJobFormSubmission,
+  updateJobEmbeddings
 } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import JobDocument from "./JobDocument";
@@ -40,6 +41,14 @@ const JobCreation = () => {
   const [formTemplate, setFormTemplate] = useState(null);
   const [randomId, setRandomId] = useState();
   const [deleteDraftModal, setDeleteDraftModal] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (jobId) {
+        dispatch(updateJobEmbeddings(jobId));
+      }
+    }
+  },[])
 
   // Fetch all the countries and account names
   useEffect(() => {

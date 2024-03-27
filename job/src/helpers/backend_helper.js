@@ -82,3 +82,7 @@ export const getJobTimeline = (data) =>
 
 export const getJobTimelineCount = (jobId) =>
   api.get(`${JOB_URL}${BASE_JOB_TIMELINE}/jobtimelinecount/${jobId}`);
+
+// Updated Embeddings
+export const updateJobEmbedding = (jobId) =>
+  api.get(`${JOB_URL}${BASE_JOBS}/${jobId}/embeddings/create`);

@@ -9,9 +9,9 @@ const FODCandidateRecommendation = ({ data }) => {
         <p>
           <strong>Overall Match: </strong>
           <span
-            style={{ color: data.computedScore > 0.8 ? "#4CAF50" : "#F44336" }}
+            style={{ color: data.similarityScore > 0.7 ? "#4CAF50" : "#F44336" }}
           >
-            {(data.computedScore * 100).toFixed(2)}%
+            {(data.similarityScore * 100).toFixed(2)}%
           </span>
         </p>
         <button

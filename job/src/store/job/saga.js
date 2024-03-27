@@ -8,6 +8,7 @@ import {
   CREATE_JOB_DOCUMENTS,
   FETCH_JOB_DATA,
   FETCH_JOBS_FIELDS_ALL,
+  UPDATE_JOB_EMBEDDINGS,
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -22,6 +23,8 @@ import {
   fetchJobDataFailure,
   fetchJobsFieldsAllSuccess,
   fetchJobsFieldsAllFailure,
+  updateJobEmbeddingsSuccess,
+  updateJobEmbeddingsFailure,
 } from "./action";
 import {
   getJobs,
@@ -32,6 +35,7 @@ import {
   updateJob,
   getJobDataById,
   getJobsFieldsAll,
+  updateJobEmbedding,
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
@@ -116,6 +120,14 @@ function* workFetchJobsFieldsAll(action) {
   }
 }
 
+function* workUpdateJobEmbeddings(action) {
+  try {
+    const response = yield call(updateJobEmbedding, action.payload);
+  } catch (error) {
+    console.log("Error updating job embeddings: ", error);
+  }
+}
+
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
@@ -123,4 +135,5 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(CREATE_JOB_DOCUMENTS, workCreateJobDocuments);
   yield takeEvery(FETCH_JOB_DATA, workFetchJobData);
   yield takeEvery(FETCH_JOBS_FIELDS_ALL, workFetchJobsFieldsAll);
+  yield takeEvery(UPDATE_JOB_EMBEDDINGS, workUpdateJobEmbeddings);
 }

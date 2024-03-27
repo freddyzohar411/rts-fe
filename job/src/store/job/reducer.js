@@ -18,6 +18,9 @@ import {
   FETCH_JOBS_FIELDS_ALL,
   FETCH_JOBS_FIELDS_ALL_SUCCESS,
   FETCH_JOBS_FIELDS_ALL_FAILURE,
+  UPDATE_JOB_EMBEDDINGS,
+  UPDATE_JOB_EMBEDDINGS_SUCCESS,
+  UPDATE_JOB_EMBEDDINGS_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
@@ -154,6 +157,24 @@ const JobReducer = (state = initialState, action) => {
         jobsFieldsAll: action.payload,
       };
     case FETCH_JOBS_FIELDS_ALL_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case UPDATE_JOB_EMBEDDINGS:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case UPDATE_JOB_EMBEDDINGS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case UPDATE_JOB_EMBEDDINGS_FAILURE:
       return {
         ...state,
         loading: false,
