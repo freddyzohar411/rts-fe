@@ -30,6 +30,9 @@ import {
   FETCH_ACCOUNTS_ADMIN,
   FETCH_ACCOUNTS_ADMIN_SUCCESS,
   FETCH_ACCOUNTS_ADMIN_FAILURE,
+  CREATE_ACCOUNT_CUSTOM_VIEW,
+  CREATE_ACCOUNT_CUSTOM_VIEW_SUCCESS,
+  CREATE_ACCOUNT_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -51,6 +54,8 @@ const initialState = {
   updateMeta: {},
   deleteMeta: {},
   tableMeta: {},
+  accountCustomView: {},
+  accountCustomView: [],
 };
 
 const AccountReducer = (state = initialState, action) => {
@@ -263,6 +268,26 @@ const AccountReducer = (state = initialState, action) => {
         ...state,
         accounts: [],
         accountsMeta: errorMetaData(action.payload),
+      };
+    case CREATE_ACCOUNT_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+
+    case CREATE_ACCOUNT_CUSTOM_VIEW_SUCCESS:
+      return {
+        loading: false,
+        accountCustomView: action.payload,
+      };
+
+    case CREATE_ACCOUNT_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        message: action.payload,
       };
     default:
       return state;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Field, Form } from "formik";
 import { initialValues, schema } from "./constants";
-import { createCustomview } from "../../store/accountcustomview/action";
+import { createAccountCustomView } from "../../../../account/src/store/account/action";
 import { fetchAccountsFields } from "@workspace/account/src/store/account/action";
 import { fetchJobListsFields } from "../../../../job/src/store/jobList/action";
 import { fetchCandidatesFields } from "../../../../candidate/src/store/candidate/action";
@@ -48,25 +48,41 @@ function CustomView() {
 
   const handleSubmit = async (values) => {
     if (selectedOption.length === 0) {
-      console.log("error");
       setDualListBoxError(true);
       return;
     } else {
-      console.log("no error");
       setDualListBoxError(false);
       const newCustomView = {
         name: values.name,
         type: values.type,
-        columnNames: selectedOption,
+        columnName: selectedOption,
       };
+      dispatch(createAccountCustomView({ payload: newCustomView }));
       console.log(newCustomView);
     }
+  };
+
+  const handleCreation = () => {
+    console.log("Test Click 1");
+    const test = {
+      "name":"Account List 5",
+      "type" : "Account",
+      "columnName":["AccountName","AccountNumber"]
+  };
+    console.log("Test Data:", test);
+    dispatch(createAccountCustomView({ test }));
+    console.log("Test Click 2");
   };
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
+          <Row>
+            <Col>
+              <Button onClick={() => handleCreation()}>Click</Button>
+            </Col>
+          </Row>
           <Row>
             <Col>
               <Card>
@@ -224,10 +240,9 @@ function CustomView() {
                             {dualListBoxError && (
                               <div className="mt-2">
                                 <span className="text-danger">
-                                Please select at least one column.
-                              </span>
+                                  Please select at least one column.
+                                </span>
                               </div>
-                              
                             )}
                           </Col>
                         </Row>

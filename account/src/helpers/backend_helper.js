@@ -10,6 +10,7 @@ import {
   BASE_CLIENT_INSTRUCTIONS,
   BASE_ACCOUNT_ACCESS,
   BASE_COMMERCIAL,
+  BASE_ACCOUNT_CUSTOM_VIEW,
 } from "./url_helper";
 
 import {
@@ -85,8 +86,15 @@ export const getAccountDataById = (id) =>
 export const getAccountsFieldsAll = () =>
   api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields/all`);
 
-
-  // Admin
+// Admin
 // Get Accounts
 export const getAccountsAdmin = (data) =>
   api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing/all`, data);
+
+// Custom View
+export const createAccountCustomView = (data) => {
+  api.create(
+    `${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/save/customfields`,
+    data
+  );
+};

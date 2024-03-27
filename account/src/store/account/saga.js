@@ -11,6 +11,7 @@ import {
   FETCH_ACCOUNT_DATA,
   FETCH_ACCOUNTS_FIELDS_ALL,
   FETCH_ACCOUNTS_ADMIN,
+  CREATE_ACCOUNT_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
   fetchAccountSuccess,
@@ -31,6 +32,8 @@ import {
   fetchAccountsFieldsAllFailure,
   fetchAccountsAdminSuccess,
   fetchAccountsAdminFailure,
+  createAccountCustomViewSuccess,
+  createAccountCustomViewFailure,
 } from "./action";
 import {
   getAccounts,
@@ -42,6 +45,7 @@ import {
   getAccountDataById,
   getAccountsFieldsAll,
   getAccountsAdmin,
+  createAccountCustomView,
 } from "../../helpers/backend_helper";
 import {
   setAccountId,
@@ -194,6 +198,22 @@ function* workFetchAccountsAdmin(action) {
   }
 }
 
+// Create Account Custom View
+function* workCreateAccountCustomView(action) {
+  const { payload } = action.payload;
+  try {
+    const accountCustomViewResponse = yield call(
+      createAccountCustomView,
+      payload
+    );
+    yield put(createAccountCustomViewSuccess(accountCustomViewResponse.data));
+    toast.success("Account Custom View created successfully!");
+  } catch (error) {
+    yield put(createAccountCustomViewFailure(error));
+    toast.error("Error creating account custom view!");
+  }
+}
+
 export default function* watchFetchAccountSaga() {
   yield takeEvery(POST_ACCOUNT, workPostAccount);
   yield takeEvery(PUT_ACCOUNT, workPutAccount);
@@ -204,4 +224,5 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(FETCH_ACCOUNT_DATA, workFetchAccountData);
   yield takeEvery(FETCH_ACCOUNTS_FIELDS_ALL, workFetchAccountsFieldsAll);
   yield takeEvery(FETCH_ACCOUNTS_ADMIN, workFetchAccountsAdmin);
+  yield takeEvery(CREATE_ACCOUNT_CUSTOM_VIEW, workCreateAccountCustomView);
 }

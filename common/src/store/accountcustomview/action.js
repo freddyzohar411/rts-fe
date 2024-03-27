@@ -5,7 +5,7 @@ import {
 } from "./actionTypes";
 
 // Create Account Custom View
-export const createCustomview = (customViewRequest) => ({
+export const createCustomView = (customViewRequest) => ({
     type: CREATE_CUSTOM_VIEW,
     payload: customViewRequest,
   });

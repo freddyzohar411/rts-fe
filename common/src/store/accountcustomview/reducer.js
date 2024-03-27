@@ -23,7 +23,6 @@ const CustomViewReducer = (state = initialState, action) => {
       };
     case CREATE_CUSTOM_VIEW_SUCCESS:
       return {
-        ...state,
         loading: false,
         customView: action.payload,
       };
@@ -34,8 +33,8 @@ const CustomViewReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
-      default:
-        return state;
+    default:
+      return state;
   }
 };
 

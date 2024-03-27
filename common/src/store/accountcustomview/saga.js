@@ -13,7 +13,7 @@ function* workCreateCustomView(action) {
     toast.success(customViewResponse?.message);
   } catch (error) {
     yield put(createCustomViewFailure(error));
-    toast.error(customViewResponse?.message);
+    toast.error(error?.message);
   }
 }
 

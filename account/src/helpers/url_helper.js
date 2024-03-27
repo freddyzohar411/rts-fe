@@ -1,6 +1,7 @@
 //ACCOUNT_account
 export const GET_ACCOUNTS = "/api/accounts";
 export const BASE_ACCOUNTS = "/api/accounts";
+export const BASE_ACCOUNT_CUSTOM_VIEW = "/api/accounts";
 
 // Account_contact
 export const BASE_CONTACTS = "/api/contacts";
