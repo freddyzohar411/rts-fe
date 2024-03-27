@@ -45,7 +45,7 @@ function ProfileFeedbackPending({
 
   const onFormikChange = (formik) => {
     if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
-      handleIconClick(candidateId, jobId, 5, true);
+      handleIconClick(candidateId, jobId, 10, true);
     }
   };
 

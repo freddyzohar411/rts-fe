@@ -646,7 +646,7 @@ const JobOverview = () => {
                     >
                       {isMobile | isTablet
                         ? truncate(formSubmissionData?.accountOwner, 8)
-                        : truncate(formSubmissionData?.accountOwner, 35)}
+                        : truncate(formSubmissionData?.accountOwner, 25)}
                     </span>
                   </div>
                   <div className="d-flex align-items-end gap-1">
