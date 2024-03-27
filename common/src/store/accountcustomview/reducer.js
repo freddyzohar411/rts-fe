@@ -1,4 +1,3 @@
-import { initialValues } from "../../Components/CustomView/constants";
 import {
   CREATE_CUSTOM_VIEW,
   CREATE_CUSTOM_VIEW_SUCCESS,
@@ -35,6 +34,8 @@ const CustomViewReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
+      default:
+        return state;
   }
 };
 

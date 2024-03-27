@@ -3,7 +3,8 @@ import {
   CREATE_CUSTOM_VIEW_SUCCESS,
   CREATE_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
-// Create an Account Customview
+
+// Create Account Custom View
 export const createCustomview = (customViewRequest) => ({
     type: CREATE_CUSTOM_VIEW,
     payload: customViewRequest,
