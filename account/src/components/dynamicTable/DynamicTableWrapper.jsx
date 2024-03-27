@@ -20,6 +20,7 @@ import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import CustomViewButton from "@workspace/common/src/Components/Common/CustomViewButton";
 
 const DynamicTableWrapper = ({
   data,
@@ -184,6 +185,7 @@ const DynamicTableWrapper = ({
                             </span>
                             Export
                           </Button>
+                          <CustomViewButton initialOptions={ACCOUNT_INITIAL_OPTIONS} optGroup={optGroup}/>
                           <Button
                             type="button"
                             onClick={() => {
