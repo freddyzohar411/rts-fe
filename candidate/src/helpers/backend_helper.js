@@ -10,6 +10,7 @@ import {
   BASE_LANGUAGES,
   BASE_EMPLOYER_DETAILS,
   BASE_RESUME_PARSING,
+  BASE_CANDIDATE_CUSTOM_VIEW,
 } from "./url_helper";
 
 import {
@@ -154,3 +155,7 @@ export const parseResumeMulti = (data, config) =>
     data,
     config
   );
+
+// Create Custom View
+export const createCandidateCustomView = (data) =>
+  api.create(`${BASE_CANDIDATE_CUSTOM_VIEW}/save/customfields`, data);

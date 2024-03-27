@@ -18,6 +18,9 @@ import {
   FETCH_JOBS_FIELDS_ALL,
   FETCH_JOBS_FIELDS_ALL_FAILURE,
   FETCH_JOBS_FIELDS_ALL_SUCCESS,
+  CREATE_JOB_CUSTOM_VIEW,
+  CREATE_JOB_CUSTOM_VIEW_SUCCESS,
+  CREATE_JOB_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -118,6 +121,17 @@ export const fetchJobsFieldsAllFailure = (error) => ({
   payload: error,
 });
 
+export const createJobCustomView = (jobCustomViewRequest) => ({
+  type: CREATE_JOB_CUSTOM_VIEW,
+  payload: jobCustomViewRequest,
+})
 
+export const createJobCustomViewSuccess = (jobCustomView) => ({
+  type: CREATE_JOB_CUSTOM_VIEW_SUCCESS,
+  payload: jobCustomView,
+});
 
-
+export const createJobCustomViewFailure = (error) => ({
+  type: CREATE_JOB_CUSTOM_VIEW_FAILURE,
+  payload: error,
+});

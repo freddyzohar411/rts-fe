@@ -39,7 +39,10 @@ import {
   IMPORT_CANDIDATE_MULTI,
   IMPORT_CANDIDATE_MULTI_SUCCESS,
   IMPORT_CANDIDATE_MULTI_FAILURE,
-  SET_PARSE_AND_IMPORT_LOADING
+  SET_PARSE_AND_IMPORT_LOADING,
+  CREATE_CANDIDATE_CUSTOM_VIEW,
+  CREATE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
+  CREATE_CANDIDATE_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -254,9 +257,18 @@ export const setParseAndImportLoading = (loading) => ({
   payload: loading,
 });
 
+// Create Candidate Custom View
+export const createCandidateCustomView = (candidateCustomViewRequest) => ({
+  type: CREATE_CANDIDATE_CUSTOM_VIEW,
+  payload: candidateCustomViewRequest,
+});
 
+export const createCandidateCustomViewSuccess = (candidateCustomView) => ({
+  type: CREATE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
+  payload: candidateCustomView,
+});
 
-
-
-
-
+export const createCandidateCustomViewFailure = (error) => ({
+  type: CREATE_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  payload: error,
+});

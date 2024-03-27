@@ -14,6 +14,7 @@ import {
   FETCH_CANDIDATES_ADMIN,
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_MULTI,
+  CREATE_CANDIDATE_CUSTOM_VIEW
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -42,6 +43,8 @@ import {
   importCandidateMultiFailure,
   importCandidateMultiSuccess,
   setParseAndImportLoading,
+  createCandidateCustomViewSuccess,
+  createCandidateCustomViewFailure,
 } from "./action";
 import {
   getCandidates,
@@ -55,6 +58,7 @@ import {
   getCandidateFieldAll,
   getCandidatesAdmin,
   createCandidateList,
+  createCandidateCustomView
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -467,6 +471,19 @@ function* workImportCandidateMulti(action) {
   }
 }
 
+// Create Custom View
+function* workCreateCandidateCustomView(action) {
+  const {payload} = action.payload;
+  try {
+    const candidateCustomViewResponse = yield call(createCandidateCustomView, payload);
+    yield put(createCandidateCustomViewSuccess(candidateCustomViewResponse.data));
+    toast.success("Candidate custom view created successfully!");
+  } catch (error) {
+    yield put(createCandidateCustomViewFailure(error));
+    toast.error("Error creating candidate custom view!");
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -480,4 +497,5 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATES_ADMIN, workFetchCandidatesAdmin);
   yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
   yield takeEvery(IMPORT_CANDIDATE_MULTI, workImportCandidateMulti);
+  yield takeEvery(CREATE_CANDIDATE_CUSTOM_VIEW, workCreateCandidateCustomView);
 }

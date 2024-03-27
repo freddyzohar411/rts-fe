@@ -18,6 +18,9 @@ import {
   FETCH_JOBS_FIELDS_ALL,
   FETCH_JOBS_FIELDS_ALL_SUCCESS,
   FETCH_JOBS_FIELDS_ALL_FAILURE,
+  CREATE_JOB_CUSTOM_VIEW,
+  CREATE_JOB_CUSTOM_VIEW_SUCCESS,
+  CREATE_JOB_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
@@ -29,6 +32,8 @@ const initialState = {
   errorMsg: "",
   loading: false,
   error: false,
+  jobCustomView: {},
+  jobCustomViews: [],
 };
 
 const JobReducer = (state = initialState, action) => {
@@ -154,6 +159,26 @@ const JobReducer = (state = initialState, action) => {
         jobsFieldsAll: action.payload,
       };
     case FETCH_JOBS_FIELDS_ALL_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+
+    // Create Job Custom View
+    case CREATE_JOB_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case CREATE_JOB_CUSTOM_VIEW_SUCCESS:
+      return {
+        loading: false,
+        jobCustomView: action.payload,
+      };
+    case CREATE_JOB_CUSTOM_VIEW_FAILURE:
       return {
         ...state,
         loading: false,

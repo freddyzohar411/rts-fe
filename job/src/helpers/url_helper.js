@@ -16,3 +16,5 @@ export const BASE_DOCUMENTS = "/api/documents";
 //Document
 export const BASE_USER_GROUP = "/api/usergroup";
 
+// Create Job Custom View
+export const BASE_JOB_CUSTOM_VIEW = "/api/job";

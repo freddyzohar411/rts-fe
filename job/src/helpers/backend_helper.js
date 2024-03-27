@@ -6,6 +6,7 @@ import {
   BASE_JOBS_CONADIDATE_STATE,
   BASE_JOB_TIMELINE,
   BASE_USER_GROUP,
+  BASE_JOB_CUSTOM_VIEW,
 } from "./url_helper";
 import {
   JOB_URL,
@@ -82,3 +83,7 @@ export const getJobTimeline = (data) =>
 
 export const getJobTimelineCount = (jobId) =>
   api.get(`${JOB_URL}${BASE_JOB_TIMELINE}/jobtimelinecount/${jobId}`);
+
+// Create Job Custom View
+export const createJobCustomView = (data) =>
+  api.create(`${JOB_URL}${BASE_JOB_CUSTOM_VIEW}/save/customfields`, data);
