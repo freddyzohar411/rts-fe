@@ -7,26 +7,22 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 
-function CustomViewButton({ initialOptions, optGroup }) {
+function CustomViewButton() {
   const [dropDownOpen, setDropDownOpen] = useState(false);
-  const dataTest = { name: "Jane Doe", age: 50 };
-  console.log("DataTest", dataTest);
 
-  const handleNavigate = () => {
-    history.push({
-      pathname: "/custom-view",
-      state: dataTest,
-    });
-  };
   return (
     <div>
       <Dropdown
         isOpen={dropDownOpen}
         toggle={() => setDropDownOpen(!dropDownOpen)}
       >
-        <DropdownToggle caret>Custom View</DropdownToggle>
+        <DropdownToggle caret className="btn btn-custom-primary d-flex flex-row">
+          <i className="ri-settings-3-fill me-2"></i>
+          <span>Custom View</span>
+        </DropdownToggle>
         <DropdownMenu>
-          <Link to={{pathname: "/custom-view", optGroup: optGroup}}>
+          <DropdownItem header>New Custom View</DropdownItem>
+          <Link to="/custom-view">
             <DropdownItem>Create Custom View</DropdownItem>
           </Link>
           <DropdownItem divider />

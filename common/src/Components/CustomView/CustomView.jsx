@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Formik, Field } from "formik";
+import React, { useState, useEffect } from "react";
+import { Formik, Field, Form } from "formik";
 import { initialValues, schema } from "./constants";
-import { useLocation } from "react-router-dom";
 import { createCustomview } from "../../store/accountcustomview/action";
-import { useDispatch } from "react-redux";
-
+import { fetchAccountsFields } from "@workspace/account/src/store/account/action";
+import { fetchJobListsFields } from "../../../../job/src/store/jobList/action";
+import { fetchCandidatesFields } from "../../../../candidate/src/store/candidate/action";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Container,
   Card,
@@ -19,47 +20,64 @@ import {
 } from "reactstrap";
 import DualListBox from "react-dual-listbox";
 
-function CustomView(props) {
+function CustomView() {
   document.title = "Custom View | RTS";
-  const location = useLocation();
   const dispatch = useDispatch();
-  
-  //   const { name, age } = state;
-  //   console.log(name, age)
-  //   const [selectedOptGroup, setSelectedOptGroup] = useState(initialOptions);
-  //   const handleChange = (selected) => {
-  //     const selectedObjects = selected.map((value) => {
-  //       return optGroup.find((option) => option.value === value);
-  //     });
-  //     setSelectedOptGroup(selectedObjects);
-  //   };
 
-  //   const areOptionsEmpty = () => {
-  //     return !(optGroup && optGroup.length > 0);
-  //   };
-  const options = [
-    { value: "one", label: "Option One" },
-    { value: "two", label: "Option Two" },
-  ];
+  const accountsFields = useSelector(
+    (state) => state?.AccountReducer?.accountsFields
+  );
+  const candidatesFields = useSelector(
+    (state) => state?.CandidateReducer?.candidatesFields
+  );
+  const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
+
+  useEffect(() => {
+    dispatch(fetchAccountsFields());
+    dispatch(fetchCandidatesFields());
+    dispatch(fetchJobListsFields());
+  }, []);
 
   const [selectedOption, setSelectedOption] = useState([]);
+  const [getOptions, setGetOptions] = useState([]);
+  const [dualListBoxError, setDualListBoxError] = useState(false);
+
+  const areOptionsEmpty = () => {
+    return !(getOptions && getOptions.length > 0);
+  };
 
   const handleSubmit = async (values) => {
-    const newCustomView = {
-      name: values.name,
-      type: values.type,
-      columnNames: selectedOption
+    if (selectedOption.length === 0) {
+      console.log("error");
+      setDualListBoxError(true);
+      return;
+    } else {
+      console.log("no error");
+      setDualListBoxError(false);
+      const newCustomView = {
+        name: values.name,
+        type: values.type,
+        columnNames: selectedOption,
+      };
+      console.log(newCustomView);
     }
-    console.log(newCustomView);
   };
+
   return (
     <React.Fragment>
       <div className="page-content">
-        <Container>
+        <Container fluid>
           <Row>
             <Col>
               <Card>
-                <CardHeader>Custom View</CardHeader>
+                <CardHeader>
+                  <div className="d-flex flex-column ">
+                    <h6 className="fw-bold">Custom View</h6>
+                    <span className="fw-medium">
+                      Personalise your own custom view of your tables here.
+                    </span>
+                  </div>
+                </CardHeader>
                 <Formik
                   initialValues={initialValues}
                   validationSchema={schema}
@@ -67,17 +85,24 @@ function CustomView(props) {
                   validateOnBlur
                   onSubmit={handleSubmit}
                 >
-                  {({ errors, touched }) => (
-                    <>
+                  {({ errors, touched, setFieldValue }) => (
+                    <Form>
                       <CardBody>
-                        <Row className="mb-3">
+                        <Row>
+                          <Col>
+                            <h6 className="fw-bold">General Information</h6>
+                          </Col>
+                        </Row>
+                        <Row className="mb-4">
                           <Col>
                             <div>
-                              <Label>Custom View Name</Label>
+                              <Label className="fw-semibold">
+                                Custom View Name
+                              </Label>
                               <Field
                                 name="name"
                                 type="text"
-                                placeholder="Please enter custom view name"
+                                placeholder="Enter Custom View Name"
                                 className={`form-control ${
                                   errors.name && touched.name
                                     ? "is-invalid"
@@ -93,7 +118,9 @@ function CustomView(props) {
                           </Col>
                           <Col>
                             <div>
-                              <Label>Type</Label>
+                              <Label className="fw-semibold">
+                                Custom View Type
+                              </Label>
                               <Field
                                 as="select"
                                 name="type"
@@ -102,6 +129,16 @@ function CustomView(props) {
                                     ? "is-invalid"
                                     : ""
                                 }`}
+                                onChange={(e) => {
+                                  if (e.target.value === "Account") {
+                                    setGetOptions(accountsFields);
+                                  } else if (e.target.value === "Candidate") {
+                                    setGetOptions(candidatesFields);
+                                  } else if (e.target.value === "Job") {
+                                    setGetOptions(jobsFields);
+                                  }
+                                  setFieldValue("type", e.target.value);
+                                }}
                               >
                                 <option value="">Select Type</option>
                                 <option value="Account">Account</option>
@@ -119,15 +156,79 @@ function CustomView(props) {
                         <Row>
                           <Col>
                             <div>
-                              <Label>Choose Custom Columns</Label>
+                              <Label className="fw-semibold">
+                                Custom View Columns
+                              </Label>
+                              <p>
+                                Please pick a custom view type to view the
+                                available columns.
+                              </p>
                               <DualListBox
-                                options={options}
+                                options={getOptions ?? []}
                                 selected={selectedOption}
                                 onChange={(newValue) =>
                                   setSelectedOption(newValue)
                                 }
+                                showOrderButtons
+                                preserveSelectOrder
+                                icons={{
+                                  moveLeft: [
+                                    <span
+                                      className={`mdi mdi-chevron-left ${
+                                        areOptionsEmpty() ? "disabled-icon" : ""
+                                      }`}
+                                      key="key"
+                                    />,
+                                  ],
+                                  moveAllLeft: [
+                                    <span
+                                      className={`mdi mdi-chevron-double-left ${
+                                        areOptionsEmpty() ? "disabled-icon" : ""
+                                      }`}
+                                      key="key"
+                                    />,
+                                  ],
+                                  moveRight: (
+                                    <span
+                                      className={`mdi mdi-chevron-right ${
+                                        areOptionsEmpty() ? "disabled-icon" : ""
+                                      }`}
+                                      key="key"
+                                    />
+                                  ),
+                                  moveAllRight: [
+                                    <span
+                                      className={`mdi mdi-chevron-double-right ${
+                                        areOptionsEmpty()
+                                          ? "disabled-icon cursor-none"
+                                          : ""
+                                      }`}
+                                      key="key"
+                                    />,
+                                  ],
+                                  moveDown: (
+                                    <span className="mdi mdi-chevron-down" />
+                                  ),
+                                  moveUp: (
+                                    <span className="mdi mdi-chevron-up" />
+                                  ),
+                                  moveTop: (
+                                    <span className="mdi mdi-chevron-double-up" />
+                                  ),
+                                  moveBottom: (
+                                    <span className="mdi mdi-chevron-double-down" />
+                                  ),
+                                }}
                               />
                             </div>
+                            {dualListBoxError && (
+                              <div className="mt-2">
+                                <span className="text-danger">
+                                Please select at least one column.
+                              </span>
+                              </div>
+                              
+                            )}
                           </Col>
                         </Row>
                       </CardBody>
@@ -140,11 +241,11 @@ function CustomView(props) {
                             type="submit"
                             className="btn btn-custom-primary"
                           >
-                            Create
+                            Create Custom View
                           </Button>
                         </div>
                       </CardFooter>
-                    </>
+                    </Form>
                   )}
                 </Formik>
               </Card>
