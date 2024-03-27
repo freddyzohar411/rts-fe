@@ -22,6 +22,7 @@ function StepComponent({
   maxOrder,
   data,
   isRejected,
+  isInProgress,
   candidateId,
   timeline,
   originalOrder,
@@ -30,7 +31,7 @@ function StepComponent({
   const [toggleInterview, setToggleInterview] = useState(false);
   const [toggleAssessment, setToggleAssessment] = useState(false);
   const date = data?.date;
-  const inProgress = maxOrder + 1;
+  const inProgress =  maxOrder + 1;
 
   const getInterviewStatus = () => {
     let status = data?.status;
@@ -65,9 +66,6 @@ function StepComponent({
         break;
       case "SKIPPED":
         customCSS = "bg-gray border-gray";
-        break;
-      case "REJECTED":
-        customCSS = "bg-danger border-danger";
         break;
       default:
         break;
@@ -125,7 +123,7 @@ function StepComponent({
                   ></i>
                 </span>
               )}
-              {index === 10 && (
+              {index === 9 && (
                 <span>
                   <i
                     className="ri-add-fill text-white fw-bold cursor-pointer"
@@ -179,7 +177,7 @@ function StepComponent({
       )}
 
       {/* Interview Schedule Pop Up */}
-      {index === 10 && (
+      {index === 9 && (
         <Popover
           className="custom-popover"
           placement="bottom"

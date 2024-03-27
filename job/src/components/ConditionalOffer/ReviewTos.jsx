@@ -57,6 +57,7 @@ const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
       jobType: "conditional_offer",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   return (

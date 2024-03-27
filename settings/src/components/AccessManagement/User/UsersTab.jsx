@@ -109,8 +109,8 @@ function UsersTab() {
 
   return (
     <div>
-      <Row className="d-flex flex-row align-items-center">
-        <Col lg={10}>
+      <Row className="d-flex flex-row justify-content-between align-items-center">
+        <Col lg={3}>
           <div className="search-box my-2">
             <Input
               type="text"
@@ -138,7 +138,10 @@ function UsersTab() {
       </Row>
       <Row className="mb-1">
         <Col lg={12}>
-          <div className="table-responsive mb-1">
+          <div
+            className="table-responsive table-hover table-card mt-1 mb-1"
+            style={{ height: "400px" }}
+          >
             <Table
               className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3"
               id="customFormTable"

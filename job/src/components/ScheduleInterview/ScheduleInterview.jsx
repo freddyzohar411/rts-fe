@@ -70,6 +70,7 @@ function ScheduleInterview({ closeOffcanvas, jobId, candidateId, activeStep }) {
       jobType: type,
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

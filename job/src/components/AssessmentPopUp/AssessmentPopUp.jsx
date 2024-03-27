@@ -3,10 +3,10 @@ import AssessmentStepComponent from "./AssessmentStepComponent";
 
 function AssessmentPopUp({ index, timeline, maxOrder, originalOrder }) {
   const stepHeaders = {
-    "Skills Assessment": 5,
-    "Coding Test": 6,
-    "Technical Interview": 7,
-    "Cultural Fit Test": 8,
+    "Skills Assessment": 6,
+    "Coding Test": 7,
+    "Technical Interview": 8,
+    "Cultural Fit Test": 9,
   };
 
   return (

@@ -68,6 +68,7 @@ function FirstInterviewFeedbackPending({
       jobType: "first_interview_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {
