@@ -200,14 +200,15 @@ function* workFetchAccountsAdmin(action) {
 
 // Create Account Custom View
 function* workCreateAccountCustomView(action) {
-  const { payload } = action.payload;
+  const { payload, navigate } = action.payload;
   try {
     const accountCustomViewResponse = yield call(
       createAccountCustomView,
       payload
     );
-    yield put(createAccountCustomViewSuccess(accountCustomViewResponse.data));
-    toast.success("Account Custom View created successfully!");
+    yield put(createAccountCustomViewSuccess(accountCustomViewResponse));
+    toast.success("Account custom view created successfully!");
+    navigate("/accounts");
   } catch (error) {
     yield put(createAccountCustomViewFailure(error));
     toast.error("Error creating account custom view!");

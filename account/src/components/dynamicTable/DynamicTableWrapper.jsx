@@ -185,8 +185,13 @@ const DynamicTableWrapper = ({
                             </span>
                             Export
                           </Button>
-                          <CustomViewButton initialOptions={ACCOUNT_INITIAL_OPTIONS} optGroup={optGroup}/>
-                          <Button
+                          <CustomViewButton
+                            initialOptions={ACCOUNT_INITIAL_OPTIONS}
+                            optGroup={optGroup}
+                            className="h-100"
+                          />
+                          {/* <Button
+                            
                             type="button"
                             onClick={() => {
                               if (areOptionsEmpty()) {
@@ -204,7 +209,7 @@ const DynamicTableWrapper = ({
                               <i className="ri-settings-3-fill me-1"></i>
                             </span>
                             Custom View
-                          </Button>
+                          </Button> */}
                           {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
                             <Link
                               to="/accounts/create"

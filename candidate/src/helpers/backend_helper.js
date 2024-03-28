@@ -158,4 +158,4 @@ export const parseResumeMulti = (data, config) =>
 
 // Create Custom View
 export const createCandidateCustomView = (data) =>
-  api.create(`${BASE_CANDIDATE_CUSTOM_VIEW}/save/customfields`, data);
+  api.create(`${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/save/customfields`, data);

@@ -147,8 +147,3 @@ export const getTemplatesByCategoryAndSubCategory = (category, subCategory) =>
   api.get(
     `${configURL.COMMON_URL}/${baseURL.TEMPLATE}/categories/${category}/sub-category/${subCategory}`
   );
-
-// Create New Custom View
-export const createCustomView = (data) =>
-  // api.create(`${configURL.ACCOUNT_URL}/save/customfields`, data);
-  api.create("http://localhost:8100/api/accounts/save/customfields", data);

@@ -121,10 +121,12 @@ function* workFetchJobsFieldsAll(action) {
 }
 
 function* workCreateJobCustomView(action) {
-  const { payload } = action.payload;
+  const { payload, navigate } = action.payload;
   try {
     const jobCustomViewResponse = yield call(createJobCustomView, payload);
-    yield put(createJobCustomViewSuccess(jobCustomViewResponse.data));
+    yield put(createJobCustomViewSuccess(jobCustomViewResponse));
+    toast.success("Job custom view created successfully!")
+    navigate("/jobs");
   } catch (error) {
     yield put(createJobCustomViewFailure(error));
     toast.error(error?.message);

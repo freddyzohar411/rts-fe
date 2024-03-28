@@ -1,4 +1,3 @@
-import { CREATE_CUSTOM_VIEW_FAILURE } from "@workspace/common/src/store/accountcustomview/actionTypes";
 import {
   FETCH_ACCOUNT,
   FETCH_ACCOUNT_SUCCESS,
@@ -33,7 +32,7 @@ import {
   FETCH_ACCOUNTS_ADMIN_FAILURE,
   CREATE_ACCOUNT_CUSTOM_VIEW,
   CREATE_ACCOUNT_CUSTOM_VIEW_SUCCESS,
-  CREATE_ACCOUNT_CUSTOM_VIEW_FAILURE,
+  CREATE_ACCOUNT_CUSTOM_VIEW_FAILURE
 } from "./actionTypes";
 
 // Fetch Account
@@ -206,6 +205,6 @@ export const createAccountCustomViewSuccess = (accountCustomView) => ({
 });
 
 export const createAccountCustomViewFailure = (error) => ({
-  type: CREATE_CUSTOM_VIEW_FAILURE,
+  type: CREATE_ACCOUNT_CUSTOM_VIEW_FAILURE,
   payload: error,
 });

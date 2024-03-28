@@ -14,7 +14,7 @@ import {
   FETCH_CANDIDATES_ADMIN,
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_MULTI,
-  CREATE_CANDIDATE_CUSTOM_VIEW
+  CREATE_CANDIDATE_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -58,7 +58,7 @@ import {
   getCandidateFieldAll,
   getCandidatesAdmin,
   createCandidateList,
-  createCandidateCustomView
+  createCandidateCustomView,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -473,11 +473,15 @@ function* workImportCandidateMulti(action) {
 
 // Create Custom View
 function* workCreateCandidateCustomView(action) {
-  const {payload} = action.payload;
+  const { payload, navigate } = action.payload;
   try {
-    const candidateCustomViewResponse = yield call(createCandidateCustomView, payload);
-    yield put(createCandidateCustomViewSuccess(candidateCustomViewResponse.data));
+    const candidateCustomViewResponse = yield call(
+      createCandidateCustomView,
+      payload
+    );
+    yield put(createCandidateCustomViewSuccess(candidateCustomViewResponse));
     toast.success("Candidate custom view created successfully!");
+    navigate("/candidates");
   } catch (error) {
     yield put(createCandidateCustomViewFailure(error));
     toast.error("Error creating candidate custom view!");

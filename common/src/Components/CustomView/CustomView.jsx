@@ -25,10 +25,12 @@ import {
   FormFeedback,
 } from "reactstrap";
 import DualListBox from "react-dual-listbox";
+import { useNavigate } from "react-router-dom";
 
 function CustomView() {
   document.title = "Custom View | RTS";
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const accountsFields = useSelector(
     (state) => state?.AccountReducer?.accountsFields
@@ -65,11 +67,11 @@ function CustomView() {
         columnName: selectedOption,
       };
       if (selectedType === "Account") {
-        dispatch(createAccountCustomView({ payload: newCustomView }));
+        dispatch(createAccountCustomView({ payload: newCustomView, navigate: navigate }));
       } else if (selectedType === "Job") {
-        dispatch(createJobCustomView({ payload: newCustomView }));
+        dispatch(createJobCustomView({ payload: newCustomView, navigate: navigate }));
       } else if (selectedType === "Candidate") {
-        dispatch(createCandidateCustomView({ payload: newCustomView }));
+        dispatch(createCandidateCustomView({ payload: newCustomView, navigate: navigate }));
       }
     }
   };

@@ -16,7 +16,7 @@ function CustomViewButton() {
         isOpen={dropDownOpen}
         toggle={() => setDropDownOpen(!dropDownOpen)}
       >
-        <DropdownToggle caret className="btn btn-custom-primary d-flex flex-row">
+        <DropdownToggle caret className="btn btn-custom-primary py-2">
           <i className="ri-settings-3-fill me-2"></i>
           <span>Custom View</span>
         </DropdownToggle>
