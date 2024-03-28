@@ -164,3 +164,8 @@ export const getCandidateRecommendations = (data, signal) =>
     data,
     { signal }
   );
+
+export const getCandidateToJobMatchData = (candidateId, jobId) =>
+  api.get(
+    `${CANDIDATE_URL}${BASE_CANDIDATES}/match/candidates/${candidateId}/jobs/${jobId}`
+  );

@@ -7,7 +7,7 @@ import {
   fetchCandidates,
   fetchCandidatesFields,
   candidateRecommendationList,
-  resetCandidateRecommendationList
+  resetCandidateRecommendationList,
 } from "../../../../candidate/src/store/candidate/action";
 import { useTableHook, DynamicTableHelper } from "@workspace/common";
 import { CANDIDATE_INITIAL_OPTIONS } from "./FODCandidateListingConstants";
@@ -111,13 +111,13 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       // Cleanup function
       return () => {
         newAbortController.abort(); // Abort the request when the component unmounts or if tagOffcanvas changes to false
-        dispatch(resetCandidateRecommendationList())
+        dispatch(resetCandidateRecommendationList());
       };
     } else if (abortController) {
       // Abort the existing request when tagOffcanvas changes to false
       abortController.abort();
       setAbortController(null); // Reset the abortController state
-      dispatch(resetCandidateRecommendationList())
+      dispatch(resetCandidateRecommendationList());
     }
     // Ensure useEffect is called again if pageRequest changes or tagOffcanvas changes
   }, [pageRequest, selectedRowData?.id, tagOffcanvas]);
@@ -196,7 +196,13 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         sort: false,
         sortValue: "Recommendation",
         render: (data) => {
-          return <FODCandidateRecommendation data={data} />;
+          return (
+            <FODCandidateRecommendation
+              data={data}
+              candidateId={data?.id}
+              jobId={selectedRowData?.id}
+            />
+          );
         },
       },
       {

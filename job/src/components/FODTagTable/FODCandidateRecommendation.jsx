@@ -1,8 +1,39 @@
-import React, { useState } from "react";
-import { Table } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  Spinner,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Row,
+  Col,
+  Label,
+} from "reactstrap";
+import { getCandidateToJobMatchData } from "../../../../candidate/src/helpers/backend_helper";
 
-const FODCandidateRecommendation = ({ data }) => {
+const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [matchData, setMatchData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (showDetails && candidateId && jobId && !matchData) {
+      setLoading(true);
+      getCandidateToJobMatchData(candidateId, jobId)
+        .then((response) => {
+          setMatchData(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("Error in getting match data", error);
+          setLoading(false);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [showDetails]);
 
   return (
     <div className="candidate-score-details">
@@ -19,32 +50,17 @@ const FODCandidateRecommendation = ({ data }) => {
         </p>
         <button
           onClick={() => setShowDetails(!showDetails)}
-          className="btn btn-sm btn-custom-primary px-3 py-0"
+          className="btn btn-sm btn-custom-primary px-3 py-1"
           // style={{ marginTop: "10px" }}
         >
-          {showDetails ? "Hide" : "View More"}
+          {loading?  <Spinner size="sm" />: "View Details"}
+          {/* {showDetails && loading && <Spinner size="sm" />} */}
         </button>
       </div>
-
-      {showDetails && (
+      {/* {showDetails && (
         <div id="detailedScores" style={{ marginTop: "10px" }}>
-          {/* {data.languageScoreDetails &&
-            data.languageScoreDetails.length > 0 && (
-              <>
-                <h4>Language Matching:</h4>
-                <ul>
-                  {data.languageScoreDetails.map((detail, index) => (
-                    <li key={index}>
-                      {detail.job_attribute.trim()} vs{" "}
-                      {detail.candidate_attribute.trim()}:{" "}
-                      {(detail.score * 100).toFixed(2)}%
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )} */}
-          {data.languageScoreDetails &&
-            data.languageScoreDetails.length > 0 && (
+          {matchData?.languageScoreDetails &&
+            matchData?.languageScoreDetails.length > 0 && (
               <>
                 <h4>Language Matching:</h4>
                 <Table>
@@ -57,7 +73,7 @@ const FODCandidateRecommendation = ({ data }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.languageScoreDetails.map((detail, index) => (
+                    {matchData?.languageScoreDetails.map((detail, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{detail.job_attribute.trim()}</td>
@@ -69,78 +85,48 @@ const FODCandidateRecommendation = ({ data }) => {
                 </Table>
               </>
             )}
-
-          {/* {data.skillsScoreDetails && data.skillsScoreDetails.length > 0 && (
-            <>
-              <h4>Skills Matching:</h4>
-              <ul>
-                {data.skillsScoreDetails.map((skill, index) => (
-                  <li key={index}>
-                    {skill.job_attribute.trim()} vs{" "}
-                    {skill.candidate_attribute.trim()}:{" "}
-                    {(skill.score * 100).toFixed(2)}%
-                  </li>
-                ))}
-              </ul>
-            </>
-          )} */}
-          {data.skillsScoreDetails && data.skillsScoreDetails.length > 0 && (
-            <>
-              <h4>Skills Matching:</h4>
-              <Table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Job Attribute</th>
-                    <th>Candidate Attribute</th>
-                    <th>Matching Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.skillsScoreDetails.map((skill, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td
-                        style={{
-                          overflowWrap: "break-word",
-                          wordWrap: "break-word",
-                        }}
-                      >
-                        {skill.job_attribute.trim()}
-                      </td>
-                      <td
-                        style={{
-                          overflowWrap: "break-word",
-                          wordWrap: "break-word",
-                        }}
-                      >
-                        {skill.candidate_attribute.trim()}
-                      </td>
-                      <td>{(skill.score * 100).toFixed(2)}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </>
-          )}
-          {/* {data.jobTitleScoreDetails &&
-            data.jobTitleScoreDetails.length > 0 && (
+          {matchData?.skillsScoreDetails &&
+            matchData?.skillsScoreDetails.length > 0 && (
               <>
-                <h4>Job Title Matching:</h4>
-                <div>
-                  {data.jobTitleScoreDetails.map((detail, index) => (
-                    <div key={index}>
-                      {detail.job_attribute.trim()} vs{" "}
-                      {detail.candidate_attribute.trim()}:{" "}
-                      {(detail.score * 100).toFixed(2)}%
-                    </div>
-                  ))}
-                </div>
+                <h4>Skills Matching:</h4>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Job Attribute</th>
+                      <th>Candidate Attribute</th>
+                      <th>Matching Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {matchData?.skillsScoreDetails.map((skill, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td
+                          style={{
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {skill.job_attribute.trim()}
+                        </td>
+                        <td
+                          style={{
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {skill.candidate_attribute.trim()}
+                        </td>
+                        <td>{(skill.score * 100).toFixed(2)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
               </>
-            )} */}
-
-          {data.jobTitleScoreDetails &&
-            data.jobTitleScoreDetails.length > 0 && (
+            )}
+          {matchData?.jobTitleScoreDetails &&
+            matchData?.jobTitleScoreDetails.length > 0 && (
               <>
                 <h4>Job Title Matching:</h4>
                 <Table>
@@ -153,7 +139,7 @@ const FODCandidateRecommendation = ({ data }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.jobTitleScoreDetails.map((detail, index) => (
+                    {matchData?.jobTitleScoreDetails.map((detail, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td
@@ -179,79 +165,262 @@ const FODCandidateRecommendation = ({ data }) => {
                 </Table>
               </>
             )}
-          {/* {data.generalScoreDetails && data.generalScoreDetails.length > 0 && (
-            <>
-              <h4>General Matching:</h4>
-              <div>
-                {data.generalScoreDetails.map((detail, index) => (
-                  <div key={index}> {`${index+1}) `}
-                    {detail.job_attribute.trim()} vs{" "}
-                    {detail.candidate_attribute.trim()}:{" "}
-                    {(detail.score * 100).toFixed(2)}%
-                  </div>
-                ))}
-              </div>
-            </>
-          )} */}
-          {data.generalScoreDetails && data.generalScoreDetails.length > 0 && (
-            <>
-              <h4>General Matching:</h4>
-              <Table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th
-                      style={{
-                        // maxWidth: "150px",
-                        overflowWrap: "break-word",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Job Attribute
-                    </th>
-                    <th
-                      style={{
-                        // maxWidth: "150px",
-                        overflowWrap: "break-word",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Candidate Attribute
-                    </th>
-                    <th>Matching Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.generalScoreDetails.map((detail, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td
+          {matchData?.generalScoreDetails &&
+            matchData?.generalScoreDetails.length > 0 && (
+              <>
+                <h4>General Matching:</h4>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th
                         style={{
                           // maxWidth: "150px",
                           overflowWrap: "break-word",
                           wordWrap: "break-word",
                         }}
                       >
-                        {detail.job_attribute.trim()}
-                      </td>
-                      <td
+                        Job Attribute
+                      </th>
+                      <th
                         style={{
                           // maxWidth: "150px",
                           overflowWrap: "break-word",
                           wordWrap: "break-word",
                         }}
                       >
-                        {detail.candidate_attribute.trim()}
-                      </td>
-                      <td>{(detail.score * 100).toFixed(2)}%</td>
+                        Candidate Attribute
+                      </th>
+                      <th>Matching Score</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </>
-          )}
+                  </thead>
+                  <tbody>
+                    {matchData?.generalScoreDetails.map((detail, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td
+                          style={{
+                            // maxWidth: "150px",
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {detail.job_attribute.trim()}
+                        </td>
+                        <td
+                          style={{
+                            // maxWidth: "150px",
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {detail.candidate_attribute.trim()}
+                        </td>
+                        <td>{(detail.score * 100).toFixed(2)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </>
+            )}
         </div>
-      )}
+      )} */}
+      <Modal
+        isOpen={showDetails && !loading}
+        closeModal={() => {
+          setShowDetails(false);
+        }}
+        centered
+        scrollable
+        size="xl"
+      >
+        <ModalHeader
+          className="bg-primary pb-3"
+          toggle={() => setShowDetails(false)}
+        >
+          <div className="d-flex flex-column text-dark">
+            <span className="h5 fw-bold">Candidate Job Analysis</span>
+          </div>
+        </ModalHeader>
+        <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
+          <div>
+            <Row className="align-items-end mb-5">
+              <div id="detailedScores" style={{ marginTop: "10px" }}>
+                {matchData?.languageScoreDetails &&
+                  matchData?.languageScoreDetails.length > 0 && (
+                    <>
+                      <h4>Language Matching:</h4>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Job Attribute</th>
+                            <th>Candidate Attribute</th>
+                            <th>Matching Score</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {matchData?.languageScoreDetails.map(
+                            (detail, index) => (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{detail.job_attribute.trim()}</td>
+                                <td>{detail.candidate_attribute.trim()}</td>
+                                <td>{(detail.score * 100).toFixed(2)}%</td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </Table>
+                    </>
+                  )}
+                {matchData?.skillsScoreDetails &&
+                  matchData?.skillsScoreDetails.length > 0 && (
+                    <>
+                      <h4>Skills Matching:</h4>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Job Attribute</th>
+                            <th>Candidate Attribute</th>
+                            <th>Matching Score</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {matchData?.skillsScoreDetails.map((skill, index) => (
+                            <tr key={index}>
+                              <td>{index + 1}</td>
+                              <td
+                                style={{
+                                  overflowWrap: "break-word",
+                                  wordWrap: "break-word",
+                                }}
+                              >
+                                {skill.job_attribute.trim()}
+                              </td>
+                              <td
+                                style={{
+                                  overflowWrap: "break-word",
+                                  wordWrap: "break-word",
+                                }}
+                              >
+                                {skill.candidate_attribute.trim()}
+                              </td>
+                              <td>{(skill.score * 100).toFixed(2)}%</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </>
+                  )}
+                {matchData?.jobTitleScoreDetails &&
+                  matchData?.jobTitleScoreDetails.length > 0 && (
+                    <>
+                      <h4>Job Title Matching:</h4>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Job Attribute</th>
+                            <th>Candidate Attribute</th>
+                            <th>Matching Score</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {matchData?.jobTitleScoreDetails.map(
+                            (detail, index) => (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td
+                                  style={{
+                                    overflowWrap: "break-word",
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  {detail.job_attribute.trim()}
+                                </td>
+                                <td
+                                  style={{
+                                    overflowWrap: "break-word",
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  {detail.candidate_attribute.trim()}
+                                </td>
+                                <td>{(detail.score * 100).toFixed(2)}%</td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </Table>
+                    </>
+                  )}
+                {matchData?.generalScoreDetails &&
+                  matchData?.generalScoreDetails.length > 0 && (
+                    <>
+                      <h4>General Matching:</h4>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th
+                              style={{
+                                // maxWidth: "150px",
+                                overflowWrap: "break-word",
+                                wordWrap: "break-word",
+                              }}
+                            >
+                              Job Attribute
+                            </th>
+                            <th
+                              style={{
+                                // maxWidth: "150px",
+                                overflowWrap: "break-word",
+                                wordWrap: "break-word",
+                              }}
+                            >
+                              Candidate Attribute
+                            </th>
+                            <th>Matching Score</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {matchData?.generalScoreDetails.map(
+                            (detail, index) => (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td
+                                  style={{
+                                    // maxWidth: "150px",
+                                    overflowWrap: "break-word",
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  {detail.job_attribute.trim()}
+                                </td>
+                                <td
+                                  style={{
+                                    // maxWidth: "150px",
+                                    overflowWrap: "break-word",
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  {detail.candidate_attribute.trim()}
+                                </td>
+                                <td>{(detail.score * 100).toFixed(2)}%</td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </Table>
+                    </>
+                  )}
+              </div>
+            </Row>
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 };

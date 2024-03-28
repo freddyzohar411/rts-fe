@@ -1,50 +1,34 @@
 import React, { useState } from "react";
+import { Table } from "reactstrap";
 
 const FODCandidateRecommendation = ({ data }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
     <div className="candidate-score-details">
-      <div className="summary-scores">
+      <div className="d-flex flex-column">
         <p>
           <strong>Overall Match: </strong>
           <span
-            style={{ color: data.computedScore > 0.8 ? "#4CAF50" : "#F44336" }}
+            style={{
+              color: data.similarityScore > 0.7 ? "#4CAF50" : "#F44336",
+            }}
           >
-            {(data.computedScore * 100).toFixed(2)}%
+            {(data.similarityScore * 100).toFixed(2)}%
           </span>
         </p>
-        {/* <p>
-          <strong>Similarity: </strong>
-          {(data.similarityScore * 100).toFixed(2)}%
-        </p>
-        <p>
-          <strong>Qualification: </strong>
-          {(data.qualificationScore * 100).toFixed(2)}%
-        </p>
-        <p>
-          <strong>Language Fit: </strong>
-          {(data.languageScore * 100).toFixed(2)}%
-        </p> */}
-        {/* <p>
-          <strong>Skills Match: </strong>
-          {(data.skillsScore * 100).toFixed(2)}%
-        </p> */}
-        {/* <p>
-          <strong>Job Title Relevance: </strong>
-          {(data.jobTitleScore * 100).toFixed(2)}%
-        </p> */}
+        <button
+          onClick={() => setShowDetails(!showDetails)}
+          className="btn btn-sm btn-custom-primary px-3 py-0"
+          // style={{ marginTop: "10px" }}
+        >
+          {showDetails ? "Hide" : "View More"}
+        </button>
       </div>
-      <button
-        onClick={() => setShowDetails(!showDetails)}
-        className="btn btn-sm btn-custom-primary px-3 py-0"
-        // style={{ marginTop: "10px" }}
-      >
-        {showDetails ? "Hide Details" : "View Detailed Scores"}
-      </button>
+
       {showDetails && (
         <div id="detailedScores" style={{ marginTop: "10px" }}>
-          {data.languageScoreDetails &&
+          {/* {data.languageScoreDetails &&
             data.languageScoreDetails.length > 0 && (
               <>
                 <h4>Language Matching:</h4>
@@ -58,8 +42,35 @@ const FODCandidateRecommendation = ({ data }) => {
                   ))}
                 </ul>
               </>
+            )} */}
+          {data.languageScoreDetails &&
+            data.languageScoreDetails.length > 0 && (
+              <>
+                <h4>Language Matching:</h4>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Job Attribute</th>
+                      <th>Candidate Attribute</th>
+                      <th>Matching Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.languageScoreDetails.map((detail, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{detail.job_attribute.trim()}</td>
+                        <td>{detail.candidate_attribute.trim()}</td>
+                        <td>{(detail.score * 100).toFixed(2)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </>
             )}
-          {data.skillsScoreDetails && data.skillsScoreDetails.length > 0 && (
+
+          {/* {data.skillsScoreDetails && data.skillsScoreDetails.length > 0 && (
             <>
               <h4>Skills Matching:</h4>
               <ul>
@@ -72,13 +83,108 @@ const FODCandidateRecommendation = ({ data }) => {
                 ))}
               </ul>
             </>
-          )}
-          { data.jobTitleScoreDetails && data.jobTitleScoreDetails.length > 0 &&
+          )} */}
+          {data.skillsScoreDetails && data.skillsScoreDetails.length > 0 && (
             <>
-              <h4>Job Title Matching:</h4>
+              <h4>Skills Matching:</h4>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Job Attribute</th>
+                    <th>Candidate Attribute</th>
+                    <th>Matching Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.skillsScoreDetails.map((skill, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td
+                        style={{
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        {skill.job_attribute.trim()}
+                      </td>
+                      <td
+                        style={{
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        {skill.candidate_attribute.trim()}
+                      </td>
+                      <td>{(skill.score * 100).toFixed(2)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </>
+          )}
+          {/* {data.jobTitleScoreDetails &&
+            data.jobTitleScoreDetails.length > 0 && (
+              <>
+                <h4>Job Title Matching:</h4>
+                <div>
+                  {data.jobTitleScoreDetails.map((detail, index) => (
+                    <div key={index}>
+                      {detail.job_attribute.trim()} vs{" "}
+                      {detail.candidate_attribute.trim()}:{" "}
+                      {(detail.score * 100).toFixed(2)}%
+                    </div>
+                  ))}
+                </div>
+              </>
+            )} */}
+
+          {data.jobTitleScoreDetails &&
+            data.jobTitleScoreDetails.length > 0 && (
+              <>
+                <h4>Job Title Matching:</h4>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Job Attribute</th>
+                      <th>Candidate Attribute</th>
+                      <th>Matching Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.jobTitleScoreDetails.map((detail, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td
+                          style={{
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {detail.job_attribute.trim()}
+                        </td>
+                        <td
+                          style={{
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {detail.candidate_attribute.trim()}
+                        </td>
+                        <td>{(detail.score * 100).toFixed(2)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </>
+            )}
+          {/* {data.generalScoreDetails && data.generalScoreDetails.length > 0 && (
+            <>
+              <h4>General Matching:</h4>
               <div>
-                {data.jobTitleScoreDetails.map((detail, index) => (
-                  <div key={index}>
+                {data.generalScoreDetails.map((detail, index) => (
+                  <div key={index}> {`${index+1}) `}
                     {detail.job_attribute.trim()} vs{" "}
                     {detail.candidate_attribute.trim()}:{" "}
                     {(detail.score * 100).toFixed(2)}%
@@ -86,7 +192,64 @@ const FODCandidateRecommendation = ({ data }) => {
                 ))}
               </div>
             </>
-          }
+          )} */}
+          {data.generalScoreDetails && data.generalScoreDetails.length > 0 && (
+            <>
+              <h4>General Matching:</h4>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th
+                      style={{
+                        // maxWidth: "150px",
+                        overflowWrap: "break-word",
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Job Attribute
+                    </th>
+                    <th
+                      style={{
+                        // maxWidth: "150px",
+                        overflowWrap: "break-word",
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Candidate Attribute
+                    </th>
+                    <th>Matching Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.generalScoreDetails.map((detail, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td
+                        style={{
+                          // maxWidth: "150px",
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        {detail.job_attribute.trim()}
+                      </td>
+                      <td
+                        style={{
+                          // maxWidth: "150px",
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        {detail.candidate_attribute.trim()}
+                      </td>
+                      <td>{(detail.score * 100).toFixed(2)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </>
+          )}
         </div>
       )}
     </div>
