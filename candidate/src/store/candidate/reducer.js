@@ -46,6 +46,7 @@ import {
   CANDIDATE_RECOMMENDATION_LIST,
   CANDIDATE_RECOMMENDATION_LIST_SUCCESS,
   CANDIDATE_RECOMMENDATION_LIST_FAILURE,
+  RESET_CANDIDATE_RECOMMENDATION_LIST,
 } from "./actionTypes";
 
 import {
@@ -365,6 +366,11 @@ const CandidateReducer = (state = initialState, action) => {
         candidateRecommendationLoading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case RESET_CANDIDATE_RECOMMENDATION_LIST:
+      return {
+        ...state,
+        candidatesRecommendation: [],
       };
     default:
       return state;

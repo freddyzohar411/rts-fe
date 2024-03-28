@@ -46,6 +46,7 @@ import {
   CANDIDATE_RECOMMENDATION_LIST,
   CANDIDATE_RECOMMENDATION_LIST_SUCCESS,
   CANDIDATE_RECOMMENDATION_LIST_FAILURE,
+  RESET_CANDIDATE_RECOMMENDATION_LIST,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -290,4 +291,8 @@ export const candidateRecommendationListSuccess = (candidates) => ({
 export const candidateRecommendationListFailure = (error) => ({
   type: CANDIDATE_RECOMMENDATION_LIST_FAILURE,
   payload: error,
+});
+
+export const resetCandidateRecommendationList = () => ({
+  type: RESET_CANDIDATE_RECOMMENDATION_LIST,
 });

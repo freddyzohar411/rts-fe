@@ -24,6 +24,10 @@ const DynamicTableWrapper = ({
     (state) => state.CandidateReducer.candidateMeta
   );
 
+  const isRecommendationLoading = useSelector(
+    (state) => state.CandidateReducer.candidateRecommendationLoading
+  );
+
   return (
     <React.Fragment>
       <div>
@@ -72,7 +76,8 @@ const DynamicTableWrapper = ({
                 data={data}
                 pageRequestSet={pageRequestSet}
                 pageInfo={pageInfo}
-                isLoading={candidateMeta?.isLoading}
+                // isLoading={candidateMeta?.isLoading}
+                isLoading={isRecommendationLoading}
               />
             </div>
           </Col>
