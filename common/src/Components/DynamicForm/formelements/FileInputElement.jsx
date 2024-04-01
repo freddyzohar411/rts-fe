@@ -22,7 +22,7 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
 
 
   // #New Check show all entity type and id
-  console.log("File field: ", field);
+  // console.log("File field: ", field);
 
   function downloadBase64File(base64Data, fileName) {
     const link = document.createElement("a");

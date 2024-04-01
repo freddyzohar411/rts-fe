@@ -134,7 +134,7 @@ const TableElement = ({
       }
     });
 
-    console.log("newFormFields", newFormFields);
+    // console.log("newFormFields", newFormFields);
 
     // Set Multi file
     newFormFields.forEach((field) => {
@@ -223,11 +223,11 @@ const TableElement = ({
             </tr>
           ) : (
             table?.map((row, rowIndex) => {
-              console.log("TT row", row);
+              // console.log("TT row", row);
               return (
                 <tr key={rowIndex}>
                   {tableConfig.map((item, index) => {
-                    console.log("Table Item: ", item);
+                    // console.log("Table Item: ", item);
                     if (item?.render === "file") {
                       return (
                         <td key={index}>
