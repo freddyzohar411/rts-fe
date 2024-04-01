@@ -1,4 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { Button } from "reactstrap";
+import axios from "axios";
 
 const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
@@ -13,8 +15,71 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
     return str.slice(0, num) + "...";
   };
 
+  const [fileData, setFileData] = useState({
+    fileUrl: "",
+    fileName: "",
+  });
+
+
   // #New Check show all entity type and id
   console.log("File field: ", field);
+
+  function downloadBase64File(base64Data, fileName) {
+    const link = document.createElement("a");
+    link.href = `data:application/octet-stream;base64,${base64Data}`;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Handle File Download
+  const handleDownload = (entityInfo) => {
+    console.log("Entity Info", entityInfo);
+    if (entityInfo?.entityType && entityInfo?.entityId) {
+      console.log(
+        "FFFFF:" +
+          `http://localhost:8500/api/documents/download/entity/${entityInfo?.entityType}/${entityInfo?.entityId}`
+      );
+      axios
+        .get(
+          `http://localhost:8500/api/documents/download/entity/${entityInfo?.entityType}/${entityInfo?.entityId}`
+        )
+        .then((res) => {
+          console.log("Download Response", res);
+          const documentData = res.data;
+          downloadBase64File(documentData?.encodedFile, documentData?.fileName);
+        })
+        .catch((error) => {
+          console.log("Error downloading file", error);
+        });
+    } else {
+      console.log("Download Using document ID", entityInfo?.entityId);
+      axios
+        .get(
+          `http://localhost:8500/api/documents/download/${entityInfo?.entityId}`
+        )
+        .then((res) => {
+          console.log("Download Response", res);
+          const documentData = res.data;
+          downloadBase64File(documentData?.encodedFile, documentData?.fileName);
+        })
+        .catch((error) => {
+          console.log("Error downloading file", error);
+        });
+    }
+  };
+
+  // File Download from fileURl
+  const handleDownloadURL = () => {
+    const link = document.createElement("a");
+    link.href = fileData?.fileUrl;
+    link.download = fileData?.fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
 
 
   return (
@@ -29,6 +94,11 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
         onChange={(e) => {
           formik.setFieldTouched(field.name, "");
           formik.setFieldValue(field.name, e.target.files[0]);
+          // Set file URL for file download
+          setFileData({
+            fileUrl: URL.createObjectURL(e.target.files[0]),
+            fileName: e.target.files[0].name,
+          });
           e.target.value = null;
         }}
         placeholder={field.placeholder}
@@ -86,7 +156,26 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
                 x
               </span>
             )}
+          {/* {formik?.values?.[field.name]?.name && <Button>DL</Button>} */}
+          {formik?.values?.[field.name] &&
+            !(formik?.values?.[field.name] instanceof File) && (
+              <span
+                className="mx-3 ri-download-line cursor-pointer"
+                onClick={() => handleDownload(field?.entityInfo)}
+              ></span>
+            )}
+
+            {
+              formik?.values?.[field.name] &&
+              (formik?.values?.[field.name] instanceof File) && (
+                <span
+                  className="mx-3 ri-download-line cursor-pointer"
+                  onClick={handleDownloadURL}
+                ></span>
+              )
+            }
         </div>
+        {}
       </div>
     </>
   );

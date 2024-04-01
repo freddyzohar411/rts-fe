@@ -88,6 +88,11 @@ const EditAccount = () => {
    */
   useEffect(() => {
     if (form) {
+      if (step === 0) {
+        const formEdited = setEnityInfo(form);
+        setFormTemplate(formEdited);
+        return;
+      }
       if (step === 1) {
         const formEdited = setTableAPI(
           form,
@@ -151,22 +156,40 @@ const EditAccount = () => {
   };
 
   // #New
-  useEffect(() => {
-    if (accountId) {
-      if (step === 0) {
-        // If form field has file set entity type and id
-        const newFormFields = JSON.parse(JSON.stringify(formFieldsData));
-        newFormFields.forEach((field) => {
-          if (field.type === "file") {
-            field.entityInfo = {
-              entityId: accountId,
-              entityType: AccountEntityConstant.ACCOUNT_ACCOUNT,
-            };
-          }
-        });
+  // useEffect(() => {
+  //   if (accountId) {
+  //     if (step === 0 && form) {
+  //       // If form field has file set entity type and id
+  //       console.log("Step 0")
+  //       const newForm = JSON.parse(JSON.stringify(form));
+  //       newForm?.formSchema?.forEach((field) => {
+  //         if (field.type === "file") {
+  //           field.entityInfo = {
+  //             entityId: accountId,
+  //             entityType: AccountEntityConstant.ACCOUNT_ACCOUNT,
+  //           };
+  //         }
+  //       });
+   
+  //       setFormTemplate(newForm);
+  //       return;
+  //     }
+  //   }
+  // }, [accountId, step, form]);
+
+  // #New
+  const setEnityInfo = (form) => {
+    const newForm = JSON.parse(JSON.stringify(form));
+    newForm?.formSchema?.forEach((field) => {
+      if (field.type === "file") {
+        field.entityInfo = {
+          entityId: accountId,
+          entityType: AccountEntityConstant.ACCOUNT_ACCOUNT,
+        };
       }
-    }
-  }, [accountId, step]);
+    });
+    return newForm;
+  }
 
   /**
    * Fetch form submission data if there is a draft account
