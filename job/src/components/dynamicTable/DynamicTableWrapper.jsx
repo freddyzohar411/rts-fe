@@ -7,14 +7,16 @@ import {
   Container,
   Input,
   Row,
-  DropdownToggle,
-  DropdownMenu,
   ButtonDropdown,
   Label,
   Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
@@ -54,6 +56,7 @@ const DynamicTableWrapper = ({
   const [massFODOpen, setMassFODOpen] = useState(false);
   const [namesData, setNamesData] = useState([]);
   const [nestedVisible, setNestedVisible] = useState([]);
+  const [customViewDropdownOpen, setCustomViewDropdownOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -371,7 +374,33 @@ const DynamicTableWrapper = ({
                             </span>
                             Export
                           </Button>
-                          <Button
+                          <Dropdown
+                            isOpen={customViewDropdownOpen}
+                            toggle={() =>
+                              setCustomViewDropdownOpen(!customViewDropdownOpen)
+                            }
+                          >
+                            <DropdownToggle
+                              caret
+                              className="btn btn-custom-primary py-2"
+                            >
+                              <i className="ri-settings-3-fill me-2"></i>
+                              <span>Custom View</span>
+                            </DropdownToggle>
+                            <DropdownMenu>
+                              <Link to="/jobs/custom-view">
+                                <DropdownItem>Create Custom View</DropdownItem>
+                              </Link>
+                              <DropdownItem divider />
+                              <DropdownItem header>
+                                My Custom Views
+                              </DropdownItem>
+                              <DropdownItem>Custom View 1</DropdownItem>
+                              <DropdownItem>Custom View 2</DropdownItem>
+                              <DropdownItem>Custom View 3</DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                          {/* <Button
                             type="button"
                             onClick={() => {
                               if (areOptionsEmpty()) {
@@ -389,7 +418,8 @@ const DynamicTableWrapper = ({
                               <i className="ri-settings-3-fill me-1"></i>
                             </span>
                             Custom View
-                          </Button>
+                          </Button> */}
+
                           {checkAllPermission([Permission.JOB_WRITE]) && (
                             <Link
                               to="/jobs/job-creation"
