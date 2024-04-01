@@ -139,6 +139,24 @@ const AccountCreation = () => {
     }
   }, [step, form]);
 
+  // #New
+  useEffect(() => {
+    if (accountId) {
+      if (step === 0) {
+        // If form field has file set entity type and id
+        const newFormFields = JSON.parse(JSON.stringify(formFieldsData));
+        newFormFields.forEach((field) => {
+          if (field.type === "file") {
+            field.entityInfo = {
+              entityId: accountId,
+              entityType: AccountEntityConstant.ACCOUNT_ACCOUNT,
+            };
+          }
+        });
+      }
+    }
+  }, [accountId, step]);
+
   /**
    * Set table API method
    * @param {*} form

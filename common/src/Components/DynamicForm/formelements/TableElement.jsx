@@ -112,7 +112,6 @@ const TableElement = ({
     formik?.setTouched({});
     formik?.setErrors({});
 
- 
     // Set tabled edit id in form field
     // const newFormFields = [...formFields];
     const newFormFields = JSON.parse(JSON.stringify(formFields));
@@ -124,6 +123,18 @@ const TableElement = ({
         };
       }
     });
+
+    // Check for file and set somestuff #NEW
+    newFormFields.forEach((field) => {
+      if (field.type === "file") {
+        field.entityInfo = {
+          entityId: row.id,
+          entityType: row.entityType,
+        };
+      }
+    });
+
+    console.log("newFormFields", newFormFields);
 
     // Set Multi file
     newFormFields.forEach((field) => {
@@ -149,6 +160,38 @@ const TableElement = ({
       axios.delete(`${tableSetting.tableDeleteAPI}/${id}`).then((data) => {
         getTableData();
       });
+    }
+  };
+
+  function downloadBase64File(base64Data, fileName) {
+    const link = document.createElement("a");
+    link.href = `data:application/octet-stream;base64,${base64Data}`;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Handle File Download
+  const handleDownload = (item, data) => {
+    if (item?.entityType && item?.entityId) {
+      console.log(
+        "Download Using Entity type and id",
+        item?.entityType,
+        item?.entityId
+      );
+    } else {
+      console.log("Download Using document ID", data?.id);
+      axios
+        .get(`http://localhost:8500/api/documents/download/${data?.id}`)
+        .then((res) => {
+          console.log("Download Response", res);
+          const documentData = res.data;
+          downloadBase64File(documentData?.encodedFile, documentData?.fileName);
+        })
+        .catch((error) => {
+          console.log("Error downloading file", error);
+        });
     }
   };
 
@@ -180,11 +223,32 @@ const TableElement = ({
             </tr>
           ) : (
             table?.map((row, rowIndex) => {
+              console.log("TT row", row);
               return (
                 <tr key={rowIndex}>
-                  {tableConfig.map((item, index) => (
-                    <td key={index}>{row?.data?.[item?.name]}</td>
-                  ))}
+                  {tableConfig.map((item, index) => {
+                    console.log("Table Item: ", item);
+                    if (item?.render === "file") {
+                      return (
+                        <td key={index}>
+                          <div className="d-flex align-items-center gap-3">
+                            <span> {row?.data?.[item?.name]}</span>
+                            <Button
+                              type="button"
+                              className="btn btn-success"
+                              onClick={() => handleDownload(item, row)}
+                            >
+                              Download
+                            </Button>
+                            <Button type="button" className="btn btn-secondary">
+                              Preview
+                            </Button>
+                          </div>
+                        </td>
+                      );
+                    }
+                    return <td key={index}>{row?.data?.[item?.name]}</td>;
+                  })}
                   {tableSetting.tableEdit === "true" ||
                     (tableSetting.tableEdit === true &&
                       formState !== "view" && (

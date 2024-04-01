@@ -150,6 +150,24 @@ const EditAccount = () => {
     return newForm;
   };
 
+  // #New
+  useEffect(() => {
+    if (accountId) {
+      if (step === 0) {
+        // If form field has file set entity type and id
+        const newFormFields = JSON.parse(JSON.stringify(formFieldsData));
+        newFormFields.forEach((field) => {
+          if (field.type === "file") {
+            field.entityInfo = {
+              entityId: accountId,
+              entityType: AccountEntityConstant.ACCOUNT_ACCOUNT,
+            };
+          }
+        });
+      }
+    }
+  }, [accountId, step]);
+
   /**
    * Fetch form submission data if there is a draft account
    */
@@ -392,8 +410,10 @@ const EditAccount = () => {
         );
       }
 
-      if (buttonName === "cancel" && !editData) {
-        resetForm();
+      if (buttonName === "cancel") {
+        setErrorMessage(null);
+        setButtonName("");
+        resetForm([], "create");
         return;
       }
 
@@ -479,6 +499,14 @@ const EditAccount = () => {
         );
         return;
       }
+
+      // Cancel add document and reset form
+      // if (buttonName === "cancel") {
+      //   console.log("Cancel add document and reset form");
+      //   resetForm([], "create");
+      //   return;
+      // }
+
       if (formSubmissionData != null) {
         const formData = {
           guidelines: newValues.guidelines,

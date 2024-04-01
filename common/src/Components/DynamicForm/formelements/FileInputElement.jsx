@@ -13,6 +13,10 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
     return str.slice(0, num) + "...";
   };
 
+  // #New Check show all entity type and id
+  console.log("File field: ", field);
+
+
   return (
     <>
       <input
