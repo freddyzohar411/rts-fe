@@ -24,19 +24,31 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   const navigate = useNavigate();
   const [abortController, setAbortController] = useState(null);
 
-  // const candidatesData = useSelector(
-  //   (state) => state.CandidateReducer.candidates
-  // );
-
-  console.log("Tag Off canvas", tagOffcanvas);
+    // Custom renders
+    const customRenderList = [
+      {
+        names: ["candidateSubmissionData.firstName"],
+        render: (data, opt) => (
+          <Link
+            to={`/candidates/${data?.id}/snapshot`}
+            className="text-custom-primary text-decoration-underline"
+          >
+            <span>{DynamicTableHelper.getDynamicNestedResult(data, opt.value)}</span>
+          </Link>
+        ),
+      },
+    ];
+  
 
   const {
     candidatesRecommendation: candidatesData,
     candidateRecommendationLoading: loading,
-  } = useSelector(
-    (state) => state.CandidateReducer
-    // (state) => state.CandidateReducer
-  );
+  } = useSelector((state) => state.CandidateReducer);
+
+  // #Old
+  // const candidatesData = useSelector(
+  //   (state) => state.CandidateReducer.candidates
+  // );
 
   const candidatesFields = useSelector(
     (state) => state.CandidateReducer.candidatesFields
@@ -87,39 +99,33 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         CANDIDATE_INITIAL_OPTIONS
       ),
     },
-    CANDIDATE_INITIAL_OPTIONS
+    CANDIDATE_INITIAL_OPTIONS,
+    customRenderList
   );
 
+  // Fetch candidate recommendation list
   useEffect(() => {
     // Only create a new abort controller when tagOffcanvas is true
     if (tagOffcanvas) {
-      // Create a new AbortController
       const newAbortController = new AbortController();
       setAbortController(newAbortController);
-
-      // Create a payload that includes the job ID from selectedRowData
       const jobPageRequest = { ...pageRequest, jobId: selectedRowData?.id };
-
-      // Dispatch the action with the signal from the new abort controller
       dispatch(
         candidateRecommendationList(
           DynamicTableHelper.cleanPageRequest(jobPageRequest),
           newAbortController.signal
         )
       );
-
-      // Cleanup function
       return () => {
-        newAbortController.abort(); // Abort the request when the component unmounts or if tagOffcanvas changes to false
+        // Abort the request when the component unmounts or if tagOffcanvas changes to false
+        newAbortController.abort();
         dispatch(resetCandidateRecommendationList());
       };
     } else if (abortController) {
-      // Abort the existing request when tagOffcanvas changes to false
       abortController.abort();
-      setAbortController(null); // Reset the abortController state
+      setAbortController(null);
       dispatch(resetCandidateRecommendationList());
     }
-    // Ensure useEffect is called again if pageRequest changes or tagOffcanvas changes
   }, [pageRequest, selectedRowData?.id, tagOffcanvas]);
 
   const handleTag = (candidateId) => {
@@ -193,8 +199,8 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       {
         header: "Recommendation",
         name: "action",
-        sort: false,
-        sortValue: "Recommendation",
+        sort: true,
+        sortValue: "cosine_similarity",
         render: (data) => {
           return (
             <FODCandidateRecommendation
@@ -202,22 +208,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
               candidateId={data?.id}
               jobId={selectedRowData?.id}
             />
-          );
-        },
-      },
-      {
-        header: "Candidate First Name",
-        name: "candidateFirstName",
-        sort: true,
-        sortValue: "candidate_submission_data.firstName",
-        render: (data) => {
-          return (
-            <Link
-              to={`/candidates/${data?.id}/snapshot`}
-              className="text-custom-primary text-decoration-underline"
-            >
-              <span>{data?.candidateSubmissionData?.firstName}</span>
-            </Link>
           );
         },
       },
@@ -244,6 +234,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
     dispatch(fetchCandidatesFields());
   }, []);
 
+  // #Old
   // Fetch the candidate when the pageRequest changes
   // useEffect(() => {
   //   // dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));

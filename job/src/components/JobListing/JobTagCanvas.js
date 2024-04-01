@@ -9,7 +9,6 @@ import {
 import FODTagTable from "../FODTagTable/FODTagTable";
 
 const JobTagCanvas = ({ tagOffcanvas, setTagOffcanvas, selectedRowData }) => {
-  console.log("selectedRowData", selectedRowData)
   return (
     <Row>
       <Col>
