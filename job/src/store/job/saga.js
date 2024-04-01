@@ -8,6 +8,7 @@ import {
   CREATE_JOB_DOCUMENTS,
   FETCH_JOB_DATA,
   FETCH_JOBS_FIELDS_ALL,
+  CLONE_JOB
   CREATE_JOB_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
@@ -23,12 +24,14 @@ import {
   fetchJobDataFailure,
   fetchJobsFieldsAllSuccess,
   fetchJobsFieldsAllFailure,
+  cloneJobSuccess, cloneJobFailure
   createJobCustomViewSuccess,
   createJobCustomViewFailure,
 } from "./action";
 import {
   getJobs,
   createJob,
+  cloneJob,
   getJobById,
   createJobDocument,
   updateJobDocument,
@@ -75,6 +78,20 @@ function* workCreateJob(action) {
   } catch (error) {
     toast.error(error?.message);
     yield put(createJobFailure(error));
+  }
+}
+
+function* workCloneJob(action) {
+  const { payload, navigate } = action.payload;
+  try {
+    const response = yield call(cloneJob, payload);
+    yield put(cloneJobSuccess(response.data));
+    toast.success(response.message);
+    const jobId = response.data.id;
+    navigate(`/jobs/${jobId}/snapshot`)
+  } catch (error) {
+    yield put(cloneJobFailure(error))
+    toast.error(error.message)
   }
 }
 
@@ -140,5 +157,6 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(CREATE_JOB_DOCUMENTS, workCreateJobDocuments);
   yield takeEvery(FETCH_JOB_DATA, workFetchJobData);
   yield takeEvery(FETCH_JOBS_FIELDS_ALL, workFetchJobsFieldsAll);
+  yield takeEvery(CLONE_JOB, workCloneJob);
   yield takeEvery(CREATE_JOB_CUSTOM_VIEW, workCreateJobCustomView);
 }

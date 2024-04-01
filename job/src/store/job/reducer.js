@@ -21,6 +21,9 @@ import {
   CREATE_JOB_CUSTOM_VIEW,
   CREATE_JOB_CUSTOM_VIEW_SUCCESS,
   CREATE_JOB_CUSTOM_VIEW_FAILURE,
+  CLONE_JOB,
+  CLONE_JOB_SUCCESS,
+  CLONE_JOB_FAILURE
 } from "./actionTypes";
 
 const initialState = {
@@ -100,6 +103,27 @@ const JobReducer = (state = initialState, action) => {
         job: action.payload,
       };
     case CREATE_JOB_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+
+    // Clone a job
+    case CLONE_JOB:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case CLONE_JOB_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        job: action.payload,
+      };
+    case CLONE_JOB_FAILURE:
       return {
         ...state,
         loading: false,

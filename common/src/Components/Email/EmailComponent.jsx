@@ -283,12 +283,15 @@ function EmailComponent() {
           <Modal
             isOpen={isEmailOpen}
             toggle={() => dispatch(setEmailClose())}
-            backdrop="false"
+            backdrop={false}
             style={{ position: "fixed", top: 0, right: 0, minWidth: "50%" }}
             fullscreen={isFullscreen}
             scrollable
           >
-            <div className="modal-header d-flex flex-row justify-content-between align-items-center" style={{paddingTop:0, paddingBottom:0}}>
+            <div
+              className="modal-header d-flex flex-row justify-content-between align-items-center"
+              style={{ paddingTop: 0, paddingBottom: 0 }}
+            >
               <span className="modal-title h5">New Message</span>
               <div className="d-flex flex-row gap-2">
                 <button

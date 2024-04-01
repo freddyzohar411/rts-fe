@@ -78,7 +78,9 @@ function CandidateListing() {
         sort: false,
         sortValue: "indexing",
         render: (data, index) => (
-          <div className="d-flex column-gap-2">{index + 1}.</div>
+          <div className="d-flex column-gap-2">
+            {pageInfo?.currentPage * pageInfo?.pageSize + (index + 1)}.
+          </div>
         ),
       },
       {
@@ -108,19 +110,19 @@ function CandidateListing() {
           );
         },
       },
-      {
-        header: "",
-        name: "badges",
-        sort: false,
-        sortValue: "badges",
-        render: () => (
-          <div className="d-flex column-gap-2">
-            <Badge color="dark">+1</Badge>
-            <Badge color="dark">+2</Badge>
-            <Badge color="dark">+10</Badge>
-          </div>
-        ),
-      },
+      // {
+      //   header: "",
+      //   name: "badges",
+      //   sort: false,
+      //   sortValue: "badges",
+      //   render: () => (
+      //     <div className="d-flex column-gap-2">
+      //       <Badge color="dark">+1</Badge>
+      //       <Badge color="dark">+2</Badge>
+      //       <Badge color="dark">+10</Badge>
+      //     </div>
+      //   ),
+      // },
       ...customConfig,
       {
         header: "Action",

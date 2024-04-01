@@ -33,6 +33,9 @@ export const getJobs = (data) =>
 export const createJob = (data) =>
   api.create(`${JOB_URL}${BASE_JOBS}/add`, data);
 
+export const cloneJob = (data) =>
+  api.create(`${JOB_URL}${BASE_JOBS}/clone`, data)
+
 export const updateJob = (id, data) =>
   api.put(`${JOB_URL}${BASE_JOBS}/${id}`, data);
 
