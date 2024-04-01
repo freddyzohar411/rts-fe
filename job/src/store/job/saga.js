@@ -8,7 +8,7 @@ import {
   CREATE_JOB_DOCUMENTS,
   FETCH_JOB_DATA,
   FETCH_JOBS_FIELDS_ALL,
-  CLONE_JOB
+  CLONE_JOB,
   CREATE_JOB_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
@@ -24,7 +24,8 @@ import {
   fetchJobDataFailure,
   fetchJobsFieldsAllSuccess,
   fetchJobsFieldsAllFailure,
-  cloneJobSuccess, cloneJobFailure
+  cloneJobSuccess,
+  cloneJobFailure,
   createJobCustomViewSuccess,
   createJobCustomViewFailure,
 } from "./action";
@@ -88,10 +89,10 @@ function* workCloneJob(action) {
     yield put(cloneJobSuccess(response.data));
     toast.success(response.message);
     const jobId = response.data.id;
-    navigate(`/jobs/${jobId}/snapshot`)
+    navigate(`/jobs/${jobId}/snapshot`);
   } catch (error) {
-    yield put(cloneJobFailure(error))
-    toast.error(error.message)
+    yield put(cloneJobFailure(error));
+    toast.error(error.message);
   }
 }
 
@@ -142,7 +143,7 @@ function* workCreateJobCustomView(action) {
   try {
     const jobCustomViewResponse = yield call(createJobCustomView, payload);
     yield put(createJobCustomViewSuccess(jobCustomViewResponse));
-    toast.success("Job custom view created successfully!")
+    toast.success("Job custom view created successfully!");
     navigate("/jobs");
   } catch (error) {
     yield put(createJobCustomViewFailure(error));
