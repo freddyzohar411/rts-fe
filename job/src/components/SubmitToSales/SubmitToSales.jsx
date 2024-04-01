@@ -52,7 +52,7 @@ function SubmitToSales({
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
@@ -75,6 +75,7 @@ function SubmitToSales({
       jobType: "submit_to_sales",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

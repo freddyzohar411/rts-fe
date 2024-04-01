@@ -45,7 +45,7 @@ function ProfileFeedbackPending({
 
   const onFormikChange = (formik) => {
     if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
-      handleIconClick(candidateId, jobId, 5, true);
+      handleIconClick(candidateId, jobId, 10, true);
     }
   };
 
@@ -68,6 +68,7 @@ function ProfileFeedbackPending({
       jobType: "profile_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

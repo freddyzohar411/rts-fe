@@ -39,13 +39,13 @@ function FirstInterviewFeedbackPending({
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
   const onFormikChange = (formik) => {
     if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
-      handleIconClick(candidateId, jobId, 7, true);
+      handleIconClick(candidateId, jobId, 12, true);
     }
   };
 
@@ -68,6 +68,7 @@ function FirstInterviewFeedbackPending({
       jobType: "first_interview_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

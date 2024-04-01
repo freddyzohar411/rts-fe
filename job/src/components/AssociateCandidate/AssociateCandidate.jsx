@@ -2,8 +2,6 @@ import { Form } from "@workspace/common";
 import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
-  Input,
-  Container,
   Col,
   Row,
   TabContent,
@@ -24,7 +22,12 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
+function AssociateCandidate({
+  closeOffcanvas,
+  jobId,
+  candidateId,
+  timelineData,
+}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -36,16 +39,12 @@ function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
       ? linkState?.view
       : false
   );
-
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
-
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
-
   const [activeTab, setActiveTab] = useState("1");
+  const [editData, setEditData] = useState({});
+
   const toggle = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
@@ -58,9 +57,23 @@ function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
+
+  // Set candidate salaries on associate page
+  useEffect(() => {
+    if (timelineData) {
+      setEditData({
+        candidateCurrentSalary:
+          timelineData?.candidate?.candidateSubmissionData
+            ?.candidateCurrentSalary,
+        candidateExpectedSalary:
+          timelineData?.candidate?.candidateSubmissionData
+            ?.candidateExpectedSalary,
+      });
+    }
+  }, [timelineData]);
 
   // Handle form submit
   const handleFormSubmit = async (
@@ -81,6 +94,7 @@ function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
       jobType: "associate_candidate",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {
@@ -122,7 +136,7 @@ function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
                 template={formTemplate}
                 userDetails={getAllUserGroups()}
                 country={null}
-                editData={null}
+                editData={editData}
                 onSubmit={handleFormSubmit}
                 onFormFieldsChange={null}
                 errorMessage={null}

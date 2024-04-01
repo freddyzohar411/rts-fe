@@ -94,11 +94,11 @@ const JobListing = () => {
   // Clone Job Function
   const handleCloneJob = (cloneJobId) => {
     const payload = {
-      "id": cloneJobId,
-      "clone": true
-    }
-    dispatch(cloneJob({ payload, navigate: navigate }))
-  }
+      id: cloneJobId,
+      clone: true,
+    };
+    dispatch(cloneJob({ payload, navigate: navigate }));
+  };
 
   // Table Hooks
   const {
@@ -435,7 +435,10 @@ const JobListing = () => {
               </Button>
             )}
             {/* Clone Button */}
-            <Button className="btn btn-custom-primary table-btn" onClick={() => handleCloneJob(data.id)}>
+            <Button
+              className="btn btn-custom-primary table-btn"
+              onClick={() => handleCloneJob(data.id)}
+            >
               <i className="mdi mdi-content-copy"></i>
             </Button>
 
@@ -489,7 +492,7 @@ const JobListing = () => {
 
   return (
     <LoadingOverlay
-      active={jobFODMeta?.isLoading || deleteFODMeta?.isLoading}
+      active={(jobFODMeta?.isLoading || deleteFODMeta?.isLoading) ?? false}
       spinner
       text="Please wait..."
     >

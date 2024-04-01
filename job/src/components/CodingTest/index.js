@@ -1,0 +1,1 @@
+export {default as CodingTest} from './CodingTest';
