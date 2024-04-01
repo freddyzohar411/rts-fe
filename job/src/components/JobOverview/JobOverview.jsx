@@ -180,8 +180,11 @@ const JobOverview = () => {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
-        if (maxOrder >= 6 && maxOrder <= 9) {
+        const status = getStatus(data, maxOrder);
+        if (maxOrder >= 6 && maxOrder < 9) {
           maxOrder = 5;
+        } else if (maxOrder === 9) {
+          maxOrder = status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
         } else if (maxOrder >= 10 && maxOrder < 13) {
           maxOrder = 9;
         }
@@ -810,8 +813,11 @@ const JobOverview = () => {
                         status === JOB_STAGE_STATUS.WITHDRAWN;
                       const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
                       const originalOrder = maxOrder;
-                      if (maxOrder >= 6 && maxOrder <= 9) {
+                      if (maxOrder >= 6 && maxOrder < 9) {
                         maxOrder = 5;
+                      } else if (maxOrder === 9) {
+                        maxOrder =
+                          status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
                       } else if (maxOrder >= 10 && maxOrder < 13) {
                         maxOrder = 9;
                       }
