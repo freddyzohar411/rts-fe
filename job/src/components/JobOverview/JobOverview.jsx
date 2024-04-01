@@ -180,7 +180,7 @@ const JobOverview = () => {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
-        if (maxOrder >= 6 && maxOrder < 9) {
+        if (maxOrder >= 6 && maxOrder <= 9) {
           maxOrder = 5;
         } else if (maxOrder >= 10 && maxOrder < 13) {
           maxOrder = 9;
@@ -198,7 +198,7 @@ const JobOverview = () => {
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
@@ -539,7 +539,7 @@ const JobOverview = () => {
         index = 8;
         break;
       case 9:
-        index = 10;
+        index = 9;
         break;
       case 10:
         index = 11;
@@ -810,7 +810,7 @@ const JobOverview = () => {
                         status === JOB_STAGE_STATUS.WITHDRAWN;
                       const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
                       const originalOrder = maxOrder;
-                      if (maxOrder >= 6 && maxOrder < 9) {
+                      if (maxOrder >= 6 && maxOrder <= 9) {
                         maxOrder = 5;
                       } else if (maxOrder >= 10 && maxOrder < 13) {
                         maxOrder = 9;

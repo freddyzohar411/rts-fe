@@ -2,11 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import { Row, Col, Button } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { fetchJobForm } from "../../store/actions";
+import { fetchJobForm, tagJob } from "../../store/actions";
 import { Form } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
+import {
+  JOB_STAGE_IDS,
+  JOB_STAGE_STATUS,
+} from "../JobListing/JobListingConstants";
 
-function CulturalFitTest({ closeOffCanvas }) {
+function CulturalFitTest({ closeOffcanvas, jobId, candidateId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,17 +33,36 @@ function CulturalFitTest({ closeOffCanvas }) {
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
-  const handleFormSubmit = () => {
-    console.log("Form Submitted");
+  const handleFormSubmit = async (
+    event,
+    values,
+    newValues,
+    buttonNameHook,
+    formStateHook,
+    rerenderTable
+  ) => {
+    const payload = {
+      jobId: jobId,
+      jobStageId: JOB_STAGE_IDS?.CULTURAL_FIT_TEST,
+      status:
+        values?.culturalFitTestResults === "true"
+          ? JOB_STAGE_STATUS?.COMPLETED
+          : JOB_STAGE_STATUS?.REJECTED,
+      candidateId,
+      formData: JSON.stringify(values),
+      formId: parseInt(form.formId),
+      jobType: "cultural_fit_test",
+    };
+    dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {
-    closeOffCanvas();
-    console.log("Cancel Clicked");
+    closeOffcanvas();
   };
   return (
     <React.Fragment>

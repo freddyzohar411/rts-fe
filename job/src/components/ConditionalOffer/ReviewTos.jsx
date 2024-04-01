@@ -34,7 +34,7 @@ const ReviewTos = ({ closeOffcanvas, candidateId, jobId, activeStep }) => {
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
