@@ -27,7 +27,7 @@ const JobManage = () => {
 
   return (
     <LoadingOverlay
-      active={jobTagMeta?.isLoading}
+      active={jobTagMeta?.isLoading ?? false}
       spinner
       text="Please wait..."
     >

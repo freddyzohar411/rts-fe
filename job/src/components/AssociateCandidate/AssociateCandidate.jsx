@@ -24,7 +24,12 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
+function AssociateCandidate({
+  closeOffcanvas,
+  jobId,
+  candidateId,
+  timelineData,
+}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -36,15 +41,9 @@ function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
       ? linkState?.view
       : false
   );
-
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
-
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
-
   const [activeTab, setActiveTab] = useState("1");
   const toggle = (tab) => {
     if (activeTab !== tab) {
@@ -61,6 +60,26 @@ function AssociateCandidate({ closeOffcanvas, jobId, candidateId }) {
       setFormTemplate(JSON.parse(JSON.stringify(form)));
     }
   }, [form]);
+
+  useEffect(() => {
+    formikRef.current.clearForm();
+    if (formikRef.current.formik && timelineData) {
+      formikRef?.current?.formik?.setFieldTouched("candidateCurrentSalary", "");
+      formikRef?.current?.formik?.setFieldTouched(
+        "candidateExpectedSalary",
+        ""
+      );
+      formikRef?.current?.formik?.setFieldValue(
+        "candidateCurrentSalary",
+        timelineData?.candidate?.candidateSubmissionData?.candidateCurrentSalary
+      );
+      formikRef?.current?.formik?.setFieldValue(
+        "candidateExpectedSalary",
+        timelineData?.candidate?.candidateSubmissionData
+          ?.candidateExpectedSalary
+      );
+    }
+  }, [formikRef?.current, timelineData]);
 
   // Handle form submit
   const handleFormSubmit = async (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Row,
   Col,
@@ -94,6 +94,7 @@ const JobOverview = () => {
   const [skipComboOptions, setSkipComboOptions] = useState({});
 
   const [deliveryTeam, setDeliveryTeam] = useState();
+  const [timelineRowIndex, setTimelineRowIndex] = useState();
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -338,6 +339,7 @@ const JobOverview = () => {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
+            timelineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 2:
@@ -527,20 +529,29 @@ const JobOverview = () => {
   const getFormIndex = (originalOrder) => {
     let index = null;
     switch (originalOrder) {
-      case 6:
-        index = 6;
-        break;
       case 7:
         index = 8;
         break;
       case 8:
-        index = 10;
+        index = 9;
         break;
       case 9:
-        index = 11;
+        index = 10;
         break;
       case 10:
-        index = 12;
+        index = 11;
+        break;
+      case 11:
+        index = 13;
+        break;
+      case 12:
+        index = 15;
+        break;
+      case 13:
+        index = 16;
+        break;
+      case 14:
+        index = 17;
         break;
       default:
         break;
@@ -783,7 +794,7 @@ const JobOverview = () => {
                       </td>
                     </tr>
                   ) : jobTimelineData?.jobs?.length > 0 ? (
-                    jobTimelineData?.jobs?.map((data, index) => {
+                    jobTimelineData?.jobs?.map((data, timelineIndex) => {
                       let maxOrder = getMaxOrder(data);
                       const status = getStatus(data, maxOrder);
                       maxOrder =
@@ -802,7 +813,7 @@ const JobOverview = () => {
                         maxOrder = 9;
                       }
                       return (
-                        <tbody key={index}>
+                        <tbody key={timelineIndex}>
                           <tr className="text-center align-top">
                             <td className="pt-4">{`${data?.candidate?.firstName} ${data?.candidate?.lastName}`}</td>
                             <td className="pt-4">{`${data?.createdByName}`}</td>
@@ -824,7 +835,7 @@ const JobOverview = () => {
                               );
                             })}
                             <td>
-                              {!isRejected && maxOrder < 11 && (
+                              {!isRejected && maxOrder < 15 && (
                                 <div className="d-flex flex-row gap-3 align-items-center">
                                   <Input
                                     type="select"
@@ -857,7 +868,7 @@ const JobOverview = () => {
                                     )}
                                   </Input>
                                   <i
-                                    onClick={() =>
+                                    onClick={() => {
                                       handleIconClick(
                                         data?.candidate?.id,
                                         data?.id,
@@ -867,8 +878,9 @@ const JobOverview = () => {
                                             ? originalOrder
                                             : skipComboOptions[data.id]
                                         )
-                                      )
-                                    }
+                                      );
+                                      setTimelineRowIndex(timelineIndex);
+                                    }}
                                     id="next-step"
                                     className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
                                   ></i>

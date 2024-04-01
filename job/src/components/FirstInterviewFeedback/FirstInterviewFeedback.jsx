@@ -45,7 +45,7 @@ function FirstInterviewFeedbackPending({
 
   const onFormikChange = (formik) => {
     if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
-      handleIconClick(candidateId, jobId, 7, true);
+      handleIconClick(candidateId, jobId, 12, true);
     }
   };
 

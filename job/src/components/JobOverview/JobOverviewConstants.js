@@ -30,6 +30,7 @@ export const CONDITIONAL_OFFER_SENT = "Conditional Offer Sent";
 export const CONDITIONAL_OFFER_ACCEPTED_DECLINED =
   "Conditional Offer Accepted/Declined";
 export const INTERVIEWS = "Interviews";
+export const ODIN_PROTOCOL = "Odin Protocol";
 
 export const steps = {
   Tag: "Tag",

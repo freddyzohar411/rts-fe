@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import {
-  Progress,
-  UncontrolledPopover,
-  PopoverBody,
-  Popover,
-} from "reactstrap";
+import { Progress, PopoverBody, Popover } from "reactstrap";
 import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
 import {
+  CODING_TEST,
+  CULTURAL_FIT_TEST,
   FIRST_INTERVIEW_SCHEDULED,
   INTERVIEWS,
   INTERVIEW_FEEDBACK_PENDING,
+  ODIN_PROTOCOL,
   SECOND_INTERVIEW_SCHEDULED,
+  SKILLS_ASSESSMENT,
+  TECHNICAL_INTERVIEW,
   THIRD_INTERVIEW_SCHEDULED,
 } from "./JobOverviewConstants";
 import AssessmentPopUp from "../AssessmentPopUp/AssessmentPopUp";
@@ -31,12 +31,21 @@ function StepComponent({
   const [toggleInterview, setToggleInterview] = useState(false);
   const [toggleAssessment, setToggleAssessment] = useState(false);
   const date = data?.date;
-  const inProgress =  maxOrder + 1;
+  const inProgress = maxOrder + 1;
 
   const getInterviewStatus = () => {
     let status = data?.status;
-
-    if (step === INTERVIEWS && !status) {
+    if (step === ODIN_PROTOCOL && !status) {
+      if (timeline?.[CULTURAL_FIT_TEST]) {
+        status = timeline?.[CULTURAL_FIT_TEST]?.["status"];
+      } else if (timeline?.[TECHNICAL_INTERVIEW]) {
+        status = timeline?.[TECHNICAL_INTERVIEW]?.["status"];
+      } else if (timeline?.[CODING_TEST]) {
+        status = timeline?.[CODING_TEST]?.["status"];
+      } else if (timeline?.[SKILLS_ASSESSMENT]) {
+        status = timeline?.[SKILLS_ASSESSMENT]?.["status"];
+      }
+    } else if (step === INTERVIEWS && !status) {
       if (timeline?.[INTERVIEW_FEEDBACK_PENDING]) {
         status = timeline?.[INTERVIEW_FEEDBACK_PENDING]?.["status"];
       } else if (timeline?.[THIRD_INTERVIEW_SCHEDULED]) {
@@ -96,7 +105,6 @@ function StepComponent({
             ) : (
               <div style={{ height: "2px", width: "100%" }}></div>
             )}
-
             <div
               className={`rounded-pill border border-primary ${
                 index === maxOrder && !isRejected

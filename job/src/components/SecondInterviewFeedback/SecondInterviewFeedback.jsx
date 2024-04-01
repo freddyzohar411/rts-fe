@@ -45,9 +45,9 @@ function SecondInterviewFeedbackPending({
 
   const onFormikChange = (formik) => {
     if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
-      handleIconClick(candidateId, jobId, 9, true);
+      handleIconClick(candidateId, jobId, 14, true);
     } else if (formik?.values?.profileFeedbackStatus === "SECOND_INTERVIEW") {
-      handleIconClick(candidateId, jobId, 7, true);
+      handleIconClick(candidateId, jobId, 12, true);
     }
   };
 
