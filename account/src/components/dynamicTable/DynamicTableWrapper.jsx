@@ -11,6 +11,10 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
@@ -40,6 +44,7 @@ const DynamicTableWrapper = ({
   );
 
   const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
+  const [customViewDropdownOpen, setCustomViewDropdownOpen] = useState(false);
 
   const accountsMeta = useSelector(
     (state) => state.AccountReducer.accountsMeta
@@ -185,11 +190,33 @@ const DynamicTableWrapper = ({
                             </span>
                             Export
                           </Button>
-                          <CustomViewButton
-                            initialOptions={ACCOUNT_INITIAL_OPTIONS}
-                            optGroup={optGroup}
-                            className="h-100"
-                          />
+                          {/* Custom View Button */}
+                          <Dropdown
+                            isOpen={customViewDropdownOpen}
+                            toggle={() =>
+                              setCustomViewDropdownOpen(!customViewDropdownOpen)
+                            }
+                          >
+                            <DropdownToggle
+                              caret
+                              className="btn btn-custom-primary py-2"
+                            >
+                              <i className="ri-settings-3-fill me-2"></i>
+                              <span>Custom View</span>
+                            </DropdownToggle>
+                            <DropdownMenu>
+                              <Link to="/accounts/custom-view">
+                                <DropdownItem>Create Custom View</DropdownItem>
+                              </Link>
+                              <DropdownItem divider />
+                              <DropdownItem header>
+                                My Custom Views
+                              </DropdownItem>
+                              <DropdownItem>Custom View 1</DropdownItem>
+                              <DropdownItem>Custom View 2</DropdownItem>
+                              <DropdownItem>Custom View 3</DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
                           {/* <Button
                             
                             type="button"
