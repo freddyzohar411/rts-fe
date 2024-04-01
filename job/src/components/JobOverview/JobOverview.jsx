@@ -529,11 +529,14 @@ const JobOverview = () => {
   const getFormIndex = (originalOrder) => {
     let index = null;
     switch (originalOrder) {
+      case 6:
+        index = 6;
+        break;
       case 7:
-        index = 8;
+        index = 7;
         break;
       case 8:
-        index = 9;
+        index = 8;
         break;
       case 9:
         index = 10;

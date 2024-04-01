@@ -43,7 +43,7 @@ function AssessmentStepComponent({ header, index, maxOrder, data }) {
       <div className="d-flex flex-row text-center">
         <div className="d-flex flex-column gap-2">
           {/* Header */}
-          <span>{header}</span>
+          <span style={{ height: "50%" }}>{header}</span>
           {/* Progress Bars and Step */}
           <div className="d-flex flex-row align-items-center justify-content-center m-0">
             {index !== 0 && (
