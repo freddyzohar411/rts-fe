@@ -2,11 +2,16 @@ import React from "react";
 import { Progress } from "reactstrap";
 import Moment from "react-moment";
 import "../JobOverview/StepComponent.scss";
+import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
 
 function AssessmentStepComponent({ header, index, maxOrder, data }) {
   const date = data?.date;
   const status = data?.status;
-  const originalOrder = maxOrder === 9 ? maxOrder : maxOrder - 1;
+  const isRejected =
+    status === JOB_STAGE_STATUS.REJECTED ||
+    status === JOB_STAGE_STATUS.WITHDRAWN;
+  const isCompleted = status === JOB_STAGE_STATUS.COMPLETED;
+  const originalOrder = maxOrder === 9 || isRejected ? maxOrder : maxOrder - 1;
 
   const getBulletBgColor = () => {
     let customCSS = "bg-primary border-light";
@@ -45,7 +50,9 @@ function AssessmentStepComponent({ header, index, maxOrder, data }) {
             <Progress
               style={{ height: "1px", width: "100%" }}
               className={`no-transition ${
-                index < maxOrder ? "bg-black border-black" : "border-primary"
+                index < maxOrder || isRejected
+                  ? "bg-black border-black"
+                  : "border-primary"
               }`}
               value={0}
             />
@@ -62,7 +69,7 @@ function AssessmentStepComponent({ header, index, maxOrder, data }) {
             <Progress
               style={{ height: "1px", width: "100%" }}
               className={`no-transition ${
-                index < originalOrder
+                index < originalOrder || isCompleted
                   ? "bg-black border-black"
                   : "border-primary"
               }`}

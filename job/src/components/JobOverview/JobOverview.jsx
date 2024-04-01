@@ -529,8 +529,9 @@ const JobOverview = () => {
    * @author Rahul Sahu
    * @description Get form index on the basis of index
    */
-  const getFormIndex = (originalOrder) => {
+  const getFormIndex = (originalOrder, data) => {
     let index = null;
+    const status = getStatus(data, originalOrder);
     switch (originalOrder) {
       case 6:
         index = 6;
@@ -542,7 +543,7 @@ const JobOverview = () => {
         index = 8;
         break;
       case 9:
-        index = 9;
+        index = status === JOB_STAGE_STATUS.COMPLETED ? 10 : 9;
         break;
       case 10:
         index = 11;
@@ -885,7 +886,8 @@ const JobOverview = () => {
                                           skipComboOptions[data.id] <
                                             originalOrder
                                             ? originalOrder
-                                            : skipComboOptions[data.id]
+                                            : skipComboOptions[data.id],
+                                          data
                                         )
                                       );
                                       setTimelineRowIndex(timelineIndex);
