@@ -2,11 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import { Row, Col, Button } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { fetchJobForm } from "../../store/actions";
+import { fetchJobForm, tagJob } from "../../store/actions";
 import { Form } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
+import {
+  JOB_STAGE_IDS,
+  JOB_STAGE_STATUS,
+} from "../JobListing/JobListingConstants";
 
-function SkillAssessment({ closeOffcanvas }) {
+function SkillAssessment({ closeOffcanvas, jobId, candidateId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,9 +37,39 @@ function SkillAssessment({ closeOffcanvas }) {
     }
   }, [form]);
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async (
+    event,
+    values,
+    newValues,
+    buttonNameHook,
+    formStateHook,
+    rerenderTable
+  ) => {
+    if (values?.skillAssessmentResults === "false") {
+      const payload = {
+        jobId: jobId,
+        jobStageId: JOB_STAGE_IDS?.SKILLS_ASSESSMENT,
+        status: JOB_STAGE_STATUS?.REJECTED,
+        candidateId,
+        jobType: "skills_assessment",
+      };
+      dispatch(tagJob({ payload, navigate }));
+    } else if (values?.skillAssessmentResults === "true") {
+      const payload = {
+        jobId: jobId,
+        jobStageId: JOB_STAGE_IDS?.CODING_TEST,
+        status: JOB_STAGE_STATUS?.IN_PROGRESS,
+        candidateId,
+        formData: JSON.stringify(values),
+        formId: parseInt(form.formId),
+        jobType: "coding_test",
+      };
+      dispatch(tagJob({ payload, navigate }));
+      if (values?.scheduleForCodingTest === "true") {
+        window.open("https://app.hackerearth.com/recruiter/", "_blank");
+      }
+    }
     closeOffcanvas();
-    window.open("https://app.hackerearth.com/recruiter/", "_blank");
   };
 
   const handleCancel = () => {

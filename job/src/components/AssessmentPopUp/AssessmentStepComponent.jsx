@@ -18,6 +18,9 @@ function AssessmentStepComponent({ header, index, maxOrder, data }) {
       case "COMPLETED":
         customCSS = "bg-success border-success";
         break;
+      case "IN_PROGRESS":
+        customCSS = "bg-warning border-warning";
+        break;
       case "WITHDRAWN":
         customCSS = "bg-withdrawn border-withdrawn";
         break;

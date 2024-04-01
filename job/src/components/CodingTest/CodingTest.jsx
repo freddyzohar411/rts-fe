@@ -2,11 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import { Row, Col, Button } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { fetchJobForm } from "../../store/actions";
+import { fetchJobForm, tagJob } from "../../store/actions";
 import { Form } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
+import {
+  JOB_STAGE_IDS,
+  JOB_STAGE_STATUS,
+} from "../JobListing/JobListingConstants";
 
-function CodingTest({ closeOffcanvas }) {
+function CodingTest({ closeOffcanvas, jobId, candidateId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,9 +37,39 @@ function CodingTest({ closeOffcanvas }) {
     }
   }, [form]);
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async (
+    event,
+    values,
+    newValues,
+    buttonNameHook,
+    formStateHook,
+    rerenderTable
+  ) => {
+    if (values?.codingTestResults === "false") {
+      const payload = {
+        jobId: jobId,
+        jobStageId: JOB_STAGE_IDS?.CODING_TEST,
+        status: JOB_STAGE_STATUS?.REJECTED,
+        candidateId,
+        jobType: "coding_test",
+      };
+      dispatch(tagJob({ payload, navigate }));
+    } else if (values?.codingTestResults === "true") {
+      const payload = {
+        jobId: jobId,
+        jobStageId: JOB_STAGE_IDS?.TECHNICAL_INTERVIEW,
+        status: JOB_STAGE_STATUS?.IN_PROGRESS,
+        candidateId,
+        formData: JSON.stringify(values),
+        formId: parseInt(form.formId),
+        jobType: "technical_interview",
+      };
+      dispatch(tagJob({ payload, navigate }));
+      if (values?.scheduleForTechnicalInterview === "true") {
+        window.open("https://app.hackerearth.com/recruiter/", "_blank");
+      }
+    }
     closeOffcanvas();
-    window.open("https://app.hackerearth.com/recruiter/", "_blank");
   };
 
   const handleCancel = () => {
