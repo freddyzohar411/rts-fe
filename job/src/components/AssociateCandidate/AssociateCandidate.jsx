@@ -2,8 +2,6 @@ import { Form } from "@workspace/common";
 import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
-  Input,
-  Container,
   Col,
   Row,
   TabContent,
@@ -45,6 +43,8 @@ function AssociateCandidate({
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
   const [activeTab, setActiveTab] = useState("1");
+  const [editData, setEditData] = useState({});
+
   const toggle = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
@@ -57,29 +57,23 @@ function AssociateCandidate({
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
+  // Set candidate salaries on associate page
   useEffect(() => {
-    formikRef.current.clearForm();
-    if (formikRef.current.formik && timelineData) {
-      formikRef?.current?.formik?.setFieldTouched("candidateCurrentSalary", "");
-      formikRef?.current?.formik?.setFieldTouched(
-        "candidateExpectedSalary",
-        ""
-      );
-      formikRef?.current?.formik?.setFieldValue(
-        "candidateCurrentSalary",
-        timelineData?.candidate?.candidateSubmissionData?.candidateCurrentSalary
-      );
-      formikRef?.current?.formik?.setFieldValue(
-        "candidateExpectedSalary",
-        timelineData?.candidate?.candidateSubmissionData
-          ?.candidateExpectedSalary
-      );
+    if (timelineData) {
+      setEditData({
+        candidateCurrentSalary:
+          timelineData?.candidate?.candidateSubmissionData
+            ?.candidateCurrentSalary,
+        candidateExpectedSalary:
+          timelineData?.candidate?.candidateSubmissionData
+            ?.candidateExpectedSalary,
+      });
     }
-  }, [formikRef?.current, timelineData]);
+  }, [timelineData]);
 
   // Handle form submit
   const handleFormSubmit = async (
@@ -142,7 +136,7 @@ function AssociateCandidate({
                 template={formTemplate}
                 userDetails={getAllUserGroups()}
                 country={null}
-                editData={null}
+                editData={editData}
                 onSubmit={handleFormSubmit}
                 onFormFieldsChange={null}
                 errorMessage={null}
