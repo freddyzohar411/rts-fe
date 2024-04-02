@@ -64,14 +64,21 @@ function* workCreateJob(action) {
     let jobResponse = null;
     if (payload?.id) {
       jobResponse = yield call(updateJob, payload?.id, payload);
+      // yield call(updateJobEmbedding, payload?.id);
     } else {
       jobResponse = yield call(createJob, payload);
+      // yield call(updateJobEmbedding, jobResponse?.data?.id);
     }
     yield put(createJobSuccess(jobResponse.data));
     if (!payload?.isDraft) {
       toast.success(jobResponse?.message);
     }
     navigate("/jobs");
+    if (payload?.id) {
+      yield call(updateJobEmbedding, payload?.id);
+    } else {
+      yield call(updateJobEmbedding, jobResponse?.data?.id);
+    }
   } catch (error) {
     toast.error(error?.message);
     yield put(createJobFailure(error));

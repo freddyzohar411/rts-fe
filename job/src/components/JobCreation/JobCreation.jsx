@@ -42,13 +42,13 @@ const JobCreation = () => {
   const [randomId, setRandomId] = useState();
   const [deleteDraftModal, setDeleteDraftModal] = useState(false);
 
-  useEffect(() => {
-    return () => {
-      if (jobId) {
-        dispatch(updateJobEmbeddings(jobId));
-      }
-    }
-  },[])
+  // useEffect(() => {
+  //   return () => {
+  //     if (jobId) {
+  //       dispatch(updateJobEmbeddings(jobId));
+  //     }
+  //   }
+  // },[])
 
   // Fetch all the countries and account names
   useEffect(() => {
