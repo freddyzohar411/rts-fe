@@ -45,7 +45,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
               color: data.similarityScore > 0.7 ? "#4CAF50" : "#F44336",
             }}
           >
-            {(data.similarityScore * 100).toFixed(2)}%
+            {(data.similarityScore * 100).toFixed(2)}% 
           </span>
         </p>
         <button
@@ -85,7 +85,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                           <tr>
                             <th>#</th>
                             <th>Job Attribute</th>
-                            <th>Candidate Attribute</th>
+                            <th>Candidate Languages</th>
                             <th>Matching Score</th>
                           </tr>
                         </thead>
@@ -113,7 +113,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                           <tr>
                             <th>#</th>
                             <th>Job Attribute</th>
-                            <th>Candidate Attribute</th>
+                            <th>Candidate Skills</th>
                             <th>Matching Score</th>
                           </tr>
                         </thead>
@@ -153,7 +153,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                           <tr>
                             <th>#</th>
                             <th>Job Attribute</th>
-                            <th>Candidate Attribute</th>
+                            <th>Candidate Job Titles</th>
                             <th>Matching Score</th>
                           </tr>
                         </thead>
@@ -234,6 +234,34 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                                 >
                                   {detail.candidate_attribute.trim()}
                                 </td>
+                                <td>{(detail.score * 100).toFixed(2)}%</td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </Table>
+                    </>
+                  )}
+                {matchData?.fieldOfStudyScoreDetails &&
+                  matchData?.fieldOfStudyScoreDetails.length > 0 && (
+                    <>
+                      <h4>Field Of Study Matching:</h4>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Job Attribute</th>
+                            <th>Candidate Field of Study</th>
+                            <th>Matching Score</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {matchData?.fieldOfStudyScoreDetails.map(
+                            (detail, index) => (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{detail.job_attribute.trim()}</td>
+                                <td>{detail.candidate_attribute.trim()}</td>
                                 <td>{(detail.score * 100).toFixed(2)}%</td>
                               </tr>
                             )
