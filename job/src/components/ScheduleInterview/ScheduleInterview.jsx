@@ -34,7 +34,7 @@ function ScheduleInterview({ closeOffcanvas, jobId, candidateId, activeStep }) {
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
@@ -50,12 +50,12 @@ function ScheduleInterview({ closeOffcanvas, jobId, candidateId, activeStep }) {
     let stageId = JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED;
     let type = "first_interview_scheduled";
 
-    if (activeStep === 7) {
+    if (activeStep === 12) {
       stageId = JOB_STAGE_IDS?.SECOND_INTERVIEW_SCHEDULED;
       type = "second_interview_scheduled";
     }
 
-    if (activeStep === 9) {
+    if (activeStep === 14) {
       stageId = JOB_STAGE_IDS?.THIRD_INTERVIEW_SCHEDULED;
       type = "third_interview_scheduled";
     }
@@ -70,6 +70,7 @@ function ScheduleInterview({ closeOffcanvas, jobId, candidateId, activeStep }) {
       jobType: type,
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {
