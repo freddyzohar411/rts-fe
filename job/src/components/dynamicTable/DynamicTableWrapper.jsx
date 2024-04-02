@@ -397,7 +397,7 @@ const DynamicTableWrapper = ({
                             >
                               <Button
                                 type="button"
-                                className="btn btn-custom-primary header-btn"
+                                className="btn btn-custom-primary header-btn d-flex align-items-center"
                               >
                                 Create Job Openings
                               </Button>
