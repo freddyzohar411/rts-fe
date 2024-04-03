@@ -119,23 +119,32 @@ function ManageUsersTable({
   useEffect(() => {
     if (selectedFile) {
       const selectedData = extractedUserData[selectedFile] || [];
-      setSelectedUserData(selectedData);
+      let filteredData = selectedData;
 
       if (searchQuery && searchQuery.length > 0) {
-        const filteredData = selectedUserData.filter((user) => {
+        filteredData = selectedData.filter((user) => {
           return (
-            user?.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user?.firstName
+              ?.toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
             user?.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user?.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user?.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (typeof user?.mobile === 'string' && user?.mobile?.toLowerCase().includes(searchQuery.toLowerCase())) ||
-            (typeof user?.employeeId === 'string' && user?.employeeId?.toLowerCase().includes(searchQuery.toLowerCase()))
+            (typeof user?.mobile === "string" &&
+              user?.mobile
+                ?.toLowerCase()
+                .includes(searchQuery.toLowerCase())) ||
+            (typeof user?.employeeId === "string" &&
+              user?.employeeId
+                ?.toLowerCase()
+                .includes(searchQuery.toLowerCase()))
           );
         });
-        setSelectedUserData(filteredData);
-      } 
+      }
 
-      const initialUserValues = getPageData(selectedUserData).map((user, index) => {
+      setSelectedUserData(filteredData);
+
+      const initialUserValues = getPageData(filteredData).map((user, index) => {
         const userGroup = allGroups?.find(
           (group) => group.userGroupName === user.groupName
         );
@@ -153,6 +162,7 @@ function ManageUsersTable({
           groups: userGroup ? [userGroup?.id] : null,
         };
       });
+
       setUserInitialValues(initialUserValues);
     }
   }, [
