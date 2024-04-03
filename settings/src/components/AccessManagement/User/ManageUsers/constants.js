@@ -20,7 +20,7 @@ export const initialValues = {
   mobile: "",
   employeeId: "",
   managerId: null,
-  groups: [],
+  groups: null,
 };
 
 export const schema = yup.object().shape({
