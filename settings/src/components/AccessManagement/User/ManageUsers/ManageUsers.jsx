@@ -17,6 +17,11 @@ function ManageUsers({ selectedFiles, onHandleNewUsers }) {
   const [extractedUserData, setExtractedUserData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [submittedUsers, setSubmittedUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   const handleExtractedUserData = (data) => {
     setExtractedUserData(data);
@@ -30,6 +35,10 @@ function ManageUsers({ selectedFiles, onHandleNewUsers }) {
     setSubmittedUsers(users);
     onHandleNewUsers(users);
   };
+
+  const filteredFiles = Object.keys(extractedUserData).filter((filename) =>
+    filename.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <React.Fragment>
@@ -52,6 +61,8 @@ function ManageUsers({ selectedFiles, onHandleNewUsers }) {
                         type="text"
                         placeholder="Search.."
                         className="form-control border-primary"
+                        value={searchQuery}
+                        onChange={handleSearch}
                       />
                       <i className="bx bx-search-alt search-icon"></i>
                     </div>
@@ -69,21 +80,19 @@ function ManageUsers({ selectedFiles, onHandleNewUsers }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {Object.keys(extractedUserData).map(
-                          (filename, index) => (
-                            <tr key={index}>
-                              <td>{truncate(filename, 14)}</td>
-                              <td>
-                                <Button
-                                  className="btn btn-sm btn-custom-primary"
-                                  onClick={() => handleViewUsers(filename)}
-                                >
-                                  View Users
-                                </Button>
-                              </td>
-                            </tr>
-                          )
-                        )}
+                        {filteredFiles.map((filename, index) => (
+                          <tr key={index}>
+                            <td>{truncate(filename, 14)}</td>
+                            <td>
+                              <Button
+                                className="btn btn-sm btn-custom-primary"
+                                onClick={() => handleViewUsers(filename)}
+                              >
+                                View Users
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </Table>
                   </Col>
