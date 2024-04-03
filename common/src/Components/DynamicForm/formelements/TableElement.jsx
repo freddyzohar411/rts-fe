@@ -286,7 +286,6 @@ const TableElement = ({
               return (
                 <tr key={rowIndex}>
                   {tableConfig.map((item, index) => {
-                    // console.log("Table Item: ", item);
                     console.log("Render: ", item?.render);
                     return (
                       <td key={index}>
