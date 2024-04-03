@@ -9,8 +9,9 @@ import {
   Input,
   Button,
 } from "reactstrap";
-import ExtractUsers from "../ImportUsers/ExtractUsers";
+import ExtractUsers from "../MassImportUsers/ExtractUsers";
 import ManageUsersTable from "./ManageUsersTable";
+import { truncate } from "@workspace/common/src/helpers/string_helper";
 
 function ManageUsers({ selectedFiles, onHandleNewUsers }) {
   const [extractedUserData, setExtractedUserData] = useState([]);
@@ -40,7 +41,7 @@ function ManageUsers({ selectedFiles, onHandleNewUsers }) {
               <CardHeader>
                 <h6 className="fw-bold">Imported Files</h6>
                 <span className="text-muted">
-                  Files that you have uploaded will be shown here.
+                  Uploaded files will be shown here.
                 </span>
               </CardHeader>
               <CardBody>
@@ -71,7 +72,7 @@ function ManageUsers({ selectedFiles, onHandleNewUsers }) {
                         {Object.keys(extractedUserData).map(
                           (filename, index) => (
                             <tr key={index}>
-                              <td>{filename}</td>
+                              <td>{truncate(filename, 14)}</td>
                               <td>
                                 <Button
                                   className="btn btn-sm btn-custom-primary"

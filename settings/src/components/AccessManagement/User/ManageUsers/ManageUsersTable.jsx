@@ -13,6 +13,7 @@ import {
   Button,
   Badge,
   Label,
+  Alert,
 } from "reactstrap";
 import SimpleBar from "simplebar-react";
 import { schema, initialValues, populateForm } from "./constants";
@@ -29,102 +30,211 @@ function ManageUsersTable({
 }) {
   const [selectedUserData, setSelectedUserData] = useState([]);
   const [submittedForms, setSubmittedForms] = useState([]);
-  useEffect(() => {
-    const selectedData = extractedUserData[selectedFile || []];
-    setSelectedUserData(selectedData);
-  }, [selectedUserData, selectedFile, extractedUserData]);
   const dispatch = useDispatch();
   const allGroups = useSelector((state) => state?.GroupReducer?.groups);
   const allUsers = useSelector((state) => state?.UserReducer?.users);
   const [userInitialValues, setUserInitialValues] = useState(
     populateForm(initialValues)
   );
-  const [confirmedUsers, setConfirmedUsers] = useState([]);
-  const [editingRow, setEditingRow] = useState(false);
-  const [formikArray, setFormikArray] = useState([]);
-  const [newUser, setNewUser] = useState([]);
-  const [submitUsers, setSubmitUsers] = useState([]);
+  const [formError, setFormError] = useState(false);
 
+  // delete a row of user data
+  const deleteUserData = (index) => {
+    const updatedUserData = selectedUserData.filter((user, userIndex) => {
+      return userIndex !== index;
+    });
+    setSelectedUserData(updatedUserData);
+
+    const updatedUserInitialValues = getPageData(updatedUserData).map(
+      (user, index) => {
+        const userGroup = allGroups?.find(
+          (group) => group.userGroupName === user.groupName
+        );
+        const userManager = (Array.isArray(allUsers) ? allUsers : []).find(
+          (manager) => manager.email === user.managerEmail
+        );
+        return {
+          firstName: user.firstName ? user.firstName : "",
+          lastName: user.lastName ? user.lastName : "",
+          username: user.username ? user.username : "",
+          email: user.email ? user.email : "",
+          mobile: user.mobile ? user.mobile : "",
+          employeeId: user.employeeId ? user.employeeId : "",
+          managerId: userManager ? userManager?.id : null,
+          groups: userGroup ? [userGroup?.id] : null,
+        };
+      }
+    );
+    setUserInitialValues(updatedUserInitialValues);
+  };
+
+  const [editingRow, setEditingRow] = useState(false);
   const formikRefs = useRef([]);
 
-  useEffect(() => {
-    const initialUserValues = selectedUserData.map((user, index) => {
-      const userGroup = allGroups?.find(
-        (group) => group.userGroupName === user.groupName
-      );
-      const userManager = (Array.isArray(allUsers) ? allUsers : []).find(
-        (manager) => manager.email === user.managerEmail
-      );
-      return {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username,
-        email: user.email,
-        mobile: user.mobile,
-        employeeId: user.employeeId,
-        managerId: userManager ? userManager?.id : null,
-        groups: userGroup ? [userGroup?.id] : [],
-      };
-    });
-
-    setUserInitialValues(initialUserValues);
-  }, [selectedUserData, allGroups, allUsers]);
-
-  //   PAGINATION - START
+  // get current page
   const [currentPage, setCurrentPage] = useState(1);
+  // get items displayed per page
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
+  // get total number of pages
   const getTotalPages = () => {
-    return Math.ceil(selectedUserData?.length / itemsPerPage);
+    return Math.ceil(selectedUserData.length / itemsPerPage);
+  };
+  // get the page data based of the index
+  const getPageData = (selectedUserData) => {
+    const firstIdx = (currentPage - 1) * itemsPerPage;
+    const lastIdx = firstIdx + itemsPerPage;
+    return selectedUserData.slice(firstIdx, lastIdx);
   };
 
-  const getCurrentPageData = () => {
-    const firstIndex = (currentPage - 1) * itemsPerPage;
-    const lastIndex = firstIndex + itemsPerPage;
-    return selectedUserData.slice(firstIndex, lastIndex);
-  };
+  // go back to page 1 when itemsperpage changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [itemsPerPage]);
 
+  // function to go to the next page
   const handleNext = () => {
     const totalPages = getTotalPages();
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
-
+  // function to go to the previous page
   const handlePrev = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
   };
-  //  PAGINATION - END
 
+  // get user index based on the current page
+  const getUserIndex = (index) => {
+    return index + (currentPage - 1) * itemsPerPage;
+  };
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  useEffect(() => {
+    if (selectedFile) {
+      const selectedData = extractedUserData[selectedFile] || [];
+      setSelectedUserData(selectedData);
+
+      if (searchQuery && searchQuery.length > 0) {
+        const filteredData = selectedUserData.filter((user) => {
+          return (
+            user?.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user?.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user?.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user?.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (typeof user?.mobile === 'string' && user?.mobile?.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (typeof user?.employeeId === 'string' && user?.employeeId?.toLowerCase().includes(searchQuery.toLowerCase()))
+          );
+        });
+        setSelectedUserData(filteredData);
+      } 
+
+      const initialUserValues = getPageData(selectedUserData).map((user, index) => {
+        const userGroup = allGroups?.find(
+          (group) => group.userGroupName === user.groupName
+        );
+        const userManager = (Array.isArray(allUsers) ? allUsers : []).find(
+          (manager) => manager.email === user.managerEmail
+        );
+        return {
+          firstName: user.firstName ? user.firstName : "",
+          lastName: user.lastName ? user.lastName : "",
+          username: user.username ? user.username : "",
+          email: user.email ? user.email : "",
+          mobile: user.mobile ? user.mobile : "",
+          employeeId: user.employeeId ? user.employeeId : "",
+          managerId: userManager ? userManager?.id : null,
+          groups: userGroup ? [userGroup?.id] : null,
+        };
+      });
+      setUserInitialValues(initialUserValues);
+    }
+  }, [
+    selectedFile,
+    extractedUserData,
+    allGroups,
+    allUsers,
+    itemsPerPage,
+    currentPage,
+    searchQuery,
+  ]);
+
+  // retrieving the groups and users
   useEffect(() => {
     dispatch(fetchGroups());
     dispatch(fetchUsers());
   }, []);
 
-  const deleteUserData = (index) => {
-    const updatedUserData = selectedUserData.filter((_, i) => i !== index);
-    setSelectedUserData(updatedUserData);
-    const updatedFormikRefs = formikRefs.current.filter((_, i) => i !== index);
-    formikRefs.current = updatedFormikRefs;
-  };
-
+  // submitting one row of data
   const handleSubmit = (values, index) => {
+    // If managerId is not present in values, set it to null
+    if (!values.managerId) {
+      values.managerId = null;
+    }
+    // If groups is not present in values or it's an empty array, set it to []
+    if (!values.groups || values.groups.length === 0) {
+      values.groups = [];
+    }
+
     const updateUserData = [...selectedUserData];
-    updateUserData[index] = values;
-    setNewUser(updateUserData);
+    updateUserData[getUserIndex(index)] = values;
+    setSelectedUserData(updateUserData, () => {
+      const updatedUserInitialValues = getPageData(selectedUserData).map(
+        (user, index) => {
+          const userGroup = allGroups?.find(
+            (group) => group.userGroupName === user.groupName
+          );
+          const userManager = (Array.isArray(allUsers) ? allUsers : []).find(
+            (manager) => manager.email === user.managerEmail
+          );
+          return {
+            firstName: user.firstName ? user.firstName : "",
+            lastName: user.lastName ? user.lastName : "",
+            username: user.username ? user.username : "",
+            email: user.email ? user.email : "",
+            mobile: user.mobile ? user.mobile : "",
+            employeeId: user.employeeId ? user.employeeId : "",
+            managerId: userManager ? userManager?.id : null,
+            groups: userGroup ? [userGroup?.id] : null,
+          };
+        }
+      );
+      setUserInitialValues(updatedUserInitialValues);
+    });
   };
 
+  // submitting all the data in the current table
   const handleSubmitAll = async () => {
-    formikRefs.current.forEach((formik) => {
-      formik?.handleSubmit();
-    });
-    const newUsers = formikRefs.current.map((formik) => formik?.values);
-    setSubmittedForms((prevSubmittedForms) => [
-      ...prevSubmittedForms,
-      ...newUsers,
-    ]);
+    console.log("Submitting:", selectedUserData);
+    try {
+      const submissionPromises = selectedUserData.map((userData) => {
+        return new Promise((resolve, reject) => {
+          schema
+            .validate(userData, { abortEarly: false })
+            .then((values) => {
+              resolve(values);
+            })
+            .catch((errors) => {
+              reject(errors);
+            });
+        });
+      });
+      const submittedUsers = await Promise.all(submissionPromises);
+      setSubmittedForms((prevSubmittedForms) => [
+        ...prevSubmittedForms,
+        ...submittedUsers,
+      ]);
+      setFormError(false);
+    } catch (error) {
+      setFormError(true);
+    }
+    console.log(submittedForms);
   };
 
   useEffect(() => {
@@ -167,6 +277,8 @@ function ManageUsersTable({
                 type="text"
                 placeholder="Search.."
                 className="form-control border-primary"
+                value={searchQuery}
+                onChange={handleSearch}
               />
               <i className="bx bx-search-alt search-icon"></i>
             </div>
@@ -188,7 +300,7 @@ function ManageUsersTable({
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedUserData?.map((userData, index) => (
+                  {getPageData(selectedUserData)?.map((userData, index) => (
                     <tr>
                       <Formik
                         initialValues={userInitialValues[index]}
@@ -207,10 +319,7 @@ function ManageUsersTable({
                           <>
                             <td>
                               {Object.values(errors).some((error) => error) ? (
-                                <i
-                                  className="ri-error-warning-line text-danger fs-5"
-                                  onClick={() => console.log(errors)}
-                                ></i>
+                                <i className="ri-error-warning-line text-danger fs-5"></i>
                               ) : (
                                 <i className="ri-checkbox-circle-line text-success"></i>
                               )}
@@ -408,25 +517,14 @@ function ManageUsersTable({
 
                             <td>
                               <div className="d-flex justify-content-between gap-2">
-                                {/* <Button
-                                  className="btn btn-sm btn-custom-primary"
-                                  type="button"
-                                  onClick={() => {
-                                    setEditingRow(index);
-                                  }}
-                                >
-                                  <i className="ri-pencil-line"></i>
-                                </Button>
-
                                 <Form onSubmit={handleSubmit}>
                                   <button
                                     type="submit"
                                     className="btn btn-sm btn-custom-primary"
-                                    disabled={editingRow !== index}
                                   >
                                     <i className="ri-save-line"></i>
                                   </button>
-                                </Form> */}
+                                </Form>
 
                                 <Button
                                   className="btn btn-sm btn-danger"
@@ -447,6 +545,17 @@ function ManageUsersTable({
             </SimpleBar>
           </Col>
         </Row>
+        {formError && (
+          <Row>
+            <Col>
+              <Alert color="danger">
+                <b>Alert:</b> User data is not complete. Please fill in the
+                required fields.
+              </Alert>
+            </Col>
+          </Row>
+        )}
+
         <Row>
           <Col>
             <div className="d-flex justify-content-between align-items-baseline">
@@ -460,18 +569,27 @@ function ManageUsersTable({
                 <option value="10">10</option>
                 <option value="20">20</option>
               </Input>
-
               <Pagination>
-                <PaginationItem disabled={currentPage === 1 || editingRow > -1}>
-                  <PaginationLink onClick={handlePrev}>Prev</PaginationLink>
+                <PaginationItem>
+                  <PaginationLink
+                    previous
+                    onClick={handlePrev}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </PaginationLink>
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink active>{currentPage}</PaginationLink>
+                  <PaginationLink>{currentPage}</PaginationLink>
                 </PaginationItem>
-                <PaginationItem
-                  disabled={currentPage === getTotalPages() || editingRow > -1}
-                >
-                  <PaginationLink onClick={handleNext}>Next</PaginationLink>
+                <PaginationItem>
+                  <PaginationLink
+                    next
+                    onClick={handleNext}
+                    disabled={currentPage > getTotalPages()}
+                  >
+                    Next
+                  </PaginationLink>
                 </PaginationItem>
               </Pagination>
             </div>
@@ -480,7 +598,7 @@ function ManageUsersTable({
         <Row>
           <Col>
             <Button
-              className="btn btn-custom-primary"
+              className="btn btn-custom-primary me-2"
               type="button"
               onClick={handleSubmitAll}
             >
@@ -488,7 +606,7 @@ function ManageUsersTable({
             </Button>
           </Col>
           <Col>
-            <InputGroup className="w-25">
+            <InputGroup>
               <InputGroupText>Total Confirmed Users</InputGroupText>
               <Input disabled value={submittedForms?.length || 0} />
             </InputGroup>
