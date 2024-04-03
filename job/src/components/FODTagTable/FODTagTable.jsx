@@ -39,16 +39,10 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       },
     ];
   
-
   const {
     candidatesRecommendation: candidatesData,
     candidateRecommendationLoading: loading,
   } = useSelector((state) => state.CandidateReducer);
-
-  // #Old
-  // const candidatesData = useSelector(
-  //   (state) => state.CandidateReducer.candidates
-  // );
 
   const candidatesFields = useSelector(
     (state) => state.CandidateReducer.candidatesFields
@@ -233,18 +227,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   useEffect(() => {
     dispatch(fetchCandidatesFields());
   }, []);
-
-  // #Old
-  // Fetch the candidate when the pageRequest changes
-  // useEffect(() => {
-  //   // dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
-  //   const jobPageRequest = { ...pageRequest, jobId: selectedRowData?.id };
-  //   dispatch(
-  //     candidateRecommendationList(
-  //       DynamicTableHelper.cleanPageRequest(jobPageRequest)
-  //     )
-  //   );
-  // }, [pageRequest, selectedRowData?.id]);
 
   // Update the page info when candidate Data changes
   useEffect(() => {

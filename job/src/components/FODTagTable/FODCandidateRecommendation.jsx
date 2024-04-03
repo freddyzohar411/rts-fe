@@ -27,7 +27,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
           setLoading(false);
         })
         .catch((error) => {
-          toast.error("Failed to fetch candidate recommendation data.")
+          toast.error("Failed to fetch candidate matching data.")
           setLoading(false);
         })
         .finally(() => {

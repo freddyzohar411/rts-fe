@@ -35,16 +35,29 @@ const ButtonUpdateElement = ({
         Update
       </button>
       <button
-        type={`submit`}
+        // type={`submit`}
+        type={`button`}
         className="btn btn-danger"
         name="cancelButton"
-        onClick={(e) => setButtonName("cancel")}
+        onClick={(e) => {
+          clearForm();
+          formik.setTouched({});
+          // setButtonName("cancel")
+          setButtonName("")
+          setFormState("create")
+        }}
         tabIndexData={tabIndexData?.[field?.fieldId]}
       >
         Cancel
       </button>
     </div>
   );
+
+  const clearForm = () => {
+    Object.keys(formik.values).forEach((key) => {
+      formik.setFieldValue(key, "");
+    });
+  };
 
   return (
     <div className={fieldLocation[field.fieldLocation]}>
