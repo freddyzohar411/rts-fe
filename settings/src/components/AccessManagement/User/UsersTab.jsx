@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import {
   Table,
   Button,
@@ -16,18 +16,22 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { debounce } from "lodash";
 import { deleteUser, listUsers } from "../../../store/users/action";
 import { DateHelper } from "@workspace/common";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function UsersTab() {
-  const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
+  const usersListingMeta = useSelector(
+    (state) => state?.UserReducer?.usersListingMeta
+  );
   const usersListing =
-    useSelector((state) => state?.UserReducer?.usersListing) || [];
-  const users = usersListing.users;
-  const totalPages = usersListing.totalPages;
+    useSelector((state) => state?.UserReducer?.usersListing) ?? {};
+  const users = usersListing?.users;
+  const totalElements = usersListing?.totalElements;
+  const totalPages = usersListing?.totalPages;
   const dispatch = useDispatch();
 
   // Pagination
@@ -37,6 +41,7 @@ function UsersTab() {
   const [sortBy, setSortBy] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [filterType, setFilterType] = useState("active");
+  const endPage = (page + 1) * pageSize;
 
   const handleSortAndDirection = (column) => {
     // Get the name of the column
@@ -57,6 +62,7 @@ function UsersTab() {
 
   const handleFilterType = (data) => {
     setFilterType(data);
+    setPage(0);
   };
 
   useEffect(() => {
@@ -71,8 +77,25 @@ function UsersTab() {
     dispatch(listUsers(pageRequest));
   }, [page, pageSize, sortBy, sortDirection, search, filterType]);
 
+  /**
+   * Added by Rahul Sahu to debounce the search
+   */
+  const handleSearchDebounce = useRef(
+    debounce(async (value) => {
+      setSearch(value);
+      setPage(0);
+    }, 300)
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      handleSearchDebounce.cancel();
+    };
+  }, [handleSearchDebounce]);
+
   // Handle Delete
   const [selectedUser, setSelectedUser] = useState(null);
+
   const openDeleteUserModal = (userId) => {
     setSelectedUser(userId);
     setModal(!modal);
@@ -84,27 +107,18 @@ function UsersTab() {
     setModal(!modal);
   };
 
-  useEffect(() => {
-    if (users && users.length === 0) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    } else {
-      setIsLoading(true);
-    }
-  }, [users]);
-
   return (
     <div>
-      <Row className="d-flex flex-row align-items-center">
-        <Col lg={10}>
+      <Row className="d-flex flex-row justify-content-between align-items-center">
+        <Col lg={3}>
           <div className="search-box my-2">
             <Input
               type="text"
               placeholder="Search.."
               className="form-control"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                handleSearchDebounce(e.target.value);
+              }}
             />
             <i className="ri-search-line search-icon"></i>
           </div>
@@ -124,13 +138,19 @@ function UsersTab() {
       </Row>
       <Row className="mb-1">
         <Col lg={12}>
-          <div className="table-responsive mb-1">
+          <div
+            className="table-responsive table-hover table-card mt-1 mb-1"
+            style={{ height: "400px" }}
+          >
             <Table
               className="table table-hover table-striped border-secondary align-middle table-nowrap rounded-3"
               id="customFormTable"
             >
               <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
                 <tr>
+                  <th>
+                    <span className="me-1">#</span>
+                  </th>
                   <th>
                     <span className="me-1">Name</span>
                     <i
@@ -174,91 +194,100 @@ function UsersTab() {
                 </tr>
               </thead>
               <tbody>
-                {users && users?.length > 0 ? (
-                  users?.map((user, index) => (
-                    <tr key={index}>
-                      <td>
-                        {user?.firstName} {user?.lastName}
-                      </td>
-                      <td>{user?.employeeId}</td>
-                      <td hidden>
-                        {user?.userGroup.length > 0 ? (
-                          <>
-                            {user.userGroup.map((group, groupIndex) => (
-                              <Fragment key={groupIndex}>
-                                {group.roles.map((role, roleIndex) => (
-                                  <span key={roleIndex}>{role?.roleName}</span>
-                                ))}
-                              </Fragment>
-                            ))}
-                          </>
-                        ) : (
-                          <span>Not Assigned</span>
-                        )}
-                      </td>
-                      <td>
-                        {user?.userGroup.length > 0 ? (
-                          user?.userGroup
-                            .map((group, index) => (
-                              <span key={index}>{group?.groupName}</span>
-                            ))
-                            .reduce((prev, curr) => [prev, ", ", curr])
-                        ) : (
-                          <span>Not Assigned</span>
-                        )}
-                      </td>
-
-                      <td>{DateHelper.formatDateStandard2(user.createdAt)}</td>
-                      <td>
-                        {user?.enabled ? (
-                          <Badge color="success">Active</Badge>
-                        ) : (
-                          <Badge color="danger">Inactive</Badge>
-                        )}
-                      </td>
-                      <td>
-                        <div className="d-flex flex-start gap-2">
-                          <Button className="btn btn-custom-primary  px-2 py-1">
-                            <i
-                              className="mdi mdi-content-copy"
-                              style={{ fontSize: "0.65rem" }}
-                            ></i>
-                          </Button>
-                          <Link to={`/settings/access/user/${user.id}`}>
-                            <Button className="btn btn-custom-primary px-2 py-1">
-                              <i
-                                className="ri-eye-line"
-                                style={{ fontSize: "0.65rem" }}
-                              ></i>
-                            </Button>
-                          </Link>
-                          <Link to={`/settings/access/user/update/${user.id}`}>
-                            <Button className="btn btn-custom-primary  px-2 py-1">
-                              <i
-                                className="ri-pencil-line"
-                                style={{ fontSize: "0.65rem" }}
-                              ></i>
-                            </Button>
-                          </Link>
-                          <Button
-                            className="btn btn-danger  px-2 py-0"
-                            onClick={() => openDeleteUserModal(user.id)}
-                          >
-                            <i
-                              className="ri-delete-bin-2-line"
-                              style={{ fontSize: "0.65rem" }}
-                            ></i>
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : isLoading ? (
+                {usersListingMeta?.isLoading ? (
                   <tr>
                     <td colSpan={8}>
                       <Skeleton count={5} />
                     </td>
                   </tr>
+                ) : users?.length > 0 ? (
+                  users?.map((user, index) => {
+                    const indexNum = page * pageSize + (index + 1);
+                    return (
+                      <tr key={indexNum}>
+                        <td>{indexNum}.</td>
+                        <td>
+                          {user?.firstName} {user?.lastName}
+                        </td>
+                        <td>{user?.employeeId}</td>
+                        <td hidden>
+                          {user?.userGroup.length > 0 ? (
+                            <>
+                              {user.userGroup.map((group, groupIndex) => (
+                                <Fragment key={groupIndex}>
+                                  {group.roles.map((role, roleIndex) => (
+                                    <span key={roleIndex}>
+                                      {role?.roleName}
+                                    </span>
+                                  ))}
+                                </Fragment>
+                              ))}
+                            </>
+                          ) : (
+                            <span>Not Assigned</span>
+                          )}
+                        </td>
+                        <td>
+                          {user?.userGroup.length > 0 ? (
+                            user?.userGroup
+                              .map((group, index) => (
+                                <span key={index}>{group?.groupName}</span>
+                              ))
+                              .reduce((prev, curr) => [prev, ", ", curr])
+                          ) : (
+                            <span>Not Assigned</span>
+                          )}
+                        </td>
+                        <td>
+                          {DateHelper.formatDateStandard2(user.createdAt)}
+                        </td>
+                        <td>
+                          {user?.enabled ? (
+                            <Badge color="success">Active</Badge>
+                          ) : (
+                            <Badge color="danger">Inactive</Badge>
+                          )}
+                        </td>
+                        <td>
+                          <div className="d-flex flex-start gap-2">
+                            <Button className="btn btn-custom-primary  px-2 py-1">
+                              <i
+                                className="mdi mdi-content-copy"
+                                style={{ fontSize: "0.65rem" }}
+                              ></i>
+                            </Button>
+                            <Link to={`/settings/access/user/${user.id}`}>
+                              <Button className="btn btn-custom-primary px-2 py-1">
+                                <i
+                                  className="ri-eye-line"
+                                  style={{ fontSize: "0.65rem" }}
+                                ></i>
+                              </Button>
+                            </Link>
+                            <Link
+                              to={`/settings/access/user/update/${user.id}`}
+                            >
+                              <Button className="btn btn-custom-primary  px-2 py-1">
+                                <i
+                                  className="ri-pencil-line"
+                                  style={{ fontSize: "0.65rem" }}
+                                ></i>
+                              </Button>
+                            </Link>
+                            <Button
+                              className="btn btn-danger  px-2 py-0"
+                              onClick={() => openDeleteUserModal(user.id)}
+                            >
+                              <i
+                                className="ri-delete-bin-2-line"
+                                style={{ fontSize: "0.65rem" }}
+                              ></i>
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan="8">No users found!</td>
@@ -266,7 +295,6 @@ function UsersTab() {
                 )}
               </tbody>
             </Table>
-
             <Modal isOpen={modal} toggle={() => setModal(!modal)} centered>
               <ModalHeader>Are you sure?</ModalHeader>
               <ModalBody>
@@ -294,45 +322,67 @@ function UsersTab() {
           </div>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <div className="d-flex flex-row justify-content-between align-items-baseline">
-            <div>
-              <Input
-                type="select"
-                className="form-select form-select-md"
-                onChange={handleChangePageSize}
-                value={pageSize}
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-              </Input>
-            </div>
-            <div>
-              <Pagination>
-                <PaginationItem>
-                  <PaginationLink
-                    disabled={page === 0}
-                    onClick={() => setPage(page - 1)}
+      {users?.length > 0 && (
+        <Row>
+          <Col>
+            <div className="d-flex flex-row justify-content-between align-items-baseline">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `Showing <b>${page * pageSize + 1}</b> - <b>${
+                    endPage < totalElements ? endPage : totalElements
+                  }</b> of <b>${totalElements}</b> results`,
+                }}
+              ></div>
+              <div className="d-flex flex-row justify-content-end align-items-baseline">
+                <div style={{ marginRight: 10 }}>Rows per page:</div>
+                <div style={{ marginRight: 10 }}>
+                  <Input
+                    type="select"
+                    className="form-select form-select-md"
+                    onChange={handleChangePageSize}
+                    value={pageSize}
                   >
-                    Previous
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    disabled={page + 1 === totalPages}
-                    onClick={() => setPage(page + 1)}
-                  >
-                    Next
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                  </Input>
+                </div>
+                <div
+                  style={{ marginRight: 10 }}
+                  dangerouslySetInnerHTML={{
+                    __html: `Page <b>${page + 1}</b> of <b>${totalPages}</b>`,
+                  }}
+                ></div>
+                <div>
+                  <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        disabled={page === 0}
+                        onClick={() => setPage(page - 1)}
+                        className={`${page === 0 ? "disabled" : ""}`}
+                      >
+                        Previous
+                      </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink
+                        disabled={page + 1 === totalPages}
+                        onClick={() => setPage(page + 1)}
+                        className={`${
+                          page + 1 === totalPages ? "disabled" : ""
+                        }`}
+                      >
+                        Next
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                </div>
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 }

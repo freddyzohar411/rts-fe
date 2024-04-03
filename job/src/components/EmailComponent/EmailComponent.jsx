@@ -163,7 +163,7 @@ function EmailComponent({ isOpen, toggle, candidateId }) {
           <Modal
             isOpen={isOpen}
             toggle={toggle}
-            backdrop="false"
+            backdrop={false}
             style={{ position: "fixed", bottom: 0, right: 0, minWidth: "50%" }}
             fullscreen={isFullscreen}
           >

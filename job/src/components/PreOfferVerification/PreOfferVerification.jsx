@@ -43,7 +43,7 @@ function PreOfferVerification() {
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 

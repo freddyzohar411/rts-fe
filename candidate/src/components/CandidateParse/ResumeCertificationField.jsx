@@ -52,7 +52,7 @@ const ResumeCertificationField = ({ section, index }) => {
     // Replace 'targetElementId' with the ID of the element you want to scroll to.
     const id = `last-responsibility-${index}`;
     const targetElement = document.getElementById(id);
-    console.log(targetElement);
+
     if (targetElement == null) return;
 
     // Scroll to the target element.
@@ -66,8 +66,8 @@ const ResumeCertificationField = ({ section, index }) => {
   return (
     <div className="companies-details-single">
       <div className="d-flex justify-content-between align-items-center">
-        <p className="company-name" style={{fontWeight:"400"}}>
-          <span >{index + 1}) Certification: </span>
+        <p className="company-name" style={{ fontWeight: "400" }}>
+          <span>{index + 1}) Certification: </span>
           <span>{sectionDetail?.name || "-"}</span>
         </p>
       </div>

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //Layouts
 import NonAuthLayout from "@workspace/common/src/Layouts/NonAuthLayout";
@@ -21,9 +16,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Import Email Component
 import { EmailComponent } from "@workspace/common";
-
-// Action
-import { usePollingAuthHook } from "@workspace/login";
 
 const Index = () => {
   // usePollingAuthHook(1000)
