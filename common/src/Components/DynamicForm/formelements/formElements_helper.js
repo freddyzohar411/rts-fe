@@ -454,6 +454,7 @@ const generateFormField = (
   if (type === "buttonupdate") {
     return (
       <ButtonUpdateElement
+        formik={formik}
         field={field}
         buttonNameHook={buttonNameHook}
         formStateHook={formStateHook}

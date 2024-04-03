@@ -392,8 +392,9 @@ const EditAccount = () => {
         );
       }
 
-      if (buttonName === "cancel" && !editData) {
-        resetForm();
+       // Cancel add document and reset form
+       if (buttonName === "cancel" && !editData) {
+        resetForm([], "create");
         return;
       }
 
