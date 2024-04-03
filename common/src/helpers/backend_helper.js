@@ -139,6 +139,18 @@ export const convertHtmlStringToPng = (data) =>
     data
   );
 
+// Convert Ms Doc to Pdf
+export const convertMsDocToPdf = (data) =>
+  api.create(
+    `${configURL.COMMON_URL}/${baseURL.DOCUMENT_CONVERSION}/convert/ms-pdf`,
+    data,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
 // Get Templates by category
 export const getTemplatesByCategory = (category) =>
   api.get(`${configURL.COMMON_URL}/${baseURL.TEMPLATE}/categories/${category}`);
@@ -146,4 +158,17 @@ export const getTemplatesByCategory = (category) =>
 export const getTemplatesByCategoryAndSubCategory = (category, subCategory) =>
   api.get(
     `${configURL.COMMON_URL}/${baseURL.TEMPLATE}/categories/${category}/sub-category/${subCategory}`
+  );
+
+// Document Microservice
+// Return a document encoded in base64 string for download
+export const downloadDocumentById = (documentId) =>
+  api.get(
+    `${configURL.DOCUMENT_URL}/${baseURL.DOCUMENTS}/download/${documentId}`
+  );
+
+// Return a document encoded in base64 string for download based on entity type and entity id
+export const downloadDocumentByEntityAndId = (entityInfo) =>
+  api.get(
+    `${configURL.DOCUMENT_URL}/${baseURL.DOCUMENTS}/download/entity/${entityInfo?.entityType}/${entityInfo?.entityId}`
   );

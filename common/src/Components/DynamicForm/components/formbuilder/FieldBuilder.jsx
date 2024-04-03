@@ -916,7 +916,7 @@ const FieldBuilder = ({
       apply: ["table"],
       tableDataTypes:[
         { label: "File Download", value: "fileDownload" },
-        { label: "File Download & Preview", value: "fileUploadPreview" },
+        { label: "File Download & Preview", value: "fileDownloadPreview" },
       ]
     },
     {
@@ -2399,7 +2399,7 @@ const FieldBuilder = ({
                             <option value="">Select a type</option>
                             {field?.tableDataTypes.map((tableData) => {
                               return (
-                                <option value={field.value}>{tableData?.label}</option>
+                                <option value={tableData?.value}>{tableData?.label}</option>
                               );
                             })}
                           </select>

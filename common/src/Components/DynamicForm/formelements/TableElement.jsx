@@ -9,7 +9,15 @@ import {
   Table,
   FormFeedback,
   Alert,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
+import FilePreview from "../../FilePreview/FilePreview";
+import { toast } from "react-toastify";
+import * as FileHelper from "../../../helpers/file_helper";
+import * as BackendHelper from "../../../helpers/backend_helper";
 
 const TableElement = ({
   formik,
@@ -28,6 +36,8 @@ const TableElement = ({
     field?.tableSettings ? field.tableSettings : {}
   );
   const [table, setTable] = useState(field.tableData || []);
+  const [filePreview, setFilePreview] = useState(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   useEffect(() => {
     setFormFieldTableData(table);
@@ -112,7 +122,6 @@ const TableElement = ({
     formik?.setTouched({});
     formik?.setErrors({});
 
- 
     // Set tabled edit id in form field
     // const newFormFields = [...formFields];
     const newFormFields = JSON.parse(JSON.stringify(formFields));
@@ -152,8 +161,102 @@ const TableElement = ({
     }
   };
 
+  // Handle File Download
+  const handleDownload = async (item, data) => {
+    let documentData = null;
+    if (item?.entityType && item?.entityId) {
+      const res = await BackendHelper.downloadDocumentByEntityAndId({
+        entityType: item?.entityType,
+        entityId: item?.entityId,
+      });
+      documentData = res.data;
+    } else {
+      const res = await BackendHelper.downloadDocumentById(data?.id);
+      documentData = res.data;
+    }
+
+    if (!documentData?.encodedFile) {
+      toast.error("File not found.");
+      return;
+    }
+
+    FileHelper.downloadBase64File(
+      documentData?.encodedFile,
+      documentData?.fileName
+    );
+  };
+
+  // Handle File Preview
+  const handlePreview = async (item, data) => {
+    let documentData = null;
+    if (item?.entityType && item?.entityId) {
+      const res = await BackendHelper.downloadDocumentByEntityAndId({
+        entityType: item?.entityType,
+        entityId: item?.entityId,
+      });
+      documentData = res.data;
+    } else {
+      const res = await BackendHelper.downloadDocumentById(data?.id);
+      documentData = res.data;
+    }
+    const ext = documentData?.fileName.split(".").pop();
+
+    if (ext == "docx" || ext == "doc" || ext == "xlsx" || ext == "xls") {
+      // Convert to formdata
+      const formData = new FormData();
+      formData.append(
+        "docFile",
+        FileHelper.base64ToFile(
+          documentData?.encodedFile,
+          documentData?.fileName
+        )
+      );
+
+      const convertedData = await BackendHelper.convertMsDocToPdf(formData);
+      const docData = convertedData.data;
+      const pdfName = docData?.fileName?.split(".")[0] + ".pdf";
+      const file = await FileHelper.base64ToFile(docData?.encodedFile, pdfName);
+      setFilePreview(file);
+      setShowPreviewModal(true);
+      return;
+    }
+
+    if (ext == "pdf") {
+      const file = FileHelper.base64ToFile(
+        documentData?.encodedFile,
+        documentData?.fileName
+      );
+      setFilePreview(file);
+      setShowPreviewModal(true);
+      return;
+    }
+
+    toast.error("File format not supported for preview.");
+  };
+
   return (
     <div className="table-responsive mb-3" style={{ maxHeight: "200px" }}>
+      <Modal
+        isOpen={showPreviewModal}
+        closeModal={() => {
+          setShowPreviewModal(false);
+        }}
+        centered
+        scrollable
+        size="xl"
+      >
+        <ModalHeader
+          className="bg-primary pb-3"
+          toggle={() => setShowPreviewModal(false)}
+        >
+          <div className="d-flex flex-column text-dark">
+            <span className="h5 fw-bold">Document Preview</span>
+          </div>
+        </ModalHeader>
+        <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
+          <FilePreview file={filePreview} />
+        </ModalBody>
+      </Modal>
       <Table className="table-bordered align-middle table-nowrap mb-0">
         <thead className="table-secondary">
           <tr>
@@ -182,9 +285,44 @@ const TableElement = ({
             table?.map((row, rowIndex) => {
               return (
                 <tr key={rowIndex}>
-                  {tableConfig.map((item, index) => (
-                    <td key={index}>{row?.data?.[item?.name]}</td>
-                  ))}
+                  {tableConfig.map((item, index) => {
+                    // console.log("Table Item: ", item);
+                    console.log("Render: ", item?.render);
+                    return (
+                      <td key={index}>
+                        <div className="d-flex align-items-center gap-3">
+                          <span> {row?.data?.[item?.name]}</span>
+                          {item?.render === "fileDownloadPreview" && (
+                            <Button
+                              type="button"
+                              className="btn btn-secondary px-2 py-1"
+                              title="Preview"
+                              onClick={() => handlePreview(item, row)}
+                            >
+                              <span
+                                className=" ri-eye-line"
+                                style={{ fontSize: "0.8rem" }}
+                              ></span>
+                            </Button>
+                          )}
+                          {(item?.render === "fileDownloadPreview" ||
+                            item?.render === "fileDownload") && (
+                            <Button
+                              type="button"
+                              className="btn btn-custom-primary px-2 py-1"
+                              onClick={() => handleDownload(item, row)}
+                              title="Download"
+                            >
+                              <span
+                                className="ri-file-download-line"
+                                style={{ fontSize: "0.8rem" }}
+                              ></span>
+                            </Button>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                   {tableSetting.tableEdit === "true" ||
                     (tableSetting.tableEdit === true &&
                       formState !== "view" && (

@@ -62,10 +62,55 @@ const displayFileSize = (size) => {
 
 const getFilenameNoExtension = (file) => {
   return file.name.split(".").slice(0, -1).join(".");
-}
+};
 
 const getFileExtension = (file) => {
   return file.name.split(".").pop();
+};
+
+function base64ToFile(base64String, filename) {
+  // Basic mapping of extensions to MIME types
+  const extensionToMimeTypeMap = {
+      'jpg': 'image/jpeg',
+      'jpeg': 'image/jpeg',
+      'png': 'image/png',
+      'gif': 'image/gif',
+      'pdf': 'application/pdf',
+      // Add more mappings as needed
+  };
+
+  // Extract the file extension from the filename
+  const extension = filename.split('.').pop().toLowerCase();
+
+  // Attempt to get the MIME type from the mapping, defaulting to 'application/octet-stream'
+  const mimeType = extensionToMimeTypeMap[extension] || 'application/octet-stream';
+
+  // Decode the Base64 string to a binary string.
+  const binaryString = window.atob(base64String);
+
+  // Convert the binary string to a typed array.
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  // Create a Blob from the typed array.
+  const blob = new Blob([bytes], { type: mimeType });
+
+  // Convert the Blob into a File.
+  const file = new File([blob], filename, { type: mimeType });
+
+  return file;
+}
+
+function downloadBase64File(base64String, fileName) {
+  const link = document.createElement("a");
+  link.href = `data:application/octet-stream;base64,${base64String}`;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 export {
@@ -75,5 +120,7 @@ export {
   checkFileWithMimeType,
   displayFileSize,
   getFilenameNoExtension,
-  getFileExtension
+  getFileExtension,
+  base64ToFile,
+  downloadBase64File
 };
