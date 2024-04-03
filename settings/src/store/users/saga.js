@@ -80,19 +80,6 @@ function* workCreateUser(action) {
   }
 }
 
-// function* workCreateUsers(action) {
-//   const { newUsers, navigate } = action.payload;
-//   try {
-//     const usersResponse = yield call(createUsers, newUsers);
-//     yield put(createUsersSuccess(usersResponse.data));
-//     navigate("/settings/access");
-//     toast.success("User mass imported successfully!");
-//   } catch (error) {
-//     yield put(createUsersFailure(error));
-//     toast.error("Users mass import failed!");
-//   }
-// }
-
 function* workCreateUsers(action) {
   const { newUsers, navigate } = action.payload;
   try {
@@ -103,7 +90,7 @@ function* workCreateUsers(action) {
     toast.success("Users mass imported successfully!");
   } catch (error) {
     yield put(createUsersFailure(error));
-    toast.error("Users mass import failed!");
+    toast.error("Users mass import failed! Duplicate entries detected!");
   }
 }
 
