@@ -11,6 +11,7 @@ import {
   Label,
 } from "reactstrap";
 import { getCandidateToJobMatchData } from "../../../../candidate/src/helpers/backend_helper";
+import { toast } from "react-toastify";
 
 const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -26,7 +27,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
           setLoading(false);
         })
         .catch((error) => {
-          console.log("Error in getting match data", error);
+          toast.error("Failed to fetch candidate recommendation data.")
           setLoading(false);
         })
         .finally(() => {
