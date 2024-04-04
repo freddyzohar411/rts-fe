@@ -24,7 +24,7 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
 
   // Handle File Download
   const handleDownload = async (entityInfo) => {
-    console.log("entityInfo", entityInfo)
+    console.log("entityInfo", entityInfo);
     let documentData = null;
     if (entityInfo?.entityType && entityInfo?.entityId) {
       const res = await BackendHelper.downloadDocumentByEntityAndId(entityInfo);
@@ -228,13 +228,8 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
                 x
               </span>
             )}
-          {formik?.values?.[field.name] &&
-            !(formik?.values?.[field.name] instanceof File) && (
-              <span
-                className="mx-3 ri-download-line cursor-pointer"
-                onClick={() => handleDownload(field?.entityInfo)}
-              ></span>
-            )}
+
+          {/* Backend File */}
           {formik?.values?.[field.name] &&
             !(formik?.values?.[field.name] instanceof File) && (
               <span
@@ -242,19 +237,27 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
                 onClick={() => handlePreview(field?.entityInfo)}
               ></span>
             )}
-
           {formik?.values?.[field.name] &&
-            formik?.values?.[field.name] instanceof File && (
+            !(formik?.values?.[field.name] instanceof File) && (
               <span
                 className="mx-3 ri-download-line cursor-pointer"
-                onClick={handleDownloadURL}
+                onClick={() => handleDownload(field?.entityInfo)}
               ></span>
             )}
+
+          {/* URL */}
           {formik?.values?.[field.name] &&
             formik?.values?.[field.name] instanceof File && (
               <span
                 className="ri-eye-line cursor-pointer"
                 onClick={() => handlePreviewURL(field?.entityInfo)}
+              ></span>
+            )}
+          {formik?.values?.[field.name] &&
+            formik?.values?.[field.name] instanceof File && (
+              <span
+                className="mx-3 ri-download-line cursor-pointer"
+                onClick={handleDownloadURL}
               ></span>
             )}
         </div>
