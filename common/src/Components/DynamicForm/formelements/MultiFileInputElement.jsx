@@ -5,6 +5,9 @@ import { DOCUMENT_BY_ID_URL, DOCUMENTS_BY_ENTITY_URL } from "../../../endpoint";
 import axios from "axios";
 import * as BackendHelper from "../../../helpers/backend_helper";
 import * as FileHelper from "../../../helpers/file_helper";
+import { Modal, ModalBody, ModalHeader } from "reactstrap";
+import FilePreview from "../../FilePreview/FilePreview";
+import { toast } from "react-toastify";
 
 const MultiFileInputElement = ({
   formik,
@@ -20,10 +23,8 @@ const MultiFileInputElement = ({
   const [deletedIds, setDeletedIds] = useState([]);
   const fileInputRef = useRef();
   const [fileDatas, setFileDatas] = useState([]);
-
-  // #New
-  console.log("MultiInputElement Field: ", field);
-  console.log("Files Ids: ", existingFiles);
+  const [filePreview, setFilePreview] = useState(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   // useEffect(() => {
   //   if (
@@ -93,7 +94,8 @@ const MultiFileInputElement = ({
     setFileDatas([
       ...fileDatas,
       {
-        fileNames: e.target.files[0].name,
+        file: e.target.files[0],
+        fileName: e.target.files[0].name,
         fileUrl: URL.createObjectURL(e.target.files[0]),
       },
     ]);
@@ -201,14 +203,102 @@ const MultiFileInputElement = ({
     const fileData = fileDatas.find((file) => file.id === id);
     const link = document.createElement("a");
     link.href = fileData?.fileUrl;
-    link.download = fileData?.fileNames;
+    link.download = fileData?.fileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
+  // Handle File Preview
+  const handlePreview = async (id) => {
+    let documentData = null;
+    const res = await BackendHelper.downloadDocumentById(id);
+    documentData = res.data;
+
+    const ext = documentData?.fileName.split(".").pop();
+
+    if (ext == "docx" || ext == "doc" || ext == "xlsx" || ext == "xls") {
+      // Convert to formdata
+      const formData = new FormData();
+      formData.append(
+        "docFile",
+        FileHelper.base64ToFile(
+          documentData?.encodedFile,
+          documentData?.fileName
+        )
+      );
+
+      const convertedData = await BackendHelper.convertMsDocToPdf(formData);
+      const docData = convertedData.data;
+      const pdfName = docData?.fileName?.split(".")[0] + ".pdf";
+      const file = await FileHelper.base64ToFile(docData?.encodedFile, pdfName);
+      setFilePreview(file);
+      setShowPreviewModal(true);
+      return;
+    }
+
+    if (ext == "pdf") {
+      const file = FileHelper.base64ToFile(
+        documentData?.encodedFile,
+        documentData?.fileName
+      );
+      setFilePreview(file);
+      setShowPreviewModal(true);
+      return;
+    }
+
+    toast.error("File format not supported for preview.");
+  };
+
+  // File Preview from fileURl
+  const handlePreviewURL = async (id) => {
+    const fileData = fileDatas.find((file) => file.id === id);
+    const ext = fileData?.fileName?.split(".").pop();
+    if (ext == "docx" || ext == "doc" || ext == "xlsx" || ext == "xls") {
+      // Convert to formdata
+      const formData = new FormData();
+      formData.append("docFile", fileData?.file);
+      const res = await BackendHelper.convertMsDocToPdf(formData);
+      const docData = res.data;
+      const pdfName = docData?.fileName?.split(".")[0] + ".pdf";
+      const file = FileHelper.base64ToFile(docData?.encodedFile, pdfName);
+      setFilePreview(file);
+      setShowPreviewModal(true);
+      return;
+    }
+
+    if (ext == "pdf") {
+      setFilePreview(fileData?.file);
+      setShowPreviewModal(true);
+      return;
+    }
+
+    toast.error("File format not supported for preview.");
+  };
+
   return (
     <>
+      <Modal
+        isOpen={showPreviewModal}
+        closeModal={() => {
+          setShowPreviewModal(false);
+        }}
+        centered
+        scrollable
+        size="xl"
+      >
+        <ModalHeader
+          className="bg-primary pb-3"
+          toggle={() => setShowPreviewModal(false)}
+        >
+          <div className="d-flex flex-column text-dark">
+            <span className="h5 fw-bold">Document Preview</span>
+          </div>
+        </ModalHeader>
+        <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
+          <FilePreview file={filePreview} />
+        </ModalBody>
+      </Modal>
       <input
         ref={fileInputRef}
         id={field.name}
@@ -303,7 +393,7 @@ const MultiFileInputElement = ({
               position: "absolute",
               right: "0px",
               borderRadius: "3px",
-              zIndex: 9999,
+              zIndex: 100,
             }}
           >
             {files.length > 0 && showFiles && (
@@ -319,6 +409,12 @@ const MultiFileInputElement = ({
                         className="mx-3 ri-download-line cursor-pointer"
                         onClick={() => {
                           handleDownloadURL(file?.id);
+                        }}
+                      ></span>
+                      <span
+                        className="ri-eye-line cursor-pointer"
+                        onClick={() => {
+                          handlePreviewURL(file?.id);
                         }}
                       ></span>
                     </span>
@@ -353,6 +449,12 @@ const MultiFileInputElement = ({
                         className="mx-3 ri-download-line cursor-pointer"
                         onClick={() => {
                           handleDownload(file?.id);
+                        }}
+                      ></span>
+                      <span
+                        className="ri-eye-line cursor-pointer"
+                        onClick={() => {
+                          handlePreview(file?.id);
                         }}
                       ></span>
                     </span>
