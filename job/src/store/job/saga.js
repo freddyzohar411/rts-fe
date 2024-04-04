@@ -52,6 +52,7 @@ import {
   createJobCustomView,
   getJobCustomViews,
   selectJobCustomView,
+  deleteJobCustomView
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
