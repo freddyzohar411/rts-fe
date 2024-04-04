@@ -180,7 +180,8 @@ const DynamicTableWrapper = ({
                       </Col>
                       <Col>
                         <div className="d-flex column-gap-2 justify-content-end">
-                          {gridView === "new_job" &&
+                          {(gridView === "new_job" ||
+                            gridView === "active_jobs") &&
                             checkAllPermission([Permission.JOB_EDIT]) && (
                               <ButtonDropdown
                                 isOpen={massFODOpen}

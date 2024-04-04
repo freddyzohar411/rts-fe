@@ -18,6 +18,10 @@ export const ASSOCIATE = "Associate";
 export const SUBMIT_TO_SALES = "Submit to Sales";
 export const SUBMIT_TO_CLIENT = "Submit to Client";
 export const PROFILE_FEEDBACK_PENDING = "Profile Feedback Pending";
+export const SKILLS_ASSESSMENT = "Skills Assessment";
+export const CODING_TEST = "Coding Test";
+export const TECHNICAL_INTERVIEW = "Technical Interview";
+export const CULTURAL_FIT_TEST = "Cultural Fit Test";
 export const FIRST_INTERVIEW_SCHEDULED = "First Interview Scheduled";
 export const SECOND_INTERVIEW_SCHEDULED = "Second Interview Scheduled";
 export const THIRD_INTERVIEW_SCHEDULED = "Third Interview Scheduled";
@@ -26,6 +30,7 @@ export const CONDITIONAL_OFFER_SENT = "Conditional Offer Sent";
 export const CONDITIONAL_OFFER_ACCEPTED_DECLINED =
   "Conditional Offer Accepted/Declined";
 export const INTERVIEWS = "Interviews";
+export const ODIN_PROTOCOL = "Odin Protocol";
 
 export const steps = {
   Tag: "Tag",
@@ -33,6 +38,7 @@ export const steps = {
   "Submit to Sales": "Submit to Sales",
   "Submit to Client": "Submit to Client",
   "Profile Feedback Pending": "Profile Feedback Pending",
+  "Odin Protocol": "Odin Protocol",
   Interviews: "Interview Feedback Pending",
   "Conditional Offer Sent": "Conditional Offer Sent",
   "Conditional Offer Accepted/Declined": "Conditional Offer Accepted/Declined",
@@ -44,9 +50,10 @@ export const stepOrders = {
   "Submit to Sales": 2,
   "Submit to Client": 3,
   "Profile Feedback Pending": 4,
-  Interviews: 5,
-  "Conditional Offer Sent": 9,
-  "Conditional Offer Accepted/Declined": 10,
+  "Odin Protocol": 5,
+  Interviews: 9,
+  "Conditional Offer Sent": 13,
+  "Conditional Offer Accepted/Declined": 14,
 };
 
 export const jobHeaders = [
@@ -69,6 +76,7 @@ export const rtsStatusHeaders = [
   "Submit to Sales",
   "Submit to Client",
   "Profile Feedback Pending",
+  "Odin Protocol",
   "Interviews",
   "Conditional Offer Sent",
   "Conditional Offer Accepted/Declined",
@@ -79,9 +87,10 @@ export const timelineSkip = {
   "Submit to Sales": 2,
   "Submit to Client": 3,
   "Profile Feedback": 4,
-  Interviews: 5,
-  "Conditional Offer": 9,
-  "Conditional Offer Status": 10,
+  "Odin Protocol": 5,
+  Interviews: 9,
+  "Conditional Offer": 13,
+  "Conditional Offer Status": 14,
 };
 
 export const timelineLegend = [

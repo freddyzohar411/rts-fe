@@ -5,6 +5,7 @@ import SimpleBar from "simplebar-react";
 import logoSm from "../assets/images/logo-sm.png";
 import logoDark from "../assets/images/logo-dark.png";
 import logoLight from "../assets/images/logo-light.png";
+import logoPulse from "../assets/images/logo-pulse.png";
 import logo_big from "../assets/images/logo_big.svg";
 import fav_icon from "../assets/images/fav_icon.png";
 //Import Components
@@ -52,7 +53,7 @@ const Sidebar = ({ layoutType }) => {
               <img src={fav_icon} alt="" height="50" />
             </span>
             <span className="logo-lg">
-              <img src={logoLight} alt="" height="50" />
+              <img src={logoPulse} alt="" height="100" />
             </span>
           </Link>
           <button

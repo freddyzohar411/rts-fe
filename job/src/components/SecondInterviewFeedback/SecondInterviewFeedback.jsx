@@ -39,15 +39,15 @@ function SecondInterviewFeedbackPending({
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
   const onFormikChange = (formik) => {
     if (formik?.values?.profileFeedbackStatus === "COMPLETED") {
-      handleIconClick(candidateId, jobId, 9, true);
+      handleIconClick(candidateId, jobId, 14, true);
     } else if (formik?.values?.profileFeedbackStatus === "SECOND_INTERVIEW") {
-      handleIconClick(candidateId, jobId, 7, true);
+      handleIconClick(candidateId, jobId, 12, true);
     }
   };
 
@@ -70,6 +70,7 @@ function SecondInterviewFeedbackPending({
       jobType: "second_interview_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {
