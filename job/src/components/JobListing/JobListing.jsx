@@ -45,7 +45,8 @@ const JobListing = () => {
   const navigate = useNavigate();
   const { jobType } = useParams();
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
-  const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
+  const jobsFields = useSelector((state) => state?.JobListReducer?.jobsFields);
+
   const recruiterGroup = useSelector(
     (state) => state.JobListReducer.recruiterGroup
   );
@@ -94,11 +95,11 @@ const JobListing = () => {
   // Clone Job Function
   const handleCloneJob = (cloneJobId) => {
     const payload = {
-      "id": cloneJobId,
-      "clone": true
-    }
-    dispatch(cloneJob({ payload, navigate: navigate }))
-  }
+      id: cloneJobId,
+      clone: true,
+    };
+    dispatch(cloneJob({ payload, navigate: navigate }));
+  };
 
   // Table Hooks
   const {
@@ -435,7 +436,10 @@ const JobListing = () => {
               </Button>
             )}
             {/* Clone Button */}
-            <Button className="btn btn-custom-primary table-btn" onClick={() => handleCloneJob(data.id)}>
+            <Button
+              className="btn btn-custom-primary table-btn"
+              onClick={() => handleCloneJob(data.id)}
+            >
               <i className="mdi mdi-content-copy"></i>
             </Button>
 
