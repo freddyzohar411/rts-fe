@@ -310,6 +310,22 @@ const JobListing = () => {
       //     </div>
       //   ),
       // },
+      {
+        header: "Job Title",
+        name: "jobTitle",
+        sort: true,
+        sortValue: "job_submission_data.jobTitle",
+        render: (data) => {
+          return (
+            <Link
+              to={`/jobs/${data.id}/snapshot`}
+              className="text-custom-primary text-decoration-underline"
+            >
+              <span>{data?.jobSubmissionData?.jobTitle}</span>
+            </Link>
+          );
+        },
+      },
       ...customConfig,
       {
         header: "Action",
@@ -319,7 +335,7 @@ const JobListing = () => {
         render: (data) => (
           <div className="d-flex column-gap-2">
             {checkAllPermission([Permission.JOB_EDIT]) &&
-              gridView === "new_job" && (
+              (gridView === "new_job" || gridView === "active_jobs") && (
                 <Dropdown
                   isOpen={fodAssign[data.id] || false}
                   toggle={() => handleFodAssignDropdown(data.id)}
