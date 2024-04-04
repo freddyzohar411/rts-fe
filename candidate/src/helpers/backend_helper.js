@@ -158,4 +158,23 @@ export const parseResumeMulti = (data, config) =>
 
 // Create Custom View
 export const createCandidateCustomView = (data) =>
-  api.create(`${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/save/customfields`, data);
+  api.create(
+    `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/save/customfields`,
+    data
+  );
+  
+// Fetch Candidate Custom Views
+export const getCandidateCustomViews = () =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/all`);
+
+  // Select Candidate Custom View
+export const selectCandidateCustomView = (id) =>
+  api.put(
+    `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/update/${id}`
+  );
+
+// Delete Candidate Custom View
+export const deleteCandidateCustomView = (id) =>
+  api.delete(
+    `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/delete/${id}`
+  );
