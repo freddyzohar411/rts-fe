@@ -134,6 +134,16 @@ const TableElement = ({
       }
     });
 
+    // Check for file and set entity info
+    newFormFields.forEach((field) => {
+      if (field.type === "file") {
+        field.entityInfo = {
+          entityId: row.id,
+          entityType: row.entityType,
+        };
+      }
+    });
+
     // Set Multi file
     newFormFields.forEach((field) => {
       if (field.type === "multifile") {

@@ -96,6 +96,12 @@ const AccountCreation = () => {
    */
   useEffect(() => {
     if (form) {
+      if (step === 0) {
+        const formEdited = setEnityInfo(form);
+        console.log("formEdited", formEdited);
+        setFormTemplate(formEdited);
+        return;
+      }
       if (step === 1) {
         const formEdited = setTableAPI(
           form,
@@ -137,7 +143,7 @@ const AccountCreation = () => {
       }
       setFormTemplate(form);
     }
-  }, [step, form]);
+  }, [step, form, accountId]);
 
   /**
    * Set table API method
@@ -157,6 +163,20 @@ const AccountCreation = () => {
     });
     return newForm;
   };
+
+  // Set entity info for file upload to the form schema
+  const setEnityInfo = (form) => {
+    const newForm = JSON.parse(JSON.stringify(form));
+    newForm?.formSchema?.forEach((field) => {
+      if (field.type === "file") {
+        field.entityInfo = {
+          entityId: accountId,
+          entityType: AccountEntityConstant.ACCOUNT_ACCOUNT,
+        };
+      }
+    });
+    return newForm;
+  }
 
   /**
    * Fetch draft account if there is

@@ -24,6 +24,7 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
 
   // Handle File Download
   const handleDownload = async (entityInfo) => {
+    console.log("entityInfo", entityInfo)
     let documentData = null;
     if (entityInfo?.entityType && entityInfo?.entityId) {
       const res = await BackendHelper.downloadDocumentByEntityAndId(entityInfo);

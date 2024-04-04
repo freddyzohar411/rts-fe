@@ -3,6 +3,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import { DOCUMENT_BY_ID_URL, DOCUMENTS_BY_ENTITY_URL } from "../../../endpoint";
 import axios from "axios";
+import * as BackendHelper from "../../../helpers/backend_helper";
+import * as FileHelper from "../../../helpers/file_helper";
 
 const MultiFileInputElement = ({
   formik,
@@ -17,6 +19,11 @@ const MultiFileInputElement = ({
   const [showFiles, setShowFiles] = useState(false);
   const [deletedIds, setDeletedIds] = useState([]);
   const fileInputRef = useRef();
+  const [fileDatas, setFileDatas] = useState([]);
+
+  // #New
+  console.log("MultiInputElement Field: ", field);
+  console.log("Files Ids: ", existingFiles);
 
   // useEffect(() => {
   //   if (
@@ -83,6 +90,13 @@ const MultiFileInputElement = ({
     if (e.target.files.length > 0) {
       setFiles([...files, e.target.files[0]]);
     }
+    setFileDatas([
+      ...fileDatas,
+      {
+        fileNames: e.target.files[0].name,
+        fileUrl: URL.createObjectURL(e.target.files[0]),
+      },
+    ]);
     e.target.value = null;
   };
 
@@ -163,6 +177,35 @@ const MultiFileInputElement = ({
     });
     setFormFields(newFormFields);
   }, [files, existingFiles]);
+
+  // Handle File Download
+  const handleDownload = async (id) => {
+    console.log("Download File: ", id);
+    let documentData = null;
+
+    const res = await BackendHelper.downloadDocumentById(id);
+    documentData = res.data;
+
+    if (!documentData?.encodedFile) {
+      toast.error("File not found.");
+      return;
+    }
+
+    FileHelper.downloadBase64File(
+      documentData?.encodedFile,
+      documentData?.fileName
+    );
+  };
+
+  const handleDownloadURL = (id) => {
+    const fileData = fileDatas.find((file) => file.id === id);
+    const link = document.createElement("a");
+    link.href = fileData?.fileUrl;
+    link.download = fileData?.fileNames;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <>
@@ -272,6 +315,12 @@ const MultiFileInputElement = ({
                   >
                     <span className="flex-grow-1">
                       {truncateString(file.name, 45)}
+                      <span
+                        className="mx-3 ri-download-line cursor-pointer"
+                        onClick={() => {
+                          handleDownloadURL(file?.id);
+                        }}
+                      ></span>
                     </span>
                     <span
                       style={{ fontWeight: "bold" }}
@@ -300,6 +349,12 @@ const MultiFileInputElement = ({
                   >
                     <span className="flex-grow-1">
                       {truncateString(file?.title, 45)}
+                      <span
+                        className="mx-3 ri-download-line cursor-pointer"
+                        onClick={() => {
+                          handleDownload(file?.id);
+                        }}
+                      ></span>
                     </span>
                     <span
                       style={{ fontWeight: "bold" }}
