@@ -20,6 +20,7 @@ import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { DateHelper, FileHelper } from "@workspace/common";
 
 const DynamicTableWrapper = ({
   data,
@@ -37,9 +38,7 @@ const DynamicTableWrapper = ({
   const [selectedOptGroup, setSelectedOptGroup] = useState(
     ACCOUNT_INITIAL_OPTIONS
   );
-
   const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
-
   const accountsMeta = useSelector(
     (state) => state.AccountReducer.accountsMeta
   );
@@ -53,6 +52,89 @@ const DynamicTableWrapper = ({
 
   const areOptionsEmpty = () => {
     return !(optGroup && optGroup.length > 0);
+  };
+
+  // Export
+  function getDynamicNestedResultForExport(data, value) {
+    const result = value?.split(".").reduce((acc, part) => {
+      const value = acc ? acc[part] : "";
+      if (value === null || value === undefined) {
+        return "";
+      }
+      return value;
+    }, data);
+    return result;
+  }
+
+  function convertConfigDataToObject(
+    configData,
+    allData,
+    customRenderList,
+    addIndexing = false
+  ) {
+    const exportData = allData.map((data) => {
+      return configData.reduce((acc, curr) => {
+        let renderMethod = null;
+
+        if (customRenderList.length > 0) {
+          renderMethod =
+            customRenderList.find((item) => {
+              return item.names.includes(curr?.name);
+            })?.render || null;
+        }
+
+        if (renderMethod) {
+          acc[curr?.header] = renderMethod(data, curr);
+          return acc;
+        }
+
+        acc[curr?.header] = getDynamicNestedResultForExport(data, curr?.name);
+        return acc;
+      }, {});
+    });
+    if (addIndexing) {
+      exportData.forEach((data, index) => {
+        exportData[index] = { "#": index + 1, ...data };
+      });
+    }
+    return exportData;
+  }
+
+  const customRenderList = [
+    {
+      names: ["updatedAt", "createdAt"],
+      render: (data, opt) =>
+        DateHelper.formatDateStandard2(
+          getDynamicNestedResultForExport(data, opt?.name) || ""
+        ),
+    },
+  ];
+
+  const handleExport = () => {
+    if (!data || data.length === 0) {
+      toast.error("No data to export");
+      return;
+    }
+    if (config.length === 0) {
+      toast.error("No fields to export");
+      return;
+    }
+
+    const exportData = convertConfigDataToObject(
+      config.slice(2, -1),
+      data,
+      customRenderList,
+      true
+    );
+
+    if (exportData.length === 0) {
+      toast.error("No data to export");
+      return;
+    }
+
+    console.log("Export Data", exportData);
+
+    // FileHelper.exportToCSV(exportData, "accounts");
   };
 
   return (
@@ -178,6 +260,7 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             className="btn btn-custom-primary d-flex align-items-center header-btn"
+                            onClick={handleExport}
                           >
                             <span>
                               <i className="mdi mdi-download me-1"></i>

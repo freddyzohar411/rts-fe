@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+// import * as XLSX from 'xlsx';
 
 /**
  * Method to check file format is valid or not
@@ -113,6 +114,23 @@ function downloadBase64File(base64String, fileName) {
   document.body.removeChild(link);
 }
 
+// const exportToExcel = (data, fileName) => {
+//   // Create a new workbook
+//   const wb = XLSX.utils.book_new();
+
+//   // Convert data to worksheet
+//   const ws = XLSX.utils.json_to_sheet(data);
+
+//   // Add the worksheet to the workbook under a specific name
+//   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+//   // Write the workbook and initiate download
+//   // Depending on the environment, you might use write or writeFile
+//   XLSX.writeFile(wb, `${fileName}.xlsx`);
+// };
+
+
+
 export {
   checkFileFormatValid,
   checkFileSizeLimit,
@@ -122,5 +140,6 @@ export {
   getFilenameNoExtension,
   getFileExtension,
   base64ToFile,
-  downloadBase64File
+  downloadBase64File,
+  // exportToExcel
 };
