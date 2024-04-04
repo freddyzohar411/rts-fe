@@ -224,8 +224,6 @@ const AccountListing = () => {
     }
   }, [accountsData]);
 
-  console.log("accountsData", accountsData)
-  console.log("Config", generateAccountConfig(customConfig).slice(2,-1));
 
   return (
     <>
