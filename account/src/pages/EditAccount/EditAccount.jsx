@@ -624,6 +624,7 @@ const EditAccount = () => {
           resetStepper={resetStepper}
           toggleFormViewState={toggleFormViewState}
           viewState={view}
+          setStep={setStep}
         >
           <Form
             template={formTemplate}
