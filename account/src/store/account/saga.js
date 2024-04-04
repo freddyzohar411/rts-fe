@@ -12,6 +12,9 @@ import {
   FETCH_ACCOUNTS_FIELDS_ALL,
   FETCH_ACCOUNTS_ADMIN,
   CREATE_ACCOUNT_CUSTOM_VIEW,
+  FETCH_ACCOUNT_CUSTOM_VIEW,
+  SELECT_ACCOUNT_CUSTOM_VIEW,
+  DELETE_ACCOUNT_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
   fetchAccountSuccess,
@@ -34,6 +37,13 @@ import {
   fetchAccountsAdminFailure,
   createAccountCustomViewSuccess,
   createAccountCustomViewFailure,
+  fetchAccountCustomViewSuccess,
+  fetchAccountCustomViewFailure,
+  selectAccountCustomViewSuccess,
+  selectAccountCustomFailure,
+  fetchAccountCustomView,
+  deleteAccountCustomViewSuccess,
+  deleteAccountCustomViewFailure,
 } from "./action";
 import {
   getAccounts,
@@ -46,6 +56,9 @@ import {
   getAccountsFieldsAll,
   getAccountsAdmin,
   createAccountCustomView,
+  getAllAccountCustomView,
+  selectAccountCustomView,
+  deleteAccountCustomView,
 } from "../../helpers/backend_helper";
 import {
   setAccountId,
@@ -152,6 +165,7 @@ function* workDeleteAccount(action) {
 function* workFetchAccountsFields() {
   try {
     const response = yield call(getAccountsFields);
+    console.log("Account Fields", response);
     yield put(fetchAccountsFieldsSuccess(response.data));
   } catch (error) {
     yield put(fetchAccountsFieldsFailure(error));
@@ -198,6 +212,16 @@ function* workFetchAccountsAdmin(action) {
   }
 }
 
+// Fetch Account Custom Views
+function* workFetchAccountCustomView() {
+  try {
+    const response = yield call(getAllAccountCustomView);
+    yield put(fetchAccountCustomViewSuccess(response.data));
+  } catch (error) {
+    yield put(fetchAccountCustomViewFailure(error));
+  }
+}
+
 // Create Account Custom View
 function* workCreateAccountCustomView(action) {
   const { payload, navigate } = action.payload;
@@ -207,11 +231,44 @@ function* workCreateAccountCustomView(action) {
       payload
     );
     yield put(createAccountCustomViewSuccess(accountCustomViewResponse));
+    yield put(fetchAccountCustomView());
     toast.success("Account custom view created successfully!");
     navigate("/accounts");
   } catch (error) {
     yield put(createAccountCustomViewFailure(error));
-    toast.error("Error creating account custom view!");
+    if (error.response && error.response.status === 409) {
+      toast.error("Account custom view name already exists.");
+    } else {
+      toast.error("Error creating account custom view!");
+    }
+  }
+}
+
+// Select Job Custom View
+function* workSelectAccountCustomView(action) {
+  const { id } = action.payload;
+  try {
+    const response = yield call(selectAccountCustomView, id);
+    yield put(selectAccountCustomViewSuccess(response.data));
+    yield put(fetchAccountCustomView());
+    toast.success("Account custom view selected successfully!");
+  } catch (error) {
+    yield put(selectAccountCustomFailure(error));
+    toast.error("Error selecting account custom view!");
+  }
+}
+
+// Delete Account Custom View
+function* workDeleteAccountCustomView(action) {
+  const { id } = action.payload;
+  try {
+    const response = yield call(deleteAccountCustomView, id);
+    yield put(deleteAccountCustomViewSuccess(response.data));
+    yield put(fetchAccountCustomView());
+    toast.success("Account custom view deleted successfully!");
+  } catch (error) {
+    yield put(deleteAccountCustomViewFailure(error));
+    toast.error("Error deleting account custom view!");
   }
 }
 
@@ -226,4 +283,7 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(FETCH_ACCOUNTS_FIELDS_ALL, workFetchAccountsFieldsAll);
   yield takeEvery(FETCH_ACCOUNTS_ADMIN, workFetchAccountsAdmin);
   yield takeEvery(CREATE_ACCOUNT_CUSTOM_VIEW, workCreateAccountCustomView);
+  yield takeEvery(FETCH_ACCOUNT_CUSTOM_VIEW, workFetchAccountCustomView);
+  yield takeEvery(SELECT_ACCOUNT_CUSTOM_VIEW, workSelectAccountCustomView);
+  yield takeEvery(DELETE_ACCOUNT_CUSTOM_VIEW, workDeleteAccountCustomView);
 }

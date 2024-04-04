@@ -59,7 +59,9 @@ function AccountCustomView() {
         columnName: selectedOption,
       };
       console.log(newCustomView);
-      dispatch(createAccountCustomView({ payload: newCustomView, navigate: navigate }));
+      dispatch(
+        createAccountCustomView({ payload: newCustomView, navigate: navigate })
+      );
     }
   };
 
@@ -128,13 +130,13 @@ function AccountCustomView() {
                         <Row>
                           <Col>
                             <div>
-                            <Label className="fw-semibold">
-                                  Custom View Columns
-                                </Label>
-                                <span>
-                                  Please select the columns you would like to
-                                  see in the Account Listing table.
-                                </span>
+                              <Label className="fw-semibold">
+                                Custom View Columns
+                              </Label>
+                              <span>
+                                Please select the columns you would like to see
+                                in the Account Listing table.
+                              </span>
 
                               <DualListBox
                                 options={options ?? []}
@@ -207,9 +209,11 @@ function AccountCustomView() {
                       <CardFooter>
                         <Row className="justify-content-between">
                           <Col md="auto">
-                            <Button type="button" className="btn btn-danger">
-                              Cancel
-                            </Button>
+                            <Link to="/accounts">
+                              <Button type="button" className="btn btn-danger">
+                                Cancel
+                              </Button>
+                            </Link>
                           </Col>
                           <Col md="auto">
                             <Button

@@ -33,6 +33,15 @@ import {
   CREATE_ACCOUNT_CUSTOM_VIEW,
   CREATE_ACCOUNT_CUSTOM_VIEW_SUCCESS,
   CREATE_ACCOUNT_CUSTOM_VIEW_FAILURE,
+  FETCH_ACCOUNT_CUSTOM_VIEW,
+  FETCH_ACCOUNT_CUSTOM_VIEW_SUCCESS,
+  FETCH_ACCOUNT_CUSTOM_VIEW_FAILURE,
+  SELECT_ACCOUNT_CUSTOM_VIEW,
+  SELECT_ACCOUNT_CUSTOM_VIEW_SUCCESS,
+  SELECT_ACCOUNT_CUSTOM_VIEW_FAILURE,
+  DELETE_ACCOUNT_CUSTOM_VIEW,
+  DELETE_ACCOUNT_CUSTOM_VIEW_SUCCESS,
+  DELETE_ACCOUNT_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -55,7 +64,7 @@ const initialState = {
   deleteMeta: {},
   tableMeta: {},
   accountCustomView: {},
-  accountCustomView: [],
+  accountCustomViews: [],
 };
 
 const AccountReducer = (state = initialState, action) => {
@@ -269,6 +278,7 @@ const AccountReducer = (state = initialState, action) => {
         accounts: [],
         accountsMeta: errorMetaData(action.payload),
       };
+    // Create Account Custom View
     case CREATE_ACCOUNT_CUSTOM_VIEW:
       return {
         ...state,
@@ -287,7 +297,67 @@ const AccountReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
-        message: action.payload,
+        errorMsg: action.payload,
+      };
+    // Fetch Account Custom Views
+    case FETCH_ACCOUNT_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_ACCOUNT_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accountCustomViews: action.payload,
+      };
+    case FETCH_ACCOUNT_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    // Select Account Custom View
+    case SELECT_ACCOUNT_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case SELECT_ACCOUNT_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accountCustomView: action.payload,
+      };
+    case SELECT_ACCOUNT_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    // Delete Account Custom View
+    case DELETE_ACCOUNT_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case DELETE_ACCOUNT_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accountCustomView: action.payload,
+      };
+    case DELETE_ACCOUNT_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;
