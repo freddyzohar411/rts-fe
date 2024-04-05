@@ -99,7 +99,11 @@ const DynamicTableWrapper = ({
       const selectedCustomView = allJobCustomView?.find(
         (customView) => customView?.selected
       );
-      if (selectedCustomView && Array.isArray(optGroup) && optGroup.length > 0) {
+      if (
+        selectedCustomView &&
+        Array.isArray(optGroup) &&
+        optGroup.length > 0
+      ) {
         const selectedGroup = selectedCustomView?.columnName?.split(",");
         const selectedObjects = selectedGroup?.map((value) => {
           return optGroup?.find((option) => option?.value === value);
@@ -339,7 +343,6 @@ const DynamicTableWrapper = ({
                                   <div className="d-flex flex-row gap-1 me-3 mb-1">
                                     <DropdownItem
                                       onClick={() => {
-                                        console.log(customView);
                                         handleSelectCustomView(customView?.id);
                                       }}
                                       key={index}

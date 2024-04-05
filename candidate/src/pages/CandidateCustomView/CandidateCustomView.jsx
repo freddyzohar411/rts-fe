@@ -30,7 +30,6 @@ function CandidateCustomView() {
   const candidateFields = useSelector(
     (state) => state?.CandidateReducer?.candidatesFields
   );
-  console.log(candidateFields)
   const [selectedOption, setSelectedOption] = useState([]);
   const [dualListBoxError, setDualListBoxError] = useState(false);
   const [options, setOptions] = useState([]);
@@ -47,8 +46,6 @@ function CandidateCustomView() {
     setOptions(candidateFields);
   }, [options]);
 
-  console.log(options)
-
   const handleSubmit = async (values) => {
     if (selectedOption.length === 0) {
       setDualListBoxError(true);
@@ -60,9 +57,11 @@ function CandidateCustomView() {
         type: "Candidate",
         columnName: selectedOption,
       };
-      console.log(newCustomView);
       dispatch(
-        createCandidateCustomView({ payload: newCustomView, navigate: navigate })
+        createCandidateCustomView({
+          payload: newCustomView,
+          navigate: navigate,
+        })
       );
     }
   };

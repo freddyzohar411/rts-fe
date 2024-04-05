@@ -58,7 +58,6 @@ function AccountCustomView() {
         type: "Account",
         columnName: selectedOption,
       };
-      console.log(newCustomView);
       dispatch(
         createAccountCustomView({ payload: newCustomView, navigate: navigate })
       );

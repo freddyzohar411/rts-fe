@@ -165,7 +165,6 @@ function* workDeleteAccount(action) {
 function* workFetchAccountsFields() {
   try {
     const response = yield call(getAccountsFields);
-    console.log("Account Fields", response);
     yield put(fetchAccountsFieldsSuccess(response.data));
   } catch (error) {
     yield put(fetchAccountsFieldsFailure(error));

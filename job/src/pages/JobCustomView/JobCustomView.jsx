@@ -54,8 +54,9 @@ function JobCustomView() {
         type: "Job",
         columnName: selectedOption,
       };
-      console.log(newCustomView)
-      dispatch(createJobCustomView({ payload: newCustomView, navigate: navigate }));
+      dispatch(
+        createJobCustomView({ payload: newCustomView, navigate: navigate })
+      );
     }
   };
 
