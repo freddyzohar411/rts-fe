@@ -23,6 +23,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [abortController, setAbortController] = useState(null);
+  const [customQuery, setCustomQuery] = useState(null);
 
     // Custom renders
     const customRenderList = [
@@ -30,7 +31,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         names: ["candidateSubmissionData.firstName"],
         render: (data, opt) => (
           <Link
-            to={`/candidates/${data?.id}/snapshot`}
             className="text-custom-primary text-decoration-underline"
             onClick={() => {
               const win = window.open(
@@ -111,6 +111,12 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       const newAbortController = new AbortController();
       setAbortController(newAbortController);
       const jobPageRequest = { ...pageRequest, jobId: selectedRowData?.id };
+      if (customQuery) {
+        console.log("I have a custom query", customQuery)
+        jobPageRequest.customQuery = customQuery;
+      } else {
+        delete jobPageRequest.customQuery;
+      }
       dispatch(
         candidateRecommendationList(
           DynamicTableHelper.cleanPageRequest(jobPageRequest),
@@ -127,7 +133,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       setAbortController(null);
       dispatch(resetCandidateRecommendationList());
     }
-  }, [pageRequest, selectedRowData?.id, tagOffcanvas]);
+  }, [pageRequest, selectedRowData?.id, tagOffcanvas, customQuery]);
 
   const handleTag = (candidateId) => {
     const payload = {
@@ -211,21 +217,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
               candidateId={data?.id}
               jobId={selectedRowData?.id}
             />
-
-            // <Link
-            //   to=""
-            //   className="text-custom-primary text-decoration-underline"
-            //   onClick={() => {
-            //     const win = window.open(
-            //       `/candidates/${data?.id}/snapshot`,
-            //       "_blank"
-            //     );
-            //     win.focus();
-            //   }}
-            // >
-            //   <span>{data?.candidateSubmissionData?.firstName}</span>
-            // </Link>
-
           );
         },
       },
@@ -271,6 +262,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       optGroup={candidatesFields}
       setCustomConfigData={setCustomConfigData}
       handleTagAll={handleTagAll}
+      setCustomQuery={setCustomQuery}
     />
   );
 };
