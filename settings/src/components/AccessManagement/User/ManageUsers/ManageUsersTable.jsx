@@ -221,7 +221,6 @@ function ManageUsersTable({
 
   // submitting all the data in the current table
   const handleSubmitAll = async () => {
-    console.log("Submitting:", selectedUserData);
     try {
       const submissionPromises = selectedUserData.map((userData) => {
         return new Promise((resolve, reject) => {
@@ -244,7 +243,6 @@ function ManageUsersTable({
     } catch (error) {
       setFormError(true);
     }
-    console.log(submittedForms);
   };
 
   useEffect(() => {
