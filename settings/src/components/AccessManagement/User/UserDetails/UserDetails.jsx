@@ -11,14 +11,13 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Button,
-  Modal,
-  ModalBody,
-  ModalHeader,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchUser, deleteUser } from "../../../../store/users/action";
 import { Axios } from "@workspace/common";
+import DualListBox from "react-dual-listbox";
+import { fetchGroups } from "../../../../store/group/action";
 const { APIClient } = Axios;
 const api = new APIClient();
 
@@ -26,7 +25,8 @@ function UserDetails() {
   const { userId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [modal, setModal] = useState(false);
+  const [formattedGroups, setFormattedGroups] = useState([]);
+  const [selectedGroups, setSelectedGroups] = useState([]);
 
   // Fetch User Details
   useEffect(() => {
@@ -35,14 +35,31 @@ function UserDetails() {
     }
   }, [userId]);
 
+  useEffect(() => {
+    dispatch(fetchGroups());
+  }, []);
+
   const user = useSelector((state) => state.UserReducer.user);
+  const allGroups = useSelector((state) => state?.GroupReducer?.groups);
 
   // Document Title
   useEffect(() => {
     if (user) {
-      document.title = `${user?.firstName} ${user?.lastName} | RTS`;
+      document.title = `${user?.firstName} ${user?.lastName} Details | RTS`;
+      const existingUsers = user?.userGroup?.map((user) => user?.id);
+      setSelectedGroups(existingUsers);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (allGroups?.length) {
+      const groupsData = allGroups?.map((group) => ({
+        value: group?.id,
+        label: group?.userGroupName,
+      }));
+      setFormattedGroups(groupsData);
+    }
+  }, [allGroups]);
 
   return (
     <React.Fragment>
@@ -145,6 +162,61 @@ function UserDetails() {
                             : "-"}
                         </span>
                       </div>
+                    </Col>
+                  </Row>
+                  <Row className="mb-2">
+                    <div className="d-flex flex-row justify-content-around fw-semibold">
+                      <span>All Groups</span>
+                      <span>Assigned Groups</span>
+                    </div>
+                  </Row>
+                  <Row className="mb-3">
+                    <Col>
+                      <DualListBox
+                        options={formattedGroups}
+                        selected={selectedGroups}
+                        onChange={(e) => setSelectedGroups(e)}
+                        canFilter={true}
+                        disabled={true}
+                        icons={{
+                          moveLeft: (
+                            <span className="mdi mdi-chevron-left" key="key" />
+                          ),
+                          moveAllLeft: [
+                            <span
+                              className="mdi mdi-chevron-double-left"
+                              key="key"
+                            />,
+                          ],
+                          moveRight: (
+                            <span className="mdi mdi-chevron-right" key="key" />
+                          ),
+                          moveAllRight: [
+                            <span
+                              className="mdi mdi-chevron-double-right"
+                              key="key"
+                            />,
+                          ],
+                          moveDown: (
+                            <span className="mdi mdi-chevron-down" key="key" />
+                          ),
+                          moveUp: (
+                            <span className="mdi mdi-chevron-up" key="key" />
+                          ),
+                          moveTop: (
+                            <span
+                              className="mdi mdi-chevron-double-up"
+                              key="key"
+                            />
+                          ),
+                          moveBottom: (
+                            <span
+                              className="mdi mdi-chevron-double-down"
+                              key="key"
+                            />
+                          ),
+                        }}
+                      />
                     </Col>
                   </Row>
                 </CardBody>
