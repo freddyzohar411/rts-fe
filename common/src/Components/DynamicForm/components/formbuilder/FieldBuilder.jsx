@@ -914,6 +914,10 @@ const FieldBuilder = ({
         tableData: [],
       },
       apply: ["table"],
+      tableDataTypes:[
+        { label: "File Download", value: "fileDownload" },
+        { label: "File Download & Preview", value: "fileDownloadPreview" },
+      ]
     },
     {
       label: "Table Setting",
@@ -2379,11 +2383,9 @@ const FieldBuilder = ({
                               );
                             })}
                           </select>
-                          <input
-                            id="configRender"
-                            name="configRender"
-                            type="text"
-                            className="form-control"
+                          <select
+                            className="form-select"
+                            value={config.render}
                             onChange={(e) =>
                               setTableConfig((prev) =>
                                 prev.map((config, i) =>
@@ -2393,9 +2395,14 @@ const FieldBuilder = ({
                                 )
                               )
                             }
-                            value={config.render}
-                            placeholder="Render"
-                          />
+                          >
+                            <option value="">Select a type</option>
+                            {field?.tableDataTypes.map((tableData) => {
+                              return (
+                                <option value={tableData?.value}>{tableData?.label}</option>
+                              );
+                            })}
+                          </select>
                           <span>
                             <AiFillDelete
                               className="cursor-pointer text-custom-primary"

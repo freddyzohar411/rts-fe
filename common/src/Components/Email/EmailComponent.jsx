@@ -70,17 +70,13 @@ function EmailComponent() {
         attachmentSubcategory
       )
         .then((res) => setAttachmentTemplates(res.data))
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
       return;
     }
     if (attachmentCategory) {
       BackendHelper.getTemplatesByCategory(attachmentCategory)
         .then((res) => setAttachmentTemplates(res.data))
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   }, [attachmentCategory, attachmentSubcategory]);
 
@@ -219,24 +215,6 @@ function EmailComponent() {
     window.URL.revokeObjectURL(url);
     a.remove();
   };
-  //   const processedContent = await TemplateHelper.runEffects(
-  //     templateContent,
-  //     null,
-  //     allData,
-  //     true
-  //   );
-  //   const removeEditableContent =
-  //     TemplateHelper.removeContentEditableAndStyles(processedContent);
-
-  //   const convertTableAttributesContent =
-  //     TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
-
-  //   const convertInlineStylesContent =
-  //     TemplateHelper.convertInlineStylesToClasses(
-  //       convertTableAttributesContent
-  //     );
-  //   return convertInlineStylesContent;
-  // };
 
   const attachmentTemplate = async (id) => {
     const filterTemplate = attachmentTemplates.find(
@@ -270,7 +248,6 @@ function EmailComponent() {
         setAttachments([...attachments, file]);
       }
     } catch (error) {
-      console.log(error);
     } finally {
       setAttachmentLoading(false);
     }

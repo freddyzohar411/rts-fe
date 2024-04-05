@@ -40,6 +40,7 @@ import { RECRUITER_GROUP } from "../../helpers/constant";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import { truncate } from "@workspace/common/src/helpers/string_helper";
+import { DateHelper, DynamicTableHelper } from "@workspace/common";
 
 const DynamicTableWrapper = ({
   data,
@@ -55,6 +56,18 @@ const DynamicTableWrapper = ({
   handleTableViewChange,
   operations,
 }) => {
+  // ================== Custom Render ==================
+  const customRenderList = [
+    {
+      names: ["updatedAt", "createdAt"],
+      render: (data, opt) =>
+        DateHelper.formatDateStandard2(
+          DynamicTableHelper.getDynamicNestedResultForExport(data, opt?.name) ||
+            ""
+        ),
+    },
+  ];
+  // ==================================================
   const { Permission, checkAllPermission } = useUserAuth();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletingCustomViewId, setDeletingCustomViewId] = useState(null);
@@ -310,6 +323,15 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             className="btn btn-custom-primary d-flex align-items-center header-btn"
+                            onClick={() =>
+                              DynamicTableHelper.handleExportExcel(
+                                "Jobs",
+                                data,
+                                config.slice(2, -1),
+                                customRenderList,
+                                true
+                              )
+                            }
                           >
                             <span>
                               <i className="mdi mdi-download me-1"></i>
