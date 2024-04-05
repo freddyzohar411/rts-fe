@@ -45,7 +45,8 @@ const JobListing = () => {
   const navigate = useNavigate();
   const { jobType } = useParams();
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
-  const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
+  const jobsFields = useSelector((state) => state?.JobListReducer?.jobsFields);
+
   const recruiterGroup = useSelector(
     (state) => state.JobListReducer.recruiterGroup
   );

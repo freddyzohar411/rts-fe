@@ -30,3 +30,6 @@ export const BASE_CANDIDATE_EDUCATION_DETAILS = "/api/education-details";
 
 // Resume Parsing
 export const BASE_RESUME_PARSING = "/api/resumes";
+
+// Custom View
+export const BASE_CANDIDATE_CUSTOM_VIEW = "/api/candidates";

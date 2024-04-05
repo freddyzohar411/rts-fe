@@ -8,7 +8,11 @@ import {
   CREATE_JOB_DOCUMENTS,
   FETCH_JOB_DATA,
   FETCH_JOBS_FIELDS_ALL,
-  CLONE_JOB
+  CLONE_JOB,
+  CREATE_JOB_CUSTOM_VIEW,
+  FETCH_JOB_CUSTOM_VIEW,
+  SELECT_JOB_CUSTOM_VIEW,
+  DELETE_JOB_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -23,7 +27,17 @@ import {
   fetchJobDataFailure,
   fetchJobsFieldsAllSuccess,
   fetchJobsFieldsAllFailure,
-  cloneJobSuccess, cloneJobFailure
+  cloneJobSuccess,
+  cloneJobFailure,
+  createJobCustomViewSuccess,
+  createJobCustomViewFailure,
+  fetchJobCustomViewSuccess,
+  fetchJobCustomViewFailure,
+  selectJobCustomViewSuccess,
+  selectJobCustomViewFailure,
+  fetchJobCustomView,
+  deleteJobCustomViewSuccess,
+  deleteJobCustomViewFailure,
 } from "./action";
 import {
   getJobs,
@@ -35,6 +49,10 @@ import {
   updateJob,
   getJobDataById,
   getJobsFieldsAll,
+  createJobCustomView,
+  getJobCustomViews,
+  selectJobCustomView,
+  deleteJobCustomView
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
@@ -84,10 +102,10 @@ function* workCloneJob(action) {
     yield put(cloneJobSuccess(response.data));
     toast.success(response.message);
     const jobId = response.data.id;
-    navigate(`/jobs/${jobId}/snapshot`)
+    navigate(`/jobs/${jobId}/snapshot`);
   } catch (error) {
-    yield put(cloneJobFailure(error))
-    toast.error(error.message)
+    yield put(cloneJobFailure(error));
+    toast.error(error.message);
   }
 }
 
@@ -133,6 +151,59 @@ function* workFetchJobsFieldsAll(action) {
   }
 }
 
+function* workFetchJobCustomViews() {
+  try {
+    const response = yield call(getJobCustomViews);
+    yield put(fetchJobCustomViewSuccess(response.data));
+  } catch (error) {
+    yield put(fetchJobCustomViewFailure(error));
+  }
+}
+
+function* workCreateJobCustomView(action) {
+  const { payload, navigate } = action.payload;
+  try {
+    const jobCustomViewResponse = yield call(createJobCustomView, payload);
+    yield put(createJobCustomViewSuccess(jobCustomViewResponse));
+    yield put(fetchJobCustomView());
+    toast.success("Job custom view created successfully!");
+    navigate("/jobs");
+  } catch (error) {
+    yield put(createJobCustomViewFailure(error));
+    toast.error(error?.message);
+  }
+}
+
+function* workSelectJobCustomView(action) {
+  const { id } = action.payload;
+  try {
+    const response = yield call(selectJobCustomView, id);
+    yield put(selectJobCustomViewSuccess(response.data));
+    yield put(fetchJobCustomView());
+    toast.success("Job custom view selected successfully!");
+  } catch (error) {
+    yield put(selectJobCustomViewFailure(error));
+    if (error.response && error.response.status === 409) {
+      toast.error("Job custom view name already exists.");
+    } else {
+      toast.error("Error creating job custom view!");
+    }
+  }
+}
+
+function* workDeleteJobCustomView(action) {
+  const { id } = action.payload;
+  try {
+    const response = yield call(deleteJobCustomView, id);
+    yield put(deleteJobCustomViewSuccess(response.data));
+    yield put(fetchJobCustomView());
+    toast.success("Job custom view deleted successfully!");
+  } catch (error) {
+    yield put(deleteJobCustomViewFailure(error));
+    toast.error("Error deleting job custom view!");
+  }
+}
+
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
@@ -141,4 +212,8 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB_DATA, workFetchJobData);
   yield takeEvery(FETCH_JOBS_FIELDS_ALL, workFetchJobsFieldsAll);
   yield takeEvery(CLONE_JOB, workCloneJob);
+  yield takeEvery(CREATE_JOB_CUSTOM_VIEW, workCreateJobCustomView);
+  yield takeEvery(FETCH_JOB_CUSTOM_VIEW, workFetchJobCustomViews);
+  yield takeEvery(SELECT_JOB_CUSTOM_VIEW, workSelectJobCustomView);
+  yield takeEvery(DELETE_JOB_CUSTOM_VIEW, workDeleteJobCustomView);
 }
