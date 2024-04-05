@@ -37,7 +37,7 @@ export const overviewValues = (data, deliveryTeam, isMobile) => {
       trimValue: trimValue(data?.accountOwner, isMobile),
     },
     Recruiter: {
-      value: deliveryTeam,
+      value: deliveryTeam?.join(", ") ?? "N/A",
       trimValue: trimValue(deliveryTeam?.join(", "), isMobile),
     },
     "Man Days": {

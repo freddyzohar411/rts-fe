@@ -97,6 +97,7 @@ const JobOverview = () => {
 
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
+  const [tooltipIndexes, setTooltipIndexes] = useState();
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -594,6 +595,35 @@ const JobOverview = () => {
     );
   };
 
+  /**
+   * @author Rahul Sahu
+   * @param {*} targetName
+   * Toggle tooltip
+   */
+  const toggle = (targetName) => {
+    if (!tooltipIndexes?.[targetName]) {
+      setTooltipIndexes({
+        ...tooltipIndexes,
+        [targetName]: {
+          tooltipOpen: true,
+        },
+      });
+    } else {
+      setTooltipIndexes({
+        ...tooltipIndexes,
+        [targetName]: {
+          tooltipOpen: !tooltipIndexes?.[targetName]?.tooltipOpen,
+        },
+      });
+    }
+  };
+
+  const isToolTipOpen = (targetName) => {
+    return tooltipIndexes?.[targetName]
+      ? tooltipIndexes?.[targetName]?.tooltipOpen
+      : false;
+  };
+
   return (
     <React.Fragment>
       <div>
@@ -608,20 +638,20 @@ const JobOverview = () => {
             return (
               <Col key={index}>
                 <div
-                  className="d-flex flex-column"
-                  id="headerInfo"
+                  className="d-flex flex-column cursor-pointer"
+                  id={`btn-${index}`}
                   onClick={() => setHeaderTooltip(!headerTooltip)}
                 >
                   <span className="fw-medium h6 text-muted">{header}</span>
-                  <span className="cursor-pointer h5 fw-bold gap-1 text-nowrap">
+                  <span className="h5 fw-bold gap-1 text-nowrap">
                     {values?.[header]?.trimValue}
                   </span>
                 </div>
                 <Tooltip
-                  target="headerInfo"
-                  placement="bottom"
-                  isOpen={headerTooltip}
-                  toggle={() => setHeaderTooltip(!headerTooltip)}
+                  isOpen={isToolTipOpen(`btn-${index}`)}
+                  placement="bottom-start"
+                  target={`btn-${index}`}
+                  toggle={() => toggle(`btn-${index}`)}
                 >
                   {values?.[header]?.value}
                 </Tooltip>
