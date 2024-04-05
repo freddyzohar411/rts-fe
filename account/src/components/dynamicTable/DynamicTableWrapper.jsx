@@ -18,11 +18,11 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
-import DualListBox from "react-dual-listbox";
 import { ACCOUNT_INITIAL_OPTIONS } from "../../pages/AccountListing/accountListingConstants";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
+import { DateHelper, DynamicTableHelper } from "@workspace/common";
 import {
   fetchAccountCustomView,
   selectAccountCustomView,
@@ -42,12 +42,29 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   confirmDelete,
 }) => {
+  // ================== Custom Render ==================
+  const customRenderList = [
+    {
+      names: ["updatedAt", "createdAt"],
+      render: (data, opt) =>
+        DateHelper.formatDateStandard2(
+          DynamicTableHelper.getDynamicNestedResultForExport(data, opt?.name) ||
+            ""
+        ),
+    },
+  ];
+  // ==================================================
   const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);
+  const [selectedOptGroup, setSelectedOptGroup] = useState(
+    ACCOUNT_INITIAL_OPTIONS
+  );
+  const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
   const dispatch = useDispatch();
   const [customViewDropdownOpen, setCustomViewDropdownOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletingCustomViewId, setDeletingCustomViewId] = useState(null);
+
   const accountsMeta = useSelector(
     (state) => state.AccountReducer.accountsMeta
   );
@@ -128,6 +145,15 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             className="btn btn-custom-primary d-flex align-items-center header-btn"
+                            onClick={() =>
+                              DynamicTableHelper.handleExportExcel(
+                                "Accounts",
+                                data,
+                                config.slice(2, -1),
+                                customRenderList,
+                                true
+                              )
+                            }
                           >
                             <span>
                               <i className="mdi mdi-download me-1"></i>

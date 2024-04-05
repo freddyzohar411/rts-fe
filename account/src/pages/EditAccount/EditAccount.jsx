@@ -88,6 +88,11 @@ const EditAccount = () => {
    */
   useEffect(() => {
     if (form) {
+      if (step === 0) {
+        const formEdited = setEnityInfo(form);
+        setFormTemplate(formEdited);
+        return;
+      }
       if (step === 1) {
         const formEdited = setTableAPI(
           form,
@@ -149,6 +154,20 @@ const EditAccount = () => {
     });
     return newForm;
   };
+
+  // Set entity info for file upload to the form schema
+  const setEnityInfo = (form) => {
+    const newForm = JSON.parse(JSON.stringify(form));
+    newForm?.formSchema?.forEach((field) => {
+      if (field.type === "file") {
+        field.entityInfo = {
+          entityId: accountId,
+          entityType: AccountEntityConstant.ACCOUNT_ACCOUNT,
+        };
+      }
+    });
+    return newForm;
+  }
 
   /**
    * Fetch form submission data if there is a draft account
@@ -392,8 +411,9 @@ const EditAccount = () => {
         );
       }
 
-      if (buttonName === "cancel" && !editData) {
-        resetForm();
+       // Cancel add document and reset form
+       if (buttonName === "cancel" && !editData) {
+        resetForm([], "create");
         return;
       }
 
@@ -604,6 +624,7 @@ const EditAccount = () => {
           resetStepper={resetStepper}
           toggleFormViewState={toggleFormViewState}
           viewState={view}
+          setStep={setStep}
         >
           <Form
             template={formTemplate}

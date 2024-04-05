@@ -89,9 +89,7 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
         );
         setCategories(getKeysArrayFromObj(res.data));
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   const convertObjectToArrayFilter = (obj, exlcude = []) => {

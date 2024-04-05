@@ -23,6 +23,7 @@ import { CANDIDATE_INITIAL_OPTIONS } from "../../pages/CandidateListing/candidat
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
+import { DateHelper, DynamicTableHelper } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchCandidateCustomView,
@@ -44,6 +45,18 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   confirmDelete,
 }) => {
+  // ================== Custom Render ==================
+  const customRenderList = [
+    {
+      names: ["updatedAt", "createdAt"],
+      render: (data, opt) =>
+        DateHelper.formatDateStandard2(
+          DynamicTableHelper.getDynamicNestedResultForExport(data, opt?.name) ||
+            ""
+        ),
+    },
+  ];
+  // ==================================================
   const { Permission, checkAllPermission } = useUserAuth();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletingCustomViewId, setDeletingCustomViewId] = useState(null);
@@ -81,7 +94,11 @@ const DynamicTableWrapper = ({
       const selectedCustomView = allCandidateCustomViews?.find(
         (customView) => customView?.selected
       );
-      if (selectedCustomView && Array.isArray(optGroup) && optGroup.length > 0) {
+      if (
+        selectedCustomView &&
+        Array.isArray(optGroup) &&
+        optGroup.length > 0
+      ) {
         const selectedGroup = selectedCustomView?.columnName?.split(",");
         const selectedObjects = selectedGroup?.map((value) => {
           return optGroup?.find((option) => option?.value === value);
@@ -127,6 +144,15 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             className="btn btn-custom-primary d-flex align-items-center header-btn"
+                            onClick={() =>
+                              DynamicTableHelper.handleExportExcel(
+                                "Candidates",
+                                data,
+                                config.slice(2, -1),
+                                customRenderList,
+                                true
+                              )
+                            }
                           >
                             <span>
                               <i className="mdi mdi-download me-1"></i>

@@ -14,6 +14,7 @@ const FormStepper = ({
   resetStepper,
   toggleFormViewState,
   viewState,
+  setStep
 }) => {
   const { Permission, checkAllPermission } = useUserAuth();
 
@@ -61,7 +62,7 @@ const FormStepper = ({
   return (
     <Card>
       <Container fluid>
-        <AccountStepper step={activeStep} />
+        <AccountStepper step={activeStep} setStep={setStep} />
         <div className="px-3"> {children}</div>
         <div
           className={`d-flex ${

@@ -9,7 +9,16 @@ import {
   Table,
   FormFeedback,
   Alert,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Spinner,
 } from "reactstrap";
+import FilePreview from "../../FilePreview/FilePreview";
+import { toast } from "react-toastify";
+import * as FileHelper from "../../../helpers/file_helper";
+import * as BackendHelper from "../../../helpers/backend_helper";
 
 const TableElement = ({
   formik,
@@ -28,6 +37,8 @@ const TableElement = ({
     field?.tableSettings ? field.tableSettings : {}
   );
   const [table, setTable] = useState(field.tableData || []);
+  const [filePreview, setFilePreview] = useState(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   useEffect(() => {
     setFormFieldTableData(table);
@@ -112,7 +123,6 @@ const TableElement = ({
     formik?.setTouched({});
     formik?.setErrors({});
 
- 
     // Set tabled edit id in form field
     // const newFormFields = [...formFields];
     const newFormFields = JSON.parse(JSON.stringify(formFields));
@@ -121,6 +131,16 @@ const TableElement = ({
         formField.tableSetting = {
           ...formField.tableSetting,
           tableEditId: row.id,
+        };
+      }
+    });
+
+    // Check for file and set entity info
+    newFormFields.forEach((field) => {
+      if (field.type === "file") {
+        field.entityInfo = {
+          entityId: row.id,
+          entityType: row.entityType,
         };
       }
     });
@@ -182,9 +202,22 @@ const TableElement = ({
             table?.map((row, rowIndex) => {
               return (
                 <tr key={rowIndex}>
-                  {tableConfig.map((item, index) => (
-                    <td key={index}>{row?.data?.[item?.name]}</td>
-                  ))}
+                  {tableConfig.map((item, index) => {
+                    return (
+                      <td key={index}>
+                        <div className="d-flex align-items-center gap-3">
+                          <span> {row?.data?.[item?.name]}</span>
+                          {item?.render === "fileDownloadPreview" && (
+                            <PreviewButton item={item} row={row} />
+                          )}
+                          {(item?.render === "fileDownloadPreview" ||
+                            item?.render === "fileDownload") && (
+                            <DownloadButton item={item} row={row} />
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                   {tableSetting.tableEdit === "true" ||
                     (tableSetting.tableEdit === true &&
                       formState !== "view" && (
@@ -222,3 +255,157 @@ const TableElement = ({
 };
 
 export default TableElement;
+
+// Seperate Components
+
+const PreviewButton = ({ item, row }) => {
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [filePreview, setFilePreview] = useState(null);
+
+  const handlePreview = async (itemIn, data) => {
+    try {
+      setPreviewLoading(true);
+      let documentData = null;
+      if (itemIn?.entityType && itemIn?.entityId) {
+        const res = await BackendHelper.downloadDocumentByEntityAndId({
+          entityType: itemIn?.entityType,
+          entityId: itemIn?.entityId,
+        });
+        documentData = res.data;
+      } else {
+        const res = await BackendHelper.downloadDocumentById(data?.id);
+        documentData = res.data;
+      }
+      const ext = documentData?.fileName.split(".").pop();
+
+      if (ext == "docx" || ext == "doc" || ext == "xlsx" || ext == "xls") {
+        // Convert to formdata
+        const formData = new FormData();
+        formData.append(
+          "docFile",
+          FileHelper.base64ToFile(
+            documentData?.encodedFile,
+            documentData?.fileName
+          )
+        );
+
+        const convertedData = await BackendHelper.convertMsDocToPdf(formData);
+        const docData = convertedData.data;
+        const pdfName = docData?.fileName?.split(".")[0] + ".pdf";
+        const file = await FileHelper.base64ToFile(
+          docData?.encodedFile,
+          pdfName
+        );
+        setFilePreview(file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      if (ext == "pdf") {
+        const file = FileHelper.base64ToFile(
+          documentData?.encodedFile,
+          documentData?.fileName
+        );
+        setFilePreview(file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      toast.error("File format not supported for preview.");
+    } catch (e) {
+    } finally {
+      setPreviewLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Modal
+        isOpen={showPreviewModal}
+        closeModal={() => {
+          setShowPreviewModal(false);
+        }}
+        centered
+        scrollable
+        size="xl"
+      >
+        <ModalHeader
+          className="bg-primary pb-3"
+          toggle={() => setShowPreviewModal(false)}
+        >
+          <div className="d-flex flex-column text-dark">
+            <span className="h5 fw-bold">Document Preview</span>
+          </div>
+        </ModalHeader>
+        <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
+          <FilePreview file={filePreview} />
+        </ModalBody>
+      </Modal>
+      <Button
+        type="button"
+        className="btn btn-secondary px-2 py-1"
+        title="Preview"
+        onClick={() => handlePreview(item, row)}
+      >
+        {previewLoading ? (
+          <Spinner size="sm" />
+        ) : (
+          <span className=" ri-eye-line" style={{ fontSize: "0.8rem" }}></span>
+        )}
+      </Button>
+    </>
+  );
+};
+
+const DownloadButton = ({ item, row }) => {
+  const [downloadLoading, setDownloadLoading] = useState(false);
+
+  const handleDownload = async (itemIn, data) => {
+    try {
+      setDownloadLoading(true);
+      let documentData = null;
+      if (itemIn?.entityType && itemIn?.entityId) {
+        const res = await BackendHelper.downloadDocumentByEntityAndId({
+          entityType: itemIn?.entityType,
+          entityId: itemIn?.entityId,
+        });
+        documentData = res.data;
+      } else {
+        const res = await BackendHelper.downloadDocumentById(data?.id);
+        documentData = res.data;
+      }
+
+      if (!documentData?.encodedFile) {
+        toast.error("File not found.");
+        return;
+      }
+
+      FileHelper.downloadBase64File(
+        documentData?.encodedFile,
+        documentData?.fileName
+      );
+    } catch (e) {
+    } finally {
+      setDownloadLoading(false);
+    }
+  };
+
+  return (
+    <Button
+      type="button"
+      className="btn btn-custom-primary px-2 py-1"
+      onClick={() => handleDownload(item, row)}
+      title="Download"
+    >
+      {downloadLoading ? (
+        <Spinner size="sm" />
+      ) : (
+        <span
+          className="ri-file-download-line"
+          style={{ fontSize: "0.8rem" }}
+        ></span>
+      )}
+    </Button>
+  );
+};

@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+import * as XLSX from 'xlsx';
 
 /**
  * Method to check file format is valid or not
@@ -62,10 +63,71 @@ const displayFileSize = (size) => {
 
 const getFilenameNoExtension = (file) => {
   return file.name.split(".").slice(0, -1).join(".");
-}
+};
 
 const getFileExtension = (file) => {
   return file.name.split(".").pop();
+};
+
+function base64ToFile(base64String, filename) {
+  // Basic mapping of extensions to MIME types
+  const extensionToMimeTypeMap = {
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    png: "image/png",
+    gif: "image/gif",
+    pdf: "application/pdf",
+    // Add more mappings as needed
+  };
+
+  // Extract the file extension from the filename
+  const extension = filename.split(".").pop().toLowerCase();
+
+  // Attempt to get the MIME type from the mapping, defaulting to 'application/octet-stream'
+  const mimeType =
+    extensionToMimeTypeMap[extension] || "application/octet-stream";
+
+  // Decode the Base64 string to a binary string.
+  const binaryString = window.atob(base64String);
+
+  // Convert the binary string to a typed array.
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  // Create a Blob from the typed array.
+  const blob = new Blob([bytes], { type: mimeType });
+
+  // Convert the Blob into a File.
+  const file = new File([blob], filename, { type: mimeType });
+
+  return file;
+}
+
+function downloadBase64File(base64String, fileName) {
+  const link = document.createElement("a");
+  link.href = `data:application/octet-stream;base64,${base64String}`;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function exportToExcel(data, fileName) {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+
+  // Convert data to worksheet
+  const ws = XLSX.utils.json_to_sheet(data);
+
+  // Add the worksheet to the workbook under a specific name
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+  // Write the workbook and initiate download
+  // Depending on the environment, you might use write or writeFile
+  XLSX.writeFile(wb, `${fileName}.xlsx`);
 }
 
 export {
@@ -75,5 +137,8 @@ export {
   checkFileWithMimeType,
   displayFileSize,
   getFilenameNoExtension,
-  getFileExtension
+  getFileExtension,
+  base64ToFile,
+  downloadBase64File,
+  exportToExcel,
 };
