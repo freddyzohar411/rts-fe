@@ -1,0 +1,11 @@
+import * as yup from "yup";
+
+export const initialValues = {
+  name: "",
+  columnName: [],
+};
+
+export const schema = yup.object().shape({
+  name: yup.string().required("Custom view name is required."),
+  columnName: yup.array().required("Please select as least one column."),
+});

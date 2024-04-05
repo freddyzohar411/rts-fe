@@ -25,6 +25,8 @@ import {
   fetchUsers,
 } from "../../../../store/users/action";
 import { encode } from "@workspace/common/src/helpers/string_helper";
+import DualListBox from "react-dual-listbox";
+import { fetchGroups } from "../../../../store/group/action";
 
 function UpdateUser() {
   const { userId } = useParams();
@@ -38,8 +40,11 @@ function UpdateUser() {
   // Country Dropdown
   const [sortByCountry, setSortByCountry] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [formattedGroups, setFormattedGroups] = useState([]);
+  const [selectedGroups, setSelectedGroups] = useState([]);
   const allUsers = useSelector((state) => state?.UserReducer?.users);
   const user = useSelector((state) => state.UserReducer.user);
+  const allGroups = useSelector((state) => state?.GroupReducer?.groups);
   const allCountries = useSelector(
     (state) => state?.CountryCurrencyReducer?.countryCurrency
   );
@@ -99,11 +104,14 @@ function UpdateUser() {
   useEffect(() => {
     dispatch(fetchUsers());
     dispatch(fetchCountryCurrency());
+    dispatch(fetchGroups());
   }, []);
 
   // Set User Initial Values
   useEffect(() => {
     if (userId && user) {
+      document.title = `${user?.firstName} ${user?.lastName} Update | RTS`;
+
       const fetchInitialValues = {
         firstName: user?.firstName,
         lastName: user?.lastName,
@@ -118,17 +126,24 @@ function UpdateUser() {
         location: user?.location,
         country: user?.country,
         status: user?.status ? "true" : "false",
+        groups: selectedGroups,
       };
       setUserInitialValues(populateForm(fetchInitialValues));
+
+      const existingGroups = user?.userGroup?.map((user) => user?.id);
+      setSelectedGroups(existingGroups);
     }
   }, [user]);
 
-  // Document Title
   useEffect(() => {
-    if (userId) {
-      document.title = `${user?.firstName} ${user?.lastName} Update | RTS`;
+    if (allGroups?.length) {
+      const groupsData = allGroups?.map((group) => ({
+        value: group?.id,
+        label: group?.userGroupName,
+      }));
+      setFormattedGroups(groupsData);
     }
-  }, []);
+  }, [allGroups]);
 
   // Handle Submit Button
   const handleSubmit = async (values) => {
@@ -147,6 +162,7 @@ function UpdateUser() {
       location: values.location,
       country: values.country,
       status: values.status === "true" ? true : false,
+      groups: selectedGroups,
     };
     dispatch(updateUser({ updatedUser, navigate: navigate }));
   };
@@ -493,6 +509,81 @@ function UpdateUser() {
                                 </FormFeedback>
                               )}
                             </div>
+                          </Col>
+                        </Row>
+                        <Row className="mb-3">
+                          <div className="d-flex flex-column gap-1">
+                            <span className="h6 fw-bold">Select Group</span>
+                            <span className="text-muted">
+                              Groups will determine the roles that this user
+                              will be assigned to.
+                            </span>
+                          </div>
+                        </Row>
+                        <Row className="mb-2">
+                          <div className="d-flex flex-row justify-content-around fw-semibold">
+                            <span>All Groups</span>
+                            <span>Assigned Groups</span>
+                          </div>
+                        </Row>
+                        <Row className="mb-3">
+                          <Col>
+                            <DualListBox
+                              options={formattedGroups}
+                              selected={selectedGroups}
+                              onChange={(e) => setSelectedGroups(e)}
+                              canFilter={true}
+                              icons={{
+                                moveLeft: (
+                                  <span
+                                    className="mdi mdi-chevron-left"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllLeft: [
+                                  <span
+                                    className="mdi mdi-chevron-double-left"
+                                    key="key"
+                                  />,
+                                ],
+                                moveRight: (
+                                  <span
+                                    className="mdi mdi-chevron-right"
+                                    key="key"
+                                  />
+                                ),
+                                moveAllRight: [
+                                  <span
+                                    className="mdi mdi-chevron-double-right"
+                                    key="key"
+                                  />,
+                                ],
+                                moveDown: (
+                                  <span
+                                    className="mdi mdi-chevron-down"
+                                    key="key"
+                                  />
+                                ),
+                                moveUp: (
+                                  <span
+                                    className="mdi mdi-chevron-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveTop: (
+                                  <span
+                                    className="mdi mdi-chevron-double-up"
+                                    key="key"
+                                  />
+                                ),
+                                moveBottom: (
+                                  <span
+                                    className="mdi mdi-chevron-double-down"
+                                    key="key"
+                                  />
+                                ),
+                              }}
+                            />
                           </Col>
                         </Row>
                       </CardBody>

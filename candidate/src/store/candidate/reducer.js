@@ -40,6 +40,18 @@ import {
   IMPORT_CANDIDATE_MULTI_SUCCESS,
   IMPORT_CANDIDATE_MULTI_FAILURE,
   SET_PARSE_AND_IMPORT_LOADING,
+  CREATE_CANDIDATE_CUSTOM_VIEW,
+  CREATE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
+  CREATE_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  FETCH_CANDIDATE_CUSTOM_VIEW,
+  FETCH_CANDIDATE_CUSTOM_VIEW_SUCCESS,
+  FETCH_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  SELECT_CANDIDATE_CUSTOM_VIEW,
+  SELECT_CANDIDATE_CUSTOM_VIEW_SUCCESS,
+  SELECT_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  DELETE_CANDIDATE_CUSTOM_VIEW,
+  DELETE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
+  DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -64,6 +76,8 @@ const initialState = {
   importLoading: false,
   importMultiLoading: false,
   parseAndImportLoading: false,
+  candidateCustomView: {},
+  candidateCustomViews: [],
 };
 
 const CandidateReducer = (state = initialState, action) => {
@@ -327,6 +341,87 @@ const CandidateReducer = (state = initialState, action) => {
         ...state,
         parseAndImportLoading: action.payload,
       };
+    // Create Custom View
+    case CREATE_CANDIDATE_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case CREATE_CANDIDATE_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidateCustomView: action.payload,
+      };
+    case CREATE_CANDIDATE_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    // Fetch Custom View
+    case FETCH_CANDIDATE_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_CANDIDATE_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidateCustomViews: action.payload,
+      };
+    case FETCH_CANDIDATE_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    // Select Custom View
+    case SELECT_CANDIDATE_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case SELECT_CANDIDATE_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidateCustomView: action.payload,
+      };
+    case SELECT_CANDIDATE_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    // Delete Custom View
+    case DELETE_CANDIDATE_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case DELETE_CANDIDATE_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidateCustomView: action.payload,
+      };
+    case DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+
     default:
       return state;
   }

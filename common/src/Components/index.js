@@ -41,6 +41,7 @@ import UiContent from "./Common/UiContent";
 import WebAppsDropdown from "./Common/WebAppsDropdown";
 import FormInput from "./Common/FormInput";
 import FormSelection from "./Common/FormSelection";
+import CustomViewButton from "./Common/CustomViewButton";
 
 // Router
 import withRouter from "./Common/withRouter";
@@ -93,6 +94,8 @@ import MultiInputFormik from "./Elements/MultiInputFormik";
 
 // Import Email Component
 import EmailComponent from "./Email/EmailComponent";
+
+import CustomView from "./CustomView/CustomView";
 
 export {
   BreadCrumb,
@@ -179,4 +182,10 @@ export {
 
   // Export Email Component
   EmailComponent,
+
+  // Custom View
+  CustomView,
+
 };
+
+

@@ -3,9 +3,10 @@ import {
   FETCH_USER,
   FETCH_USERS,
   CREATE_USER,
+  CREATE_USERS,
   DELETE_USER,
   UPDATE_USER,
-  LIST_USERS
+  LIST_USERS,
 } from "./actionTypes";
 import {
   fetchUserSuccess,
@@ -14,21 +15,24 @@ import {
   fetchUsersFailure,
   createUserSuccess,
   createUserFailure,
+  createUsersSuccess,
+  createUsersFailure,
   deleteUserSuccess,
   deleteUserFailure,
   updateUserSuccess,
   updateUserFailure,
   listUsersSuccess,
-  listUsersFailure
+  listUsersFailure,
 } from "./action";
 
 import {
   createUser,
+  createUsers,
   getUser,
   getUsers,
   deleteUser,
   updateUser,
-  listUsers
+  listUsers,
 } from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
@@ -76,6 +80,20 @@ function* workCreateUser(action) {
   }
 }
 
+function* workCreateUsers(action) {
+  const { newUsers, navigate } = action.payload;
+  try {
+    const response = yield call(createUsers, newUsers);
+    const { data } = response;
+    yield put(createUsersSuccess(data));
+    navigate("/settings/access");
+    toast.success("Users mass imported successfully!");
+  } catch (error) {
+    yield put(createUsersFailure(error));
+    toast.error("Users mass import failed! Duplicate entries detected!");
+  }
+}
+
 function* workDeleteUser(action) {
   try {
     const response = yield call(deleteUser, action.payload);
@@ -109,6 +127,7 @@ export default function* watchFetchUserSaga() {
   yield takeEvery(FETCH_USER, workFetchUser);
   yield takeEvery(FETCH_USERS, workFetchUsers);
   yield takeEvery(CREATE_USER, workCreateUser);
+  yield takeEvery(CREATE_USERS, workCreateUsers);
   yield takeEvery(DELETE_USER, workDeleteUser);
   yield takeEvery(UPDATE_USER, workUpdateUser);
   yield takeEvery(LIST_USERS, workListUsers);
