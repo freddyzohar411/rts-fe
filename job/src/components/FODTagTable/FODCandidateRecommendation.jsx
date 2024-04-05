@@ -18,6 +18,8 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
   const [matchData, setMatchData] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  console.log("CA Data", data);
+
   useEffect(() => {
     if (showDetails && candidateId && jobId && !matchData) {
       setLoading(true);
@@ -27,7 +29,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
           setLoading(false);
         })
         .catch((error) => {
-          toast.error("Failed to fetch candidate matching data.")
+          toast.error("Failed to fetch candidate matching data.");
           setLoading(false);
         })
         .finally(() => {
@@ -46,7 +48,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
               color: data.similarityScore > 0.7 ? "#4CAF50" : "#F44336",
             }}
           >
-            {(data.similarityScore * 100).toFixed(2)}% 
+            {(data.similarityScore * 100).toFixed(2)}%
           </span>
         </p>
         <button
@@ -70,7 +72,13 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
           toggle={() => setShowDetails(false)}
         >
           <div className="d-flex flex-column text-dark">
-            <span className="h5 fw-bold">Candidate Job Analysis</span>
+            <span className="h5 fw-bold">
+              Candidate Job Analysis ({` ${data?.firstName} ${data?.lastName} `}
+              )
+            </span>
+            {/* <span className="text-muted" style={{ fontSize: "0.8rem" }}>
+              Candidate Name : {` ${data?.firstName} ${data?.lastName}`}{" "}
+            </span> */}
           </div>
         </ModalHeader>
         <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
@@ -91,16 +99,16 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {matchData?.languageScoreDetails.map(
-                            (detail, index) => (
+                          {matchData?.languageScoreDetails
+                            .sort((a, b) => b.score - a.score)
+                            .map((detail, index) => (
                               <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{detail.job_attribute.trim()}</td>
                                 <td>{detail.candidate_attribute.trim()}</td>
                                 <td>{(detail.score * 100).toFixed(2)}%</td>
                               </tr>
-                            )
-                          )}
+                            ))}
                         </tbody>
                       </Table>
                     </>
@@ -119,28 +127,30 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {matchData?.skillsScoreDetails.map((skill, index) => (
-                            <tr key={index}>
-                              <td>{index + 1}</td>
-                              <td
-                                style={{
-                                  overflowWrap: "break-word",
-                                  wordWrap: "break-word",
-                                }}
-                              >
-                                {skill.job_attribute.trim()}
-                              </td>
-                              <td
-                                style={{
-                                  overflowWrap: "break-word",
-                                  wordWrap: "break-word",
-                                }}
-                              >
-                                {skill.candidate_attribute.trim()}
-                              </td>
-                              <td>{(skill.score * 100).toFixed(2)}%</td>
-                            </tr>
-                          ))}
+                          {matchData?.skillsScoreDetails
+                            .sort((a, b) => b.score - a.score)
+                            .map((skill, index) => (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td
+                                  style={{
+                                    overflowWrap: "break-word",
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  {skill.job_attribute.trim()}
+                                </td>
+                                <td
+                                  style={{
+                                    overflowWrap: "break-word",
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  {skill.candidate_attribute.trim()}
+                                </td>
+                                <td>{(skill.score * 100).toFixed(2)}%</td>
+                              </tr>
+                            ))}
                         </tbody>
                       </Table>
                     </>
@@ -159,8 +169,9 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {matchData?.jobTitleScoreDetails.map(
-                            (detail, index) => (
+                          {matchData?.jobTitleScoreDetails
+                            .sort((a, b) => b.score - a.score)
+                            .map((detail, index) => (
                               <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td
@@ -181,8 +192,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                                 </td>
                                 <td>{(detail.score * 100).toFixed(2)}%</td>
                               </tr>
-                            )
-                          )}
+                            ))}
                         </tbody>
                       </Table>
                     </>
@@ -215,8 +225,9 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {matchData?.generalScoreDetails.map(
-                            (detail, index) => (
+                          {matchData?.generalScoreDetails
+                            .sort((a, b) => b.score - a.score)
+                            .map((detail, index) => (
                               <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td
@@ -237,8 +248,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                                 </td>
                                 <td>{(detail.score * 100).toFixed(2)}%</td>
                               </tr>
-                            )
-                          )}
+                            ))}
                         </tbody>
                       </Table>
                     </>
@@ -257,16 +267,16 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {matchData?.fieldOfStudyScoreDetails.map(
-                            (detail, index) => (
+                          {matchData?.fieldOfStudyScoreDetails
+                            .sort((a, b) => b.score - a.score)
+                            .map((detail, index) => (
                               <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{detail.job_attribute.trim()}</td>
                                 <td>{detail.candidate_attribute.trim()}</td>
                                 <td>{(detail.score * 100).toFixed(2)}%</td>
                               </tr>
-                            )
-                          )}
+                            ))}
                         </tbody>
                       </Table>
                     </>
