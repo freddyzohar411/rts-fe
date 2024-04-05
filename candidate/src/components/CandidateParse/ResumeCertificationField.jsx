@@ -52,10 +52,6 @@ const ResumeCertificationField = ({ section, index }) => {
     // Replace 'targetElementId' with the ID of the element you want to scroll to.
     const id = `last-responsibility-${index}`;
     const targetElement = document.getElementById(id);
-<<<<<<< HEAD
-=======
-
->>>>>>> account-edit-link
     if (targetElement == null) return;
 
     // Scroll to the target element.

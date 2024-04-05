@@ -49,12 +49,9 @@ import {
   GroupUpdate,
   UpdateRole,
   UpdateUser,
-<<<<<<< HEAD
   CustomisationNew,
   MassImportUsers,
   ImportUsers,
-=======
->>>>>>> account-edit-link
 } from "@workspace/settings";
 
 
