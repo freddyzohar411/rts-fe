@@ -17,6 +17,9 @@ import {
   UPDATE_USER,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAILURE,
+  CREATE_USERS,
+  CREATE_USERS_SUCCESS,
+  CREATE_USERS_FAILURE,
 } from "./actionTypes";
 
 // Fetch User
@@ -66,7 +69,7 @@ export const listUsersFailure = (error) => ({
   payload: error,
 });
 
-// Create Users
+// Create User
 export const createUser = (userRequest) => ({
   type: CREATE_USER,
   payload: userRequest,
@@ -79,6 +82,22 @@ export const createUserSuccess = (user) => ({
 
 export const createUserFailure = (error) => ({
   type: CREATE_USER_FAILURE,
+  payload: error,
+});
+
+// Create Users
+export const createUsers = (userRequests) => ({
+  type: CREATE_USERS,
+  payload: userRequests,
+});
+
+export const createUsersSuccess = (users) => ({
+  type: CREATE_USERS_SUCCESS,
+  payload: users,
+});
+
+export const createUsersFailure = (error) => ({
+  type: CREATE_USERS_FAILURE,
   payload: error,
 });
 

@@ -25,6 +25,7 @@ import { fetchRole, removeRole } from "../../../../store/roles/action";
 import { fetchGroups } from "../../../../store/group/action";
 import { fetchModules } from "../../../../store/module/action";
 import { fetchPermissions } from "../../../../store/permissions/action";
+import RolesTab from "../RolesTab";
 
 function ViewRole() {
   const { roleId } = useParams();
