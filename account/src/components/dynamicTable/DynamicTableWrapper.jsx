@@ -20,6 +20,7 @@ import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { DateHelper, DynamicTableHelper } from "@workspace/common";
 
 const DynamicTableWrapper = ({
   data,
@@ -32,14 +33,24 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   confirmDelete,
 }) => {
+  // ================== Custom Render ==================
+  const customRenderList = [
+    {
+      names: ["updatedAt", "createdAt"],
+      render: (data, opt) =>
+        DateHelper.formatDateStandard2(
+          DynamicTableHelper.getDynamicNestedResultForExport(data, opt?.name) ||
+            ""
+        ),
+    },
+  ];
+  // ==================================================
   const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);
   const [selectedOptGroup, setSelectedOptGroup] = useState(
     ACCOUNT_INITIAL_OPTIONS
   );
-
   const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
-
   const accountsMeta = useSelector(
     (state) => state.AccountReducer.accountsMeta
   );
@@ -178,6 +189,15 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             className="btn btn-custom-primary d-flex align-items-center header-btn"
+                            onClick={() =>
+                              DynamicTableHelper.handleExportExcel(
+                                "Accounts",
+                                data,
+                                config.slice(2, -1),
+                                customRenderList,
+                                true
+                              )
+                            }
                           >
                             <span>
                               <i className="mdi mdi-download me-1"></i>

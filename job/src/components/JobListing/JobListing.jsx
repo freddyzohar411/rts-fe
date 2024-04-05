@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingOverlay from "react-loading-overlay";
 import {
   Badge,
   Button,
@@ -30,6 +31,7 @@ import {
   deleteFODReset,
   createJobFODReset,
 } from "../../store/jobList/action";
+import { cloneJob } from "../../store/job/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
 import JobTagCanvas from "./JobTagCanvas";
@@ -40,6 +42,7 @@ import { truncate } from "@workspace/common/src/helpers/string_helper";
 const JobListing = () => {
   const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { jobType } = useParams();
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
@@ -64,6 +67,10 @@ const JobListing = () => {
   const [nestedVisible, setNestedVisible] = useState([]);
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
+  const hasPageRendered = useRef(false);
+
+  const isFOD = gridView === "fod";
+  const showDelete = gridView === "fod" || gridView === "active_jobs";
 
   // Custom renders
   const customRenderList = [
@@ -83,6 +90,15 @@ const JobListing = () => {
       ),
     },
   ];
+
+  // Clone Job Function
+  const handleCloneJob = (cloneJobId) => {
+    const payload = {
+      id: cloneJobId,
+      clone: true,
+    };
+    dispatch(cloneJob({ payload, navigate: navigate }));
+  };
 
   // Table Hooks
   const {
@@ -128,9 +144,16 @@ const JobListing = () => {
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, page: 0, jobType: gridView };
+    const request = { ...pageRequest, jobType: gridView };
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-  }, [pageRequest, gridView]);
+  }, [pageRequest]);
+
+  useEffect(() => {
+    if (hasPageRendered.current) {
+      pageRequestSet.setPage(0);
+    }
+    hasPageRendered.current = true;
+  }, [gridView]);
 
   // Update the page info when job Data changes
   useEffect(() => {
@@ -222,7 +245,7 @@ const JobListing = () => {
 
   // Modal Delete
   const confirmDelete = () => {
-    if (gridView === "fod") {
+    if (isFOD) {
       dispatch(deleteFOD({ jobId: deleteId }));
       setIsDeleteModalOpen(false);
     } else {
@@ -241,7 +264,9 @@ const JobListing = () => {
         sort: false,
         sortValue: "indexing",
         render: (data, index) => (
-          <div className="d-flex column-gap-2">{index + 1}.</div>
+          <div className="d-flex column-gap-2">
+            {pageInfo?.currentPage * pageInfo?.pageSize + (index + 1)}.
+          </div>
         ),
       },
       {
@@ -275,16 +300,16 @@ const JobListing = () => {
           );
         },
       },
-      {
-        name: "badges",
-        sort: false,
-        sortValue: "badges",
-        render: () => (
-          <div className="d-flex column-gap-2">
-            <Badge color="dark">10</Badge>
-          </div>
-        ),
-      },
+      // {
+      //   name: "badges",
+      //   sort: false,
+      //   sortValue: "badges",
+      //   render: () => (
+      //     <div className="d-flex column-gap-2">
+      //       <Badge color="dark">10</Badge>
+      //     </div>
+      //   ),
+      // },
       ...customConfig,
       {
         header: "Action",
@@ -293,7 +318,7 @@ const JobListing = () => {
         sortValue: "action",
         render: (data) => (
           <div className="d-flex column-gap-2">
-            {checkAllPermission([Permission.CANDIDATE_WRITE]) &&
+            {checkAllPermission([Permission.JOB_EDIT]) &&
               gridView === "new_job" && (
                 <Dropdown
                   isOpen={fodAssign[data.id] || false}
@@ -409,7 +434,11 @@ const JobListing = () => {
                 <i className="ri-parent-fill"></i>
               </Button>
             )}
-            <Button className="btn btn-custom-primary table-btn">
+            {/* Clone Button */}
+            <Button
+              className="btn btn-custom-primary table-btn"
+              onClick={() => handleCloneJob(data.id)}
+            >
               <i className="mdi mdi-content-copy"></i>
             </Button>
 
@@ -440,7 +469,7 @@ const JobListing = () => {
                 </Button>
               </Link>
             )}
-            {checkAllPermission([Permission.JOB_DELETE]) && (
+            {checkAllPermission([Permission.JOB_DELETE]) && showDelete && (
               <Button
                 type="button"
                 className="btn btn-danger table-btn"
@@ -462,14 +491,18 @@ const JobListing = () => {
   // ==================================================================
 
   return (
-    <>
+    <LoadingOverlay
+      active={(jobFODMeta?.isLoading || deleteFODMeta?.isLoading) ?? false}
+      spinner
+      text="Please wait..."
+    >
       <DeleteCustomModal
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
         confirmDelete={confirmDelete}
-        header={gridView === "fod" ? "Delete FOD" : "Delete Job"}
+        header={isFOD ? "Delete FOD" : "Delete Job"}
         deleteText={`Are you sure you would like to delete this ${
-          gridView === "fod" ? "fod" : "job"
+          isFOD ? "fod" : "job"
         }?`}
       />
       <DynamicTableWrapper
@@ -499,7 +532,7 @@ const JobListing = () => {
         setTagOffcanvas={setTagOffcanvas}
         selectedRowData={selectedRowData}
       />
-    </>
+    </LoadingOverlay>
   );
 };
 

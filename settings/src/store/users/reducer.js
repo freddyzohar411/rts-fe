@@ -1,3 +1,4 @@
+import { errorMetaData, pendingMetaData, successMetaData } from "@workspace/common";
 import {
   // Fetch User
   FETCH_USER,
@@ -33,6 +34,7 @@ const initialState = {
   user: {},
   users: null,
   usersListing: [],
+  usersListingMeta: {},
   message: "",
   loading: false,
   error: false,
@@ -90,23 +92,21 @@ const UserReducer = (state = initialState, action) => {
     case LIST_USERS:
       return {
         ...state,
-        loading: true,
-        error: false,
+        usersListingMeta: pendingMetaData(),
       };
 
     case LIST_USERS_SUCCESS:
       return {
         ...state,
-        loading: false,
+        usersListingMeta: successMetaData(),
         usersListing: action.payload,
       };
 
     case LIST_USERS_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
+        usersListingMeta: errorMetaData(action.payload),
+        usersListing: [],
       };
 
     // Create User

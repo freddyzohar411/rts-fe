@@ -214,12 +214,28 @@ function ViewRole() {
                                   </tr>
                                 </thead>
                                 <tbody>
+<<<<<<< HEAD
                                   {role?.userGroups?.map((group, index) => (
                                     <tr key={index}>
                                       <td>{group?.userGroupName}</td>
                                       <td>{group?.userGroupDescription}</td>
                                     </tr>
                                   ))}
+=======
+                                  {role?.userGroups &&
+                                  role.userGroups?.length > 0 ? (
+                                    role?.userGroups?.map((group, index) => (
+                                      <tr key={index}>
+                                        <td>{group.userGroupName}</td>
+                                        <td>{group.userGroupDescription}</td>
+                                      </tr>
+                                    ))
+                                  ) : (
+                                    <tr>
+                                      <td colSpan={2}>No groups assigned to this role.</td>
+                                    </tr>
+                                  )}
+>>>>>>> account-edit-link
                                 </tbody>
                               </Table>
                             </Col>

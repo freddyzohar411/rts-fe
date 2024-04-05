@@ -155,29 +155,7 @@ const EditAccount = () => {
     return newForm;
   };
 
-  // #New
-  // useEffect(() => {
-  //   if (accountId) {
-  //     if (step === 0 && form) {
-  //       // If form field has file set entity type and id
-  //       console.log("Step 0")
-  //       const newForm = JSON.parse(JSON.stringify(form));
-  //       newForm?.formSchema?.forEach((field) => {
-  //         if (field.type === "file") {
-  //           field.entityInfo = {
-  //             entityId: accountId,
-  //             entityType: AccountEntityConstant.ACCOUNT_ACCOUNT,
-  //           };
-  //         }
-  //       });
-   
-  //       setFormTemplate(newForm);
-  //       return;
-  //     }
-  //   }
-  // }, [accountId, step, form]);
-
-  // #New
+  // Set entity info for file upload to the form schema
   const setEnityInfo = (form) => {
     const newForm = JSON.parse(JSON.stringify(form));
     newForm?.formSchema?.forEach((field) => {
@@ -189,7 +167,7 @@ const EditAccount = () => {
       }
     });
     return newForm;
-  }
+  };
 
   /**
    * Fetch form submission data if there is a draft account
@@ -433,9 +411,8 @@ const EditAccount = () => {
         );
       }
 
-      if (buttonName === "cancel") {
-        setErrorMessage(null);
-        setButtonName("");
+      // Cancel add document and reset form
+      if (buttonName === "cancel" && !editData) {
         resetForm([], "create");
         return;
       }
@@ -655,6 +632,7 @@ const EditAccount = () => {
           resetStepper={resetStepper}
           toggleFormViewState={toggleFormViewState}
           viewState={view}
+          setStep={setStep}
         >
           <Form
             template={formTemplate}

@@ -1,4 +1,9 @@
 import {
+  errorMetaData,
+  pendingMetaData,
+  successMetaData,
+} from "@workspace/common";
+import {
   CREATE_ROLE,
   CREATE_ROLE_SUCCESS,
   CREATE_ROLE_FAILURE,
@@ -24,6 +29,7 @@ const initialState = {
   role: {},
   roles: [],
   rolesListing: [],
+  rolesListingMeta: {},
   message: "",
   loading: false,
   error: false,
@@ -58,23 +64,21 @@ const RoleReducer = (state = initialState, action) => {
     case LIST_ROLES:
       return {
         ...state,
-        loading: true,
-        error: false,
+        rolesListingMeta: pendingMetaData(),
       };
 
     case LIST_ROLES_SUCCESS:
       return {
         ...state,
-        loading: false,
+        rolesListingMeta: successMetaData(),
         rolesListing: action.payload,
       };
 
     case LIST_ROLES_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
+        rolesListing: [],
+        rolesListingMeta: errorMetaData(action.payload),
       };
 
     // Fetch Roles

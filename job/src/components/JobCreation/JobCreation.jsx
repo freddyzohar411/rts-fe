@@ -64,7 +64,7 @@ const JobCreation = () => {
    */
   useEffect(() => {
     if (form) {
-      // setFormTemplate(JSON.parse(JSON.stringify(form)));
+      // setFormTemplate(form);
       setFormTemplate(form);
     }
   }, [form, view]);

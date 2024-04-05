@@ -34,7 +34,7 @@ function ThirdInterviewFeedbackPending({ closeOffcanvas, jobId, candidateId }) {
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
@@ -57,6 +57,7 @@ function ThirdInterviewFeedbackPending({ closeOffcanvas, jobId, candidateId }) {
       jobType: "third_interview_feedback_pending",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

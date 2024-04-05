@@ -3,6 +3,11 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import { DOCUMENT_BY_ID_URL, DOCUMENTS_BY_ENTITY_URL } from "../../../endpoint";
 import axios from "axios";
+import * as BackendHelper from "../../../helpers/backend_helper";
+import * as FileHelper from "../../../helpers/file_helper";
+import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap";
+import FilePreview from "../../FilePreview/FilePreview";
+import { toast } from "react-toastify";
 
 const MultiFileInputElement = ({
   formik,
@@ -17,11 +22,12 @@ const MultiFileInputElement = ({
   const [showFiles, setShowFiles] = useState(false);
   const [deletedIds, setDeletedIds] = useState([]);
   const fileInputRef = useRef();
-  const [fileDatas, setFileDatas] = useState([]); 
-
-  // #New
-  console.log("MultiInputElement Field: ", field);
-  console.log("Files Ids: ", existingFiles);
+  const [fileDatas, setFileDatas] = useState([]);
+  const [filePreview, setFilePreview] = useState(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [previewLoading, setPreviewLoading] = useState({});
+  const [previewLoadingUrl, setPreviewLoadingUrl] = useState({});
+  const [downloadLoading, setDownloadLoading] = useState({});
 
   // useEffect(() => {
   //   if (
@@ -69,9 +75,7 @@ const MultiFileInputElement = ({
           setFiles([]);
           setDeletedIds([]);
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((error) => {});
     }
   }, [field?.multiFileEnity]);
 
@@ -90,10 +94,14 @@ const MultiFileInputElement = ({
     if (e.target.files.length > 0) {
       setFiles([...files, e.target.files[0]]);
     }
-    setFileDatas([...fileDatas, {
-      fileNames: e.target.files[0].name,
-      fileUrl: URL.createObjectURL(e.target.files[0])
-    }]);
+    setFileDatas([
+      ...fileDatas,
+      {
+        file: e.target.files[0],
+        fileName: e.target.files[0].name,
+        fileUrl: URL.createObjectURL(e.target.files[0]),
+      },
+    ]);
     e.target.value = null;
   };
 
@@ -140,9 +148,7 @@ const MultiFileInputElement = ({
       if (!checkifFileExists()) {
         setShowFiles(false);
       }
-    } catch (error) {
-      console.log("Error deleting file: ", error);
-    }
+    } catch (error) {}
   };
 
   /**
@@ -177,44 +183,147 @@ const MultiFileInputElement = ({
     setFormFields(newFormFields);
   }, [files, existingFiles]);
 
-  function downloadBase64File(base64Data, fileName) {
-    const link = document.createElement("a");
-    link.href = `data:application/octet-stream;base64,${base64Data}`;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  // Handle File Download
+  const handleDownload = async (id) => {
+    try {
+      setDownloadLoading((prev) => ({ ...prev, [id]: true }));
+      let documentData = null;
 
-  const handleDownload = (id) => {
-    axios
-    .get(
-      `http://localhost:8500/api/documents/download/${id}`
-    )
-    .then((res) => {
-      console.log("Download Response", res);
-      const documentData = res.data;
-      downloadBase64File(documentData?.encodedFile, documentData?.fileName);
-    })
-    .catch((error) => {
-      console.log("Error downloading file", error);
-    });
-  }
+      const res = await BackendHelper.downloadDocumentById(id);
+      documentData = res.data;
+
+      if (!documentData?.encodedFile) {
+        toast.error("File not found.");
+        return;
+      }
+
+      FileHelper.downloadBase64File(
+        documentData?.encodedFile,
+        documentData?.fileName
+      );
+    } catch (e) {
+    } finally {
+      setDownloadLoading((prev) => ({ ...prev, [id]: false }));
+    }
+  };
+
 
   const handleDownloadURL = (id) => {
     const fileData = fileDatas.find((file) => file.id === id);
     const link = document.createElement("a");
     link.href = fileData?.fileUrl;
-    link.download = fileData?.fileNames;
+    link.download = fileData?.fileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
-  
+  };
 
+  // Handle File Preview
+  const handlePreview = async (id) => {
+    try {
+      setPreviewLoading((prev) => ({ ...prev, [id]: true }));
+      let documentData = null;
+      const res = await BackendHelper.downloadDocumentById(id);
+      documentData = res.data;
+
+      const ext = documentData?.fileName.split(".").pop();
+
+      if (ext == "docx" || ext == "doc" || ext == "xlsx" || ext == "xls") {
+        // Convert to formdata
+        const formData = new FormData();
+        formData.append(
+          "docFile",
+          FileHelper.base64ToFile(
+            documentData?.encodedFile,
+            documentData?.fileName
+          )
+        );
+
+        const convertedData = await BackendHelper.convertMsDocToPdf(formData);
+        const docData = convertedData.data;
+        const pdfName = docData?.fileName?.split(".")[0] + ".pdf";
+        const file = await FileHelper.base64ToFile(
+          docData?.encodedFile,
+          pdfName
+        );
+        setFilePreview(file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      if (ext == "pdf") {
+        const file = FileHelper.base64ToFile(
+          documentData?.encodedFile,
+          documentData?.fileName
+        );
+        setFilePreview(file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      toast.error("File format not supported for preview.");
+    } catch (error) {
+    } finally {
+      setPreviewLoading((prev) => ({ ...prev, [id]: false }));
+    }
+  };
+
+  // File Preview from fileURl
+  const handlePreviewURL = async (id) => {
+    try {
+      setPreviewLoadingUrl((prev) => ({ ...prev, [id]: true }));
+      const fileData = fileDatas.find((file) => file.id === id);
+      const ext = fileData?.fileName?.split(".").pop();
+      if (ext == "docx" || ext == "doc" || ext == "xlsx" || ext == "xls") {
+        // Convert to formdata
+        const formData = new FormData();
+        formData.append("docFile", fileData?.file);
+        const res = await BackendHelper.convertMsDocToPdf(formData);
+        const docData = res.data;
+        const pdfName = docData?.fileName?.split(".")[0] + ".pdf";
+        const file = FileHelper.base64ToFile(docData?.encodedFile, pdfName);
+        setFilePreview(file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      if (ext == "pdf") {
+        setFilePreview(fileData?.file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      toast.error("File format not supported for preview.");
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setPreviewLoadingUrl((prev) => ({ ...prev, [id]: false }));
+    }
+  };
 
   return (
     <>
+      <Modal
+        isOpen={showPreviewModal}
+        closeModal={() => {
+          setShowPreviewModal(false);
+        }}
+        centered
+        scrollable
+        size="xl"
+      >
+        <ModalHeader
+          className="bg-primary pb-3"
+          toggle={() => setShowPreviewModal(false)}
+        >
+          <div className="d-flex flex-column text-dark">
+            <span className="h5 fw-bold">Document Preview</span>
+          </div>
+        </ModalHeader>
+        <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
+          <FilePreview file={filePreview} />
+        </ModalBody>
+      </Modal>
       <input
         ref={fileInputRef}
         id={field.name}
@@ -309,7 +418,7 @@ const MultiFileInputElement = ({
               position: "absolute",
               right: "0px",
               borderRadius: "3px",
-              zIndex: 9999,
+              zIndex: 100,
             }}
           >
             {files.length > 0 && showFiles && (
@@ -321,10 +430,22 @@ const MultiFileInputElement = ({
                   >
                     <span className="flex-grow-1">
                       {truncateString(file.name, 45)}
-                      <span className="mx-3 ri-download-line cursor-pointer"
-                      onClick={() => {
-                        handleDownloadURL(file?.id);
-                      }}></span>
+                      {previewLoadingUrl?.[file?.id] ? (
+                        <Spinner size="sm" color="primary" className="mx-3" />
+                      ) : (
+                        <span
+                          className="mx-3 ri-eye-line cursor-pointer"
+                          onClick={() => {
+                            handlePreviewURL(file?.id);
+                          }}
+                        ></span>
+                      )}
+                      <span
+                        className="ri-download-line cursor-pointer"
+                        onClick={() => {
+                          handleDownloadURL(file?.id);
+                        }}
+                      ></span>
                     </span>
                     <span
                       style={{ fontWeight: "bold" }}
@@ -354,11 +475,28 @@ const MultiFileInputElement = ({
                   >
                     <span className="flex-grow-1">
                       {truncateString(file?.title, 45)}
-                      <span className="mx-3 ri-download-line cursor-pointer"
-                      onClick={() => {
-                        handleDownload(file?.id);
-                      }}></span>
+                      {previewLoading?.[file?.id] ? (
+                        <Spinner size="sm" color="primary" className="mx-3" />
+                      ) : (
+                        <span
+                          className="mx-3 ri-eye-line cursor-pointer"
+                          onClick={() => {
+                            handlePreview(file?.id);
+                          }}
+                        ></span>
+                      )}
+                      {downloadLoading?.[file?.id] ? (
+                        <Spinner size="sm" color="primary" />
+                      ) : (
+                        <span
+                          className="ri-download-line cursor-pointer"
+                          onClick={() => {
+                            handleDownload(file?.id);
+                          }}
+                        ></span>
+                      )}
                     </span>
+
                     <span
                       style={{ fontWeight: "bold" }}
                       className="cursor-pointer"

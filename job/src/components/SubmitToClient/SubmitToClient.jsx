@@ -50,7 +50,7 @@ function SubmitToClient({
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
@@ -77,6 +77,7 @@ function SubmitToClient({
       jobType: "submit_to_client",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
 
   const handleCancel = () => {

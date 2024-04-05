@@ -9,6 +9,7 @@ import {
   FETCH_JOB_DATA,
   FETCH_JOBS_FIELDS_ALL,
   UPDATE_JOB_EMBEDDINGS,
+  CLONE_JOB
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -25,10 +26,12 @@ import {
   fetchJobsFieldsAllFailure,
   updateJobEmbeddingsSuccess,
   updateJobEmbeddingsFailure,
+  cloneJobSuccess, cloneJobFailure
 } from "./action";
 import {
   getJobs,
   createJob,
+  cloneJob,
   getJobById,
   createJobDocument,
   updateJobDocument,
@@ -82,6 +85,20 @@ function* workCreateJob(action) {
   } catch (error) {
     toast.error(error?.message);
     yield put(createJobFailure(error));
+  }
+}
+
+function* workCloneJob(action) {
+  const { payload, navigate } = action.payload;
+  try {
+    const response = yield call(cloneJob, payload);
+    yield put(cloneJobSuccess(response.data));
+    toast.success(response.message);
+    const jobId = response.data.id;
+    navigate(`/jobs/${jobId}/snapshot`)
+  } catch (error) {
+    yield put(cloneJobFailure(error))
+    toast.error(error.message)
   }
 }
 
@@ -143,4 +160,5 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB_DATA, workFetchJobData);
   yield takeEvery(FETCH_JOBS_FIELDS_ALL, workFetchJobsFieldsAll);
   yield takeEvery(UPDATE_JOB_EMBEDDINGS, workUpdateJobEmbeddings);
+  yield takeEvery(CLONE_JOB, workCloneJob);
 }

@@ -11,6 +11,12 @@ const ButtonUpdateElement = ({
   const { buttonName, setButtonName } = buttonNameHook;
   const { formState, setFormState } = formStateHook;
 
+  const clearForm = () => {
+    Object.keys(formik.values).forEach((key) => {
+      formik.setFieldValue(key, "");
+    });
+  };
+
   const buttonJsx = (
     <button
       onClick={(e) => setButtonName(field.buttonName)}
@@ -40,11 +46,10 @@ const ButtonUpdateElement = ({
         className="btn btn-danger"
         name="cancelButton"
         onClick={(e) => {
+          formik.resetForm();
           clearForm();
-          formik.setTouched({});
-          // setButtonName("cancel")
+          setFormState("create");
           setButtonName("")
-          setFormState("create")
         }}
         tabIndexData={tabIndexData?.[field?.fieldId]}
       >
@@ -52,12 +57,6 @@ const ButtonUpdateElement = ({
       </button>
     </div>
   );
-
-  const clearForm = () => {
-    Object.keys(formik.values).forEach((key) => {
-      formik.setFieldValue(key, "");
-    });
-  };
 
   return (
     <div className={fieldLocation[field.fieldLocation]}>

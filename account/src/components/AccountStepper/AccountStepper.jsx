@@ -11,7 +11,7 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 
-const AccountStepper = ({ step }) => {
+const AccountStepper = ({ step, setStep }) => {
   const MAX_STEPS = 4;
   const [progressBarValue, setProgressBarValue] = useState(0);
 
@@ -31,6 +31,7 @@ const AccountStepper = ({ step }) => {
             >
               <NavItem>
                 <NavLink
+                  onClick={() => setStep && setStep(0)}
                   id="pills-gen-info-tab"
                   className={classnames(
                     {
@@ -50,7 +51,7 @@ const AccountStepper = ({ step }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                  href="/contact-creation"
+                  onClick={() => setStep && setStep(1)}
                   id="pills-gen-info-tab"
                   className={classnames(
                     {
@@ -69,7 +70,7 @@ const AccountStepper = ({ step }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                  to="#"
+                  onClick={() => setStep && setStep(2)}
                   id="pills-gen-info-tab"
                   className={classnames(
                     {
@@ -88,7 +89,7 @@ const AccountStepper = ({ step }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                  to="#"
+                  onClick={() => setStep && setStep(3)}
                   id="pills-gen-info-tab"
                   className={classnames(
                     {
@@ -107,7 +108,7 @@ const AccountStepper = ({ step }) => {
               </NavItem>
               <NavItem>
                 <NavLink
-                  to="#"
+                  onClick={() => setStep && setStep(4)}
                   id="pills-gen-info-tab"
                   className={classnames(
                     {

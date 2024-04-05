@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Row,
   Col,
@@ -62,6 +62,11 @@ import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
 import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
 import { truncate } from "@workspace/common/src/helpers/string_helper";
+import { SkillAssessment } from "../SkillAssessment";
+import { CodingTest } from "../CodingTest";
+import { CulturalFitTest } from "../CulturalFitTest";
+import { TechnicalInterview } from "../TechnicalInterview";
+import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -89,6 +94,7 @@ const JobOverview = () => {
   const [skipComboOptions, setSkipComboOptions] = useState({});
 
   const [deliveryTeam, setDeliveryTeam] = useState();
+  const [timelineRowIndex, setTimelineRowIndex] = useState();
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -174,8 +180,13 @@ const JobOverview = () => {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
+        const status = getStatus(data, maxOrder);
         if (maxOrder >= 6 && maxOrder < 9) {
           maxOrder = 5;
+        } else if (maxOrder === 9) {
+          maxOrder = status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
+        } else if (maxOrder >= 10 && maxOrder < 13) {
+          maxOrder = 9;
         }
         jsonObject[data?.id] = maxOrder;
       });
@@ -190,7 +201,7 @@ const JobOverview = () => {
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
@@ -217,27 +228,42 @@ const JobOverview = () => {
         setStepperState("Profile Feedback Pending");
         break;
       case 5:
-        setStepperState("Schedule First Interview");
+        setStepperState("Pre-Skill Assessment");
         break;
       case 6:
-        setStepperState("Update 1st Interview Feedback");
+        setStepperState("Review Skill Assessment Results");
         break;
       case 7:
-        setStepperState("Schedule Second Interview");
+        setStepperState("Review Coding Test Results");
         break;
       case 8:
-        setStepperState("Update 2nd Interview Feedback");
+        setStepperState("Review Technical Interview Results");
         break;
       case 9:
-        setStepperState("Schedule Third Interview");
+        setStepperState("Review Cultural Fit Test Results");
         break;
       case 10:
-        setStepperState("Interview Feedback Pending");
+        setStepperState("Schedule First Interview");
         break;
       case 11:
-        setStepperState("Conditional Offer");
+        setStepperState("Update 1st Interview Feedback");
         break;
       case 12:
+        setStepperState("Schedule Second Interview");
+        break;
+      case 13:
+        setStepperState("Update 2nd Interview Feedback");
+        break;
+      case 14:
+        setStepperState("Schedule Third Interview");
+        break;
+      case 15:
+        setStepperState("Interview Feedback Pending");
+        break;
+      case 16:
+        setStepperState("Conditional Offer");
+        break;
+      case 17:
         setStepperState("Conditional Offer Status");
         break;
       default:
@@ -316,6 +342,7 @@ const JobOverview = () => {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
+            timelineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 2:
@@ -362,7 +389,7 @@ const JobOverview = () => {
         );
       case 5:
         return (
-          <ScheduleInterview
+          <PreSkillAssessment
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
@@ -371,16 +398,16 @@ const JobOverview = () => {
         );
       case 6:
         return (
-          <FirstInterviewFeedbackPending
+          <SkillAssessment
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            handleIconClick={handleIconClick}
+            activeStep={step}
           />
         );
       case 7:
         return (
-          <ScheduleInterview
+          <CodingTest
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
@@ -389,16 +416,16 @@ const JobOverview = () => {
         );
       case 8:
         return (
-          <SecondInterviewFeedbackPending
+          <TechnicalInterview
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            handleIconClick={handleIconClick}
+            activeStep={step}
           />
         );
       case 9:
         return (
-          <ScheduleInterview
+          <CulturalFitTest
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
@@ -407,13 +434,58 @@ const JobOverview = () => {
         );
       case 10:
         return (
+          <ScheduleInterview
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            activeStep={step}
+          />
+        );
+      case 11:
+        return (
+          <FirstInterviewFeedbackPending
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            handleIconClick={handleIconClick}
+          />
+        );
+      case 12:
+        return (
+          <ScheduleInterview
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            activeStep={step}
+          />
+        );
+      case 13:
+        return (
+          <SecondInterviewFeedbackPending
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            handleIconClick={handleIconClick}
+          />
+        );
+      case 14:
+        return (
+          <ScheduleInterview
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            activeStep={step}
+          />
+        );
+      case 15:
+        return (
           <ThirdInterviewFeedbackPending
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
           />
         );
-      case 11:
+      case 16:
         return (
           <ConditionalOffer
             templateData={templateData}
@@ -423,7 +495,7 @@ const JobOverview = () => {
             activeStep={step}
           />
         );
-      case 12:
+      case 17:
         return (
           <ConditionalOfferStatus
             closeOffcanvas={closeOffcanvas}
@@ -457,23 +529,36 @@ const JobOverview = () => {
    * @author Rahul Sahu
    * @description Get form index on the basis of index
    */
-  const getFormIndex = (originalOrder) => {
+  const getFormIndex = (originalOrder, data) => {
     let index = null;
+    const status = getStatus(data, originalOrder);
     switch (originalOrder) {
       case 6:
         index = 6;
         break;
       case 7:
-        index = 8;
+        index = 7;
         break;
       case 8:
-        index = 10;
+        index = 8;
         break;
       case 9:
-        index = 11;
+        index = status === JOB_STAGE_STATUS.COMPLETED ? 10 : 9;
         break;
       case 10:
-        index = 12;
+        index = 11;
+        break;
+      case 11:
+        index = 13;
+        break;
+      case 12:
+        index = 15;
+        break;
+      case 13:
+        index = 16;
+        break;
+      case 14:
+        index = 17;
         break;
       default:
         break;
@@ -579,7 +664,7 @@ const JobOverview = () => {
                     >
                       {isMobile | isTablet
                         ? truncate(formSubmissionData?.accountOwner, 8)
-                        : truncate(formSubmissionData?.accountOwner, 35)}
+                        : truncate(formSubmissionData?.accountOwner, 25)}
                     </span>
                   </div>
                   <div className="d-flex align-items-end gap-1">
@@ -716,7 +801,7 @@ const JobOverview = () => {
                       </td>
                     </tr>
                   ) : jobTimelineData?.jobs?.length > 0 ? (
-                    jobTimelineData?.jobs?.map((data, index) => {
+                    jobTimelineData?.jobs?.map((data, timelineIndex) => {
                       let maxOrder = getMaxOrder(data);
                       const status = getStatus(data, maxOrder);
                       maxOrder =
@@ -727,12 +812,18 @@ const JobOverview = () => {
                       const isRejected =
                         status === JOB_STAGE_STATUS.REJECTED ||
                         status === JOB_STAGE_STATUS.WITHDRAWN;
+                      const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
                       const originalOrder = maxOrder;
                       if (maxOrder >= 6 && maxOrder < 9) {
                         maxOrder = 5;
+                      } else if (maxOrder === 9) {
+                        maxOrder =
+                          status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
+                      } else if (maxOrder >= 10 && maxOrder < 13) {
+                        maxOrder = 9;
                       }
                       return (
-                        <tbody key={index}>
+                        <tbody key={timelineIndex}>
                           <tr className="text-center align-top">
                             <td className="pt-4">{`${data?.candidate?.firstName} ${data?.candidate?.lastName}`}</td>
                             <td className="pt-4">{`${data?.createdByName}`}</td>
@@ -743,6 +834,7 @@ const JobOverview = () => {
                                     index={stepOrders[step]}
                                     maxOrder={maxOrder}
                                     isRejected={isRejected}
+                                    isInProgress={isInProgress}
                                     data={data?.timeline?.[steps[step]]}
                                     candidateId={data?.candidate?.id}
                                     timeline={data?.timeline}
@@ -753,7 +845,7 @@ const JobOverview = () => {
                               );
                             })}
                             <td>
-                              {!isRejected && maxOrder < 11 && (
+                              {!isRejected && maxOrder < 15 && (
                                 <div className="d-flex flex-row gap-3 align-items-center">
                                   <Input
                                     type="select"
@@ -786,7 +878,7 @@ const JobOverview = () => {
                                     )}
                                   </Input>
                                   <i
-                                    onClick={() =>
+                                    onClick={() => {
                                       handleIconClick(
                                         data?.candidate?.id,
                                         data?.id,
@@ -794,10 +886,12 @@ const JobOverview = () => {
                                           skipComboOptions[data.id] <
                                             originalOrder
                                             ? originalOrder
-                                            : skipComboOptions[data.id]
+                                            : skipComboOptions[data.id],
+                                          data
                                         )
-                                      )
-                                    }
+                                      );
+                                      setTimelineRowIndex(timelineIndex);
+                                    }}
                                     id="next-step"
                                     className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
                                   ></i>

@@ -1,10 +1,19 @@
 import React, { useRef, useState } from "react";
-import { Button } from "reactstrap";
-import axios from "axios";
+import * as BackendHelper from "../../../helpers/backend_helper";
+import * as FileHelper from "../../../helpers/file_helper";
+import { toast } from "react-toastify";
+import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap";
+import FilePreview from "../../FilePreview/FilePreview";
 
 const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
   const fileInputRef = useRef();
+  const [fileData, setFileData] = useState(null);
+  const [filePreview, setFilePreview] = useState(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [downloadLoading, setDownloadLoading] = useState(false);
+
   const truncateString = (str, num) => {
     if (str) {
       return str;
@@ -15,58 +24,35 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
     return str.slice(0, num) + "...";
   };
 
-  const [fileData, setFileData] = useState({
-    fileUrl: "",
-    fileName: "",
-  });
-
-
-  // #New Check show all entity type and id
-  // console.log("File field: ", field);
-
-  function downloadBase64File(base64Data, fileName) {
-    const link = document.createElement("a");
-    link.href = `data:application/octet-stream;base64,${base64Data}`;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
   // Handle File Download
-  const handleDownload = (entityInfo) => {
-    console.log("Entity Info", entityInfo);
-    if (entityInfo?.entityType && entityInfo?.entityId) {
-      console.log(
-        "FFFFF:" +
-          `http://localhost:8500/api/documents/download/entity/${entityInfo?.entityType}/${entityInfo?.entityId}`
+  const handleDownload = async (entityInfo) => {
+    try {
+      setDownloadLoading(true);
+      let documentData = null;
+      if (entityInfo?.entityType && entityInfo?.entityId) {
+        const res = await BackendHelper.downloadDocumentByEntityAndId(
+          entityInfo
+        );
+        documentData = res.data;
+      } else {
+        const res = await BackendHelper.downloadDocumentById(
+          entityInfo?.entityId
+        );
+        documentData = res.data;
+      }
+
+      if (!documentData?.encodedFile) {
+        toast.error("File not found.");
+        return;
+      }
+
+      FileHelper.downloadBase64File(
+        documentData?.encodedFile,
+        documentData?.fileName
       );
-      axios
-        .get(
-          `http://localhost:8500/api/documents/download/entity/${entityInfo?.entityType}/${entityInfo?.entityId}`
-        )
-        .then((res) => {
-          console.log("Download Response", res);
-          const documentData = res.data;
-          downloadBase64File(documentData?.encodedFile, documentData?.fileName);
-        })
-        .catch((error) => {
-          console.log("Error downloading file", error);
-        });
-    } else {
-      console.log("Download Using document ID", entityInfo?.entityId);
-      axios
-        .get(
-          `http://localhost:8500/api/documents/download/${entityInfo?.entityId}`
-        )
-        .then((res) => {
-          console.log("Download Response", res);
-          const documentData = res.data;
-          downloadBase64File(documentData?.encodedFile, documentData?.fileName);
-        })
-        .catch((error) => {
-          console.log("Error downloading file", error);
-        });
+    } catch (e) {
+    } finally {
+      setDownloadLoading(false);
     }
   };
 
@@ -78,12 +64,124 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
+  };
 
+  // Handle File Preview
+  const handlePreview = async (entityInfo) => {
+    try {
+      setPreviewLoading(true);
+      let documentData = null;
+      if (entityInfo?.entityType && entityInfo?.entityId) {
+        const res = await BackendHelper.downloadDocumentByEntityAndId({
+          entityType: entityInfo?.entityType,
+          entityId: entityInfo?.entityId,
+        });
+        documentData = res.data;
+      } else {
+        const res = await BackendHelper.downloadDocumentById(
+          entityInfo?.entityId
+        );
+        documentData = res.data;
+      }
+      const ext = documentData?.fileName.split(".").pop();
 
+      if (ext == "docx" || ext == "doc" || ext == "xlsx" || ext == "xls") {
+        // Convert to formdata
+        const formData = new FormData();
+        formData.append(
+          "docFile",
+          FileHelper.base64ToFile(
+            documentData?.encodedFile,
+            documentData?.fileName
+          )
+        );
+
+        const convertedData = await BackendHelper.convertMsDocToPdf(formData);
+        const docData = convertedData.data;
+        const pdfName = docData?.fileName?.split(".")[0] + ".pdf";
+        const file = await FileHelper.base64ToFile(
+          docData?.encodedFile,
+          pdfName
+        );
+        setFilePreview(file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      if (ext == "pdf") {
+        const file = FileHelper.base64ToFile(
+          documentData?.encodedFile,
+          documentData?.fileName
+        );
+        setFilePreview(file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      toast.error("File format not supported for preview.");
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setPreviewLoading(false);
+    }
+  };
+
+  // File Preview from fileURl
+  const handlePreviewURL = async () => {
+    console.log("fileData", fileData);
+    const ext = fileData?.fileName?.split(".").pop();
+    try {
+      setPreviewLoading(true);
+      if (ext == "docx" || ext == "doc" || ext == "xlsx" || ext == "xls") {
+        // Convert to formdata
+        const formData = new FormData();
+        formData.append("docFile", fileData?.file);
+        const res = await BackendHelper.convertMsDocToPdf(formData);
+        const docData = res.data;
+        const pdfName = docData?.fileName?.split(".")[0] + ".pdf";
+        const file = FileHelper.base64ToFile(docData?.encodedFile, pdfName);
+        setFilePreview(file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      if (ext == "pdf") {
+        setFilePreview(fileData?.file);
+        setShowPreviewModal(true);
+        return;
+      }
+
+      toast.error("File format not supported for preview.");
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setPreviewLoading(false);
+    }
+  };
 
   return (
     <>
+      <Modal
+        isOpen={showPreviewModal}
+        closeModal={() => {
+          setShowPreviewModal(false);
+        }}
+        centered
+        scrollable
+        size="xl"
+      >
+        <ModalHeader
+          className="bg-primary pb-3"
+          toggle={() => setShowPreviewModal(false)}
+        >
+          <div className="d-flex flex-column text-dark">
+            <span className="h5 fw-bold">Document Preview</span>
+          </div>
+        </ModalHeader>
+        <ModalBody className="bg-light" style={{ minHeight: "500px" }}>
+          <FilePreview file={filePreview} />
+        </ModalBody>
+      </Modal>
       <input
         ref={fileInputRef}
         id={field.name}
@@ -94,8 +192,8 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
         onChange={(e) => {
           formik.setFieldTouched(field.name, "");
           formik.setFieldValue(field.name, e.target.files[0]);
-          // Set file URL for file download
           setFileData({
+            file: e.target.files[0],
             fileUrl: URL.createObjectURL(e.target.files[0]),
             fileName: e.target.files[0].name,
           });
@@ -156,24 +254,43 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
                 x
               </span>
             )}
-          {/* {formik?.values?.[field.name]?.name && <Button>DL</Button>} */}
+          {/* Backend File */}
           {formik?.values?.[field.name] &&
-            !(formik?.values?.[field.name] instanceof File) && (
+            !(formik?.values?.[field.name] instanceof File) &&
+            (previewLoading ? (
+              <Spinner size="sm" color="primary" className="mx-3" />
+            ) : (
               <span
-                className="mx-3 ri-download-line cursor-pointer"
+                className="mx-3 ri-eye-line cursor-pointer"
+                onClick={() => handlePreview(field?.entityInfo)}
+              ></span>
+            ))}
+          {formik?.values?.[field.name] &&
+            !(formik?.values?.[field.name] instanceof File) &&
+            (downloadLoading ? (
+              <Spinner size="sm" color="primary" />
+            ) : (
+              <span
+                className="ri-download-line cursor-pointer"
                 onClick={() => handleDownload(field?.entityInfo)}
               ></span>
-            )}
+            ))}
 
-            {
-              formik?.values?.[field.name] &&
-              (formik?.values?.[field.name] instanceof File) && (
-                <span
-                  className="mx-3 ri-download-line cursor-pointer"
-                  onClick={handleDownloadURL}
-                ></span>
-              )
-            }
+          {/* URL */}
+          {formik?.values?.[field.name] &&
+            formik?.values?.[field.name] instanceof File && (
+              <span
+                className="mx-3 ri-eye-line cursor-pointer"
+                onClick={() => handlePreviewURL(field?.entityInfo)}
+              ></span>
+            )}
+          {formik?.values?.[field.name] &&
+            formik?.values?.[field.name] instanceof File && (
+              <span
+                className="ri-download-line cursor-pointer"
+                onClick={handleDownloadURL}
+              ></span>
+            )}
         </div>
         {}
       </div>

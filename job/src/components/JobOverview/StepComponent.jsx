@@ -1,33 +1,51 @@
 import React, { useState } from "react";
-import { Progress, UncontrolledPopover, PopoverBody } from "reactstrap";
+import { Progress, PopoverBody, Popover } from "reactstrap";
 import Moment from "react-moment";
 import InterviewPopUp from "../InterviewPopUp/InterviewPopUp";
 import "./StepComponent.scss";
 import {
+  CODING_TEST,
+  CULTURAL_FIT_TEST,
   FIRST_INTERVIEW_SCHEDULED,
   INTERVIEWS,
   INTERVIEW_FEEDBACK_PENDING,
+  ODIN_PROTOCOL,
   SECOND_INTERVIEW_SCHEDULED,
+  SKILLS_ASSESSMENT,
+  TECHNICAL_INTERVIEW,
   THIRD_INTERVIEW_SCHEDULED,
 } from "./JobOverviewConstants";
+import AssessmentPopUp from "../AssessmentPopUp/AssessmentPopUp";
 
 function StepComponent({
   index,
   maxOrder,
   data,
   isRejected,
+  isInProgress,
   candidateId,
   timeline,
   originalOrder,
   step,
 }) {
   const [toggleInterview, setToggleInterview] = useState(false);
+  const [toggleAssessment, setToggleAssessment] = useState(false);
   const date = data?.date;
   const inProgress = maxOrder + 1;
 
   const getInterviewStatus = () => {
     let status = data?.status;
-    if (step === INTERVIEWS && !status) {
+    if (step === ODIN_PROTOCOL && !status) {
+      if (timeline?.[CULTURAL_FIT_TEST]) {
+        status = timeline?.[CULTURAL_FIT_TEST]?.["status"];
+      } else if (timeline?.[TECHNICAL_INTERVIEW]) {
+        status = timeline?.[TECHNICAL_INTERVIEW]?.["status"];
+      } else if (timeline?.[CODING_TEST]) {
+        status = timeline?.[CODING_TEST]?.["status"];
+      } else if (timeline?.[SKILLS_ASSESSMENT]) {
+        status = timeline?.[SKILLS_ASSESSMENT]?.["status"];
+      }
+    } else if (step === INTERVIEWS && !status) {
       if (timeline?.[INTERVIEW_FEEDBACK_PENDING]) {
         status = timeline?.[INTERVIEW_FEEDBACK_PENDING]?.["status"];
       } else if (timeline?.[THIRD_INTERVIEW_SCHEDULED]) {
@@ -58,9 +76,6 @@ function StepComponent({
       case "SKIPPED":
         customCSS = "bg-gray border-gray";
         break;
-      case "REJECTED":
-        customCSS = "bg-danger border-danger";
-        break;
       default:
         break;
     }
@@ -90,7 +105,6 @@ function StepComponent({
             ) : (
               <div style={{ height: "2px", width: "100%" }}></div>
             )}
-
             <div
               className={`rounded-pill border border-primary ${
                 index === maxOrder && !isRejected
@@ -109,6 +123,17 @@ function StepComponent({
               {index === 5 && (
                 <span>
                   <i
+                    id="assessment-popover"
+                    className="ri-add-fill text-white fw-bold cursor-pointer"
+                    onClick={() => {
+                      setToggleAssessment(!toggleAssessment);
+                    }}
+                  ></i>
+                </span>
+              )}
+              {index === 9 && (
+                <span>
+                  <i
                     className="ri-add-fill text-white fw-bold cursor-pointer"
                     onClick={() => {
                       setToggleInterview(!toggleInterview);
@@ -117,7 +142,7 @@ function StepComponent({
                 </span>
               )}
             </div>
-            {index !== 7 ? (
+            {index !== 11 ? (
               <Progress
                 animated={false}
                 value={0}
@@ -138,9 +163,30 @@ function StepComponent({
           )}
         </div>
       </div>
-      {/* Interview Schedule Pop Up */}
+      {/* Odin Protocol Pop Up */}
       {index === 5 && (
-        <UncontrolledPopover
+        <Popover
+          className="custom-assessment-popover"
+          target={`Popover-${index}-${candidateId}`}
+          isOpen={toggleAssessment}
+          toggle={() => setToggleAssessment(!toggleAssessment)}
+          placement="bottom"
+          trigger="legacy"
+        >
+          <PopoverBody>
+            <AssessmentPopUp
+              index={index}
+              timeline={timeline}
+              maxOrder={maxOrder}
+              originalOrder={originalOrder}
+            />
+          </PopoverBody>
+        </Popover>
+      )}
+
+      {/* Interview Schedule Pop Up */}
+      {index === 9 && (
+        <Popover
           className="custom-popover"
           placement="bottom"
           isOpen={toggleInterview}
@@ -156,7 +202,7 @@ function StepComponent({
               originalOrder={originalOrder}
             />
           </PopoverBody>
-        </UncontrolledPopover>
+        </Popover>
       )}
     </React.Fragment>
   );

@@ -287,7 +287,6 @@ function* workImportCandidate(action) {
     } catch (error) {
       yield put(importCandidateFailure());
       toast.error("Error creating candidate basic info");
-      console.log("Error creating candidate", error);
     }
 
     if (!candidateId) return;
@@ -313,7 +312,6 @@ function* workImportCandidate(action) {
       } catch (error) {
         yield put(importCandidateFailure());
         toast.error("Error creating candidate work experiences");
-        console.log("Error creating candidate", error);
       }
     }
 
@@ -342,7 +340,6 @@ function* workImportCandidate(action) {
         } catch (error) {
           yield put(importCandidateFailure());
           toast.error("Error creating candidate languages");
-          console.log("Error creating candidate", error);
         }
       }
     }
@@ -369,7 +366,6 @@ function* workImportCandidate(action) {
     } catch (error) {
       yield put(importCandidateFailure());
       toast.error("Error creating candidate education details");
-      console.log("Error creating candidate", error);
     }
 
     // Document
@@ -392,7 +388,6 @@ function* workImportCandidate(action) {
         } catch (error) {
           yield put(importCandidateFailure());
           toast.error("Error creating candidate Document");
-          console.log("Error creating candidate", error);
         }
       }
     }
@@ -421,7 +416,6 @@ function* workImportCandidate(action) {
       } catch (error) {
         yield put(importCandidateFailure());
         toast.error("Error creating candidate certificates");
-        console.log("Error creating candidate", error);
       }
     }
 
@@ -444,10 +438,8 @@ function* workImportCandidate(action) {
     } catch (error) {
       yield put(importCandidateFailure());
       toast.error("Error creating candidate registration");
-      console.log("Error creating candidate", error);
     }
   } catch (error) {
-    console.log("Error creating candidate", error);
     yield put(importCandidateFailure());
     yield put(importCandidateMultiFailure());
     yield put(setParseAndImportLoading(false));
@@ -474,7 +466,6 @@ function* workImportCandidateMulti(action) {
       navigate("/candidates");
     }
   } catch (error) {
-    console.log("Error creating candidate", error);
     yield put(importCandidateFailure());
     yield put(importCandidateMultiFailure());
     yield put(setParseAndImportLoading(false));

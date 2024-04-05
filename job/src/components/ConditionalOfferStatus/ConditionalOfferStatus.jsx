@@ -38,7 +38,7 @@ function ConditionalOfferStatus({
 
   useEffect(() => {
     if (form) {
-      setFormTemplate(JSON.parse(JSON.stringify(form)));
+      setFormTemplate(form);
     }
   }, [form]);
 
@@ -61,6 +61,7 @@ function ConditionalOfferStatus({
       jobType: "conditional offer_sent",
     };
     dispatch(tagJob({ payload, navigate }));
+    closeOffcanvas();
   };
   return (
     <React.Fragment>

@@ -18,9 +18,15 @@ import {
   FETCH_JOBS_FIELDS_ALL,
   FETCH_JOBS_FIELDS_ALL_SUCCESS,
   FETCH_JOBS_FIELDS_ALL_FAILURE,
+<<<<<<< HEAD
   UPDATE_JOB_EMBEDDINGS,
   UPDATE_JOB_EMBEDDINGS_SUCCESS,
   UPDATE_JOB_EMBEDDINGS_FAILURE,
+=======
+  CLONE_JOB,
+  CLONE_JOB_SUCCESS,
+  CLONE_JOB_FAILURE
+>>>>>>> account-edit-link
 } from "./actionTypes";
 
 const initialState = {
@@ -98,6 +104,27 @@ const JobReducer = (state = initialState, action) => {
         job: action.payload,
       };
     case CREATE_JOB_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+
+    // Clone a job
+    case CLONE_JOB:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case CLONE_JOB_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        job: action.payload,
+      };
+    case CLONE_JOB_FAILURE:
       return {
         ...state,
         loading: false,

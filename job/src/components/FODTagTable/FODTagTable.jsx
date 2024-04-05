@@ -32,6 +32,13 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
           <Link
             to={`/candidates/${data?.id}/snapshot`}
             className="text-custom-primary text-decoration-underline"
+            onClick={() => {
+              const win = window.open(
+                `/candidates/${data?.id}/snapshot`,
+                "_blank"
+              );
+              win.focus();
+            }}
           >
             <span>{DynamicTableHelper.getDynamicNestedResult(data, opt.value)}</span>
           </Link>
@@ -158,7 +165,9 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         sort: false,
         sortValue: "indexing",
         render: (data, index) => (
-          <div className="d-flex column-gap-2">{index + 1}.</div>
+          <div className="d-flex column-gap-2">
+            {pageInfo?.currentPage * pageInfo?.pageSize + (index + 1)}.
+          </div>
         ),
       },
       {
@@ -202,6 +211,21 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
               candidateId={data?.id}
               jobId={selectedRowData?.id}
             />
+
+            // <Link
+            //   to=""
+            //   className="text-custom-primary text-decoration-underline"
+            //   onClick={() => {
+            //     const win = window.open(
+            //       `/candidates/${data?.id}/snapshot`,
+            //       "_blank"
+            //     );
+            //     win.focus();
+            //   }}
+            // >
+            //   <span>{data?.candidateSubmissionData?.firstName}</span>
+            // </Link>
+
           );
         },
       },
