@@ -455,9 +455,7 @@ export async function exportBackendHtml2Pdf(
     }
     const blob = new Blob([bytes], { type: "application/pdf" });
     FileSaver.saveAs(blob, fileName);
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 }
 
 export async function exportBackendHtml2PdfBlob(htmlString, options = {}) {
@@ -493,9 +491,7 @@ export async function exportBackendHtml2PdfBlob(htmlString, options = {}) {
     }
     const blob = new Blob([bytes], { type: "application/pdf" });
     return blob;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 export async function exportBackendHtml2PdfBlobExtCss(
@@ -540,9 +536,7 @@ export async function exportBackendHtml2PdfBlobExtCss(
     }
     const blob = new Blob([bytes], { type: "application/pdf" });
     return blob;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 export async function exportBackendHtml2PdfFile(
@@ -589,9 +583,7 @@ export async function exportBackendHtml2PdfFile(
     });
 
     return file;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 export async function exportBackendHtml2Docx(
@@ -640,9 +632,7 @@ export async function exportBackendHtml2Docx(
       type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     });
     FileSaver.saveAs(blob, fileName);
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 export async function exportBackendHtml2DocxFile(
@@ -693,9 +683,7 @@ export async function exportBackendHtml2DocxFile(
       type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     });
     return file;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 // Export Jpeg from HTML
@@ -741,9 +729,7 @@ export async function exportBackendHtml2Jpeg(
     }
     const blob = new Blob([bytes], { type: "image/jpeg" });
     FileSaver.saveAs(blob, fileName);
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 // Convert to File Jpeg from HTML
@@ -791,9 +777,7 @@ export async function exportBackendHtml2JpegFile(
     });
 
     return file;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 // Export Png from HTML
@@ -838,9 +822,7 @@ export async function exportBackendHtml2Png(
     }
     const blob = new Blob([bytes], { type: "image/png" });
     FileSaver.saveAs(blob, fileName);
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 // Convert to File Png from HTML
@@ -888,7 +870,5 @@ export async function exportBackendHtml2PngFile(
     });
 
     return file;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }

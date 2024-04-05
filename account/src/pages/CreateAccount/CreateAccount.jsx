@@ -98,7 +98,6 @@ const AccountCreation = () => {
     if (form) {
       if (step === 0) {
         const formEdited = setEnityInfo(form);
-        console.log("formEdited", formEdited);
         setFormTemplate(formEdited);
         return;
       }
@@ -176,7 +175,7 @@ const AccountCreation = () => {
       }
     });
     return newForm;
-  }
+  };
 
   /**
    * Fetch draft account if there is

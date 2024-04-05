@@ -70,7 +70,7 @@ const TemplateBuilder = forwardRef(
       if (typeData?.label === categoryConstants.CANDIDATES) {
         return state.CandidateReducer.candidatesFieldsAll;
       }
-    }); 
+    });
 
     // Get field All if type exist
     useEffect(() => {
@@ -81,7 +81,7 @@ const TemplateBuilder = forwardRef(
         setSelectedField("");
       }
       if (typeData) {
-        setSelectedSection("")
+        setSelectedSection("");
         dispatch(moduleActions[typeData.label]());
       }
     }, [typeData]);
@@ -119,7 +119,7 @@ const TemplateBuilder = forwardRef(
         setSelectedField("");
       }
       if (selectedSection) {
-        setSelectedField("")
+        setSelectedField("");
         setFields(sectionData[selectedSection.value]);
       }
     }, [selectedSection]);
@@ -327,9 +327,7 @@ const TemplateBuilder = forwardRef(
 
       try {
         content = await TemplateHelper.setOnlyTemplateInjection(content);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
       editorRef.current.setContent(content);
     };
 

@@ -18,7 +18,6 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
-import DualListBox from "react-dual-listbox";
 import { ACCOUNT_INITIAL_OPTIONS } from "../../pages/AccountListing/accountListingConstants";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
