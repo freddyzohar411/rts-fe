@@ -661,10 +661,18 @@ const generateValidationSchema2 = (
                 }
               }
 
-              if (isValidCombined === null) {
-                isValidCombined = isValid;
-              } else {
+              // if (isValidCombined === null) {
+              //   isValidCombined = isValid;
+              // } else {
+              //   isValidCombined = isValidCombined && isValid;
+              // }
+
+              if (condition?.logicalCondition === "AND") {
                 isValidCombined = isValidCombined && isValid;
+              } else if (condition?.logicalCondition === "OR") {
+                isValidCombined = isValidCombined || isValid;
+              } else {
+                isValidCombined = isValid;
               }
 
               console.log("isValid", `Index ${index}: ${isValid}`);
