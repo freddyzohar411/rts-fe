@@ -1,4 +1,4 @@
-import { Form, Formik, Field } from "formik";
+import { Form, Formik, Field, getIn } from "formik";
 import { FormSelection } from "@workspace/common";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -91,6 +91,8 @@ function CreateUser() {
     };
     dispatch(createUser({ newUser, navigate: navigate }));
   };
+
+  console.log("SelectedOption", selectedOption)
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -347,16 +349,17 @@ function CreateUser() {
                                   if (!selectedOption) {
                                     handleChange("managerId")("");
                                   } else {
-                                    handleChange("managerId")(
+                                    handleChange("newUser.managerId")(
                                       selectedOption?.value
                                     );
                                   }
                                 }}
-                                label="Select Manager"
+                                label="Select Manager*"
                                 options={selectedOption}
                                 style={{ borderColor: "#8aaed6" }}
-                                className="js-example-basic-single mb-3"
+                                className="js-example-basic-single"
                                 isClearable
+                                error={errors.managerId}
                               />
                             </div>
                           </Col>
