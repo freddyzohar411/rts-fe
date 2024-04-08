@@ -349,7 +349,7 @@ function CreateUser() {
                                   if (!selectedOption) {
                                     handleChange("managerId")("");
                                   } else {
-                                    handleChange("newUser.managerId")(
+                                    handleChange("managerId")(
                                       selectedOption?.value
                                     );
                                   }
