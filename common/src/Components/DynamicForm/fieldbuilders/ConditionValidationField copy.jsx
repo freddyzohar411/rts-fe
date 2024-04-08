@@ -1,43 +1,99 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
 
-const ConditionValidationField = ({validationConditionList, setValidationConditionList, formFields, field }) => {
+const ConditionValidationField = ({
+  validationConditionList,
+  setValidationConditionList,
+  formFields,
+  field,
+}) => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const conditionTypes = [
+    { label: "AND", value: "AND" },
+    { label: "OR", value: "OR" },
+  ];
+
   return (
     <div className="mb-3">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <label htmlFor={field.name} className="form-label">
           {field.label}
         </label>
-        <button
-          type="button"
-          className="btn btn-custom-primary"
-          onClick={() => {
-            setValidationConditionList([
-              ...validationConditionList,
-              { field: "", condition: "", value: "", type: 1 },
-            ]);
-          }}
-        >
-          Add Type 1
-        </button>
-        <button
-          type="button"
-          className="btn btn-custom-primary"
-          onClick={() => {
-            setValidationConditionList([
-              ...validationConditionList,
-              { field: "", condition: "", value: "", type: 2 },
-            ]);
-          }}
-        >
-          Add Type 2
-        </button>
+        <Dropdown isOpen={dropdownOpen} toggle={toggle} direction="down">
+          <DropdownToggle className="btn btn-custom-primary" caret>
+            Add Condition Type
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem
+              onClick={() => {
+                setValidationConditionList([
+                  ...validationConditionList,
+                  {
+                    field: "",
+                    condition: "",
+                    value: "",
+                    type: 1,
+                    logicalCondition: "AND",
+                  },
+                ]);
+              }}
+            >
+              Type 1
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => {
+                setValidationConditionList([
+                  ...validationConditionList,
+                  {
+                    field: "",
+                    condition: "",
+                    value: "",
+                    type: 2,
+                    logicalCondition: "AND",
+                  },
+                ]);
+              }}
+            >
+              Type 2
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </div>
       {validationConditionList.map((condition, index) => {
         if (condition.type === 1) {
           return (
             <div className="d-flex gap-2 mb-2 align-items-center">
               <span>{index + 1}) </span>
+              <select
+                className="form-select"
+                value={index == 0 ? "" : condition.logicalCondition}
+                disabled={index == 0}
+                onChange={(e) => {
+                  setValidationConditionList((prev) =>
+                    prev.map((item, i) =>
+                      i === index
+                        ? {
+                            ...item,
+                            logicalCondition: e.target.value,
+                          }
+                        : item
+                    )
+                  );
+                }}
+                style={{ width: "100px" }}
+              >
+                <option value="">Select a field</option>
+                {conditionTypes.map((field) => {
+                  return <option value={field.label}>{field.value}</option>;
+                })}
+              </select>
               <select
                 className="form-select"
                 value={condition.condition}
@@ -100,6 +156,7 @@ const ConditionValidationField = ({validationConditionList, setValidationConditi
                 value={condition.value}
                 placeholder="Value"
               />
+
               <span>
                 <AiFillDelete
                   className="cursor-pointer text-custom-primary"
@@ -116,6 +173,29 @@ const ConditionValidationField = ({validationConditionList, setValidationConditi
           return (
             <div className="d-flex gap-2 mb-2 align-items-center">
               <span>{index + 1}) </span>
+              <select
+                className="form-select"
+                value={index == 0 ? "" : condition.logicalCondition}
+                disabled={index == 0}
+                onChange={(e) => {
+                  setValidationConditionList((prev) =>
+                    prev.map((item, i) =>
+                      i === index
+                        ? {
+                            ...item,
+                            logicalCondition: e.target.value,
+                          }
+                        : item
+                    )
+                  );
+                }}
+                style={{ width: "100px" }}
+              >
+                <option value="">Select a field</option>
+                {conditionTypes.map((field) => {
+                  return <option value={field.label}>{field.value}</option>;
+                })}
+              </select>
               <select
                 className="form-select"
                 value={condition.field}
@@ -165,6 +245,7 @@ const ConditionValidationField = ({validationConditionList, setValidationConditi
                 value={condition.value}
                 placeholder="Value"
               />
+
               <span>
                 <AiFillDelete
                   className="cursor-pointer text-custom-primary"
