@@ -40,7 +40,7 @@ function JobCustomView() {
   };
 
   useEffect(() => {
-    if (jobFields.length > 0) {
+    if (jobFields?.length > 0) {
       setOptions(jobFields);
     }
   }, [jobFields]);

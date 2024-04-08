@@ -44,11 +44,11 @@ function AccountCustomView() {
   }, []);
 
   useEffect(() => {
-    if (accountFields.length > 0) {
+    if (accountFields?.length > 0) {
       setOptions(accountFields);
     }
   }, [accountFields]);
-  
+
   const handleSubmit = async (values) => {
     if (selectedOption.length === 0) {
       setDualListBoxError(true);

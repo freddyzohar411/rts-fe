@@ -43,7 +43,7 @@ function CandidateCustomView() {
   }, []);
 
   useEffect(() => {
-    if (candidateFields.length > 0) {
+    if (candidateFields?.length > 0) {
       setOptions(candidateFields);
     }
   }, [candidateFields]);
