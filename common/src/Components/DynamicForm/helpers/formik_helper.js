@@ -492,7 +492,7 @@ const generateValidationSchema2 = (
       // }
 
       if (field?.conditionValidation?.length > 0) {
-        console.log("field.conditionValidation", field.conditionValidation)
+        console.log("field.conditionValidation", field.conditionValidation);
         fieldValidation = fieldValidation.test(
           "conditionValidation",
           field.conditionValidationErrorMessage,
@@ -505,12 +505,28 @@ const generateValidationSchema2 = (
             field?.conditionValidation.forEach((condition, index) => {
               let isValid = false;
               // if (condition.field === "" && condition.value === "") return true;
-              const valueToCompare =
-                condition?.value || formik?.values[condition?.field] || "";
-              // if (valueToCompare === undefined) return true;
-              console.log("value", value);  
-              console.log("valueToCompare", valueToCompare);
+              // const valueToCompare =
+              //   condition?.value || formik?.values[condition?.field] || "";
+              // // if (valueToCompare === undefined) return true;
+              // console.log("value", value);
+              // console.log("valueToCompare", valueToCompare);
+
+              // // Ensure data is not undefined
+              // if (valueToCompare === undefined) {
+              //   valueToCompare = "";
+              // }
+
               if (condition?.type === 1) {
+                const valueToCompare =
+                  condition?.value || formik?.values[condition?.field] || "";
+                // if (valueToCompare === undefined) return true;
+                console.log("value", value);
+                console.log("valueToCompare", valueToCompare);
+
+                // Ensure data is not undefined
+                if (valueToCompare === undefined) {
+                  valueToCompare = "";
+                }
                 console.log("condition?.condition", condition?.condition);
                 if (condition?.condition === "equals") {
                   if (value === valueToCompare) {
@@ -572,21 +588,20 @@ const generateValidationSchema2 = (
                   }
                 }
                 if (condition?.condition === "isEmpty") {
-                  console.log("IsEmpty value", value);
                   if (value === "") {
                     isValid = true;
                   }
+                  console.log("IsEmpty value", value, isValid);
                 }
               } else {
+                const valueToCompare = formik?.values[condition?.field] || "";
                 if (condition?.condition === "equals") {
-                  console.log("Type 2 value", condition?.value);
-                  console.log("Type 2valueToCompare", valueToCompare);
                   if (condition?.value === valueToCompare) {
                     isValid = true;
                   }
                 }
                 if (condition?.condition === "notEqual") {
-                  if (value === valueToCompare) {
+                  if (condition?.value !== valueToCompare) {
                     isValid = true;
                   }
                 }
@@ -646,13 +661,13 @@ const generateValidationSchema2 = (
                 }
               }
 
-              if (isValidCombined === null){
+              if (isValidCombined === null) {
                 isValidCombined = isValid;
               } else {
                 isValidCombined = isValidCombined && isValid;
               }
 
-              console.log("isValid",`Index ${index}: ${isValid}`);
+              console.log("isValid", `Index ${index}: ${isValid}`);
             });
             console.log("isValidCombined", !isValidCombined);
             return !isValidCombined;
@@ -742,5 +757,5 @@ export {
   generateValidationSchema,
   generateValidationSchema2,
   generateValidationSchemaForFieldBuilder,
-  populateInitialValues
+  populateInitialValues,
 };
