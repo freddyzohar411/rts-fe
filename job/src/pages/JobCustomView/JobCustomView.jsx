@@ -40,8 +40,10 @@ function JobCustomView() {
   };
 
   useEffect(() => {
-    setOptions(jobFields);
-  }, [options]);
+    if (jobFields?.length > 0) {
+      setOptions(jobFields);
+    }
+  }, [jobFields]);
 
   const handleSubmit = async (values) => {
     if (selectedOption.length === 0) {
@@ -68,7 +70,7 @@ function JobCustomView() {
             <Col>
               <Breadcrumb>
                 <BreadcrumbItem>Jobs</BreadcrumbItem>
-                <BreadcrumbItem active>Custom View</BreadcrumbItem>
+                <BreadcrumbItem active>Create Custom View</BreadcrumbItem>
               </Breadcrumb>
             </Col>
           </Row>
@@ -95,7 +97,12 @@ function JobCustomView() {
                       <CardBody>
                         <Row>
                           <Col>
-                            <div className="mb-3 w-50">
+                            <h6 className="fw-bold">General Information</h6>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={4}>
+                            <div className="mb-3">
                               <Label className="fw-semibold">
                                 Custom View Name
                               </Label>
