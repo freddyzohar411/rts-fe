@@ -62,7 +62,7 @@ export const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords must match."),
   employeeId: yup.string().required("Please enter the Employee ID."),
   // Id is a number
-  managerId: yup.number().nullable().notRequired(),
+  managerId: yup.number().required("Please select a manager."),
   status: yup.bool().required("Please select a status."),
   groups: yup.array().nullable().notRequired(),
 });
@@ -91,5 +91,5 @@ export const updateSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords must match."),
   employeeId: yup.string().required("Please enter the Employee ID."),
   // Id is a number
-  managerId: yup.number().nullable().notRequired(),
+  managerId: yup.number().required("Please select a manager."),
 });

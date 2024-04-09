@@ -197,7 +197,7 @@ function UpdateUser() {
                   initialValues={userInitialValues}
                   enableReinitialize={true}
                   onSubmit={handleSubmit}
-                >
+                > 
                   {({ errors, touched, resetForm, values, handleChange }) => (
                     <Form>
                       <CardBody>
@@ -399,7 +399,7 @@ function UpdateUser() {
                         <Row className="mb-3">
                           <Col lg={4}>
                             <div className="mb-3">
-                              <Label>Select Manager</Label>
+                              <Label>Select Manager*</Label>
                               <FormSelection
                                 name="managerId"
                                 value={sortBy}
@@ -417,6 +417,7 @@ function UpdateUser() {
                                 style={{ borderColor: "#8aaed6" }}
                                 className="js-example-basic-single mb-0"
                                 isClearable
+                                error={errors.managerId}
                               />
                             </div>
                           </Col>
