@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Row,
   Col,
@@ -16,6 +16,7 @@ import {
   PaginationItem,
   PaginationLink,
   Tooltip,
+  ButtonGroup,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -67,6 +68,7 @@ import { CodingTest } from "../CodingTest";
 import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
+import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -75,6 +77,7 @@ const JobOverview = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
   const [legendTooltip, setLegendTooltip] = useState(false);
+  const [headerTooltip, setHeaderTooltip] = useState(false);
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
@@ -95,6 +98,7 @@ const JobOverview = () => {
 
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
+  const [tooltipIndexes, setTooltipIndexes] = useState();
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -592,138 +596,74 @@ const JobOverview = () => {
     );
   };
 
+  /**
+   * @author Rahul Sahu
+   * @param {*} targetName
+   * Toggle tooltip
+   */
+  const toggle = (targetName) => {
+    if (!tooltipIndexes?.[targetName]) {
+      setTooltipIndexes({
+        ...tooltipIndexes,
+        [targetName]: {
+          tooltipOpen: true,
+        },
+      });
+    } else {
+      setTooltipIndexes({
+        ...tooltipIndexes,
+        [targetName]: {
+          tooltipOpen: !tooltipIndexes?.[targetName]?.tooltipOpen,
+        },
+      });
+    }
+  };
+
+  const isToolTipOpen = (targetName) => {
+    return tooltipIndexes?.[targetName]
+      ? tooltipIndexes?.[targetName]?.tooltipOpen
+      : false;
+  };
+
   return (
     <React.Fragment>
       <div>
+        <Row lg={12} className="m-1 p-0">
+          {overviewHeaders.map((header, index) => {
+            const mobile = isMobile | isTablet;
+            const values = overviewValues(
+              formSubmissionData,
+              deliveryTeam,
+              mobile
+            );
+            return (
+              <Col key={index}>
+                <div
+                  className="d-flex flex-column cursor-pointer"
+                  id={`btn-${index}`}
+                  onClick={() => setHeaderTooltip(!headerTooltip)}
+                >
+                  <span className="fw-medium h6 text-muted">{header}</span>
+                  <span className="h5 fw-bold gap-1 text-nowrap">
+                    {values?.[header]?.trimValue}
+                  </span>
+                </div>
+                <Tooltip
+                  isOpen={isToolTipOpen(`btn-${index}`)}
+                  placement="bottom-start"
+                  target={`btn-${index}`}
+                  toggle={() => toggle(`btn-${index}`)}
+                >
+                  {values?.[header]?.value}
+                </Tooltip>
+              </Col>
+            );
+          })}
+        </Row>
         <Row lg={12} className="m-0 p-0">
           <TimelineHeader data={jobHeaders} />
         </Row>
         <hr className="border border-dashed border-dark" />
-        <Row className="mb-2">
-          <Col>
-            <div
-              className={`d-flex ${
-                isMobile
-                  ? "flex-column align-items-start"
-                  : "flex-row align-items-center"
-              } justify-content-between gap-1`}
-            >
-              <div
-                className={`d-flex ${
-                  isMobile
-                    ? "flex-column align-items-start"
-                    : "flex-row align-items-end"
-                } h5 fw-bold  gap-1`}
-                style={{ whiteSpace: "nowrap" }}
-              >
-                <div className="d-flex flex-row gap-1">
-                  <div className="d-flex flex-column">
-                    <span className="fw-medium h6 text-muted">Account</span>
-                    <span
-                      title={formSubmissionData?.accountName}
-                      className="cursor-pointer"
-                    >
-                      {isMobile | isTablet
-                        ? truncate(formSubmissionData?.accountName, 8)
-                        : truncate(formSubmissionData?.accountName, 35)}
-                      <span> | </span>
-                    </span>
-                  </div>
-                  <div className="d-flex flex-column">
-                    <span className="fw-medium h6 text-muted">Job Title</span>
-                    <span
-                      title={formSubmissionData?.jobTitle}
-                      className="cursor-pointer"
-                    >
-                      {isMobile | isTablet
-                        ? truncate(formSubmissionData?.jobTitle, 8)
-                        : truncate(formSubmissionData?.jobTitle, 35)}
-                      <span> | </span>
-                    </span>
-                  </div>
-                  <div className="d-flex flex-column">
-                    <span className="fw-medium h6 text-muted">Job Id</span>
-                    <span
-                      title={formSubmissionData?.clientJobId}
-                      className="cursor-pointer"
-                    >
-                      {isMobile | isTablet
-                        ? truncate(formSubmissionData?.clientJobId, 8)
-                        : truncate(formSubmissionData?.clientJobId, 35)}
-                      {isMobile || <span> | </span>}
-                    </span>
-                  </div>
-                </div>
-                <div className="d-flex flex-row gap-1">
-                  <div className="d-flex flex-column">
-                    <span className="fw-medium h6 text-muted">Sales</span>
-                    <span
-                      title={formSubmissionData?.accountOwner}
-                      className="cursor-pointer"
-                    >
-                      {isMobile | isTablet
-                        ? truncate(formSubmissionData?.accountOwner, 8)
-                        : truncate(formSubmissionData?.accountOwner, 25)}
-                    </span>
-                  </div>
-                  <div className="d-flex align-items-end gap-1">
-                    <span>|</span>
-                    <div className="d-flex flex-column">
-                      <span className="fw-medium h6 text-muted">Delivery</span>
-                      <span
-                        title={deliveryTeam?.join(", ")}
-                        className="cursor-pointer"
-                      >
-                        {isMobile | isTablet
-                          ? truncate(deliveryTeam?.join(", "), 8)
-                          : truncate(deliveryTeam?.join(", "), 25)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="d-flex flex-column gap-2">
-                <div className="d-flex flex-row gap-2 justify-content-end align-items-center">
-                  <div>
-                    <i
-                      id="legendInfo"
-                      className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
-                      onClick={() => setLegendTooltip(!legendTooltip)}
-                    ></i>
-                    <Tooltip
-                      target="legendInfo"
-                      placement="bottom"
-                      isOpen={legendTooltip}
-                      toggle={() => setLegendTooltip(!legendTooltip)}
-                      className="legend-tooltip"
-                    >
-                      {renderLegend()}
-                    </Tooltip>
-                  </div>
-                  <div className="search-box">
-                    <form onSubmit={pageRequestSet.setSearchTerm}>
-                      <Input
-                        type="text"
-                        placeholder="Search"
-                        className="form-control search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                      />
-                    </form>
-                    <i className="ri-search-eye-line search-icon"></i>
-                  </div>
-                  <Button className="btn btn-custom-primary">
-                    <i className="ri-filter-2-fill"></i>
-                  </Button>
-                  <Button className="btn btn-custom-primary">
-                    <i className="ri-message-2-fill"></i>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
-
         <Row>
           <Nav tabs>
             <NavItem>
@@ -746,18 +686,61 @@ const JobOverview = () => {
                 BSG Status
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink>
-                <div className="d-flex flex-row gap-2 fw-semibold">
-                  <span>Status Overview</span>
-                  <span>|</span>
-                  <span>Overall Man Days: 30</span>
-                </div>
-              </NavLink>
-            </NavItem>
           </Nav>
         </Row>
-
+        <Row className="mb-2 mt-2">
+          <Col>
+            <div
+              className={`d-flex ${
+                isMobile
+                  ? "flex-column align-items-start"
+                  : "flex-row align-items-center"
+              } justify-content-between gap-1`}
+            >
+              <div className="d-flex flex-row gap-2 align-items-center">
+                <div className="search-box">
+                  <form onSubmit={pageRequestSet.setSearchTerm}>
+                    <Input
+                      type="text"
+                      placeholder="Search"
+                      className="form-control search"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </form>
+                  <i className="ri-search-eye-line search-icon"></i>
+                </div>
+                <i
+                  id="legendInfo"
+                  className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
+                  onClick={() => setLegendTooltip(!legendTooltip)}
+                ></i>
+                <Tooltip
+                  target="legendInfo"
+                  placement="bottom"
+                  isOpen={legendTooltip}
+                  toggle={() => setLegendTooltip(!legendTooltip)}
+                  className="legend-tooltip"
+                >
+                  {renderLegend()}
+                </Tooltip>
+              </div>
+              <div className="d-flex flex-row gap-2 ">
+                <ButtonGroup>
+                  <Button color="light" className="bg-gradient border-dark">
+                    <i className="ri-filter-3-line align-bottom me-1"></i>Filter
+                  </Button>
+                  <Button color="light" className="bg-gradient border-dark">
+                    <i className="ri-download-fill align-bottom me-1"></i>
+                  </Button>
+                  <Button color="light" className="bg-gradient border-dark">
+                    <i className="ri-fullscreen-line align-bottom me-1"></i>
+                  </Button>
+                </ButtonGroup>
+              </div>
+            </div>
+          </Col>
+        </Row>
         <Row>
           <TabContent activeTab={timelineTab} className="p-0">
             <TabPane tabId="1">

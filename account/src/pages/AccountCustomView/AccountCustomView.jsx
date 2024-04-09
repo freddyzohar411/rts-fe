@@ -40,12 +40,14 @@ function AccountCustomView() {
   };
 
   useEffect(() => {
-    setOptions(accountFields);
-  }, [options]);
-
-  useEffect(() => {
     dispatch(fetchAccountsFields());
   }, []);
+
+  useEffect(() => {
+    if (accountFields?.length > 0) {
+      setOptions(accountFields);
+    }
+  }, [accountFields]);
 
   const handleSubmit = async (values) => {
     if (selectedOption.length === 0) {
@@ -128,14 +130,16 @@ function AccountCustomView() {
                         </Row>
                         <Row>
                           <Col>
-                            <div>
-                              <Label className="fw-semibold">
-                                Custom View Columns
-                              </Label>
-                              <span>
-                                Please select the columns you would like to see
-                                in the Account Listing table.
-                              </span>
+                            <div className="mb-3">
+                              <div className="d-flex flex-column mb-3">
+                                <Label className="fw-semibold">
+                                  Custom View Columns
+                                </Label>
+                                <span>
+                                  Please select the columns you would like to
+                                  see in the Account Listing table.
+                                </span>
+                              </div>
 
                               <DualListBox
                                 options={options ?? []}

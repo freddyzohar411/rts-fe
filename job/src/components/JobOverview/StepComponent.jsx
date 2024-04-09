@@ -106,7 +106,7 @@ function StepComponent({
               <div style={{ height: "2px", width: "100%" }}></div>
             )}
             <div
-              className={`rounded-pill border border-primary ${
+              className={`d-flex justify-content-center align-items-center cursor-pointer rounded-pill border border-primary ${
                 index === maxOrder && !isRejected
                   ? "bg-warning border-warning"
                   : getBulletBgColor()
@@ -121,24 +121,24 @@ function StepComponent({
               }}
             >
               {index === 5 && (
-                <span>
-                  <i
-                    id="assessment-popover"
-                    className="ri-add-fill text-white fw-bold cursor-pointer"
-                    onClick={() => {
-                      setToggleAssessment(!toggleAssessment);
-                    }}
-                  ></i>
+                <span
+                  id="assessment-popover"
+                  className="text-white fw-bold"
+                  onClick={() => {
+                    setToggleAssessment(!toggleAssessment);
+                  }}
+                >
+                  +
                 </span>
               )}
               {index === 9 && (
-                <span>
-                  <i
-                    className="ri-add-fill text-white fw-bold cursor-pointer"
-                    onClick={() => {
-                      setToggleInterview(!toggleInterview);
-                    }}
-                  ></i>
+                <span
+                  className="text-white fw-bold cursor-pointer"
+                  onClick={() => {
+                    setToggleInterview(!toggleInterview);
+                  }}
+                >
+                  +
                 </span>
               )}
             </div>

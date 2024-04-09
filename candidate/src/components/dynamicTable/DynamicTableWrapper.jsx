@@ -32,7 +32,6 @@ import {
 } from "../../store/candidate/action";
 import { DeleteCustomModal } from "@workspace/common";
 import { all } from "redux-saga/effects";
-import { ACCOUNT_INITIAL_OPTIONS } from "@workspace/account/src/pages/AccountListing/accountListingConstants";
 
 const DynamicTableWrapper = ({
   data,
@@ -108,7 +107,7 @@ const DynamicTableWrapper = ({
         }
       }
     } else {
-      setCustomConfigData(ACCOUNT_INITIAL_OPTIONS);
+      setCustomConfigData(CANDIDATE_INITIAL_OPTIONS);
     }
   }, [allCandidateCustomViews, optGroup]);
 
