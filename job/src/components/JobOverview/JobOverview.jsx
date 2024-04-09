@@ -16,6 +16,7 @@ import {
   PaginationItem,
   PaginationLink,
   Tooltip,
+  ButtonGroup,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -663,57 +664,6 @@ const JobOverview = () => {
           <TimelineHeader data={jobHeaders} />
         </Row>
         <hr className="border border-dashed border-dark" />
-        <Row className="mb-2">
-          <Col>
-            <div
-              className={`d-flex ${
-                isMobile
-                  ? "flex-column align-items-start"
-                  : "flex-row align-items-center"
-              } justify-content-between gap-1`}
-            >
-              <div className="d-flex flex-column gap-2">
-                <div className="d-flex flex-row gap-2 justify-content-end align-items-center">
-                  <div>
-                    <i
-                      id="legendInfo"
-                      className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
-                      onClick={() => setLegendTooltip(!legendTooltip)}
-                    ></i>
-                    <Tooltip
-                      target="legendInfo"
-                      placement="bottom"
-                      isOpen={legendTooltip}
-                      toggle={() => setLegendTooltip(!legendTooltip)}
-                      className="legend-tooltip"
-                    >
-                      {renderLegend()}
-                    </Tooltip>
-                  </div>
-                  <div className="search-box">
-                    <form onSubmit={pageRequestSet.setSearchTerm}>
-                      <Input
-                        type="text"
-                        placeholder="Search"
-                        className="form-control search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                      />
-                    </form>
-                    <i className="ri-search-eye-line search-icon"></i>
-                  </div>
-                  <Button className="btn btn-custom-primary">
-                    <i className="ri-filter-2-fill"></i>
-                  </Button>
-                  <Button className="btn btn-custom-primary">
-                    <i className="ri-message-2-fill"></i>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
-
         <Row>
           <Nav tabs>
             <NavItem>
@@ -736,18 +686,61 @@ const JobOverview = () => {
                 BSG Status
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink>
-                <div className="d-flex flex-row gap-2 fw-semibold">
-                  <span>Status Overview</span>
-                  <span>|</span>
-                  <span>Overall Man Days: 30</span>
-                </div>
-              </NavLink>
-            </NavItem>
           </Nav>
         </Row>
-
+        <Row className="mb-2 mt-2">
+          <Col>
+            <div
+              className={`d-flex ${
+                isMobile
+                  ? "flex-column align-items-start"
+                  : "flex-row align-items-center"
+              } justify-content-between gap-1`}
+            >
+              <div className="d-flex flex-row gap-2 align-items-center">
+                <div className="search-box">
+                  <form onSubmit={pageRequestSet.setSearchTerm}>
+                    <Input
+                      type="text"
+                      placeholder="Search"
+                      className="form-control search"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </form>
+                  <i className="ri-search-eye-line search-icon"></i>
+                </div>
+                <i
+                  id="legendInfo"
+                  className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
+                  onClick={() => setLegendTooltip(!legendTooltip)}
+                ></i>
+                <Tooltip
+                  target="legendInfo"
+                  placement="bottom"
+                  isOpen={legendTooltip}
+                  toggle={() => setLegendTooltip(!legendTooltip)}
+                  className="legend-tooltip"
+                >
+                  {renderLegend()}
+                </Tooltip>
+              </div>
+              <div className="d-flex flex-row gap-2 ">
+                <ButtonGroup>
+                  <Button color="light" className="bg-gradient border-dark">
+                    <i className="ri-filter-3-line align-bottom me-1"></i>Filter
+                  </Button>
+                  <Button color="light" className="bg-gradient border-dark">
+                    <i className="ri-download-fill align-bottom me-1"></i>
+                  </Button>
+                  <Button color="light" className="bg-gradient border-dark">
+                    <i className="ri-fullscreen-line align-bottom me-1"></i>
+                  </Button>
+                </ButtonGroup>
+              </div>
+            </div>
+          </Col>
+        </Row>
         <Row>
           <TabContent activeTab={timelineTab} className="p-0">
             <TabPane tabId="1">
