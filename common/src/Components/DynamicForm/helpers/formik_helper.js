@@ -334,83 +334,182 @@ const generateValidationSchema2 = (
         }
       }
 
-      // Perform custom condition validation
       if (field?.conditionValidation?.length > 0) {
-        fieldValidation = fieldValidation.test(
-          "conditionValidation",
-          field.conditionValidationErrorMessage,
-          (value) => {
-            if (!value) return true; // allow empty values
-            let isValid = true;
-            field?.conditionValidation.forEach((condition) => {
-              if (condition.field === "" && condition.value === "") return true;
-              const valueToCompare =
-                condition?.value || formik?.values[condition?.field];
-              if (valueToCompare === undefined) return true;
+        field?.conditionValidation?.forEach((validation, index) => {
+          fieldValidation = fieldValidation.test(
+            `conditionValidation-${index}`,
+            validation?.conditionValidationMessage,
+            (value) => {
+              if (value === undefined) {
+                value = "";
+              }
+              let isValidCombined = null;
+              validation.validationList.forEach((condition, index) => {
+                let isValid = false;
+                if (condition?.type === 1) {
+                  // Get value to compare
+                  let valueToCompare =
+                    condition?.value || formik?.values[condition?.field] || "";
 
-              if (condition?.condition === "equals") {
-                if (value === valueToCompare) {
-                  isValid = false;
+                  // Ensure data is not undefined
+                  if (valueToCompare === undefined) {
+                    valueToCompare = "";
+                  }
+
+                  if (condition?.condition === "equals") {
+                    if (value === valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "notEqual") {
+                    if (value !== valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "greaterThan") {
+                    if (value > valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "lessThan") {
+                    if (value < valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "greaterThanOrEqual") {
+                    if (value >= valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "lessThanOrEqual") {
+                    if (value <= valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "before") {
+                    // Compare dates
+                    if (new Date(value) < new Date(valueToCompare)) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "after") {
+                    // Compare dates
+                    if (new Date(value) > new Date(valueToCompare)) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "beforeOrEqual") {
+                    // Compare dates
+                    if (new Date(value) <= new Date(valueToCompare)) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "afterOrEqual") {
+                    // Compare dates
+                    if (new Date(value) >= new Date(valueToCompare)) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "isNotEmpty") {
+                    if (value != "" && valueToCompare === "") {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "isEmpty") {
+                    if (value === "") {
+                      isValid = true;
+                    }
+                  }
+                } else {
+                  // Get value to compare
+                  let valueToCompare = formik?.values[condition?.field] || "";
+                  if (valueToCompare === undefined) {
+                    valueToCompare = "";
+                  }
+
+                  if (condition?.condition === "equals") {
+                    if (condition?.value === valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+
+                  if (condition?.condition === "notEqual") {
+                    if (condition?.value !== valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "greaterThan") {
+                    if (condition?.value < valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "lessThan") {
+                    if (condition?.value > valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "greaterThanOrEqual") {
+                    if (condition?.value <= valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "lessThanOrEqual") {
+                    if (condition?.value >= valueToCompare) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "before") {
+                    // Compare dates
+                    if (new Date(condition?.value) > new Date(valueToCompare)) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "after") {
+                    // Compare dates
+                    if (new Date(condition?.value) < new Date(valueToCompare)) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "beforeOrEqual") {
+                    // Compare dates
+                    if (
+                      new Date(condition?.value) >= new Date(valueToCompare)
+                    ) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "afterOrEqual") {
+                    // Compare dates
+                    if (
+                      new Date(condition?.value) <= new Date(valueToCompare)
+                    ) {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "isNotEmpty") {
+                    if (valueToCompare != "") {
+                      isValid = true;
+                    }
+                  }
+                  if (condition?.condition === "isEmpty") {
+                    if (valueToCompare === "") {
+                      isValid = true;
+                    }
+                  }
                 }
-              }
-              if (condition?.condition === "notEqual") {
-                if (value !== valueToCompare) {
-                  isValid = false;
+
+                if (condition?.logicalCondition === "AND") {
+                  isValidCombined = isValidCombined && isValid;
+                } else if (condition?.logicalCondition === "OR") {
+                  isValidCombined = isValidCombined || isValid;
+                } else {
+                  isValidCombined = isValid;
                 }
-              }
-              if (condition?.condition === "greaterThan") {
-                if (value > valueToCompare) {
-                  isValid = false;
-                }
-              }
-              if (condition?.condition === "lessThan") {
-                if (value < valueToCompare) {
-                  isValid = false;
-                }
-              }
-              if (condition?.condition === "greaterThanOrEqual") {
-                if (value >= valueToCompare) {
-                  isValid = false;
-                }
-              }
-              if (condition?.condition === "lessThanOrEqual") {
-                if (value <= valueToCompare) {
-                  isValid = false;
-                }
-              }
-              if (condition?.condition === "before") {
-                // Compare dates
-                if (new Date(value) < new Date(valueToCompare)) {
-                  isValid = false;
-                }
-              }
-              if (condition?.condition === "after") {
-                // Compare dates
-                if (new Date(value) > new Date(valueToCompare)) {
-                  isValid = false;
-                }
-              }
-              if (condition?.condition === "beforeOrEqual") {
-                // Compare dates
-                if (new Date(value) <= new Date(valueToCompare)) {
-                  isValid = false;
-                }
-              }
-              if (condition?.condition === "afterOrEqual") {
-                // Compare dates
-                if (new Date(value) >= new Date(valueToCompare)) {
-                  isValid = false;
-                }
-              }
-              if (condition?.condition === "isNotEmpty") {
-                if (value != "" && valueToCompare === "") {
-                  isValid = false;
-                }
-              }
-            });
-            return isValid;
-          }
-        );
+              });
+              return !isValidCombined;
+            }
+          );
+        });
       }
 
       return { ...acc, [field.name]: fieldValidation };
@@ -495,5 +594,5 @@ export {
   generateValidationSchema,
   generateValidationSchema2,
   generateValidationSchemaForFieldBuilder,
-  populateInitialValues
+  populateInitialValues,
 };

@@ -1275,7 +1275,8 @@ const FormBuilder = ({
             toggle={() => {
               setFormBuilderUpdateData(null);
               setFormBuilderType(null);
-              setShowModalSchema(!showModalSchema)}}
+              setShowModalSchema(!showModalSchema);
+            }}
           >
             <div className="d-flex flex-column text-dark">
               <span className="h5 fw-bold">Edit Field</span>

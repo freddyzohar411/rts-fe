@@ -19,6 +19,7 @@ import { useNavigate, Link } from "react-router-dom";
 import {
   fetchAccountsFields,
   createAccountCustomView,
+  fetchAccountCustomView,
 } from "../../store/account/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
@@ -63,6 +64,7 @@ function AccountCustomView() {
       dispatch(
         createAccountCustomView({ payload: newCustomView, navigate: navigate })
       );
+      dispatch(fetchAccountCustomView());
     }
   };
 
