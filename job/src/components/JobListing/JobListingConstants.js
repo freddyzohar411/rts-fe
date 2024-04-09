@@ -1,5 +1,11 @@
 const JOB_INITIAL_OPTIONS = [
   {
+    sortValue: "job_submission_data.jobTitle",
+    label: "Job Title",
+    value: "jobSubmissionData.jobTitle",
+    sort: true,
+  },
+  {
     sortValue: "job_submission_data.jobType",
     label: "Job Type",
     value: "jobSubmissionData.jobType",
