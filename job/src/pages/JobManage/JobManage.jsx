@@ -51,7 +51,7 @@ const JobManage = () => {
               </Breadcrumb>
             </Col>
           </Row>
-          <Nav tabs>
+          <Nav className="nav-tabs-custom">
             <NavItem>
               <NavLink
                 className={classnames(
