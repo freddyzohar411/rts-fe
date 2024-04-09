@@ -651,15 +651,20 @@ const generateValidationSchema2 = (
             `conditionValidation-${index}`,
             validation?.conditionValidationMessage,
             (value) => {
-              if (!value) return true; // allow empty values
+              // if (!value) return true; // allow empty values
               let isValid = true;
               validation?.validationList?.forEach((condition) => {
-                if (condition.field === "" && condition.value === "") return true;
-                const valueToCompare =
-                  condition?.value || formik?.values[condition?.field];
-                if (valueToCompare === undefined) return true;
-                console.log("valueToCompare", valueToCompare);
+                // if (condition.field === "" && condition.value === "") return true;
+                // const valueToCompare =
+                //   condition?.value || formik?.values[condition?.field];
+                // if (valueToCompare === undefined) return true;
+
                 if (condition?.type === 1) {
+                  let valueToCompare =
+                    condition?.value || formik?.values[condition?.field] || "";
+                  if (valueToCompare === undefined) {
+                    valueToCompare = "";
+                  }
                   if (condition?.condition === "equals") {
                     if (value === valueToCompare) {
                       isValid = false;
@@ -725,6 +730,11 @@ const generateValidationSchema2 = (
                     }
                   }
                 } else {
+                  let valueToCompare =
+                    condition?.value || formik?.values[condition?.field];
+                  if (valueToCompare === undefined) {
+                    valueToCompare = "";
+                  }
                   if (condition?.condition === "equals") {
                     console.log("value", condition?.value);
                     console.log("valueToCompare", valueToCompare);
@@ -793,7 +803,7 @@ const generateValidationSchema2 = (
                   }
                 }
               });
-  
+
               console.log("isValid", isValid);
               return isValid;
             }
