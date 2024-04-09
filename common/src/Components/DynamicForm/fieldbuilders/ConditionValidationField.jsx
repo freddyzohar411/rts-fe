@@ -22,10 +22,13 @@ const ConditionValidationField = ({
   const [conditionValidationError, setConditionValidationError] = useState([]);
 
   useEffect(() => {
+    if (!validationConditionList) {
+      return
+    }
     setDropdownOpen((prevState) => {
-      const newState = new Array(validationConditionList.length).fill(false);
+      const newState = new Array(validationConditionList?.length).fill(false);
       prevState.forEach((state, index) => {
-        if (index < newState.length) {
+        if (index < newState?.length) {
           newState[index] = state;
         }
       });
@@ -35,7 +38,7 @@ const ConditionValidationField = ({
 
   const toggle = (index) => {
     setDropdownOpen((prevState) =>
-      prevState.map((item, i) => (i === index ? !prevState[index] : item))
+      prevState?.map((item, i) => (i === index ? !prevState[index] : item))
     );
   };
 
@@ -51,7 +54,7 @@ const ConditionValidationField = ({
   const verifyAndModifyConditionalMessage = () => {
     setValidationConditionList((prev) => {
       return prev.map((condition) => {
-        if (condition.validationList.length === 0) {
+        if (condition?.validationList?.length === 0) {
           return {
             ...condition,
             conditionValidationMessage: "",
@@ -68,7 +71,7 @@ const ConditionValidationField = ({
 
   useEffect(() => {
     const newConditions = validationConditionList.map((condition) => {
-      if (condition.validationList.length === 0) {
+      if (condition?.validationList?.length === 0) {
         return { ...condition, conditionValidationMessage: "" };
       }
       return condition; // Assuming we don't need to update if there's no change
@@ -82,8 +85,8 @@ const ConditionValidationField = ({
 
   const handleValidationErrorMessage = (index) => {
     if (
-      validationConditionList[index].validationList.length > 0 &&
-      validationConditionList[index].conditionValidationMessage === ""
+      validationConditionList[index]?.validationList?.length > 0 &&
+      validationConditionList[index]?.conditionValidationMessage === ""
     ) {
       return "Please add a condition error message";
     }
@@ -121,7 +124,7 @@ const ConditionValidationField = ({
         </Button>
       </div>
 
-      {validationConditionList.map((validationCondition, index) => {
+      {validationConditionList?.map((validationCondition, index) => {
         return (
           <div className="mb-3">
             <div className="d-flex align-items-center gap-3 mb-2">
@@ -202,7 +205,7 @@ const ConditionValidationField = ({
                       style={{ width: "100px" }}
                     >
                       <option value="">Select a field</option>
-                      {conditionTypes.map((field) => {
+                      {conditionTypes?.map((field) => {
                         return (
                           <option value={field.label}>{field.value}</option>
                         );
@@ -221,7 +224,7 @@ const ConditionValidationField = ({
                       }
                     >
                       <option value="">Select a condition</option>
-                      {field.conditionTypes.map((conditionType) => (
+                      {field.conditionTypes?.map((conditionType) => (
                         <option value={conditionType}>{conditionType}</option>
                       ))}
                     </select>
@@ -238,7 +241,7 @@ const ConditionValidationField = ({
                       }}
                     >
                       <option value="">Select a field</option>
-                      {formFields.map((field) => {
+                      {formFields?.map((field) => {
                         return <option value={field.name}>{field.name}</option>;
                       })}
                     </select>
@@ -294,7 +297,7 @@ const ConditionValidationField = ({
                       style={{ width: "100px" }}
                     >
                       <option value="">Select a field</option>
-                      {conditionTypes.map((field) => {
+                      {conditionTypes?.map((field) => {
                         return (
                           <option value={field.label}>{field.value}</option>
                         );
@@ -313,7 +316,7 @@ const ConditionValidationField = ({
                       }}
                     >
                       <option value="">Select a field</option>
-                      {formFields.map((field) => {
+                      {formFields?.map((field) => {
                         return <option value={field.name}>{field.name}</option>;
                       })}
                     </select>
@@ -330,7 +333,7 @@ const ConditionValidationField = ({
                       }
                     >
                       <option value="">Select a condition</option>
-                      {field.conditionTypes.map((conditionType) => (
+                      {field?.conditionTypes?.map((conditionType) => (
                         <option value={conditionType}>{conditionType}</option>
                       ))}
                     </select>
@@ -373,7 +376,7 @@ const ConditionValidationField = ({
             <Input
               value={validationCondition?.conditionValidationMessage}
               type="text"
-              disabled={validationCondition.validationList.length === 0}
+              disabled={validationCondition?.validationList?.length === 0}
               onChange={(e) => {
                 setValidationConditionList((prev) => {
                   const va = jsonCopy(prev);
