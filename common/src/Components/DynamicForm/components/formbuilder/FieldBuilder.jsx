@@ -11,6 +11,7 @@ import CountrySelectField from "../../fieldbuilders/CountrySelectField";
 import UserGroupSelectField from "../../fieldbuilders/UserGroupSelectField";
 import FormCategorySelectField from "../../fieldbuilders/FormCategorySelectField";
 import useFieldBuilderValidationHook from "./FieldBuilderValidationHook";
+import ConditionValidationField from "../../fieldbuilders/ConditionValidationField";
 
 const FieldBuilder = ({
   type,
@@ -28,6 +29,9 @@ const FieldBuilder = ({
   const [initialValues, setInitialValues] = useState({});
   const [uuidKey, setUuidKey] = useState(
     !formBuilderUpdateData?.label ? formBuilderUpdateData?.name : uuid()
+  );
+  const [validationConditionErrors, setValidationConditionErrors] = useState(
+    []
   );
 
   useEffect(() => {
@@ -767,44 +771,44 @@ const FieldBuilder = ({
         "multiinput",
       ],
     },
-    {
-      label: "Condition Validation Error Message",
-      type: "text",
-      name: "conditionValidationErrorMessage",
-      apply: [
-        "text",
-        "email",
-        "number",
-        "textarea",
-        "file",
-        "select",
-        "radio",
-        "checkbox",
-        "password",
-        "date",
-        "selectindustry",
-        "selectsubindustry",
-        "selectaccountowner",
-        "selectcountry",
-        "selectcity",
-        "selectcurrency",
-        "selectstate",
-        "selectlandline",
-        "selectdepartment",
-        "editor",
-        "parentcompany",
-        "searchselect",
-        "multiselect",
-        "singleselect",
-        "singleselectapi",
-        "multiselectapi",
-        "multifile",
-        "selectaccountnameall",
-        "selectformtemplate",
-        "multiinput",
-      ],
-      renderCondition: validationConditionList.length > 0,
-    },
+    // {
+    //   label: "Condition Validation Error Message",
+    //   type: "text",
+    //   name: "conditionValidationErrorMessage",
+    //   apply: [
+    //     "text",
+    //     "email",
+    //     "number",
+    //     "textarea",
+    //     "file",
+    //     "select",
+    //     "radio",
+    //     "checkbox",
+    //     "password",
+    //     "date",
+    //     "selectindustry",
+    //     "selectsubindustry",
+    //     "selectaccountowner",
+    //     "selectcountry",
+    //     "selectcity",
+    //     "selectcurrency",
+    //     "selectstate",
+    //     "selectlandline",
+    //     "selectdepartment",
+    //     "editor",
+    //     "parentcompany",
+    //     "searchselect",
+    //     "multiselect",
+    //     "singleselect",
+    //     "singleselectapi",
+    //     "multiselectapi",
+    //     "multifile",
+    //     "selectaccountnameall",
+    //     "selectformtemplate",
+    //     "multiinput",
+    //   ],
+    //   renderCondition: validationConditionList.length > 0,
+    // },
     {
       label: "Copy Fields",
       type: "copyFields",
@@ -914,10 +918,10 @@ const FieldBuilder = ({
         tableData: [],
       },
       apply: ["table"],
-      tableDataTypes:[
+      tableDataTypes: [
         { label: "File Download", value: "fileDownload" },
         { label: "File Download & Preview", value: "fileDownloadPreview" },
-      ]
+      ],
     },
     {
       label: "Table Setting",
@@ -1486,6 +1490,11 @@ const FieldBuilder = ({
 
   // Handle Submit
   const handleFormSchemaSubmit = (values) => {
+    // Manual Checks for fields
+    if (validationConditionErrors.filter((item) => item !== "").length > 0) {
+      return;
+    }
+
     let validationSchema = { ...values };
     if (formBuilderUpdateData) {
       validationSchema = { ...formBuilderUpdateData, ...values };
@@ -2027,111 +2036,218 @@ const FieldBuilder = ({
                 ifContainsType(type, field.apply)
               ) {
                 return (
-                  <div className="mb-3">
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <label htmlFor={field.name} className="form-label">
-                        {field.label}
-                      </label>
-                      <button
-                        type="button"
-                        className="btn btn-custom-primary"
-                        onClick={() => {
-                          setValidationConditionList([
-                            ...validationConditionList,
-                            { field: "", condition: "", value: "" },
-                          ]);
-                        }}
-                      >
-                        Add
-                      </button>
-                    </div>
-                    {validationConditionList.map((condition, index) => {
-                      return (
-                        <div className="d-flex gap-2 mb-2 align-items-center">
-                          <span>{index + 1}) </span>
-                          <select
-                            className="form-select"
-                            value={condition.condition}
-                            onChange={(e) =>
-                              setValidationConditionList((prev) =>
-                                prev.map((item, i) =>
-                                  i === index
-                                    ? { ...item, condition: e.target.value }
-                                    : item
-                                )
-                              )
-                            }
-                          >
-                            <option value="">Select a condition</option>
-                            {field.conditionTypes.map((conditionType) => (
-                              <option value={conditionType}>
-                                {conditionType}
-                              </option>
-                            ))}
-                          </select>
-                          <select
-                            className="form-select"
-                            value={condition.field}
-                            onChange={(e) => {
-                              setValidationConditionList((prev) =>
-                                prev.map((item, i) =>
-                                  i === index
-                                    ? {
-                                        ...item,
-                                        field: e.target.value,
-                                        value: e.target.value ? "" : item.value,
-                                      }
-                                    : item
-                                )
-                              );
-                            }}
-                          >
-                            <option value="">Select a field</option>
-                            {formFields.map((field) => {
-                              return (
-                                <option value={field.name}>{field.name}</option>
-                              );
-                            })}
-                          </select>
-                          <span>OR</span>
-                          <input
-                            id="conditionValue"
-                            name="conditionValue"
-                            type="text"
-                            className="form-control"
-                            onChange={(e) =>
-                              setValidationConditionList((prev) =>
-                                prev.map((item, i) =>
-                                  i === index
-                                    ? {
-                                        ...item,
-                                        value: e.target.value,
-                                        field: e.target.value ? "" : item.field,
-                                      }
-                                    : item
-                                )
-                              )
-                            }
-                            value={condition.value}
-                            placeholder="Value"
-                          />
-                          <span>
-                            <AiFillDelete
-                              className="cursor-pointer text-custom-primary"
-                              onClick={() => {
-                                setValidationConditionList(
-                                  validationConditionList.filter(
-                                    (item, i) => i !== index
-                                  )
-                                );
-                              }}
-                            />
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <ConditionValidationField
+                    validationConditionList={validationConditionList}
+                    setValidationConditionList={setValidationConditionList}
+                    formFields={formFields}
+                    field={field}
+                    formik={formik}
+                    setValidationConditionErrors={setValidationConditionErrors}
+                  />
                 );
+                // return (
+                //   <div className="mb-3">
+                //     <div className="d-flex justify-content-between align-items-center mb-3">
+                //       <label htmlFor={field.name} className="form-label">
+                //         {field.label}
+                //       </label>
+                //       <button
+                //         type="button"
+                //         className="btn btn-custom-primary"
+                //         onClick={() => {
+                //           setValidationConditionList([
+                //             ...validationConditionList,
+                //             { field: "", condition: "", value: "", type: 1 },
+                //           ]);
+                //         }}
+                //       >
+                //         Add Type 1
+                //       </button>
+                //       <button
+                //         type="button"
+                //         className="btn btn-custom-primary"
+                //         onClick={() => {
+                //           setValidationConditionList([
+                //             ...validationConditionList,
+                //             { field: "", condition: "", value: "", type: 2 },
+                //           ]);
+                //         }}
+                //       >
+                //         Add Type 2
+                //       </button>
+                //     </div>
+                //     {validationConditionList.map((condition, index) => {
+                //       if (condition.type === 1) {
+                //         return (
+                //           <div className="d-flex gap-2 mb-2 align-items-center">
+                //             <span>{index + 1}) </span>
+                //             <select
+                //               className="form-select"
+                //               value={condition.condition}
+                //               onChange={(e) =>
+                //                 setValidationConditionList((prev) =>
+                //                   prev.map((item, i) =>
+                //                     i === index
+                //                       ? { ...item, condition: e.target.value }
+                //                       : item
+                //                   )
+                //                 )
+                //               }
+                //             >
+                //               <option value="">Select a condition</option>
+                //               {field.conditionTypes.map((conditionType) => (
+                //                 <option value={conditionType}>
+                //                   {conditionType}
+                //                 </option>
+                //               ))}
+                //             </select>
+                //             <select
+                //               className="form-select"
+                //               value={condition.field}
+                //               onChange={(e) => {
+                //                 setValidationConditionList((prev) =>
+                //                   prev.map((item, i) =>
+                //                     i === index
+                //                       ? {
+                //                           ...item,
+                //                           field: e.target.value,
+                //                           value: e.target.value
+                //                             ? ""
+                //                             : item.value,
+                //                         }
+                //                       : item
+                //                   )
+                //                 );
+                //               }}
+                //             >
+                //               <option value="">Select a field</option>
+                //               {formFields.map((field) => {
+                //                 return (
+                //                   <option value={field.name}>
+                //                     {field.name}
+                //                   </option>
+                //                 );
+                //               })}
+                //             </select>
+                //             <span>OR</span>
+                //             <input
+                //               id="conditionValue"
+                //               name="conditionValue"
+                //               type="text"
+                //               className="form-control"
+                //               onChange={(e) =>
+                //                 setValidationConditionList((prev) =>
+                //                   prev.map((item, i) =>
+                //                     i === index
+                //                       ? {
+                //                           ...item,
+                //                           value: e.target.value,
+                //                           field: e.target.value
+                //                             ? ""
+                //                             : item.field,
+                //                         }
+                //                       : item
+                //                   )
+                //                 )
+                //               }
+                //               value={condition.value}
+                //               placeholder="Value"
+                //             />
+                //             <span>
+                //               <AiFillDelete
+                //                 className="cursor-pointer text-custom-primary"
+                //                 onClick={() => {
+                //                   setValidationConditionList(
+                //                     validationConditionList.filter(
+                //                       (item, i) => i !== index
+                //                     )
+                //                   );
+                //                 }}
+                //               />
+                //             </span>
+                //           </div>
+                //         );
+                //       } else {
+                //         return (
+                //           <div className="d-flex gap-2 mb-2 align-items-center">
+                //             <span>{index + 1}) </span>
+                //             <select
+                //               className="form-select"
+                //               value={condition.field}
+                //               onChange={(e) =>
+                //                 setValidationConditionList((prev) =>
+                //                   prev.map((item, i) =>
+                //                     i === index
+                //                       ? { ...item, field: e.target.value }
+                //                       : item
+                //                   )
+                //                 )
+                //               }
+                //             >
+                //               <option value="">Select a field</option>
+                //               {formFields.map((field) => {
+                //                 return (
+                //                   <option value={field.name}>
+                //                     {field.name}
+                //                   </option>
+                //                 );
+                //               })}
+                //             </select>
+                //             <select
+                //               className="form-select"
+                //               value={condition.condition}
+                //               onChange={(e) =>
+                //                 setValidationConditionList((prev) =>
+                //                   prev.map((item, i) =>
+                //                     i === index
+                //                       ? { ...item, condition: e.target.value }
+                //                       : item
+                //                   )
+                //                 )
+                //               }
+                //             >
+                //               <option value="">Select a condition</option>
+                //               {field.conditionTypes.map((conditionType) => (
+                //                 <option value={conditionType}>
+                //                   {conditionType}
+                //                 </option>
+                //               ))}
+                //             </select>
+                //             <input
+                //               id="conditionValue"
+                //               name="conditionValue"
+                //               type="text"
+                //               className="form-control"
+                //               onChange={(e) =>
+                //                 setValidationConditionList((prev) =>
+                //                   prev.map((item, i) =>
+                //                     i === index
+                //                       ? { ...item, value: e.target.value }
+                //                       : item
+                //                   )
+                //                 )
+                //               }
+                //               value={condition.value}
+                //               placeholder="Value"
+                //             />
+                //             <span>
+                //               <AiFillDelete
+                //                 className="cursor-pointer text-custom-primary"
+                //                 onClick={() => {
+                //                   setValidationConditionList(
+                //                     validationConditionList.filter(
+                //                       (item, i) => i !== index
+                //                     )
+                //                   );
+                //                 }}
+                //               />
+                //             </span>
+                //           </div>
+                //         );
+                //       }
+                //     })}
+                //   </div>
+                // );
               } else if (
                 field.type === "copyFields" &&
                 ifContainsType(type, field.apply)
@@ -2399,7 +2515,9 @@ const FieldBuilder = ({
                             <option value="">Select a type</option>
                             {field?.tableDataTypes.map((tableData) => {
                               return (
-                                <option value={tableData?.value}>{tableData?.label}</option>
+                                <option value={tableData?.value}>
+                                  {tableData?.label}
+                                </option>
                               );
                             })}
                           </select>
