@@ -1203,15 +1203,6 @@ const FormBuilder = ({
                             Save to API
                           </Button>
                         )} */}
-
-                        {/* This submit button is to test validation */}
-                        {/* <Button
-                          type="submit"
-                          className="btn btn-custom-primary mt-3"
-                        >
-                          {formState === "create" ? "Create" : "Update"}
-                        </Button> */}
-
                         {formFields.length > 0 && (
                           <Button
                             className="btn btn-custom-primary mt-3 ms-3"
