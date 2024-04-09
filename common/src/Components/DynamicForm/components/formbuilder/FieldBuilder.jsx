@@ -30,6 +30,9 @@ const FieldBuilder = ({
   const [uuidKey, setUuidKey] = useState(
     !formBuilderUpdateData?.label ? formBuilderUpdateData?.name : uuid()
   );
+  const [validationConditionErrors, setValidationConditionErrors] = useState(
+    []
+  );
 
   useEffect(() => {
     if (!uuidKey) {
@@ -1487,6 +1490,11 @@ const FieldBuilder = ({
 
   // Handle Submit
   const handleFormSchemaSubmit = (values) => {
+    // Manual Checks for fields
+    if (validationConditionErrors.filter((item) => item !== "").length > 0) {
+      return;
+    }
+
     let validationSchema = { ...values };
     if (formBuilderUpdateData) {
       validationSchema = { ...formBuilderUpdateData, ...values };
@@ -2033,6 +2041,8 @@ const FieldBuilder = ({
                     setValidationConditionList={setValidationConditionList}
                     formFields={formFields}
                     field={field}
+                    formik={formik}
+                    setValidationConditionErrors={setValidationConditionErrors}
                   />
                 );
                 // return (

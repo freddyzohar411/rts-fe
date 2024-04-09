@@ -16,19 +16,28 @@ const ConditionValidationField = ({
   setValidationConditionList,
   formFields,
   field,
+  setValidationConditionErrors,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState([]);
-  const toggle = (index) => {
-    // Toggle all false except the index that is selected
-    setDropdownOpen((prevState) =>
-      prevState.map((item, i) => (i === index ? !item : false))
-    );
-  };
+  const [conditionValidationError, setConditionValidationError] = useState([]);
 
   useEffect(() => {
-    // Set dropdownOpen as a List of Booleans
-    setDropdownOpen(new Array(validationConditionList.length).fill(false));
+    setDropdownOpen((prevState) => {
+      const newState = new Array(validationConditionList.length).fill(false);
+      prevState.forEach((state, index) => {
+        if (index < newState.length) {
+          newState[index] = state;
+        }
+      });
+      return newState;
+    });
   }, [validationConditionList]);
+
+  const toggle = (index) => {
+    setDropdownOpen((prevState) =>
+      prevState.map((item, i) => (i === index ? !prevState[index] : item))
+    );
+  };
 
   const conditionTypes = [
     { label: "AND", value: "AND" },
@@ -38,6 +47,58 @@ const ConditionValidationField = ({
   const jsonCopy = (obj) => {
     return JSON.parse(JSON.stringify(obj));
   };
+
+  const verifyAndModifyConditionalMessage = () => {
+    setValidationConditionList((prev) => {
+      return prev.map((condition) => {
+        if (condition.validationList.length === 0) {
+          return {
+            ...condition,
+            conditionValidationMessage: "",
+          };
+        } else {
+          return {
+            ...condition,
+            conditionValidationMessage: condition.conditionValidationMessage,
+          };
+        }
+      });
+    });
+  };
+
+  useEffect(() => {
+    const newConditions = validationConditionList.map((condition) => {
+      if (condition.validationList.length === 0) {
+        return { ...condition, conditionValidationMessage: "" };
+      }
+      return condition; // Assuming we don't need to update if there's no change
+    });
+    if (
+      JSON.stringify(newConditions) !== JSON.stringify(validationConditionList)
+    ) {
+      setValidationConditionList(newConditions);
+    }
+  }, [validationConditionList]);
+
+  const handleValidationErrorMessage = (index) => {
+    if (
+      validationConditionList[index].validationList.length > 0 &&
+      validationConditionList[index].conditionValidationMessage === ""
+    ) {
+      return "Please add a condition error message";
+    }
+    return "";
+  };
+
+  useEffect(() => {
+    const getNewValidationError = validationConditionList.map(
+      (condition, index) => handleValidationErrorMessage(index)
+    );
+    setConditionValidationError(getNewValidationError);
+    setValidationConditionErrors(getNewValidationError);
+  }, [validationConditionList]);
+
+  console.log("Erorrr", conditionValidationError);
 
   return (
     <div className="mb-3">
@@ -65,14 +126,14 @@ const ConditionValidationField = ({
       {validationConditionList.map((validationCondition, index) => {
         return (
           <div className="mb-3">
-            <div className="d-flex align-items-center gap-3">
+            <div className="d-flex align-items-center gap-3 mb-2">
               <span>{index + 1}) </span>
               <Dropdown
                 isOpen={dropdownOpen[index]}
                 toggle={() => toggle(index)}
                 direction="down"
               >
-                <DropdownToggle className="btn btn-custom-primary mb-2" caret>
+                <DropdownToggle className="btn btn-custom-primary px-2 py-1 " caret style={{fontSize:"0.7rem"}}>
                   Add Condition Type
                 </DropdownToggle>
                 <DropdownMenu>
@@ -110,18 +171,20 @@ const ConditionValidationField = ({
               </Dropdown>
               <Button
                 type="button"
-                className="btn btn-danger"
+                className="btn btn-danger px-2 py-1"
+                style={{ fontSize: "0.7rem" }}
                 onClick={() => {
                   setValidationConditionList(
                     validationConditionList.filter((item, i) => i !== index)
                   );
+                  verifyAndModifyConditionalMessage();
                 }}
               >
-                Delete
+                <span className="ri-delete-bin-line"></span>
+                {/* Delete */}
               </Button>
             </div>
-
-            {validationCondition.validationList.map((condition, index2) => {
+            {validationCondition?.validationList?.map((condition, index2) => {
               if (condition.type === 1) {
                 return (
                   <div className="d-flex gap-2 mb-2 align-items-center">
@@ -312,6 +375,7 @@ const ConditionValidationField = ({
             <Input
               value={validationCondition?.conditionValidationMessage}
               type="text"
+              disabled={validationCondition.validationList.length === 0}
               onChange={(e) => {
                 setValidationConditionList((prev) => {
                   const va = jsonCopy(prev);
@@ -319,7 +383,15 @@ const ConditionValidationField = ({
                   return va;
                 });
               }}
+              onBlur={() => handleBlur(index)} // Here you attach the onBlur handler
             />
+            {/* // Error handling. If there is a condition. Make sure Input cannot
+            be empty */}
+            {conditionValidationError[index] && (
+              <div className="mt-2 text-danger">
+                {conditionValidationError[index]}
+              </div>
+            )}
           </div>
         );
       })}

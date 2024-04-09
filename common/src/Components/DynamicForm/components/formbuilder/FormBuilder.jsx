@@ -293,6 +293,8 @@ const FormBuilder = ({
       formData: newValues,
       formLayoutSchema,
     };
+
+    // console.log("values", values);
   };
 
   /**
@@ -1203,6 +1205,12 @@ const FormBuilder = ({
                             Save to API
                           </Button>
                         )} */}
+                        <Button
+                          type="submit"
+                          className="btn btn-custom-primary mt-3"
+                        >
+                          {formState === "create" ? "Create" : "Update"}
+                        </Button>
                         {formFields.length > 0 && (
                           <Button
                             className="btn btn-custom-primary mt-3 ms-3"
@@ -1275,7 +1283,8 @@ const FormBuilder = ({
             toggle={() => {
               setFormBuilderUpdateData(null);
               setFormBuilderType(null);
-              setShowModalSchema(!showModalSchema)}}
+              setShowModalSchema(!showModalSchema);
+            }}
           >
             <div className="d-flex flex-column text-dark">
               <span className="h5 fw-bold">Edit Field</span>
