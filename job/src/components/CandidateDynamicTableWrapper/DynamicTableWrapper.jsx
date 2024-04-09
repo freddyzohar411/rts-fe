@@ -109,10 +109,10 @@ const DynamicTableWrapper = ({
                 <Col>
                   <div className="d-flex flex-row justify-content-between align-items-baseline">
                     <div className="text-decoration-underline">
-                      <span>Suitable Candidates </span>
+                      {/* <span>Suitable Candidates </span>
                       <span className="fw-semibold">
                         ({candidatesData?.totalElements ?? 0})
-                      </span>
+                      </span> */}
                     </div>
                     <div className="d-flex flex-row gap-3 align-items-baseline">
                       <Button
