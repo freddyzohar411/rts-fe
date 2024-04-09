@@ -37,10 +37,6 @@ const FormSelection = ({ name, ...props }) => {
           component="span"
           style={{ fontSize: "11px", marginTop: "0.25rem" }}
         />
-
-        // <>
-        //   <FormFeedback type="invalid">{props?.error}</FormFeedback>
-        // </>
       )}
     </div>
   );

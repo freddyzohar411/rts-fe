@@ -92,8 +92,6 @@ function CreateUser() {
     dispatch(createUser({ newUser, navigate: navigate }));
   };
 
-  console.log("SelectedOption", selectedOption)
-
   useEffect(() => {
     dispatch(fetchUsers());
     dispatch(fetchGroups());
