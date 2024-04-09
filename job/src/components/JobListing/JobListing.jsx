@@ -324,22 +324,6 @@ const JobListing = () => {
       //     </div>
       //   ),
       // },
-      // {
-      //   header: "Job Title",
-      //   name: "jobTitle",
-      //   sort: true,
-      //   sortValue: "job_submission_data.jobTitle",
-      //   render: (data) => {
-      //     return (
-      //       <Link
-      //         to={`/jobs/${data.id}/snapshot`}
-      //         className="text-custom-primary text-decoration-underline"
-      //       >
-      //         <span>{data?.jobSubmissionData?.jobTitle}</span>
-      //       </Link>
-      //     );
-      //   },
-      // },
       ...customConfig,
       {
         header: "Action",

@@ -293,8 +293,6 @@ const FormBuilder = ({
       formData: newValues,
       formLayoutSchema,
     };
-
-    console.log("values", values);
   };
 
   /**
@@ -1205,12 +1203,15 @@ const FormBuilder = ({
                             Save to API
                           </Button>
                         )} */}
-                        <Button
+
+                        {/* This submit button is to test validation */}
+                        {/* <Button
                           type="submit"
                           className="btn btn-custom-primary mt-3"
                         >
                           {formState === "create" ? "Create" : "Update"}
-                        </Button>
+                        </Button> */}
+
                         {formFields.length > 0 && (
                           <Button
                             className="btn btn-custom-primary mt-3 ms-3"
