@@ -294,7 +294,7 @@ const FormBuilder = ({
       formLayoutSchema,
     };
 
-    // console.log("values", values);
+    console.log("values", values);
   };
 
   /**

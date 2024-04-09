@@ -98,8 +98,6 @@ const ConditionValidationField = ({
     setValidationConditionErrors(getNewValidationError);
   }, [validationConditionList]);
 
-  console.log("Erorrr", conditionValidationError);
-
   return (
     <div className="mb-3">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -145,7 +143,7 @@ const ConditionValidationField = ({
                         condition: "",
                         value: "",
                         type: 1,
-                        logicalCondition: "AND",
+                        logicalCondition: "",
                       });
                       setValidationConditionList(va);
                     }}
@@ -160,7 +158,7 @@ const ConditionValidationField = ({
                         condition: "",
                         value: "",
                         type: 2,
-                        logicalCondition: "AND",
+                        logicalCondition: "",
                       });
                       setValidationConditionList(va);
                     }}
