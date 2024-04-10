@@ -17,6 +17,7 @@ import { useRef } from "react";
 import DeleteDraftModal from "./DeleteDraftModal";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { generateId } from "@workspace/common/src/helpers/generate_id_helper";
 
 const JobCreation = () => {
   const navigate = useNavigate();
@@ -59,6 +60,16 @@ const JobCreation = () => {
       setFormTemplate(form);
     }
   }, [form, view]);
+
+  useEffect(() => {
+    if (!jobId && formikRef?.current?.formik?.values?.jobId?.length === 0) {
+      generateId("J")
+        .then((id) => {
+          formikRef.current.formik.setFieldValue("jobId", id);
+        })
+        .catch((e) => {});
+    }
+  }, [formikRef?.current?.formik?.values]);
 
   useEffect(() => {
     if (jobId) {
