@@ -41,6 +41,7 @@ const JobCreation = () => {
   const [formTemplate, setFormTemplate] = useState(null);
   const [randomId, setRandomId] = useState();
   const [deleteDraftModal, setDeleteDraftModal] = useState(false);
+  const [formikValues, setFormikValues] = useState(null);
 
   // Fetch all the countries and account names
   useEffect(() => {
@@ -56,13 +57,12 @@ const JobCreation = () => {
    */
   useEffect(() => {
     if (form) {
-      // setFormTemplate(form);
       setFormTemplate(form);
     }
   }, [form, view]);
 
   useEffect(() => {
-    if (!jobId && formikRef?.current?.formik?.values?.jobId?.length === 0) {
+    if (!jobId && formikValues?.values?.jobId?.length === 0) {
       generateId("J")
         .then((id) => {
           formikRef.current.formik.setFieldValue("jobId", id);
@@ -70,6 +70,10 @@ const JobCreation = () => {
         .catch((e) => {});
     }
   }, [formikRef?.current?.formik?.values]);
+
+  const onFormikChange = (formikValues) => {
+    setFormikValues(formikValues);
+  };
 
   useEffect(() => {
     if (jobId) {
@@ -162,6 +166,7 @@ const JobCreation = () => {
           country={null}
           editData={formSubmissionData}
           onSubmit={handleFormSubmit}
+          onFormikChange={onFormikChange}
           onFormFieldsChange={handleFormFieldChange}
           errorMessage={null}
           view={view}

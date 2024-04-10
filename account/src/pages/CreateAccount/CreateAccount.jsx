@@ -4,6 +4,7 @@ import { Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
+import { generateId } from "@workspace/common/src/helpers/generate_id_helper";
 import {
   postAccount,
   putAccount,
@@ -80,6 +81,7 @@ const AccountCreation = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [country, setCountry] = useState(null);
+  const [formikValues, setFormikValues] = useState(null);
 
   /**
    * Set country if is in edit mode
@@ -89,6 +91,20 @@ const AccountCreation = () => {
       setCountry(accountCountry);
     }
   }, [accountCountry]);
+
+  useEffect(() => {
+    if (formikValues?.values?.accountId?.length === 0) {
+      generateId("A")
+        .then((id) => {
+          formikRef.current.formik.setFieldValue("accountId", id);
+        })
+        .catch((e) => {});
+    }
+  }, [formikRef?.current?.formik?.values]);
+
+  const onFormikChange = (formikValues) => {
+    setFormikValues(formikValues);
+  };
 
   /**
    * Fetch form template based on step
@@ -698,6 +714,7 @@ const AccountCreation = () => {
             country={accountCountry || country?.name}
             editData={formSubmissionData}
             onSubmit={handleFormSubmit}
+            onFormikChange={onFormikChange}
             onFormFieldsChange={handleFormFieldChange}
             errorMessage={errorMessage}
             view={false}
