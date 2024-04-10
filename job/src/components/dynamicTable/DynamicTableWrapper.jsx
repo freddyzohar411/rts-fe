@@ -9,10 +9,6 @@ import {
   Row,
   ButtonDropdown,
   Label,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
@@ -20,7 +16,6 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
-import DualListBox from "react-dual-listbox";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
@@ -51,7 +46,6 @@ const DynamicTableWrapper = ({
   setSearch,
   optGroup,
   setCustomConfigData,
-  confirmDelete,
   gridView,
   handleTableViewChange,
   operations,
@@ -71,7 +65,6 @@ const DynamicTableWrapper = ({
   const { Permission, checkAllPermission } = useUserAuth();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletingCustomViewId, setDeletingCustomViewId] = useState(null);
-  const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
   const [massFODOpen, setMassFODOpen] = useState(false);
   const [namesData, setNamesData] = useState([]);
   const [nestedVisible, setNestedVisible] = useState([]);
