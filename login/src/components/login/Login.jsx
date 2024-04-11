@@ -18,19 +18,21 @@ import { initialValues, schema } from "./constants";
 import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
 
 import { useDispatch } from "react-redux";
-import { loginUser } from "../../store/actions";
+import { useNavigate } from "react-router-dom";
+import { loginUser, login1FA } from "../../store/actions";
 import { withRouter } from "@workspace/common";
 import { useSelector } from "react-redux";
 
 const Login = (props) => {
   document.title = "Login | RTS";
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [passwordShow, setPasswordShow] = useState(false);
 
   const handleFormSubmit = async (values) => {
-    dispatch(loginUser(values, props.router.navigate));
+    // dispatch(loginUser(values, props.router.navigate));
+    dispatch(login1FA(values, navigate));
   };
 
   const loginMeta = useSelector((state) => state.Login.loginMeta);

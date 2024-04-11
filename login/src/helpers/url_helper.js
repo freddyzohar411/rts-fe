@@ -20,3 +20,6 @@ export const validateResetToken = (token) => "/api/user/validate-forget-password
 
 // Forget reset password
 export const FORGET_RESET_PASSWORD = "/api/user/forget-password/reset";
+
+// Login 1FA
+export const POST_LOGIN_1FA = "/api/user/signin/1FA";

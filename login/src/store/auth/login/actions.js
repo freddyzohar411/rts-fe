@@ -8,6 +8,12 @@ import {
   LOGIN_RESET_PASSWORD_ERROR,
   LOGIN_ERROR,
   LOGOUT_USER_ERROR,
+  LOGIN_1FA,
+  LOGIN_1FA_SUCCESS,
+  LOGIN_1FA_ERROR,
+  LOGIN_2FA,
+  LOGIN_2FA_SUCCESS,
+  LOGIN_2FA_ERROR,
 } from "./actionTypes";
 
 // User login
@@ -72,6 +78,48 @@ export const loginResetPasswordSuccess = (user) => {
 export const loginResetPasswordError = (error) => {
   return {
     type: LOGIN_RESET_PASSWORD_ERROR,
+    payload: error,
+  };
+};
+
+export const login1FA = (userRequest1FA, navigate) => {
+  return {
+    type: LOGIN_1FA,
+    payload: { userRequest1FA, navigate },
+  };
+}
+
+export const login1FASuccess = (user) => {
+  return {
+    type: LOGIN_1FA_SUCCESS,
+    payload: user,
+  };
+};
+
+export const login1FAError = (error) => {
+  return {
+    type: LOGIN_1FA_ERROR,
+    payload: error,
+  };
+};
+
+export const login2FA = (userRequest2FA, navigate) => {
+  return {
+    type: LOGIN_2FA,
+    payload: { userRequest2FA, navigate },
+  };
+}
+
+export const login2FASuccess = (user) => {
+  return {
+    type: LOGIN_2FA_SUCCESS,
+    payload: user,
+  };
+};
+
+export const login2FAError = (error) => {
+  return {
+    type: LOGIN_2FA_ERROR,
     payload: error,
   };
 };

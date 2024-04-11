@@ -9,7 +9,8 @@ import {
   LOGIN_RESET_PASSWORD,
   forgetPassword,
   validateResetToken,
-  FORGET_RESET_PASSWORD
+  FORGET_RESET_PASSWORD,
+  POST_LOGIN_1FA
 } from "./url_helper";
 
 const { APIClient } = Axios;
@@ -54,3 +55,6 @@ export const getValidateResetToken = (data) => api.get(validateResetToken(data))
 
 // Forget reset password
 export const postForgetPasswordReset = (data) => api.create(FORGET_RESET_PASSWORD, data);
+
+// Login 1FA Method
+export const postLogin1FA = (data) => api.create(POST_LOGIN_1FA, data);

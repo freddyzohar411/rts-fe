@@ -13,6 +13,12 @@ import {
   LOGIN_RESET_PASSWORD_ERROR,
   LOGIN_ERROR,
   LOGOUT_USER_ERROR,
+  LOGIN_1FA,
+  LOGIN_1FA_SUCCESS,
+  LOGIN_1FA_ERROR,
+  LOGIN_2FA,
+  LOGIN_2FA_SUCCESS,
+  LOGIN_2FA_ERROR,
 } from "./actionTypes";
 
 const initialState = {
@@ -20,6 +26,8 @@ const initialState = {
   logoutMeta: {},
   loginResetPassword: {},
   loginResetPasswordMeta: {},
+  login1FAMeta: {},
+  login2FAMeta: {},
 };
 
 const login = (state = initialState, action) => {
@@ -70,6 +78,18 @@ const login = (state = initialState, action) => {
         ...state,
         loginResetPasswordMeta: errorMetaData(action.payload),
       };
+    case LOGIN_1FA:
+      return { ...state, login1FAMeta: pendingMetaData() };
+    case LOGIN_1FA_SUCCESS:
+      return { ...state, login1FAMeta: successMetaData(action.payload) };
+    case LOGIN_1FA_ERROR:
+      return { ...state, login1FAMeta: errorMetaData(action.payload) };
+    case LOGIN_2FA:
+      return { ...state, login2FAMeta: pendingMetaData() };
+    case LOGIN_2FA_SUCCESS:
+      return { ...state, login2FAMeta: successMetaData(action.payload) };
+    case LOGIN_2FA_ERROR:
+      return { ...state, login2FAMeta: errorMetaData(action.payload) };
     default:
       return { ...state };
   }
