@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -43,6 +43,7 @@ const LoginOTP = (props) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const [timer, setTimer] = useState(0);
   const state = location?.state;
   useEffect(() => {
     if (!state) {
@@ -157,12 +158,39 @@ const LoginOTP = (props) => {
               <div className="mt-4 text-center">
                 <p className="mb-0">
                   Didn't receive a code ?{" "}
-                  <Link
+                  {/* <Link
                     to="/auth-pass-reset-basic"
                     className="fw-semibold text-primary text-decoration-underline"
+                  > */}
+                  <span
+                    className={
+                      timer > 0
+                        ? `cursor-not-allowed disabled`
+                        : `cursor-pointer`
+                    }
+                    style={{
+                      textDecoration: "underline",
+                      color: "blue",
+                      pointerEvents: timer > 0 ? "none" : "auto",
+                      opacity: timer > 0 ? 0.65 : 1,
+                    }}
+                    onClick={() => {
+                      console.log("Resend OTP");
+                      // Set the timer countdown
+                      setTimer(30);
+                      const interval = setInterval(() => {
+                        setTimer((prev) => {
+                          if (prev === 1) {
+                            clearInterval(interval); // Clear the interval when the countdown reaches 0
+                          }
+                          return prev - 1; // Update the state by decrementing the previous state value
+                        });
+                      }, 1000);
+                    }}
                   >
                     Resend
-                  </Link>{" "}
+                  </span>
+                  {timer > 0 && <span> in {timer} seconds</span>}
                 </p>
               </div>
             </Col>
