@@ -19,7 +19,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Formik Validation
 import * as Yup from "yup";
@@ -30,6 +30,7 @@ import {
   userForgetPassword,
   resetForgetPasswordMeta,
 } from "../../store/actions";
+import { login2FA } from "../../store/auth/login/actions";
 
 // import images
 import logoLight from "@workspace/common/src/assets/images/logo-light.png";
@@ -40,10 +41,23 @@ import OTPDigitInput from "./OTPDigitInput";
 
 const LoginOTP = (props) => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
+  const state = location?.state;
+  useEffect(() => {
+    if (!state) {
+      navigate("/login");
+    }
+  }, [state]);
+
   const onOTPAndUserSubmit = (values) => {
     console.log("values", values);
-    // dispatch(userForgetPassword(values, navigate));
+    console.log("Refresh Token", state?.refreshToken);
+    const optRequest = {
+      otp: values.otp,
+      refreshToken: state?.refreshToken,
+    };
+    dispatch(login2FA(optRequest, state, navigate));
   };
   const forgetPasswordData = useSelector((state) => state.ForgetPassword);
 
@@ -61,7 +75,7 @@ const LoginOTP = (props) => {
     },
     validationSchema: Yup.object({
       otp: Yup.string()
-        .required("Required")
+        .required("OTP is required")
         .matches(/^[0-9]+$/, "Must be only digits")
         .min(6, "Invalid OTP, must be 6 digits")
         .max(6, "Invalid OTP, must be 6 digits"),
@@ -122,79 +136,7 @@ const LoginOTP = (props) => {
                           noOfOtp={6}
                           setOTP={(otp) => formik.setFieldValue("otp", otp)}
                         />
-                        {/* <Col className="col-3">
-                          <div className="mb-3">
-                            <label
-                              htmlFor="digit1-input"
-                              className="visually-hidden"
-                            >
-                              Digit 1
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control form-control-lg bg-light border-light text-center"
-                              maxLength="1"
-                              id="digit1-input"
-                              onKeyUp={() => moveToNext(1)}
-                            />
-                          </div>
-                        </Col>
-
-                        <Col className="col-3">
-                          <div className="mb-3">
-                            <label
-                              htmlFor="digit2-input"
-                              className="visually-hidden"
-                            >
-                              Digit 2
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control form-control-lg bg-light border-light text-center"
-                              maxLength="1"
-                              id="digit2-input"
-                              onKeyUp={() => moveToNext(2)}
-                            />
-                          </div>
-                        </Col>
-
-                        <Col className="col-3">
-                          <div className="mb-3">
-                            <label
-                              htmlFor="digit3-input"
-                              className="visually-hidden"
-                            >
-                              Digit 3
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control form-control-lg bg-light border-light text-center"
-                              maxLength="1"
-                              id="digit3-input"
-                              onKeyUp={() => moveToNext(3)}
-                            />
-                          </div>
-                        </Col>
-
-                        <Col className="col-3">
-                          <div className="mb-3">
-                            <label
-                              htmlFor="digit4-input"
-                              className="visually-hidden"
-                            >
-                              Digit 4
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control form-control-lg bg-light border-light text-center"
-                              maxLength="1"
-                              id="digit4-input"
-                              onKeyUp={() => moveToNext(4)}
-                            />
-                          </div>
-                        </Col> */}
                       </Row>
-
                       {formik.touched.otp && formik.errors.otp ? (
                         <Alert
                           className="border-0 alert-danger text-center mb-2 mx-2"
@@ -203,7 +145,6 @@ const LoginOTP = (props) => {
                           {formik.errors.otp}
                         </Alert>
                       ) : null}
-
                       <div className="mt-3">
                         <Button type="submit" color="success" className="w-100">
                           Confirm

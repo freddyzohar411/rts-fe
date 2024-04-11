@@ -31,8 +31,8 @@ const Login = (props) => {
   const [passwordShow, setPasswordShow] = useState(false);
 
   const handleFormSubmit = async (values) => {
-    dispatch(loginUser(values, props.router.navigate));
-    // dispatch(login1FA(values, navigate));
+    // dispatch(loginUser(values, props.router.navigate));
+    dispatch(login1FA(values, navigate));
   };
 
   const loginMeta = useSelector((state) => state.Login.loginMeta);

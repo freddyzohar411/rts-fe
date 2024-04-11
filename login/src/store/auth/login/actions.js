@@ -87,7 +87,7 @@ export const login1FA = (userRequest1FA, navigate) => {
     type: LOGIN_1FA,
     payload: { userRequest1FA, navigate },
   };
-}
+};
 
 export const login1FASuccess = (user) => {
   return {
@@ -103,12 +103,12 @@ export const login1FAError = (error) => {
   };
 };
 
-export const login2FA = (userRequest2FA, navigate) => {
+export const login2FA = (userRequest2FA, state, navigate) => {
   return {
     type: LOGIN_2FA,
-    payload: { userRequest2FA, navigate },
+    payload: { userRequest2FA, state, navigate },
   };
-}
+};
 
 export const login2FASuccess = (user) => {
   return {
