@@ -111,9 +111,7 @@ function* login1FA({ payload: { userRequest1FA , navigate } }) {
     });
     yield put(login1FASuccess(response));  
 
-    console.log("SUccess")
-    return
-    navigate("/login-2fa");
+    navigate("/login-otp");
   } catch (error) {
     if (error?.status === "UNAUTHORIZED") {
       toast.error(error?.message);

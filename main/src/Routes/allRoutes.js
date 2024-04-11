@@ -14,6 +14,7 @@ import {
   ForgetPassword,
   ResetPassword,
   ForgetResetPassword,
+  LoginOTP
 } from "@workspace/login";
 
 // Account
@@ -225,6 +226,7 @@ const publicRoutes = [
   { path: "/forget-reset-password", component: <ForgetResetPassword /> },
   { path: "/logout", component: <Logout /> },
   { path: "/forget-password", component: <ForgetPassword /> },
+  { path: "/login-otp", component: <LoginOTP /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };
