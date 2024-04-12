@@ -14,6 +14,9 @@ import {
   LOGIN_2FA,
   LOGIN_2FA_SUCCESS,
   LOGIN_2FA_ERROR,
+  RESEND_OTP,
+  RESEND_OTP_SUCCESS,
+  RESEND_OTP_ERROR,
 } from "./actionTypes";
 
 // User login
@@ -123,3 +126,23 @@ export const login2FAError = (error) => {
     payload: error,
   };
 };
+
+export const resendOTP = (state) => {
+  return {
+    type: RESEND_OTP,
+    payload: { state },
+  };
+}
+
+export const resendOTPSuccess = () => {
+  return {
+    type: RESEND_OTP_SUCCESS,
+  };
+}
+
+export const resendOTPError = (error) => {
+  return {
+    type: RESEND_OTP_ERROR,
+    payload: error,
+  };
+}

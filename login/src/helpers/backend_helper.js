@@ -12,6 +12,7 @@ import {
   FORGET_RESET_PASSWORD,
   POST_LOGIN_1FA,
   POST_LOGIN_2FA,
+  RESEND_OTP,
 } from "./url_helper";
 
 const { APIClient } = Axios;
@@ -65,3 +66,6 @@ export const postLogin1FA = (data) => api.create(POST_LOGIN_1FA, data);
 // Login 2FA Method
 export const postLogin2FA = (data, config) =>
   api.create(POST_LOGIN_2FA, data, config);
+
+// Resend OTP
+export const getResendOTP = (config) => api.getWithConfig(RESEND_OTP, config);

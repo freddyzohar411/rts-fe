@@ -26,7 +26,7 @@ import {
   userForgetPassword,
   resetForgetPasswordMeta,
 } from "../../store/actions";
-import { login2FA } from "../../store/auth/login/actions";
+import { login2FA, resendOTP } from "../../store/auth/login/actions";
 
 // import images
 import logoLight from "@workspace/common/src/assets/images/logo-light.png";
@@ -73,6 +73,7 @@ const LoginOTP = (props) => {
   });
 
   const handleTimer = (timeout, ms) => {
+    dispatch(resendOTP(state));
     setTimer(timeout);
     const interval = setInterval(() => {
       setTimer((prev) => {

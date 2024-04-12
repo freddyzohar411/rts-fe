@@ -17,3 +17,7 @@ export const LOGIN_1FA_ERROR = "LOGIN_1FA_ERROR";
 export const LOGIN_2FA = "LOGIN_2FA";
 export const LOGIN_2FA_SUCCESS = "LOGIN_2FA_SUCCESS";
 export const LOGIN_2FA_ERROR = "LOGIN_2FA_ERROR";
+
+export const RESEND_OTP = "RESEND_OTP";
+export const RESEND_OTP_SUCCESS = "RESEND_OTP_SUCCESS";
+export const RESEND_OTP_ERROR = "RESEND_OTP_ERROR";

@@ -9,6 +9,7 @@ import {
   LOGOUT_USER,
   LOGIN_1FA,
   LOGIN_2FA,
+  RESEND_OTP,
 } from "./actionTypes";
 import {
   loginError,
@@ -21,6 +22,8 @@ import {
   login2FASuccess,
   login1FAError,
   login2FAError,
+  resendOTPError,
+  resendOTPSuccess,
 } from "./actions";
 import { deleteProfile } from "../profile/actions";
 import {
@@ -29,6 +32,7 @@ import {
   postLogin,
   postLogin1FA,
   postLogin2FA,
+  getResendOTP,
 } from "../../../helpers/backend_helper";
 import { encode } from "@workspace/common/src/helpers/string_helper";
 
@@ -94,7 +98,7 @@ function* loginResetPassword({ payload: { user, history } }) {
     authUser.user["isTemp"] = false;
     yield sessionStorage.setItem("authUser", JSON.stringify(authUser));
     toast.success("Password has been reset successfully.");
-    history("/dashboard");
+    history("/login");
   } catch (error) {
     yield put(loginResetPasswordError(error));
   }
@@ -158,8 +162,6 @@ function* login2FA({ payload: { userRequest2FA, state, navigate } }) {
         Authorization: `Bearer ${state?.accessToken}`,
       },
     });
-
-    console.log("Login 2FA Response", response);
     yield put(login2FASuccess(response));
     sessionStorage.setItem("accessToken", response?.access_token);
     sessionStorage.setItem("refreshToken", response?.refresh_token);
@@ -187,12 +189,26 @@ function* login2FA({ payload: { userRequest2FA, state, navigate } }) {
   }
 }
 
+function* resendOTP({ payload: { state, navigate } }) {
+  try {
+    yield call(getResendOTP, {
+      headers: {
+        Authorization: `Bearer ${state?.accessToken}`,
+      },
+    });
+    yield put(resendOTPSuccess());
+  } catch (error) {
+    yield put(resendOTPError(error));
+  }
+}
+
 function* authSaga() {
   yield takeEvery(LOGIN_USER, loginUser);
   yield takeEvery(LOGOUT_USER, logoutUser);
   yield takeEvery(LOGIN_RESET_PASSWORD_USER, loginResetPassword);
   yield takeEvery(LOGIN_1FA, login1FA);
   yield takeEvery(LOGIN_2FA, login2FA);
+  yield takeEvery(RESEND_OTP, resendOTP);
 }
 
 export default authSaga;
