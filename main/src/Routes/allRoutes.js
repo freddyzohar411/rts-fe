@@ -62,6 +62,7 @@ import {
   CustomisationNew,
   MassImportUsers,
   ImportUsers,
+  InitializeSettings,
 } from "@workspace/settings";
 
 
@@ -192,6 +193,11 @@ const authProtectedRoutes = [
   {
     path: "/settings/access/group/update/:id",
     component: <GroupUpdate />,
+  },
+
+  {
+    path: "/settings/initialize",
+    component: <InitializeSettings />,
   },
 
   { path: "/settings/access/user/:userId", component: <UserDetails /> },
