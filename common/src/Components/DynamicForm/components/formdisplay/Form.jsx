@@ -18,8 +18,7 @@ import {
   generateValidationSchema2,
   populateInitialValues,
 } from "../../helpers/formik_helper";
-import { Col, Card, CardBody, Label, Row, Alert, Container } from "reactstrap";
-import SimpleBar from "simplebar-react";
+import { Col, Row, Alert, Container } from "reactstrap";
 
 const Form = forwardRef(
   (
@@ -269,15 +268,6 @@ const Form = forwardRef(
         }
       }
     }, [formik.values]);
-
-    /**
-     * onFormikChange
-     */
-    // useEffect(() => {
-    //   if (onFormikChange) {
-    //     onFormikChange(formik);
-    //   }
-    // }, [onFormikChange]);
 
     const clearForm = () => {
       Object.keys(formik.values).forEach((key) => {

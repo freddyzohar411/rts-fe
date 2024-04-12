@@ -1,26 +1,24 @@
 import React, { useState } from "react";
-import { Button, Col, Spinner, Row, Alert } from "reactstrap";
+import { Button, Col, Row, Alert, Spinner } from "reactstrap";
 import { createUsers } from "../../../../store/users/action";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import "react-loading-skeleton/dist/skeleton.css";
+import { useDispatch, useSelector } from "react-redux";
 
 function FinaliseMassUsers({ newUsers }) {
-  console.log("Finalise Mass Users - Imported Users: ", newUsers);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [showAlert, setShowAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  console.log("isLoading -- Mass Import", isLoading);
+  const error = useSelector((state) => state?.UserReducer?.error);
 
   const handleUsersCreation = () => {
     setIsLoading(true);
-    dispatch(createUsers({ newUsers, navigate: navigate }))
-      .catch((error) => {
-        console.error("Error creating users:", error);
-        setShowAlert(true);
+    dispatch(createUsers({ newUsers: newUsers, navigate: navigate }))
+      .then(() => {
+        setIsLoading(false);
       })
-      .finally(() => setIsLoading(false));
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -29,12 +27,8 @@ function FinaliseMassUsers({ newUsers }) {
       <div className="mb-5">
         <Row className="mb-3">
           <Col>
-            {showAlert && (
-              <Alert
-                color="danger"
-                isOpen={showAlert}
-                toggle={() => setShowAlert(!showAlert)}
-              >
+            {error && (
+              <Alert color="danger" isOpen={true}>
                 <div className="d-flex flex-column gap-1">
                   <span className="fw-semibold">
                     Attention: Duplicate Entries Detected!
@@ -53,6 +47,16 @@ function FinaliseMassUsers({ newUsers }) {
           <Col>
             <div className="d-flex flex-column align-items-center justify-content-center gap-5 text-center">
               <div className="d-flex flex-column">
+                {isLoading ? (
+                  <Spinner color="primary" />
+                ) : (
+                  <>
+                    {error && (
+                      <i className="ri-error-warning-line text-danger fs-1"></i>
+                    )}
+                  </>
+                )}
+
                 <span className="fw-semibold">
                   Ready to import your new users?
                 </span>
@@ -61,20 +65,11 @@ function FinaliseMassUsers({ newUsers }) {
                 </span>
               </div>
 
-              {isLoading && (
-                <div className="d-flex flex-column align-items-center justify-content-center gap-3">
-                  <Spinner />
-                  <p>Creating user accounts..</p>
-                </div>
-              )}
-
               <Button
                 className="btn btn-custom-primary w-25"
-                onClick={() => handleUsersCreation()}
-                disabled={isLoading}
+                onClick={handleUsersCreation}
               >
                 <span className="me-2">Import Users</span>
-                {isLoading && <Spinner size="sm" color="light" />}
               </Button>
             </div>
           </Col>

@@ -1,5 +1,17 @@
 const JOB_INITIAL_OPTIONS = [
   {
+    sortValue: "job_submission_data.jobTitle",
+    label: "Job Title",
+    value: "jobSubmissionData.jobTitle",
+    sort: true,
+  },
+  {
+    sortValue: "job_submission_data.jobType",
+    label: "Job Type",
+    value: "jobSubmissionData.jobType",
+    sort: true,
+  },
+  {
     sortValue: "job_submission_data.dateOpen",
     label: "Date Open",
     value: "jobSubmissionData.dateOpen",
@@ -27,18 +39,6 @@ const JOB_INITIAL_OPTIONS = [
     sortValue: "job_submission_data.clientJobId",
     label: "Client Job Id",
     value: "jobSubmissionData.clientJobId",
-    sort: true,
-  },
-  {
-    sortValue: "job_submission_data.jobTitle",
-    label: "Job Title",
-    value: "jobSubmissionData.jobTitle",
-    sort: true,
-  },
-  {
-    sortValue: "job_submission_data.jobType",
-    label: "Job Type",
-    value: "jobSubmissionData.jobType",
     sort: true,
   },
   {

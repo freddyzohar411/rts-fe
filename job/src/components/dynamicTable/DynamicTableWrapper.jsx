@@ -7,22 +7,25 @@ import {
   Container,
   Input,
   Row,
-  DropdownToggle,
-  DropdownMenu,
   ButtonDropdown,
   Label,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
-import DualListBox from "react-dual-listbox";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserGroupByName } from "../../store/jobList/action";
+import {
+  fetchJobCustomView,
+  selectJobCustomView,
+  deleteJobCustomView,
+} from "../../store/job/action";
+import { DeleteCustomModal } from "@workspace/common";
 import {
   JOB_FILTERS,
   JOB_INITIAL_OPTIONS,
@@ -43,7 +46,6 @@ const DynamicTableWrapper = ({
   setSearch,
   optGroup,
   setCustomConfigData,
-  confirmDelete,
   gridView,
   handleTableViewChange,
   operations,
@@ -61,17 +63,19 @@ const DynamicTableWrapper = ({
   ];
   // ==================================================
   const { Permission, checkAllPermission } = useUserAuth();
-  const [customViewShow, setCustomViewShow] = useState(false);
-  const [selectedOptGroup, setSelectedOptGroup] = useState(JOB_INITIAL_OPTIONS);
-  const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deletingCustomViewId, setDeletingCustomViewId] = useState(null);
   const [massFODOpen, setMassFODOpen] = useState(false);
   const [namesData, setNamesData] = useState([]);
   const [nestedVisible, setNestedVisible] = useState([]);
+  const [customViewDropdownOpen, setCustomViewDropdownOpen] = useState(false);
 
   const dispatch = useDispatch();
-
   const recruiterGroup = useSelector(
     (state) => state.JobListReducer.recruiterGroup
+  );
+  const allJobCustomView = useSelector(
+    (state) => state?.JobReducer?.jobCustomViews
   );
   const jobsMeta = useSelector((state) => state.JobListReducer.jobsMeta);
 
@@ -89,7 +93,46 @@ const DynamicTableWrapper = ({
 
   useEffect(() => {
     dispatch(fetchUserGroupByName(RECRUITER_GROUP));
+    dispatch(fetchJobCustomView());
   }, []);
+
+  const handleSelectCustomView = (id) => {
+    dispatch(selectJobCustomView({ id: id }));
+  };
+
+  useEffect(() => {
+    if (allJobCustomView && allJobCustomView.length > 0) {
+      const selectedCustomView = allJobCustomView?.find(
+        (customView) => customView?.selected
+      );
+      if (
+        selectedCustomView &&
+        Array.isArray(optGroup) &&
+        optGroup.length > 0
+      ) {
+        const selectedGroup = selectedCustomView?.columnName?.split(",");
+        const selectedObjects = selectedGroup?.map((value) => {
+          return optGroup?.find((option) => option?.value === value);
+        });
+        if (selectedObjects.length > 0) {
+          setCustomConfigData(selectedObjects);
+        }
+      }
+    } else {
+      setCustomConfigData(JOB_INITIAL_OPTIONS);
+    }
+  }, [allJobCustomView, optGroup]);
+
+  const handleDeleteButtonClick = (id) => {
+    setDeletingCustomViewId(id);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteCustomView = (id) => {
+    dispatch(deleteJobCustomView({ id: id }));
+    setDeleteModalOpen(false);
+    setDeletingCustomViewId(null);
+  };
 
   const toggleNested = (index) => {
     setNestedVisible((prev) => {
@@ -99,113 +142,9 @@ const DynamicTableWrapper = ({
     });
   };
 
-  const handleChange = (selected) => {
-    const selectedObjects = selected.map((value) => {
-      return optGroup.find((option) => option.value === value);
-    });
-    setSelectedOptGroup(selectedObjects);
-  };
-
-  const areOptionsEmpty = () => {
-    return !(optGroup && optGroup.length > 0);
-  };
-
   return (
     <React.Fragment>
       <div className="page-content">
-        <Modal
-          isOpen={isCustomViewModalOpen}
-          setIsOpen={setIsCustomModalView}
-          size="xl"
-          centered
-        >
-          <ModalHeader className="border border-bottom border-primary pb-3">
-            <div className="d-flex flex-column gap-1">
-              <span className="modal-title">Job Fields Options</span>
-              <span className="text-muted fs-6">
-                Select fields to show on job listing table.
-              </span>
-            </div>
-          </ModalHeader>
-          <ModalBody>
-            <div className="p-2">
-              <DualListBox
-                showOrderButtons
-                preserveSelectOrder
-                canFilter
-                filterCallback={(optGroup, filterInput) => {
-                  if (filterInput === "") {
-                    return true;
-                  }
-                  return new RegExp(filterInput, "i").test(optGroup.label);
-                }}
-                filterPlaceholder="Search..."
-                options={
-                  optGroup?.filter((option) => option?.value !== "") ?? []
-                }
-                selected={selectedOptGroup.map((option) => option?.value) ?? []}
-                onChange={handleChange}
-                icons={{
-                  moveLeft: [
-                    <span
-                      className={`mdi mdi-chevron-left ${
-                        areOptionsEmpty() ? "disabled-icon" : ""
-                      }`}
-                      key="key"
-                    />,
-                  ],
-                  moveAllLeft: [
-                    <span
-                      className={`mdi mdi-chevron-double-left ${
-                        areOptionsEmpty() ? "disabled-icon" : ""
-                      }`}
-                      key="key"
-                    />,
-                  ],
-                  moveRight: (
-                    <span
-                      className={`mdi mdi-chevron-right ${
-                        areOptionsEmpty() ? "disabled-icon" : ""
-                      }`}
-                      key="key"
-                    />
-                  ),
-                  moveAllRight: [
-                    <span
-                      className={`mdi mdi-chevron-double-right ${
-                        areOptionsEmpty() ? "disabled-icon cursor-none" : ""
-                      }`}
-                      key="key"
-                    />,
-                  ],
-                  moveDown: <span className="mdi mdi-chevron-down" />,
-                  moveUp: <span className="mdi mdi-chevron-up" />,
-                  moveTop: <span className="mdi mdi-chevron-double-up" />,
-                  moveBottom: <span className="mdi mdi-chevron-double-down" />,
-                }}
-              />
-            </div>
-          </ModalBody>
-          <ModalFooter className="border border-top border-primary pt-3">
-            <div className="d-flex flex-row gap-2 justify-content-end">
-              <Button
-                className="btn btn-danger"
-                onClick={() => setIsCustomModalView(!isCustomViewModalOpen)}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="btn btn-custom-primary px-3"
-                onClick={() => {
-                  setCustomConfigData(selectedOptGroup);
-                  setIsCustomModalView(false);
-                }}
-              >
-                Set
-              </Button>
-            </div>
-          </ModalFooter>
-        </Modal>
         <Container fluid>
           <Row>
             <Col lg={12}>
@@ -251,7 +190,8 @@ const DynamicTableWrapper = ({
                       </Col>
                       <Col>
                         <div className="d-flex column-gap-2 justify-content-end">
-                          {gridView === "new_job" &&
+                          {(gridView === "new_job" ||
+                            gridView === "active_jobs") &&
                             checkAllPermission([Permission.JOB_EDIT]) && (
                               <ButtonDropdown
                                 isOpen={massFODOpen}
@@ -391,7 +331,79 @@ const DynamicTableWrapper = ({
                             </span>
                             Export
                           </Button>
-                          <Button
+                          <Dropdown
+                            isOpen={customViewDropdownOpen}
+                            toggle={() =>
+                              setCustomViewDropdownOpen(!customViewDropdownOpen)
+                            }
+                          >
+                            <DropdownToggle
+                              caret
+                              className="btn btn-custom-primary py-2"
+                            >
+                              <i className="ri-settings-3-fill me-2"></i>
+                              <span>Custom View</span>
+                            </DropdownToggle>
+                            <DropdownMenu>
+                              <Link to="/jobs/custom-view">
+                                <DropdownItem>Create Custom View</DropdownItem>
+                              </Link>
+                              <DropdownItem divider />
+                              <DropdownItem header>
+                                My Custom Views
+                              </DropdownItem>
+                              {allJobCustomView &&
+                              allJobCustomView.length > 0 ? (
+                                allJobCustomView.map((customView, index) => (
+                                  <div className="d-flex flex-row gap-1 me-3 mb-1">
+                                    <DropdownItem
+                                      onClick={() => {
+                                        handleSelectCustomView(customView?.id);
+                                      }}
+                                      key={index}
+                                    >
+                                      <div className="d-flex flex-row justify-content-between">
+                                        <span className="me-2">
+                                          {customView?.name}
+                                        </span>
+                                        {customView?.selected && (
+                                          <span>
+                                            <i className="ri-check-fill"></i>
+                                          </span>
+                                        )}
+                                      </div>
+                                    </DropdownItem>
+                                    <Button
+                                      className="btn btn-sm btn-danger"
+                                      onClick={() =>
+                                        handleDeleteButtonClick(customView?.id)
+                                      }
+                                    >
+                                      <i className="mdi mdi-delete"></i>
+                                    </Button>
+                                  </div>
+                                ))
+                              ) : (
+                                <>
+                                  <DropdownItem text>
+                                    No custom view created yet!
+                                  </DropdownItem>
+                                </>
+                              )}
+                            </DropdownMenu>
+                          </Dropdown>
+                          <DeleteCustomModal
+                            isOpen={deleteModalOpen}
+                            setIsOpen={setDeleteModalOpen}
+                            confirmDelete={() =>
+                              handleDeleteCustomView(deletingCustomViewId)
+                            }
+                            header="Delete Custom View Confirmation"
+                            deleteText={`Are you sure you want to delete this custom view?`}
+                            confirmButtonText="Delete"
+                            isLoading={false}
+                          />
+                          {/* <Button
                             type="button"
                             onClick={() => {
                               if (areOptionsEmpty()) {
@@ -409,7 +421,8 @@ const DynamicTableWrapper = ({
                               <i className="ri-settings-3-fill me-1"></i>
                             </span>
                             Custom View
-                          </Button>
+                          </Button> */}
+
                           {checkAllPermission([Permission.JOB_WRITE]) && (
                             <Link
                               to="/jobs/job-creation"
@@ -417,7 +430,7 @@ const DynamicTableWrapper = ({
                             >
                               <Button
                                 type="button"
-                                className="btn btn-custom-primary header-btn"
+                                className="btn btn-custom-primary header-btn d-flex align-items-center"
                               >
                                 Create Job Openings
                               </Button>

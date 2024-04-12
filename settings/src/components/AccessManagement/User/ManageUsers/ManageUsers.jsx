@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Row,
   Col,
@@ -9,13 +9,19 @@ import {
   Input,
   Button,
 } from "reactstrap";
-import ExtractUsers from "../ImportUsers/ExtractUsers";
+import ExtractUsers from "../MassImportUsers/ExtractUsers";
 import ManageUsersTable from "./ManageUsersTable";
+import { truncate } from "@workspace/common/src/helpers/string_helper";
 
-function ManageUsers({ selectedFiles, onImportUsers }) {
+function ManageUsers({ selectedFiles, onHandleNewUsers }) {
   const [extractedUserData, setExtractedUserData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [submittedUsers, setSubmittedUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   const handleExtractedUserData = (data) => {
     setExtractedUserData(data);
@@ -25,17 +31,26 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
     setSelectedFile(filename);
   };
 
+  const handleSubmittedUsers = (users) => {
+    setSubmittedUsers(users);
+    onHandleNewUsers(users);
+  };
+
+  const filteredFiles = Object.keys(extractedUserData).filter((filename) =>
+    filename.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <React.Fragment>
       <div>
-        <hr/>
+        <hr />
         <Row>
           <Col lg={3}>
             <Card>
               <CardHeader>
                 <h6 className="fw-bold">Imported Files</h6>
                 <span className="text-muted">
-                  Files that you have uploaded will be shown here.
+                  Uploaded files will be shown here.
                 </span>
               </CardHeader>
               <CardBody>
@@ -46,6 +61,8 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
                         type="text"
                         placeholder="Search.."
                         className="form-control border-primary"
+                        value={searchQuery}
+                        onChange={handleSearch}
                       />
                       <i className="bx bx-search-alt search-icon"></i>
                     </div>
@@ -63,21 +80,19 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {Object.keys(extractedUserData).map(
-                          (filename, index) => (
-                            <tr key={index}>
-                              <td>{filename}</td>
-                              <td>
-                                <Button
-                                  className="btn btn-sm btn-custom-primary"
-                                  onClick={() => handleViewUsers(filename)}
-                                >
-                                  View Users
-                                </Button>
-                              </td>
-                            </tr>
-                          )
-                        )}
+                        {filteredFiles.map((filename, index) => (
+                          <tr key={index}>
+                            <td>{truncate(filename, 14)}</td>
+                            <td>
+                              <Button
+                                className="btn btn-sm btn-custom-primary"
+                                onClick={() => handleViewUsers(filename)}
+                              >
+                                View Users
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </Table>
                   </Col>
@@ -101,7 +116,7 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
                       <ManageUsersTable
                         extractedUserData={extractedUserData}
                         selectedFile={selectedFile}
-                        onImportUsers={onImportUsers}
+                        onSubmittedUsers={handleSubmittedUsers}
                       />
                     ) : (
                       <div>
@@ -120,18 +135,6 @@ function ManageUsers({ selectedFiles, onImportUsers }) {
               selectedFiles={selectedFiles}
               onExtractedUserData={handleExtractedUserData}
             />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div className="d-flex justify-content-end">
-              <Button
-                // onClick={handleSubmitAll}
-                className="btn btn-custom-primary"
-              >
-                Confirm User Data
-              </Button>
-            </div>
           </Col>
         </Row>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Card,
@@ -11,6 +11,10 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
@@ -19,8 +23,15 @@ import { CANDIDATE_INITIAL_OPTIONS } from "../../pages/CandidateListing/candidat
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
 import { DateHelper, DynamicTableHelper } from "@workspace/common";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchCandidateCustomView,
+  selectCandidateCustomView,
+  deleteCandidateCustomView,
+} from "../../store/candidate/action";
+import { DeleteCustomModal } from "@workspace/common";
+import { all } from "redux-saga/effects";
 
 const DynamicTableWrapper = ({
   data,
@@ -33,8 +44,8 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   confirmDelete,
 }) => {
-   // ================== Custom Render ==================
-   const customRenderList = [
+  // ================== Custom Render ==================
+  const customRenderList = [
     {
       names: ["updatedAt", "createdAt"],
       render: (data, opt) =>
@@ -46,122 +57,63 @@ const DynamicTableWrapper = ({
   ];
   // ==================================================
   const { Permission, checkAllPermission } = useUserAuth();
-  const [customViewShow, setCustomViewShow] = useState(false);
-  const [selectedOptGroup, setSelectedOptGroup] = useState(
-    CANDIDATE_INITIAL_OPTIONS
-  );
-
-  const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deletingCustomViewId, setDeletingCustomViewId] = useState(null);
+  const dispatch = useDispatch();
+  const [customViewDropdownOpen, setCustomViewDropdownOpen] = useState(false);
 
   const candidateMeta = useSelector(
     (state) => state.CandidateReducer.candidateMeta
   );
+  const allCandidateCustomViews = useSelector(
+    (state) => state?.CandidateReducer?.candidateCustomViews
+  );
 
-  const handleChange = (selected) => {
-    const selectedObjects = selected.map((value) => {
-      return optGroup.find((option) => option.value === value);
-    });
-    setSelectedOptGroup(selectedObjects);
+  useEffect(() => {
+    dispatch(fetchCandidateCustomView());
+  }, []);
+
+  const handleSelectCustomView = (id) => {
+    dispatch(selectCandidateCustomView({ id: id }));
   };
 
-  const areOptionsEmpty = () => {
-    return !(optGroup && optGroup.length > 0);
+  const handleDeleteButtonClick = (id) => {
+    setDeletingCustomViewId(id);
+    setDeleteModalOpen(true);
   };
+
+  const handleDeleteCustomView = (id) => {
+    dispatch(deleteCandidateCustomView({ id: id }));
+    setDeleteModalOpen(false);
+    setDeletingCustomViewId(null);
+  };
+
+  useEffect(() => {
+    if (allCandidateCustomViews && allCandidateCustomViews.length > 0) {
+      const selectedCustomView = allCandidateCustomViews?.find(
+        (customView) => customView?.selected
+      );
+      if (
+        selectedCustomView &&
+        Array.isArray(optGroup) &&
+        optGroup.length > 0
+      ) {
+        const selectedGroup = selectedCustomView?.columnName?.split(",");
+        const selectedObjects = selectedGroup?.map((value) => {
+          return optGroup?.find((option) => option?.value === value);
+        });
+        if (selectedObjects.length > 0) {
+          setCustomConfigData(selectedObjects);
+        }
+      }
+    } else {
+      setCustomConfigData(CANDIDATE_INITIAL_OPTIONS);
+    }
+  }, [allCandidateCustomViews, optGroup]);
 
   return (
     <React.Fragment>
       <div className="page-content">
-        <Modal
-          isOpen={isCustomViewModalOpen}
-          setIsOpen={setIsCustomModalView}
-          size="xl"
-          centered
-        >
-          <ModalHeader className="border border-bottom border-primary pb-3">
-            <div className="d-flex flex-column gap-1">
-              <span className="modal-title">Candidate Fields Options</span>
-              <span className="text-muted fs-6">
-                Select fields to show on candidate listing table.
-              </span>
-            </div>
-          </ModalHeader>
-          <ModalBody>
-            <div className="p-2">
-              <DualListBox
-                id="preserve-order"
-                canFilter
-                filterCallback={(optGroup, filterInput) => {
-                  if (filterInput === "") {
-                    return true;
-                  }
-                  return new RegExp(filterInput, "i").test(optGroup.label);
-                }}
-                options={optGroup ?? []}
-                preserveSelectOrder
-                selected={selectedOptGroup.map((option) => option?.value) ?? []}
-                showOrderButtons
-                onChange={handleChange}
-                icons={{
-                  moveLeft: [
-                    <span
-                      className={`mdi mdi-chevron-left ${
-                        areOptionsEmpty() ? "disabled-icon" : ""
-                      }`}
-                      key="key"
-                    />,
-                  ],
-                  moveAllLeft: [
-                    <span
-                      className={`mdi mdi-chevron-double-left ${
-                        areOptionsEmpty() ? "disabled-icon" : ""
-                      }`}
-                      key="key"
-                    />,
-                  ],
-                  moveRight: (
-                    <span
-                      className={`mdi mdi-chevron-right ${
-                        areOptionsEmpty() ? "disabled-icon" : ""
-                      }`}
-                      key="key"
-                    />
-                  ),
-                  moveAllRight: [
-                    <span
-                      className={`mdi mdi-chevron-double-right ${
-                        areOptionsEmpty() ? "disabled-icon cursor-none" : ""
-                      }`}
-                      key="key"
-                    />,
-                  ],
-                  moveDown: <span className="mdi mdi-chevron-down" />,
-                  moveUp: <span className="mdi mdi-chevron-up" />,
-                  moveTop: <span className="mdi mdi-chevron-double-up" />,
-                  moveBottom: <span className="mdi mdi-chevron-double-down" />,
-                }}
-              />
-            </div>
-          </ModalBody>
-          <ModalFooter className="border border-top border-primary pt-3">
-            <div className="d-flex flex-row gap-2 justify-content-end">
-              <Button
-                className="btn btn-danger"
-                onClick={() => setIsCustomModalView(!isCustomViewModalOpen)}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="btn btn-custom-primary px-3"
-                onClick={() => {
-                  setCustomConfigData(selectedOptGroup);
-                  setIsCustomModalView(false);
-                }}
-              >
-                Set
-              </Button>
-            </div>
-          </ModalFooter>
-        </Modal>
         <Container fluid>
           <Row>
             <Col lg={12}>
@@ -206,19 +158,83 @@ const DynamicTableWrapper = ({
                             </span>
                             Export
                           </Button>
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              setIsCustomModalView(true);
-                              setCustomViewShow(!customViewShow);
-                            }}
-                            className="btn btn-custom-primary d-flex align-items-center header-btn"
+                          <Dropdown
+                            isOpen={customViewDropdownOpen}
+                            toggle={() =>
+                              setCustomViewDropdownOpen(!customViewDropdownOpen)
+                            }
                           >
-                            <span>
-                              <i className="ri-settings-3-fill me-1"></i>
-                            </span>
-                            Custom View
-                          </Button>
+                            <DropdownToggle
+                              caret
+                              className="btn btn-custom-primary py-2"
+                            >
+                              <i className="ri-settings-3-fill me-2"></i>
+                              <span>Custom View</span>
+                            </DropdownToggle>
+                            <DropdownMenu>
+                              <Link to="/candidates/custom-view">
+                                <DropdownItem>Create Custom View</DropdownItem>
+                              </Link>
+                              <DropdownItem divider />
+                              <DropdownItem header>
+                                My Custom Views
+                              </DropdownItem>
+                              {allCandidateCustomViews &&
+                              allCandidateCustomViews.length > 0 ? (
+                                allCandidateCustomViews.map(
+                                  (customView, index) => (
+                                    <div className="d-flex flex-row gap-1 me-2 mb-1 ">
+                                      <DropdownItem
+                                        key={index}
+                                        onClick={() => {
+                                          handleSelectCustomView(
+                                            customView?.id
+                                          );
+                                        }}
+                                      >
+                                        <div className="d-flex flex-row justify-content-between">
+                                          <span className="me-2">
+                                            {customView?.name}
+                                          </span>
+                                          {customView?.selected && (
+                                            <span>
+                                              <i className="ri-check-fill"></i>
+                                            </span>
+                                          )}
+                                        </div>
+                                      </DropdownItem>
+
+                                      <Button
+                                        className="btn btn-sm btn-danger"
+                                        onClick={() =>
+                                          handleDeleteButtonClick(
+                                            customView?.id
+                                          )
+                                        }
+                                      >
+                                        <i className="mdi mdi-delete"></i>
+                                      </Button>
+                                    </div>
+                                  )
+                                )
+                              ) : (
+                                <DropdownItem text>
+                                  No custom view created yet.
+                                </DropdownItem>
+                              )}
+                            </DropdownMenu>
+                          </Dropdown>
+                          <DeleteCustomModal
+                            isOpen={deleteModalOpen}
+                            setIsOpen={setDeleteModalOpen}
+                            confirmDelete={() =>
+                              handleDeleteCustomView(deletingCustomViewId)
+                            }
+                            header="Delete Custom View Confirmation"
+                            deleteText={`Are you sure you want to delete this custom view?`}
+                            confirmButtonText="Delete"
+                            isLoading={false}
+                          />
                           {checkAllPermission([Permission.CANDIDATE_WRITE]) && (
                             <Button
                               type="button"

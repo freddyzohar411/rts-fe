@@ -29,28 +29,10 @@ const MultiFileInputElement = ({
   const [previewLoadingUrl, setPreviewLoadingUrl] = useState({});
   const [downloadLoading, setDownloadLoading] = useState({});
 
-  // useEffect(() => {
-  //   if (
-  //     formik?.values?.[field.name] === "" ||
-  //     formik?.values?.[field.name] === null ||
-  //     formik?.values?.[field.name] === undefined
-  //     // typeof formik?.values?.[field.name] !== "object"
-  //   ) {
-  //     setFiles([]);
-  //     setExistingFiles([]);
-  //     setDeletedIds([]);
-  //   }
-  // }, [formik?.values?.[field.name]]);
-
   useEffect(() => {
     const fieldValue = formik?.values?.[field.name];
 
-    if (
-      fieldValue === "" ||
-      fieldValue === null ||
-      fieldValue === undefined
-      // typeof fieldValue !== "object"
-    ) {
+    if (fieldValue === "" || fieldValue === null || fieldValue === undefined) {
       // Check if an update is needed before updating the state
       if (
         files.length > 0 ||
@@ -295,7 +277,6 @@ const MultiFileInputElement = ({
 
       toast.error("File format not supported for preview.");
     } catch (e) {
-      console.log(e);
     } finally {
       setPreviewLoadingUrl((prev) => ({ ...prev, [id]: false }));
     }

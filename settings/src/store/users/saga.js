@@ -65,8 +65,6 @@ function* workListUsers(action) {
 
 function* workCreateUser(action) {
   const { newUser, navigate } = action.payload;
-  console.log("New User: ", newUser);
-  console.log("Payload: ", action.payload)
   try {
     const userResponse = yield call(createUser, newUser);
     yield put(createUserSuccess(userResponse.data));
@@ -82,23 +80,8 @@ function* workCreateUser(action) {
   }
 }
 
-// function* workCreateUsers(action) {
-//   const { newUsers, navigate } = action.payload;
-//   try {
-//     const usersResponse = yield call(createUsers, newUsers);
-//     yield put(createUsersSuccess(usersResponse.data));
-//     navigate("/settings/access");
-//     toast.success("User mass imported successfully!");
-//   } catch (error) {
-//     yield put(createUsersFailure(error));
-//     toast.error("Users mass import failed!");
-//   }
-// }
-
 function* workCreateUsers(action) {
   const { newUsers, navigate } = action.payload;
-  console.log("New Users: ", newUsers);
-  console.log("Payload: ", action.payload);
   try {
     const response = yield call(createUsers, newUsers);
     const { data } = response;
@@ -107,7 +90,7 @@ function* workCreateUsers(action) {
     toast.success("Users mass imported successfully!");
   } catch (error) {
     yield put(createUsersFailure(error));
-    toast.error("Users mass import failed!");
+    toast.error("Users mass import failed! Duplicate entries detected!");
   }
 }
 

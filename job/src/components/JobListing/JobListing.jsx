@@ -40,12 +40,13 @@ import "simplebar/dist/simplebar.min.css";
 import { truncate } from "@workspace/common/src/helpers/string_helper";
 
 const JobListing = () => {
-  const { Permission, checkAllPermission } = useUserAuth();
+  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { jobType } = useParams();
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
-  const jobsFields = useSelector((state) => state.JobListReducer.jobsFields);
+  const jobsFields = useSelector((state) => state?.JobListReducer?.jobsFields);
+
   const recruiterGroup = useSelector(
     (state) => state.JobListReducer.recruiterGroup
   );
@@ -53,6 +54,7 @@ const JobListing = () => {
   const deleteFODMeta = useSelector(
     (state) => state.JobListReducer.deleteFODMeta
   );
+  const userProfile = useSelector((state) => state.Profile.userProfile);
 
   // Dropdown State
   const [fodAssign, setFodAssign] = useState({});
@@ -88,6 +90,19 @@ const JobListing = () => {
           {DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"}
         </Badge>
       ),
+    },
+    {
+      names: ["jobSubmissionData.jobTitle"],
+      render: (data) => {
+        return (
+          <Link
+            to={`/jobs/${data.id}/snapshot`}
+            className="text-custom-primary text-decoration-underline"
+          >
+            <span>{data?.jobSubmissionData?.jobTitle}</span>
+          </Link>
+        );
+      },
     },
   ];
 
@@ -319,7 +334,7 @@ const JobListing = () => {
         render: (data) => (
           <div className="d-flex column-gap-2">
             {checkAllPermission([Permission.JOB_EDIT]) &&
-              gridView === "new_job" && (
+              (gridView === "new_job" || gridView === "active_jobs") && (
                 <Dropdown
                   isOpen={fodAssign[data.id] || false}
                   toggle={() => handleFodAssignDropdown(data.id)}
@@ -469,20 +484,23 @@ const JobListing = () => {
                 </Button>
               </Link>
             )}
-            {checkAllPermission([Permission.JOB_DELETE]) && showDelete && (
-              <Button
-                type="button"
-                className="btn btn-danger table-btn"
-                onClick={() => {
-                  setDeleteId(data.id);
-                  setIsDeleteModalOpen(true);
-                }}
-              >
-                <span>
-                  <i className="mdi mdi-delete"></i>
-                </span>
-              </Button>
-            )}
+            {checkAllPermission([Permission.JOB_DELETE]) &&
+              showDelete &&
+              (userProfile?.id === data?.createdBy ||
+                checkAnyRole([Role.ADMIN])) && (
+                <Button
+                  type="button"
+                  className="btn btn-danger table-btn"
+                  onClick={() => {
+                    setDeleteId(data.id);
+                    setIsDeleteModalOpen(true);
+                  }}
+                >
+                  <span>
+                    <i className="mdi mdi-delete"></i>
+                  </span>
+                </Button>
+              )}
           </div>
         ),
       },

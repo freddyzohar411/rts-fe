@@ -21,9 +21,21 @@ import {
   UPDATE_JOB_EMBEDDINGS,
   UPDATE_JOB_EMBEDDINGS_SUCCESS,
   UPDATE_JOB_EMBEDDINGS_FAILURE,
+  CREATE_JOB_CUSTOM_VIEW,
+  CREATE_JOB_CUSTOM_VIEW_SUCCESS,
+  CREATE_JOB_CUSTOM_VIEW_FAILURE,
   CLONE_JOB,
   CLONE_JOB_SUCCESS,
-  CLONE_JOB_FAILURE
+  CLONE_JOB_FAILURE,
+  FETCH_JOB_CUSTOM_VIEW,
+  FETCH_JOB_CUSTOM_VIEW_SUCCESS,
+  FETCH_JOB_CUSTOM_VIEW_FAILURE,
+  SELECT_JOB_CUSTOM_VIEW,
+  SELECT_JOB_CUSTOM_VIEW_SUCCESS,
+  SELECT_JOB_CUSTOM_VIEW_FAILURE,
+  DELETE_JOB_CUSTOM_VIEW,
+  DELETE_JOB_CUSTOM_VIEW_SUCCESS,
+  DELETE_JOB_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 const initialState = {
@@ -35,6 +47,8 @@ const initialState = {
   errorMsg: "",
   loading: false,
   error: false,
+  jobCustomView: {},
+  jobCustomViews: [],
 };
 
 const JobReducer = (state = initialState, action) => {
@@ -187,18 +201,102 @@ const JobReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
+
     case UPDATE_JOB_EMBEDDINGS:
       return {
         ...state,
         loading: true,
         error: false,
       };
+
     case UPDATE_JOB_EMBEDDINGS_SUCCESS:
       return {
         ...state,
         loading: false,
       };
     case UPDATE_JOB_EMBEDDINGS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+
+    // Create Job Custom View
+    case CREATE_JOB_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+
+    case CREATE_JOB_CUSTOM_VIEW_SUCCESS:
+      return {
+        loading: false,
+        jobCustomView: action.payload,
+      };
+    case CREATE_JOB_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+
+    // Fetch Job Custom View
+    case FETCH_JOB_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_JOB_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        jobCustomViews: action.payload,
+      };
+    case FETCH_JOB_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    // Select Job Custom View
+    case SELECT_JOB_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case SELECT_JOB_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        jobCustomView: action.payload,
+      };
+    case SELECT_JOB_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    // Delete Job Custom View
+    case DELETE_JOB_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case DELETE_JOB_CUSTOM_VIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        jobCustomView: action.payload,
+      };
+    case DELETE_JOB_CUSTOM_VIEW_FAILURE:
       return {
         ...state,
         loading: false,

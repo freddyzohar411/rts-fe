@@ -21,9 +21,21 @@ import {
   UPDATE_JOB_EMBEDDINGS,
   UPDATE_JOB_EMBEDDINGS_FAILURE,
   UPDATE_JOB_EMBEDDINGS_SUCCESS,
+  CREATE_JOB_CUSTOM_VIEW,
+  CREATE_JOB_CUSTOM_VIEW_SUCCESS,
+  CREATE_JOB_CUSTOM_VIEW_FAILURE,
   CLONE_JOB, 
   CLONE_JOB_SUCCESS, 
   CLONE_JOB_FAILURE,
+  FETCH_JOB_CUSTOM_VIEW,
+  FETCH_JOB_CUSTOM_VIEW_SUCCESS,
+  FETCH_JOB_CUSTOM_VIEW_FAILURE,
+  SELECT_JOB_CUSTOM_VIEW,
+  SELECT_JOB_CUSTOM_VIEW_SUCCESS,
+  SELECT_JOB_CUSTOM_VIEW_FAILURE,
+  DELETE_JOB_CUSTOM_VIEW,
+  DELETE_JOB_CUSTOM_VIEW_SUCCESS,
+  DELETE_JOB_CUSTOM_VIEW_FAILURE
 } from "./actionTypes";
 
 // Fetch Account
@@ -140,6 +152,7 @@ export const fetchJobsFieldsAllFailure = (error) => ({
   payload: error,
 });
 
+
 export const updateJobEmbeddings = (jobId) => ({
   type: UPDATE_JOB_EMBEDDINGS,
   payload: jobId,
@@ -155,4 +168,62 @@ export const updateJobEmbeddingsFailure = (error) => ({
   payload: error,
 });
 
+export const createJobCustomView = (jobCustomViewRequest) => ({
+  type: CREATE_JOB_CUSTOM_VIEW,
+  payload: jobCustomViewRequest,
+})
 
+export const createJobCustomViewSuccess = (jobCustomView) => ({
+  type: CREATE_JOB_CUSTOM_VIEW_SUCCESS,
+  payload: jobCustomView,
+});
+
+export const createJobCustomViewFailure = (error) => ({
+  type: CREATE_JOB_CUSTOM_VIEW_FAILURE,
+  payload: error,
+});
+
+export const fetchJobCustomView = () => ({
+  type: FETCH_JOB_CUSTOM_VIEW,
+});
+
+export const fetchJobCustomViewSuccess = (jobCustomViews) => ({
+  type: FETCH_JOB_CUSTOM_VIEW_SUCCESS,
+  payload: jobCustomViews,
+});
+
+export const fetchJobCustomViewFailure = (error) => ({
+  type: FETCH_JOB_CUSTOM_VIEW_FAILURE,
+  payload: error,
+});
+
+export const selectJobCustomView = (jobCustomViewRequest) => ({
+  type: SELECT_JOB_CUSTOM_VIEW,
+  payload: jobCustomViewRequest,
+});
+
+export const selectJobCustomViewSuccess = (jobCustomView) => ({
+  type: SELECT_JOB_CUSTOM_VIEW_SUCCESS,
+  payload: jobCustomView,
+});
+
+export const selectJobCustomViewFailure = (error) => ({
+  type: SELECT_JOB_CUSTOM_VIEW_FAILURE,
+  payload: error,
+});
+
+// Delete Job Custom View
+export const deleteJobCustomView = (jobCustomViewRequest) => ({
+  type: DELETE_JOB_CUSTOM_VIEW,
+  payload: jobCustomViewRequest,
+});
+
+export const deleteJobCustomViewSuccess = (jobCustomView) => ({
+  type: DELETE_JOB_CUSTOM_VIEW_SUCCESS,
+  payload: jobCustomView,
+});
+
+export const deleteJobCustomViewFailure = (error) => ({
+  type: DELETE_JOB_CUSTOM_VIEW_FAILURE,
+  payload: error,
+});

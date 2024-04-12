@@ -120,7 +120,6 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
 
       toast.error("File format not supported for preview.");
     } catch (e) {
-      console.log(e);
     } finally {
       setPreviewLoading(false);
     }
@@ -128,7 +127,6 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
 
   // File Preview from fileURl
   const handlePreviewURL = async () => {
-    console.log("fileData", fileData);
     const ext = fileData?.fileName?.split(".").pop();
     try {
       setPreviewLoading(true);
@@ -153,7 +151,6 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
 
       toast.error("File format not supported for preview.");
     } catch (e) {
-      console.log(e);
     } finally {
       setPreviewLoading(false);
     }

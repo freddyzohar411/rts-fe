@@ -20,8 +20,15 @@ import {
   FETCH_CANDIDATES_ADMIN,
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_MULTI,
+<<<<<<< HEAD
   UPDATE_CANIDATE_EMBEDDINGS,
   CANDIDATE_RECOMMENDATION_LIST,
+=======
+  CREATE_CANDIDATE_CUSTOM_VIEW,
+  FETCH_CANDIDATE_CUSTOM_VIEW,
+  SELECT_CANDIDATE_CUSTOM_VIEW,
+  DELETE_CANDIDATE_CUSTOM_VIEW,
+>>>>>>> 2fa-9-v2
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -50,10 +57,22 @@ import {
   importCandidateMultiFailure,
   importCandidateMultiSuccess,
   setParseAndImportLoading,
+<<<<<<< HEAD
   updateCandidateEmbeddingsSuccess,
   updateCandidateEmbeddingsFailure,
   candidateRecommendationListSuccess,
   candidateRecommendationListFailure,
+=======
+  createCandidateCustomViewSuccess,
+  createCandidateCustomViewFailure,
+  fetchCandidateCustomViewSuccess,
+  fetchCandidateCustomViewFailure,
+  selectCandidateCustomViewSuccess,
+  selectCandidateCustomViewFailure,
+  fetchCandidateCustomView,
+  deleteCandidateCustomViewSuccess,
+  deleteCandidateCustomViewFailure,
+>>>>>>> 2fa-9-v2
 } from "./action";
 import {
   getCandidates,
@@ -67,8 +86,15 @@ import {
   getCandidateFieldAll,
   getCandidatesAdmin,
   createCandidateList,
+<<<<<<< HEAD
   updateCandidateEmbeddings,
   getCandidateRecommendations,
+=======
+  createCandidateCustomView,
+  getCandidateCustomViews,
+  selectCandidateCustomView,
+  deleteCandidateCustomView,
+>>>>>>> 2fa-9-v2
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -472,6 +498,7 @@ function* workImportCandidateMulti(action) {
   }
 }
 
+<<<<<<< HEAD
 // Update Candidate Embeddings
 function* workUpdateCandidateEmbeddings(action) {
   try {
@@ -489,6 +516,65 @@ function* workCandidateRecommendationList(action) {
     yield put(candidateRecommendationListSuccess(response.data));
   } catch (error) {
     yield put(candidateRecommendationListFailure(error));
+=======
+// Fetch Custom View
+function* workFetchCandidateCustomView(action) {
+  try {
+    const response = yield call(getCandidateCustomViews, action.payload);
+    yield put(fetchCandidateCustomViewSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCandidateCustomViewFailure(error));
+  }
+}
+
+// Create Custom View
+function* workCreateCandidateCustomView(action) {
+  const { payload, navigate } = action.payload;
+  try {
+    const candidateCustomViewResponse = yield call(
+      createCandidateCustomView,
+      payload
+    );
+    yield put(createCandidateCustomViewSuccess(candidateCustomViewResponse));
+    yield put(fetchCandidateCustomView());
+    toast.success("Candidate custom view created successfully!");
+    navigate("/candidates");
+  } catch (error) {
+    yield put(createCandidateCustomViewFailure(error));
+    if (error.response && error.response.status === 409) {
+      toast.error("Candidate custom view name already exists.");
+    } else {
+      toast.error("Error creating candidate custom view!");
+    }
+  }
+}
+
+// Select Custom View
+function* workSelectCandidateCustomView(action) {
+  const { id } = action.payload;
+  try {
+    const response = yield call(selectCandidateCustomView, id);
+    yield put(selectCandidateCustomViewSuccess(response.data));
+    yield put(fetchCandidateCustomView());
+    toast.success("Candidate custom view selected successfully!");
+  } catch (error) {
+    yield put(selectCandidateCustomViewFailure(error));
+    toast.error("Error selecting candidate custom view!");
+  }
+}
+
+// Delete Candidate Custom View
+function* workDeleteCandidateCustomView(action) {
+  const { id } = action.payload;
+  try {
+    const response = yield call(deleteCandidateCustomView, id);
+    yield put(deleteCandidateCustomViewSuccess(response.data));
+    yield put(fetchCandidateCustomView());
+    toast.success("Candidate custom view deleted successfully!");
+  } catch (error) {
+    yield put(deleteCandidateCustomViewFailure(error));
+    toast.error("Error deleting candidate custom view!");
+>>>>>>> 2fa-9-v2
   }
 }
 
@@ -505,9 +591,16 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATES_ADMIN, workFetchCandidatesAdmin);
   yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
   yield takeEvery(IMPORT_CANDIDATE_MULTI, workImportCandidateMulti);
+<<<<<<< HEAD
   yield takeEvery(UPDATE_CANIDATE_EMBEDDINGS, workUpdateCandidateEmbeddings);
   yield takeEvery(
     CANDIDATE_RECOMMENDATION_LIST,
     workCandidateRecommendationList
   );
+=======
+  yield takeEvery(CREATE_CANDIDATE_CUSTOM_VIEW, workCreateCandidateCustomView);
+  yield takeEvery(FETCH_CANDIDATE_CUSTOM_VIEW, workFetchCandidateCustomView);
+  yield takeEvery(SELECT_CANDIDATE_CUSTOM_VIEW, workSelectCandidateCustomView);
+  yield takeEvery(DELETE_CANDIDATE_CUSTOM_VIEW, workDeleteCandidateCustomView);
+>>>>>>> 2fa-9-v2
 }

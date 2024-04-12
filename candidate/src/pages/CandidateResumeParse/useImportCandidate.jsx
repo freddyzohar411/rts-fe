@@ -51,9 +51,7 @@ const useImportCandidate = () => {
       .then((response) => {
         setFormNameId(response.data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }, []);
 
   function mapResumeDataToFormData(

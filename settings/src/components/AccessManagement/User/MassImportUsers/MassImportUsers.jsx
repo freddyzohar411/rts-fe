@@ -20,7 +20,6 @@ import ImportFiles from "./ImportFiles";
 import FinaliseMassUsers from "../FinaliseMassUsers/FinaliseMassUsers";
 import { Link } from "react-router-dom";
 import ManageUsers from "../ManageUsers/ManageUsers";
-import ValidateUsers from "../ValidateUsers/ValidateUsers";
 
 function MassImportUsers() {
   document.title = "Import Users | RTS";
@@ -28,6 +27,7 @@ function MassImportUsers() {
   const [passedarrowSteps, setPassedarrowSteps] = useState([0]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [newUsers, setNewUsers] = useState([]);
+  
 
   function toggleArrowTab(tab) {
     if (activeArrowTab !== tab && tab >= 0 && tab <= 2) {
@@ -40,9 +40,9 @@ function MassImportUsers() {
     setSelectedFiles(files);
   };
 
-  const handleImportedUsers = (users) => {
+  const handleNewUsers = (users) => {
     setNewUsers(users);
-  };
+  }
 
   return (
     <React.Fragment>
@@ -169,6 +169,7 @@ function MassImportUsers() {
                                 onClick={() =>
                                   toggleArrowTab(activeArrowTab + 1)
                                 }
+                                disabled={selectedFiles.length === 0}
                               >
                                 Next
                               </Button>
@@ -183,12 +184,8 @@ function MassImportUsers() {
                           <Col>
                             <ManageUsers
                               selectedFiles={selectedFiles}
-                              onImportUsers={handleImportedUsers}
+                              onHandleNewUsers={handleNewUsers}
                             />
-                            {/* <ValidateUsers
-                              selectedFiles={selectedFiles}
-                              onImportUsers={handleImportFiles}
-                            /> */}
                           </Col>
                         </Row>
                         <Row>

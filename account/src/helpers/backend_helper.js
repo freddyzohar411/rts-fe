@@ -1,21 +1,15 @@
 import { Axios } from "@workspace/common";
-// import axios from "axios";
 
 import {
-  GET_ACCOUNTS,
   BASE_FORMS,
   BASE_ACCOUNTS,
-  BASE_CONTACTS,
-  BASE_DOCUMENTS,
   BASE_CLIENT_INSTRUCTIONS,
-  BASE_ACCOUNT_ACCESS,
   BASE_COMMERCIAL,
+  BASE_ACCOUNT_CUSTOM_VIEW,
 } from "./url_helper";
 
 import {
   ACCOUNT_URL,
-  CONTACT_URL,
-  DOCUMENT_URL,
   ACCOUNT_INSTRUCTION_URL,
   FORM_URL,
 } from "@workspace/common/src/config";
@@ -85,8 +79,28 @@ export const getAccountDataById = (id) =>
 export const getAccountsFieldsAll = () =>
   api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields/all`);
 
-
-  // Admin
+// Admin
 // Get Accounts
 export const getAccountsAdmin = (data) =>
   api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing/all`, data);
+
+// Create Account Custom View
+export const createAccountCustomView = (data) => {
+  api.create(
+    `${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/save/customfields`,
+    data
+  );
+};
+// Get All Account Custom View
+export const getAllAccountCustomView = () =>
+  api.get(`${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/customView/all`);
+
+// Update isSelected of Account Custom View
+export const selectAccountCustomView = (id) =>
+  api.put(`${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/customView/update/${id}`);
+
+// Delete Account Custom View
+export const deleteAccountCustomView = (id) =>
+  api.delete(
+    `${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/customView/delete/${id}`
+  );

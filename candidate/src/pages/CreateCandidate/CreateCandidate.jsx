@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Card, CardBody } from "reactstrap";
+import { Container } from "reactstrap";
 import FormStepper from "./FormStepper";
 import { Form } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { generateId } from "@workspace/common/src/helpers/generate_id_helper";
 import {
   postCandidate,
   putCandidate,
@@ -16,11 +18,7 @@ import {
   CandidateEntityConstant,
   CandidateTableListConstant,
 } from "../../constants/candidateConstant";
-import {
-  fetchDraftCandidate,
-  deleteCandidateId,
-  deleteCandidateCountry,
-} from "../../store/candidateregistration/action";
+import { fetchDraftCandidate } from "../../store/candidateregistration/action";
 import {
   fetchCandidateFormSubmission,
   clearCandidateFormSubmission,
@@ -43,7 +41,6 @@ import {
 } from "../../helpers/backend_helper";
 import { useUserAuth } from "@workspace/login";
 import { fetchCandidateForm } from "../../store/candidateForm/action";
-import axios from "axios";
 
 const CreateCandidate = () => {
   const dispatch = useDispatch();
@@ -78,8 +75,7 @@ const CreateCandidate = () => {
   const [formFieldsData, setFormFieldsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [country, setCountry] = useState(null);
+  const [formikValues, setFormikValues] = useState(null);
 
   /**
    * Fetch form template based on step
@@ -106,9 +102,7 @@ const CreateCandidate = () => {
           CANDIDATE_WORK_EXPERIENCE_BASE_URL
         );
         setFormTemplate(formEdited);
-        return;
-      }
-      if (step === 2) {
+      } else if (step === 2) {
         const formEdited = setTableAPI(
           form,
           CandidateTableListConstant.LANGUAGES_LIST,
@@ -119,9 +113,7 @@ const CreateCandidate = () => {
           CANDIDATE_LANGUAGES_BASE_URL
         );
         setFormTemplate(formEdited);
-        return;
-      }
-      if (step === 3) {
+      } else if (step === 3) {
         const formEdited = setTableAPI(
           form,
           CandidateTableListConstant.EDUCATION_DETAILS_LIST,
@@ -132,9 +124,7 @@ const CreateCandidate = () => {
           CANDIDATE_EDUCATION_DETAILS_BASE_URL
         );
         setFormTemplate(formEdited);
-        return;
-      }
-      if (step === 4) {
+      } else if (step === 4) {
         const formEdited = setTableAPI(
           form,
           CandidateTableListConstant.DOCUMENTS_LIST,
@@ -145,9 +135,7 @@ const CreateCandidate = () => {
           DOCUMENT_BASE_URL
         );
         setFormTemplate(formEdited);
-        return;
-      }
-      if (step === 5) {
+      } else if (step === 5) {
         const formEdited = setTableAPI(
           form,
           CandidateTableListConstant.CERTIFICATION_LIST,
@@ -158,9 +146,7 @@ const CreateCandidate = () => {
           CANDIDATE_CERTIFICATE_BASE_URL
         );
         setFormTemplate(formEdited);
-        return;
-      }
-      if (step === 6) {
+      } else if (step === 6) {
         const formEdited = setTableAPI(
           form,
           CandidateTableListConstant.EMPLOYER_DETAILS_LIST,
@@ -171,11 +157,25 @@ const CreateCandidate = () => {
           CANDIDATE_EMPLOYER_DETAILS_BASE_URL
         );
         setFormTemplate(formEdited);
-        return;
+      } else {
+        setFormTemplate(form);
       }
-      setFormTemplate(form);
     }
   }, [step, form]);
+
+  useEffect(() => {
+    if (formikValues?.values?.candidateId?.length === 0) {
+      generateId("C")
+        .then((id) => {
+          formikRef.current.formik.setFieldValue("candidateId", id);
+        })
+        .catch((e) => {});
+    }
+  }, [formikValues]);
+
+  const onFormikChange = (formikValues) => {
+    setFormikValues(formikValues);
+  };
 
   /**
    * Set table API method
@@ -895,10 +895,11 @@ const CreateCandidate = () => {
         <Form
           template={formTemplate}
           userDetails={getAllUserGroups()}
-          country={candidateCountry || country?.name || null}
+          country={candidateCountry ?? null}
           editData={formSubmissionData}
           onSubmit={handleFormSubmit}
           onFormFieldsChange={handleFormFieldChange}
+          onFormikChange={onFormikChange}
           errorMessage={errorMessage}
           view={false}
           ref={formikRef}

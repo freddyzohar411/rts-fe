@@ -87,6 +87,17 @@ class APIClient {
 
     return response;
   };
+
+  /**
+   * get with config
+   * @param {*} url 
+   * @param {*} config 
+   * @returns 
+   */
+  getWithConfig = (url, config) => {
+    return axios.get(url, config);
+  };
+
   /**
    * post given data to url
    */

@@ -10,6 +10,7 @@ import {
   BASE_LANGUAGES,
   BASE_EMPLOYER_DETAILS,
   BASE_RESUME_PARSING,
+  BASE_CANDIDATE_CUSTOM_VIEW,
 } from "./url_helper";
 
 import {
@@ -155,6 +156,7 @@ export const parseResumeMulti = (data, config) =>
     config
   );
 
+<<<<<<< HEAD
 export const updateCandidateEmbeddings = (id) =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/create-embeddings/${id}`);
 
@@ -168,4 +170,27 @@ export const getCandidateRecommendations = (data, signal) =>
 export const getCandidateToJobMatchData = (candidateId, jobId) =>
   api.get(
     `${CANDIDATE_URL}${BASE_CANDIDATES}/match/candidates/${candidateId}/jobs/${jobId}`
+=======
+// Create Custom View
+export const createCandidateCustomView = (data) =>
+  api.create(
+    `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/save/customfields`,
+    data
+  );
+  
+// Fetch Candidate Custom Views
+export const getCandidateCustomViews = () =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/all`);
+
+  // Select Candidate Custom View
+export const selectCandidateCustomView = (id) =>
+  api.put(
+    `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/update/${id}`
+  );
+
+// Delete Candidate Custom View
+export const deleteCandidateCustomView = (id) =>
+  api.delete(
+    `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/delete/${id}`
+>>>>>>> 2fa-9-v2
   );

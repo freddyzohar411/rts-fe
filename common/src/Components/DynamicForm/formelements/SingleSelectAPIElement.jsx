@@ -101,7 +101,6 @@ const SingleSelectAPIElement = ({
             setOptions(mapToOptionFormat(res.data));
           })
           .catch((err) => {
-            console.log("err", err);
           });
       }
 
@@ -111,7 +110,6 @@ const SingleSelectAPIElement = ({
             setOptions(mapToOptionFormat(res.data));
           })
           .catch((err) => {
-            console.log("err", err);
           });
       }
     }

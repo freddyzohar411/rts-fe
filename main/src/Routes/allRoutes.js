@@ -4,6 +4,8 @@ import { Navigate } from "react-router-dom";
 // Dashboard
 import { Dashboard } from "@workspace/dashboard";
 
+import { CustomView } from "@workspace/common";
+
 // User Profile
 import {
   Login,
@@ -12,10 +14,16 @@ import {
   ForgetPassword,
   ResetPassword,
   ForgetResetPassword,
+  LoginOTP
 } from "@workspace/login";
 
 // Account
-import { AccountListing, EditAccount, CreateAccount } from "@workspace/account";
+import {
+  AccountListing,
+  EditAccount,
+  CreateAccount,
+  AccountCustomView,
+} from "@workspace/account";
 
 // Candidate
 import {
@@ -24,6 +32,7 @@ import {
   CandidateManage,
   CreateCandidateOptions,
   CandidateResumeParse,
+  CandidateCustomView,
 } from "@workspace/candidate";
 
 // Job
@@ -33,6 +42,7 @@ import {
   JobCreate,
   FOD,
   PreOfferVerification,
+  JobCustomView,
 } from "@workspace/job";
 
 // Settings
@@ -101,6 +111,7 @@ const authProtectedRoutes = [
     component: <CreateCandidateOptions />,
     requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
+  { path: "/candidates/custom-view", component: <CandidateCustomView /> },
 
   // Account
   {
@@ -118,6 +129,11 @@ const authProtectedRoutes = [
     component: <AccountListing />,
     requiredPermissions: [Permission.ACCOUNT_READ],
   },
+  {
+    path: "/accounts/custom-view",
+    component: <AccountCustomView />,
+    requiredPermissions: [Permission.ACCOUNT_READ],
+  },
 
   // Job
   {
@@ -125,6 +141,7 @@ const authProtectedRoutes = [
     component: <JobCreate />,
     requiredPermissions: [Permission.JOB_WRITE],
   },
+  { path: "/jobs/custom-view", component: <JobCustomView /> },
   {
     path: "/jobs",
     component: <JobListing />,
@@ -191,6 +208,8 @@ const authProtectedRoutes = [
     component: <TemplateBuilderPage />,
   },
 
+  { path: "/custom-view", component: <CustomView /> },
+
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
   {
@@ -208,6 +227,7 @@ const publicRoutes = [
   { path: "/forget-reset-password", component: <ForgetResetPassword /> },
   { path: "/logout", component: <Logout /> },
   { path: "/forget-password", component: <ForgetPassword /> },
+  { path: "/login-otp", component: <LoginOTP /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };

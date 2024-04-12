@@ -84,15 +84,12 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
     // Fetch data
     getCandidateFieldAll()
       .then((res) => {
-        console.log("All Candidate Dynamic Fields", res.data);
         setCandidateFormFieldsData(
           convertObjectToArrayFilter(res.data, exlcudeDynamicFields)
         );
         setCategories(getKeysArrayFromObj(res.data));
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   const convertObjectToArrayFilter = (obj, exlcude = []) => {

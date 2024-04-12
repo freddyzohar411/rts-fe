@@ -6,6 +6,7 @@ import {
   BASE_JOBS_CONADIDATE_STATE,
   BASE_JOB_TIMELINE,
   BASE_USER_GROUP,
+  BASE_JOB_CUSTOM_VIEW,
 } from "./url_helper";
 import {
   JOB_URL,
@@ -33,7 +34,7 @@ export const createJob = (data) =>
   api.create(`${JOB_URL}${BASE_JOBS}/add`, data);
 
 export const cloneJob = (data) =>
-  api.create(`${JOB_URL}${BASE_JOBS}/clone`, data)
+  api.create(`${JOB_URL}${BASE_JOBS}/clone`, data);
 
 export const updateJob = (id, data) =>
   api.put(`${JOB_URL}${BASE_JOBS}/${id}`, data);
@@ -89,3 +90,19 @@ export const getJobTimelineCount = (jobId) =>
 // Updated Embeddings
 export const updateJobEmbedding = (jobId) =>
   api.get(`${JOB_URL}${BASE_JOBS}/${jobId}/embeddings/create`);
+
+// Create Job Custom View
+export const createJobCustomView = (data) =>
+  api.create(`${JOB_URL}${BASE_JOB_CUSTOM_VIEW}/save/customfields`, data);
+
+// Get Job Custom Views
+export const getJobCustomViews = () =>
+  api.get(`${JOB_URL}${BASE_JOB_CUSTOM_VIEW}/customView/all`);
+
+// Select Job Custom View
+export const selectJobCustomView = (id) =>
+  api.put(`${JOB_URL}${BASE_JOB_CUSTOM_VIEW}/customView/update/${id}`);
+
+// Delete Job Custom View
+export const deleteJobCustomView = (id) =>
+  api.delete(`${JOB_URL}${BASE_JOB_CUSTOM_VIEW}/customView/delete/${id}`);
