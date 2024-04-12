@@ -6,4 +6,5 @@ export const moduleConstants = [
 
 export const injectionVariables = [
   { label: "Reset Password Link", value: "RESET_PASSWORD_LINK" },
+  { label: "Login OTP Token", value: "LOGIN_OTP_TOKEN" },
 ]

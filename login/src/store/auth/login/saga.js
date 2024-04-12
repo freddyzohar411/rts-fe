@@ -36,6 +36,15 @@ import {
 } from "../../../helpers/backend_helper";
 import { encode } from "@workspace/common/src/helpers/string_helper";
 
+function* storeUserData(response) {
+  const { access_token, refresh_token } = response;
+  sessionStorage.setItem("accessToken", access_token);
+  sessionStorage.setItem("refreshToken", refresh_token);
+  sessionStorage.setItem("authUser", JSON.stringify(response));
+  yield put(fetchProfile());
+  yield take("PROFILE_SUCCESS");
+}
+
 function* loginUser({ payload: { user, history } }) {
   try {
     const hashedPassword = yield encode(user.password);
@@ -105,8 +114,7 @@ function* loginResetPassword({ payload: { user, history } }) {
 }
 
 function* login1FA({ payload: { userRequest1FA, navigate } }) {
-  const devFlag = process.env.REACT_APP_DEV_FLAG;
-  console.log("Dev Flag", devFlag);
+  const is2FAEnabled = process.env.REACT_APP_ENABLE_2FA;
   try {
     const hashedPassword = yield encode(userRequest1FA?.password);
     const response = yield call(postLogin1FA, {
@@ -117,33 +125,21 @@ function* login1FA({ payload: { userRequest1FA, navigate } }) {
 
     const isTemp = response?.user?.isTemp;
     if (isTemp) {
-      const { access_token, refresh_token } = response;
-      sessionStorage.setItem("accessToken", access_token);
-      sessionStorage.setItem("refreshToken", refresh_token);
-      sessionStorage.setItem("authUser", JSON.stringify(response));
-      // Check if user has any profile
-      yield put(fetchProfile());
-      yield take("PROFILE_SUCCESS");
+      yield call(storeUserData, response);
       navigate("/reset-password");
       return;
     }
-    if (devFlag === "true") {
-      const { access_token, refresh_token } = response;
-      sessionStorage.setItem("accessToken", access_token);
-      sessionStorage.setItem("refreshToken", refresh_token);
-      sessionStorage.setItem("authUser", JSON.stringify(response));
-      // Check if user has any profile
-      yield put(fetchProfile());
-      yield take("PROFILE_SUCCESS");
-      navigate("/dashboard");
-      toast.success("Thanks for logging in.");
-    } else {
+    if (is2FAEnabled) {
       navigate("/login-otp", {
         state: {
           accessToken: response?.access_token,
           refreshToken: response?.refresh_token,
         },
       });
+    } else {
+      yield call(storeUserData, response);
+      navigate("/dashboard");
+      toast.success("Thanks for logging in.");
     }
   } catch (error) {
     if (error?.status === "UNAUTHORIZED") {
@@ -163,12 +159,7 @@ function* login2FA({ payload: { userRequest2FA, state, navigate } }) {
       },
     });
     yield put(login2FASuccess(response));
-    sessionStorage.setItem("accessToken", response?.access_token);
-    sessionStorage.setItem("refreshToken", response?.refresh_token);
-    sessionStorage.setItem("authUser", JSON.stringify(response));
-    // Check if user has any profile
-    yield put(fetchProfile());
-    yield take("PROFILE_SUCCESS");
+    yield call(storeUserData, response);
     const isTemp = response?.user?.isTemp;
     if (isTemp) {
       navigate("/reset-password");
@@ -189,7 +180,7 @@ function* login2FA({ payload: { userRequest2FA, state, navigate } }) {
   }
 }
 
-function* resendOTP({ payload: { state, navigate } }) {
+function* resendOTP({ payload: { state } }) {
   try {
     yield call(getResendOTP, {
       headers: {
