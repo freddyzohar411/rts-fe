@@ -1,22 +1,15 @@
 import { Axios } from "@workspace/common";
-// import axios from "axios";
 
 import {
-  GET_ACCOUNTS,
   BASE_FORMS,
   BASE_ACCOUNTS,
-  BASE_CONTACTS,
-  BASE_DOCUMENTS,
   BASE_CLIENT_INSTRUCTIONS,
-  BASE_ACCOUNT_ACCESS,
   BASE_COMMERCIAL,
   BASE_ACCOUNT_CUSTOM_VIEW,
 } from "./url_helper";
 
 import {
   ACCOUNT_URL,
-  CONTACT_URL,
-  DOCUMENT_URL,
   ACCOUNT_INSTRUCTION_URL,
   FORM_URL,
 } from "@workspace/common/src/config";

@@ -1,11 +1,9 @@
 import React from "react";
-import { Field } from "formik";
+import { Field, ErrorMessage } from "formik";
 import { Label, FormFeedback } from "reactstrap";
 import Select from "react-select";
 
 const FormSelection = ({ name, ...props }) => {
-
-
   const isValid = !props?.error;
 
   const customStyles = {
@@ -20,6 +18,8 @@ const FormSelection = ({ name, ...props }) => {
     }),
   };
 
+  console.log("error?", props?.error);
+
   return (
     <div>
       {props?.label && (
@@ -31,7 +31,12 @@ const FormSelection = ({ name, ...props }) => {
         {({ field }) => <Select styles={customStyles} {...field} {...props} />}
       </Field>
       {props?.error && (
-        <FormFeedback type="invalid">{props?.error}</FormFeedback>
+        <ErrorMessage
+          className="text-danger"
+          name={name}
+          component="span"
+          style={{ fontSize: "11px", marginTop: "0.25rem" }}
+        />
       )}
     </div>
   );

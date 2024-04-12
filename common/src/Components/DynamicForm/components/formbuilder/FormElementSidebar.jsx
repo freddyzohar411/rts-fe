@@ -308,6 +308,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableId: "accountowner",
       type: "field",
     },
+    {
+      draggableLabelIcon: "ri-account-box-fill",
+      draggableLabel: "Account Type",
+      draggablePrefix: "element",
+      draggableId: "accounttype",
+      type: "field",
+    },
   ];
 
   // Layout List

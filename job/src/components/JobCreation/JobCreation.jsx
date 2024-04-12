@@ -17,6 +17,7 @@ import { useRef } from "react";
 import DeleteDraftModal from "./DeleteDraftModal";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { generateId } from "@workspace/common/src/helpers/generate_id_helper";
 
 const JobCreation = () => {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const JobCreation = () => {
   const [formTemplate, setFormTemplate] = useState(null);
   const [randomId, setRandomId] = useState();
   const [deleteDraftModal, setDeleteDraftModal] = useState(false);
+  const [formikValues, setFormikValues] = useState(null);
 
   // Fetch all the countries and account names
   useEffect(() => {
@@ -55,10 +57,23 @@ const JobCreation = () => {
    */
   useEffect(() => {
     if (form) {
-      // setFormTemplate(form);
       setFormTemplate(form);
     }
   }, [form, view]);
+
+  useEffect(() => {
+    if (!jobId && formikValues?.values?.jobId?.length === 0) {
+      generateId("J")
+        .then((id) => {
+          formikRef.current.formik.setFieldValue("jobId", id);
+        })
+        .catch((e) => {});
+    }
+  }, [formikRef?.current?.formik?.values]);
+
+  const onFormikChange = (formikValues) => {
+    setFormikValues(formikValues);
+  };
 
   useEffect(() => {
     if (jobId) {
@@ -151,6 +166,7 @@ const JobCreation = () => {
           country={null}
           editData={formSubmissionData}
           onSubmit={handleFormSubmit}
+          onFormikChange={onFormikChange}
           onFormFieldsChange={handleFormFieldChange}
           errorMessage={null}
           view={view}
