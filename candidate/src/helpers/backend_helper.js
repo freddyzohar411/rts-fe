@@ -37,7 +37,7 @@ export const getCandidatesFields = () =>
 
 // Get Accounts
 export const getCandidates = (data) =>
-  api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing`, data);
+  api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/all`, data);
 
 // Get Form by id
 export const getFormById = (id) => api.get(`${FORM_URL}${BASE_FORMS}/${id}`);
@@ -129,11 +129,6 @@ export const getCandidateDataById = (id) =>
 // Get candidate field All
 export const getCandidateFieldAll = () =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/fields/all`);
-
-// Admin
-// Get candidates
-export const getCandidatesAdmin = (data) =>
-  api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/all`, data);
 
 // Candidate Mapping
 // Get candidate mapping
