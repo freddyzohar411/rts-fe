@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
-import {
-  fetchFormsByCategory
-} from "../../../store/actions";
+import { getFormsByCategories } from "../../../helpers/backend_helper";
 
 const FormTemplateSelectElement = ({
   formik,
@@ -13,24 +11,21 @@ const FormTemplateSelectElement = ({
   ...props
 }) => {
   const { formState } = formStateHook;
-  const formsDataByCategory = useSelector(
-    (state) => state.FormCommonReducer.formsByCategories
-  );
-  const dispatch = useDispatch();
   const [fetchData, setFetchData] = useState([]);
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchFormsByCategory(field.formCategorySelect || "ALL"));
-  }, []);
+    const fetchFormByCategories = async (category) => {
+      const response = await getFormsByCategories(category || "ALL");
+      setFetchData(response?.data);
+    };
 
-  useEffect(() => {
-    if (formsDataByCategory) {
-      setFetchData(formsDataByCategory || []);
+    if (field?.formCategorySelect) {
+      fetchFormByCategories(field?.formCategorySelect);
     }
-  }, [formsDataByCategory]);
+  }, [field?.formCategorySelect]);
 
   // Helper Functions
   function mapToOptionFormat(apiData) {
@@ -45,16 +40,15 @@ const FormTemplateSelectElement = ({
     return options?.find((option) => option.label === data);
   }
 
-
   // Get Data for normal API calls without parents
   useEffect(() => {
-    if (formsDataByCategory && formsDataByCategory?.category === field.formCategorySelect) {
-      setOptions(mapToOptionFormat(formsDataByCategory?.formTemplateNamesList));
-    } 
-    if (formsDataByCategory && field.formCategorySelect === "" ) {
-      setOptions(mapToOptionFormat(formsDataByCategory?.formTemplateNamesList));
+    if (fetchData && fetchData?.category === field.formCategorySelect) {
+      setOptions(mapToOptionFormat(fetchData?.formTemplateNamesList));
     }
-  }, [formsDataByCategory]);
+    if (fetchData && field.formCategorySelect === "") {
+      setOptions(mapToOptionFormat(fetchData?.formTemplateNamesList));
+    }
+  }, [fetchData]);
 
   const handleInputChange = (inputValue) => {
     setSearch(inputValue);

@@ -37,7 +37,7 @@ export const getCandidatesFields = () =>
 
 // Get Accounts
 export const getCandidates = (data) =>
-  api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing`, data);
+  api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/all`, data);
 
 // Get Form by id
 export const getFormById = (id) => api.get(`${FORM_URL}${BASE_FORMS}/${id}`);
@@ -130,11 +130,6 @@ export const getCandidateDataById = (id) =>
 export const getCandidateFieldAll = () =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/fields/all`);
 
-// Admin
-// Get candidates
-export const getCandidatesAdmin = (data) =>
-  api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/all`, data);
-
 // Candidate Mapping
 // Get candidate mapping
 export const getCandidateMapping = () =>
@@ -162,12 +157,12 @@ export const createCandidateCustomView = (data) =>
     `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/save/customfields`,
     data
   );
-  
+
 // Fetch Candidate Custom Views
 export const getCandidateCustomViews = () =>
   api.get(`${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/all`);
 
-  // Select Candidate Custom View
+// Select Candidate Custom View
 export const selectCandidateCustomView = (id) =>
   api.put(
     `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/update/${id}`

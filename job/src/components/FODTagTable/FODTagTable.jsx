@@ -123,7 +123,10 @@ const FODTagTable = ({ selectedRowData }) => {
               className="form-check-input"
               type="checkbox"
               id="fodTable"
-              checked={selected?.length === candidatesData?.candidates?.length}
+              checked={
+                selected?.length > 0 &&
+                selected?.length === candidatesData?.candidates?.length
+              }
               onChange={(e) => selectAll(e?.target?.checked)}
             />
           </div>

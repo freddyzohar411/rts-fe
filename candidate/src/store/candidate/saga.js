@@ -11,7 +11,6 @@ import {
   PUT_CANDIDATE_DRAFT_STATUS,
   FETCH_CANDIDATE_DATA,
   FETCH_CANDIDATES_FIELDS_ALL,
-  FETCH_CANDIDATES_ADMIN,
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_MULTI,
   CREATE_CANDIDATE_CUSTOM_VIEW,
@@ -66,7 +65,6 @@ import {
   completeCandidateRegistration,
   getCandidateDataById,
   getCandidateFieldAll,
-  getCandidatesAdmin,
   createCandidateList,
   createCandidateCustomView,
   getCandidateCustomViews,
@@ -258,17 +256,6 @@ function* workFetchCandidatesFieldsAll() {
     yield put(fetchCandidatesFieldsAllSuccess(response.data));
   } catch (error) {
     yield put(fetchCandidatesFieldsAllFailure(error));
-  }
-}
-
-// Fetch candidate Admin listing
-function* workFetchCandidatesAdmin(action) {
-  try {
-    const response = yield call(getCandidatesAdmin, action.payload);
-    yield put(fetchCandidatesAdminSuccess(response.data));
-  } catch (error) {
-    toast.error("Error fetching accounts");
-    yield put(fetchCandidatesAdminFailure(error));
   }
 }
 
@@ -545,7 +532,6 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(PUT_CANDIDATE_DRAFT_STATUS, workPutCandidateDraftStatus);
   yield takeEvery(FETCH_CANDIDATE_DATA, workFetchCandidateData);
   yield takeEvery(FETCH_CANDIDATES_FIELDS_ALL, workFetchCandidatesFieldsAll);
-  yield takeEvery(FETCH_CANDIDATES_ADMIN, workFetchCandidatesAdmin);
   yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
   yield takeEvery(IMPORT_CANDIDATE_MULTI, workImportCandidateMulti);
   yield takeEvery(CREATE_CANDIDATE_CUSTOM_VIEW, workCreateCandidateCustomView);
