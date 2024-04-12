@@ -16,7 +16,6 @@ import {
   fetchAccounts,
   fetchAccountsFields,
   fetchAccountsAdmin,
-  fetchAccountCustomView,
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -68,38 +67,9 @@ const AccountListing = () => {
 
   useEffect(() => {
     dispatch(fetchAccountsFields());
-    dispatch(fetchAccountCustomView());
   }, []);
 
-  // useEffect(() => {
-  //   if (accountCustomView && accountCustomView.length > 0) {
-  //     // Find the selected custom view
-  //     const selectedCustomView = accountCustomView?.find(
-  //       (customView) => customView?.selected
-  //     );
-  //     if (
-  //       selectedCustomView &&
-  //       Array.isArray(accountsFields) &&
-  //       accountsFields.length > 0
-  //     ) {
-  //       const selectedGroup = selectedCustomView?.columnName?.split(",");
-  //       const selectedObjects = selectedGroup?.map((value) => {
-  //         return accountsFields?.find((option) => option?.value === value);
-  //       });
-  //       if (selectedObjects.length > 0) {
-  //         setCustomConfigCV(selectedObjects);
-  //       }
-  //     } else {
-  //       setCustomConfigCV(ACCOUNT_INITIAL_OPTIONS);
-  //     }
-  //   }
-  // }, [accountCustomView, accountsFields]);
-
-  // console.log("Custom Config Cv", customConfigCV);
-  // console.log("Account Initial Options", ACCOUNT_INITIAL_OPTIONS);
-  // console.log("Search Fields, Dynamic Table Helper", DynamicTableHelper.generateSeachFieldArray(customConfigCV))
-  // console.log("Search Fields, Dynamic Table Helper", DynamicTableHelper.generateSeachFieldArray(ACCOUNT_INITIAL_OPTIONS))
-
+  
   // Table Hooks
   const {
     pageRequest,
@@ -117,11 +87,10 @@ const AccountListing = () => {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(
-        ACCOUNT_INITIAL_OPTIONS
-      ),
+      searchFields: []
+      ,
     },
-    ACCOUNT_INITIAL_OPTIONS,
+    [],
     customRenderList
   );
 
@@ -241,11 +210,6 @@ const AccountListing = () => {
     dispatch(deleteAccount(deleteId));
     setIsDeleteModalOpen(false);
   };
-
-  // Get all the option groups
-  useEffect(() => {
-    dispatch(fetchAccountsFields());
-  }, []);
 
   // Fetch the account when the pageRequest changes
   useEffect(() => {

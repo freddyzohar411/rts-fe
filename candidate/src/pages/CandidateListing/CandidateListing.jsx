@@ -60,11 +60,9 @@ function CandidateListing() {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(
-        CANDIDATE_INITIAL_OPTIONS
-      ),
+      searchFields: [],
     },
-    CANDIDATE_INITIAL_OPTIONS,
+    [],
     customRenderList
   );
 
