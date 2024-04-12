@@ -31,12 +31,20 @@ const Login = (props) => {
   const [passwordShow, setPasswordShow] = useState(false);
 
   const handleFormSubmit = async (values) => {
-    // dispatch(loginUser(values, props.router.navigate));
-    dispatch(login1FA(values, navigate));
+    const is2FAEnabled = process.env.REACT_APP_ENABLE_2FA;
+    if (is2FAEnabled === "true") {
+      dispatch(login1FA(values, navigate));
+    } else {
+      dispatch(loginUser(values, props.router.navigate));
+    }
   };
 
-  // const loginMeta = useSelector((state) => state.Login.loginMeta);
-  const loginMeta = useSelector((state) => state.Login.login1FAMeta);
+  let loginMeta = null;
+  if (process.env.REACT_APP_ENABLE_2FA === "true") {
+    loginMeta = useSelector((state) => state.Login.login1FAMeta);
+  } else {
+    loginMeta = useSelector((state) => state.Login.loginMeta);
+  }
 
   return (
     <Formik

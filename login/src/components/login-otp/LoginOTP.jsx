@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import {
   Row,
@@ -22,17 +21,12 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // action
-import {
-  userForgetPassword,
-  resetForgetPasswordMeta,
-} from "../../store/actions";
 import { login2FA, resendOTP } from "../../store/auth/login/actions";
 
 // import images
 import logoLight from "@workspace/common/src/assets/images/logo-light.png";
 
 import ParticlesAuth from "../../ParticlesAuth";
-import { createSelector } from "reselect";
 import OTPDigitInput from "./OTPDigitInput";
 
 const LoginOTP = (props) => {
@@ -42,12 +36,17 @@ const LoginOTP = (props) => {
   const [timer, setTimer] = useState(0);
   const loginMeta = useSelector((state) => state.Login.login2FAMeta);
   const state = location?.state;
+
   useEffect(() => {
     if (!state) {
       navigate("/login");
     }
   }, [state]);
 
+  /**
+   * OTP and User Submit
+   * @param {*} values
+   */
   const onOTPAndUserSubmit = (values) => {
     const optRequest = {
       otp: values.otp,
@@ -56,6 +55,9 @@ const LoginOTP = (props) => {
     dispatch(login2FA(optRequest, state, navigate));
   };
 
+  /**
+   * Formik Initialization and Validation
+   */
   const formik = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
@@ -72,22 +74,28 @@ const LoginOTP = (props) => {
     onSubmit: onOTPAndUserSubmit,
   });
 
+  /**
+   * Timer helper function
+   * @param {*} timeout
+   * @param {*} ms
+   */
   const handleTimer = (timeout, ms) => {
-    dispatch(resendOTP(state));
     setTimer(timeout);
     const interval = setInterval(() => {
       setTimer((prev) => {
         if (prev === 1) {
-          clearInterval(interval); // Clear the interval when the countdown reaches 0
+          clearInterval(interval);
         }
-        return prev - 1; // Update the state by decrementing the previous state value
+        return prev - 1;
       });
     }, ms);
   };
 
+  /**
+   * Handle resend OTP and timer
+   */
   const handleResendOTP = () => {
-    console.log("Resend OTP");
-    // Set the timer countdown
+    dispatch(resendOTP(state));
     handleTimer(30, 1000);
   };
 

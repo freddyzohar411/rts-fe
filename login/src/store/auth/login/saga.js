@@ -114,7 +114,6 @@ function* loginResetPassword({ payload: { user, history } }) {
 }
 
 function* login1FA({ payload: { userRequest1FA, navigate } }) {
-  const is2FAEnabled = process.env.REACT_APP_ENABLE_2FA;
   try {
     const hashedPassword = yield encode(userRequest1FA?.password);
     const response = yield call(postLogin1FA, {
@@ -129,18 +128,12 @@ function* login1FA({ payload: { userRequest1FA, navigate } }) {
       navigate("/reset-password");
       return;
     }
-    if (is2FAEnabled) {
-      navigate("/login-otp", {
-        state: {
-          accessToken: response?.access_token,
-          refreshToken: response?.refresh_token,
-        },
-      });
-    } else {
-      yield call(storeUserData, response);
-      navigate("/dashboard");
-      toast.success("Thanks for logging in.");
-    }
+    navigate("/login-otp", {
+      state: {
+        accessToken: response?.access_token,
+        refreshToken: response?.refresh_token,
+      },
+    });
   } catch (error) {
     if (error?.status === "UNAUTHORIZED") {
       toast.error(error?.message);
