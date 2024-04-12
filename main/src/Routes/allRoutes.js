@@ -4,7 +4,6 @@ import { Navigate } from "react-router-dom";
 // Dashboard
 import { Dashboard } from "@workspace/dashboard";
 
-import { CustomView } from "@workspace/common";
 
 // User Profile
 import {
@@ -205,8 +204,6 @@ const authProtectedRoutes = [
     path: "/settings/templates/:templateId/edit",
     component: <TemplateBuilderPage />,
   },
-
-  { path: "/custom-view", component: <CustomView /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
