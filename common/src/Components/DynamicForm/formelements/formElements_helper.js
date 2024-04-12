@@ -35,6 +35,7 @@ import ProfileFeedbackStatusSelectElement from "./ProfileFeedbackStatusSelectEle
 import FirstInterviewFeedbackStatus from "./FirstInterviewFeedbackStatus";
 import SecondInterviewFeedbackStatus from "./SecondInterviewFeedbackStatus";
 import AccountOwnerSelectElement from "./AccountOwnerSelectElement";
+import AccountTypeElement from "./AccountTypeElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -215,6 +216,17 @@ const generateFormField = (
   if (type === "accountowner") {
     return (
       <AccountOwnerElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+        tabIndexData={tabIndexData}
+      />
+    );
+  }
+
+  if (type === "accounttype") {
+    return (
+      <AccountTypeElement
         formik={formik}
         field={field}
         formStateHook={formStateHook}
