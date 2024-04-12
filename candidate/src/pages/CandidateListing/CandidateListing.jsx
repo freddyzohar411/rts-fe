@@ -192,13 +192,16 @@ function CandidateListing() {
 
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    if (checkAnyRole([Role.ADMIN])) {
-      dispatch(
-        fetchCandidatesAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
-      );
-      return;
-    }
-    dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
+    // if (checkAnyRole([Role.ADMIN])) {
+    //   dispatch(
+    //     fetchCandidatesAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
+    //   );
+    //   return;
+    // }
+    // dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
+    dispatch(
+      fetchCandidatesAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
+    );
   }, [pageRequest]);
 
   // Update the page info when candidate Data changes

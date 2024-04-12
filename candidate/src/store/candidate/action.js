@@ -40,7 +40,6 @@ import {
   IMPORT_CANDIDATE_MULTI_SUCCESS,
   IMPORT_CANDIDATE_MULTI_FAILURE,
   SET_PARSE_AND_IMPORT_LOADING,
-<<<<<<< HEAD
   UPDATE_CANIDATE_EMBEDDINGS,
   UPDATE_CANIDATE_EMBEDDINGS_SUCCESS,
   UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
@@ -48,7 +47,6 @@ import {
   CANDIDATE_RECOMMENDATION_LIST_SUCCESS,
   CANDIDATE_RECOMMENDATION_LIST_FAILURE,
   RESET_CANDIDATE_RECOMMENDATION_LIST,
-=======
   CREATE_CANDIDATE_CUSTOM_VIEW,
   CREATE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
   CREATE_CANDIDATE_CUSTOM_VIEW_FAILURE,
@@ -61,7 +59,7 @@ import {
   DELETE_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
   DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE
->>>>>>> 2fa-9-v2
+
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -276,7 +274,6 @@ export const setParseAndImportLoading = (loading) => ({
   payload: loading,
 });
 
-<<<<<<< HEAD
 // Update Candidate Embeddings
 export const updateCandidateEmbeddings = (candidateId) => ({
   type: UPDATE_CANIDATE_EMBEDDINGS,
@@ -312,7 +309,7 @@ export const candidateRecommendationListFailure = (error) => ({
 export const resetCandidateRecommendationList = () => ({
   type: RESET_CANDIDATE_RECOMMENDATION_LIST,
 });
-=======
+
 // Create Candidate Custom View
 export const createCandidateCustomView = (candidateCustomViewRequest) => ({
   type: CREATE_CANDIDATE_CUSTOM_VIEW,
@@ -375,4 +372,4 @@ export const deleteCandidateCustomViewFailure = (error) => ({
   type: DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE,
   payload: error,
 });
->>>>>>> 2fa-9-v2
+

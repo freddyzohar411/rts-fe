@@ -15,6 +15,10 @@ function cleanPageRequest(pageRequest) {
 function generateSeachFieldArray(selectedOptGroup) {
   const searchFields = [];
   selectedOptGroup.forEach((opt) => {
+    if (!opt?.value) {
+      // Move to next loop if value is not present
+      return;
+    }
     if (opt.sort === true) {
       searchFields.push(opt.sortValue);
     }
@@ -30,13 +34,19 @@ function getDynamicNestedResult(data, value) {
 }
 
 function generateConfig(selectedOptGroup, customRender = []) {
+  console.log(selectedOptGroup, "selectedOptGroup")
   const config = [];
   selectedOptGroup.forEach((opt) => {
+    if (!opt?.value) {
+      // Move to next loop if value is not present
+      return;
+    }
     let renderMethod = null;
+    console.log(customRender, "customRender")
     if (customRender.length > 0) {
       renderMethod =
-        customRender.find((item) => {
-          return item.names.includes(opt.value);
+        customRender?.find((item) => {
+          return item?.names?.includes(opt.value);
         })?.render || null;
     }
 
