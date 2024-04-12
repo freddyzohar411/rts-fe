@@ -141,6 +141,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "submit",
         "table",
         "selectdepartment",
@@ -204,6 +205,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         "table",
         "parentcompany",
@@ -261,6 +263,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         "parentcompany",
         "searchselect",
@@ -310,6 +313,7 @@ const FieldBuilder = ({
         "selectprofilefeedbackstatus",
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
+        "accounttype",
         "accountowner",
         "editor",
         "button",
@@ -365,6 +369,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         // "button",
         // "buttonupdate"
@@ -466,6 +471,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         "parentcompany",
         "searchselect",
@@ -510,6 +516,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         "parentcompany",
         "searchselect",
@@ -707,6 +714,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         "parentcompany",
         "searchselect",
@@ -853,6 +861,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "selectstate",
         "selectdepartment",
         "editor",
@@ -896,6 +905,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         "parentcompany",
         "searchselect",
@@ -960,6 +970,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "parentcompany",
         "multiselect",
         "singleselect",
@@ -1013,6 +1024,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         "parentcompany",
         "searchselect",
@@ -1061,6 +1073,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "submit",
         "table",
         "selectdepartment",
@@ -1113,6 +1126,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         "parentcompany",
         "searchselect",
@@ -1157,6 +1171,7 @@ const FieldBuilder = ({
         "selectfirstintrvfdbkstatus",
         "selectsecondintrvfdbkstatus",
         "accountowner",
+        "accounttype",
         "editor",
         "parentcompany",
         "searchselect",
@@ -1275,6 +1290,9 @@ const FieldBuilder = ({
       break;
     case "accountowner":
       header = "Account Owner";
+      break;
+    case "accounttype":
+      header = "Account Type";
       break;
     case "date":
       header = "Date Field";
