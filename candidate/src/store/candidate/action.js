@@ -30,9 +30,6 @@ import {
   FETCH_CANDIDATES_FIELDS_ALL,
   FETCH_CANDIDATES_FIELDS_ALL_SUCCESS,
   FETCH_CANDIDATES_FIELDS_ALL_FAILURE,
-  FETCH_CANDIDATES_ADMIN,
-  FETCH_CANDIDATES_ADMIN_SUCCESS,
-  FETCH_CANDIDATES_ADMIN_FAILURE,
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_SUCCESS,
   IMPORT_CANDIDATE_FAILURE,
@@ -51,7 +48,7 @@ import {
   SELECT_CANDIDATE_CUSTOM_VIEW_FAILURE,
   DELETE_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
-  DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE
+  DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -215,22 +212,6 @@ export const fetchCandidatesFieldsAllFailure = (error) => ({
   payload: error,
 });
 
-// Fetch Candidates Admin
-export const fetchCandidatesAdmin = (params) => ({
-  type: FETCH_CANDIDATES_ADMIN,
-  payload: params,
-});
-
-export const fetchCandidatesAdminSuccess = (candidates) => ({
-  type: FETCH_CANDIDATES_ADMIN_SUCCESS,
-  payload: candidates,
-});
-
-export const fetchCandidatesAdminFailure = (error) => ({
-  type: FETCH_CANDIDATES_ADMIN_FAILURE,
-  payload: error,
-});
-
 // Import Candidate
 export const importCandidate = (candidateRequest) => ({
   type: IMPORT_CANDIDATE,
@@ -311,9 +292,9 @@ export const selectCandidateCustomViewSuccess = (candidateCustomView) => ({
 export const selectCandidateCustomViewFailure = (error) => ({
   type: SELECT_CANDIDATE_CUSTOM_VIEW_FAILURE,
   payload: error,
-});   
+});
 
-// Delete Candidate Custom View 
+// Delete Candidate Custom View
 export const deleteCandidateCustomView = (candidateCustomViewId) => ({
   type: DELETE_CANDIDATE_CUSTOM_VIEW,
   payload: candidateCustomViewId,

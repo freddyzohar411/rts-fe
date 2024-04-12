@@ -30,7 +30,6 @@ import {
   FETCH_CANDIDATES_FIELDS_ALL,
   FETCH_CANDIDATES_FIELDS_ALL_SUCCESS,
   FETCH_CANDIDATES_FIELDS_ALL_FAILURE,
-  FETCH_CANDIDATES_ADMIN,
   FETCH_CANDIDATES_ADMIN_SUCCESS,
   FETCH_CANDIDATES_ADMIN_FAILURE,
   IMPORT_CANDIDATE,
@@ -287,24 +286,6 @@ const CandidateReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
-      };
-    // Admin
-    case FETCH_CANDIDATES_ADMIN:
-      return {
-        ...state,
-        candidateMeta: pendingMetaData(),
-      };
-    case FETCH_CANDIDATES_ADMIN_SUCCESS:
-      return {
-        ...state,
-        candidateMeta: successMetaData(action.payload),
-        candidates: action.payload,
-      };
-    case FETCH_CANDIDATES_ADMIN_FAILURE:
-      return {
-        ...state,
-        candidates: {},
-        candidateMeta: errorMetaData(action.payload),
       };
     case IMPORT_CANDIDATE:
       return {

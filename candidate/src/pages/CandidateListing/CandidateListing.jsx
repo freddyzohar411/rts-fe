@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Badge, Button, Input } from "reactstrap";
+import { Button, Input } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import { useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
@@ -13,7 +13,6 @@ import {
   deleteCandidate,
   fetchCandidates,
   fetchCandidatesFields,
-  fetchCandidatesAdmin,
 } from "../../store/candidate/action";
 import { useUserAuth } from "@workspace/login";
 
@@ -192,12 +191,6 @@ function CandidateListing() {
 
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    if (checkAnyRole([Role.ADMIN])) {
-      dispatch(
-        fetchCandidatesAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
-      );
-      return;
-    }
     dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
   }, [pageRequest]);
 
