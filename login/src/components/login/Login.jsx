@@ -35,7 +35,8 @@ const Login = (props) => {
     dispatch(login1FA(values, navigate));
   };
 
-  const loginMeta = useSelector((state) => state.Login.loginMeta);
+  // const loginMeta = useSelector((state) => state.Login.loginMeta);
+  const loginMeta = useSelector((state) => state.Login.login1FAMeta);
 
   return (
     <Formik

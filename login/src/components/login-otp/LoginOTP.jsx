@@ -7,10 +7,6 @@ import {
   Card,
   CardBody,
   Container,
-  FormFeedback,
-  Input,
-  Label,
-  Form,
   Spinner,
   Button,
 } from "reactstrap";
@@ -44,6 +40,7 @@ const LoginOTP = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [timer, setTimer] = useState(0);
+  const loginMeta = useSelector((state) => state.Login.login2FAMeta);
   const state = location?.state;
   useEffect(() => {
     if (!state) {
@@ -52,21 +49,12 @@ const LoginOTP = (props) => {
   }, [state]);
 
   const onOTPAndUserSubmit = (values) => {
-    console.log("values", values);
-    console.log("Refresh Token", state?.refreshToken);
     const optRequest = {
       otp: values.otp,
       refreshToken: state?.refreshToken,
     };
     dispatch(login2FA(optRequest, state, navigate));
   };
-  const forgetPasswordData = useSelector((state) => state.ForgetPassword);
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetForgetPasswordMeta());
-    };
-  }, []);
 
   const formik = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -84,13 +72,23 @@ const LoginOTP = (props) => {
     onSubmit: onOTPAndUserSubmit,
   });
 
-  const selectLayoutState = (state) => state.ForgetPassword;
-  const selectLayoutProperties = createSelector(selectLayoutState, (state) => ({
-    forgetError: state.forgetError,
-    forgetSuccessMsg: state.forgetSuccessMsg,
-  }));
-  // Inside your component
-  const { forgetError, forgetSuccessMsg } = useSelector(selectLayoutProperties);
+  const handleTimer = (timeout, ms) => {
+    setTimer(timeout);
+    const interval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev === 1) {
+          clearInterval(interval); // Clear the interval when the countdown reaches 0
+        }
+        return prev - 1; // Update the state by decrementing the previous state value
+      });
+    }, ms);
+  };
+
+  const handleResendOTP = () => {
+    console.log("Resend OTP");
+    // Set the timer countdown
+    handleTimer(30, 1000);
+  };
 
   document.title = "Reset Password | RTS";
 
@@ -147,8 +145,16 @@ const LoginOTP = (props) => {
                         </Alert>
                       ) : null}
                       <div className="mt-3">
-                        <Button type="submit" color="success" className="w-100">
-                          Confirm
+                        <Button
+                          color="success"
+                          className="btn btn-next-button border-next-button-border w-100 py-2 fw-semibold fs-5"
+                          type="submit"
+                          disabled={loginMeta?.isLoading}
+                        >
+                          <span style={{ marginRight: "5px" }}>Confirm</span>
+                          {loginMeta?.isLoading && (
+                            <Spinner size="sm">Loading...</Spinner>
+                          )}
                         </Button>
                       </div>
                     </form>
@@ -158,10 +164,6 @@ const LoginOTP = (props) => {
               <div className="mt-4 text-center">
                 <p className="mb-0">
                   Didn't receive a code ?{" "}
-                  {/* <Link
-                    to="/auth-pass-reset-basic"
-                    className="fw-semibold text-primary text-decoration-underline"
-                  > */}
                   <span
                     className={
                       timer > 0
@@ -174,19 +176,7 @@ const LoginOTP = (props) => {
                       pointerEvents: timer > 0 ? "none" : "auto",
                       opacity: timer > 0 ? 0.65 : 1,
                     }}
-                    onClick={() => {
-                      console.log("Resend OTP");
-                      // Set the timer countdown
-                      setTimer(30);
-                      const interval = setInterval(() => {
-                        setTimer((prev) => {
-                          if (prev === 1) {
-                            clearInterval(interval); // Clear the interval when the countdown reaches 0
-                          }
-                          return prev - 1; // Update the state by decrementing the previous state value
-                        });
-                      }, 1000);
-                    }}
+                    onClick={handleResendOTP}
                   >
                     Resend
                   </span>
