@@ -60,9 +60,6 @@ export const getValidateResetToken = (data) =>
 export const postForgetPasswordReset = (data) =>
   api.create(FORGET_RESET_PASSWORD, data);
 
-// Login 1FA Method
-export const postLogin1FA = (data) => api.create(POST_LOGIN_1FA, data);
-
 // Login 2FA Method
 export const postLogin2FA = (data, config) =>
   api.create(POST_LOGIN_2FA, data, config);

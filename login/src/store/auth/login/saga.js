@@ -30,7 +30,6 @@ import {
   getLogout,
   loginResetPwd,
   postLogin,
-  postLogin1FA,
   postLogin2FA,
   getResendOTP,
 } from "../../../helpers/backend_helper";
@@ -51,6 +50,7 @@ function* loginUser({ payload: { user, history } }) {
     const response = yield call(postLogin, {
       username: user.username,
       password: hashedPassword,
+      is2FAEnabled: false,
     });
     yield put(loginSuccess(response));
 
@@ -116,9 +116,10 @@ function* loginResetPassword({ payload: { user, history } }) {
 function* login1FA({ payload: { userRequest1FA, navigate } }) {
   try {
     const hashedPassword = yield encode(userRequest1FA?.password);
-    const response = yield call(postLogin1FA, {
+    const response = yield call(postLogin, {
       username: userRequest1FA?.username,
       password: hashedPassword,
+      is2FAEnabled: true,
     });
     yield put(login1FASuccess(response));
 
