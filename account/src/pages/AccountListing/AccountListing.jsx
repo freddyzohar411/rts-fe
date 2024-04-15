@@ -9,7 +9,6 @@ import {
   DynamicTableHelper,
 } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
-import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
 import "./AccountListing.scss";
 import {
   deleteAccount,

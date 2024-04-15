@@ -6,7 +6,6 @@ import "react-dual-listbox/lib/react-dual-listbox.css";
 import { useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper, DateHelper } from "@workspace/common";
-import { CANDIDATE_INITIAL_OPTIONS } from "./candidateListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
 import "./CandidateListing.scss";
 import {

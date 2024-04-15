@@ -30,7 +30,6 @@ import {
   JOB_FILTERS,
   JOB_INITIAL_OPTIONS,
 } from "../JobListing/JobListingConstants";
-import { toast } from "react-toastify";
 import { RECRUITER_GROUP } from "../../helpers/constant";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";

@@ -19,7 +19,6 @@ import "./JobListing.scss";
 import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
-import { JOB_INITIAL_OPTIONS } from "./JobListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
 import {
   createJobFOD,
@@ -137,17 +136,6 @@ const JobListing = () => {
     [],
     customRenderList
   );
-
-  // function MyComponent({ pageRequest, gridView }) {
-  //   const memoizedDispatch = useCallback(() => {
-  //     const request = { ...pageRequest, jobType: gridView };
-  //     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-  //   }, [pageRequest, gridView]);
-
-  //   useEffect(() => {
-  //     memoizedDispatch();
-  //   }, [memoizedDispatch]);
-  // }
 
   useEffect(() => {
     if (recruiterGroup?.users?.length > 0) {
