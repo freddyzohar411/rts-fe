@@ -27,7 +27,6 @@ import {
   FETCH_ACCOUNTS_FIELDS_ALL,
   FETCH_ACCOUNTS_FIELDS_ALL_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_ALL_FAILURE,
-  FETCH_ACCOUNTS_ADMIN,
   FETCH_ACCOUNTS_ADMIN_SUCCESS,
   FETCH_ACCOUNTS_ADMIN_FAILURE,
   CREATE_ACCOUNT_CUSTOM_VIEW,
@@ -259,24 +258,6 @@ const AccountReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
-      };
-    // Fetch Admin accounts
-    case FETCH_ACCOUNTS_ADMIN:
-      return {
-        ...state,
-        accountsMeta: pendingMetaData(),
-      };
-    case FETCH_ACCOUNTS_ADMIN_SUCCESS:
-      return {
-        ...state,
-        accountsMeta: successMetaData(action.payload),
-        accounts: action.payload,
-      };
-    case FETCH_ACCOUNTS_ADMIN_FAILURE:
-      return {
-        ...state,
-        accounts: [],
-        accountsMeta: errorMetaData(action.payload),
       };
     // Create Account Custom View
     case CREATE_ACCOUNT_CUSTOM_VIEW:
