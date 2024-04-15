@@ -19,33 +19,45 @@ import {
 } from "../JobListing/JobListingConstants";
 import FODCandidateRecommendation from "./FODCandidateRecommendation";
 
+
 const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
+  const fodTableType = {
+    Recommendation: "Recommendation",
+    All: "All",
+  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [abortController, setAbortController] = useState(null);
   const [customQuery, setCustomQuery] = useState(null);
+  const [fodTableShowType, setFODTableShowType] = useState({
+    label: fodTableType.Recommendation,
+    value: fodTableType.Recommendation,
+  });
+  const [tableConfig, setTableConfig] = useState([]);
 
-    // Custom renders
-    const customRenderList = [
-      {
-        names: ["candidateSubmissionData.firstName"],
-        render: (data, opt) => (
-          <Link
-            className="text-custom-primary text-decoration-underline"
-            onClick={() => {
-              const win = window.open(
-                `/candidates/${data?.id}/snapshot`,
-                "_blank"
-              );
-              win.focus();
-            }}
-          >
-            <span>{DynamicTableHelper.getDynamicNestedResult(data, opt.value)}</span>
-          </Link>
-        ),
-      },
-    ];
-  
+  // Custom renders
+  const customRenderList = [
+    {
+      names: ["candidateSubmissionData.firstName"],
+      render: (data, opt) => (
+        <Link
+          className="text-custom-primary text-decoration-underline"
+          onClick={() => {
+            const win = window.open(
+              `/candidates/${data?.id}/snapshot`,
+              "_blank"
+            );
+            win.focus();
+          }}
+        >
+          <span>
+            {DynamicTableHelper.getDynamicNestedResult(data, opt.value)}
+          </span>
+        </Link>
+      ),
+    },
+  ];
+
   const {
     candidatesRecommendation: candidatesData,
     candidateRecommendationLoading: loading,
@@ -89,6 +101,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
     setSearch,
     customConfig,
     setCustomConfigData,
+    setCustomConfig
   } = useTableHook(
     {
       page: 0,
@@ -112,7 +125,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       setAbortController(newAbortController);
       const jobPageRequest = { ...pageRequest, jobId: selectedRowData?.id };
       if (customQuery) {
-        console.log("I have a custom query", customQuery)
         jobPageRequest.customQuery = customQuery;
       } else {
         delete jobPageRequest.customQuery;
@@ -120,7 +132,8 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       dispatch(
         candidateRecommendationList(
           DynamicTableHelper.cleanPageRequest(jobPageRequest),
-          newAbortController.signal
+          newAbortController.signal,
+          fodTableShowType?.value
         )
       );
       return () => {
@@ -133,7 +146,16 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       setAbortController(null);
       dispatch(resetCandidateRecommendationList());
     }
-  }, [pageRequest, selectedRowData?.id, tagOffcanvas, customQuery]);
+    // if (tagOffcanvas && fodTableShowType?.value === fodTableType.All) {
+    //   dispatch(fetchCandidates(pageRequest));
+    // }
+  }, [
+    pageRequest,
+    selectedRowData?.id,
+    tagOffcanvas,
+    customQuery,
+    fodTableShowType,
+  ]);
 
   const handleTag = (candidateId) => {
     const payload = {
@@ -161,6 +183,10 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       toast.error("Please select at least one checkbox.");
     }
   };
+
+  useEffect(() => {
+    setTableConfig(generateCandidateConfig(customConfig));
+  }, [fodTableShowType]);
 
   // Candidate Config
   const generateCandidateConfig = (customConfig) => {
@@ -208,7 +234,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
           );
         },
       },
-      {
+      fodTableShowType?.value === fodTableType.Recommendation && {
         header: "Recommendation",
         name: "action",
         sort: true,
@@ -238,7 +264,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
           </Button>
         ),
       },
-    ];
+    ].filter((item) => item);
   };
 
   // Get all the option groups
@@ -256,7 +282,8 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   return (
     <DynamicTableWrapper
       data={candidatesData?.candidates}
-      config={generateCandidateConfig(customConfig)}
+      // config={generateCandidateConfig(customConfig)}
+      config={tableConfig}
       pageInfo={pageInfo}
       pageRequest={pageRequest}
       pageRequestSet={pageRequestSet}
@@ -266,6 +293,10 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       setCustomConfigData={setCustomConfigData}
       handleTagAll={handleTagAll}
       setCustomQuery={setCustomQuery}
+      fodODTableShowType={{
+        fodTableShowType,
+        setFODTableShowType,
+      }}
     />
   );
 };

@@ -12,6 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import { DynamicTable } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
+import { SelectElement } from "@workspace/common";
 
 const DynamicTableWrapper = ({
   data,
@@ -25,6 +26,7 @@ const DynamicTableWrapper = ({
   confirmDelete,
   handleTagAll,
   setCustomQuery,
+  fodODTableShowType,
 }) => {
   const candidatesData = useSelector(
     (state) => state.CandidateReducer.candidates
@@ -108,20 +110,72 @@ const DynamicTableWrapper = ({
               <Row className="d-flex column-gap-1 mb-3">
                 <Col>
                   <div className="d-flex flex-row justify-content-between align-items-baseline">
-                    <div className="text-decoration-underline">
+                    <div className="">
                       {/* <span>Suitable Candidates </span>
                       <span className="fw-semibold">
                         ({candidatesData?.totalElements ?? 0})
                       </span> */}
+                      {/* <SelectElement
+                        optionsData={[
+                          {
+                            label: "Recommendation",
+                            value: "Recommendation",
+                          },
+                          {
+                            label: "All",
+                            value: "All",
+                          },
+                        ]}
+                        setSelectedOptionData={
+                          fodODTableShowType?.setFODTableShowType
+                        }
+                        value={fodODTableShowType.fodTableShowType}
+                      /> */}
+                      {/* // Use a check box instead of Select element */}
+                      <div
+                        className="d-flex gap-2 align-items-center"
+                        style={{ fontSize: "0.9rem" }}
+                      >
+                       
+                        <Input
+                          className="mt-0"
+                          type="checkbox"
+                          id="checkbox"
+                          value="option"
+                          defaultChecked={
+                            fodODTableShowType?.fodTableShowType?.value ===
+                            "Recommendation"
+                          }
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              fodODTableShowType?.setFODTableShowType({
+                                label: "Recommendation",
+                                value: "Recommendation",
+                              });
+                            } else {
+                              fodODTableShowType?.setFODTableShowType({
+                                label: "All",
+                                value: "All",
+                              });
+                            }
+                          }}
+                        />
+                         <label className="form-check-label" htmlFor="checkbox">
+                          Recommend Candidates
+                        </label>
+                      </div>
                     </div>
                     <div className="d-flex flex-row gap-3 align-items-baseline">
-                      <Button
-                        className="px-2 py-1"
-                        title="AI custom query search"
-                        onClick={() => setShowQueryModal(true)}
-                      >
-                        <i className="ri-magic-line"></i>
-                      </Button>
+                      {fodODTableShowType?.fodTableShowType?.value ===
+                        "Recommendation" && (
+                        <Button
+                          className="px-2 py-1"
+                          title="AI custom query search"
+                          onClick={() => setShowQueryModal(true)}
+                        >
+                          <i className="ri-magic-line"></i>
+                        </Button>
+                      )}
                       <div className="search-box">
                         {setSearch && (
                           <form onSubmit={pageRequestSet.setSearchTerm}>
@@ -154,7 +208,6 @@ const DynamicTableWrapper = ({
                 data={data}
                 pageRequestSet={pageRequestSet}
                 pageInfo={pageInfo}
-                // isLoading={candidateMeta?.isLoading}
                 isLoading={isRecommendationLoading}
               />
             </div>

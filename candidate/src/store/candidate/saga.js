@@ -487,9 +487,14 @@ function* workUpdateCandidateEmbeddings(action) {
 
 // Candidate Recommendation List
 function* workCandidateRecommendationList(action) {
-  const { params, signal } = action.payload;
+  const { params, signal, type } = action.payload;
   try {
-    const response = yield call(getCandidateRecommendations, params, signal);
+    let response = null;
+    if (type === "Recommendation") {
+      response = yield call(getCandidateRecommendations, params, signal);
+    } else {
+      response = yield call(getCandidates, params);
+    }
     yield put(candidateRecommendationListSuccess(response.data));
   } catch (error) {
     yield put(candidateRecommendationListFailure(error));
