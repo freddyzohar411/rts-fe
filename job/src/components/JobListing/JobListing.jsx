@@ -132,23 +132,22 @@ const JobListing = () => {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields:
-      [],
+      searchFields: [],
     },
     [],
     customRenderList
   );
 
-  function MyComponent({ pageRequest, gridView }) {
-    const memoizedDispatch = useCallback(() => {
-      const request = { ...pageRequest, jobType: gridView };
-      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-    }, [pageRequest, gridView]);
+  // function MyComponent({ pageRequest, gridView }) {
+  //   const memoizedDispatch = useCallback(() => {
+  //     const request = { ...pageRequest, jobType: gridView };
+  //     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+  //   }, [pageRequest, gridView]);
 
-    useEffect(() => {
-      memoizedDispatch();
-    }, [memoizedDispatch]);
-  }
+  //   useEffect(() => {
+  //     memoizedDispatch();
+  //   }, [memoizedDispatch]);
+  // }
 
   useEffect(() => {
     if (recruiterGroup?.users?.length > 0) {
@@ -170,8 +169,10 @@ const JobListing = () => {
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, jobType: gridView };
-    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+    if (pageRequest?.searchFields?.length > 0) {
+      const request = { ...pageRequest, jobType: gridView };
+      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+    }
   }, [JSON.stringify(pageRequest)]);
 
   useEffect(() => {

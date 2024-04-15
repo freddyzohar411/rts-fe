@@ -69,7 +69,6 @@ const AccountListing = () => {
     dispatch(fetchAccountsFields());
   }, []);
 
-  
   // Table Hooks
   const {
     pageRequest,
@@ -87,8 +86,7 @@ const AccountListing = () => {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: []
-      ,
+      searchFields: [],
     },
     [],
     customRenderList
@@ -213,12 +211,16 @@ const AccountListing = () => {
 
   // Fetch the account when the pageRequest changes
   useEffect(() => {
-    if (checkAnyRole([Role.ADMIN])) {
-      dispatch(
-        fetchAccountsAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
-      );
-    } else {
-      dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
+    if (pageRequest?.searchFields?.length > 0) {
+      if (checkAnyRole([Role.ADMIN])) {
+        dispatch(
+          fetchAccountsAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
+        );
+      } else {
+        dispatch(
+          fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest))
+        );
+      }
     }
   }, [JSON.stringify(pageRequest)]);
 
