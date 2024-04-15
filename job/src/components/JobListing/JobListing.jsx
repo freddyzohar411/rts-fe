@@ -173,7 +173,7 @@ const JobListing = () => {
       const request = { ...pageRequest, jobType: gridView };
       dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
     }
-  }, [JSON.stringify(pageRequest)]);
+  }, [JSON.stringify(pageRequest), gridView]);
 
   useEffect(() => {
     if (hasPageRendered.current) {
