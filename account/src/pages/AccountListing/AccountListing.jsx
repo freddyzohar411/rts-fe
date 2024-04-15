@@ -27,10 +27,6 @@ const AccountListing = () => {
   const accountsFields = useSelector(
     (state) => state.AccountReducer.accountsFields
   );
-  const accountCustomView = useSelector(
-    (state) => state?.AccountReducer?.accountCustomViews
-  );
-  const [customConfigCV, setCustomConfigCV] = useState([]);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
