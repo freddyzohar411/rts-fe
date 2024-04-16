@@ -6,7 +6,6 @@ import "react-dual-listbox/lib/react-dual-listbox.css";
 import { useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper, DateHelper } from "@workspace/common";
-import { CANDIDATE_INITIAL_OPTIONS } from "./candidateListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
 import "./CandidateListing.scss";
 import {
@@ -59,11 +58,9 @@ function CandidateListing() {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(
-        CANDIDATE_INITIAL_OPTIONS
-      ),
+      searchFields: [],
     },
-    CANDIDATE_INITIAL_OPTIONS,
+    [],
     customRenderList
   );
 
@@ -191,8 +188,12 @@ function CandidateListing() {
 
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
-  }, [pageRequest]);
+    if (pageRequest?.searchFields?.length > 0) {
+      dispatch(
+        fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest))
+      );
+    }
+  }, [JSON.stringify(pageRequest)]);
 
   // Update the page info when candidate Data changes
   useEffect(() => {

@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Badge, Button, Input } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
-import { useTableHook } from "@workspace/common";
+import {
+  useTableHook,
+  DeleteCustomModal,
+  DynamicTableHelper,
+} from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
-import { DynamicTableHelper } from "@workspace/common";
-import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
-import { DeleteCustomModal } from "@workspace/common";
 import "./AccountListing.scss";
 import {
   deleteAccount,
@@ -58,6 +59,10 @@ const AccountListing = () => {
     },
   ];
 
+  useEffect(() => {
+    dispatch(fetchAccountsFields());
+  }, []);
+
   // Table Hooks
   const {
     pageRequest,
@@ -75,11 +80,9 @@ const AccountListing = () => {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(
-        ACCOUNT_INITIAL_OPTIONS
-      ),
+      searchFields: [],
     },
-    ACCOUNT_INITIAL_OPTIONS,
+    [],
     customRenderList
   );
 
@@ -200,17 +203,12 @@ const AccountListing = () => {
     setIsDeleteModalOpen(false);
   };
 
-  // Get all the option groups
-  useEffect(() => {
-    dispatch(fetchAccountsFields());
-  }, []);
-
   // Fetch the account when the pageRequest changes
   useEffect(() => {
     if (pageRequest?.searchFields?.length > 0) {
       dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
-  }, [pageRequest]);
+  }, [JSON.stringify(pageRequest)]);
 
   // Update the page info when account Data changes
   useEffect(() => {
@@ -218,7 +216,6 @@ const AccountListing = () => {
       setPageInfoData(accountsData);
     }
   }, [accountsData]);
-
 
   return (
     <>
