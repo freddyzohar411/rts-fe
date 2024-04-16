@@ -94,7 +94,7 @@ const AccountCreation = () => {
 
   useEffect(() => {
     if (formikValues?.values?.accountId?.length === 0) {
-      generateId("A")
+      generateId("A", "IN", "account")
         .then((id) => {
           formikRef.current.formik.setFieldValue("accountId", id);
         })

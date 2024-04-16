@@ -164,7 +164,7 @@ const CreateCandidate = () => {
 
   useEffect(() => {
     if (formikValues?.values?.candidateId?.length === 0) {
-      generateId("C")
+      generateId("C", "IN", "candidate")
         .then((id) => {
           formikRef.current.formik.setFieldValue("candidateId", id);
         })

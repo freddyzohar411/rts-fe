@@ -33,6 +33,9 @@ const initialState = {
   message: "",
   loading: false,
   error: false,
+  roleUpdateMeta: {},
+  roleDeleteMeta: {},
+  roleCreateMeta: {},
 };
 
 const RoleReducer = (state = initialState, action) => {
@@ -41,23 +44,20 @@ const RoleReducer = (state = initialState, action) => {
     case CREATE_ROLE:
       return {
         ...state,
-        loading: true,
-        error: false,
+        roleCreateMeta: pendingMetaData(),
       };
 
     case CREATE_ROLE_SUCCESS:
       return {
         ...state,
-        loading: false,
-        user: action.payload,
+        roleCreateMeta: successMetaData(action.payload),
+        role: action.payload,
       };
 
     case CREATE_ROLE_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
+        roleCreateMeta: errorMetaData(action.payload),
       };
 
     // List Roles
@@ -131,46 +131,40 @@ const RoleReducer = (state = initialState, action) => {
     case UPDATE_ROLE:
       return {
         ...state,
-        loading: true,
-        error: false,
+        roleUpdateMeta: pendingMetaData(),
       };
 
     case UPDATE_ROLE_SUCCESS:
       return {
         ...state,
-        loading: false,
+        roleUpdateMeta: successMetaData(action.payload),
         role: action.payload,
       };
 
     case UPDATE_ROLE_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
+        roleUpdateMeta: errorMetaData(action.payload),
       };
 
     // Delete Role
     case DELETE_ROLE:
       return {
         ...state,
-        loading: true,
-        error: false,
+        roleDeleteMeta: pendingMetaData(),
       };
 
     case DELETE_ROLE_SUCCESS:
       return {
         ...state,
-        loading: false,
+        roleDeleteMeta: successMetaData(action.payload),
         role: action.payload,
       };
 
     case DELETE_ROLE_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
+        roleDeleteMeta: errorMetaData(action.payload),
       };
     case REMOVE_ROLE:
       return {

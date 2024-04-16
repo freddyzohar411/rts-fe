@@ -63,7 +63,7 @@ const JobCreation = () => {
 
   useEffect(() => {
     if (!jobId && formikValues?.values?.jobId?.length === 0) {
-      generateId("J")
+      generateId("J", "IN", "job")
         .then((id) => {
           formikRef.current.formik.setFieldValue("jobId", id);
         })

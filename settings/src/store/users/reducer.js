@@ -1,4 +1,8 @@
-import { errorMetaData, pendingMetaData, successMetaData } from "@workspace/common";
+import {
+  errorMetaData,
+  pendingMetaData,
+  successMetaData,
+} from "@workspace/common";
 import {
   // Fetch User
   FETCH_USER,
@@ -38,6 +42,9 @@ const initialState = {
   message: "",
   loading: false,
   error: false,
+  userUpdateMeta: {},
+  userCreateMeta: {},
+  userDeleteMeta: {},
 };
 
 const UserReducer = (state = initialState, action) => {
@@ -113,22 +120,19 @@ const UserReducer = (state = initialState, action) => {
     case CREATE_USER:
       return {
         ...state,
-        loading: true,
-        error: false,
+        userCreateMeta: pendingMetaData(),
       };
 
     case CREATE_USER_SUCCESS:
       return {
-        loading: false,
+        userCreateMeta: successMetaData(action.payload),
         user: action.payload,
       };
 
     case CREATE_USER_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
+        userCreateMeta: errorMetaData(action.payload),
       };
 
     // Create Users
@@ -145,7 +149,7 @@ const UserReducer = (state = initialState, action) => {
         loading: false,
         users: action.payload,
       };
-      
+
     case CREATE_USERS_FAILURE:
       return {
         ...state,
@@ -157,45 +161,39 @@ const UserReducer = (state = initialState, action) => {
     case UPDATE_USER:
       return {
         ...state,
-        loading: true,
-        error: false,
+        userUpdateMeta: pendingMetaData(),
       };
 
     case UPDATE_USER_SUCCESS:
       return {
         ...state,
-        loading: false,
+        userUpdateMeta: successMetaData(action.payload),
         user: action.payload,
       };
 
     case UPDATE_USER_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
+        userUpdateMeta: errorMetaData(action.payload),
       };
 
     case DELETE_USER:
       return {
         ...state,
-        loading: true,
-        error: false,
+        userDeleteMeta: pendingMetaData(),
       };
 
     case DELETE_USER_SUCCESS:
       return {
         ...state,
-        loading: false,
+        userDeleteMeta: successMetaData(action.payload),
         user: action.payload,
       };
 
     case DELETE_USER_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        message: action.payload,
+        userDeleteMeta: errorMetaData(action.payload),
       };
 
     default:

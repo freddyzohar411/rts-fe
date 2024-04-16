@@ -18,6 +18,7 @@ import {
   TabPane,
   Table,
   FormFeedback,
+  Spinner,
 } from "reactstrap";
 // Formik
 import { Formik, Form, Field } from "formik";
@@ -47,6 +48,9 @@ function CreateNewRole() {
   const modulesData = useSelector((state) => state.ModuleReducer.modules);
   const permissionData = useSelector(
     (state) => state.PermissionReducer.permissions
+  );
+  const roleCreateMeta = useSelector(
+    (state) => state.RoleReducer.roleCreateMeta
   );
 
   const [initialValues, setInitialValues] = useState(null);
@@ -169,9 +173,7 @@ function CreateNewRole() {
                             <Row>
                               <Col>
                                 <div className="mb-3">
-                                  <Label>
-                                    Role Name*
-                                  </Label>
+                                  <Label>Role Name*</Label>
                                   <Field
                                     name="roleName"
                                     className={`form-control ${
@@ -193,9 +195,7 @@ function CreateNewRole() {
                             <Row>
                               <Col>
                                 <div className="mb-3">
-                                  <Label>
-                                    Role Description*
-                                  </Label>
+                                  <Label>Role Description*</Label>
                                   <Field
                                     name="roleDescription"
                                     className={`form-control ${
@@ -408,8 +408,12 @@ function CreateNewRole() {
                             <Button
                               className="btn btn-custom-primary"
                               type="submit"
+                              disabled={roleCreateMeta?.isLoading}
                             >
-                              Save
+                              Save{" "}
+                              {roleCreateMeta?.isLoading && (
+                                <Spinner size="sm"></Spinner>
+                              )}
                             </Button>
                           </div>
                         </div>

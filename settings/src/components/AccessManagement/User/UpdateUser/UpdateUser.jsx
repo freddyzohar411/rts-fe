@@ -14,6 +14,7 @@ import {
   FormFeedback,
   Label,
   Row,
+  Spinner,
 } from "reactstrap";
 import { initialValues, updateSchema, populateForm } from "../constants";
 import { fetchCountryCurrency } from "@workspace/common/src/store/actions";
@@ -45,6 +46,9 @@ function UpdateUser() {
   const allUsers = useSelector((state) => state?.UserReducer?.users);
   const user = useSelector((state) => state.UserReducer.user);
   const allGroups = useSelector((state) => state?.GroupReducer?.groups);
+  const userUpdateMeta = useSelector(
+    (state) => state.UserReducer.userUpdateMeta
+  );
   const allCountries = useSelector(
     (state) => state?.CountryCurrencyReducer?.countryCurrency
   );
@@ -197,7 +201,7 @@ function UpdateUser() {
                   initialValues={userInitialValues}
                   enableReinitialize={true}
                   onSubmit={handleSubmit}
-                > 
+                >
                   {({ errors, touched, resetForm, values, handleChange }) => (
                     <Form>
                       <CardBody>
@@ -598,12 +602,15 @@ function UpdateUser() {
                               Cancel
                             </Button>
                           </Link>
-
                           <Button
                             className="btn btn-custom-primary"
                             type="submit"
+                            disabled={userUpdateMeta?.isLoading}
                           >
-                            Save
+                            Save{" "}
+                            {userUpdateMeta?.isLoading && (
+                              <Spinner size="sm"></Spinner>
+                            )}
                           </Button>
                         </div>
                       </CardFooter>
