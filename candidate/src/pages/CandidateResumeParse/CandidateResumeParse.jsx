@@ -135,9 +135,9 @@ const CandidateResumeParse = () => {
     setFileObj(files);
 
     // PDF
-    if (files) {
-      setFileUrlFunc(0, 1, files);
-    }
+    // if (files) {
+    //   setFileUrlFunc(0, 1, files);
+    // }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -172,6 +172,7 @@ const CandidateResumeParse = () => {
 
   useEffect(() => {
     if (fileObjects.length > 0) {
+      console.log("FileObjects", fileObjects)
       setTotalUploadCount(fileObjects.length);
       setFileUrlFunc(0, 2);
     }
