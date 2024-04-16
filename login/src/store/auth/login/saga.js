@@ -164,11 +164,9 @@ function* login2FA({ payload: { userRequest2FA, state, navigate } }) {
   } catch (error) {
     console.error("Login 2FA Error", error);
     if (error?.code === 401) {
-      toast.error(error?.message);
-      navigate("/login");
+      toast.error("Invalid OTP, Please try again.");
     } else {
       toast.error("Something went wrong, Please try again after some time.");
-      navigate("/login");
     }
     yield put(login2FAError(error));
   }

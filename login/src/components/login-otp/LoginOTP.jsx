@@ -24,7 +24,7 @@ import { useFormik } from "formik";
 import { login2FA, resendOTP } from "../../store/auth/login/actions";
 
 // import images
-import logoLight from "@workspace/common/src/assets/images/logo-light.png";
+import PulseLogo from "@workspace/common/src/assets/images/logo-pulse.png";
 
 import ParticlesAuth from "../../ParticlesAuth";
 import OTPDigitInput from "./OTPDigitInput";
@@ -105,12 +105,12 @@ const LoginOTP = (props) => {
     <ParticlesAuth>
       <div className="auth-page-content">
         <Container>
-          <Row>
+          {/* <Row>
             <Col lg={12}>
               <div className="text-center mt-sm-5 mb-4 text-white-50">
                 <div>
                   <Link to="/" className="d-inline-block auth-logo">
-                    <img src={logoLight} alt="" height="50" />
+                    <img src={PulseLogo} alt="" height="150" />
                   </Link>
                 </div>
                 <p className="mt-3 fs-15 fw-medium">
@@ -118,13 +118,28 @@ const LoginOTP = (props) => {
                 </p>
               </div>
             </Col>
-          </Row>
+          </Row> */}
+          <Row>
+                <Col lg={12}>
+                  <div className="text-center mt-sm-4 text-white-50">
+                    <div>
+                      <Link to="/login" className="d-inline-block auth-logo">
+                        <img src={PulseLogo} alt="" height="130" />
+                      </Link>
+                    </div>
+                    <p className="fs-5 fw-medium text-white">
+                      Talent and Recruitment Services to clients across the
+                      world.
+                    </p>
+                  </div>
+                </Col>
+              </Row>
 
           <Row className="justify-content-center">
             <Col md={8} lg={6} xl={5}>
               <Card className="mt-4">
                 <CardBody className="p-4">
-                  <div className="mb-4">
+                  <div className="mb-2">
                     <div className="avatar-lg mx-auto">
                       <div className="avatar-title bg-light text-primary display-5 rounded-circle">
                         <i className="ri-mail-line"></i>
@@ -132,8 +147,8 @@ const LoginOTP = (props) => {
                     </div>
                   </div>
 
-                  <div className="p-2 mt-4">
-                    <div className="text-muted text-center mb-4 mx-lg-3">
+                  <div className="p-2">
+                    <div className="text-muted text-center mb-2 mx-lg-3">
                       <h4 className="">Verify Your Login</h4>
                       <p>6 digits OTP code sent to your email</p>
                     </div>
@@ -166,6 +181,13 @@ const LoginOTP = (props) => {
                           )}
                         </Button>
                       </div>
+                      <Link
+                        color="secondary"
+                        to="/login"
+                        className="mx-auto d-flex justify-content-center mt-3 text-dark fs-6"
+                      >
+                        <span className="fw-semibold">Back to Login</span>
+                      </Link>
                     </form>
                   </div>
                 </CardBody>

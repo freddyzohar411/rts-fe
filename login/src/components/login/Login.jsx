@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { Field, Formik, Form } from "formik";
 import { initialValues, schema } from "./constants";
 import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
+import PulseLogo from "@workspace/common/src/assets/images/logo-pulse.png";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -63,7 +64,7 @@ const Login = (props) => {
                   <div className="text-center mt-sm-4 text-white-50">
                     <div>
                       <Link to="/login" className="d-inline-block auth-logo">
-                        <img src={logo_big} alt="" height="80" />
+                        <img src={PulseLogo} alt="" height="130" />
                       </Link>
                     </div>
                     <p className="fs-5 fw-medium text-white">
