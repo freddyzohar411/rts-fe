@@ -25,7 +25,7 @@ export const getAccountsFields = () =>
 
 // Get Accounts
 export const getAccounts = (data) =>
-  api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing`, data);
+  api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing/all`, data);
 
 // Get Form by id
 export const getFormById = (id) => api.get(`${FORM_URL}${BASE_FORMS}/${id}`);
@@ -78,11 +78,6 @@ export const getAccountDataById = (id) =>
 // Get account fields all
 export const getAccountsFieldsAll = () =>
   api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields/all`);
-
-// Admin
-// Get Accounts
-export const getAccountsAdmin = (data) =>
-  api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing/all`, data);
 
 // Create Account Custom View
 export const createAccountCustomView = (data) => {

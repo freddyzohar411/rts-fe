@@ -27,7 +27,6 @@ import {
   FETCH_ACCOUNTS_FIELDS_ALL,
   FETCH_ACCOUNTS_FIELDS_ALL_SUCCESS,
   FETCH_ACCOUNTS_FIELDS_ALL_FAILURE,
-  FETCH_ACCOUNTS_ADMIN,
   FETCH_ACCOUNTS_ADMIN_SUCCESS,
   FETCH_ACCOUNTS_ADMIN_FAILURE,
   CREATE_ACCOUNT_CUSTOM_VIEW,
@@ -187,22 +186,6 @@ export const fetchAccountsFieldsAllFailure = (error) => ({
   payload: error,
 });
 
-// Admin
-export const fetchAccountsAdmin = (params) => ({
-  type: FETCH_ACCOUNTS_ADMIN,
-  payload: params,
-});
-
-export const fetchAccountsAdminSuccess = (accounts) => ({
-  type: FETCH_ACCOUNTS_ADMIN_SUCCESS,
-  payload: accounts,
-});
-
-export const fetchAccountsAdminFailure = (error) => ({
-  type: FETCH_ACCOUNTS_ADMIN_FAILURE,
-  payload: error,
-});
-
 // Create Account Custom View
 export const createAccountCustomView = (accountCustomViewRequest) => ({
   type: CREATE_ACCOUNT_CUSTOM_VIEW,
@@ -221,47 +204,47 @@ export const createAccountCustomViewFailure = (error) => ({
 
 // Fetch Account Custom Views
 export const fetchAccountCustomView = () => ({
-  type: FETCH_ACCOUNT_CUSTOM_VIEW
+  type: FETCH_ACCOUNT_CUSTOM_VIEW,
 });
 
 export const fetchAccountCustomViewSuccess = (accountCustomViews) => ({
   type: FETCH_ACCOUNT_CUSTOM_VIEW_SUCCESS,
-  payload: accountCustomViews
+  payload: accountCustomViews,
 });
 
 export const fetchAccountCustomViewFailure = (error) => ({
   type: FETCH_ACCOUNT_CUSTOM_VIEW_FAILURE,
-  payload: error
+  payload: error,
 });
 
 // Select Account Custom View
 export const selectAccountCustomView = (accountCustomViewRequest) => ({
   type: SELECT_ACCOUNT_CUSTOM_VIEW,
-  payload: accountCustomViewRequest
+  payload: accountCustomViewRequest,
 });
 
 export const selectAccountCustomViewSuccess = (accountCustomView) => ({
   type: SELECT_ACCOUNT_CUSTOM_VIEW_SUCCESS,
-  payload: accountCustomView
+  payload: accountCustomView,
 });
 
 export const selectAccountCustomFailure = (error) => ({
   type: SELECT_ACCOUNT_CUSTOM_VIEW_FAILURE,
-  payload: error
+  payload: error,
 });
 
 // Delete Account Custom View
 export const deleteAccountCustomView = (accountCustomViewId) => ({
   type: DELETE_ACCOUNT_CUSTOM_VIEW,
-  payload: accountCustomViewId
+  payload: accountCustomViewId,
 });
 
 export const deleteAccountCustomViewSuccess = (accountCustomViewId) => ({
   type: DELETE_ACCOUNT_CUSTOM_VIEW_SUCCESS,
-  payload: accountCustomViewId
+  payload: accountCustomViewId,
 });
 
 export const deleteAccountCustomViewFailure = (error) => ({
   type: DELETE_ACCOUNT_CUSTOM_VIEW_FAILURE,
-  payload: error
+  payload: error,
 });

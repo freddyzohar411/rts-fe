@@ -10,7 +10,6 @@ import {
   FETCH_ACCOUNTS_FIELDS,
   FETCH_ACCOUNT_DATA,
   FETCH_ACCOUNTS_FIELDS_ALL,
-  FETCH_ACCOUNTS_ADMIN,
   CREATE_ACCOUNT_CUSTOM_VIEW,
   FETCH_ACCOUNT_CUSTOM_VIEW,
   SELECT_ACCOUNT_CUSTOM_VIEW,
@@ -54,7 +53,6 @@ import {
   getAccountById,
   getAccountDataById,
   getAccountsFieldsAll,
-  getAccountsAdmin,
   createAccountCustomView,
   getAllAccountCustomView,
   selectAccountCustomView,
@@ -201,16 +199,6 @@ function* workFetchAccountsFieldsAll() {
   }
 }
 
-function* workFetchAccountsAdmin(action) {
-  try {
-    const response = yield call(getAccountsAdmin, action.payload);
-    yield put(fetchAccountsAdminSuccess(response.data));
-  } catch (error) {
-    toast.error("Error fetching accounts");
-    yield put(fetchAccountsAdminFailure(error));
-  }
-}
-
 // Fetch Account Custom Views
 function* workFetchAccountCustomView() {
   try {
@@ -280,7 +268,6 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(FETCH_ACCOUNT, workFetchAccount);
   yield takeEvery(FETCH_ACCOUNT_DATA, workFetchAccountData);
   yield takeEvery(FETCH_ACCOUNTS_FIELDS_ALL, workFetchAccountsFieldsAll);
-  yield takeEvery(FETCH_ACCOUNTS_ADMIN, workFetchAccountsAdmin);
   yield takeEvery(CREATE_ACCOUNT_CUSTOM_VIEW, workCreateAccountCustomView);
   yield takeEvery(FETCH_ACCOUNT_CUSTOM_VIEW, workFetchAccountCustomView);
   yield takeEvery(SELECT_ACCOUNT_CUSTOM_VIEW, workSelectAccountCustomView);
