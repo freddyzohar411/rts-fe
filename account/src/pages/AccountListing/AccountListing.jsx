@@ -3,16 +3,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Badge, Button, Input } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
-import { useTableHook } from "@workspace/common";
+import {
+  useTableHook,
+  DeleteCustomModal,
+  DynamicTableHelper,
+} from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
-import { DynamicTableHelper } from "@workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
-import { DeleteCustomModal } from "@workspace/common";
 import "./AccountListing.scss";
 import {
   deleteAccount,
   fetchAccounts,
   fetchAccountsFields,
+<<<<<<< HEAD
+=======
+  fetchAccountsAdmin,
+  fetchAccountCustomView,
+>>>>>>> timeline-design-changes
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -24,6 +31,10 @@ const AccountListing = () => {
   const accountsFields = useSelector(
     (state) => state.AccountReducer.accountsFields
   );
+  const accountCustomView = useSelector(
+    (state) => state?.AccountReducer?.accountCustomViews
+  );
+  const [customConfigCV, setCustomConfigCV] = useState([]);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -57,6 +68,40 @@ const AccountListing = () => {
       ),
     },
   ];
+
+  useEffect(() => {
+    dispatch(fetchAccountsFields());
+    dispatch(fetchAccountCustomView());
+  }, []);
+
+  // useEffect(() => {
+  //   if (accountCustomView && accountCustomView.length > 0) {
+  //     // Find the selected custom view
+  //     const selectedCustomView = accountCustomView?.find(
+  //       (customView) => customView?.selected
+  //     );
+  //     if (
+  //       selectedCustomView &&
+  //       Array.isArray(accountsFields) &&
+  //       accountsFields.length > 0
+  //     ) {
+  //       const selectedGroup = selectedCustomView?.columnName?.split(",");
+  //       const selectedObjects = selectedGroup?.map((value) => {
+  //         return accountsFields?.find((option) => option?.value === value);
+  //       });
+  //       if (selectedObjects.length > 0) {
+  //         setCustomConfigCV(selectedObjects);
+  //       }
+  //     } else {
+  //       setCustomConfigCV(ACCOUNT_INITIAL_OPTIONS);
+  //     }
+  //   }
+  // }, [accountCustomView, accountsFields]);
+
+  // console.log("Custom Config Cv", customConfigCV);
+  // console.log("Account Initial Options", ACCOUNT_INITIAL_OPTIONS);
+  // console.log("Search Fields, Dynamic Table Helper", DynamicTableHelper.generateSeachFieldArray(customConfigCV))
+  // console.log("Search Fields, Dynamic Table Helper", DynamicTableHelper.generateSeachFieldArray(ACCOUNT_INITIAL_OPTIONS))
 
   // Table Hooks
   const {
@@ -210,7 +255,7 @@ const AccountListing = () => {
     if (pageRequest?.searchFields?.length > 0) {
       dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
-  }, [pageRequest]);
+  }, [JSON.stringify(pageRequest)]);
 
   // Update the page info when account Data changes
   useEffect(() => {
@@ -218,7 +263,6 @@ const AccountListing = () => {
       setPageInfoData(accountsData);
     }
   }, [accountsData]);
-
 
   return (
     <>

@@ -139,6 +139,17 @@ const JobListing = () => {
     customRenderList
   );
 
+  function MyComponent({ pageRequest, gridView }) {
+    const memoizedDispatch = useCallback(() => {
+      const request = { ...pageRequest, jobType: gridView };
+      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+    }, [pageRequest, gridView]);
+
+    useEffect(() => {
+      memoizedDispatch();
+    }, [memoizedDispatch]);
+  }
+
   useEffect(() => {
     if (recruiterGroup?.users?.length > 0) {
       const users = [];
@@ -161,7 +172,7 @@ const JobListing = () => {
   useEffect(() => {
     const request = { ...pageRequest, jobType: gridView };
     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-  }, [pageRequest]);
+  }, [JSON.stringify(pageRequest)]);
 
   useEffect(() => {
     if (hasPageRendered.current) {

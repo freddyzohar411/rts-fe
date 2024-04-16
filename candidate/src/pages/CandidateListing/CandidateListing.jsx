@@ -192,7 +192,7 @@ function CandidateListing() {
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
     dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
-  }, [pageRequest]);
+  }, [JSON.stringify(pageRequest)]);
 
   // Update the page info when candidate Data changes
   useEffect(() => {
