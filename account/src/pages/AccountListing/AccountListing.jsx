@@ -14,7 +14,6 @@ import {
   deleteAccount,
   fetchAccounts,
   fetchAccountsFields,
-  fetchAccountsAdmin,
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -207,15 +206,7 @@ const AccountListing = () => {
   // Fetch the account when the pageRequest changes
   useEffect(() => {
     if (pageRequest?.searchFields?.length > 0) {
-      if (checkAnyRole([Role.ADMIN])) {
-        dispatch(
-          fetchAccountsAdmin(DynamicTableHelper.cleanPageRequest(pageRequest))
-        );
-      } else {
-        dispatch(
-          fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest))
-        );
-      }
+      dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
   }, [JSON.stringify(pageRequest)]);
 
