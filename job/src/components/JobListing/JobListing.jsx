@@ -65,9 +65,11 @@ const JobListing = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   // Placeholder Recruiter Name List
-  const [nestedVisible, setNestedVisible] = useState([]);
+  const [nestedVisible, setNestedVisible] = useState([true]);
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const hasPageRendered = useRef(false);
 
   const isFOD = gridView === "fod";
@@ -203,6 +205,10 @@ const JobListing = () => {
       ...prevStates,
       [dataId]: !prevStates[dataId],
     }));
+  };
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   const toggleNested = (index) => {
@@ -345,6 +351,7 @@ const JobListing = () => {
                     onClick={() => {
                       setActiveJob([data.id]);
                       setSelectedRecruiter([]);
+                      setSearchQuery("");
                     }}
                   >
                     FOD
@@ -358,6 +365,8 @@ const JobListing = () => {
                             className="form-control form-control-sm"
                             placeholder="Search.."
                             type="text"
+                            value={searchQuery}
+                            onChange={handleSearch}
                           />
                           <i className="ri-search-eye-line search-icon"></i>
                         </div>
@@ -382,8 +391,13 @@ const JobListing = () => {
                                       className="simplebar-hght"
                                       autoHide={false}
                                     >
-                                      {item.subNames.map(
-                                        (subName, subIndex) => {
+                                      {item?.subNames
+                                        ?.filter((it) =>
+                                          it
+                                            ?.toLowerCase()
+                                            .includes(searchQuery.toLowerCase())
+                                        )
+                                        ?.map((subName, subIndex) => {
                                           const split = subName?.split("@");
                                           return (
                                             <li
@@ -410,8 +424,7 @@ const JobListing = () => {
                                               </Label>
                                             </li>
                                           );
-                                        }
-                                      )}
+                                        })}
                                     </SimpleBar>
                                   </div>
                                 </ul>
