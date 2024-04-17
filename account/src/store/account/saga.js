@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import { AccountEntityConstant } from "../../constants/accountConstant";
 
 import {
@@ -32,8 +32,6 @@ import {
   fetchAccountDataFailure,
   fetchAccountsFieldsAllSuccess,
   fetchAccountsFieldsAllFailure,
-  fetchAccountsAdminSuccess,
-  fetchAccountsAdminFailure,
   createAccountCustomViewSuccess,
   createAccountCustomViewFailure,
   fetchAccountCustomViewSuccess,

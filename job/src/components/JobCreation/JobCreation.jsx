@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "reactstrap";
-import { Form } from "@workspace/common";
+import { Actions, Form } from "@workspace/common";
 import { JOB_FORM_NAME } from "./constants";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,8 +36,18 @@ const JobCreation = () => {
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
+
   const editId = useSelector((state) => state.JobFormReducer.editId);
-  const [formFieldsData, setFormFieldsData] = useState([]);
+  const accountById = useSelector(
+    (state) => state.AccountNamesReducer.accountById
+  );
+  const accountByIdMeta = useSelector(
+    (state) => state.AccountNamesReducer.accountByIdMeta
+  );
+  const businessCountries = useSelector(
+    (state) => state.CountryCurrencyReducer.businessCountries
+  );
+
   const [formTemplate, setFormTemplate] = useState(null);
   const [randomId, setRandomId] = useState();
   const [deleteDraftModal, setDeleteDraftModal] = useState(false);
@@ -45,6 +55,7 @@ const JobCreation = () => {
 
   // Fetch all the countries and account names
   useEffect(() => {
+    dispatch(Actions.fetchBusinessCountries());
     dispatch(fetchJobForm(JOB_FORM_NAME));
     if (!jobId) {
       dispatch(fetchDraftJob());
@@ -62,14 +73,22 @@ const JobCreation = () => {
   }, [form, view]);
 
   useEffect(() => {
-    if (!jobId && formikValues?.values?.jobId?.length === 0) {
-      generateId("J", "IN", "job")
+    if (
+      !jobId &&
+      formikValues?.values?.accountName?.length > 0 &&
+      accountById &&
+      !accountByIdMeta?.isLoading
+    ) {
+      const cntry = businessCountries?.find(
+        (bcountry) => bcountry?.name === accountById?.accountCountry
+      );
+      generateId("J", cntry?.iso3, "job")
         .then((id) => {
           formikRef.current.formik.setFieldValue("jobId", id);
         })
         .catch((e) => {});
     }
-  }, [formikRef?.current?.formik?.values]);
+  }, [formikValues?.values?.accountName, accountById]);
 
   const onFormikChange = (formikValues) => {
     setFormikValues(formikValues);
@@ -91,13 +110,6 @@ const JobCreation = () => {
       dispatch(fetchJobFormSubmission(jobId));
     }
   }, [jobId]);
-
-  /**
-   * Get Form field data from Form component
-   */
-  const handleFormFieldChange = useCallback((formFields) => {
-    setFormFieldsData(formFields);
-  }, []);
 
   const checkReadEditPermission = () => {
     return checkAllPermission([Permission.JOB_EDIT, Permission.JOB_READ]);
@@ -167,7 +179,7 @@ const JobCreation = () => {
           editData={formSubmissionData}
           onSubmit={handleFormSubmit}
           onFormikChange={onFormikChange}
-          onFormFieldsChange={handleFormFieldChange}
+          onFormFieldsChange={null}
           errorMessage={null}
           view={view}
           ref={formikRef}

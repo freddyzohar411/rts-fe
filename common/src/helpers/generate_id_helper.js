@@ -1,13 +1,8 @@
 import { getIdCount } from "./backend_helper";
-import { Axios } from "@workspace/common";
-const { APIClient } = Axios;
 
 export const generateId = async (prefix, cntryCode, module) => {
-  const api = new APIClient();
-
   let id = "";
   const year = new Date().getFullYear().toString().substring(2, 4);
-  let countryCode = cntryCode;
   if (module) {
     try {
       const countData = await getIdCount(module);
@@ -19,6 +14,6 @@ export const generateId = async (prefix, cntryCode, module) => {
       id = "";
     }
   }
-  const output = `${prefix}${countryCode}${year}-${id}`;
+  const output = `${prefix}${cntryCode}${year}-${id}`;
   return output;
 };
