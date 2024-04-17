@@ -15,7 +15,10 @@ import {
 import classnames from "classnames";
 import { Link, useLocation } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import {
+  handleCandidateEmbeddings,
+  handleJobEmbeddings,
+} from "../../helpers/backend_helper";
 
 import { fetchGroups, listGroups } from "../../store/group/action";
 
@@ -23,29 +26,20 @@ function InitializeSetting() {
   const location = useLocation();
   const navState = location.state;
 
-  document.title = "Access Management Settings | RTS";
+  document.title = "Initialize Setting | RTS";
 
-  const handleCandidateEmbeddings = () => {
-    axios
-      .get("http://localhost:8050/api/candidates/create-embeddings/all")
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  const handleCandidateEmbeddingsData = () => {
+      // Hanld the candidate embeddings
+    handleCandidateEmbeddings()
+      .then((response) => {})
+      .catch((error) => {});
+  };
 
-  const handleJobEmbeddings = () => {
-    axios
-      .get("http://localhost:9200/api/job/create-embeddings/all")
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  const handleJobEmbeddingsData = () => {
+    handleJobEmbeddings()
+      .then((response) => {})
+      .catch((error) => {});
+  };
 
   return (
     <React.Fragment>
@@ -64,12 +58,12 @@ function InitializeSetting() {
               <Card>
                 <CardBody className="p-5">
                   <Row>
-                    <Button onClick={handleCandidateEmbeddings}>
+                    <Button onClick={handleCandidateEmbeddingsData}>
                       Update Candidate Embeddings
                     </Button>
                   </Row>
                   <Row className="mt-3">
-                    <Button onClick={handleJobEmbeddings}>
+                    <Button onClick={handleJobEmbeddingsData}>
                       Update Job Embeddings
                     </Button>
                   </Row>

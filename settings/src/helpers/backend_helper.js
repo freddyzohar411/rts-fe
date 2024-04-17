@@ -23,8 +23,16 @@ import {
   GET_PERMISSIONS,
   GET_USER_GROUP,
   LIST_GROUPS,
+  GET_JOB,
+  GET_CANDIDATE,
 } from "./url_helper";
-import { API_URL, ACCESS_URL, GROUP_URL } from "@workspace/common/src/config";
+import {
+  API_URL,
+  ACCESS_URL,
+  GROUP_URL,
+  CANDIDATE_URL,
+  JOB_URL,
+} from "@workspace/common/src/config";
 
 const { APIClient } = Axios;
 
@@ -105,3 +113,10 @@ export const deleteGroup = (id) =>
 // List Groups
 export const listGroups = (data) =>
   api.create(`${GROUP_URL}${LIST_GROUPS}`, data);
+
+// Embedding Initialize
+export const handleCandidateEmbeddings = () =>
+  api.get(`${CANDIDATE_URL}${GET_CANDIDATE}/create-embeddings/all`);
+
+export const handleJobEmbeddings = () =>
+  api.get(`${JOB_URL}${GET_JOB}/create-embeddings/all`);

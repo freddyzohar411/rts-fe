@@ -28,3 +28,10 @@ export const GET_PERMISSIONS = "/api/permission";
 export const GET_USER_GROUP = "/api/usergroup";
 export const LIST_GROUPS = "/api/usergroup/listing";
 
+// Candidate
+export const GET_CANDIDATE = "/api/candidates";
+
+// Job
+export const GET_JOB = "/api/job";
+
+

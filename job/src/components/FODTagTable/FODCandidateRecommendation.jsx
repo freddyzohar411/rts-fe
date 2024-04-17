@@ -74,9 +74,6 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
               Candidate Job Analysis ({` ${data?.firstName} ${data?.lastName} `}
               )
             </span>
-            {/* <span className="text-muted" style={{ fontSize: "0.8rem" }}>
-              Candidate Name : {` ${data?.firstName} ${data?.lastName}`}{" "}
-            </span> */}
           </div>
         </ModalHeader>
         <ModalBody className="bg-light" style={{ minHeight: "500px" }}>

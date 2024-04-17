@@ -19,7 +19,6 @@ import {
 } from "../JobListing/JobListingConstants";
 import FODCandidateRecommendation from "./FODCandidateRecommendation";
 
-
 const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   const fodTableType = {
     Recommendation: "Recommendation",
@@ -101,7 +100,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
     setSearch,
     customConfig,
     setCustomConfigData,
-    setCustomConfig
+    setCustomConfig,
   } = useTableHook(
     {
       page: 0,
@@ -146,9 +145,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       setAbortController(null);
       dispatch(resetCandidateRecommendationList());
     }
-    // if (tagOffcanvas && fodTableShowType?.value === fodTableType.All) {
-    //   dispatch(fetchCandidates(pageRequest));
-    // }
   }, [
     pageRequest,
     selectedRowData?.id,
