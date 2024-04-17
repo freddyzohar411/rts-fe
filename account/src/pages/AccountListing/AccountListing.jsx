@@ -15,11 +15,8 @@ import {
   deleteAccount,
   fetchAccounts,
   fetchAccountsFields,
-<<<<<<< HEAD
-=======
   fetchAccountsAdmin,
   fetchAccountCustomView,
->>>>>>> timeline-design-changes
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -283,6 +280,7 @@ const AccountListing = () => {
         setSearch={setSearch}
         optGroup={accountsFields}
         setCustomConfigData={setCustomConfigData}
+        header="Accounts"
       />
     </>
   );
