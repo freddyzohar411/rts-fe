@@ -19,7 +19,6 @@ import { DynamicTable } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserGroupByName } from "../../store/jobList/action";
 import {
   fetchJobCustomView,
   selectJobCustomView,
@@ -30,7 +29,6 @@ import {
   JOB_FILTERS,
   JOB_INITIAL_OPTIONS,
 } from "../JobListing/JobListingConstants";
-import { RECRUITER_GROUP } from "../../helpers/constant";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import { truncate } from "@workspace/common/src/helpers/string_helper";
@@ -66,8 +64,9 @@ const DynamicTableWrapper = ({
   const [deletingCustomViewId, setDeletingCustomViewId] = useState(null);
   const [massFODOpen, setMassFODOpen] = useState(false);
   const [namesData, setNamesData] = useState([]);
-  const [nestedVisible, setNestedVisible] = useState([]);
+  const [nestedVisible, setNestedVisible] = useState([true]);
   const [customViewDropdownOpen, setCustomViewDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const dispatch = useDispatch();
   const recruiterGroup = useSelector(
@@ -91,7 +90,6 @@ const DynamicTableWrapper = ({
   }, [recruiterGroup]);
 
   useEffect(() => {
-    dispatch(fetchUserGroupByName(RECRUITER_GROUP));
     dispatch(fetchJobCustomView());
   }, []);
 
@@ -139,6 +137,10 @@ const DynamicTableWrapper = ({
       updatedVisibility[index] = !updatedVisibility[index];
       return updatedVisibility;
     });
+  };
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   return (
@@ -194,7 +196,10 @@ const DynamicTableWrapper = ({
                             checkAllPermission([Permission.JOB_EDIT]) && (
                               <ButtonDropdown
                                 isOpen={massFODOpen}
-                                toggle={() => setMassFODOpen(!massFODOpen)}
+                                toggle={() => {
+                                  setMassFODOpen(!massFODOpen);
+                                  setSearchQuery("");
+                                }}
                               >
                                 <DropdownToggle
                                   className="d-flex flex-row align-items-center gap-1 bg-custom-primary text-white"
@@ -214,6 +219,8 @@ const DynamicTableWrapper = ({
                                           type="text"
                                           placeholder="Search.."
                                           className="form-control form-control-sm"
+                                          value={searchQuery}
+                                          onChange={handleSearch}
                                         />
                                         <i className="bx bx-search search-icon"></i>
                                       </div>
@@ -244,46 +251,55 @@ const DynamicTableWrapper = ({
                                                     className="simplebar-hght"
                                                     autoHide={false}
                                                   >
-                                                    {item.subNames.map(
-                                                      (subName, subIndex) => {
-                                                        const split =
-                                                          subName?.split("@");
-                                                        return (
-                                                          <li
-                                                            key={subIndex}
-                                                            className="d-flex flew-row align-items-center justify-content-between me-3"
-                                                          >
-                                                            {truncate(
-                                                              split[1],
-                                                              16
-                                                            )}
-
-                                                            <Label
-                                                              check
-                                                              className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                                    {item?.subNames
+                                                      ?.filter((it) =>
+                                                        it
+                                                          ?.toLowerCase()
+                                                          .includes(
+                                                            searchQuery.toLowerCase()
+                                                          )
+                                                      )
+                                                      ?.map(
+                                                        (subName, subIndex) => {
+                                                          const split =
+                                                            subName?.split("@");
+                                                          return (
+                                                            <li
+                                                              key={subIndex}
+                                                              className="d-flex flew-row align-items-center justify-content-between me-3"
                                                             >
-                                                              <Input
-                                                                type="checkbox"
-                                                                checked={operations?.selectedRecruiter?.includes(
-                                                                  parseInt(
-                                                                    split[0]
-                                                                  )
-                                                                )}
-                                                                onChange={(e) =>
-                                                                  operations?.handleFODCheck(
+                                                              {truncate(
+                                                                split[1],
+                                                                16
+                                                              )}
+                                                              <Label
+                                                                check
+                                                                className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                                              >
+                                                                <Input
+                                                                  type="checkbox"
+                                                                  checked={operations?.selectedRecruiter?.includes(
                                                                     parseInt(
                                                                       split[0]
-                                                                    ),
-                                                                    e.target
-                                                                      .checked
-                                                                  )
-                                                                }
-                                                              />
-                                                            </Label>
-                                                          </li>
-                                                        );
-                                                      }
-                                                    )}
+                                                                    )
+                                                                  )}
+                                                                  onChange={(
+                                                                    e
+                                                                  ) =>
+                                                                    operations?.handleFODCheck(
+                                                                      parseInt(
+                                                                        split[0]
+                                                                      ),
+                                                                      e.target
+                                                                        .checked
+                                                                    )
+                                                                  }
+                                                                />
+                                                              </Label>
+                                                            </li>
+                                                          );
+                                                        }
+                                                      )}
                                                   </SimpleBar>
                                                 </div>
                                               </ul>
@@ -402,26 +418,6 @@ const DynamicTableWrapper = ({
                             confirmButtonText="Delete"
                             isLoading={false}
                           />
-                          {/* <Button
-                            type="button"
-                            onClick={() => {
-                              if (areOptionsEmpty()) {
-                                toast.error(
-                                  "No fields to show. Please have at least one job"
-                                );
-                                return;
-                              }
-                              setIsCustomModalView(true);
-                              setCustomViewShow(!customViewShow);
-                            }}
-                            className="btn btn-custom-primary d-flex align-items-center header-btn"
-                          >
-                            <span>
-                              <i className="ri-settings-3-fill me-1"></i>
-                            </span>
-                            Custom View
-                          </Button> */}
-
                           {checkAllPermission([Permission.JOB_WRITE]) && (
                             <Link
                               to="/jobs/job-creation"
