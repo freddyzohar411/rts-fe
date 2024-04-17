@@ -34,7 +34,6 @@ function getDynamicNestedResult(data, value) {
 }
 
 function generateConfig(selectedOptGroup, customRender = []) {
-  console.log(selectedOptGroup, "selectedOptGroup")
   const config = [];
   selectedOptGroup.forEach((opt) => {
     if (!opt?.value) {
@@ -42,7 +41,6 @@ function generateConfig(selectedOptGroup, customRender = []) {
       return;
     }
     let renderMethod = null;
-    console.log(customRender, "customRender")
     if (customRender.length > 0) {
       renderMethod =
         customRender?.find((item) => {

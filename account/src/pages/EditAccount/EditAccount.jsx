@@ -500,13 +500,6 @@ const EditAccount = () => {
         return;
       }
 
-      // Cancel add document and reset form
-      // if (buttonName === "cancel") {
-      //   console.log("Cancel add document and reset form");
-      //   resetForm([], "create");
-      //   return;
-      // }
-
       if (formSubmissionData != null) {
         const formData = {
           guidelines: newValues.guidelines,

@@ -18,8 +18,6 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
   const [matchData, setMatchData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  console.log("CA Data", data);
-
   useEffect(() => {
     if (showDetails && candidateId && jobId && !matchData) {
       setLoading(true);

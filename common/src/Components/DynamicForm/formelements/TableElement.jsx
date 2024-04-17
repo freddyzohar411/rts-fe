@@ -182,29 +182,6 @@ const TableElement = ({
     document.body.removeChild(link);
   }
 
-  // Handle File Download
-  const handleDownload = (item, data) => {
-    if (item?.entityType && item?.entityId) {
-      console.log(
-        "Download Using Entity type and id",
-        item?.entityType,
-        item?.entityId
-      );
-    } else {
-      console.log("Download Using document ID", data?.id);
-      axios
-        .get(`http://localhost:8500/api/documents/download/${data?.id}`)
-        .then((res) => {
-          console.log("Download Response", res);
-          const documentData = res.data;
-          downloadBase64File(documentData?.encodedFile, documentData?.fileName);
-        })
-        .catch((error) => {
-          console.log("Error downloading file", error);
-        });
-    }
-  };
-
   return (
     <div className="table-responsive mb-3" style={{ maxHeight: "200px" }}>
       <Table className="table-bordered align-middle table-nowrap mb-0">
@@ -233,7 +210,6 @@ const TableElement = ({
             </tr>
           ) : (
             table?.map((row, rowIndex) => {
-              // console.log("TT row", row);
               return (
                 <tr key={rowIndex}>
                   {tableConfig.map((item, index) => {
