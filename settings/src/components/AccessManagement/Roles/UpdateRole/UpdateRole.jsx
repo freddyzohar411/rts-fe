@@ -20,6 +20,7 @@ import {
   TabContent,
   TabPane,
   Table,
+  Spinner,
 } from "reactstrap";
 import classnames from "classnames";
 import { initialValues, populateForm, schema } from "../constants";
@@ -45,6 +46,9 @@ function UpdateRole() {
   const modulesData = useSelector((state) => state.ModuleReducer.modules);
   const permissionData = useSelector(
     (state) => state.PermissionReducer.permissions
+  );
+  const roleUpdateMeta = useSelector(
+    (state) => state.RoleReducer.roleUpdateMeta
   );
 
   // Fetch Modules and Permissions if dont exist
@@ -138,7 +142,9 @@ function UpdateRole() {
                       <CardBody>
                         <Row className="mb-3">
                           <Col>
-                            <span className="h6 fw-bold">General Information</span>
+                            <span className="h6 fw-bold">
+                              General Information
+                            </span>
                           </Col>
                         </Row>
                         <Row className="mb-3">
@@ -166,9 +172,7 @@ function UpdateRole() {
                         <Row className="mb-3">
                           <Col>
                             <div>
-                              <Label>
-                                Role Description*
-                              </Label>
+                              <Label>Role Description*</Label>
                               <Field
                                 placeholder="Enter Role Description"
                                 type="text"
@@ -340,8 +344,12 @@ function UpdateRole() {
                           <Button
                             className="btn btn-custom-primary"
                             type="submit"
+                            disabled={roleUpdateMeta?.isLoading}
                           >
-                            Save
+                            Save{" "}
+                            {roleUpdateMeta?.isLoading && (
+                              <Spinner size="sm"></Spinner>
+                            )}
                           </Button>
                         </div>
                       </CardFooter>

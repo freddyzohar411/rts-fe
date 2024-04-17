@@ -17,7 +17,8 @@ import {
   TabPane,
   Breadcrumb,
   BreadcrumbItem,
-  FormFeedback
+  FormFeedback,
+  Spinner,
 } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import DualListBox from "react-dual-listbox";
@@ -428,8 +429,12 @@ function GroupUpdate() {
                           <Button
                             className="btn btn-custom-primary"
                             type="submit"
+                            disabled={updateMeta?.isLoading}
                           >
-                            Save
+                            Save{" "}
+                            {updateMeta?.isLoading && (
+                              <Spinner size="sm"></Spinner>
+                            )}
                           </Button>
                         </div>
                       </CardFooter>

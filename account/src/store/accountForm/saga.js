@@ -1,12 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
+import { FETCH_ACCOUNTFORM, FETCH_ACCOUNTFORM_SUBMISSION } from "./actionTypes";
 import {
-  FETCH_ACCOUNTFORM,
-  FETCH_ACCOUNTFORM_SUBMISSION,
-  CLEAR_ACCOUNTFORM_SUBMISSION,
-} from "./actionTypes";
-import {
-  clearAccountFormSubmission,
   fetchAccountFormSuccess,
   fetchAccountFormFailure,
   fetchAccountFormSubmissionSuccess,
@@ -18,7 +13,6 @@ import {
   getAccountInstructionById,
   getAccountCommercialById,
 } from "../../helpers/backend_helper";
-import { toast } from "react-toastify";
 
 const formURL = {
   account_account: getAccountById,

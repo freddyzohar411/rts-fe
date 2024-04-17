@@ -12,14 +12,10 @@ import {
   ModalHeader,
   Label,
 } from "reactstrap";
-// import { countries } from "./countries";
 import SimpleBar from "simplebar-react";
 import { useDispatch, useSelector } from "react-redux";
 import Flag from "react-world-flags";
 import { Actions } from "@workspace/common";
-import { Axios } from "@workspace/common";
-const { APIClient } = Axios;
-const api = new APIClient();
 
 function CountryModal({ setCountry }) {
   const dispatch = useDispatch();

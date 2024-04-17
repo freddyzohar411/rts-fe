@@ -12,6 +12,7 @@ import {
   PaginationLink,
   Row,
   Col,
+  Spinner,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +33,9 @@ function RolesTab() {
   const modulesData = useSelector((state) => state.ModuleReducer.modules);
   const permissionData = useSelector(
     (state) => state.PermissionReducer.permissions
+  );
+  const roleDeleteMeta = useSelector(
+    (state) => state.RoleReducer.roleDeleteMeta
   );
   const dispatch = useDispatch();
   const totalElements = rolesListing?.totalElements;
@@ -257,8 +261,10 @@ function RolesTab() {
                 <Button
                   className="btn btn-custom-primary"
                   onClick={() => handleDelete(selectedRole)}
+                  disabled={roleDeleteMeta?.isLoading}
                 >
-                  Delete
+                  Delete{" "}
+                  {roleDeleteMeta?.isLoading && <Spinner size="sm"></Spinner>}
                 </Button>
                 <Button
                   className="btn btn-custom-primary"

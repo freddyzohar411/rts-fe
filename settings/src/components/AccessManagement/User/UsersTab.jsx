@@ -13,6 +13,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Spinner,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,6 +30,9 @@ function UsersTab() {
   );
   const usersListing =
     useSelector((state) => state?.UserReducer?.usersListing) ?? {};
+  const userDeleteMeta = useSelector(
+    (state) => state?.UserReducer?.userDeleteMeta
+  );
   const users = usersListing?.users;
   const totalElements = usersListing?.totalElements;
   const totalPages = usersListing?.totalPages;
@@ -312,8 +316,12 @@ function UsersTab() {
                     <Button
                       className="btn btn-custom-primary"
                       onClick={() => handleDelete(selectedUser)}
+                      disabled={userDeleteMeta?.isLoading}
                     >
-                      Delete
+                      Delete{" "}
+                      {userDeleteMeta?.isLoading && (
+                        <Spinner size="sm"></Spinner>
+                      )}
                     </Button>
                   )}
                 </div>
