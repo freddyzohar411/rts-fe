@@ -15,6 +15,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  ButtonGroup,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
@@ -138,7 +139,7 @@ const DynamicTableWrapper = ({
                             placeholder="Search"
                             className="form-control search"
                             value={search}
-                            style={{ width: "350px" }}
+                            style={{ width: "350px", height: "40px"}}
                             onChange={(e) => setSearch(e.target.value)}
                           />
                         </form>
@@ -148,85 +149,92 @@ const DynamicTableWrapper = ({
                   )}
                   <Col>
                     <div className="d-flex column-gap-2 justify-content-end">
-                      <Button
-                        type="button"
-                        className="btn btn-custom-primary d-flex align-items-center header-btn"
-                        onClick={() =>
-                          DynamicTableHelper.handleExportExcel(
-                            "Accounts",
-                            data,
-                            config.slice(2, -1),
-                            customRenderList,
-                            true
-                          )
-                        }
-                      >
-                        <span>
-                          <i className="mdi mdi-download me-1"></i>
-                        </span>
-                        Export
-                      </Button>
-                      {/* Custom View Button */}
-                      <Dropdown
-                        isOpen={customViewDropdownOpen}
-                        toggle={() =>
-                          setCustomViewDropdownOpen(!customViewDropdownOpen)
-                        }
-                      >
-                        <DropdownToggle
-                          caret
-                          className="btn btn-custom-primary py-2"
+                      <ButtonGroup>
+                        <Dropdown
+                          isOpen={customViewDropdownOpen}
+                          toggle={() =>
+                            setCustomViewDropdownOpen(!customViewDropdownOpen)
+                          }
                         >
-                          <i className="ri-settings-3-fill me-2"></i>
-                          <span>Custom View</span>
-                        </DropdownToggle>
-                        <DropdownMenu>
-                          <Link to="/accounts/custom-view">
-                            <DropdownItem>Create Custom View</DropdownItem>
-                          </Link>
-                          <DropdownItem divider />
-                          <DropdownItem header>My Custom Views</DropdownItem>
-                          {allAccountCustomViews &&
-                          allAccountCustomViews.length > 0 ? (
-                            allAccountCustomViews?.map((customView, index) => (
-                              <div className="d-flex flex-row gap-1 me-2">
-                                <DropdownItem
-                                  onClick={() => {
-                                    handleSelectCustomView(customView?.id);
-                                  }}
-                                  key={index}
-                                >
-                                  <div className="d-flex flex-row align-items-center justify-content-between">
-                                    <span className="me-2">
-                                      {customView?.name}
-                                    </span>
-                                    {customView?.selected && (
-                                      <span>
-                                        <i className="ri-check-fill"></i>
-                                      </span>
-                                    )}
+                          <DropdownToggle
+                            color="light"
+                            className="bg-gradient border-dark"
+                            style={{
+                              borderTopRightRadius: "0px",
+                              borderBottomRightRadius: "0px",
+                              height:"40px"
+                            }}
+                          >
+                            <i className="ri-settings-3-fill fs-5"></i>
+                          </DropdownToggle>
+                          <DropdownMenu className="mt-1">
+                            <Link to="/accounts/custom-view">
+                              <DropdownItem>Create Custom View</DropdownItem>
+                            </Link>
+                            <DropdownItem divider />
+                            <DropdownItem header>My Custom Views</DropdownItem>
+                            {allAccountCustomViews &&
+                            allAccountCustomViews.length > 0 ? (
+                              allAccountCustomViews?.map(
+                                (customView, index) => (
+                                  <div className="d-flex flex-row gap-1 me-2">
+                                    <DropdownItem
+                                      onClick={() => {
+                                        handleSelectCustomView(customView?.id);
+                                      }}
+                                      key={index}
+                                    >
+                                      <div className="d-flex flex-row align-items-center justify-content-between">
+                                        <span className="me-2">
+                                          {customView?.name}
+                                        </span>
+                                        {customView?.selected && (
+                                          <span>
+                                            <i className="ri-check-fill"></i>
+                                          </span>
+                                        )}
+                                      </div>
+                                    </DropdownItem>
+                                    <Button
+                                      className="btn btn-sm btn-danger"
+                                      style={{ height: "29px" }}
+                                      onClick={() =>
+                                        handleDeleteButtonClick(customView?.id)
+                                      }
+                                    >
+                                      <i className="mdi mdi-delete"></i>
+                                    </Button>
                                   </div>
+                                )
+                              )
+                            ) : (
+                              <>
+                                <DropdownItem text>
+                                  No custom view created yet!
                                 </DropdownItem>
-                                <Button
-                                  className="btn btn-sm btn-danger"
-                                  style={{ height: "29px" }}
-                                  onClick={() =>
-                                    handleDeleteButtonClick(customView?.id)
-                                  }
-                                >
-                                  <i className="mdi mdi-delete"></i>
-                                </Button>
-                              </div>
-                            ))
-                          ) : (
-                            <>
-                              <DropdownItem text>
-                                No custom view created yet!
-                              </DropdownItem>
-                            </>
-                          )}
-                        </DropdownMenu>
-                      </Dropdown>
+                              </>
+                            )}
+                          </DropdownMenu>
+                        </Dropdown>
+
+                        <Button
+                          color="light"
+                          className="bg-gradient border-dark"
+                          onClick={() =>
+                            DynamicTableHelper.handleExportExcel(
+                              "Accounts",
+                              data,
+                              config.slice(2, -1),
+                              customRenderList,
+                              true
+                            )
+                          }
+                          style={{ height: "40px" }}
+                        >
+                          <i className="ri-download-fill align-bottom fs-5"></i>
+                        </Button>
+                      </ButtonGroup>
+
                       <DeleteCustomModal
                         isOpen={deleteModalOpen}
                         setIsOpen={setDeleteModalOpen}
@@ -242,9 +250,10 @@ const DynamicTableWrapper = ({
                         <Link to="/accounts/create" style={{ color: "black" }}>
                           <Button
                             type="button"
-                            className="btn btn-custom-primary header-btn"
+                            className="btn btn-custom-primary header-btn px-4"
+                            style={{ height: "40px" }}
                           >
-                            Create New Account
+                            <span className="fs-5 align-bottom">+ ADD ACCOUNT</span>
                           </Button>
                         </Link>
                       )}

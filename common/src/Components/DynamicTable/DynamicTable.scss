@@ -10,7 +10,6 @@
 //   text-overflow: ellipsis;
 // }
 
-
 tr {
   border: none !important;
 }
@@ -20,7 +19,7 @@ td {
 }
 
 thead {
-  border:none !important;
+  border: none !important;
 }
 
 th {
@@ -36,7 +35,7 @@ thead {
   background-color: #fff !important;
   position: sticky;
   top: 0;
-  z-index: 1000 !important;
+  z-index: 1 !important;
 }
 
 // First tbody tr no border-top
@@ -57,15 +56,6 @@ td {
   text-overflow: ellipsis;
 }
 
-// .table th:first-child {
-//   border-top-left-radius: 6px; /* Top-left corner */
-// }
-
-// .table th:last-child,
-// .table td:last-child {
-//   border-top-right-radius: 6px; /* Top-right corner */
-// }
-
 // Table last row no border-bottom
 .table tr:last-child {
   border-bottom: none !important;
@@ -84,30 +74,40 @@ td {
   border-style: solid;
 }
 
-// th:last-child, td:last-child {
-//   position: sticky;
-//   right: 0;
-//   background-color: white; /* Ensures the cell background isn't transparent */
-//   z-index: 1000; /* Ensures the sticky column is above other content when scrolling horizontally */
-//   // Box shadow on the left
-//   box-shadow: -6px 0 2px -2px rgba(224, 56, 56, 0.1) !important;
-
-// }
-
 .sticky-right {
   position: sticky;
   right: 0;
   background-color: white !important; /* Ensures the cell background isn't transparent */
-  z-index: 1000; /* Ensures the sticky column is above other content when scrolling horizontally */
-  // Box shadow on the left
-  box-shadow: -6px 0 2px -2px rgba(224, 56, 56, 0.1) !important;
+  // border-bottom: 2px solid #e0e0e0 !important;
 }
 
 .sticky-left {
   position: sticky;
   left: 0;
   background-color: white !important; /* Ensures the cell background isn't transparent */
-  z-index: 1000; /* Ensures the sticky column is above other content when scrolling horizontally */
-  // Box shadow on the right
-  box-shadow: 6px 0 2px -2px rgba(224, 56, 56, 0.1) !important;
 }
+
+.sticky-right::before {
+  content: "";
+  position: absolute;
+  left: 0px; /* Adjust this to position the shadow slightly to the left */
+  top: 0;
+  bottom: 0;
+  width: 8px; /* Width can be adjusted to control the spread of the shadow */
+  // box-shadow: -3px 0 5px -2px rgba(0, 0, 0, 0.3); /* Box shadow to mimic a border effect */
+  box-shadow: -3px 0 5px -2px rgba(0, 0, 0, 0.1); /* Box shadow to mimic a border effect */
+  z-index: 1;
+}
+
+.sticky-left::before {
+  content: "";
+  position: absolute;
+  right: 0px; /* Adjust this to position the shadow slightly to the right */
+  top: 0;
+  bottom: 0;
+  width: 6px; /* Width can be adjusted to control the spread of the shadow */
+  box-shadow: 3px 0 5px -2px rgba(0, 0, 0, 0.3); /* Box shadow to mimic a border effect */
+  z-index: 1;
+}
+
+

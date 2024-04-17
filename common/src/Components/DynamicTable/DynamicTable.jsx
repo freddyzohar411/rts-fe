@@ -24,22 +24,6 @@ const DynamicTable = ({
   const endPage = (page + 1) * pageSize;
 
   // ========================================= Table Configuration ===========================
-  // Create style
-  const stickyRight = {
-    position: "sticky",
-    right: "0",
-    zIndex: "1",
-    backgroundColor: "#fff",
-    // boxShadow: "1px 0 5px rgba(0,0,0,0.1) !important",
-    border:"2px solid red !important"
-  };
-
-  const stickyLeft = {
-    position: "sticky",
-    left: "0",
-    zIndex: "1",
-    backgroundColor: "#fff",
-  };
   // Generate Header
   const generateHeaderJSX = (config) => {
     return (
@@ -61,7 +45,11 @@ const DynamicTable = ({
               <th
                 key={option.name}
                 scope="col"
-                className={`${option?.sticky === "left" && "sticky-left" || option?.sticky === "right" && "sticky-right" || ""}`}
+                className={`${
+                  (option?.sticky === "left" && "sticky-left") ||
+                  (option?.sticky === "right" && "sticky-right") ||
+                  ""
+                }`}
               >
                 {option.header}
               </th>
@@ -80,14 +68,17 @@ const DynamicTable = ({
           ...(option?.name === "action"
             ? { overflow: "visible", maxWidth: "100%" }
             : { maxWidth: "150px" }),
-          ...(option?.sticky
-            ? option.sticky === "left"
-              ? stickyLeft
-              : stickyRight
-            : {}),
         };
         return (
-          <td key={option.name} style={combinedStyle}>
+          <td
+            key={option.name}
+            style={combinedStyle}
+            className={`${
+              (option?.sticky === "left" && "sticky-left") ||
+              (option?.sticky === "right" && "sticky-right") ||
+              ""
+            }`}
+          >
             {option.render(rowData, i)}
           </td>
         );
