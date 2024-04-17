@@ -52,7 +52,6 @@ const ForgetPasswordPage = (props) => {
   }, []);
 
   const formik = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
     initialValues: {
       email: "",

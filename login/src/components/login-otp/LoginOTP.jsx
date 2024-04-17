@@ -105,35 +105,20 @@ const LoginOTP = (props) => {
     <ParticlesAuth>
       <div className="auth-page-content">
         <Container>
-          {/* <Row>
+          <Row>
             <Col lg={12}>
-              <div className="text-center mt-sm-5 mb-4 text-white-50">
+              <div className="text-center mt-sm-4 text-white-50">
                 <div>
-                  <Link to="/" className="d-inline-block auth-logo">
-                    <img src={PulseLogo} alt="" height="150" />
+                  <Link to="/login" className="d-inline-block auth-logo">
+                    <img src={PulseLogo} alt="" height="130" />
                   </Link>
                 </div>
-                <p className="mt-3 fs-15 fw-medium">
+                <p className="fs-5 fw-medium text-white">
                   Talent and Recruitment Services to clients across the world.
                 </p>
               </div>
             </Col>
-          </Row> */}
-          <Row>
-                <Col lg={12}>
-                  <div className="text-center mt-sm-4 text-white-50">
-                    <div>
-                      <Link to="/login" className="d-inline-block auth-logo">
-                        <img src={PulseLogo} alt="" height="130" />
-                      </Link>
-                    </div>
-                    <p className="fs-5 fw-medium text-white">
-                      Talent and Recruitment Services to clients across the
-                      world.
-                    </p>
-                  </div>
-                </Col>
-              </Row>
+          </Row>
 
           <Row className="justify-content-center">
             <Col md={8} lg={6} xl={5}>

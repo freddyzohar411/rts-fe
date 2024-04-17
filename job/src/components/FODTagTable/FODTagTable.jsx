@@ -278,7 +278,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   return (
     <DynamicTableWrapper
       data={candidatesData?.candidates}
-      // config={generateCandidateConfig(customConfig)}
       config={tableConfig}
       pageInfo={pageInfo}
       pageRequest={pageRequest}

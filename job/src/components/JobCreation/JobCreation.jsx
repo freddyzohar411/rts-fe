@@ -44,14 +44,6 @@ const JobCreation = () => {
   const [deleteDraftModal, setDeleteDraftModal] = useState(false);
   const [formikValues, setFormikValues] = useState(null);
 
-  // useEffect(() => {
-  //   return () => {
-  //     if (jobId) {
-  //       dispatch(updateJobEmbeddings(jobId));
-  //     }
-  //   }
-  // },[])
-
   // Fetch all the countries and account names
   useEffect(() => {
     dispatch(fetchJobForm(JOB_FORM_NAME));

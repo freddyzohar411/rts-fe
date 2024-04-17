@@ -110,33 +110,11 @@ const DynamicTableWrapper = ({
               <Row className="d-flex column-gap-1 mb-3">
                 <Col>
                   <div className="d-flex flex-row justify-content-between align-items-baseline">
-                    <div className="">
-                      {/* <span>Suitable Candidates </span>
-                      <span className="fw-semibold">
-                        ({candidatesData?.totalElements ?? 0})
-                      </span> */}
-                      {/* <SelectElement
-                        optionsData={[
-                          {
-                            label: "Recommendation",
-                            value: "Recommendation",
-                          },
-                          {
-                            label: "All",
-                            value: "All",
-                          },
-                        ]}
-                        setSelectedOptionData={
-                          fodODTableShowType?.setFODTableShowType
-                        }
-                        value={fodODTableShowType.fodTableShowType}
-                      /> */}
-                      {/* // Use a check box instead of Select element */}
+                    <div>
                       <div
                         className="d-flex gap-2 align-items-center"
                         style={{ fontSize: "0.9rem" }}
                       >
-                       
                         <Input
                           className="mt-0"
                           type="checkbox"
@@ -160,7 +138,7 @@ const DynamicTableWrapper = ({
                             }
                           }}
                         />
-                         <label className="form-check-label" htmlFor="checkbox">
+                        <label className="form-check-label" htmlFor="checkbox">
                           Recommend Candidates
                         </label>
                       </div>

@@ -289,7 +289,6 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
               ></span>
             )}
         </div>
-        {}
       </div>
     </>
   );

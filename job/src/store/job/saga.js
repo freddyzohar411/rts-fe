@@ -86,10 +86,8 @@ function* workCreateJob(action) {
     let jobResponse = null;
     if (payload?.id) {
       jobResponse = yield call(updateJob, payload?.id, payload);
-      // yield call(updateJobEmbedding, payload?.id);
     } else {
       jobResponse = yield call(createJob, payload);
-      // yield call(updateJobEmbedding, jobResponse?.data?.id);
     }
     yield put(createJobSuccess(jobResponse.data));
     if (!payload?.isDraft) {
