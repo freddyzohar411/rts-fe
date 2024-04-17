@@ -216,7 +216,6 @@ function* workCreateAccountCustomView(action) {
       payload
     );
     yield put(createAccountCustomViewSuccess(accountCustomViewResponse));
-    yield put(fetchAccountCustomView());
     toast.success("Account custom view created successfully!");
     navigate("/accounts");
   } catch (error) {
@@ -229,7 +228,7 @@ function* workCreateAccountCustomView(action) {
   }
 }
 
-// Select Job Custom View
+// Select Account Custom View
 function* workSelectAccountCustomView(action) {
   const { id } = action.payload;
   try {

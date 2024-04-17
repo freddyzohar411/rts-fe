@@ -19,7 +19,6 @@ import "./JobListing.scss";
 import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
-import { JOB_INITIAL_OPTIONS } from "./JobListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
 import {
   createJobFOD,
@@ -132,10 +131,9 @@ const JobListing = () => {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields:
-        DynamicTableHelper.generateSeachFieldArray(JOB_INITIAL_OPTIONS),
+      searchFields: [],
     },
-    JOB_INITIAL_OPTIONS,
+    [],
     customRenderList
   );
 
@@ -159,9 +157,11 @@ const JobListing = () => {
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
-    const request = { ...pageRequest, jobType: gridView };
-    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-  }, [pageRequest]);
+    if (pageRequest?.searchFields?.length > 0) {
+      const request = { ...pageRequest, jobType: gridView };
+      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+    }
+  }, [JSON.stringify(pageRequest), gridView]);
 
   useEffect(() => {
     if (hasPageRendered.current) {

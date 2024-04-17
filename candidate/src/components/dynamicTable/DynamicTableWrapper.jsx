@@ -7,10 +7,6 @@ import {
   Container,
   Input,
   Row,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
@@ -18,11 +14,9 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
-import DualListBox from "react-dual-listbox";
 import { CANDIDATE_INITIAL_OPTIONS } from "../../pages/CandidateListing/candidateListingConstants";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
-import { toast } from "react-toastify";
 import { DateHelper, DynamicTableHelper } from "@workspace/common";
 import { useSelector, useDispatch } from "react-redux";
 import {
