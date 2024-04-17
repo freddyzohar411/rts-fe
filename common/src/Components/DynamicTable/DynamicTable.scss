@@ -83,3 +83,31 @@ td {
   border-color: #e0e0e0;
   border-style: solid;
 }
+
+// th:last-child, td:last-child {
+//   position: sticky;
+//   right: 0;
+//   background-color: white; /* Ensures the cell background isn't transparent */
+//   z-index: 1000; /* Ensures the sticky column is above other content when scrolling horizontally */
+//   // Box shadow on the left
+//   box-shadow: -6px 0 2px -2px rgba(224, 56, 56, 0.1) !important;
+
+// }
+
+.sticky-right {
+  position: sticky;
+  right: 0;
+  background-color: white; /* Ensures the cell background isn't transparent */
+  z-index: 1000; /* Ensures the sticky column is above other content when scrolling horizontally */
+  // Box shadow on the left
+  box-shadow: -6px 0 2px -2px rgba(224, 56, 56, 0.1) !important;
+}
+
+.sticky-left {
+  position: sticky;
+  left: 0;
+  background-color: white; /* Ensures the cell background isn't transparent */
+  z-index: 1000; /* Ensures the sticky column is above other content when scrolling horizontally */
+  // Box shadow on the right
+  box-shadow: 6px 0 2px -2px rgba(224, 56, 56, 0.1) !important;
+}

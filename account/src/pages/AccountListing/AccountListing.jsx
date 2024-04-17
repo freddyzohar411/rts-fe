@@ -186,7 +186,7 @@ const AccountListing = () => {
         name: "action",
         sort: false,
         sortValue: "action",
-        sticky:true,
+        sticky: "right",
         render: (data) => (
           <div className="d-flex column-gap-2">
             <Link

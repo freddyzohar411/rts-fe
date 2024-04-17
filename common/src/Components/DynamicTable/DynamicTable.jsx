@@ -24,45 +24,77 @@ const DynamicTable = ({
   const endPage = (page + 1) * pageSize;
 
   // ========================================= Table Configuration ===========================
+  // Create style
+  const stickyRight = {
+    position: "sticky",
+    right: "0",
+    zIndex: "1",
+    backgroundColor: "#fff",
+    // boxShadow: "1px 0 5px rgba(0,0,0,0.1) !important",
+    border:"2px solid red !important"
+  };
+
+  const stickyLeft = {
+    position: "sticky",
+    left: "0",
+    zIndex: "1",
+    backgroundColor: "#fff",
+  };
   // Generate Header
-  const generateHeaderJSX = (config) => (
-    <>
-      {config.map((option) => {
-        if (option.sort === true) {
-          return (
-            <th
-              key={option.name}
-              scope="col"
-              className="cursor-pointer"
-              onClick={() => pageRequestSet.setSortAndDirection(option)}
-            >
-              {option.header} <i className="mdi mdi-sort-descending"></i>
-            </th>
-          );
-        } else {
-          return (
-            <th key={option.name} scope="col">
-              {option.header}
-            </th>
-          );
-        }
-      })}
-    </>
-  );
+  const generateHeaderJSX = (config) => {
+    return (
+      <>
+        {config.map((option) => {
+          if (option.sort === true) {
+            return (
+              <th
+                key={option.name}
+                scope="col"
+                className="cursor-pointer"
+                onClick={() => pageRequestSet.setSortAndDirection(option)}
+              >
+                {option.header} <i className="mdi mdi-sort-descending"></i>
+              </th>
+            );
+          } else {
+            return (
+              <th
+                key={option.name}
+                scope="col"
+                className={`${option?.sticky === "left" && "sticky-left" || option?.sticky === "right" && "sticky-right" || ""}`}
+                // style={
+                //   option?.sticky
+                //     ? option?.sticky === "left"
+                //       ? stickyLeft
+                //       : stickyRight
+                //     : null
+                // }
+              >
+                {option.header}
+              </th>
+            );
+          }
+        })}
+      </>
+    );
+  };
 
   // Generate Body
   const generateBodyJSX = (config, data) => {
     return data.map((rowData, i) => {
       const rowdata = config.map((option) => {
+        const combinedStyle = {
+          ...(option?.name === "action"
+            ? { overflow: "visible", maxWidth: "100%" }
+            : { maxWidth: "150px" }),
+          ...(option?.sticky
+            ? option.sticky === "left"
+              ? stickyLeft
+              : stickyRight
+            : {}),
+        };
         return (
-          <td
-            key={option.name}
-            style={
-              option?.name === "action"
-                ? { overflow: "visible", maxWidth: "100%" }
-                : { maxWidth: "150px" }
-            }
-          >
+          <td key={option.name} style={combinedStyle}>
             {option.render(rowData, i)}
           </td>
         );
@@ -79,10 +111,7 @@ const DynamicTable = ({
         className="table-responsive table-hover table-card mt-3 mb-1 table-custom"
         style={{ height: "470px" }}
       >
-        <Table
-          className="m-0 align-middle"
-          id="accountListingTable"
-        >
+        <Table className="m-0 align-middle" id="accountListingTable">
           <thead>
             <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
           </thead>
@@ -101,7 +130,6 @@ const DynamicTable = ({
               </tr>
             )}
           </tbody>
-         
         </Table>
       </div>
 
