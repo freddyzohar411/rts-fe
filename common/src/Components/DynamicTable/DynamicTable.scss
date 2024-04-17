@@ -32,12 +32,11 @@ tbody {
 }
 
 thead {
-  box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   background-color: #fff !important;
   position: sticky;
   top: 0;
   z-index: 1000 !important;
-  // border: 5px solid green !important;
 }
 
 // First tbody tr no border-top
@@ -47,7 +46,9 @@ tbody tr:first-child {
 
 tbody tr {
   background-color: #fff !important;
-  border: 1px solid #e0e0e0 !important;
+  border-width: 1px 0 1px 0 !important;
+  border-color: #e0e0e0 !important;
+  border-style: solid !important;
 }
 
 td {
@@ -75,20 +76,10 @@ td {
   border-top: none !important;
 }
 
-.table-bottom {
-  border-radius: 0 0 6px 6px; /* Bottom corners */
+.table-custom {
+  border-radius: 6px;
   background-color: #fff !important;
-  border-width: 0 1px 1px 1px;
+  border-width: 1px;
   border-color: #e0e0e0;
   border-style: solid;
-  height: 6px;
-}
-
-.table-top {
-  border-radius: 6px 6px 0 0; /* Top corners */
-  background-color: #fff !important;
-  border-width: 1px 1px 0 1px;
-  border-color: #e0e0e0;
-  border-style: solid;
-  height: 6px;
 }

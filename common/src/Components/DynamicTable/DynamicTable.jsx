@@ -76,16 +76,13 @@ const DynamicTable = ({
     <>
       {/* Table */}
       <div
-        className="table-responsive table-hover table-card mt-3 mb-1"
-        style={{ height: "400px" }}
+        className="table-responsive table-hover table-card mt-3 mb-1 table-custom"
+        style={{ height: "470px" }}
       >
-               <div className="table-top"></div>
         <Table
-          // className="table align-middle table-nowrap border-secondary align-middle table-custom"
-          className="m-0"
+          className="m-0 align-middle"
           id="accountListingTable"
         >
-          {/* <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}> */}
           <thead>
             <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
           </thead>
@@ -106,7 +103,6 @@ const DynamicTable = ({
           </tbody>
          
         </Table>
-        <div className="table-bottom"></div>
       </div>
 
       {/* Table Pagination */}
