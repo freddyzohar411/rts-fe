@@ -62,13 +62,6 @@ const DynamicTable = ({
                 key={option.name}
                 scope="col"
                 className={`${option?.sticky === "left" && "sticky-left" || option?.sticky === "right" && "sticky-right" || ""}`}
-                // style={
-                //   option?.sticky
-                //     ? option?.sticky === "left"
-                //       ? stickyLeft
-                //       : stickyRight
-                //     : null
-                // }
               >
                 {option.header}
               </th>
