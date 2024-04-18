@@ -82,7 +82,7 @@ const DynamicTable = ({
         const combinedStyle = {
           ...(option?.name === "action"
             ? { overflow: "visible", maxWidth: "100%" }
-            : { maxWidth: "150px" }),
+            : { maxWidth: "100px" }),
         };
         return (
           <td

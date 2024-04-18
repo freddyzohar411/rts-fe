@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Badge, Button, Input } from "reactstrap";
+import {
+  Badge,
+  Button,
+  Input,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
+} from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import {
   useTableHook,
@@ -20,6 +28,7 @@ import {
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
+import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
 
 const AccountListing = () => {
   const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
@@ -172,49 +181,95 @@ const AccountListing = () => {
         sortValue: "action",
         sticky: "right",
         render: (data) => (
-          <div className="d-flex column-gap-2">
-            <Link
-              to={`/accounts/${data.id}/edit`}
-              style={{ color: "black" }}
-              // state={{ form: 3 }}
-              state={{ view: true }}
-            >
-              <Button
-                type="button"
-                className="btn btn-custom-primary table-btn"
-              >
-                <i className="ri-eye-line"></i>
-              </Button>
-            </Link>
-            {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+          // <div className="d-flex column-gap-2">
+          //   <Link
+          //     to={`/accounts/${data.id}/edit`}
+          //     style={{ color: "black" }}
+          //     // state={{ form: 3 }}
+          //     state={{ view: true }}
+          //   >
+          //     <Button
+          //       type="button"
+          //       className="btn btn-custom-primary table-btn"
+          //     >
+          //       <i className="ri-eye-line"></i>
+          //     </Button>
+          //   </Link>
+          //   {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+          //     <Link
+          //       to={`/accounts/${data.id}/edit`}
+          //       style={{ color: "black" }}
+          //       state={{ view: false }}
+          //     >
+          //       <Button
+          //         type="button"
+          //         className="btn btn-custom-primary table-btn"
+          //       >
+          //         <i className="mdi mdi-pencil"></i>
+          //       </Button>
+          //     </Link>
+          //   )}
+          //   {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+          //     <Button
+          //       type="button"
+          //       className="btn btn-danger table-btn d-flex "
+          //       onClick={() => {
+          //         setDeleteId(data.id);
+          //         setIsDeleteModalOpen(true);
+          //       }}
+          //     >
+          //       <span>
+          //         <i className="mdi mdi-delete"></i>
+          //       </span>
+          //     </Button>
+          //   )}
+          // </div>
+          <ActionDropDown>
+            <DropdownItem>
               <Link
                 to={`/accounts/${data.id}/edit`}
                 style={{ color: "black" }}
-                state={{ view: false }}
+                // state={{ form: 3 }}
+                state={{ view: true }}
               >
-                <Button
-                  type="button"
-                  className="btn btn-custom-primary table-btn"
-                >
-                  <i className="mdi mdi-pencil"></i>
-                </Button>
+                <div className="d-flex  align-items-center gap-2">
+                  <i className="ri-eye-line"></i>
+                  <span>View</span>
+                </div>
               </Link>
-            )}
-            {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
-              <Button
-                type="button"
-                className="btn btn-danger table-btn d-flex "
-                onClick={() => {
-                  setDeleteId(data.id);
-                  setIsDeleteModalOpen(true);
-                }}
-              >
-                <span>
-                  <i className="mdi mdi-delete"></i>
+            </DropdownItem>
+            <DropdownItem>
+              {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+                <Link
+                  to={`/accounts/${data.id}/edit`}
+                  style={{ color: "black" }}
+                  state={{ view: false }}
+                >
+                  <div className="d-flex  align-items-center gap-2">
+                    <i className="mdi mdi-pencil"></i>
+                    <span>Edit</span>
+                  </div>
+                </Link>
+              )}
+            </DropdownItem>
+            <DropdownItem>
+              {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+                <span
+                  type="button"
+                  // className="table-btn d-flex "
+                  onClick={() => {
+                    setDeleteId(data.id);
+                    setIsDeleteModalOpen(true);
+                  }}
+                >
+                  <div className="d-flex  align-items-center gap-2">
+                    <i className="mdi mdi-delete"></i>
+                    <span>Delete</span>
+                  </div>
                 </span>
-              </Button>
-            )}
-          </div>
+              )}
+            </DropdownItem>
+          </ActionDropDown>
         ),
       },
     ];
