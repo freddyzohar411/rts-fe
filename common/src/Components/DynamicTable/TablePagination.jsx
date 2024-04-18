@@ -78,7 +78,10 @@ const TablePagination = ({
     }
 
     // Add the last page and ellipsis if needed
-    if (currentPage < totalPages - (pageWindow + 1)) {
+    if (
+      currentPage < totalPages - (pageWindow + 1) &&
+      upperLimit != totalPages - 1
+    ) {
       pages.push(
         <span
           key="right-ellipsis"
