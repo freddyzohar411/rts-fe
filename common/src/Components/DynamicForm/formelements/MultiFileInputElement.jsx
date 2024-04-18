@@ -189,6 +189,7 @@ const MultiFileInputElement = ({
     }
   };
 
+
   const handleDownloadURL = (id) => {
     const fileData = fileDatas.find((file) => file.id === id);
     const link = document.createElement("a");
@@ -436,6 +437,7 @@ const MultiFileInputElement = ({
                         if (!checkifFileExists()) {
                           setShowFiles(false);
                         }
+                        setFileDatas(fileDatas.filter((f, i) => i !== index));
                       }}
                     >
                       x

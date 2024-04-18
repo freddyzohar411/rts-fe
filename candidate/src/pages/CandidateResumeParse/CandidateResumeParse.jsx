@@ -134,10 +134,6 @@ const CandidateResumeParse = () => {
     // Set file object
     setFileObj(files);
 
-    // PDF
-    if (files) {
-      setFileUrlFunc(0, 1, files);
-    }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

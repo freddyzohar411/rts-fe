@@ -135,6 +135,7 @@ const TableElement = ({
       }
     });
 
+
     // Check for file and set entity info
     newFormFields.forEach((field) => {
       if (field.type === "file") {
@@ -171,6 +172,15 @@ const TableElement = ({
       });
     }
   };
+
+  function downloadBase64File(base64Data, fileName) {
+    const link = document.createElement("a");
+    link.href = `data:application/octet-stream;base64,${base64Data}`;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   return (
     <div className="table-responsive mb-3" style={{ maxHeight: "200px" }}>

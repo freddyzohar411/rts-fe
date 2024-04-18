@@ -10,6 +10,7 @@ import {
   fetchDraftJob,
   fetchJobForm,
   fetchJobFormSubmission,
+  updateJobEmbeddings
 } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import JobDocument from "./JobDocument";

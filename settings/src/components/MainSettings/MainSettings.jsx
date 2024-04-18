@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function MainSettings() {
   document.title = "Settings | RTS";
-  
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -22,7 +22,6 @@ function MainSettings() {
                 type="unstyled"
                 className="d-flex flex-column gap-3 ms-5 mt-4"
               >
-                
                 <li>
                   <Link className="text-dark" to="/settings/customisation">
                     Customise Form
@@ -59,19 +58,26 @@ function MainSettings() {
             </Card>
           </Col>
 
-          <Col md={3} hidden>
+          <Col md={3}>
             <Card className="d-flex flex-column" style={{ height: "500px" }}>
               <div className="text-center">
                 <i
                   className="ri-shape-line text-primary"
                   style={{ fontSize: "70px" }}
                 ></i>
-                <h6>Customisation</h6>
+                <h6>Initialization</h6>
               </div>
 
-              <Nav vertical pills className="mt-3 ms-4">
-                <span className="text-muted">Coming soon..</span>
-              </Nav>
+              <List
+                type="unstyled"
+                className="d-flex flex-column gap-3 ms-5 mt-4"
+              >
+                <li>
+                  <Link className="text-dark" to="/settings/initialize">
+                    Initialize Data
+                  </Link>
+                </li>
+              </List>
             </Card>
           </Col>
 

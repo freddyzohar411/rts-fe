@@ -12,6 +12,7 @@ import {
   ForgetPassword,
   ResetPassword,
   ForgetResetPassword,
+  LoginOTP
 } from "@workspace/login";
 
 // Account
@@ -57,6 +58,8 @@ import {
   UpdateRole,
   UpdateUser,
   MassImportUsers,
+  ImportUsers,
+  InitializeSettings,
 } from "@workspace/settings";
 
 // Form Builder
@@ -188,6 +191,11 @@ const authProtectedRoutes = [
     component: <GroupUpdate />,
   },
 
+  {
+    path: "/settings/initialize",
+    component: <InitializeSettings />,
+  },
+
   { path: "/settings/access/user/:userId", component: <UserDetails /> },
   { path: "/settings/access/user/user-creation", component: <CreateUser /> },
   { path: "/settings/access/user/update/:userId", component: <UpdateUser /> },
@@ -219,6 +227,7 @@ const publicRoutes = [
   { path: "/forget-reset-password", component: <ForgetResetPassword /> },
   { path: "/logout", component: <Logout /> },
   { path: "/forget-password", component: <ForgetPassword /> },
+  { path: "/login-otp", component: <LoginOTP /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };

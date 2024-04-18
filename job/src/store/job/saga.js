@@ -8,11 +8,13 @@ import {
   CREATE_JOB_DOCUMENTS,
   FETCH_JOB_DATA,
   FETCH_JOBS_FIELDS_ALL,
+  UPDATE_JOB_EMBEDDINGS,
   CLONE_JOB,
   CREATE_JOB_CUSTOM_VIEW,
   FETCH_JOB_CUSTOM_VIEW,
   SELECT_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW,
+
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -27,6 +29,8 @@ import {
   fetchJobDataFailure,
   fetchJobsFieldsAllSuccess,
   fetchJobsFieldsAllFailure,
+  updateJobEmbeddingsSuccess,
+  updateJobEmbeddingsFailure,
   cloneJobSuccess,
   cloneJobFailure,
   createJobCustomViewSuccess,
@@ -49,6 +53,7 @@ import {
   updateJob,
   getJobDataById,
   getJobsFieldsAll,
+  updateJobEmbedding,
   createJobCustomView,
   getJobCustomViews,
   selectJobCustomView,
@@ -89,6 +94,11 @@ function* workCreateJob(action) {
       toast.success(jobResponse?.message);
     }
     navigate("/jobs");
+    if (payload?.id) {
+      yield call(updateJobEmbedding, payload?.id);
+    } else {
+      yield call(updateJobEmbedding, jobResponse?.data?.id);
+    }
   } catch (error) {
     toast.error(error?.message);
     yield put(createJobFailure(error));
@@ -148,6 +158,15 @@ function* workFetchJobsFieldsAll(action) {
     yield put(fetchJobsFieldsAllSuccess(response.data));
   } catch (error) {
     yield put(fetchJobsFieldsAllFailure(error));
+  }
+}
+
+function* workUpdateJobEmbeddings(action) {
+  try {
+    const response = yield call(updateJobEmbedding, action.payload);
+  } catch (error) {
+    console.log("Error updating job embeddings: ", error);
+    yield put(updateJobEmbeddingsFailure(error));
   }
 }
 
@@ -211,6 +230,7 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(CREATE_JOB_DOCUMENTS, workCreateJobDocuments);
   yield takeEvery(FETCH_JOB_DATA, workFetchJobData);
   yield takeEvery(FETCH_JOBS_FIELDS_ALL, workFetchJobsFieldsAll);
+  yield takeEvery(UPDATE_JOB_EMBEDDINGS, workUpdateJobEmbeddings);
   yield takeEvery(CLONE_JOB, workCloneJob);
   yield takeEvery(CREATE_JOB_CUSTOM_VIEW, workCreateJobCustomView);
   yield takeEvery(FETCH_JOB_CUSTOM_VIEW, workFetchJobCustomViews);

@@ -151,6 +151,21 @@ export const parseResumeMulti = (data, config) =>
     config
   );
 
+export const updateCandidateEmbeddings = (id) =>
+  api.get(`${CANDIDATE_URL}${BASE_CANDIDATES}/create-embeddings/${id}`);
+
+export const getCandidateRecommendations = (data, signal) =>
+  api.create(
+    `${CANDIDATE_URL}${BASE_CANDIDATES}/listing/similarity-search`,
+    data,
+    { signal }
+  );
+
+export const getCandidateToJobMatchData = (candidateId, jobId) =>
+  api.get(
+    `${CANDIDATE_URL}${BASE_CANDIDATES}/match/candidates/${candidateId}/jobs/${jobId}`
+  );
+
 // Create Custom View
 export const createCandidateCustomView = (data) =>
   api.create(

@@ -125,6 +125,7 @@ const DynamicTable = ({
                 className="form-select border-secondary"
                 style={{ height: "34px", marginRight: "10px", width: "70px" }}
                 defaultValue="20"
+                value={pageInfo?.pageSize}
               >
                 <option value="5">5</option>
                 <option value="10">10</option>

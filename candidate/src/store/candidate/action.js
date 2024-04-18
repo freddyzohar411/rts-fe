@@ -37,6 +37,13 @@ import {
   IMPORT_CANDIDATE_MULTI_SUCCESS,
   IMPORT_CANDIDATE_MULTI_FAILURE,
   SET_PARSE_AND_IMPORT_LOADING,
+  UPDATE_CANIDATE_EMBEDDINGS,
+  UPDATE_CANIDATE_EMBEDDINGS_SUCCESS,
+  UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
+  CANDIDATE_RECOMMENDATION_LIST,
+  CANDIDATE_RECOMMENDATION_LIST_SUCCESS,
+  CANDIDATE_RECOMMENDATION_LIST_FAILURE,
+  RESET_CANDIDATE_RECOMMENDATION_LIST,
   CREATE_CANDIDATE_CUSTOM_VIEW,
   CREATE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
   CREATE_CANDIDATE_CUSTOM_VIEW_FAILURE,
@@ -48,7 +55,7 @@ import {
   SELECT_CANDIDATE_CUSTOM_VIEW_FAILURE,
   DELETE_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
-  DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -245,6 +252,42 @@ export const importCandidateMultiFailure = (error) => ({
 export const setParseAndImportLoading = (loading) => ({
   type: SET_PARSE_AND_IMPORT_LOADING,
   payload: loading,
+});
+
+// Update Candidate Embeddings
+export const updateCandidateEmbeddings = (candidateId) => ({
+  type: UPDATE_CANIDATE_EMBEDDINGS,
+  payload: candidateId,
+});
+
+export const updateCandidateEmbeddingsSuccess = (candidate) => ({
+  type: UPDATE_CANIDATE_EMBEDDINGS_SUCCESS,
+  payload: candidate,
+});
+
+export const updateCandidateEmbeddingsFailure = (error) => ({
+  type: UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
+  payload: error,
+});
+
+// Candidate Recommendation List
+export const candidateRecommendationList = (params, signal, type) => ({
+  type: CANDIDATE_RECOMMENDATION_LIST,
+  payload: { params, signal, type },
+});
+
+export const candidateRecommendationListSuccess = (candidates) => ({
+  type: CANDIDATE_RECOMMENDATION_LIST_SUCCESS,
+  payload: candidates,
+});
+
+export const candidateRecommendationListFailure = (error) => ({
+  type: CANDIDATE_RECOMMENDATION_LIST_FAILURE,
+  payload: error,
+});
+
+export const resetCandidateRecommendationList = () => ({
+  type: RESET_CANDIDATE_RECOMMENDATION_LIST,
 });
 
 // Create Candidate Custom View

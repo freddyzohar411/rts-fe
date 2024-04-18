@@ -15,7 +15,7 @@ import {
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
+import PulseLogo from "@workspace/common/src/assets/images/logo-pulse.png";
 import ParticlesAuth from "../../ParticlesAuth";
 import { initialValues, schema } from "./constants";
 import { encode } from "@workspace/common/src/helpers/string_helper";
@@ -80,7 +80,7 @@ const ForgetResetPassword = () => {
                   <div className="text-center mt-sm-4 text-white-50">
                     <div>
                       <Link to="/login" className="d-inline-block auth-logo">
-                        <img src={logo_big} alt="" height="80" />
+                        <img src={PulseLogo} alt="" height="130" />
                       </Link>
                     </div>
                     <p className="fs-5 fw-medium text-white">

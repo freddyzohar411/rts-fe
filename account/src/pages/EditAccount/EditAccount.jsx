@@ -167,7 +167,7 @@ const EditAccount = () => {
       }
     });
     return newForm;
-  }
+  };
 
   /**
    * Fetch form submission data if there is a draft account
@@ -411,8 +411,8 @@ const EditAccount = () => {
         );
       }
 
-       // Cancel add document and reset form
-       if (buttonName === "cancel" && !editData) {
+      // Cancel add document and reset form
+      if (buttonName === "cancel" && !editData) {
         resetForm([], "create");
         return;
       }
@@ -499,6 +499,7 @@ const EditAccount = () => {
         );
         return;
       }
+
       if (formSubmissionData != null) {
         const formData = {
           guidelines: newValues.guidelines,

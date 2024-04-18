@@ -11,6 +11,7 @@ import {
   putCandidate,
   putCandidateDraftStatus,
   resetMetaData,
+  updateCandidateEmbeddings
 } from "../../store/candidate/action";
 import {
   CandidateFormConstant,
@@ -857,6 +858,7 @@ const CreateCandidate = () => {
     if (createMetaData?.isSuccess) {
       dispatch(resetMetaData());
       if (step === 6) {
+        dispatch(updateCandidateEmbeddings(candidateId));
         navigate("/candidates");
         return;
       }

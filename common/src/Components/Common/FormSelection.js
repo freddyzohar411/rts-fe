@@ -18,8 +18,6 @@ const FormSelection = ({ name, ...props }) => {
     }),
   };
 
-  console.log("error?", props?.error);
-
   return (
     <div>
       {props?.label && (

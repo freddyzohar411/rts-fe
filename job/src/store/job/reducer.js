@@ -18,6 +18,9 @@ import {
   FETCH_JOBS_FIELDS_ALL,
   FETCH_JOBS_FIELDS_ALL_SUCCESS,
   FETCH_JOBS_FIELDS_ALL_FAILURE,
+  UPDATE_JOB_EMBEDDINGS,
+  UPDATE_JOB_EMBEDDINGS_SUCCESS,
+  UPDATE_JOB_EMBEDDINGS_FAILURE,
   CREATE_JOB_CUSTOM_VIEW,
   CREATE_JOB_CUSTOM_VIEW_SUCCESS,
   CREATE_JOB_CUSTOM_VIEW_FAILURE,
@@ -199,6 +202,26 @@ const JobReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
 
+    case UPDATE_JOB_EMBEDDINGS:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+
+    case UPDATE_JOB_EMBEDDINGS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case UPDATE_JOB_EMBEDDINGS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+
     // Create Job Custom View
     case CREATE_JOB_CUSTOM_VIEW:
       return {
@@ -206,6 +229,7 @@ const JobReducer = (state = initialState, action) => {
         loading: true,
         error: false,
       };
+
     case CREATE_JOB_CUSTOM_VIEW_SUCCESS:
       return {
         loading: false,
@@ -279,7 +303,6 @@ const JobReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
-
     default:
       return state;
   }

@@ -251,7 +251,6 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
                 x
               </span>
             )}
-
           {/* Backend File */}
           {formik?.values?.[field.name] &&
             !(formik?.values?.[field.name] instanceof File) &&

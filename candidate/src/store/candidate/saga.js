@@ -1,4 +1,10 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import {
+  call,
+  put,
+  takeEvery,
+  takeLatest,
+  cancelled,
+} from "redux-saga/effects";
 import { CandidateEntityConstant } from "../../constants/candidateConstant";
 
 import {
@@ -13,6 +19,8 @@ import {
   FETCH_CANDIDATES_FIELDS_ALL,
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_MULTI,
+  UPDATE_CANIDATE_EMBEDDINGS,
+  CANDIDATE_RECOMMENDATION_LIST,
   CREATE_CANDIDATE_CUSTOM_VIEW,
   FETCH_CANDIDATE_CUSTOM_VIEW,
   SELECT_CANDIDATE_CUSTOM_VIEW,
@@ -45,6 +53,10 @@ import {
   importCandidateMultiFailure,
   importCandidateMultiSuccess,
   setParseAndImportLoading,
+  updateCandidateEmbeddingsSuccess,
+  updateCandidateEmbeddingsFailure,
+  candidateRecommendationListSuccess,
+  candidateRecommendationListFailure,
   createCandidateCustomViewSuccess,
   createCandidateCustomViewFailure,
   fetchCandidateCustomViewSuccess,
@@ -66,6 +78,8 @@ import {
   getCandidateDataById,
   getCandidateFieldAll,
   createCandidateList,
+  updateCandidateEmbeddings,
+  getCandidateRecommendations,
   createCandidateCustomView,
   getCandidateCustomViews,
   selectCandidateCustomView,
@@ -415,7 +429,7 @@ function* workImportCandidate(action) {
         completeCandidateRegistration,
         parseInt(candidateId)
       );
-
+      yield call(updateCandidateEmbeddings, candidateId);
       yield put(importCandidateSuccess());
       // Check if navgate exist
       if (typeof navigate === "function") {
@@ -459,6 +473,31 @@ function* workImportCandidateMulti(action) {
     yield put(importCandidateFailure());
     yield put(importCandidateMultiFailure());
     yield put(setParseAndImportLoading(false));
+  }
+}
+
+// Update Candidate Embeddings
+function* workUpdateCandidateEmbeddings(action) {
+  try {
+    const response = yield call(updateCandidateEmbeddings, action.payload);
+  } catch (error) {
+    console.log("Error updating candidate embeddings", error);
+  }
+}
+
+// Candidate Recommendation List
+function* workCandidateRecommendationList(action) {
+  const { params, signal, type } = action.payload;
+  try {
+    let response = null;
+    if (type === "Recommendation") {
+      response = yield call(getCandidateRecommendations, params, signal);
+    } else {
+      response = yield call(getCandidates, params);
+    }
+    yield put(candidateRecommendationListSuccess(response.data));
+  } catch (error) {
+    yield put(candidateRecommendationListFailure(error));
   }
 }
 
@@ -534,6 +573,11 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATES_FIELDS_ALL, workFetchCandidatesFieldsAll);
   yield takeEvery(IMPORT_CANDIDATE, workImportCandidate);
   yield takeEvery(IMPORT_CANDIDATE_MULTI, workImportCandidateMulti);
+  yield takeEvery(UPDATE_CANIDATE_EMBEDDINGS, workUpdateCandidateEmbeddings);
+  yield takeEvery(
+    CANDIDATE_RECOMMENDATION_LIST,
+    workCandidateRecommendationList
+  );
   yield takeEvery(CREATE_CANDIDATE_CUSTOM_VIEW, workCreateCandidateCustomView);
   yield takeEvery(FETCH_CANDIDATE_CUSTOM_VIEW, workFetchCandidateCustomView);
   yield takeEvery(SELECT_CANDIDATE_CUSTOM_VIEW, workSelectCandidateCustomView);

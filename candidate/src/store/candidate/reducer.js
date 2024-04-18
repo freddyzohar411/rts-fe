@@ -30,8 +30,6 @@ import {
   FETCH_CANDIDATES_FIELDS_ALL,
   FETCH_CANDIDATES_FIELDS_ALL_SUCCESS,
   FETCH_CANDIDATES_FIELDS_ALL_FAILURE,
-  FETCH_CANDIDATES_ADMIN_SUCCESS,
-  FETCH_CANDIDATES_ADMIN_FAILURE,
   IMPORT_CANDIDATE,
   IMPORT_CANDIDATE_SUCCESS,
   IMPORT_CANDIDATE_FAILURE,
@@ -39,6 +37,13 @@ import {
   IMPORT_CANDIDATE_MULTI_SUCCESS,
   IMPORT_CANDIDATE_MULTI_FAILURE,
   SET_PARSE_AND_IMPORT_LOADING,
+  UPDATE_CANIDATE_EMBEDDINGS,
+  UPDATE_CANIDATE_EMBEDDINGS_SUCCESS,
+  UPDATE_CANIDATE_EMBEDDINGS_FAILURE,
+  CANDIDATE_RECOMMENDATION_LIST,
+  CANDIDATE_RECOMMENDATION_LIST_SUCCESS,
+  CANDIDATE_RECOMMENDATION_LIST_FAILURE,
+  RESET_CANDIDATE_RECOMMENDATION_LIST,
   CREATE_CANDIDATE_CUSTOM_VIEW,
   CREATE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
   CREATE_CANDIDATE_CUSTOM_VIEW_FAILURE,
@@ -75,6 +80,8 @@ const initialState = {
   importLoading: false,
   importMultiLoading: false,
   parseAndImportLoading: false,
+  candidatesRecommendation: [],
+  candidateRecommendationLoading: false,
   candidateCustomView: {},
   candidateCustomViews: [],
 };
@@ -322,6 +329,44 @@ const CandidateReducer = (state = initialState, action) => {
         ...state,
         parseAndImportLoading: action.payload,
       };
+
+    case UPDATE_CANIDATE_EMBEDDINGS:
+      return {
+        ...state,
+      };
+    case UPDATE_CANIDATE_EMBEDDINGS_SUCCESS:
+      return {
+        ...state,
+      };
+    case UPDATE_CANIDATE_EMBEDDINGS_FAILURE:
+      return {
+        ...state,
+      };
+    case CANDIDATE_RECOMMENDATION_LIST:
+      return {
+        ...state,
+        candidateRecommendationLoading: true,
+        error: false,
+      };
+    case CANDIDATE_RECOMMENDATION_LIST_SUCCESS:
+      return {
+        ...state,
+        candidateRecommendationLoading: false,
+        candidatesRecommendation: action.payload,
+      };
+    case CANDIDATE_RECOMMENDATION_LIST_FAILURE:
+      return {
+        ...state,
+        candidateRecommendationLoading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case RESET_CANDIDATE_RECOMMENDATION_LIST:
+      return {
+        ...state,
+        candidatesRecommendation: [],
+      };
+
     // Create Custom View
     case CREATE_CANDIDATE_CUSTOM_VIEW:
       return {
@@ -402,7 +447,6 @@ const CandidateReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
-
     default:
       return state;
   }

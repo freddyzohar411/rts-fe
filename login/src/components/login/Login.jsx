@@ -16,24 +16,36 @@ import { Link } from "react-router-dom";
 import { Field, Formik, Form } from "formik";
 import { initialValues, schema } from "./constants";
 import logo_big from "@workspace/common/src/assets/images/logo_big.svg";
+import PulseLogo from "@workspace/common/src/assets/images/logo-pulse.png";
 
 import { useDispatch } from "react-redux";
-import { loginUser } from "../../store/actions";
+import { useNavigate } from "react-router-dom";
+import { loginUser, login1FA } from "../../store/actions";
 import { withRouter } from "@workspace/common";
 import { useSelector } from "react-redux";
 
 const Login = (props) => {
   document.title = "Login | RTS";
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [passwordShow, setPasswordShow] = useState(false);
 
   const handleFormSubmit = async (values) => {
-    dispatch(loginUser(values, props.router.navigate));
+    const is2FAEnabled = process.env.REACT_APP_ENABLE_2FA;
+    if (is2FAEnabled === "true") {
+      dispatch(login1FA(values, navigate));
+    } else {
+      dispatch(loginUser(values, props.router.navigate));
+    }
   };
 
-  const loginMeta = useSelector((state) => state.Login.loginMeta);
+  let loginMeta = null;
+  if (process.env.REACT_APP_ENABLE_2FA === "true") {
+    loginMeta = useSelector((state) => state.Login.login1FAMeta);
+  } else {
+    loginMeta = useSelector((state) => state.Login.loginMeta);
+  }
 
   return (
     <Formik
@@ -52,7 +64,7 @@ const Login = (props) => {
                   <div className="text-center mt-sm-4 text-white-50">
                     <div>
                       <Link to="/login" className="d-inline-block auth-logo">
-                        <img src={logo_big} alt="" height="80" />
+                        <img src={PulseLogo} alt="" height="130" />
                       </Link>
                     </div>
                     <p className="fs-5 fw-medium text-white">

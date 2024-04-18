@@ -18,6 +18,9 @@ import {
   FETCH_JOBS_FIELDS_ALL,
   FETCH_JOBS_FIELDS_ALL_FAILURE,
   FETCH_JOBS_FIELDS_ALL_SUCCESS,
+  UPDATE_JOB_EMBEDDINGS,
+  UPDATE_JOB_EMBEDDINGS_FAILURE,
+  UPDATE_JOB_EMBEDDINGS_SUCCESS,
   CREATE_JOB_CUSTOM_VIEW,
   CREATE_JOB_CUSTOM_VIEW_SUCCESS,
   CREATE_JOB_CUSTOM_VIEW_FAILURE,
@@ -146,6 +149,22 @@ export const fetchJobsFieldsAllSuccess = (fields) => ({
 
 export const fetchJobsFieldsAllFailure = (error) => ({
   type: FETCH_JOBS_FIELDS_ALL_FAILURE,
+  payload: error,
+});
+
+
+export const updateJobEmbeddings = (jobId) => ({
+  type: UPDATE_JOB_EMBEDDINGS,
+  payload: jobId,
+});
+
+export const updateJobEmbeddingsSuccess = (job) => ({
+  type: UPDATE_JOB_EMBEDDINGS_SUCCESS,
+  payload: job,
+});
+
+export const updateJobEmbeddingsFailure = (error) => ({
+  type: UPDATE_JOB_EMBEDDINGS_FAILURE,
   payload: error,
 });
 

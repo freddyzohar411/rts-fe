@@ -76,7 +76,7 @@ const JobTagCanvas = ({ tagOffcanvas, setTagOffcanvas, selectedRowData }) => {
           </OffcanvasHeader>
           <OffcanvasBody>
             {/* Specific Data information */}
-            <FODTagTable selectedRowData={selectedRowData} />
+            <FODTagTable selectedRowData={selectedRowData} tagOffcanvas={tagOffcanvas}/>
           </OffcanvasBody>
         </Offcanvas>
       </Col>
