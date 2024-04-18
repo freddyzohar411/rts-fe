@@ -43,7 +43,7 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   confirmDelete,
   header,
-  activeRow
+  activeRow,
 }) => {
   // ================== Custom Render ==================
   const customRenderList = [
@@ -116,14 +116,31 @@ const DynamicTableWrapper = ({
     }
   }, [allAccountCustomViews, optGroup]);
 
+  const handleEportExcel = () => {
+    let exportData = null;
+    if (!activeRow) {
+      exportData = data;
+    } else if (activeRow?.length === 0) {
+      exportData = data;
+    } else {
+      exportData = data.filter((item) => activeRow.includes(item?.id));
+    }
+
+    DynamicTableHelper.handleExportExcel(
+      "Accounts",
+      exportData,
+      config.slice(2, -1),
+      customRenderList,
+      true
+    );
+  };
+
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
           <Row>
             <Col lg={12}>
-              {/* <Card className="m-3">
-                <CardBody> */}
               <div className="listjs-table">
                 <Row className="mb-2">
                   <Col>
@@ -221,15 +238,7 @@ const DynamicTableWrapper = ({
                         <Button
                           color="light"
                           className="btn-white bg-gradient border-2 border-light-grey fw-bold"
-                          onClick={() =>
-                            DynamicTableHelper.handleExportExcel(
-                              "Accounts",
-                              data,
-                              config.slice(2, -1),
-                              customRenderList,
-                              true
-                            )
-                          }
+                          onClick={handleEportExcel}
                           style={{ height: "40px" }}
                         >
                           <i className="ri-download-fill align-bottom fs-5"></i>
@@ -273,8 +282,6 @@ const DynamicTableWrapper = ({
                   activeRow={activeRow}
                 />
               </div>
-              {/* </CardBody>
-              </Card> */}
             </Col>
           </Row>
         </Container>

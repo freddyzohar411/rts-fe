@@ -90,7 +90,6 @@ const AccountListing = () => {
     setSearch,
     customConfig,
     setCustomConfigData,
-    setPage,
     setTableData,
     tableData,
     handleRowCheck,
