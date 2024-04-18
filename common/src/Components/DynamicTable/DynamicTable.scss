@@ -33,9 +33,12 @@ tbody {
 thead {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   background-color: #fff !important;
+  z-index: 1 !important;
+}
+
+.sticky-head {
   position: sticky;
   top: 0;
-  z-index: 1 !important;
 }
 
 // First tbody tr no border-top

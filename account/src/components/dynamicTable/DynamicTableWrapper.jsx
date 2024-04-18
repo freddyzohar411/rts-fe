@@ -43,7 +43,6 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   confirmDelete,
   header,
-  setPage,
 }) => {
   // ================== Custom Render ==================
   const customRenderList = [
@@ -269,7 +268,7 @@ const DynamicTableWrapper = ({
                   pageRequestSet={pageRequestSet}
                   pageInfo={pageInfo}
                   isLoading={accountsMeta?.isLoading}
-                  setPage={setPage}
+                  freezeHeader={true}
                 />
               </div>
               {/* </CardBody>

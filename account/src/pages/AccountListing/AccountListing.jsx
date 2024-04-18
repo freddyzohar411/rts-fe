@@ -283,7 +283,6 @@ const AccountListing = () => {
         optGroup={accountsFields}
         setCustomConfigData={setCustomConfigData}
         header="Accounts"
-        setPage={setPage}
       />
     </>
   );

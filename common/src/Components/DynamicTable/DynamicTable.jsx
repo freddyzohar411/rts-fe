@@ -19,15 +19,13 @@ const DynamicTable = ({
   pageInfo,
   pageRequestSet,
   isLoading = false,
-  setPage,
+  freezeHeader = false,
 }) => {
   const page = pageInfo?.currentPage;
   const totalElements = pageInfo?.totalElements;
   const totalPages = pageInfo?.totalPages;
   const pageSize = pageInfo?.pageSize;
   const endPage = (page + 1) * pageSize;
-
-  console.log("Page Info", pageInfo);
 
   // ========================================= Table Configuration ===========================
   // Generate Header
@@ -40,7 +38,7 @@ const DynamicTable = ({
               <th
                 key={option.name}
                 scope="col"
-                className="cursor-pointer"
+                className={`cursor-pointer`}
                 onClick={() => pageRequestSet.setSortAndDirection(option)}
               >
                 {option.header} <i className="mdi mdi-sort-descending"></i>
@@ -99,10 +97,10 @@ const DynamicTable = ({
       {/* Table */}
       <div
         className="table-responsive table-hover table-card mt-3 mb-1 table-custom"
-        style={{ height: "470px" }}
+        style={{ maxHeight: "470px" }}
       >
         <Table className="m-0 align-middle" id="accountListingTable">
-          <thead>
+          <thead className={`${freezeHeader ? "sticky-head" : ""}`}>
             <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
           </thead>
           <tbody className="list form-check-all">
@@ -128,7 +126,14 @@ const DynamicTable = ({
         <div className="d-flex flex-row justify-content-between align-items-baseline mt-2">
           <div className="d-flex align-items-center fs-6">
             <TableRowsPerPage pageRequestSet={pageRequestSet} />
-            <div style={{width:"2px", height:"20px", backgroundColor:"#adb5bd", marginRight:"15px"}}></div>
+            <div
+              style={{
+                width: "2px",
+                height: "20px",
+                backgroundColor: "#adb5bd",
+                marginRight: "15px",
+              }}
+            ></div>
             <TableItemDisplay pageInfo={pageInfo} />
           </div>
           <div className="d-flex flex-row justify-content-end align-items-baseline">
