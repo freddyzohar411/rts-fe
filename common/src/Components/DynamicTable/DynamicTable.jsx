@@ -42,7 +42,10 @@ const DynamicTable = ({
                 className={`cursor-pointer`}
                 onClick={() => pageRequestSet.setSortAndDirection(option)}
               >
-                {option.header} <i className="mdi mdi-sort-descending"></i>
+                <div className="d-flex gap-2">
+                  <span> {option.header}</span>
+                  <i className="mdi mdi-sort-descending align-self-end"></i>
+                </div>
               </th>
             );
           } else {
@@ -56,7 +59,10 @@ const DynamicTable = ({
                   ""
                 } sticky-color`}
               >
-                {option.header}
+                <div className="d-flex gap-2">
+                  <span> {option.header}</span>
+                  <i className="mdi mdi-sort-descending  align-self-end"></i>
+                </div>
               </th>
             );
           }
@@ -121,7 +127,9 @@ const DynamicTable = ({
         style={{ maxHeight: "470px" }}
       >
         <Table className="m-0 align-middle" id="accountListingTable">
-          <thead className={`${freezeHeader ? "sticky-head" : "non-sticky-head"}`}>
+          <thead
+            className={`${freezeHeader ? "sticky-head" : "non-sticky-head"}`}
+          >
             <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
           </thead>
           <tbody className="list form-check-all">

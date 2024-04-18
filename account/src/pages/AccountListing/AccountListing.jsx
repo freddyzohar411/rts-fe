@@ -181,49 +181,6 @@ const AccountListing = () => {
         sortValue: "action",
         sticky: "right",
         render: (data) => (
-          // <div className="d-flex column-gap-2">
-          //   <Link
-          //     to={`/accounts/${data.id}/edit`}
-          //     style={{ color: "black" }}
-          //     // state={{ form: 3 }}
-          //     state={{ view: true }}
-          //   >
-          //     <Button
-          //       type="button"
-          //       className="btn btn-custom-primary table-btn"
-          //     >
-          //       <i className="ri-eye-line"></i>
-          //     </Button>
-          //   </Link>
-          //   {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
-          //     <Link
-          //       to={`/accounts/${data.id}/edit`}
-          //       style={{ color: "black" }}
-          //       state={{ view: false }}
-          //     >
-          //       <Button
-          //         type="button"
-          //         className="btn btn-custom-primary table-btn"
-          //       >
-          //         <i className="mdi mdi-pencil"></i>
-          //       </Button>
-          //     </Link>
-          //   )}
-          //   {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
-          //     <Button
-          //       type="button"
-          //       className="btn btn-danger table-btn d-flex "
-          //       onClick={() => {
-          //         setDeleteId(data.id);
-          //         setIsDeleteModalOpen(true);
-          //       }}
-          //     >
-          //       <span>
-          //         <i className="mdi mdi-delete"></i>
-          //       </span>
-          //     </Button>
-          //   )}
-          // </div>
           <ActionDropDown>
             <DropdownItem>
               <Link
@@ -238,8 +195,8 @@ const AccountListing = () => {
                 </div>
               </Link>
             </DropdownItem>
-            <DropdownItem>
-              {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+            {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+              <DropdownItem>
                 <Link
                   to={`/accounts/${data.id}/edit`}
                   style={{ color: "black" }}
@@ -250,25 +207,24 @@ const AccountListing = () => {
                     <span>Edit</span>
                   </div>
                 </Link>
-              )}
-            </DropdownItem>
-            <DropdownItem>
-              {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+              </DropdownItem>
+            )}
+            {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+              <DropdownItem>
                 <span
                   type="button"
-                  // className="table-btn d-flex "
                   onClick={() => {
                     setDeleteId(data.id);
                     setIsDeleteModalOpen(true);
                   }}
                 >
-                  <div className="d-flex  align-items-center gap-2">
+                  <div className="d-flex align-items-center gap-2">
                     <i className="mdi mdi-delete"></i>
                     <span>Delete</span>
                   </div>
                 </span>
-              )}
-            </DropdownItem>
+              </DropdownItem>
+            )}
           </ActionDropDown>
         ),
       },
