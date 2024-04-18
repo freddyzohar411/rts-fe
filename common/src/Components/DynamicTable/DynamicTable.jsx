@@ -10,6 +10,8 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./DynamicTable.scss";
 import TablePagination from "./TablePagination";
+import TableRowsPerPage from "./TableRowsPerPage";
+import TableItemDisplay from "./TableItemDisplay";
 
 const DynamicTable = ({
   data,
@@ -123,62 +125,14 @@ const DynamicTable = ({
 
       {/* Table Pagination */}
       {data?.length > 0 && (
-        <div className="d-flex flex-row justify-content-between align-items-baseline">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: `Showing <b>${page * pageSize + 1}</b> - <b>${
-                endPage < totalElements ? endPage : totalElements
-              }</b> of <b>${totalElements}</b> results`,
-            }}
-          ></div>
+        <div className="d-flex flex-row justify-content-between align-items-baseline mt-2">
+          <div className="d-flex align-items-center fs-6">
+            <TableRowsPerPage pageRequestSet={pageRequestSet} />
+            <div style={{width:"2px", height:"20px", backgroundColor:"#adb5bd", marginRight:"15px"}}></div>
+            <TableItemDisplay pageInfo={pageInfo} />
+          </div>
           <div className="d-flex flex-row justify-content-end align-items-baseline">
-            <div style={{ marginRight: 10 }}>Rows per page:</div>
-            <div style={{ marginRight: 10 }}>
-              <Input
-                onChange={(e) =>
-                  pageRequestSet.setPageSize(parseInt(e.target.value))
-                }
-                type="select"
-                className="form-select border-secondary"
-                style={{ height: "34px", marginRight: "10px", width: "70px" }}
-                defaultValue="20"
-              >
-                <option value="2">2</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-              </Input>
-            </div>
-            <div
-              style={{ marginRight: 10 }}
-              dangerouslySetInnerHTML={{
-                __html: `Page <b>${page + 1}</b> of <b>${totalPages}</b>`,
-              }}
-            ></div>
-            <div>
-              <Pagination>
-                <PaginationItem
-                  disabled={pageInfo.currentPage === 0}
-                  onClick={pageRequestSet.setPreviousPage}
-                >
-                  <PaginationLink className={`${page === 0 ? "disabled" : ""}`}>
-                    Previous
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem
-                  disabled={pageInfo.currentPage === pageInfo.totalPages - 1}
-                  onClick={pageRequestSet.setNextPage}
-                >
-                  <PaginationLink
-                    className={`${page + 1 === totalPages ? "disabled" : ""}`}
-                  >
-                    Next
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
-            </div>
-            <TablePagination 
+            <TablePagination
               currentPage={page + 1}
               totalPages={pageInfo.totalPages}
               pageWindow={1}
