@@ -9,6 +9,7 @@ import {
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./DynamicTable.scss";
+import TablePagination from "./TablePagination";
 
 const DynamicTable = ({
   data,
@@ -16,12 +17,15 @@ const DynamicTable = ({
   pageInfo,
   pageRequestSet,
   isLoading = false,
+  setPage,
 }) => {
   const page = pageInfo?.currentPage;
   const totalElements = pageInfo?.totalElements;
   const totalPages = pageInfo?.totalPages;
   const pageSize = pageInfo?.pageSize;
   const endPage = (page + 1) * pageSize;
+
+  console.log("Page Info", pageInfo);
 
   // ========================================= Table Configuration ===========================
   // Generate Header
@@ -139,6 +143,7 @@ const DynamicTable = ({
                 style={{ height: "34px", marginRight: "10px", width: "70px" }}
                 defaultValue="20"
               >
+                <option value="2">2</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -173,6 +178,12 @@ const DynamicTable = ({
                 </PaginationItem>
               </Pagination>
             </div>
+            <TablePagination 
+              currentPage={page + 1}
+              totalPages={pageInfo.totalPages}
+              pageWindow={1}
+              setCurrentPage={pageRequestSet?.setPage}
+            />
           </div>
         </div>
       )}

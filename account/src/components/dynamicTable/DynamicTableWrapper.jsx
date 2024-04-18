@@ -43,6 +43,7 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   confirmDelete,
   header,
+  setPage,
 }) => {
   // ================== Custom Render ==================
   const customRenderList = [
@@ -139,7 +140,7 @@ const DynamicTableWrapper = ({
                             placeholder="Search"
                             className="form-control search"
                             value={search}
-                            style={{ width: "350px", height: "40px"}}
+                            style={{ width: "350px", height: "40px" }}
                             onChange={(e) => setSearch(e.target.value)}
                           />
                         </form>
@@ -162,7 +163,7 @@ const DynamicTableWrapper = ({
                             style={{
                               borderTopRightRadius: "0px",
                               borderBottomRightRadius: "0px",
-                              height:"40px"
+                              height: "40px",
                             }}
                           >
                             <i className="ri-settings-3-fill fs-5"></i>
@@ -253,7 +254,9 @@ const DynamicTableWrapper = ({
                             className="btn btn-custom-primary header-btn px-4"
                             style={{ height: "40px" }}
                           >
-                            <span className="fs-5 align-bottom">+ ADD ACCOUNT</span>
+                            <span className="fs-5 align-bottom">
+                              + ADD ACCOUNT
+                            </span>
                           </Button>
                         </Link>
                       )}
@@ -266,6 +269,7 @@ const DynamicTableWrapper = ({
                   pageRequestSet={pageRequestSet}
                   pageInfo={pageInfo}
                   isLoading={accountsMeta?.isLoading}
+                  setPage={setPage}
                 />
               </div>
               {/* </CardBody>

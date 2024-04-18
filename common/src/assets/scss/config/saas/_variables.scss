@@ -333,6 +333,7 @@ $theme-color-3:   #CCE0F4;
 $theme-color-4:   #7EABE7;
 $theme-color-5:   #BCD4F8;
 $theme-color-6:   #BDD6FB;
+
 // Next Button
 $theme-color-7:   #83A9E2;
 $theme-color-8:   #5D87C7;
@@ -347,6 +348,7 @@ $warning:       $yellow;
 $danger:        $red;
 $light:         $gray-100;
 $dark:          $gray-800;
+$white:         $white;
 
 // scss-docs-end theme-color-variables
 
@@ -365,7 +367,9 @@ $theme-colors: (
   "header":     $theme-color-6,
   "next-button": $theme-color-7,
   "next-button-border": $theme-color-8,
-  "next-button-hover": $theme-color-9
+  "next-button-hover": $theme-color-9,
+  "white":      $white,
+  "light-grey":       $gray-300
 );
 // scss-docs-end theme-colors-map
 
@@ -598,6 +602,16 @@ $border-radius-pill:          50rem;
 // fusv-disable
 $border-radius-2xl:           $border-radius-xxl; // Deprecated in v5.3.0
 // fusv-enable
+
+$radius-sizes: (
+  'custom-1': 12px,
+);
+
+@each $name, $size in $radius-sizes {
+  .rounded-#{$name} {
+    border-radius: $size;
+  }
+}
 
 // scss-docs-start box-shadow-variables
 $box-shadow:                  0 1px 2px rgba(56,65,74,0.15);

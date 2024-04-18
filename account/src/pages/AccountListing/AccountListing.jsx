@@ -110,6 +110,7 @@ const AccountListing = () => {
     setSearch,
     customConfig,
     setCustomConfigData,
+    setPage,
   } = useTableHook(
     {
       page: 0,
@@ -282,6 +283,7 @@ const AccountListing = () => {
         optGroup={accountsFields}
         setCustomConfigData={setCustomConfigData}
         header="Accounts"
+        setPage={setPage}
       />
     </>
   );
