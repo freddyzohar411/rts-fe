@@ -20,6 +20,7 @@ const DynamicTable = ({
   pageRequestSet,
   isLoading = false,
   freezeHeader = false,
+  activeRow,
 }) => {
   const page = pageInfo?.currentPage;
   const totalElements = pageInfo?.totalElements;
@@ -53,7 +54,7 @@ const DynamicTable = ({
                   (option?.sticky === "left" && "sticky-left") ||
                   (option?.sticky === "right" && "sticky-right") ||
                   ""
-                }`}
+                } sticky-color`}
               >
                 {option.header}
               </th>
@@ -67,6 +68,16 @@ const DynamicTable = ({
   // Generate Body
   const generateBodyJSX = (config, data) => {
     return data.map((rowData, i) => {
+      const isRowChecked = activeRow?.includes(rowData?.id);
+      const returnClass = (isSticky, isRowChecked) => {
+        if (isSticky && isRowChecked) {
+          return "sticky-color-checked";
+        } else if (isSticky) {
+          return "sticky-color";
+        } else {
+          return "";
+        }
+      };
       const rowdata = config.map((option) => {
         const combinedStyle = {
           ...(option?.name === "action"
@@ -81,13 +92,23 @@ const DynamicTable = ({
               (option?.sticky === "left" && "sticky-left") ||
               (option?.sticky === "right" && "sticky-right") ||
               ""
-            }`}
+            } ${returnClass(option?.sticky, isRowChecked)}`}
           >
             {option.render(rowData, i)}
           </td>
         );
       });
-      return <tr key={rowData.id}>{rowdata}</tr>;
+
+      return (
+        <tr
+          className={`${
+            activeRow?.includes(rowData?.id) ? "row-selected" : ""
+          }`}
+          key={rowData.id}
+        >
+          {rowdata}
+        </tr>
+      );
     });
   };
 
@@ -100,7 +121,7 @@ const DynamicTable = ({
         style={{ maxHeight: "470px" }}
       >
         <Table className="m-0 align-middle" id="accountListingTable">
-          <thead className={`${freezeHeader ? "sticky-head" : ""}`}>
+          <thead className={`${freezeHeader ? "sticky-head" : "non-sticky-head"}`}>
             <tr className="text-dark">{data && generateHeaderJSX(config)}</tr>
           </thead>
           <tbody className="list form-check-all">

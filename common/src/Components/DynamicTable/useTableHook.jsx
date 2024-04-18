@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DateHelper } from "@workspace/common";
 import {
   generateSeachFieldArray,
@@ -28,10 +28,39 @@ const useTableHook = (
   });
 
   const [search, setSearch] = useState("");
-
+  const [activeRow, setActiveRow] = useState([]);
+  const [tableData, setTableData] = useState([]);
   const [customConfig, setCustomConfig] = useState(
     generateConfig(initialConfig, customConfigList)
   );
+
+  // Active Row Logic
+  useEffect(() => {
+    setActiveRow([]);
+  }, [pageRequest]);
+
+  const handleRowCheck = (id, checked) => {
+    if (checked) {
+      setActiveRow([...activeRow, id]);
+    } else {
+      const updatedVal = activeRow?.filter((sid) => sid !== id);
+      setActiveRow(updatedVal);
+    }
+  };
+
+  const selectAllRows = (isChecked) => {
+    if (isChecked) {
+      if (tableData?.length > 0) {
+        const ids = [];
+        tableData.forEach((item) => {
+          ids.push(item?.id);
+        });
+        setActiveRow(ids);
+      }
+    } else {
+      setActiveRow([]);
+    }
+  };
 
   const setCustomConfigData = (selectedOptGroup) => {
     setCustomConfig(generateConfig(selectedOptGroup, customConfigList));
@@ -138,6 +167,11 @@ const useTableHook = (
     setSearch,
     customConfig,
     setCustomConfigData,
+    setTableData,
+    handleRowCheck,
+    selectAllRows,
+    activeRow,
+    tableData,
   };
 };
 

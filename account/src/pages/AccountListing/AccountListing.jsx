@@ -71,35 +71,6 @@ const AccountListing = () => {
     dispatch(fetchAccountCustomView());
   }, []);
 
-  // useEffect(() => {
-  //   if (accountCustomView && accountCustomView.length > 0) {
-  //     // Find the selected custom view
-  //     const selectedCustomView = accountCustomView?.find(
-  //       (customView) => customView?.selected
-  //     );
-  //     if (
-  //       selectedCustomView &&
-  //       Array.isArray(accountsFields) &&
-  //       accountsFields.length > 0
-  //     ) {
-  //       const selectedGroup = selectedCustomView?.columnName?.split(",");
-  //       const selectedObjects = selectedGroup?.map((value) => {
-  //         return accountsFields?.find((option) => option?.value === value);
-  //       });
-  //       if (selectedObjects.length > 0) {
-  //         setCustomConfigCV(selectedObjects);
-  //       }
-  //     } else {
-  //       setCustomConfigCV(ACCOUNT_INITIAL_OPTIONS);
-  //     }
-  //   }
-  // }, [accountCustomView, accountsFields]);
-
-  // console.log("Custom Config Cv", customConfigCV);
-  // console.log("Account Initial Options", ACCOUNT_INITIAL_OPTIONS);
-  // console.log("Search Fields, Dynamic Table Helper", DynamicTableHelper.generateSeachFieldArray(customConfigCV))
-  // console.log("Search Fields, Dynamic Table Helper", DynamicTableHelper.generateSeachFieldArray(ACCOUNT_INITIAL_OPTIONS))
-
   // Table Hooks
   const {
     pageRequest,
@@ -111,6 +82,11 @@ const AccountListing = () => {
     customConfig,
     setCustomConfigData,
     setPage,
+    setTableData,
+    tableData,
+    handleRowCheck,
+    selectAllRows,
+    activeRow,
   } = useTableHook(
     {
       page: 0,
@@ -125,6 +101,9 @@ const AccountListing = () => {
     ACCOUNT_INITIAL_OPTIONS,
     customRenderList
   );
+
+  console.log("Active Row", activeRow);
+  console.log("Table Data", tableData);
 
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
@@ -148,21 +127,25 @@ const AccountListing = () => {
               className="form-check-input"
               type="checkbox"
               id="checkbox"
-              value="option"
+              checked={
+                activeRow?.length > 0 && activeRow?.length === tableData?.length
+              }
+              onChange={(e) => selectAllRows(e?.target?.checked)}
             />
           </div>
         ),
         name: "checkbox",
         sort: false,
         sortValue: "checkbox",
-        render: () => {
+        render: (data) => {
           return (
             <div className="form-check">
               <Input
                 className="form-check-input"
                 type="checkbox"
                 name="chk_child"
-                value="option1"
+                checked={activeRow?.includes(parseInt(data?.id))}
+                onChange={(e) => handleRowCheck(data?.id, e.target.checked)}
               />
             </div>
           );
@@ -260,6 +243,7 @@ const AccountListing = () => {
   useEffect(() => {
     if (accountsData) {
       setPageInfoData(accountsData);
+      setTableData(accountsData?.accounts);
     }
   }, [accountsData]);
 
@@ -283,6 +267,7 @@ const AccountListing = () => {
         optGroup={accountsFields}
         setCustomConfigData={setCustomConfigData}
         header="Accounts"
+        activeRow={activeRow}
       />
     </>
   );

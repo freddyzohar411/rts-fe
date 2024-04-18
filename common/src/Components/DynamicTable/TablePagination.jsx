@@ -26,7 +26,7 @@ const TablePagination = ({
         1
       </Button>
     );
-    if (currentPage > pageWindow + 2) {
+    if (currentPage > pageWindow + 2 && totalPages > pageWindow + 3) {
       pages.push(
         <span
           key="left-ellipsis"
