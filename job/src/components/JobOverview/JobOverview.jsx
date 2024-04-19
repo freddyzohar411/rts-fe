@@ -17,6 +17,12 @@ import {
   PaginationLink,
   Tooltip,
   ButtonGroup,
+  Card,
+  CardBody,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -27,7 +33,7 @@ import {
   tagReset,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 import "./StepComponent.scss";
 import Skeleton from "react-loading-skeleton";
@@ -54,8 +60,11 @@ import {
   rtsStatusHeaders,
   steps,
   timelineSkip,
+  timelineSkipModule,
+  timelineSkipSubModule,
   timelineLegend,
   stepOrders,
+  newHeaders,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -69,10 +78,19 @@ import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
+import OverviewStepComponent from "./OverviewStepComponent";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
-
+  const [openJobIndex, setOpenJobIndex] = useState(null);
+  const toggleJobOpen = (index) => {
+    setOpenJobIndex(openJobIndex === index ? null : index);
+  };
+  // Next Step Dropdown States
+  const [selectedModule, setSelectedModule] = useState("");
+  const handleModuleChange = (e) => {
+    setSelectedModule(e.target.value);
+  };
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
@@ -624,11 +642,160 @@ const JobOverview = () => {
       ? tooltipIndexes?.[targetName]?.tooltipOpen
       : false;
   };
+  // Retrieve individual candidate data - job timeline
+  const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
+    return (
+      <React.Fragment>
+        {jobTimelineData?.jobs && jobTimelineData?.jobs?.length > 0 ? (
+          jobTimelineData?.jobs?.map((data, timelineIndex) => {
+            const candidateData = data?.candidate;
+            let maxOrder = getMaxOrder(data);
+            const status = getStatus(data, maxOrder);
+            maxOrder =
+              status !== JOB_STAGE_STATUS.REJECTED &&
+              status !== JOB_STAGE_STATUS.WITHDRAWN
+                ? maxOrder
+                : maxOrder - 1;
+            const isRejected =
+              status === JOB_STAGE_STATUS.REJECTED ||
+              status === JOB_STAGE_STATUS.WITHDRAWN;
+            const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
+            const originalOrder = maxOrder;
+            if (maxOrder >= 6 && maxOrder < 9) {
+              maxOrder = 5;
+            } else if (maxOrder === 9) {
+              maxOrder = status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
+            } else if (maxOrder >= 10 && maxOrder < 13) {
+              maxOrder = 9;
+            }
+            return (
+              <>
+                <tr className="cursor-pointer">
+                  {/* Candidate */}
+                  <td style={{ width: "160px" }}>
+                    <div className="d-flex flex-column align-items-start">
+                      <Link
+                        to={`/candidates/${candidateData.id}/snapshot`}
+                        className="fw-semibold"
+                        style={{ color: "#0A56AE" }}
+                      >
+                        <span>
+                          {candidateData?.firstName} {candidateData?.lastName}
+                        </span>
+                      </Link>
+
+                      <div className="d-flex flex-row justify-content-center align-items-center text-muted text-small">
+                        <i className="mdi mdi-account-circle-outline me-1"></i>
+                        <span>{data?.createdByName}</span>
+                      </div>
+                    </div>
+                  </td>
+                  {/* Progress Bar */}
+                  <td
+                    style={{ width: "300px" }}
+                    onClick={() => toggleJobOpen(data.id)}
+                  >
+                    <OverviewStepComponent />
+                  </td>
+                  {/* Current Status */}
+                  <td style={{ width: "5rem" }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
+                      <span>Profile</span>
+                      <i className="ri-arrow-right-s-line"></i>
+                      <span className="fw-semibold">Tagged</span>
+                    </div>
+                  </td>
+                  {/* Next Step */}
+                  <td style={{ width: "15rem" }}>
+                    <div className="d-flex flex-row gap-1">
+                      <Input
+                        type="select"
+                        className="form-select border-0"
+                        onChange={handleModuleChange}
+                        value={selectedModule}
+                      >
+                        <option value="">Select</option>
+                        {Object.keys(timelineSkipModule).map((item, index) => (
+                          <option key={index} value={timelineSkipModule[item]}>
+                            {item}
+                          </option>
+                        ))}
+                      </Input>
+
+                      <Input
+                        type="select"
+                        className="form-select border-0"
+                        disabled={!selectedModule}
+                      >
+                        <option value="">Select</option>
+                        {selectedModule &&
+                          timelineSkipSubModule[selectedModule]?.map(
+                            (item, index) => (
+                              <option key={index} value={item}>
+                                {item}
+                              </option>
+                            )
+                          )}
+                      </Input>
+                    </div>
+                  </td>
+                  {/* Save Button */}
+                  <td style={{ width: "50px" }}>
+                    <div>
+                      <div
+                        className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
+                        style={{ width: "30px", height: "30px" }}
+                      >
+                        <i
+                          className="mdi mdi-content-save-outline"
+                          style={{ color: "#0A56AE" }}
+                        ></i>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {openJobIndex === data.id && (
+                  <tr>
+                    <td colSpan={10}>
+                      {Object.keys(steps).map((step, index) => {
+                        return (
+                          <td key={index} className="px-0">
+                            {/* To replace with new timeline. */}
+                            {/* <StepComponent
+                              index={stepOrders[step]}
+                              maxOrder={maxOrder}
+                              isRejected={isRejected}
+                              isInProgress={isInProgress}
+                              data={data?.timeline?.[steps[step]]}
+                              candidateId={data?.candidate?.id}
+                              timeline={data?.timeline}
+                              originalOrder={originalOrder}
+                              step={step}
+                            /> */}
+                          </td>
+                        );
+                      })}
+                    </td>
+                  </tr>
+                )}
+              </>
+            );
+          })
+        ) : (
+          <tr>
+            <td colSpan={10} className="fw-semibold text-center">
+              No candidates tagged.
+            </td>
+          </tr>
+        )}
+      </React.Fragment>
+    );
+  };
 
   return (
     <React.Fragment>
-      <div>
-        <Row lg={12} className="m-1 p-0">
+      <div className="p-2">
+        <Row className="mb-2">
           {overviewHeaders.map((header, index) => {
             const mobile = isMobile | isTablet;
             const values = overviewValues(
@@ -643,8 +810,11 @@ const JobOverview = () => {
                   id={`btn-${index}`}
                   onClick={() => setHeaderTooltip(!headerTooltip)}
                 >
-                  <span className="fw-medium h6 text-muted">{header}</span>
-                  <span className="h5 fw-bold gap-1 text-nowrap">
+                  <span className="fw-medium text-muted">{header}</span>
+                  <span
+                    className="fw-semibold gap-1 text-nowrap"
+                    style={{ color: "#0A56AE" }}
+                  >
                     {values?.[header]?.trimValue}
                   </span>
                 </div>
@@ -660,15 +830,19 @@ const JobOverview = () => {
             );
           })}
         </Row>
-        <Row lg={12} className="m-0 p-0">
-          <TimelineHeader data={jobHeaders} />
+        <hr className="w-100"></hr>
+        <Row className="mb-2">
+          <Card style={{ backgroundColor: "#F3F8FF" }}>
+            <CardBody>
+              <TimelineHeader data={jobHeaders} />
+            </CardBody>
+          </Card>
         </Row>
-        <hr className="border border-dashed border-dark" />
-        <Row>
-          <Nav tabs>
+        <Row className="mb-2">
+          <Nav pills>
             <NavItem>
               <NavLink
-                className={`cursor-pointer ${
+                className={`cursor-pointer rounded-0 ${
                   timelineTab === "1" ? "active" : ""
                 }`}
                 onClick={() => setTimelineTab("1")}
@@ -678,7 +852,7 @@ const JobOverview = () => {
             </NavItem>
             <NavItem>
               <NavLink
-                className={`cursor-pointer ${
+                className={`cursor-pointer rounded-0 ${
                   timelineTab === "2" ? "active" : ""
                 }`}
                 onClick={() => setTimelineTab("2")}
@@ -688,63 +862,90 @@ const JobOverview = () => {
             </NavItem>
           </Nav>
         </Row>
-        <Row className="mb-2 mt-2">
-          <Col>
-            <div
-              className={`d-flex ${
-                isMobile
-                  ? "flex-column align-items-start"
-                  : "flex-row align-items-center"
-              } justify-content-between gap-1`}
-            >
-              <div className="d-flex flex-row gap-2 align-items-center">
-                <div className="search-box">
-                  <form onSubmit={pageRequestSet.setSearchTerm}>
-                    <Input
-                      type="text"
-                      placeholder="Search"
-                      className="form-control search"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </form>
-                  <i className="ri-search-eye-line search-icon"></i>
-                </div>
+        <Row className="mb-2">
+          <div
+            className={`d-flex ${
+              isMobile
+                ? "flex-column align-items-start"
+                : "flex-row align-items-center px-0"
+            } justify-content-between`}
+          >
+            <div className="d-flex flex-row gap-2 align-items-center">
+              <div className="search-box">
+                <form onSubmit={pageRequestSet.setSearchTerm}>
+                  <Input
+                    type="text"
+                    placeholder="Search"
+                    className="form-control search main-border-style"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </form>
                 <i
-                  id="legendInfo"
-                  className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
-                  onClick={() => setLegendTooltip(!legendTooltip)}
+                  className="ri-search-line fw-semibold search-icon"
+                  style={{ color: "#0A56AE" }}
                 ></i>
-                <Tooltip
-                  target="legendInfo"
-                  placement="bottom"
-                  isOpen={legendTooltip}
-                  toggle={() => setLegendTooltip(!legendTooltip)}
-                  className="legend-tooltip"
-                >
-                  {renderLegend()}
-                </Tooltip>
               </div>
-              <div className="d-flex flex-row gap-2 ">
-                <ButtonGroup>
-                  <Button color="light" className="bg-gradient border-dark">
-                    <i className="ri-filter-3-line align-bottom me-1"></i>Filter
-                  </Button>
-                  <Button color="light" className="bg-gradient border-dark">
-                    <i className="ri-download-fill align-bottom me-1"></i>
-                  </Button>
-                  <Button color="light" className="bg-gradient border-dark">
-                    <i className="ri-fullscreen-line align-bottom me-1"></i>
-                  </Button>
-                </ButtonGroup>
-              </div>
+              <i
+                id="legendInfo"
+                className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
+                onClick={() => setLegendTooltip(!legendTooltip)}
+              ></i>
+              <Tooltip
+                target="legendInfo"
+                placement="bottom"
+                isOpen={legendTooltip}
+                toggle={() => setLegendTooltip(!legendTooltip)}
+                className="legend-tooltip"
+              >
+                {renderLegend()}
+              </Tooltip>
             </div>
-          </Col>
+            <div className="d-flex flex-row gap-2 ">
+              <ButtonGroup>
+                <Button className="bg-white main-border-style">
+                  <i className="ri-filter-3-line align-bottom me-1"></i>Filter
+                </Button>
+                <Button className="bg-white main-border-style">
+                  <i className="ri-download-fill align-bottom me-1"></i>
+                </Button>
+                <Button className="bg-white main-border-style">
+                  <i className="ri-fullscreen-line align-bottom me-1"></i>
+                </Button>
+              </ButtonGroup>
+            </div>
+          </div>
         </Row>
         <Row>
           <TabContent activeTab={timelineTab} className="p-0">
             <TabPane tabId="1">
               <div className="overflow-auto">
+                <Table>
+                  <thead className="bg-white main-border-style">
+                    <tr>
+                      {newHeaders.map((header, index) => (
+                        <td key={index} className="main-border-style">
+                          {header.name} <i className={header.icon}></i>
+                        </td>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="main-border-style bg-white">
+                    {jobTimelineMeta?.isLoading ? (
+                      <tr className="border border-light">
+                        <td colSpan={newHeaders.length}>
+                          <Skeleton count="1" />
+                        </td>
+                      </tr>
+                    ) : (
+                      generateBodyJsx(jobTimelineMeta, jobTimelineData)
+                    )}
+                  </tbody>
+                </Table>
+              </div>
+
+              {/* Old Timeline Code: For Reference */}
+              {/* <div className="overflow-auto">
                 <Table
                   className="table table-striped align-middle jobtimeline"
                   style={{ tableLayout: "fixed", wordWrap: "break-word" }}
@@ -892,8 +1093,9 @@ const JobOverview = () => {
                     </tr>
                   )}
                 </Table>
-              </div>
+              </div> */}
             </TabPane>
+
             <TabPane tabId="2">
               <div>
                 <BSGTimeline />

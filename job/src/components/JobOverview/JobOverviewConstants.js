@@ -82,6 +82,14 @@ export const rtsStatusHeaders = [
   "Conditional Offer Accepted/Declined",
 ];
 
+export const newHeaders = [
+  { name: "Candidate & Recruiter", icon: "mdi mdi-sort-reverse-variant" },
+  { name: "Progress", icon: "" },
+  { name: "Current Status", icon: "" },
+  { name: "Next Step", icon: "" },
+  { name: "Actions", icon: "" },
+];
+
 export const timelineSkip = {
   Associate: 1,
   "Submit to Sales": 2,
@@ -91,6 +99,39 @@ export const timelineSkip = {
   Interviews: 9,
   "Conditional Offer": 13,
   "Conditional Offer Status": 14,
+};
+
+export const timelineSkipModule = {
+  Profile: 1,
+  Interviews: 2,
+  "Odin Protocol": 3,
+  "Conditional Offer": 4,
+};
+export const timelineSkipSubModule = {
+  1: [
+    "Tag",
+    "Untag",
+    "Associate",
+    "Submit To Sales",
+    "Submit To Client",
+    "Profile Feedback Pending",
+  ],
+  2: [
+    "Schedule First Interview",
+    "Schedule Second Interview",
+    "Schedule Third Interview",
+  ],
+  3: [
+    "Skills Assessment",
+    "Coding Test",
+    "Technical Interview",
+    "Cultural Fit Test",
+  ],
+  4: [
+    "Conditional Offer Sent",
+    "Conditional Offer Accepted",
+    "Conditional Offer Declined",
+  ],
 };
 
 export const timelineLegend = [
