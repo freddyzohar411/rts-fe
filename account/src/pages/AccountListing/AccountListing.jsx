@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Badge, Button, Input } from "reactstrap";
+import {
+  Badge,
+  Button,
+  Input,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
+} from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
-import { useTableHook } from "@workspace/common";
+import {
+  useTableHook,
+  DeleteCustomModal,
+  DynamicTableHelper,
+} from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
-import { DynamicTableHelper } from "@workspace/common";
 import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
-import { DeleteCustomModal } from "@workspace/common";
 import "./AccountListing.scss";
 import {
   deleteAccount,
   fetchAccounts,
   fetchAccountsFields,
+  fetchAccountsAdmin,
+  fetchAccountCustomView,
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
+import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
 
 const AccountListing = () => {
   const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
@@ -24,6 +37,13 @@ const AccountListing = () => {
   const accountsFields = useSelector(
     (state) => state.AccountReducer.accountsFields
   );
+  const accountCustomView = useSelector(
+    (state) => state?.AccountReducer?.accountCustomViews
+  );
+  const [customConfigCV, setCustomConfigCV] = useState([]);
+  
+  // Table state
+  const [tableConfig, setTableConfig] = useState([]);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -58,6 +78,11 @@ const AccountListing = () => {
     },
   ];
 
+  useEffect(() => {
+    dispatch(fetchAccountsFields());
+    dispatch(fetchAccountCustomView());
+  }, []);
+
   // Table Hooks
   const {
     pageRequest,
@@ -68,6 +93,11 @@ const AccountListing = () => {
     setSearch,
     customConfig,
     setCustomConfigData,
+    setTableData,
+    tableData,
+    handleRowCheck,
+    selectAllRows,
+    activeRow,
   } = useTableHook(
     {
       page: 0,
@@ -105,21 +135,25 @@ const AccountListing = () => {
               className="form-check-input"
               type="checkbox"
               id="checkbox"
-              value="option"
+              checked={
+                activeRow?.length > 0 && activeRow?.length === tableData?.length
+              }
+              onChange={(e) => selectAllRows(e?.target?.checked)}
             />
           </div>
         ),
         name: "checkbox",
         sort: false,
         sortValue: "checkbox",
-        render: () => {
+        render: (data) => {
           return (
             <div className="form-check">
               <Input
                 className="form-check-input"
                 type="checkbox"
                 name="chk_child"
-                value="option1"
+                checked={activeRow?.includes(parseInt(data?.id))}
+                onChange={(e) => handleRowCheck(data?.id, e.target.checked)}
               />
             </div>
           );
@@ -144,50 +178,53 @@ const AccountListing = () => {
         name: "action",
         sort: false,
         sortValue: "action",
+        sticky: "right",
+        expand: true,
         render: (data) => (
-          <div className="d-flex column-gap-2">
-            <Link
-              to={`/accounts/${data.id}/edit`}
-              style={{ color: "black" }}
-              // state={{ form: 3 }}
-              state={{ view: true }}
-            >
-              <Button
-                type="button"
-                className="btn btn-custom-primary table-btn"
-              >
-                <i className="ri-eye-line"></i>
-              </Button>
-            </Link>
-            {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+          <ActionDropDown>
+            <DropdownItem>
               <Link
                 to={`/accounts/${data.id}/edit`}
                 style={{ color: "black" }}
-                state={{ view: false }}
+                state={{ view: true }}
               >
-                <Button
-                  type="button"
-                  className="btn btn-custom-primary table-btn"
-                >
-                  <i className="mdi mdi-pencil"></i>
-                </Button>
+                <div className="d-flex  align-items-center gap-2">
+                  <i className="ri-eye-line"></i>
+                  <span>View</span>
+                </div>
               </Link>
+            </DropdownItem>
+            {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
+              <DropdownItem>
+                <Link
+                  to={`/accounts/${data.id}/edit`}
+                  style={{ color: "black" }}
+                  state={{ view: false }}
+                >
+                  <div className="d-flex  align-items-center gap-2">
+                    <i className="mdi mdi-pencil"></i>
+                    <span>Edit</span>
+                  </div>
+                </Link>
+              </DropdownItem>
             )}
             {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
-              <Button
-                type="button"
-                className="btn btn-danger table-btn d-flex "
-                onClick={() => {
-                  setDeleteId(data.id);
-                  setIsDeleteModalOpen(true);
-                }}
-              >
-                <span>
-                  <i className="mdi mdi-delete"></i>
+              <DropdownItem>
+                <span
+                  type="button"
+                  onClick={() => {
+                    setDeleteId(data.id);
+                    setIsDeleteModalOpen(true);
+                  }}
+                >
+                  <div className="d-flex align-items-center gap-2">
+                    <i className="mdi mdi-delete"></i>
+                    <span>Delete</span>
+                  </div>
                 </span>
-              </Button>
+              </DropdownItem>
             )}
-          </div>
+          </ActionDropDown>
         ),
       },
     ];
@@ -210,15 +247,19 @@ const AccountListing = () => {
     if (pageRequest?.searchFields?.length > 0) {
       dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
-  }, [pageRequest]);
+  }, [JSON.stringify(pageRequest)]);
 
   // Update the page info when account Data changes
   useEffect(() => {
     if (accountsData) {
       setPageInfoData(accountsData);
+      setTableData(accountsData?.accounts);
     }
   }, [accountsData]);
 
+  useEffect(() => {
+    setTableConfig(generateAccountConfig(customConfig));
+  }, [customConfig, pageInfo, activeRow, tableData]);
 
   return (
     <>
@@ -231,7 +272,7 @@ const AccountListing = () => {
       />
       <DynamicTableWrapper
         data={accountsData?.accounts}
-        config={generateAccountConfig(customConfig)}
+        config={tableConfig}
         pageInfo={pageInfo}
         pageRequest={pageRequest}
         pageRequestSet={pageRequestSet}
@@ -239,6 +280,9 @@ const AccountListing = () => {
         setSearch={setSearch}
         optGroup={accountsFields}
         setCustomConfigData={setCustomConfigData}
+        header="Accounts"
+        activeRow={activeRow}
+        setTableConfig={setTableConfig}
       />
     </>
   );

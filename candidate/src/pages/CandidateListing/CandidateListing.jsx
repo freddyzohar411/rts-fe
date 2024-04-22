@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Button, Input } from "reactstrap";
+import {
+  Button,
+  Input,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
+} from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import { useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
@@ -15,6 +22,7 @@ import {
   fetchCandidatesFields,
 } from "../../store/candidate/action";
 import { useUserAuth } from "@workspace/login";
+import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
 
 function CandidateListing() {
   const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
@@ -26,6 +34,9 @@ function CandidateListing() {
   const candidatesFields = useSelector(
     (state) => state.CandidateReducer.candidatesFields
   );
+
+    // Table state
+    // const [tableConfig, setTableConfig] = useState([]);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -42,32 +53,7 @@ function CandidateListing() {
     },
   ];
 
-  // Table Hooks
-  const {
-    pageRequest,
-    pageRequestSet,
-    pageInfo,
-    setPageInfoData,
-    search,
-    setSearch,
-    customConfig,
-    setCustomConfigData,
-  } = useTableHook(
-    {
-      page: 0,
-      pageSize: 20,
-      sortBy: null,
-      sortDirection: "asc",
-      searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(
-        CANDIDATE_INITIAL_OPTIONS
-      ),
-    },
-    CANDIDATE_INITIAL_OPTIONS,
-    customRenderList
-  );
-
-  //========================== User Setup ============================
+   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
   const generateCandidateConfig = (customConfig) => {
     return [
@@ -89,21 +75,25 @@ function CandidateListing() {
               className="form-check-input"
               type="checkbox"
               id="checkbox"
-              value="option"
+              checked={
+                activeRow?.length > 0 && activeRow?.length === tableData?.length
+              }
+              onChange={(e) => selectAllRows(e?.target?.checked)}
             />
           </div>
         ),
         name: "checkbox",
         sort: false,
         sortValue: "checkbox",
-        render: () => {
+        render: (data) => {
           return (
             <div className="form-check">
               <Input
                 className="form-check-input"
                 type="checkbox"
                 name="chk_child"
-                value="option1"
+                checked={activeRow?.includes(parseInt(data?.id))}
+                onChange={(e) => handleRowCheck(data?.id, e.target.checked)}
               />
             </div>
           );
@@ -128,55 +118,93 @@ function CandidateListing() {
         name: "action",
         sort: false,
         sortValue: "action",
+        sticky: "right",
+        expand: true,
         render: (data) => (
-          <div className="d-flex column-gap-2">
-            <Link
-              to={`/candidates/${data.id}/snapshot`}
-              style={{ color: "black" }}
-              state={{ view: true }}
-            >
-              <Button
-                type="button"
-                className="btn btn-custom-primary table-btn"
-              >
-                <i className="ri-eye-line"></i>
-              </Button>
-            </Link>
-            {/* {checkAllPermission([Permission.CANDIDATE_EDIT]) && data.createdByName === getName() && ( */}
-            {checkAllPermission([Permission.CANDIDATE_EDIT]) && (
+          <ActionDropDown>
+            <DropdownItem>
               <Link
                 to={`/candidates/${data.id}/snapshot`}
                 style={{ color: "black" }}
-                state={{ view: false }}
+                state={{ view: true }}
               >
-                <Button
-                  type="button"
-                  className="btn btn-custom-primary table-btn"
-                >
-                  <i className="mdi mdi-pencil"></i>
-                </Button>
+                <div className="d-flex  align-items-center gap-2">
+                  <i className="ri-eye-line"></i>
+                  <span>View</span>
+                </div>
               </Link>
+            </DropdownItem>
+            {checkAllPermission([Permission.CANDIDATE_EDIT]) && (
+              <DropdownItem>
+                <Link
+                  to={`/candidates/${data.id}/snapshot`}
+                  style={{ color: "black" }}
+                  state={{ view: false }}
+                >
+                  <div className="d-flex  align-items-center gap-2">
+                    <i className="mdi mdi-pencil"></i>
+                    <span>Edit</span>
+                  </div>
+                </Link>
+              </DropdownItem>
             )}
             {checkAllPermission([Permission.CANDIDATE_DELETE]) && (
-              <Button
-                type="button"
-                className="btn btn-danger table-btn"
-                onClick={() => {
-                  setDeleteId(data.id);
-                  setIsDeleteModalOpen(true);
-                }}
-              >
-                <span>
-                  <i className="mdi mdi-delete"></i>
+              <DropdownItem>
+                <span
+                  type="button"
+                  onClick={() => {
+                    setDeleteId(data.id);
+                    setIsDeleteModalOpen(true);
+                  }}
+                >
+                  <div className="d-flex align-items-center gap-2">
+                    <i className="mdi mdi-delete"></i>
+                    <span>Delete</span>
+                  </div>
                 </span>
-              </Button>
+              </DropdownItem>
             )}
-          </div>
+          </ActionDropDown>
         ),
       },
     ];
   };
   // ==================================================================
+
+  // Table Hooks
+  const {
+    pageRequest,
+    pageRequestSet,
+    pageInfo,
+    setPageInfoData,
+    search,
+    setSearch,
+    customConfig,
+    setCustomConfigData,
+    setTableData,
+    tableData,
+    handleRowCheck,
+    selectAllRows,
+    activeRow,
+    tableConfig,
+    setTableConfig
+  } = useTableHook(
+    {
+      page: 0,
+      pageSize: 20,
+      sortBy: null,
+      sortDirection: "asc",
+      searchTerm: null,
+      searchFields: DynamicTableHelper.generateSeachFieldArray(
+        CANDIDATE_INITIAL_OPTIONS
+      ),
+    },
+    CANDIDATE_INITIAL_OPTIONS,
+    customRenderList,
+    generateCandidateConfig
+  );
+
+ 
 
   // Modal Delete
   const confirmDelete = () => {
@@ -192,14 +220,19 @@ function CandidateListing() {
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
     dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
-  }, [pageRequest]);
+  }, [JSON.stringify(pageRequest)]);
 
   // Update the page info when candidate Data changes
   useEffect(() => {
     if (candidatesData) {
       setPageInfoData(candidatesData);
+      setTableData(candidatesData?.candidates);
     }
   }, [candidatesData]);
+
+  // useEffect(() => {
+  //   setTableConfig(generateCandidateConfig(customConfig));
+  // }, [customConfig, pageInfo, activeRow, tableData]);
 
   return (
     <>
@@ -212,7 +245,7 @@ function CandidateListing() {
       />
       <DynamicTableWrapper
         data={candidatesData.candidates}
-        config={generateCandidateConfig(customConfig)}
+        config={tableConfig}
         pageInfo={pageInfo}
         pageRequest={pageRequest}
         pageRequestSet={pageRequestSet}
@@ -220,6 +253,9 @@ function CandidateListing() {
         setSearch={setSearch}
         optGroup={candidatesFields}
         setCustomConfigData={setCustomConfigData}
+        header="Candidates"
+        activeRow={activeRow}
+        setTableConfig={setTableConfig}
       />
     </>
   );

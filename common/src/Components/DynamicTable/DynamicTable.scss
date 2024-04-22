@@ -1,11 +1,130 @@
-.table-card th {
+// .table-card th {
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+// }
+
+// .table-card td {
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+// }
+
+tr {
+  border: none !important;
+}
+
+td {
+  border: none !important;
+}
+
+thead {
+  border: none !important;
+}
+
+th {
+  border: none !important;
+}
+
+tbody {
+  border: none !important;
+}
+
+thead {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  background-color: #fff !important;
+  z-index: 1 !important;
+}
+
+.sticky-head {
+  position: sticky;
+  top: 0;
+}
+
+.non-sticky-head {
+  border-bottom: #e0e0e0 1px solid !important;
+}
+
+// First tbody tr no border-top
+tbody tr:first-child {
+  border-top: none !important;
+}
+
+tbody tr {
+  background-color: #fff !important;
+  border-width: 1px 0 1px 0 !important;
+  border-color: #e0e0e0 !important;
+  border-style: solid !important;
+}
+
+td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.table-card td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+// Table last row no border-bottom
+.table tr:last-child {
+  border-bottom: none !important;
+}
+
+// Tablebody first tr no border-top
+.table tbody tr:first-child {
+  border-top: none !important;
+}
+
+.table-custom {
+  border-radius: 6px;
+  background-color: #fff !important;
+  border-width: 1px;
+  border-color: #e0e0e0;
+  border-style: solid;
+}
+
+.sticky-right {
+  position: sticky;
+  right: 0;
+  // background-color: white !important; /* Ensures the cell background isn't transparent */
+  // border-bottom: 2px solid #e0e0e0 !important;
+}
+
+.sticky-color {
+  background-color: #fff !important;
+}
+
+.sticky-color-checked {
+  background-color: #daecfb !important;
+}
+
+.sticky-left {
+  position: sticky;
+  left: 0;
+  // background-color: white !important; /* Ensures the cell background isn't transparent */
+}
+
+.sticky-right::before {
+  content: "";
+  position: absolute;
+  left: 0px; /* Adjust this to position the shadow slightly to the left */
+  top: 0;
+  bottom: 0;
+  width: 8px; /* Width can be adjusted to control the spread of the shadow */
+  // box-shadow: -3px 0 5px -2px rgba(0, 0, 0, 0.3); /* Box shadow to mimic a border effect */
+  box-shadow: -3px 0 5px -2px rgba(0, 0, 0, 0.1); /* Box shadow to mimic a border effect */
+  z-index: 1;
+}
+
+.sticky-left::before {
+  content: "";
+  position: absolute;
+  right: 0px; /* Adjust this to position the shadow slightly to the right */
+  top: 0;
+  bottom: 0;
+  width: 6px; /* Width can be adjusted to control the spread of the shadow */
+  box-shadow: 3px 0 5px -2px rgba(0, 0, 0, 0.3); /* Box shadow to mimic a border effect */
+  z-index: 1;
+}
+
+.row-selected {
+  background-color: #daecfb !important;
 }

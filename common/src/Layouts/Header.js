@@ -1,6 +1,15 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Dropdown, DropdownMenu, DropdownToggle, Form } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  Dropdown,
+  DropdownMenu,
+  DropdownToggle,
+  Form,
+  Breadcrumb,
+  BreadcrumbItem,
+} from "reactstrap";
+
+import { routeData, moduleRouteData } from "../common/routeData";
 
 //import images
 import logoSm from "../assets/images/logo-sm.png";
@@ -21,12 +30,35 @@ import LightDark from "../Components/Common/LightDark";
 import { changeSidebarVisibility } from "../store/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
+import { useMemo } from "react";
 
 const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
   const [search, setSearch] = useState(false);
   const toogleSearch = () => {
     setSearch(!search);
   };
+
+  const location = useLocation();
+  const path = location.pathname;
+  const [breadCrumbData, setBreadcrumbData] = useState([]);
+
+  const pageData = (pathname) => {
+    const module = moduleRouteData.find((route) =>
+      pathname.startsWith(route.path)
+    );
+    const page = routeData.find((route) => {
+      const pattern = route.path.replace("/:id", "/\\d+");
+      return new RegExp(`^${pattern}$`).test(pathname);
+    });
+    return [module, page];
+  };
+
+  useEffect(() => {
+    if (path) {
+      const breadCrumb = pageData(path);
+      setBreadcrumbData(breadCrumb.filter((data) => data !== undefined));
+    }
+  }, [path]);
 
   const dispatch = useDispatch();
   const sidebarVisibilityData = createSelector(
@@ -86,16 +118,16 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
               <div className="navbar-brand-box horizontal-logo">
                 <Link to="/" className="logo logo-dark">
                   <span className="logo-sm">
-                    <img src={logoSm} alt="" height="22" />
+                    <img src={logoPulse} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
-                    <img src={logoDark} alt="" height="17" />
+                    <img src={logoPulse} alt="" height="17" />
                   </span>
                 </Link>
 
                 <Link to="/" className="logo logo-light">
                   <span className="logo-sm">
-                    <img src={logoSm} alt="" height="22" />
+                    <img src={logoPulse} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
                     <img src={logoPulse} alt="" height="50" />
@@ -115,9 +147,34 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                   <span></span>
                 </span>
               </button>
+
+              <Breadcrumb className="d-flex flex-row justify-content-center align-items-center pt-3 ps-3">
+                <BreadcrumbItem>
+                  <Link to="/">
+                    <i className="ri-home-3-line"></i>
+                  </Link>
+                </BreadcrumbItem>
+                {breadCrumbData &&
+                  breadCrumbData?.length > 0 &&
+                  breadCrumbData?.map((data, index) => (
+                    <BreadcrumbItem key={index}>
+                      <Link to={data.path}>
+                        <span
+                          className={
+                            index === 1 &&
+                            "bg-light py-1 px-2 rounded fw-semibold"
+                          }
+                        >
+                          {data.name}
+                        </span>
+                      </Link>
+                    </BreadcrumbItem>
+                  ))}
+              </Breadcrumb>
             </div>
 
             <div className="d-flex align-items-center">
+              <SearchOption />
               <Dropdown
                 isOpen={search}
                 toggle={toogleSearch}
