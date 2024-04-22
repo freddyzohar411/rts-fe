@@ -8,7 +8,8 @@ import {
 const useTableHook = (
   initialPageRequest = {},
   initialConfig = [],
-  customConfigList = []
+  customConfigList = [],
+  generateConfigFunc
 ) => {
   // Set state for page request
   const [pageRequest, setPageRequest] = useState({
@@ -33,6 +34,12 @@ const useTableHook = (
   const [customConfig, setCustomConfig] = useState(
     generateConfig(initialConfig, customConfigList)
   );
+
+  const [tableConfig, setTableConfig] = useState();
+
+  // useEffect(() => {
+  //   setTableConfig(generateConfigFunc(customConfig));
+  // }, [customConfig, pageInfo, activeRow, tableData]);
 
   // Active Row Logic
   useEffect(() => {
@@ -172,6 +179,8 @@ const useTableHook = (
     selectAllRows,
     activeRow,
     tableData,
+    tableConfig,
+    setTableConfig
   };
 };
 

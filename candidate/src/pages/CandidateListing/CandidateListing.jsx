@@ -36,7 +36,7 @@ function CandidateListing() {
   );
 
     // Table state
-    const [tableConfig, setTableConfig] = useState([]);
+    // const [tableConfig, setTableConfig] = useState([]);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -53,37 +53,7 @@ function CandidateListing() {
     },
   ];
 
-  // Table Hooks
-  const {
-    pageRequest,
-    pageRequestSet,
-    pageInfo,
-    setPageInfoData,
-    search,
-    setSearch,
-    customConfig,
-    setCustomConfigData,
-    setTableData,
-    tableData,
-    handleRowCheck,
-    selectAllRows,
-    activeRow,
-  } = useTableHook(
-    {
-      page: 0,
-      pageSize: 20,
-      sortBy: null,
-      sortDirection: "asc",
-      searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(
-        CANDIDATE_INITIAL_OPTIONS
-      ),
-    },
-    CANDIDATE_INITIAL_OPTIONS,
-    customRenderList
-  );
-
-  //========================== User Setup ============================
+   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
   const generateCandidateConfig = (customConfig) => {
     return [
@@ -201,6 +171,41 @@ function CandidateListing() {
   };
   // ==================================================================
 
+  // Table Hooks
+  const {
+    pageRequest,
+    pageRequestSet,
+    pageInfo,
+    setPageInfoData,
+    search,
+    setSearch,
+    customConfig,
+    setCustomConfigData,
+    setTableData,
+    tableData,
+    handleRowCheck,
+    selectAllRows,
+    activeRow,
+    tableConfig,
+    setTableConfig
+  } = useTableHook(
+    {
+      page: 0,
+      pageSize: 20,
+      sortBy: null,
+      sortDirection: "asc",
+      searchTerm: null,
+      searchFields: DynamicTableHelper.generateSeachFieldArray(
+        CANDIDATE_INITIAL_OPTIONS
+      ),
+    },
+    CANDIDATE_INITIAL_OPTIONS,
+    customRenderList,
+    generateCandidateConfig
+  );
+
+ 
+
   // Modal Delete
   const confirmDelete = () => {
     dispatch(deleteCandidate(deleteId));
@@ -225,9 +230,9 @@ function CandidateListing() {
     }
   }, [candidatesData]);
 
-  useEffect(() => {
-    setTableConfig(generateCandidateConfig(customConfig));
-  }, [customConfig, pageInfo, activeRow, tableData]);
+  // useEffect(() => {
+  //   setTableConfig(generateCandidateConfig(customConfig));
+  // }, [customConfig, pageInfo, activeRow, tableData]);
 
   return (
     <>
