@@ -21,6 +21,7 @@ const DynamicTable = ({
   isLoading = false,
   freezeHeader = false,
   activeRow,
+  setTableConfig,
 }) => {
   const page = pageInfo?.currentPage;
   const totalElements = pageInfo?.totalElements;
@@ -28,23 +29,44 @@ const DynamicTable = ({
   const pageSize = pageInfo?.pageSize;
   const endPage = (page + 1) * pageSize;
 
+  const toggleColumnExpand = (configIndex) => {
+    setTableConfig((prev) => {
+      return prev.map((item, prevIndex) => {
+        if (prevIndex === configIndex) {
+          if (item?.expand === true) {
+            return { ...item, expand: false };
+          } else if (item?.expand === false || item?.expand === undefined) {
+            return { ...item, expand: true };
+          }
+          return item;
+        }
+        return item;
+      });
+    });
+  };
+
   // ========================================= Table Configuration ===========================
   // Generate Header
   const generateHeaderJSX = (config) => {
     return (
       <>
-        {config.map((option) => {
+        {config.map((option, configIndex) => {
           if (option.sort === true) {
             return (
               <th
                 key={option.name}
                 scope="col"
-                className={`cursor-pointer`}
-                onClick={() => pageRequestSet.setSortAndDirection(option)}
+                // className={`cursor-pointer`}
+                onDoubleClick={() => {
+                  toggleColumnExpand(configIndex);
+                }}
               >
                 <div className="d-flex gap-2">
                   <span> {option.header}</span>
-                  <i className="mdi mdi-sort-descending align-self-end"></i>
+                  <i
+                    className="mdi mdi-sort-descending align-self-end cursor-pointer"
+                    onClick={() => pageRequestSet.setSortAndDirection(option)}
+                  ></i>
                 </div>
               </th>
             );
@@ -58,6 +80,9 @@ const DynamicTable = ({
                   (option?.sticky === "right" && "sticky-right") ||
                   ""
                 } sticky-color`}
+                onDoubleClick={() => {
+                  toggleColumnExpand(configIndex);
+                }}
               >
                 <div className="d-flex gap-2">
                   <span> {option.header}</span>
@@ -83,9 +108,15 @@ const DynamicTable = ({
           return "";
         }
       };
-      const rowdata = config.map((option) => {
+      const rowdata = config.map((option, configIndex) => {
+        // const combinedStyle = {
+        //   ...(option?.name === "action"
+        //     ? { overflow: "visible", maxWidth: "100%" }
+        //     : { maxWidth: "100px" }),
+        // };
+
         const combinedStyle = {
-          ...(option?.name === "action"
+          ...(option?.expand === true
             ? { overflow: "visible", maxWidth: "100%" }
             : { maxWidth: "100px" }),
         };
@@ -98,6 +129,9 @@ const DynamicTable = ({
               (option?.sticky === "right" && "sticky-right") ||
               ""
             } ${returnClass(option?.sticky, isRowChecked)}`}
+            onDoubleClick={() => {
+              toggleColumnExpand(configIndex);
+            }}
           >
             {option.render(rowData, i)}
           </td>
@@ -125,7 +159,11 @@ const DynamicTable = ({
         className="table-responsive table-hover table-card mt-3 mb-1 table-custom"
         style={{ maxHeight: "470px" }}
       >
-        <Table className="m-0 align-middle" id="accountListingTable">
+        <Table
+          className="m-0 align-middle"
+          id="accountListingTable"
+          style={{ tableLayout: "auto" }}
+        >
           <thead
             className={`${freezeHeader ? "sticky-head" : "non-sticky-head"}`}
           >

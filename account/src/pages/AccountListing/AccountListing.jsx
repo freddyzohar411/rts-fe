@@ -41,6 +41,7 @@ const AccountListing = () => {
     (state) => state?.AccountReducer?.accountCustomViews
   );
   const [customConfigCV, setCustomConfigCV] = useState([]);
+  const [tableConfig, setTableConfig] = useState([]);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -176,6 +177,7 @@ const AccountListing = () => {
         sort: false,
         sortValue: "action",
         sticky: "right",
+        expand: true,
         render: (data) => (
           <ActionDropDown>
             <DropdownItem>
@@ -254,6 +256,10 @@ const AccountListing = () => {
     }
   }, [accountsData]);
 
+  useEffect(() => {
+    setTableConfig(generateAccountConfig(customConfig));
+  }, [customConfig]);
+
   return (
     <>
       <DeleteCustomModal
@@ -265,7 +271,8 @@ const AccountListing = () => {
       />
       <DynamicTableWrapper
         data={accountsData?.accounts}
-        config={generateAccountConfig(customConfig)}
+        // config={generateAccountConfig(customConfig)}
+        config={tableConfig}
         pageInfo={pageInfo}
         pageRequest={pageRequest}
         pageRequestSet={pageRequestSet}
@@ -275,6 +282,7 @@ const AccountListing = () => {
         setCustomConfigData={setCustomConfigData}
         header="Accounts"
         activeRow={activeRow}
+        setTableConfig={setTableConfig}
       />
     </>
   );
