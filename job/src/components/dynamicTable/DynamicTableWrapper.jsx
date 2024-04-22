@@ -49,6 +49,8 @@ const DynamicTableWrapper = ({
   gridView,
   handleTableViewChange,
   operations,
+  header,
+  activeRow,
 }) => {
   // ================== Custom Render ==================
   const customRenderList = [
@@ -148,262 +150,251 @@ const DynamicTableWrapper = ({
         <Container fluid>
           <Row>
             <Col lg={12}>
-              <Card className="m-3">
-                <CardBody>
-                  <div className="listjs-table">
-                    <Row className="d-flex flex-row align-items-baseline column-gap-1 mb-3">
-                      <Col>
-                        <div className="d-flex justify-content-start align-items-center">
-                          {setSearch && (
-                            <div className="search-box">
-                              <form onSubmit={pageRequestSet.setSearchTerm}>
-                                <Input
-                                  type="text"
-                                  placeholder="Search"
-                                  className="form-control search bg-light border-light"
-                                  value={search}
-                                  style={{ width: "280px" }}
-                                  onChange={(e) => setSearch(e.target.value)}
-                                />
-                              </form>
-                              <i className="ri-search-line search-icon"></i>
-                            </div>
-                          )}
-                          <div className="select-width">
+              <div className="listjs-table">
+                <Row className="mb-2">
+                  <Col>
+                    <span className="fw-semibold fs-3">{header}</span>
+                  </Col>
+                </Row>
+                <Row className="d-flex flex-row align-items-baseline column-gap-1 mb-3">
+                  <Col>
+                    <div className="d-flex justify-content-start align-items-center">
+                      {setSearch && (
+                        <div className="search-box">
+                          <form onSubmit={pageRequestSet.setSearchTerm}>
                             <Input
-                              type="select"
-                              className="form-select border-secondary"
-                              onChange={handleTableViewChange}
-                              value={gridView}
-                            >
-                              {JOB_FILTERS?.map((ob, index) => {
-                                const key = Object.keys(ob);
-                                return (
-                                  <option key={index} value={key}>
-                                    {ob[key]}
-                                  </option>
-                                );
-                              })}
-                            </Input>
-                          </div>
+                              type="text"
+                              placeholder="Search"
+                              className="form-control search"
+                              value={search}
+                              style={{ width: "350px", height: "40px" }}
+                              onChange={(e) => setSearch(e.target.value)}
+                            />
+                          </form>
+                          <i className="ri-search-line search-icon"></i>
                         </div>
-                      </Col>
-                      <Col>
-                        <div className="d-flex column-gap-2 justify-content-end">
-                          {(gridView === "new_job" ||
-                            gridView === "active_jobs") &&
-                            checkAllPermission([Permission.JOB_EDIT]) && (
-                              <ButtonDropdown
-                                isOpen={massFODOpen}
-                                toggle={() => setMassFODOpen(!massFODOpen)}
-                              >
-                                <DropdownToggle
-                                  className="d-flex flex-row align-items-center gap-1 bg-custom-primary text-white"
-                                  caret
-                                >
-                                  <i className="bx bxs-user-account"></i>
-                                  <span>FOD</span>
-                                </DropdownToggle>
-                                <DropdownMenu
-                                  className="pt-3 px-3"
-                                  style={{ width: "200px" }}
-                                >
-                                  <Row className="mb-3">
-                                    <Col>
-                                      <div className="search-box">
-                                        <Input
-                                          type="text"
-                                          placeholder="Search.."
-                                          className="form-control form-control-sm"
-                                        />
-                                        <i className="bx bx-search search-icon"></i>
-                                      </div>
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col>
-                                      <ul className="ps-0 list-unstyled">
-                                        {namesData?.map((item, index) => (
-                                          <li key={index}>
-                                            <div
-                                              className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
-                                              onClick={() =>
-                                                toggleNested(index)
-                                              }
-                                            >
-                                              <span>{item.name}</span>
-                                              <span>
-                                                {nestedVisible[index]
-                                                  ? "-"
-                                                  : "+"}
-                                              </span>
-                                            </div>
-                                            {nestedVisible[index] && (
-                                              <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
-                                                <div className="ps-0 ms-0 w-100">
-                                                  <SimpleBar
-                                                    className="simplebar-hght"
-                                                    autoHide={false}
-                                                  >
-                                                    {item.subNames.map(
-                                                      (subName, subIndex) => {
-                                                        const split =
-                                                          subName?.split("@");
-                                                        return (
-                                                          <li
-                                                            key={subIndex}
-                                                            className="d-flex flew-row align-items-center justify-content-between me-3"
-                                                          >
-                                                            {truncate(
-                                                              split[1],
-                                                              16
-                                                            )}
-
-                                                            <Label
-                                                              check
-                                                              className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
-                                                            >
-                                                              <Input
-                                                                type="checkbox"
-                                                                checked={operations?.selectedRecruiter?.includes(
-                                                                  parseInt(
-                                                                    split[0]
-                                                                  )
-                                                                )}
-                                                                onChange={(e) =>
-                                                                  operations?.handleFODCheck(
-                                                                    parseInt(
-                                                                      split[0]
-                                                                    ),
-                                                                    e.target
-                                                                      .checked
-                                                                  )
-                                                                }
-                                                              />
-                                                            </Label>
-                                                          </li>
-                                                        );
-                                                      }
-                                                    )}
-                                                  </SimpleBar>
-                                                </div>
-                                              </ul>
-                                            )}
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col className="d-flex justify-content-end">
-                                      <Button
-                                        type="submit"
-                                        className="btn btn-custom-primary btn-sm px-3"
-                                        onClick={() => {
-                                          operations?.handleFODAssign();
-                                          setMassFODOpen(!massFODOpen);
-                                          operations?.setActiveJob([]);
-                                          operations?.setSelectedRecruiter([]);
-                                        }}
-                                      >
-                                        Assign
-                                      </Button>
-                                    </Col>
-                                  </Row>
-                                </DropdownMenu>
-                              </ButtonDropdown>
-                            )}
-                          <Button
-                            type="button"
-                            className="btn btn-custom-primary d-flex align-items-center header-btn"
-                            onClick={() =>
-                              DynamicTableHelper.handleExportExcel(
-                                "Jobs",
-                                data,
-                                config.slice(2, -1),
-                                customRenderList,
-                                true
-                              )
-                            }
-                          >
-                            <span>
-                              <i className="mdi mdi-download me-1"></i>
-                            </span>
-                            Export
-                          </Button>
-                          <Dropdown
-                            isOpen={customViewDropdownOpen}
-                            toggle={() =>
-                              setCustomViewDropdownOpen(!customViewDropdownOpen)
-                            }
+                      )}
+                      <div className="select-width">
+                        <Input
+                          type="select"
+                          className="form-select border-secondary"
+                          onChange={handleTableViewChange}
+                          value={gridView}
+                        >
+                          {JOB_FILTERS?.map((ob, index) => {
+                            const key = Object.keys(ob);
+                            return (
+                              <option key={index} value={key}>
+                                {ob[key]}
+                              </option>
+                            );
+                          })}
+                        </Input>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className="d-flex column-gap-2 justify-content-end">
+                      {(gridView === "new_job" || gridView === "active_jobs") &&
+                        checkAllPermission([Permission.JOB_EDIT]) && (
+                          <ButtonDropdown
+                            isOpen={massFODOpen}
+                            toggle={() => setMassFODOpen(!massFODOpen)}
                           >
                             <DropdownToggle
+                              className="d-flex flex-row align-items-center gap-1 bg-custom-primary text-white"
                               caret
-                              className="btn btn-custom-primary py-2"
                             >
-                              <i className="ri-settings-3-fill me-2"></i>
-                              <span>Custom View</span>
+                              <i className="bx bxs-user-account"></i>
+                              <span>FOD</span>
                             </DropdownToggle>
-                            <DropdownMenu>
-                              <Link to="/jobs/custom-view">
-                                <DropdownItem>Create Custom View</DropdownItem>
-                              </Link>
-                              <DropdownItem divider />
-                              <DropdownItem header>
-                                My Custom Views
-                              </DropdownItem>
-                              {allJobCustomView &&
-                              allJobCustomView.length > 0 ? (
-                                allJobCustomView.map((customView, index) => (
-                                  <div className="d-flex flex-row gap-1 me-3 mb-1">
-                                    <DropdownItem
-                                      onClick={() => {
-                                        handleSelectCustomView(customView?.id);
-                                      }}
-                                      key={index}
-                                    >
-                                      <div className="d-flex flex-row justify-content-between">
-                                        <span className="me-2">
-                                          {customView?.name}
-                                        </span>
-                                        {customView?.selected && (
-                                          <span>
-                                            <i className="ri-check-fill"></i>
-                                          </span>
-                                        )}
-                                      </div>
-                                    </DropdownItem>
-                                    <Button
-                                      className="btn btn-sm btn-danger"
-                                      onClick={() =>
-                                        handleDeleteButtonClick(customView?.id)
-                                      }
-                                    >
-                                      <i className="mdi mdi-delete"></i>
-                                    </Button>
+                            <DropdownMenu
+                              className="pt-3 px-3"
+                              style={{ width: "200px" }}
+                            >
+                              <Row className="mb-3">
+                                <Col>
+                                  <div className="search-box">
+                                    <Input
+                                      type="text"
+                                      placeholder="Search.."
+                                      className="form-control form-control-sm"
+                                    />
+                                    <i className="bx bx-search search-icon"></i>
                                   </div>
-                                ))
-                              ) : (
-                                <>
-                                  <DropdownItem text>
-                                    No custom view created yet!
-                                  </DropdownItem>
-                                </>
-                              )}
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col>
+                                  <ul className="ps-0 list-unstyled">
+                                    {namesData?.map((item, index) => (
+                                      <li key={index}>
+                                        <div
+                                          className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
+                                          onClick={() => toggleNested(index)}
+                                        >
+                                          <span>{item.name}</span>
+                                          <span>
+                                            {nestedVisible[index] ? "-" : "+"}
+                                          </span>
+                                        </div>
+                                        {nestedVisible[index] && (
+                                          <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+                                            <div className="ps-0 ms-0 w-100">
+                                              <SimpleBar
+                                                className="simplebar-hght"
+                                                autoHide={false}
+                                              >
+                                                {item.subNames.map(
+                                                  (subName, subIndex) => {
+                                                    const split =
+                                                      subName?.split("@");
+                                                    return (
+                                                      <li
+                                                        key={subIndex}
+                                                        className="d-flex flew-row align-items-center justify-content-between me-3"
+                                                      >
+                                                        {truncate(split[1], 16)}
+
+                                                        <Label
+                                                          check
+                                                          className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                                        >
+                                                          <Input
+                                                            type="checkbox"
+                                                            checked={operations?.selectedRecruiter?.includes(
+                                                              parseInt(split[0])
+                                                            )}
+                                                            onChange={(e) =>
+                                                              operations?.handleFODCheck(
+                                                                parseInt(
+                                                                  split[0]
+                                                                ),
+                                                                e.target.checked
+                                                              )
+                                                            }
+                                                          />
+                                                        </Label>
+                                                      </li>
+                                                    );
+                                                  }
+                                                )}
+                                              </SimpleBar>
+                                            </div>
+                                          </ul>
+                                        )}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className="d-flex justify-content-end">
+                                  <Button
+                                    type="submit"
+                                    className="btn btn-custom-primary btn-sm px-3"
+                                    onClick={() => {
+                                      operations?.handleFODAssign();
+                                      setMassFODOpen(!massFODOpen);
+                                      operations?.setActiveJob([]);
+                                      operations?.setSelectedRecruiter([]);
+                                    }}
+                                  >
+                                    Assign
+                                  </Button>
+                                </Col>
+                              </Row>
                             </DropdownMenu>
-                          </Dropdown>
-                          <DeleteCustomModal
-                            isOpen={deleteModalOpen}
-                            setIsOpen={setDeleteModalOpen}
-                            confirmDelete={() =>
-                              handleDeleteCustomView(deletingCustomViewId)
-                            }
-                            header="Delete Custom View Confirmation"
-                            deleteText={`Are you sure you want to delete this custom view?`}
-                            confirmButtonText="Delete"
-                            isLoading={false}
-                          />
-                          {/* <Button
+                          </ButtonDropdown>
+                        )}
+                      <Button
+                        type="button"
+                        className="btn btn-custom-primary d-flex align-items-center header-btn"
+                        onClick={() =>
+                          DynamicTableHelper.handleExportExcel(
+                            "Jobs",
+                            data,
+                            config.slice(2, -1),
+                            customRenderList,
+                            true
+                          )
+                        }
+                      >
+                        <span>
+                          <i className="mdi mdi-download me-1"></i>
+                        </span>
+                        Export
+                      </Button>
+                      <Dropdown
+                        isOpen={customViewDropdownOpen}
+                        toggle={() =>
+                          setCustomViewDropdownOpen(!customViewDropdownOpen)
+                        }
+                      >
+                        <DropdownToggle
+                          caret
+                          className="btn btn-custom-primary py-2"
+                        >
+                          <i className="ri-settings-3-fill me-2"></i>
+                          <span>Custom View</span>
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <Link to="/jobs/custom-view">
+                            <DropdownItem>Create Custom View</DropdownItem>
+                          </Link>
+                          <DropdownItem divider />
+                          <DropdownItem header>My Custom Views</DropdownItem>
+                          {allJobCustomView && allJobCustomView.length > 0 ? (
+                            allJobCustomView.map((customView, index) => (
+                              <div className="d-flex flex-row gap-1 me-3 mb-1">
+                                <DropdownItem
+                                  onClick={() => {
+                                    handleSelectCustomView(customView?.id);
+                                  }}
+                                  key={index}
+                                >
+                                  <div className="d-flex flex-row justify-content-between">
+                                    <span className="me-2">
+                                      {customView?.name}
+                                    </span>
+                                    {customView?.selected && (
+                                      <span>
+                                        <i className="ri-check-fill"></i>
+                                      </span>
+                                    )}
+                                  </div>
+                                </DropdownItem>
+                                <Button
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() =>
+                                    handleDeleteButtonClick(customView?.id)
+                                  }
+                                >
+                                  <i className="mdi mdi-delete"></i>
+                                </Button>
+                              </div>
+                            ))
+                          ) : (
+                            <>
+                              <DropdownItem text>
+                                No custom view created yet!
+                              </DropdownItem>
+                            </>
+                          )}
+                        </DropdownMenu>
+                      </Dropdown>
+                      <DeleteCustomModal
+                        isOpen={deleteModalOpen}
+                        setIsOpen={setDeleteModalOpen}
+                        confirmDelete={() =>
+                          handleDeleteCustomView(deletingCustomViewId)
+                        }
+                        header="Delete Custom View Confirmation"
+                        deleteText={`Are you sure you want to delete this custom view?`}
+                        confirmButtonText="Delete"
+                        isLoading={false}
+                      />
+                      {/* <Button
                             type="button"
                             onClick={() => {
                               if (areOptionsEmpty()) {
@@ -423,32 +414,32 @@ const DynamicTableWrapper = ({
                             Custom View
                           </Button> */}
 
-                          {checkAllPermission([Permission.JOB_WRITE]) && (
-                            <Link
-                              to="/jobs/job-creation"
-                              style={{ color: "black" }}
-                            >
-                              <Button
-                                type="button"
-                                className="btn btn-custom-primary header-btn d-flex align-items-center"
-                              >
-                                Create Job Openings
-                              </Button>
-                            </Link>
-                          )}
-                        </div>
-                      </Col>
-                    </Row>
-                    <DynamicTable
-                      config={config}
-                      data={data}
-                      pageRequestSet={pageRequestSet}
-                      pageInfo={pageInfo}
-                      isLoading={jobsMeta?.isLoading}
-                    />
-                  </div>
-                </CardBody>
-              </Card>
+                      {checkAllPermission([Permission.JOB_WRITE]) && (
+                        <Link
+                          to="/jobs/job-creation"
+                          style={{ color: "black" }}
+                        >
+                          <Button
+                            type="button"
+                            className="btn btn-custom-primary header-btn d-flex align-items-center"
+                          >
+                            Create Job Openings
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
+                <DynamicTable
+                  config={config}
+                  data={data}
+                  pageRequestSet={pageRequestSet}
+                  pageInfo={pageInfo}
+                  isLoading={jobsMeta?.isLoading}
+                  freezeHeader={true}
+                  activeRow={activeRow}
+                />
+              </div>
             </Col>
           </Row>
         </Container>

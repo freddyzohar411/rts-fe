@@ -110,9 +110,6 @@ const AccountListing = () => {
     customRenderList
   );
 
-  console.log("Active Row", activeRow);
-  console.log("Table Data", tableData);
-
   //========================== User Setup ============================
   // This will vary with the table main page. Each table have it own config with additional columns
   const generateAccountConfig = (customConfig) => {

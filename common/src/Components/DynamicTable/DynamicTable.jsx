@@ -61,7 +61,6 @@ const DynamicTable = ({
               >
                 <div className="d-flex gap-2">
                   <span> {option.header}</span>
-                  <i className="mdi mdi-sort-descending  align-self-end"></i>
                 </div>
               </th>
             );
