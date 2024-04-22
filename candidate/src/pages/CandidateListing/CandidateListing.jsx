@@ -35,6 +35,9 @@ function CandidateListing() {
     (state) => state.CandidateReducer.candidatesFields
   );
 
+    // Table state
+    const [tableConfig, setTableConfig] = useState([]);
+
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -146,6 +149,7 @@ function CandidateListing() {
         sort: false,
         sortValue: "action",
         sticky: "right",
+        expand: true,
         render: (data) => (
           <ActionDropDown>
             <DropdownItem>
@@ -221,6 +225,10 @@ function CandidateListing() {
     }
   }, [candidatesData]);
 
+  useEffect(() => {
+    setTableConfig(generateCandidateConfig(customConfig));
+  }, [customConfig, pageInfo, activeRow, tableData]);
+
   return (
     <>
       <DeleteCustomModal
@@ -232,7 +240,7 @@ function CandidateListing() {
       />
       <DynamicTableWrapper
         data={candidatesData.candidates}
-        config={generateCandidateConfig(customConfig)}
+        config={tableConfig}
         pageInfo={pageInfo}
         pageRequest={pageRequest}
         pageRequestSet={pageRequestSet}
@@ -242,6 +250,7 @@ function CandidateListing() {
         setCustomConfigData={setCustomConfigData}
         header="Candidates"
         activeRow={activeRow}
+        setTableConfig={setTableConfig}
       />
     </>
   );

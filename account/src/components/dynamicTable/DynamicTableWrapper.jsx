@@ -44,7 +44,7 @@ const DynamicTableWrapper = ({
   confirmDelete,
   header,
   activeRow,
-  setTableConfig
+  setTableConfig,
 }) => {
   // ================== Custom Render ==================
   const customRenderList = [

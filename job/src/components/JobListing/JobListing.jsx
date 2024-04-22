@@ -58,6 +58,9 @@ const JobListing = () => {
   );
   const userProfile = useSelector((state) => state.Profile.userProfile);
 
+  // Table state
+  const [tableConfig, setTableConfig] = useState([]);
+
   // Dropdown State
   const [fodAssign, setFodAssign] = useState({});
   const [namesData, setNamesData] = useState([]);
@@ -353,6 +356,7 @@ const JobListing = () => {
         sort: false,
         sortValue: "action",
         sticky: "right",
+        expand: true,
         render: (data) => (
           <ActionDropDown>
             {checkAllPermission([Permission.JOB_EDIT]) &&
@@ -480,9 +484,7 @@ const JobListing = () => {
             )}
             {/* Clone Button */}
             <DropdownItem>
-              <span
-                onClick={() => handleCloneJob(data.id)}
-              >
+              <span onClick={() => handleCloneJob(data.id)}>
                 <div className="d-flex  align-items-center gap-2">
                   <i className="mdi mdi-content-copy"></i>
                   <span>Clone</span>
@@ -543,6 +545,10 @@ const JobListing = () => {
   };
   // ==================================================================
 
+  useEffect(() => {
+    setTableConfig(generateJobListConfig(customConfig));
+  }, [customConfig, pageInfo, activeRow, tableData]);
+
   return (
     <LoadingOverlay
       active={(jobFODMeta?.isLoading || deleteFODMeta?.isLoading) ?? false}
@@ -560,7 +566,7 @@ const JobListing = () => {
       />
       <DynamicTableWrapper
         data={jobsData?.jobs ?? []}
-        config={generateJobListConfig(customConfig)}
+        config={tableConfig}
         pageInfo={pageInfo}
         pageRequest={pageRequest}
         pageRequestSet={pageRequestSet}
@@ -581,6 +587,7 @@ const JobListing = () => {
         }}
         header="Jobs"
         activeRow={activeRow}
+        setTableConfig={setTableConfig}
       />
       <JobTagCanvas
         tagOffcanvas={tagOffcanvas}

@@ -41,6 +41,8 @@ const AccountListing = () => {
     (state) => state?.AccountReducer?.accountCustomViews
   );
   const [customConfigCV, setCustomConfigCV] = useState([]);
+  
+  // Table state
   const [tableConfig, setTableConfig] = useState([]);
 
   // Delete modal states
@@ -184,7 +186,6 @@ const AccountListing = () => {
               <Link
                 to={`/accounts/${data.id}/edit`}
                 style={{ color: "black" }}
-                // state={{ form: 3 }}
                 state={{ view: true }}
               >
                 <div className="d-flex  align-items-center gap-2">
@@ -258,7 +259,7 @@ const AccountListing = () => {
 
   useEffect(() => {
     setTableConfig(generateAccountConfig(customConfig));
-  }, [customConfig]);
+  }, [customConfig, pageInfo, activeRow, tableData]);
 
   return (
     <>
@@ -271,7 +272,6 @@ const AccountListing = () => {
       />
       <DynamicTableWrapper
         data={accountsData?.accounts}
-        // config={generateAccountConfig(customConfig)}
         config={tableConfig}
         pageInfo={pageInfo}
         pageRequest={pageRequest}

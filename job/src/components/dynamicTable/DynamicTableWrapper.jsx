@@ -52,6 +52,7 @@ const DynamicTableWrapper = ({
   operations,
   header,
   activeRow,
+  setTableConfig,
 }) => {
   // ================== Custom Render ==================
   const customRenderList = [
@@ -423,10 +424,8 @@ const DynamicTableWrapper = ({
                             type="button"
                             className="btn btn-custom-primary header-btn d-flex align-items-center"
                             style={{ height: "40px" }}
-                         >
-                            <span className="fs-5 align-bottom">
-                              + ADD JOB
-                            </span>
+                          >
+                            <span className="fs-5 align-bottom">+ ADD JOB</span>
                           </Button>
                         </Link>
                       )}
@@ -441,6 +440,7 @@ const DynamicTableWrapper = ({
                   isLoading={jobsMeta?.isLoading}
                   freezeHeader={true}
                   activeRow={activeRow}
+                  setTableConfig={setTableConfig}
                 />
               </div>
             </Col>

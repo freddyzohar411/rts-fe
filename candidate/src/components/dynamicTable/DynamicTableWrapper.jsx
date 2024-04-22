@@ -46,6 +46,7 @@ const DynamicTableWrapper = ({
   confirmDelete,
   header,
   activeRow,
+  setTableConfig
 }) => {
   // ================== Custom Render ==================
   const customRenderList = [
@@ -278,6 +279,7 @@ const DynamicTableWrapper = ({
                   isLoading={candidateMeta?.isLoading}
                   freezeHeader={true}
                   activeRow={activeRow}
+                  setTableConfig={setTableConfig}
                 />
               </div>
             </Col>
