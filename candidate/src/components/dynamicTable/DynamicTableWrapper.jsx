@@ -174,7 +174,7 @@ const DynamicTableWrapper = ({
                         >
                           <DropdownToggle
                             color="light"
-                            className="btn-white bg-gradient border-2 border-light-grey fw-bold"
+                            className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
                             style={{
                               borderTopRightRadius: "0px",
                               borderBottomRightRadius: "0px",
@@ -233,7 +233,7 @@ const DynamicTableWrapper = ({
 
                         <Button
                           color="light"
-                          className="btn-white bg-gradient border-2 border-light-grey fw-bold"
+                          className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
                           onClick={handleEportExcel}
                           style={{ height: "40px" }}
                         >

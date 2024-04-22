@@ -13,6 +13,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  ButtonGroup,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
@@ -144,6 +145,25 @@ const DynamicTableWrapper = ({
     });
   };
 
+  const handleEportExcel = () => {
+    let exportData = null;
+    if (!activeRow) {
+      exportData = data;
+    } else if (activeRow?.length === 0) {
+      exportData = data;
+    } else {
+      exportData = data.filter((item) => activeRow.includes(item?.id));
+    }
+
+    DynamicTableHelper.handleExportExcel(
+      "Jobs",
+      exportData,
+      config.slice(2, -1),
+      customRenderList,
+      true
+    );
+  };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -202,8 +222,9 @@ const DynamicTableWrapper = ({
                             toggle={() => setMassFODOpen(!massFODOpen)}
                           >
                             <DropdownToggle
-                              className="d-flex flex-row align-items-center gap-1 bg-custom-primary text-white"
+                              className="d-flex flex-row align-items-center gap-1 btn-white bg-gradient border-2 border-light-grey fw-semibold fs-5"
                               caret
+                              style={{ height: "40px" }}
                             >
                               <i className="bx bxs-user-account"></i>
                               <span>FOD</span>
@@ -307,82 +328,80 @@ const DynamicTableWrapper = ({
                             </DropdownMenu>
                           </ButtonDropdown>
                         )}
-                      <Button
-                        type="button"
-                        className="btn btn-custom-primary d-flex align-items-center header-btn"
-                        onClick={() =>
-                          DynamicTableHelper.handleExportExcel(
-                            "Jobs",
-                            data,
-                            config.slice(2, -1),
-                            customRenderList,
-                            true
-                          )
-                        }
-                      >
-                        <span>
-                          <i className="mdi mdi-download me-1"></i>
-                        </span>
-                        Export
-                      </Button>
-                      <Dropdown
-                        isOpen={customViewDropdownOpen}
-                        toggle={() =>
-                          setCustomViewDropdownOpen(!customViewDropdownOpen)
-                        }
-                      >
-                        <DropdownToggle
-                          caret
-                          className="btn btn-custom-primary py-2"
+
+                      <ButtonGroup>
+                        <Dropdown
+                          isOpen={customViewDropdownOpen}
+                          toggle={() =>
+                            setCustomViewDropdownOpen(!customViewDropdownOpen)
+                          }
                         >
-                          <i className="ri-settings-3-fill me-2"></i>
-                          <span>Custom View</span>
-                        </DropdownToggle>
-                        <DropdownMenu>
-                          <Link to="/jobs/custom-view">
-                            <DropdownItem>Create Custom View</DropdownItem>
-                          </Link>
-                          <DropdownItem divider />
-                          <DropdownItem header>My Custom Views</DropdownItem>
-                          {allJobCustomView && allJobCustomView.length > 0 ? (
-                            allJobCustomView.map((customView, index) => (
-                              <div className="d-flex flex-row gap-1 me-3 mb-1">
-                                <DropdownItem
-                                  onClick={() => {
-                                    handleSelectCustomView(customView?.id);
-                                  }}
-                                  key={index}
-                                >
-                                  <div className="d-flex flex-row justify-content-between">
-                                    <span className="me-2">
-                                      {customView?.name}
-                                    </span>
-                                    {customView?.selected && (
-                                      <span>
-                                        <i className="ri-check-fill"></i>
+                          <DropdownToggle
+                            color="light"
+                            className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                            style={{
+                              borderTopRightRadius: "0px",
+                              borderBottomRightRadius: "0px",
+                              height: "40px",
+                            }}
+                          >
+                            <i className="ri-settings-3-fill fs-5"></i>
+                          </DropdownToggle>
+                          <DropdownMenu className="mt-1">
+                            <Link to="/jobs/custom-view">
+                              <DropdownItem>Create Custom View</DropdownItem>
+                            </Link>
+                            <DropdownItem divider />
+                            <DropdownItem header>My Custom Views</DropdownItem>
+                            {allJobCustomView && allJobCustomView.length > 0 ? (
+                              allJobCustomView?.map((customView, index) => (
+                                <div className="d-flex flex-row gap-1 me-2">
+                                  <DropdownItem
+                                    onClick={() => {
+                                      handleSelectCustomView(customView?.id);
+                                    }}
+                                    key={index}
+                                  >
+                                    <div className="d-flex flex-row align-items-center justify-content-between">
+                                      <span className="me-2">
+                                        {customView?.name}
                                       </span>
-                                    )}
-                                  </div>
+                                      {customView?.selected && (
+                                        <span>
+                                          <i className="ri-check-fill"></i>
+                                        </span>
+                                      )}
+                                    </div>
+                                  </DropdownItem>
+                                  <Button
+                                    className="btn btn-sm btn-danger"
+                                    style={{ height: "29px" }}
+                                    onClick={() =>
+                                      handleDeleteButtonClick(customView?.id)
+                                    }
+                                  >
+                                    <i className="mdi mdi-delete"></i>
+                                  </Button>
+                                </div>
+                              ))
+                            ) : (
+                              <>
+                                <DropdownItem text>
+                                  No custom view created yet!
                                 </DropdownItem>
-                                <Button
-                                  className="btn btn-sm btn-danger"
-                                  onClick={() =>
-                                    handleDeleteButtonClick(customView?.id)
-                                  }
-                                >
-                                  <i className="mdi mdi-delete"></i>
-                                </Button>
-                              </div>
-                            ))
-                          ) : (
-                            <>
-                              <DropdownItem text>
-                                No custom view created yet!
-                              </DropdownItem>
-                            </>
-                          )}
-                        </DropdownMenu>
-                      </Dropdown>
+                              </>
+                            )}
+                          </DropdownMenu>
+                        </Dropdown>
+                        <Button
+                          color="light"
+                          className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                          onClick={handleEportExcel}
+                          style={{ height: "40px" }}
+                        >
+                          <i className="ri-download-fill align-bottom fs-5"></i>
+                        </Button>
+                      </ButtonGroup>
                       <DeleteCustomModal
                         isOpen={deleteModalOpen}
                         setIsOpen={setDeleteModalOpen}
@@ -394,25 +413,6 @@ const DynamicTableWrapper = ({
                         confirmButtonText="Delete"
                         isLoading={false}
                       />
-                      {/* <Button
-                            type="button"
-                            onClick={() => {
-                              if (areOptionsEmpty()) {
-                                toast.error(
-                                  "No fields to show. Please have at least one job"
-                                );
-                                return;
-                              }
-                              setIsCustomModalView(true);
-                              setCustomViewShow(!customViewShow);
-                            }}
-                            className="btn btn-custom-primary d-flex align-items-center header-btn"
-                          >
-                            <span>
-                              <i className="ri-settings-3-fill me-1"></i>
-                            </span>
-                            Custom View
-                          </Button> */}
 
                       {checkAllPermission([Permission.JOB_WRITE]) && (
                         <Link
@@ -422,8 +422,11 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             className="btn btn-custom-primary header-btn d-flex align-items-center"
-                          >
-                            Create Job Openings
+                            style={{ height: "40px" }}
+                         >
+                            <span className="fs-5 align-bottom">
+                              + ADD JOB
+                            </span>
                           </Button>
                         </Link>
                       )}
