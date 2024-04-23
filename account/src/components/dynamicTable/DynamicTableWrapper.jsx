@@ -48,7 +48,6 @@ const DynamicTableWrapper = ({
   setSearch,
   optGroup,
   setCustomConfigData,
-  // confirmDelete,
   header,
   activeRow,
   setTableConfig,
@@ -159,7 +158,7 @@ const DynamicTableWrapper = ({
     setIsDeleteModalOpen(true);
   };
 
-  // Modal Delete
+  // Modal Delete accounts
   const confirmDelete = () => {
     dispatch(deleteAccounts(activeRow));
   };
@@ -203,21 +202,22 @@ const DynamicTableWrapper = ({
                   </Col>
 
                   <Col>
-                    <div className="d-flex column-gap-2 justify-content-end align-items-center">
+                    <div className="d-flex column-gap  gap-1 justify-content-end align-items-center">
                       <TableItemDisplay pageInfo={pageInfo} />
                       <div
                         style={{
                           width: "2px",
                           height: "20px",
                           backgroundColor: "#adb5bd",
-                          marginRight: "15px",
+                          // marginRight: "15px",
+                           marginLeft: "12px",
                         }}
                       ></div>
                       <TableRowsPerPageWithNav
                         pageInfo={pageInfo}
                         pageRequestSet={pageRequestSet}
                       />
-                      <ButtonGroup>
+                      <ButtonGroup className="mx-1">
                         <Dropdown
                           isOpen={customViewDropdownOpen}
                           toggle={() =>
@@ -301,7 +301,6 @@ const DynamicTableWrapper = ({
                           <i className="mdi mdi-delete align-bottom fs-5"></i>
                         </Button>
                       </ButtonGroup>
-
                       {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
                         <Link to="/accounts/create" style={{ color: "black" }}>
                           <Button

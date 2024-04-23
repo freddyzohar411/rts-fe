@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -17,12 +17,16 @@ import {
   DynamicTableHelper,
 } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
-import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
+import {
+  ACCOUNT_INITIAL_OPTIONS,
+  ACCOUNT_MANDATORY_OPTIONS,
+} from "./accountListingConstants";
 import "./AccountListing.scss";
 import {
   fetchAccounts,
   fetchAccountsFields,
   fetchAccountCustomView,
+  deleteAccount,
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -42,6 +46,10 @@ const AccountListing = () => {
 
   // Table state
   const [tableConfig, setTableConfig] = useState([]);
+
+  // Delete modal states
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   // Custom renders
   const customRenderList = [
@@ -68,6 +76,31 @@ const AccountListing = () => {
         >
           {DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"}
         </Badge>
+      ),
+    },
+    {
+      names: ["accountNumber"],
+      render: (data) => (
+        <Link
+          to={`/accounts/${data.id}/edit`}
+          className="text-custom-primary text-decoration-underline"
+          state={{ view: true }}
+        >
+          {data.accountNumber}
+        </Link>
+      ),
+    },
+    // Same for account name
+    {
+      names: ["accountSubmissionData.accountName"],
+      render: (data) => (
+        <Link
+          to={`/accounts/${data.id}/edit`}
+          className="text-custom-primary text-decoration-underline"
+          state={{ view: true }}
+        >
+          {data.accountSubmissionData.accountName}
+        </Link>
       ),
     },
   ];
@@ -103,6 +136,7 @@ const AccountListing = () => {
         ACCOUNT_INITIAL_OPTIONS
       ),
     },
+    ACCOUNT_MANDATORY_OPTIONS,
     ACCOUNT_INITIAL_OPTIONS,
     customRenderList
   );
@@ -153,28 +187,6 @@ const AccountListing = () => {
           );
         },
       },
-      {
-        header: "Account Number",
-        value: "accountNumber",
-        sort: true,
-        sortValue: "account_submission_data.accountNumber",
-        render: (data) => (
-          <Link
-            to={`/accounts/${data.id}/edit`}
-            style={{ color: "black" }}
-            state={{ view: true }}
-          >
-            {data.accountNumber}
-          </Link>
-        ),
-      },
-      {
-        header: "Account Name",
-        value: "accountSubmissionData.accountName",
-        sort: true,
-        sortValue: "account_submission_data.accountName",
-        render: (data) => data.accountSubmissionData.accountName,
-      },
       // {
       //   header: "",
       //   name: "badges",
@@ -198,7 +210,7 @@ const AccountListing = () => {
         expand: true,
         render: (data) => (
           <ActionDropDown>
-            <DropdownItem>
+            {/* <DropdownItem>
               <Link
                 to={`/accounts/${data.id}/edit`}
                 style={{ color: "black" }}
@@ -209,7 +221,7 @@ const AccountListing = () => {
                   <span>View</span>
                 </div>
               </Link>
-            </DropdownItem>
+            </DropdownItem> */}
             {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
               <DropdownItem>
                 <Link
@@ -247,6 +259,12 @@ const AccountListing = () => {
   };
   // ==================================================================
 
+    // Modal Delete
+    const confirmDelete = () => {
+      dispatch(deleteAccount(deleteId));
+      setIsDeleteModalOpen(false);
+    };
+
   // Get all the option groups
   useEffect(() => {
     dispatch(fetchAccountsFields());
@@ -268,11 +286,20 @@ const AccountListing = () => {
   }, [accountsData]);
 
   useEffect(() => {
-    setTableConfig(generateAccountConfig(customConfig));
+    const newConfig = generateAccountConfig(customConfig);
+    setTableConfig(newConfig);
   }, [customConfig, pageInfo, activeRow, tableData]);
+
 
   return (
     <>
+      <DeleteCustomModal
+        isOpen={isDeleteModalOpen}
+        setIsOpen={setIsDeleteModalOpen}
+        confirmDelete={confirmDelete}
+        header="Delete Account"
+        deleteText={"Are you sure you would like to delete this account?"}
+      />
       <DynamicTableWrapper
         data={accountsData?.accounts}
         config={tableConfig}

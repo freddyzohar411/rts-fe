@@ -7,6 +7,7 @@ import {
 
 const useTableHook = (
   initialPageRequest = {},
+  mandatoryConfig = [],
   initialConfig = [],
   customConfigList = [],
   generateConfigFunc
@@ -32,7 +33,7 @@ const useTableHook = (
   const [activeRow, setActiveRow] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [customConfig, setCustomConfig] = useState(
-    generateConfig(initialConfig, customConfigList)
+    generateConfig([...mandatoryConfig,...initialConfig], customConfigList)
   );
 
   const [tableConfig, setTableConfig] = useState();
@@ -69,13 +70,31 @@ const useTableHook = (
     }
   };
 
+  // const setCustomConfigData = (selectedOptGroup) => {
+  //   setCustomConfig(generateConfig(selectedOptGroup, customConfigList));
+  //   const newSearchFields = generateSeachFieldArray(selectedOptGroup);
+  //   //Add in searchfields from tableConfig
+  //   setPageRequest((prev) => ({
+  //     ...prev,
+  //     searchFields: newSearchFields,
+  //   }));
+  // };
+
   const setCustomConfigData = (selectedOptGroup) => {
-    setCustomConfig(generateConfig(selectedOptGroup, customConfigList));
+    const newFields = selectedOptGroup.filter((item) => {
+      if (!mandatoryConfig.find((opt) => opt.value === item.value)) {
+        return item;
+      }
+    });
+    const newOptGroup = [...mandatoryConfig, ...newFields];
+    setCustomConfig(generateConfig(newOptGroup, customConfigList));
+    const newSearchFields = generateSeachFieldArray(newOptGroup);
     setPageRequest((prev) => ({
       ...prev,
-      searchFields: generateSeachFieldArray(selectedOptGroup),
+      searchFields: newSearchFields,
     }));
   };
+
 
   const setPageInfoData = (data) => {
     setPageInfo((prev) => ({
@@ -180,7 +199,7 @@ const useTableHook = (
     activeRow,
     tableData,
     tableConfig,
-    setTableConfig
+    setTableConfig,
   };
 };
 

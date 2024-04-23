@@ -5,9 +5,9 @@ const TableRowsPerPageWithNav = ({ pageRequestSet, pageInfo }) => {
   const currentPage = pageInfo?.currentPage + 1;
   const totalPages = pageInfo?.totalPages;
   return (
-    <div className="d-flex align-items-center gap-1">
+    <div className="d-flex align-items-center ">
       <i
-        className={`ri-arrow-left-s-fill fs-2 cursor-pointer ${
+        className={`ri-arrow-left-s-fill fs-2 cursor-pointer px-0 ${
           currentPage === 1 ? "text-muted" : ""
         }`}
         onClick={() => {
@@ -38,7 +38,7 @@ const TableRowsPerPageWithNav = ({ pageRequestSet, pageInfo }) => {
         </Input>
       </div>
       <i
-        className={`ri-arrow-right-s-fill fs-2 cursor-pointer ${
+        className={`ri-arrow-right-s-fill fs-2 cursor-pointer px-0 ${
           currentPage === totalPages ? "text-muted" : ""
         }`}
         onClick={() => {
