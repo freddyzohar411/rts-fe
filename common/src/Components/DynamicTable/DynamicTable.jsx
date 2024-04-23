@@ -50,7 +50,7 @@ const DynamicTable = ({
   const generateHeaderJSX = (config) => {
     return (
       <>
-        {config.map((option, configIndex) => {
+        {config?.map((option, configIndex) => {
           if (option.sort === true) {
             return (
               <th
@@ -108,13 +108,7 @@ const DynamicTable = ({
           return "";
         }
       };
-      const rowdata = config.map((option, configIndex) => {
-        // const combinedStyle = {
-        //   ...(option?.name === "action"
-        //     ? { overflow: "visible", maxWidth: "100%" }
-        //     : { maxWidth: "100px" }),
-        // };
-
+      const rowdata = config?.map((option, configIndex) => {
         const combinedStyle = {
           ...(option?.expand === true
             ? { overflow: "visible", maxWidth: "100%" }
@@ -157,7 +151,7 @@ const DynamicTable = ({
       {/* Table */}
       <div
         className="table-responsive table-hover table-card mt-3 mb-1 table-custom"
-        style={{ maxHeight: "470px" }}
+        style={{ maxHeight: "565px" }}
       >
         <Table
           className="m-0 align-middle"
@@ -172,7 +166,7 @@ const DynamicTable = ({
           <tbody className="list form-check-all">
             {isLoading ? (
               <tr>
-                <td colSpan={config.length}>
+                <td colSpan={config?.length}>
                   <Skeleton className="pb-3" count={2} />
                 </td>
               </tr>
@@ -180,7 +174,7 @@ const DynamicTable = ({
               generateBodyJSX(config, data)
             ) : (
               <tr>
-                <td colSpan={config.length}>No data available.</td>
+                <td colSpan={config?.length}>No data available.</td>
               </tr>
             )}
           </tbody>
@@ -188,7 +182,7 @@ const DynamicTable = ({
       </div>
 
       {/* Table Pagination */}
-      {data?.length > 0 && (
+      {/* {data?.length > 0 && (
         <div className="d-flex flex-row justify-content-between align-items-baseline mt-2">
           <div className="d-flex align-items-center fs-6">
             <TableRowsPerPage pageRequestSet={pageRequestSet} />
@@ -211,7 +205,7 @@ const DynamicTable = ({
             />
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };

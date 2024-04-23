@@ -31,6 +31,11 @@ import {
 } from "../../store/account/action";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDispatch, useSelector } from "react-redux";
+import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
+import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
+import {
+  deleteAccount,
+} from "../../store/account/action";
 
 const DynamicTableWrapper = ({
   data,
@@ -41,7 +46,7 @@ const DynamicTableWrapper = ({
   setSearch,
   optGroup,
   setCustomConfigData,
-  confirmDelete,
+  // confirmDelete,
   header,
   activeRow,
   setTableConfig,
@@ -58,6 +63,7 @@ const DynamicTableWrapper = ({
     },
   ];
   // ==================================================
+  console.log("PageInfo", pageInfo);
   const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);
   const [selectedOptGroup, setSelectedOptGroup] = useState(
@@ -75,6 +81,9 @@ const DynamicTableWrapper = ({
   const allAccountCustomViews = useSelector(
     (state) => state?.AccountReducer?.accountCustomViews
   );
+
+  // Delete modal states
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAccountCustomView());
@@ -136,6 +145,22 @@ const DynamicTableWrapper = ({
     );
   };
 
+  const handleDelete = () => {
+    if (activeRow?.length === 0) {
+      toast.error("Please select at least one record to delete.");
+      return;
+    }
+    setIsDeleteModalOpen(true);
+    console.log("Delete Array: ", activeRow);
+    confirmDelete();
+  };
+
+    // Modal Delete
+    const confirmDelete = () => {
+      dispatch(deleteAccount(deleteId));
+      setIsDeleteModalOpen(false);
+    };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -143,14 +168,13 @@ const DynamicTableWrapper = ({
           <Row>
             <Col lg={12}>
               <div className="listjs-table">
-                <Row className="mb-2">
-                  <Col>
-                    <span className="fw-semibold fs-3">{header}</span>
-                  </Col>
-                </Row>
-                <Row className="d-flex column-gap-1 mb-3">
-                  {setSearch && (
-                    <Col>
+                <Row className="d-flex mb-3">
+                  <Col className="d-flex align-items-center gap-3">
+                    <span className="fw-semibold fs-3">
+                      {header}
+                      {` (${pageInfo?.totalElements || 0})`}
+                    </span>
+                    {setSearch && (
                       <div className="search-box">
                         <form onSubmit={pageRequestSet.setSearchTerm}>
                           <Input
@@ -158,16 +182,30 @@ const DynamicTableWrapper = ({
                             placeholder="Search"
                             className="form-control search"
                             value={search}
-                            style={{ width: "350px", height: "40px" }}
+                            style={{ width: "300px", height: "40px" }}
                             onChange={(e) => setSearch(e.target.value)}
                           />
                         </form>
                         <i className="ri-search-line search-icon"></i>
                       </div>
-                    </Col>
-                  )}
+                    )}
+                  </Col>
+
                   <Col>
-                    <div className="d-flex column-gap-2 justify-content-end">
+                    <div className="d-flex column-gap-2 justify-content-end align-items-center">
+                      <TableItemDisplay pageInfo={pageInfo} />
+                      <div
+                        style={{
+                          width: "2px",
+                          height: "20px",
+                          backgroundColor: "#adb5bd",
+                          marginRight: "15px",
+                        }}
+                      ></div>
+                      <TableRowsPerPageWithNav
+                        pageInfo={pageInfo}
+                        pageRequestSet={pageRequestSet}
+                      />
                       <ButtonGroup>
                         <Dropdown
                           isOpen={customViewDropdownOpen}
@@ -243,29 +281,24 @@ const DynamicTableWrapper = ({
                         >
                           <i className="ri-download-fill align-bottom fs-5"></i>
                         </Button>
+                        <Button
+                          color="light"
+                          className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                          onClick={handleDelete}
+                          style={{ height: "40px" }}
+                        >
+                          <i className="mdi mdi-delete align-bottom fs-5"></i>
+                        </Button>
                       </ButtonGroup>
 
-                      <DeleteCustomModal
-                        isOpen={deleteModalOpen}
-                        setIsOpen={setDeleteModalOpen}
-                        confirmDelete={() =>
-                          handleDeleteCustomView(deletingCustomViewId)
-                        }
-                        header="Delete Custom View Confirmation"
-                        deleteText={`Are you sure you want to delete this custom view?`}
-                        confirmButtonText="Delete"
-                        isLoading={false}
-                      />
                       {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
                         <Link to="/accounts/create" style={{ color: "black" }}>
                           <Button
                             type="button"
-                            className="btn btn-custom-primary header-btn px-4"
+                            className="btn btn-custom-primary header-btn d-flex align-items-center"
                             style={{ height: "40px" }}
                           >
-                            <span className="fs-5 align-bottom">
-                              + ADD ACCOUNT
-                            </span>
+                            <span className="fs-3 align-bottom">+</span>
                           </Button>
                         </Link>
                       )}
@@ -285,6 +318,22 @@ const DynamicTableWrapper = ({
               </div>
             </Col>
           </Row>
+          <DeleteCustomModal
+            isOpen={deleteModalOpen}
+            setIsOpen={setDeleteModalOpen}
+            confirmDelete={() => handleDeleteCustomView(deletingCustomViewId)}
+            header="Delete Custom View Confirmation"
+            deleteText={`Are you sure you want to delete this custom view?`}
+            confirmButtonText="Delete"
+            isLoading={false}
+          />
+          <DeleteCustomModal
+            isOpen={isDeleteModalOpen}
+            setIsOpen={setIsDeleteModalOpen}
+            confirmDelete={confirmDelete}
+            header="Delete Account"
+            deleteText={"Are you sure you would like to delete this account?"}
+          />
         </Container>
       </div>
     </React.Fragment>

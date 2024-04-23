@@ -14,6 +14,7 @@ import {
   FETCH_ACCOUNT_CUSTOM_VIEW,
   SELECT_ACCOUNT_CUSTOM_VIEW,
   DELETE_ACCOUNT_CUSTOM_VIEW,
+  DELETE_ACCOUNTS,
 } from "./actionTypes";
 import {
   fetchAccountSuccess,
@@ -43,6 +44,8 @@ import {
   fetchAccountCustomView,
   deleteAccountCustomViewSuccess,
   deleteAccountCustomViewFailure,
+  deleteAccountsFailure,
+  deleteAccountsSuccess,
 } from "./action";
 import {
   getAccounts,
@@ -259,6 +262,17 @@ function* workDeleteAccountCustomView(action) {
   }
 }
 
+// Delete Accounts
+function* workDeleteAccounts(action) {
+  try {
+    const response = yield call(deleteAccounts, action.payload);
+    yield put(deleteAccountsSuccess(response.data));
+    toast.success("Accounts deleted successfully");
+  } catch (error) {
+    yield put(deleteAccountsFailure(error));
+  }
+}
+
 export default function* watchFetchAccountSaga() {
   yield takeEvery(POST_ACCOUNT, workPostAccount);
   yield takeEvery(PUT_ACCOUNT, workPutAccount);
@@ -272,4 +286,5 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(FETCH_ACCOUNT_CUSTOM_VIEW, workFetchAccountCustomView);
   yield takeEvery(SELECT_ACCOUNT_CUSTOM_VIEW, workSelectAccountCustomView);
   yield takeEvery(DELETE_ACCOUNT_CUSTOM_VIEW, workDeleteAccountCustomView);
+  yield takeEvery(DELETE_ACCOUNTS, workDeleteAccounts);
 }

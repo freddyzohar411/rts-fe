@@ -36,7 +36,7 @@ function CandidateListing() {
   );
 
     // Table state
-    // const [tableConfig, setTableConfig] = useState([]);
+    const [tableConfig, setTableConfig] = useState([]);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -186,8 +186,8 @@ function CandidateListing() {
     handleRowCheck,
     selectAllRows,
     activeRow,
-    tableConfig,
-    setTableConfig
+    // tableConfig,
+    // setTableConfig
   } = useTableHook(
     {
       page: 0,
@@ -230,9 +230,9 @@ function CandidateListing() {
     }
   }, [candidatesData]);
 
-  // useEffect(() => {
-  //   setTableConfig(generateCandidateConfig(customConfig));
-  // }, [customConfig, pageInfo, activeRow, tableData]);
+  useEffect(() => {
+    setTableConfig(generateCandidateConfig(customConfig));
+  }, [customConfig, pageInfo, activeRow, tableData]);
 
   return (
     <>

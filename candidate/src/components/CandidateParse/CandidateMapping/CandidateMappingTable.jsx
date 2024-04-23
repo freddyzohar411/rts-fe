@@ -285,9 +285,9 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
             <>
               {categoryData && categoryData.length > 0 ? (
                 categoryData?.map((rowData, i) => (
-                  <tr key={rowData.formId}>
+                  <tr key={rowData.formId} style={{zIndex:-999}}>
                     {config.map((option) => (
-                      <td key={option.name} style={{ verticalAlign: "middle" }}>
+                      <td key={option.name} style={{ verticalAlign: "middle", zIndex:-999, overflow:"visible" }}>
                         {option.render(rowData, i, category)}
                       </td>
                     ))}

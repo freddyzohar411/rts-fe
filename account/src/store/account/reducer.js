@@ -41,6 +41,10 @@ import {
   DELETE_ACCOUNT_CUSTOM_VIEW,
   DELETE_ACCOUNT_CUSTOM_VIEW_SUCCESS,
   DELETE_ACCOUNT_CUSTOM_VIEW_FAILURE,
+  DELETE_ACCOUNTS,
+  DELETE_ACCOUNTS_SUCCESS,
+  DELETE_ACCOUNTS_FAILURE,
+  DELETE_ACCOUNTS_RESET,
 } from "./actionTypes";
 
 import {
@@ -64,6 +68,7 @@ const initialState = {
   tableMeta: {},
   accountCustomView: {},
   accountCustomViews: [],
+  deleteAccountsMeta: {},
 };
 
 const AccountReducer = (state = initialState, action) => {
@@ -339,6 +344,26 @@ const AccountReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case DELETE_ACCOUNTS:
+      return {
+        ...state,
+        deleteAccountsMeta: pendingMetaData(),
+      };
+    case DELETE_ACCOUNTS_SUCCESS:
+      return {
+        ...state,
+        deleteAccountsMeta: successMetaData(action.payload),
+      };
+    case DELETE_ACCOUNTS_FAILURE:
+      return {
+        ...state,
+        deleteAccountsMeta: errorMetaData(action.payload),
+      };
+    case DELETE_ACCOUNTS_RESET:
+      return {
+        ...state,
+        deleteAccountsMeta: resetAllMetaData(),
       };
     default:
       return state;
