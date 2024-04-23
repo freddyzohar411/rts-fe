@@ -208,6 +208,7 @@ const AccountListing = () => {
         // sortValue: "action",
         sticky: "right",
         expand: true,
+        center: true,
         render: (data) => (
           <ActionDropDown>
             {/* <DropdownItem>

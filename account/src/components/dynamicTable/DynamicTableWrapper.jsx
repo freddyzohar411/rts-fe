@@ -200,7 +200,6 @@ const DynamicTableWrapper = ({
                       </div>
                     )}
                   </Col>
-
                   <Col>
                     <div className="d-flex column-gap  gap-1 justify-content-end align-items-center">
                       <TableItemDisplay pageInfo={pageInfo} />

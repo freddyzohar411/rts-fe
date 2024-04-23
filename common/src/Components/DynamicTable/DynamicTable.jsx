@@ -61,7 +61,11 @@ const DynamicTable = ({
                   toggleColumnExpand(configIndex);
                 }}
               >
-                <div className="d-flex gap-2">
+                <div
+                  className={`d-flex gap-2 ${
+                    option?.center && "justify-content-center"
+                  }`}
+                >
                   <span> {option.header}</span>
                   <i
                     className="mdi mdi-sort-descending align-self-end cursor-pointer"
@@ -87,7 +91,11 @@ const DynamicTable = ({
                   border: "2px solid black !important",
                 }}
               >
-                <div className="d-flex gap-2">
+                <div
+                  className={`d-flex gap-2 ${
+                    option?.center && "justify-content-center"
+                  }`}
+                >
                   <span> {option.header}</span>
                 </div>
               </th>

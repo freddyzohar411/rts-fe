@@ -56,6 +56,10 @@ import {
   DELETE_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
   DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  DELETE_CANDIDATES,
+  DELETE_CANDIDATES_SUCCESS,
+  DELETE_CANDIDATES_FAILURE,
+  DELETE_CANDIDATES_RESET,
 } from "./actionTypes";
 
 import {
@@ -84,6 +88,7 @@ const initialState = {
   candidateRecommendationLoading: false,
   candidateCustomView: {},
   candidateCustomViews: [],
+  deleteCandidatesMeta: {},
 };
 
 const CandidateReducer = (state = initialState, action) => {
@@ -446,6 +451,32 @@ const CandidateReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case DELETE_CANDIDATES:
+      return {
+        ...state,
+        deleteCandidatesMeta: pendingMetaData(),
+      };
+    case DELETE_CANDIDATES_SUCCESS:
+      const newCandidatesTemp = JSON.parse(JSON.stringify(state.candidates));
+      const filteredCandidatesTemp = newCandidatesTemp.candidates.filter(
+        (candidate) => !action.payload.includes(candidate.id)
+      );
+      newCandidatesTemp.candidates = filteredCandidatesTemp;
+      return {
+        ...state,
+        deleteCandidatesMeta: successMetaData(action.payload),
+        candidates: newCandidatesTemp,
+      };
+    case DELETE_CANDIDATES_FAILURE:
+      return {
+        ...state,
+        deleteCandidatesMeta: errorMetaData(action.payload),
+      };
+    case DELETE_CANDIDATES_RESET:
+      return {
+        ...state,
+        deleteCandidatesMeta: {},
       };
     default:
       return state;

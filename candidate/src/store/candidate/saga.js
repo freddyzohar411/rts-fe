@@ -25,6 +25,7 @@ import {
   FETCH_CANDIDATE_CUSTOM_VIEW,
   SELECT_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW,
+  DELETE_CANDIDATES
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -66,6 +67,8 @@ import {
   fetchCandidateCustomView,
   deleteCandidateCustomViewSuccess,
   deleteCandidateCustomViewFailure,
+  deleteCandidatesSuccess,
+  deleteCandidatesFailure,
 } from "./action";
 import {
   getCandidates,
@@ -84,6 +87,7 @@ import {
   getCandidateCustomViews,
   selectCandidateCustomView,
   deleteCandidateCustomView,
+  deleteCandidates
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -561,6 +565,20 @@ function* workDeleteCandidateCustomView(action) {
   }
 }
 
+// Delete Candidates
+function* workDeleteCandidates(action) {
+  try {
+    const response = yield call(deleteCandidates, {
+      candidateIds: action.payload,
+    });
+    yield put(deleteCandidatesSuccess(action.payload));
+    toast.success("Candidates deleted successfully!");
+  } catch (error) {
+    yield put(deleteCandidatesFailure(error));
+    toast.error("Error deleting candidates!");
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -582,4 +600,5 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(FETCH_CANDIDATE_CUSTOM_VIEW, workFetchCandidateCustomView);
   yield takeEvery(SELECT_CANDIDATE_CUSTOM_VIEW, workSelectCandidateCustomView);
   yield takeEvery(DELETE_CANDIDATE_CUSTOM_VIEW, workDeleteCandidateCustomView);
+  yield takeEvery(DELETE_CANDIDATES, workDeleteCandidates);
 }
