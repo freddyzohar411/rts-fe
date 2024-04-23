@@ -1,10 +1,13 @@
-const JOB_INITIAL_OPTIONS = [
+const JOB_MANDATORY_OPTIONS = [
   {
     sortValue: "job_submission_data.jobTitle",
     label: "Job Title",
     value: "jobSubmissionData.jobTitle",
     sort: true,
   },
+];
+
+const JOB_INITIAL_OPTIONS = [
   {
     sortValue: "job_submission_data.jobType",
     label: "Job Type",
@@ -104,4 +107,4 @@ const JOB_STAGE_STATUS = {
   REJECTED: "REJECTED",
 };
 
-export { JOB_INITIAL_OPTIONS, JOB_FILTERS, JOB_STAGE_IDS, JOB_STAGE_STATUS };
+export { JOB_INITIAL_OPTIONS, JOB_FILTERS, JOB_STAGE_IDS, JOB_STAGE_STATUS, JOB_MANDATORY_OPTIONS };

@@ -180,9 +180,9 @@ const DynamicTableWrapper = ({
               <div className="listjs-table">
                 <Row className="d-flex mb-3">
                   <Col className="d-flex align-items-center gap-3">
-                    <span className="fw-semibold fs-3">
-                      {header}
-                      {` (${pageInfo?.totalElements || 0})`}
+                    <span className="fw-semibold fs-3 d-flex gap-1">
+                      <span>{header}</span>
+                      <span> {` (${pageInfo?.totalElements || 0})`}</span>
                     </span>
                     {setSearch && (
                       <div className="search-box">
@@ -208,8 +208,7 @@ const DynamicTableWrapper = ({
                           width: "2px",
                           height: "20px",
                           backgroundColor: "#adb5bd",
-                          // marginRight: "15px",
-                           marginLeft: "12px",
+                          marginLeft: "12px",
                         }}
                       ></div>
                       <TableRowsPerPageWithNav

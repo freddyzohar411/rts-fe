@@ -20,7 +20,10 @@ import "./JobListing.scss";
 import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
-import { JOB_INITIAL_OPTIONS } from "./JobListingConstants";
+import {
+  JOB_INITIAL_OPTIONS,
+  JOB_MANDATORY_OPTIONS,
+} from "./JobListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
 import {
   createJobFOD,
@@ -142,24 +145,23 @@ const JobListing = () => {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields:
-        DynamicTableHelper.generateSeachFieldArray(JOB_INITIAL_OPTIONS),
+      searchFields: DynamicTableHelper.generateSeachFieldArray([]),
     },
-    [],
+    JOB_MANDATORY_OPTIONS,
     JOB_INITIAL_OPTIONS,
     customRenderList
   );
 
-  function MyComponent({ pageRequest, gridView }) {
-    const memoizedDispatch = useCallback(() => {
-      const request = { ...pageRequest, jobType: gridView };
-      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-    }, [pageRequest, gridView]);
+  // function MyComponent({ pageRequest, gridView }) {
+  //   const memoizedDispatch = useCallback(() => {
+  //     const request = { ...pageRequest, jobType: gridView };
+  //     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+  //   }, [pageRequest, gridView]);
 
-    useEffect(() => {
-      memoizedDispatch();
-    }, [memoizedDispatch]);
-  }
+  //   useEffect(() => {
+  //     memoizedDispatch();
+  //   }, [memoizedDispatch]);
+  // }
 
   useEffect(() => {
     if (recruiterGroup?.users?.length > 0) {
@@ -182,8 +184,9 @@ const JobListing = () => {
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     const request = { ...pageRequest, jobType: gridView };
-    dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-  }, [JSON.stringify(pageRequest)]);
+    if (pageRequest?.searchFields?.length > 0 || jobsData?.jobs?.length > 0)
+      dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+  }, [JSON.stringify(pageRequest), jobsData?.jobs?.length, gridView]);
 
   useEffect(() => {
     if (hasPageRendered.current) {
@@ -358,116 +361,119 @@ const JobListing = () => {
         sortValue: "action",
         sticky: "right",
         expand: true,
+        center: true,
         render: (data) => (
           <ActionDropDown>
-            {checkAllPermission([Permission.JOB_EDIT]) &&
-              (gridView === "new_job" || gridView === "active_jobs") && (
-                <DropdownItem>
-                  <Dropdown
-                    isOpen={fodAssign[data.id] || false}
-                    toggle={() => handleFodAssignDropdown(data.id)}
-                  >
-                    <DropdownToggle
-                      className="btn btn-sm btn-custom-primary table-btn"
-                      style={{ fontSize: "0.65rem" }}
-                      onClick={() => {
-                        setActiveJob([data.id]);
-                        setSelectedRecruiter([]);
-                      }}
-                    >
-                      FOD
-                    </DropdownToggle>
-                    <DropdownMenu className="p-3" style={{ width: "200px" }}>
-                      {/* Map Recruiter Checkbox Here */}
-                      <Row className="mb-2">
-                        <Col>
-                          <div className="search-box">
-                            <Input
-                              className="form-control form-control-sm"
-                              placeholder="Search.."
-                              type="text"
-                            />
-                            <i className="ri-search-eye-line search-icon"></i>
-                          </div>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <ul className="ps-0 list-unstyled">
-                            {namesData?.map((item, index) => (
-                              <li key={index}>
-                                <div
-                                  className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
-                                  onClick={() => toggleNested(index)}
-                                >
-                                  <span>{item.name}</span>
-                                  <span>
-                                    {nestedVisible[index] ? "-" : "+"}
-                                  </span>
-                                </div>
-                                {nestedVisible[index] && (
-                                  <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
-                                    <div className="ps-0 ms-0 w-100">
-                                      <SimpleBar
-                                        className="simplebar-hght"
-                                        autoHide={false}
-                                      >
-                                        {item.subNames.map(
-                                          (subName, subIndex) => {
-                                            const split = subName?.split("@");
-                                            return (
-                                              <li
-                                                key={subIndex}
-                                                className="d-flex flew-row align-items-center justify-content-between me-3"
-                                              >
-                                                {truncate(split[1], 16)}
-                                                <Label
-                                                  check
-                                                  className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
-                                                >
-                                                  <Input
-                                                    type="checkbox"
-                                                    checked={selectedRecruiter.includes(
-                                                      parseInt(split[0])
-                                                    )}
-                                                    onChange={(e) =>
-                                                      handleFODCheck(
-                                                        parseInt(split[0]),
-                                                        e.target.checked
-                                                      )
-                                                    }
-                                                  />
-                                                </Label>
-                                              </li>
-                                            );
-                                          }
-                                        )}
-                                      </SimpleBar>
-                                    </div>
-                                  </ul>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <div className="d-flex justify-content-end">
-                            <Button
-                              type="submit"
-                              className="btn btn-sm btn-custom-primary px-3"
-                              onClick={() => handleFODAssign()}
-                            >
-                              Assign
-                            </Button>
-                          </div>
-                        </Col>
-                      </Row>
-                    </DropdownMenu>
-                  </Dropdown>
-                </DropdownItem>
-              )}
+            {
+              // checkAllPermission([Permission.JOB_EDIT]) &&
+              //   (gridView === "new_job" || gridView === "active_jobs") && (
+              //     <DropdownItem>
+              //       <Dropdown
+              //         isOpen={fodAssign[data.id] || false}
+              //         toggle={() => handleFodAssignDropdown(data.id)}
+              //       >
+              //         <DropdownToggle
+              //           className="btn btn-sm btn-custom-primary table-btn"
+              //           style={{ fontSize: "0.65rem" }}
+              //           onClick={() => {
+              //             setActiveJob([data.id]);
+              //             setSelectedRecruiter([]);
+              //           }}
+              //         >
+              //           FOD
+              //         </DropdownToggle>
+              //         <DropdownMenu className="p-3" style={{ width: "200px" }}>
+              //           {/* Map Recruiter Checkbox Here */}
+              //           <Row className="mb-2">
+              //             <Col>
+              //               <div className="search-box">
+              //                 <Input
+              //                   className="form-control form-control-sm"
+              //                   placeholder="Search.."
+              //                   type="text"
+              //                 />
+              //                 <i className="ri-search-eye-line search-icon"></i>
+              //               </div>
+              //             </Col>
+              //           </Row>
+              //           <Row>
+              //             <Col>
+              //               <ul className="ps-0 list-unstyled">
+              //                 {namesData?.map((item, index) => (
+              //                   <li key={index}>
+              //                     <div
+              //                       className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
+              //                       onClick={() => toggleNested(index)}
+              //                     >
+              //                       <span>{item.name}</span>
+              //                       <span>
+              //                         {nestedVisible[index] ? "-" : "+"}
+              //                       </span>
+              //                     </div>
+              //                     {nestedVisible[index] && (
+              //                       <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+              //                         <div className="ps-0 ms-0 w-100">
+              //                           <SimpleBar
+              //                             className="simplebar-hght"
+              //                             autoHide={false}
+              //                           >
+              //                             {item.subNames.map(
+              //                               (subName, subIndex) => {
+              //                                 const split = subName?.split("@");
+              //                                 return (
+              //                                   <li
+              //                                     key={subIndex}
+              //                                     className="d-flex flew-row align-items-center justify-content-between me-3"
+              //                                   >
+              //                                     {truncate(split[1], 16)}
+              //                                     <Label
+              //                                       check
+              //                                       className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+              //                                     >
+              //                                       <Input
+              //                                         type="checkbox"
+              //                                         checked={selectedRecruiter.includes(
+              //                                           parseInt(split[0])
+              //                                         )}
+              //                                         onChange={(e) =>
+              //                                           handleFODCheck(
+              //                                             parseInt(split[0]),
+              //                                             e.target.checked
+              //                                           )
+              //                                         }
+              //                                       />
+              //                                     </Label>
+              //                                   </li>
+              //                                 );
+              //                               }
+              //                             )}
+              //                           </SimpleBar>
+              //                         </div>
+              //                       </ul>
+              //                     )}
+              //                   </li>
+              //                 ))}
+              //               </ul>
+              //             </Col>
+              //           </Row>
+              //           <Row>
+              //             <Col>
+              //               <div className="d-flex justify-content-end">
+              //                 <Button
+              //                   type="submit"
+              //                   className="btn btn-sm btn-custom-primary px-3"
+              //                   onClick={() => handleFODAssign()}
+              //                 >
+              //                   Assign
+              //                 </Button>
+              //               </div>
+              //             </Col>
+              //           </Row>
+              //         </DropdownMenu>
+              //       </Dropdown>
+              //     </DropdownItem>
+              //   )
+            }
             {checkAllPermission([Permission.JOB_EDIT]) && (
               <DropdownItem>
                 <span
@@ -492,7 +498,7 @@ const JobListing = () => {
                 </div>
               </span>
             </DropdownItem>
-            <DropdownItem>
+            {/* <DropdownItem>
               <Link
                 to={`/jobs/${data.id}/snapshot`}
                 style={{ color: "black" }}
@@ -503,7 +509,7 @@ const JobListing = () => {
                   <span>View</span>
                 </div>
               </Link>
-            </DropdownItem>
+            </DropdownItem> */}
 
             {checkAllPermission([Permission.JOB_EDIT]) && (
               <DropdownItem>
