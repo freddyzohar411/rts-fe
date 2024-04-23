@@ -30,7 +30,7 @@ const ActionDropDown = ({ dropDownIcon, children, caret = false, width }) => {
       toggle={() => setIsOpen(!isOpen)}
       className="text-center m-0 p-0"
     >
-      <DropdownToggle caret={caret} className="border-0" style={{background:"transparent"}}>
+      <DropdownToggle caret={caret} className="border-0 m-0 p-0" style={{background:"transparent"}}>
         {dropDownIcon ?? <i className="ri-more-fill fs-5 p-0 m-0"></i>}
       </DropdownToggle>
       <Portal>

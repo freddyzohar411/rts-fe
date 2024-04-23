@@ -157,8 +157,6 @@ const DynamicTableWrapper = ({
       return;
     }
     setIsDeleteModalOpen(true);
-    // console.log("Delete Array: ", activeRow);
-    // confirmDelete();
   };
 
   // Modal Delete

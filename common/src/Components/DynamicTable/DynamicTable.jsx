@@ -56,7 +56,7 @@ const DynamicTable = ({
               <th
                 key={option.name}
                 scope="col"
-                // className={`cursor-pointer`}
+                className={`sticky-head-border`}
                 onDoubleClick={() => {
                   toggleColumnExpand(configIndex);
                 }}
@@ -79,9 +79,12 @@ const DynamicTable = ({
                   (option?.sticky === "left" && "sticky-left") ||
                   (option?.sticky === "right" && "sticky-right") ||
                   ""
-                } sticky-color`}
+                } sticky-color sticky-head-border`}
                 onDoubleClick={() => {
                   toggleColumnExpand(configIndex);
+                }}
+                style={{
+                  border: "2px solid black !important",
                 }}
               >
                 <div className="d-flex gap-2">

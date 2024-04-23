@@ -39,6 +39,11 @@ thead {
 .sticky-head {
   position: sticky;
   top: 0;
+  z-index: 1;
+}
+
+.sticky-head-border:not(:first-child):not(:last-child) {
+  box-shadow: 1px 0 0 0 #e0e0e0 inset !important; /* Mimicking a right border on middle headers */
 }
 
 .non-sticky-head {

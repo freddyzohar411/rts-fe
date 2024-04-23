@@ -20,10 +20,8 @@ import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapp
 import { ACCOUNT_INITIAL_OPTIONS } from "./accountListingConstants";
 import "./AccountListing.scss";
 import {
-  deleteAccount,
   fetchAccounts,
   fetchAccountsFields,
-  fetchAccountsAdmin,
   fetchAccountCustomView,
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
@@ -41,13 +39,9 @@ const AccountListing = () => {
     (state) => state?.AccountReducer?.accountCustomViews
   );
   const [customConfigCV, setCustomConfigCV] = useState([]);
-  
+
   // Table state
   const [tableConfig, setTableConfig] = useState([]);
-
-  // Delete modal states
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
 
   // Custom renders
   const customRenderList = [
@@ -121,7 +115,7 @@ const AccountListing = () => {
         header: "#",
         name: "indexing",
         sort: false,
-        sortValue: "indexing",
+        // sortValue: "indexing",
         render: (data, index) => (
           <div className="d-flex column-gap-2">
             {pageInfo?.currentPage * pageInfo?.pageSize + (index + 1)}.
@@ -144,7 +138,7 @@ const AccountListing = () => {
         ),
         name: "checkbox",
         sort: false,
-        sortValue: "checkbox",
+        // sortValue: "checkbox",
         render: (data) => {
           return (
             <div className="form-check">
@@ -158,6 +152,28 @@ const AccountListing = () => {
             </div>
           );
         },
+      },
+      {
+        header: "Account Number",
+        value: "accountNumber",
+        sort: true,
+        sortValue: "account_submission_data.accountNumber",
+        render: (data) => (
+          <Link
+            to={`/accounts/${data.id}/edit`}
+            style={{ color: "black" }}
+            state={{ view: true }}
+          >
+            {data.accountNumber}
+          </Link>
+        ),
+      },
+      {
+        header: "Account Name",
+        value: "accountSubmissionData.accountName",
+        sort: true,
+        sortValue: "account_submission_data.accountName",
+        render: (data) => data.accountSubmissionData.accountName,
       },
       // {
       //   header: "",
@@ -177,7 +193,7 @@ const AccountListing = () => {
         header: "Action",
         name: "action",
         sort: false,
-        sortValue: "action",
+        // sortValue: "action",
         sticky: "right",
         expand: true,
         render: (data) => (
@@ -231,12 +247,6 @@ const AccountListing = () => {
   };
   // ==================================================================
 
-  // Modal Delete
-  const confirmDelete = () => {
-    dispatch(deleteAccount(deleteId));
-    setIsDeleteModalOpen(false);
-  };
-
   // Get all the option groups
   useEffect(() => {
     dispatch(fetchAccountsFields());
@@ -263,13 +273,6 @@ const AccountListing = () => {
 
   return (
     <>
-      <DeleteCustomModal
-        isOpen={isDeleteModalOpen}
-        setIsOpen={setIsDeleteModalOpen}
-        confirmDelete={confirmDelete}
-        header="Delete Account"
-        deleteText={"Are you sure you would like to delete this account?"}
-      />
       <DynamicTableWrapper
         data={accountsData?.accounts}
         config={tableConfig}
