@@ -351,8 +351,14 @@ const AccountReducer = (state = initialState, action) => {
         deleteAccountsMeta: pendingMetaData(),
       };
     case DELETE_ACCOUNTS_SUCCESS:
+      const newAccountsTemp = JSON.parse(JSON.stringify(state.accounts));
+      const filteredAccountsTemp = newAccountsTemp.accounts.filter(
+        (account) => !action.payload.includes(account.id)
+      );
+      newAccountsTemp.accounts = filteredAccountsTemp;
       return {
         ...state,
+        accounts: newAccountsTemp,
         deleteAccountsMeta: successMetaData(action.payload),
       };
     case DELETE_ACCOUNTS_FAILURE:

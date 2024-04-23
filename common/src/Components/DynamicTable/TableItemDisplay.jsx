@@ -10,12 +10,12 @@ const TableItemDisplay = ({ pageInfo }) => {
     <div>
       <span>
         <span className="fw-bold">
-          {`${page * pageSize + 1} - ${
-            endPage < totalElements ? endPage : totalElements
+          {`${page * pageSize + 1 || 0} - ${
+            endPage < totalElements ? endPage : totalElements || 0
           } `}
         </span>
         <span>of</span>
-        <span className="fw-bold"> {`${totalElements} `}</span>
+        <span className="fw-bold"> {`${totalElements || 0} `}</span>
         <span>items</span>
       </span>
     </div>

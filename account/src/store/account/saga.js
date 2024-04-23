@@ -60,6 +60,7 @@ import {
   getAllAccountCustomView,
   selectAccountCustomView,
   deleteAccountCustomView,
+  deleteAccounts,
 } from "../../helpers/backend_helper";
 import {
   setAccountId,
@@ -265,9 +266,10 @@ function* workDeleteAccountCustomView(action) {
 // Delete Accounts
 function* workDeleteAccounts(action) {
   try {
-    const response = yield call(deleteAccounts, action.payload);
-    yield put(deleteAccountsSuccess(response.data));
-    toast.success("Accounts deleted successfully");
+    const response = yield call(deleteAccounts, {
+      accountIds: action.payload,
+    });
+    yield put(deleteAccountsSuccess(action.payload));
   } catch (error) {
     yield put(deleteAccountsFailure(error));
   }

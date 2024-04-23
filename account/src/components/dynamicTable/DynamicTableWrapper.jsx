@@ -34,7 +34,9 @@ import { useDispatch, useSelector } from "react-redux";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
 import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 import {
-  deleteAccount,
+  fetchAccounts,
+  deleteAccounts,
+  deleteAccountsReset,
 } from "../../store/account/action";
 
 const DynamicTableWrapper = ({
@@ -80,6 +82,10 @@ const DynamicTableWrapper = ({
   );
   const allAccountCustomViews = useSelector(
     (state) => state?.AccountReducer?.accountCustomViews
+  );
+
+  const deleteAccountsMeta = useSelector(
+    (state) => state.AccountReducer.deleteAccountsMeta
   );
 
   // Delete modal states
@@ -151,15 +157,22 @@ const DynamicTableWrapper = ({
       return;
     }
     setIsDeleteModalOpen(true);
-    console.log("Delete Array: ", activeRow);
-    confirmDelete();
+    // console.log("Delete Array: ", activeRow);
+    // confirmDelete();
   };
 
-    // Modal Delete
-    const confirmDelete = () => {
-      dispatch(deleteAccount(deleteId));
+  // Modal Delete
+  const confirmDelete = () => {
+    dispatch(deleteAccounts(activeRow));
+  };
+
+  useEffect(() => {
+    if (deleteAccountsMeta?.isSuccess) {
+      dispatch(deleteAccountsReset());
+      toast.success("Account deleted successfully");
       setIsDeleteModalOpen(false);
-    };
+    }
+  }, [deleteAccountsMeta?.isSuccess]);
 
   return (
     <React.Fragment>
@@ -333,6 +346,7 @@ const DynamicTableWrapper = ({
             confirmDelete={confirmDelete}
             header="Delete Account"
             deleteText={"Are you sure you would like to delete this account?"}
+            isLoading={deleteAccountsMeta?.isLoading}
           />
         </Container>
       </div>

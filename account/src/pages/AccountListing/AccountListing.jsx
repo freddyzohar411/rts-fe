@@ -247,7 +247,7 @@ const AccountListing = () => {
     if (pageRequest?.searchFields?.length > 0) {
       dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
-  }, [JSON.stringify(pageRequest)]);
+  }, [JSON.stringify(pageRequest), accountsData?.accounts?.length]);
 
   // Update the page info when account Data changes
   useEffect(() => {
