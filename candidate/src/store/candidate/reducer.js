@@ -476,7 +476,7 @@ const CandidateReducer = (state = initialState, action) => {
     case DELETE_CANDIDATES_RESET:
       return {
         ...state,
-        deleteCandidatesMeta: {},
+        deleteCandidatesMeta: resetAllMetaData(),
       };
     default:
       return state;

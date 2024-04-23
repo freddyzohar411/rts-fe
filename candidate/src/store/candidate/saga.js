@@ -572,7 +572,6 @@ function* workDeleteCandidates(action) {
       candidateIds: action.payload,
     });
     yield put(deleteCandidatesSuccess(action.payload));
-    toast.success("Candidates deleted successfully!");
   } catch (error) {
     yield put(deleteCandidatesFailure(error));
     toast.error("Error deleting candidates!");

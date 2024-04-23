@@ -30,9 +30,12 @@ import {
   fetchCandidateCustomView,
   selectCandidateCustomView,
   deleteCandidateCustomView,
+  deleteCandidates,
+  deleteCandidatesReset,
 } from "../../store/candidate/action";
 import { DeleteCustomModal } from "@workspace/common";
-import { all } from "redux-saga/effects";
+import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
+import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 
 const DynamicTableWrapper = ({
   data,
@@ -43,10 +46,9 @@ const DynamicTableWrapper = ({
   setSearch,
   optGroup,
   setCustomConfigData,
-  confirmDelete,
   header,
   activeRow,
-  setTableConfig
+  setTableConfig,
 }) => {
   // ================== Custom Render ==================
   const customRenderList = [
@@ -72,6 +74,13 @@ const DynamicTableWrapper = ({
   const allCandidateCustomViews = useSelector(
     (state) => state?.CandidateReducer?.candidateCustomViews
   );
+
+  const deleteCandidatesMeta = useSelector(
+    (state) => state.CandidateReducer?.deleteCandidatesMeta
+  );
+
+  // Delete modal states
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCandidateCustomView());
@@ -134,6 +143,27 @@ const DynamicTableWrapper = ({
     );
   };
 
+  const handleDelete = () => {
+    if (activeRow?.length === 0) {
+      toast.error("Please select at least one record to delete.");
+      return;
+    }
+    setIsDeleteModalOpen(true);
+  };
+
+  // Modal Delete accounts
+  const confirmDelete = () => {
+    dispatch(deleteCandidates(activeRow));
+  };
+
+  useEffect(() => {
+    if (deleteCandidatesMeta?.isSuccess) {
+      dispatch(deleteCandidatesReset());
+      toast.success("Candidate deleted successfully");
+      setIsDeleteModalOpen(false);
+    }
+  }, [deleteCandidatesMeta?.isSuccess]);
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -141,14 +171,13 @@ const DynamicTableWrapper = ({
           <Row>
             <Col lg={12}>
               <div className="listjs-table">
-                <Row className="mb-2">
-                  <Col>
-                    <span className="fw-semibold fs-3">{header}</span>
-                  </Col>
-                </Row>
-                <Row className="d-flex column-gap-1 mb-3">
-                  {setSearch && (
-                    <Col>
+                <Row className="d-flex mb-3">
+                  <Col className="d-flex align-items-center gap-3">
+                    <span className="fw-semibold fs-3">
+                      {header}
+                      {` (${pageInfo?.totalElements || 0})`}
+                    </span>
+                    {setSearch && (
                       <div className="search-box">
                         <form onSubmit={pageRequestSet.setSearchTerm}>
                           <Input
@@ -156,16 +185,30 @@ const DynamicTableWrapper = ({
                             placeholder="Search"
                             className="form-control search"
                             value={search}
-                            style={{ width: "350px", height: "40px" }}
+                            style={{ width: "300px", height: "40px" }}
                             onChange={(e) => setSearch(e.target.value)}
                           />
                         </form>
                         <i className="ri-search-line search-icon"></i>
                       </div>
-                    </Col>
-                  )}
+                    )}
+                  </Col>
                   <Col>
-                    <div className="d-flex column-gap-2 justify-content-end">
+                    <div className="d-flex column-gap  gap-1 justify-content-end align-items-center">
+                      <TableItemDisplay pageInfo={pageInfo} />
+                      <div
+                        style={{
+                          width: "2px",
+                          height: "20px",
+                          backgroundColor: "#adb5bd",
+                          // marginRight: "15px",
+                          marginLeft: "12px",
+                        }}
+                      ></div>
+                      <TableRowsPerPageWithNav
+                        pageInfo={pageInfo}
+                        pageRequestSet={pageRequestSet}
+                      />
                       <ButtonGroup>
                         <Dropdown
                           isOpen={customViewDropdownOpen}
@@ -231,7 +274,6 @@ const DynamicTableWrapper = ({
                             )}
                           </DropdownMenu>
                         </Dropdown>
-
                         <Button
                           color="light"
                           className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
@@ -239,6 +281,14 @@ const DynamicTableWrapper = ({
                           style={{ height: "40px" }}
                         >
                           <i className="ri-download-fill align-bottom fs-5"></i>
+                        </Button>
+                        <Button
+                          color="light"
+                          className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                          onClick={handleDelete}
+                          style={{ height: "40px" }}
+                        >
+                          <i className="mdi mdi-delete align-bottom fs-5"></i>
                         </Button>
                       </ButtonGroup>
                       <DeleteCustomModal
@@ -259,12 +309,10 @@ const DynamicTableWrapper = ({
                         >
                           <Button
                             type="button"
-                            className="btn btn-custom-primary header-btn px-4"
+                            className="btn btn-custom-primary header-btn d-flex align-items-center"
                             style={{ height: "40px" }}
                           >
-                            <span className="fs-5 align-bottom">
-                              + ADD CANDIDATE
-                            </span>
+                            <span className="fs-3 align-bottom">+</span>
                           </Button>
                         </Link>
                       )}
@@ -284,6 +332,14 @@ const DynamicTableWrapper = ({
               </div>
             </Col>
           </Row>
+          <DeleteCustomModal
+            isOpen={isDeleteModalOpen}
+            setIsOpen={setIsDeleteModalOpen}
+            confirmDelete={confirmDelete}
+            header="Delete Candidate"
+            deleteText={"Are you sure you would like to delete this candidate?"}
+            isLoading={deleteCandidatesMeta?.isLoading}
+          />
         </Container>
       </div>
     </React.Fragment>

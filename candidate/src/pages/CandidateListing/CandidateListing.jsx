@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  Button,
-  Input,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-} from "reactstrap";
+import { Input, DropdownItem } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import { useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper, DateHelper } from "@workspace/common";
-import { CANDIDATE_INITIAL_OPTIONS } from "./candidateListingConstants";
+import {
+  CANDIDATE_INITIAL_OPTIONS,
+  CANDIDATE_MANDATORY_OPTIONS,
+} from "./candidateListingConstants";
 import { DeleteCustomModal } from "@workspace/common";
 import "./CandidateListing.scss";
 import {
@@ -50,6 +46,17 @@ function CandidateListing() {
         DateHelper.formatDateStandard2(
           DynamicTableHelper.getDynamicNestedResult(data, opt.value) || "-"
         ),
+    },
+    {
+      names: ["candidateSubmissionData.firstName"],
+      render: (data) => (
+        <Link
+          to={`/candidates/${data.id}/snapshot`}
+          className="text-custom-primary text-decoration-underline"
+        >
+          {data.candidateSubmissionData.firstName}
+        </Link>
+      ),
     },
   ];
 
@@ -120,20 +127,21 @@ function CandidateListing() {
         sortValue: "action",
         sticky: "right",
         expand: true,
+        center: true,
         render: (data) => (
           <ActionDropDown>
-            <DropdownItem>
-              <Link
-                to={`/candidates/${data.id}/snapshot`}
-                style={{ color: "black" }}
-                state={{ view: true }}
-              >
-                <div className="d-flex  align-items-center gap-2">
-                  <i className="ri-eye-line"></i>
-                  <span>View</span>
-                </div>
-              </Link>
-            </DropdownItem>
+            {/* //   <DropdownItem>
+          //     <Link
+          //       to={`/candidates/${data.id}/snapshot`}
+          //       style={{ color: "black" }}
+          //       state={{ view: true }}
+          //     >
+          //       <div className="d-flex  align-items-center gap-2">
+          //         <i className="ri-eye-line"></i>
+          //         <span>View</span>
+          //       </div>
+          //     </Link>
+          //   </DropdownItem> */}
             {checkAllPermission([Permission.CANDIDATE_EDIT]) && (
               <DropdownItem>
                 <Link
@@ -186,8 +194,6 @@ function CandidateListing() {
     handleRowCheck,
     selectAllRows,
     activeRow,
-    // tableConfig,
-    // setTableConfig
   } = useTableHook(
     {
       page: 0,
@@ -196,10 +202,10 @@ function CandidateListing() {
       sortDirection: "asc",
       searchTerm: null,
       searchFields: DynamicTableHelper.generateSeachFieldArray(
-        CANDIDATE_INITIAL_OPTIONS
+        []
       ),
     },
-    [],
+    CANDIDATE_MANDATORY_OPTIONS,
     CANDIDATE_INITIAL_OPTIONS,
     customRenderList,
     generateCandidateConfig
@@ -218,8 +224,15 @@ function CandidateListing() {
 
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    dispatch(fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest)));
-  }, [JSON.stringify(pageRequest)]);
+    if (
+      pageRequest?.searchFields?.length > 0 &&
+      candidatesData?.candidates?.length > 0
+    ) {
+      dispatch(
+        fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest))
+      );
+    }
+  }, [JSON.stringify(pageRequest), candidatesData?.candidates?.length]);
 
   // Update the page info when candidate Data changes
   useEffect(() => {

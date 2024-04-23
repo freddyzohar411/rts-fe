@@ -133,7 +133,7 @@ const AccountListing = () => {
       sortDirection: "asc",
       searchTerm: null,
       searchFields: DynamicTableHelper.generateSeachFieldArray(
-        ACCOUNT_INITIAL_OPTIONS
+        []
       ),
     },
     ACCOUNT_MANDATORY_OPTIONS,
