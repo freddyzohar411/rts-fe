@@ -36,7 +36,18 @@ import {
   DELETE_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW_SUCCESS,
   DELETE_JOB_CUSTOM_VIEW_FAILURE,
+  DELETE_JOBS,
+  DELETE_JOBS_SUCCESS,
+  DELETE_JOBS_FAILURE,
+  DELETE_JOBS_RESET,
 } from "./actionTypes";
+
+import {
+  errorMetaData,
+  pendingMetaData,
+  resetAllMetaData,
+  successMetaData,
+} from "@workspace/common";
 
 const initialState = {
   job: {},
@@ -49,6 +60,7 @@ const initialState = {
   error: false,
   jobCustomView: {},
   jobCustomViews: [],
+  deleteJobsMeta: {}
 };
 
 const JobReducer = (state = initialState, action) => {
@@ -303,6 +315,32 @@ const JobReducer = (state = initialState, action) => {
         error: true,
         errorMsg: action.payload,
       };
+    case DELETE_JOBS:
+      return {
+        ...state,
+        deleteJobsMeta: pendingMetaData(),
+      }
+    case DELETE_JOBS_SUCCESS:
+      const newJobsTemp = JSON.parse(JSON.stringify(state.jobs));
+      const filteredJobsTemp = newJobsTemp.jobs.filter(
+        (job) => !action.payload.includes(job.id)
+      );
+      newJobsTemp.jobs = filteredJobsTemp;
+      return {
+        ...state,
+        jobs: newJobsTemp,
+        deleteJobsMeta: successMetaData(),
+      }
+    case DELETE_JOBS_FAILURE:
+      return {
+        ...state,
+        deleteJobsMeta: errorMetaData(action.payload),
+      }
+    case DELETE_JOBS_RESET:
+      return {
+        ...state,
+        deleteJobsMeta: resetAllMetaData(),
+      }
     default:
       return state;
   }

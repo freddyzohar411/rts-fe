@@ -106,3 +106,7 @@ export const selectJobCustomView = (id) =>
 // Delete Job Custom View
 export const deleteJobCustomView = (id) =>
   api.delete(`${JOB_URL}${BASE_JOB_CUSTOM_VIEW}/customView/delete/${id}`);
+
+  // Delete an jobs List
+export const deleteJobs = (jobIds) =>
+api.create(`${JOB_URL}${BASE_JOBS}/listing/delete`, jobIds);

@@ -145,6 +145,7 @@ const JobListing = () => {
       searchFields:
         DynamicTableHelper.generateSeachFieldArray(JOB_INITIAL_OPTIONS),
     },
+    [],
     JOB_INITIAL_OPTIONS,
     customRenderList
   );
