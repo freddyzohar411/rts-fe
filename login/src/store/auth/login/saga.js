@@ -123,6 +123,8 @@ function* login1FA({ payload: { userRequest1FA, navigate } }) {
     });
     yield put(login1FASuccess(response));
 
+    console.log("Response", response)
+
     const isTemp = response?.user?.isTemp;
     if (isTemp) {
       yield call(storeUserData, response);
@@ -133,6 +135,8 @@ function* login1FA({ payload: { userRequest1FA, navigate } }) {
       state: {
         accessToken: response?.access_token,
         refreshToken: response?.refresh_token,
+        username: response?.user?.username,
+        email: response?.user?.email,
       },
     });
   } catch (error) {
