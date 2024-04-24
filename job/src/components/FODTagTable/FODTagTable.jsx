@@ -191,7 +191,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         header: "#",
         name: "indexing",
         sort: false,
-        sortValue: "indexing",
         render: (data, index) => (
           <div className="d-flex column-gap-2">
             {pageInfo?.currentPage * pageInfo?.pageSize + (index + 1)}.
@@ -274,6 +273,11 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       setPageInfoData(candidatesData);
     }
   }, [candidatesData]);
+
+  useEffect(() => {
+    const newConfig = generateCandidateConfig(customConfig);
+    setTableConfig(newConfig);
+  }, [customConfig, pageInfo]);
 
   return (
     <DynamicTableWrapper
