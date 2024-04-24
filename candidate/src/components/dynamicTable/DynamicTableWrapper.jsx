@@ -316,7 +316,10 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             className="btn btn-custom-primary header-btn d-flex align-items-center"
-                            style={{ height: "40px" }}
+                            style={{
+                              height: "40px",
+                              backgroundColor: "#0A65CC",
+                            }}
                           >
                             <span className="fs-3 align-bottom">+</span>
                           </Button>

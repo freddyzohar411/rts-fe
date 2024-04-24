@@ -20,7 +20,10 @@ import { DynamicTable } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserGroupByName, fetchJobLists } from "../../store/jobList/action";
+import {
+  fetchUserGroupByName,
+  fetchJobLists,
+} from "../../store/jobList/action";
 import {
   fetchJobCustomView,
   selectJobCustomView,
@@ -502,7 +505,10 @@ const DynamicTableWrapper = ({
                           <Button
                             type="button"
                             className="btn btn-custom-primary header-btn d-flex align-items-center"
-                            style={{ height: "40px" }}
+                            style={{
+                              height: "40px",
+                              backgroundColor: "#0A65CC",
+                            }}
                           >
                             <span className="fs-3 align-bottom">+</span>
                           </Button>
