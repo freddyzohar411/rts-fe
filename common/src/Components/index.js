@@ -42,6 +42,7 @@ import WebAppsDropdown from "./Common/WebAppsDropdown";
 import FormInput from "./Common/FormInput";
 import FormSelection from "./Common/FormSelection";
 import CustomViewButton from "./Common/CustomViewButton";
+import TooltipWrapper from "./Tooltip/TooltipWrapper";
 
 // Router
 import withRouter from "./Common/withRouter";
@@ -185,6 +186,9 @@ export {
 
   // Custom View
   CustomView,
+
+  // Tool Tip
+  TooltipWrapper,
 
 };
 

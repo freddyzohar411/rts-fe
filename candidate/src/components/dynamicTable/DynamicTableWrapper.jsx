@@ -37,6 +37,7 @@ import {
 import { DeleteCustomModal } from "@workspace/common";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
 import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
+import { TooltipWrapper } from "@workspace/common";
 
 const DynamicTableWrapper = ({
   data,
@@ -216,86 +217,98 @@ const DynamicTableWrapper = ({
                         pageRequestSet={pageRequestSet}
                       />
                       <ButtonGroup>
-                        <Dropdown
-                          isOpen={customViewDropdownOpen}
-                          toggle={() =>
-                            setCustomViewDropdownOpen(!customViewDropdownOpen)
-                          }
-                        >
-                          <DropdownToggle
+                        <TooltipWrapper tooltipText="Custom View">
+                          <Dropdown
+                            isOpen={customViewDropdownOpen}
+                            toggle={() =>
+                              setCustomViewDropdownOpen(!customViewDropdownOpen)
+                            }
+                          >
+                            <DropdownToggle
+                              color="light"
+                              className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                              style={{
+                                borderTopRightRadius: "0px",
+                                borderBottomRightRadius: "0px",
+                                height: "40px",
+                              }}
+                            >
+                              <i className="ri-settings-3-fill fs-5"></i>
+                            </DropdownToggle>
+                            <DropdownMenu className="mt-1">
+                              <Link to="/candidates/custom-view">
+                                <DropdownItem>Create Custom View</DropdownItem>
+                              </Link>
+                              <DropdownItem divider />
+                              <DropdownItem header>
+                                My Custom Views
+                              </DropdownItem>
+                              {allCandidateCustomViews &&
+                              allCandidateCustomViews.length > 0 ? (
+                                allCandidateCustomViews.map(
+                                  (customView, index) => (
+                                    <div className="d-flex flex-row gap-1 me-2 mb-1 ">
+                                      <DropdownItem
+                                        key={index}
+                                        onClick={() => {
+                                          handleSelectCustomView(
+                                            customView?.id
+                                          );
+                                        }}
+                                      >
+                                        <div className="d-flex flex-row justify-content-between">
+                                          <span className="me-2">
+                                            {customView?.name}
+                                          </span>
+                                          {customView?.selected && (
+                                            <span>
+                                              <i className="ri-check-fill"></i>
+                                            </span>
+                                          )}
+                                        </div>
+                                      </DropdownItem>
+
+                                      <Button
+                                        className="btn btn-sm btn-danger"
+                                        onClick={() =>
+                                          handleDeleteButtonClick(
+                                            customView?.id
+                                          )
+                                        }
+                                      >
+                                        <i className="mdi mdi-delete"></i>
+                                      </Button>
+                                    </div>
+                                  )
+                                )
+                              ) : (
+                                <DropdownItem text>
+                                  No custom view created yet.
+                                </DropdownItem>
+                              )}
+                            </DropdownMenu>
+                          </Dropdown>
+                        </TooltipWrapper>
+                        <TooltipWrapper tooltipText="Export Excel">
+                          <Button
                             color="light"
                             className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                            style={{
-                              borderTopRightRadius: "0px",
-                              borderBottomRightRadius: "0px",
-                              height: "40px",
-                            }}
+                            onClick={handleEportExcel}
+                            style={{ height: "40px" }}
                           >
-                            <i className="ri-settings-3-fill fs-5"></i>
-                          </DropdownToggle>
-                          <DropdownMenu className="mt-1">
-                            <Link to="/candidates/custom-view">
-                              <DropdownItem>Create Custom View</DropdownItem>
-                            </Link>
-                            <DropdownItem divider />
-                            <DropdownItem header>My Custom Views</DropdownItem>
-                            {allCandidateCustomViews &&
-                            allCandidateCustomViews.length > 0 ? (
-                              allCandidateCustomViews.map(
-                                (customView, index) => (
-                                  <div className="d-flex flex-row gap-1 me-2 mb-1 ">
-                                    <DropdownItem
-                                      key={index}
-                                      onClick={() => {
-                                        handleSelectCustomView(customView?.id);
-                                      }}
-                                    >
-                                      <div className="d-flex flex-row justify-content-between">
-                                        <span className="me-2">
-                                          {customView?.name}
-                                        </span>
-                                        {customView?.selected && (
-                                          <span>
-                                            <i className="ri-check-fill"></i>
-                                          </span>
-                                        )}
-                                      </div>
-                                    </DropdownItem>
-
-                                    <Button
-                                      className="btn btn-sm btn-danger"
-                                      onClick={() =>
-                                        handleDeleteButtonClick(customView?.id)
-                                      }
-                                    >
-                                      <i className="mdi mdi-delete"></i>
-                                    </Button>
-                                  </div>
-                                )
-                              )
-                            ) : (
-                              <DropdownItem text>
-                                No custom view created yet.
-                              </DropdownItem>
-                            )}
-                          </DropdownMenu>
-                        </Dropdown>
-                        <Button
-                          color="light"
-                          className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                          onClick={handleEportExcel}
-                          style={{ height: "40px" }}
-                        >
-                          <i className="ri-download-fill align-bottom fs-5"></i>
-                        </Button>
-                        <Button
-                          color="light"
-                          className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                          onClick={handleDelete}
-                          style={{ height: "40px" }}
-                        >
-                          <i className="mdi mdi-delete align-bottom fs-5"></i>
-                        </Button>
+                            <i className="ri-download-fill align-bottom fs-5"></i>
+                          </Button>
+                        </TooltipWrapper>
+                        <TooltipWrapper tooltipText="Delete Multiple">
+                          <Button
+                            color="light"
+                            className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                            onClick={handleDelete}
+                            style={{ height: "40px" }}
+                          >
+                            <i className="mdi mdi-delete align-bottom fs-5"></i>
+                          </Button>
+                        </TooltipWrapper>
                       </ButtonGroup>
                       <DeleteCustomModal
                         isOpen={deleteModalOpen}
@@ -313,16 +326,18 @@ const DynamicTableWrapper = ({
                           to="/candidates/create"
                           style={{ color: "black" }}
                         >
-                          <Button
-                            type="button"
-                            className="btn btn-custom-primary header-btn d-flex align-items-center"
-                            style={{
-                              height: "40px",
-                              backgroundColor: "#0A65CC",
-                            }}
-                          >
-                            <span className="fs-3 align-bottom">+</span>
-                          </Button>
+                          <TooltipWrapper tooltipText="Create Candidate">
+                            <Button
+                              type="button"
+                              className="btn btn-custom-primary header-btn d-flex align-items-center"
+                              style={{
+                                height: "40px",
+                                backgroundColor: "#0A65CC",
+                              }}
+                            >
+                              <span className="fs-3 align-bottom">+</span>
+                            </Button>
+                          </TooltipWrapper>
                         </Link>
                       )}
                     </div>
