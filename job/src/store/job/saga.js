@@ -14,7 +14,6 @@ import {
   FETCH_JOB_CUSTOM_VIEW,
   SELECT_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW,
-  DELETE_JOBS,
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -42,8 +41,6 @@ import {
   fetchJobCustomView,
   deleteJobCustomViewSuccess,
   deleteJobCustomViewFailure,
-  deleteJobsSuccess,
-  deleteJobsFailure,
 } from "./action";
 import {
   getJobs,
@@ -226,16 +223,6 @@ function* workDeleteJobCustomView(action) {
   }
 }
 
-function* workDeleteJobs(action) {
-  try {
-    const response = yield call(deleteJobs, {
-      jobIds: action.payload,
-    });
-    yield put(deleteJobsSuccess(action.payload));
-  } catch (error) {
-    yield put(deleteJobsFailure(error));
-  }
-}
 
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
@@ -250,5 +237,5 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB_CUSTOM_VIEW, workFetchJobCustomViews);
   yield takeEvery(SELECT_JOB_CUSTOM_VIEW, workSelectJobCustomView);
   yield takeEvery(DELETE_JOB_CUSTOM_VIEW, workDeleteJobCustomView);
-  yield takeEvery(DELETE_JOBS, workDeleteJobs);
+
 }

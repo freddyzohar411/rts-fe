@@ -42,6 +42,7 @@ import {
 const DynamicTableWrapper = ({
   data,
   pageInfo,
+  pageRequest,
   pageRequestSet,
   config,
   search,
@@ -50,6 +51,7 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   header,
   activeRow,
+  setActiveRow,
   setTableConfig,
 }) => {
   // ================== Custom Render ==================
@@ -64,7 +66,6 @@ const DynamicTableWrapper = ({
     },
   ];
   // ==================================================
-  console.log("PageInfo", pageInfo);
   const { Permission, checkAllPermission } = useUserAuth();
   const [customViewShow, setCustomViewShow] = useState(false);
   const [selectedOptGroup, setSelectedOptGroup] = useState(
@@ -168,6 +169,12 @@ const DynamicTableWrapper = ({
       dispatch(deleteAccountsReset());
       toast.success("Account deleted successfully");
       setIsDeleteModalOpen(false);
+      if (pageRequest?.searchFields?.length > 0) {
+        setActiveRow([]);
+        dispatch(
+          fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest))
+        );
+      }
     }
   }, [deleteAccountsMeta?.isSuccess]);
 

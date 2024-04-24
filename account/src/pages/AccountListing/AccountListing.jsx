@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  Badge,
-  Input,
-  DropdownItem,
-} from "reactstrap";
+import { Badge, Input, DropdownItem } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import {
   useTableHook,
@@ -121,7 +117,7 @@ const AccountListing = () => {
     handleRowCheck,
     selectAllRows,
     activeRow,
-    setActiveRow
+    setActiveRow,
   } = useTableHook(
     {
       page: 0,
@@ -129,9 +125,7 @@ const AccountListing = () => {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(
-        []
-      ),
+      searchFields: DynamicTableHelper.generateSeachFieldArray([]),
     },
     ACCOUNT_MANDATORY_OPTIONS,
     ACCOUNT_INITIAL_OPTIONS,
@@ -257,11 +251,11 @@ const AccountListing = () => {
   };
   // ==================================================================
 
-    // Modal Delete
-    const confirmDelete = () => {
-      dispatch(deleteAccount(deleteId));
-      setIsDeleteModalOpen(false);
-    };
+  // Modal Delete
+  const confirmDelete = () => {
+    dispatch(deleteAccount(deleteId));
+    setIsDeleteModalOpen(false);
+  };
 
   // Get all the option groups
   useEffect(() => {
@@ -271,10 +265,10 @@ const AccountListing = () => {
   // Fetch the account when the pageRequest changes
   useEffect(() => {
     if (pageRequest?.searchFields?.length > 0) {
-      setActiveRow([])
+      setActiveRow([]);
       dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
-  }, [JSON.stringify(pageRequest), accountsData?.accounts?.length]);
+  }, [JSON.stringify(pageRequest)]);
 
   // Update the page info when account Data changes
   useEffect(() => {
@@ -288,7 +282,6 @@ const AccountListing = () => {
     const newConfig = generateAccountConfig(customConfig);
     setTableConfig(newConfig);
   }, [customConfig, pageInfo, activeRow, tableData]);
-
 
   return (
     <>
@@ -311,6 +304,7 @@ const AccountListing = () => {
         setCustomConfigData={setCustomConfigData}
         header="Accounts"
         activeRow={activeRow}
+        setActiveRow={setActiveRow}
         setTableConfig={setTableConfig}
       />
     </>

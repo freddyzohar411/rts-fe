@@ -165,7 +165,7 @@ const DynamicTable = ({
         style={{ maxHeight: "565px" }}
       >
         <Table
-          className="m-0 align-middle"
+          className="m-0 align-middle dynamic-table-main"
           id="accountListingTable"
           style={{ tableLayout: "auto" }}
         >

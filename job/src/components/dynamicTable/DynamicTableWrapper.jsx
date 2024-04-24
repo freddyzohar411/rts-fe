@@ -20,14 +20,13 @@ import { DynamicTable } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserGroupByName } from "../../store/jobList/action";
+import { fetchUserGroupByName, fetchJobLists } from "../../store/jobList/action";
 import {
   fetchJobCustomView,
   selectJobCustomView,
   deleteJobCustomView,
-  deleteJobs,
-  deleteJobsReset,
 } from "../../store/job/action";
+import { deleteJobs, deleteJobsReset } from "../../store/jobList/action";
 import { DeleteCustomModal } from "@workspace/common";
 import {
   JOB_FILTERS,
@@ -45,6 +44,7 @@ import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/Tabl
 const DynamicTableWrapper = ({
   data,
   pageInfo,
+  pageRequest,
   pageRequestSet,
   config,
   search,
@@ -56,6 +56,7 @@ const DynamicTableWrapper = ({
   operations,
   header,
   activeRow,
+  setActiveRow,
   setTableConfig,
 }) => {
   // ================== Custom Render ==================
@@ -88,7 +89,7 @@ const DynamicTableWrapper = ({
   const jobsMeta = useSelector((state) => state.JobListReducer.jobsMeta);
 
   const deleteJobsMeta = useSelector(
-    (state) => state.JobReducer.deleteJobsMeta
+    (state) => state.JobListReducer.deleteJobsMeta
   );
 
   // Delete modal states
@@ -194,6 +195,11 @@ const DynamicTableWrapper = ({
       dispatch(deleteJobsReset());
       toast.success("Job deleted successfully");
       setIsDeleteModalOpen(false);
+      const request = { ...pageRequest, jobType: gridView };
+      if (pageRequest?.searchFields?.length > 0) {
+        setActiveRow([]);
+        dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+      }
     }
   }, [deleteJobsMeta?.isSuccess]);
 

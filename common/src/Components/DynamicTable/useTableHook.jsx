@@ -81,8 +81,8 @@ const useTableHook = (
   // };
 
   const setCustomConfigData = (selectedOptGroup) => {
-    const newFields = selectedOptGroup.filter((item) => {
-      if (!mandatoryConfig.find((opt) => opt.value === item.value)) {
+    const newFields = selectedOptGroup?.filter((item) => {
+      if (!mandatoryConfig?.find((opt) => opt.value === item.value)) {
         return item;
       }
     });

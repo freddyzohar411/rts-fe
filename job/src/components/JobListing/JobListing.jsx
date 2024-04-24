@@ -174,11 +174,11 @@ const JobListing = () => {
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     const request = { ...pageRequest, jobType: gridView };
-    if (pageRequest?.searchFields?.length > 0 || jobsData?.jobs?.length > 0) {
+    if (pageRequest?.searchFields?.length > 0) {
       setActiveRow([]);
       dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
     }
-  }, [JSON.stringify(pageRequest), jobsData?.jobs?.length, gridView]);
+  }, [JSON.stringify({ ...pageRequest, jobType: gridView }), gridView]);
 
   useEffect(() => {
     if (hasPageRendered.current) {
@@ -585,6 +585,7 @@ const JobListing = () => {
         }}
         header="Jobs"
         activeRow={activeRow}
+        setActiveRow={setActiveRow}
         setTableConfig={setTableConfig}
       />
       <JobTagCanvas

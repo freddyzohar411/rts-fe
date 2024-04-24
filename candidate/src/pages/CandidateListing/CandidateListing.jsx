@@ -194,7 +194,7 @@ function CandidateListing() {
     handleRowCheck,
     selectAllRows,
     activeRow,
-    setActiveRow
+    setActiveRow,
   } = useTableHook(
     {
       page: 0,
@@ -202,9 +202,7 @@ function CandidateListing() {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(
-        []
-      ),
+      searchFields: DynamicTableHelper.generateSeachFieldArray([]),
     },
     CANDIDATE_MANDATORY_OPTIONS,
     CANDIDATE_INITIAL_OPTIONS,
@@ -225,16 +223,13 @@ function CandidateListing() {
 
   // Fetch the candidate when the pageRequest changes
   useEffect(() => {
-    if (
-      pageRequest?.searchFields?.length > 0 &&
-      candidatesData?.candidates?.length > 0
-    ) {
+    if (pageRequest?.searchFields?.length > 0) {
       setActiveRow([]);
       dispatch(
         fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest))
       );
     }
-  }, [JSON.stringify(pageRequest), candidatesData?.candidates?.length]);
+  }, [JSON.stringify(pageRequest)]);
 
   // Update the page info when candidate Data changes
   useEffect(() => {
@@ -269,6 +264,7 @@ function CandidateListing() {
         setCustomConfigData={setCustomConfigData}
         header="Candidates"
         activeRow={activeRow}
+        setActiveRow={setActiveRow}
         setTableConfig={setTableConfig}
       />
     </>

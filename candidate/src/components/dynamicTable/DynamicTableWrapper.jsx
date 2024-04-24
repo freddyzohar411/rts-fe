@@ -32,6 +32,7 @@ import {
   deleteCandidateCustomView,
   deleteCandidates,
   deleteCandidatesReset,
+  fetchCandidates,
 } from "../../store/candidate/action";
 import { DeleteCustomModal } from "@workspace/common";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
@@ -40,6 +41,7 @@ import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/Tabl
 const DynamicTableWrapper = ({
   data,
   pageInfo,
+  pageRequest,
   pageRequestSet,
   config,
   search,
@@ -48,6 +50,7 @@ const DynamicTableWrapper = ({
   setCustomConfigData,
   header,
   activeRow,
+  setActiveRow,
   setTableConfig,
 }) => {
   // ================== Custom Render ==================
@@ -161,6 +164,10 @@ const DynamicTableWrapper = ({
       dispatch(deleteCandidatesReset());
       toast.success("Candidate deleted successfully");
       setIsDeleteModalOpen(false);
+      setActiveRow([]);
+      dispatch(
+        fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest))
+      );
     }
   }, [deleteCandidatesMeta?.isSuccess]);
 
@@ -201,7 +208,6 @@ const DynamicTableWrapper = ({
                           width: "2px",
                           height: "20px",
                           backgroundColor: "#adb5bd",
-                          // marginRight: "15px",
                           marginLeft: "12px",
                         }}
                       ></div>
