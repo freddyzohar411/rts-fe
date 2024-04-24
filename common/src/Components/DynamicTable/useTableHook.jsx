@@ -197,6 +197,7 @@ const useTableHook = (
     handleRowCheck,
     selectAllRows,
     activeRow,
+    setActiveRow,
     tableData,
     tableConfig,
     setTableConfig,

@@ -138,6 +138,7 @@ const JobListing = () => {
     handleRowCheck,
     selectAllRows,
     activeRow,
+    setActiveRow,
   } = useTableHook(
     {
       page: 0,
@@ -151,17 +152,6 @@ const JobListing = () => {
     JOB_INITIAL_OPTIONS,
     customRenderList
   );
-
-  // function MyComponent({ pageRequest, gridView }) {
-  //   const memoizedDispatch = useCallback(() => {
-  //     const request = { ...pageRequest, jobType: gridView };
-  //     dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
-  //   }, [pageRequest, gridView]);
-
-  //   useEffect(() => {
-  //     memoizedDispatch();
-  //   }, [memoizedDispatch]);
-  // }
 
   useEffect(() => {
     if (recruiterGroup?.users?.length > 0) {
@@ -184,8 +174,10 @@ const JobListing = () => {
   // Fetch the job when the pageRequest changes
   useEffect(() => {
     const request = { ...pageRequest, jobType: gridView };
-    if (pageRequest?.searchFields?.length > 0 || jobsData?.jobs?.length > 0)
+    if (pageRequest?.searchFields?.length > 0 || jobsData?.jobs?.length > 0) {
+      setActiveRow([]);
       dispatch(fetchJobLists(DynamicTableHelper.cleanPageRequest(request)));
+    }
   }, [JSON.stringify(pageRequest), jobsData?.jobs?.length, gridView]);
 
   useEffect(() => {
@@ -510,7 +502,6 @@ const JobListing = () => {
                 </div>
               </Link>
             </DropdownItem> */}
-
             {checkAllPermission([Permission.JOB_EDIT]) && (
               <DropdownItem>
                 <Link

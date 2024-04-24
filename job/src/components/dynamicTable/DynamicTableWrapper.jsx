@@ -284,13 +284,10 @@ const DynamicTableWrapper = ({
                               toggle={() => setMassFODOpen(!massFODOpen)}
                             >
                               <DropdownToggle
-                                // className="d-flex flex-row align-items-center gap-1 btn-white bg-gradient border-2 border-light-grey fw-semibold fs-5"
-                                // caret
                                 className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                                style={{ height: "40px", }}
+                                style={{ height: "40px" }}
                               >
                                 <i className="bx bxs-user-account"></i>
-                                {/* <span>FOD</span> */}
                               </DropdownToggle>
                               <DropdownMenu
                                 className="pt-3 px-3"
@@ -411,7 +408,7 @@ const DynamicTableWrapper = ({
                               borderTopRightRadius: "0px",
                               borderBottomRightRadius: "0px",
                               height: "40px",
-                              ...buttonStyle()
+                              ...buttonStyle(),
                             }}
                           >
                             <i className="ri-settings-3-fill fs-5"></i>
@@ -466,7 +463,7 @@ const DynamicTableWrapper = ({
                           color="light"
                           className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
                           onClick={handleEportExcel}
-                          style={{ height: "40px", borderLeft: "none"}}
+                          style={{ height: "40px", borderLeft: "none" }}
                         >
                           <i className="ri-download-fill align-bottom fs-5"></i>
                         </Button>

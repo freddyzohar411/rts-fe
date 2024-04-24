@@ -322,7 +322,7 @@ const JobReducer = (state = initialState, action) => {
       }
     case DELETE_JOBS_SUCCESS:
       const newJobsTemp = JSON.parse(JSON.stringify(state.jobs));
-      const filteredJobsTemp = newJobsTemp.jobs.filter(
+      const filteredJobsTemp = newJobsTemp?.jobs.filter(
         (job) => !action.payload.includes(job.id)
       );
       newJobsTemp.jobs = filteredJobsTemp;

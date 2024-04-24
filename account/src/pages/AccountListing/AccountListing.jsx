@@ -3,12 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   Badge,
-  Button,
   Input,
-  Dropdown,
-  DropdownMenu,
   DropdownItem,
-  DropdownToggle,
 } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import {
@@ -125,6 +121,7 @@ const AccountListing = () => {
     handleRowCheck,
     selectAllRows,
     activeRow,
+    setActiveRow
   } = useTableHook(
     {
       page: 0,
@@ -274,6 +271,7 @@ const AccountListing = () => {
   // Fetch the account when the pageRequest changes
   useEffect(() => {
     if (pageRequest?.searchFields?.length > 0) {
+      setActiveRow([])
       dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
   }, [JSON.stringify(pageRequest), accountsData?.accounts?.length]);

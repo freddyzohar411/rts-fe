@@ -194,6 +194,7 @@ function CandidateListing() {
     handleRowCheck,
     selectAllRows,
     activeRow,
+    setActiveRow
   } = useTableHook(
     {
       page: 0,
@@ -228,6 +229,7 @@ function CandidateListing() {
       pageRequest?.searchFields?.length > 0 &&
       candidatesData?.candidates?.length > 0
     ) {
+      setActiveRow([]);
       dispatch(
         fetchCandidates(DynamicTableHelper.cleanPageRequest(pageRequest))
       );
