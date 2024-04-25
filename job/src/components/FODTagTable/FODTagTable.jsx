@@ -105,7 +105,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 5,
+      pageSize: 10,
       sortBy: null,
       sortDirection: null,
       searchTerm: null,
@@ -135,7 +135,9 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         candidateRecommendationList(
           DynamicTableHelper.cleanPageRequest(jobPageRequest),
           newAbortController.signal,
-          fodTableShowType?.value
+          fodTableShowType?.value === fodTableType.Recommendation || customQuery
+            ? fodTableType.Recommendation
+            : fodTableType.All
         )
       );
       return () => {
@@ -228,7 +230,8 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
           );
         },
       },
-      fodTableShowType?.value === fodTableType.Recommendation && {
+      (fodTableShowType?.value === fodTableType.Recommendation ||
+        customQuery) && {
         header: "Recommendation",
         name: "action",
         sort: true,
@@ -254,7 +257,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         center: true,
         render: (data) => (
           <Button
-            className="btn btn-sm btn-custom-primary px-4 py-0"
+            className="btn btn-sm btn-custom-primary px-3 py-0"
             onClick={() => handleTag(data?.id)}
           >
             <span className="fs-6">Tag</span>

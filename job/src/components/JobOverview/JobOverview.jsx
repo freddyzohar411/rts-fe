@@ -357,13 +357,6 @@ const JobOverview = () => {
             candidateId={candidateId}
           />
         ) : (
-          // <SubmitToSales
-          //   closeOffcanvas={closeOffcanvas}
-          //   onPreviewCVClick={handlePreviewCVClick}
-          //   templateData={templateData}
-          //   jobId={jobId}
-          //   candidateId={candidateId}
-          // />
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
             onPreviewCVClick={handlePreviewCVClick}

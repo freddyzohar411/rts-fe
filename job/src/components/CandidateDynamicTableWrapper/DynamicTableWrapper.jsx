@@ -166,18 +166,15 @@ const DynamicTableWrapper = ({
                           </form>
                         )}
                       </div>
-                      {fodODTableShowType?.fodTableShowType?.value ===
-                        "Recommendation" && (
-                        <Button
-                          color="light"
-                          className="btn btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                          title="AI custom query search"
-                          onClick={() => setShowQueryModal(true)}
-                          style={{ height: "40px" }}
-                        >
-                          <i className="ri-magic-line align-bottom fs-5"></i>
-                        </Button>
-                      )}
+                      <Button
+                        color="light"
+                        className="btn btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                        title="AI custom query search"
+                        onClick={() => setShowQueryModal(true)}
+                        style={{ height: "40px" }}
+                      >
+                        <i className="ri-magic-line align-bottom fs-5"></i>
+                      </Button>
                     </div>
                     <div className="d-flex flex-row gap-3 align-items-center">
                       <TableItemDisplay pageInfo={pageInfo} />
@@ -192,7 +189,7 @@ const DynamicTableWrapper = ({
                       <TableRowsPerPageWithNav
                         pageInfo={pageInfo}
                         pageRequestSet={pageRequestSet}
-                        defaultValue={5}
+                        defaultValue={10}
                       />
                       <TooltipWrapper tooltipText="Tag Candidates">
                         <Button
