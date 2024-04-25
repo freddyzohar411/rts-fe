@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Table,
-  Spinner,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Row,
-  Col,
-  Label,
-} from "reactstrap";
+import { Table, Spinner, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import { getCandidateToJobMatchData } from "../../../../candidate/src/helpers/backend_helper";
 import { toast } from "react-toastify";
 
@@ -80,27 +70,75 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
           <div>
             <Row className="align-items-end mb-5">
               <div id="detailedScores" style={{ marginTop: "10px" }}>
-                {matchData?.languageScoreDetails &&
-                  matchData?.languageScoreDetails.length > 0 && (
+                {matchData?.generalScoreDetails &&
+                  matchData?.generalScoreDetails.length > 0 && (
                     <>
-                      <h4>Language Matching:</h4>
+                      <h4 className="fw-bold">
+                        Candidate-Job Compatibility Highlights:
+                      </h4>
                       <Table>
                         <thead>
                           <tr>
-                            <th>#</th>
-                            <th>Job Attribute</th>
-                            <th>Candidate Languages</th>
-                            <th>Matching Score</th>
+                            <th
+                              style={{
+                                width: "5%",
+                              }}
+                            >
+                              #
+                            </th>
+                            <th
+                              style={{
+                                overflowWrap: "break-word",
+                                wordWrap: "break-word",
+                                width: "40%",
+                              }}
+                            >
+                              Job Attribute
+                            </th>
+                            <th
+                              style={{
+                                overflowWrap: "break-word",
+                                wordWrap: "break-word",
+                                width: "40%",
+                              }}
+                            >
+                              Candidate Attribute
+                            </th>
+                            <th
+                              style={{
+                                whiteSpace:
+                                  "nowrap" /* Prevents text from wrapping */,
+                                overflow:
+                                  "hidden" /* Keeps the content within the cell */,
+                                width: "15%",
+                              }}
+                            >
+                              Matching Score
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
-                          {matchData?.languageScoreDetails
+                          {matchData?.generalScoreDetails
                             .sort((a, b) => b.score - a.score)
                             .map((detail, index) => (
                               <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{detail.job_attribute.trim()}</td>
-                                <td>{detail.candidate_attribute.trim()}</td>
+                                <td
+                                  style={{
+                                    overflowWrap: "break-word",
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  {detail.job_attribute.trim()}
+                                </td>
+                                <td
+                                  style={{
+                                    overflowWrap: "break-word",
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  {detail.candidate_attribute.trim()}
+                                </td>
                                 <td>{(detail.score * 100).toFixed(2)}%</td>
                               </tr>
                             ))}
@@ -111,14 +149,14 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                 {matchData?.skillsScoreDetails &&
                   matchData?.skillsScoreDetails.length > 0 && (
                     <>
-                      <h4>Skills Matching:</h4>
+                      <h4 className="mt-4 fw-bold">Skills Matching:</h4>
                       <Table>
                         <thead>
                           <tr>
-                            <th>#</th>
-                            <th>Job Attribute</th>
-                            <th>Candidate Skills</th>
-                            <th>Matching Score</th>
+                            <th style={{ width: "5%" }}>#</th>
+                            <th style={{ width: "40%" }}>Job Attribute</th>
+                            <th style={{ width: "40%" }}>Candidate Skills</th>
+                            <th style={{ width: "15%" }}>Matching Score</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -153,14 +191,16 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                 {matchData?.jobTitleScoreDetails &&
                   matchData?.jobTitleScoreDetails.length > 0 && (
                     <>
-                      <h4>Job Title Matching:</h4>
+                      <h4 className="mt-4 fw-bold">Job Title Matching:</h4>
                       <Table>
                         <thead>
                           <tr>
-                            <th>#</th>
-                            <th>Job Attribute</th>
-                            <th>Candidate Job Titles</th>
-                            <th>Matching Score</th>
+                            <th style={{ width: "5%" }}>#</th>
+                            <th style={{ width: "40%" }}>Job Attribute</th>
+                            <th style={{ width: "40%" }}>
+                              Candidate Job Titles
+                            </th>
+                            <th style={{ width: "15%" }}>Matching Score</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -192,66 +232,10 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                       </Table>
                     </>
                   )}
-                {matchData?.generalScoreDetails &&
-                  matchData?.generalScoreDetails.length > 0 && (
-                    <>
-                      <h4>General Matching:</h4>
-                      <Table>
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th
-                              style={{
-                                overflowWrap: "break-word",
-                                wordWrap: "break-word",
-                              }}
-                            >
-                              Job Attribute
-                            </th>
-                            <th
-                              style={{
-                                overflowWrap: "break-word",
-                                wordWrap: "break-word",
-                              }}
-                            >
-                              Candidate Attribute
-                            </th>
-                            <th>Matching Score</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {matchData?.generalScoreDetails
-                            .sort((a, b) => b.score - a.score)
-                            .map((detail, index) => (
-                              <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td
-                                  style={{
-                                    overflowWrap: "break-word",
-                                    wordWrap: "break-word",
-                                  }}
-                                >
-                                  {detail.job_attribute.trim()}
-                                </td>
-                                <td
-                                  style={{
-                                    overflowWrap: "break-word",
-                                    wordWrap: "break-word",
-                                  }}
-                                >
-                                  {detail.candidate_attribute.trim()}
-                                </td>
-                                <td>{(detail.score * 100).toFixed(2)}%</td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </Table>
-                    </>
-                  )}
                 {matchData?.fieldOfStudyScoreDetails &&
                   matchData?.fieldOfStudyScoreDetails.length > 0 && (
                     <>
-                      <h4>Field Of Study Matching:</h4>
+                      <h4 className="mt-4 fw-bold">Field Of Study Matching:</h4>
                       <Table>
                         <thead>
                           <tr>
@@ -263,6 +247,42 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                         </thead>
                         <tbody>
                           {matchData?.fieldOfStudyScoreDetails
+                            .sort((a, b) => b.score - a.score)
+                            .map((detail, index) => (
+                              <tr key={index}>
+                                <td style={{ width: "5%" }}>{index + 1}</td>
+                                <td style={{ width: "40%" }}>
+                                  {detail.job_attribute.trim()}
+                                </td>
+                                <td style={{ width: "40%" }}>
+                                  {detail.candidate_attribute.trim()}
+                                </td>
+                                <td style={{ width: "15%" }}>
+                                  {(detail.score * 100).toFixed(2)}%
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </Table>
+                    </>
+                  )}
+                {matchData?.languageScoreDetails &&
+                  matchData?.languageScoreDetails.length > 0 && (
+                    <>
+                      <h4 className="mt-4 fw-bold">Language Matching:</h4>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th style={{ width: "5%" }}>#</th>
+                            <th style={{ width: "40%" }}>Job Attribute</th>
+                            <th style={{ width: "40%" }}>
+                              Candidate Languages
+                            </th>
+                            <th style={{ width: "15%" }}>Matching Score</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {matchData?.languageScoreDetails
                             .sort((a, b) => b.score - a.score)
                             .map((detail, index) => (
                               <tr key={index}>

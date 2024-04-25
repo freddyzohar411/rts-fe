@@ -489,21 +489,23 @@ const DynamicTableWrapper = ({
                             <i className="ri-download-fill align-bottom fs-5"></i>
                           </Button>
                         </TooltipWrapper>
-                        <TooltipWrapper tooltipText="Delete Multiple">
-                          <Button
-                            color="light"
-                            className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                            onClick={handleDelete}
-                            style={{
-                              height: "40px",
-                              borderLeft: "none",
-                              borderTopRightRadius: "4px",
-                              borderBottomRightRadius: "4px",
-                            }}
-                          >
-                            <i className="mdi mdi-delete align-bottom fs-5"></i>
-                          </Button>
-                        </TooltipWrapper>
+                        {checkAllPermission([Permission.JOB_DELETE]) && (
+                          <TooltipWrapper tooltipText="Delete Multiple">
+                            <Button
+                              color="light"
+                              className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                              onClick={handleDelete}
+                              style={{
+                                height: "40px",
+                                borderLeft: "none",
+                                borderTopRightRadius: "4px",
+                                borderBottomRightRadius: "4px",
+                              }}
+                            >
+                              <i className="mdi mdi-delete align-bottom fs-5"></i>
+                            </Button>
+                          </TooltipWrapper>
+                        )}
                       </ButtonGroup>
                       <DeleteCustomModal
                         isOpen={deleteModalOpen}

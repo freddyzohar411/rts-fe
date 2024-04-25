@@ -43,6 +43,12 @@ const CANDIDATE_INITIAL_OPTIONS = [
     sort: true,
     sortValue: "candidate_submission_data.email",
   },
+  {
+    label: "Experience",
+    value: "candidateSubmissionData.totalExperience",
+    sort: true,
+    sortValue: "candidate_submission_data.totalExperience",
+  }
 ];
 
 export { CANDIDATE_INITIAL_OPTIONS };

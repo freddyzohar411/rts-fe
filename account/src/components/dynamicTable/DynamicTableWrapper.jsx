@@ -303,21 +303,37 @@ const DynamicTableWrapper = ({
                             color="light"
                             className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
                             onClick={handleEportExcel}
-                            style={{ height: "40px" }}
+                            style={{
+                              height: "40px",
+                              borderTopLeftRadius:
+                                checkAllPermission([
+                                  Permission.ACCOUNT_DELETE,
+                                ]) && "4px",
+                              borderBottomLeftRadius:
+                                checkAllPermission([
+                                  Permission.ACCOUNT_DELETE,
+                                ]) && "4px",
+                            }}
                           >
                             <i className="ri-download-fill align-bottom fs-5"></i>
                           </Button>
                         </TooltipWrapper>
-                        <TooltipWrapper tooltipText="Delete multiple">
-                          <Button
-                            color="light"
-                            className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                            onClick={handleDelete}
-                            style={{ height: "40px" }}
-                          >
-                            <i className="mdi mdi-delete align-bottom fs-5"></i>
-                          </Button>
-                        </TooltipWrapper>
+                        {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+                          <TooltipWrapper tooltipText="Delete multiple">
+                            <Button
+                              color="light"
+                              className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                              onClick={handleDelete}
+                              style={{
+                                height: "40px",
+                                borderTopRightRadius: "4px",
+                                borderBottomRightRadius: "4px",
+                              }}
+                            >
+                              <i className="mdi mdi-delete align-bottom fs-5"></i>
+                            </Button>
+                          </TooltipWrapper>
+                        )}
                       </ButtonGroup>
                       {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
                         <Link to="/accounts/create" style={{ color: "black" }}>

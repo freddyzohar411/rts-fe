@@ -523,7 +523,6 @@ const JobListing = () => {
                 <DropdownItem>
                   <span
                     type="button"
-                    className="btn btn-danger table-btn"
                     onClick={() => {
                       setDeleteId(data.id);
                       setIsDeleteModalOpen(true);
