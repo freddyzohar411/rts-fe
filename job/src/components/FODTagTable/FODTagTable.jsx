@@ -112,6 +112,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         CANDIDATE_INITIAL_OPTIONS
       ),
     },
+    [],
     CANDIDATE_INITIAL_OPTIONS,
     customRenderList
   );
