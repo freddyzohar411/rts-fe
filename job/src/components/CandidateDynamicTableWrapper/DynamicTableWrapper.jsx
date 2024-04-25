@@ -15,6 +15,7 @@ import "./DynamicTableWrapper.scss";
 import { SelectElement } from "@workspace/common";
 import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
+import { TooltipWrapper } from "@workspace/common";
 
 const DynamicTableWrapper = ({
   data,
@@ -29,6 +30,7 @@ const DynamicTableWrapper = ({
   handleTagAll,
   setCustomQuery,
   fodODTableShowType,
+  setSelected,
 }) => {
   const candidatesData = useSelector(
     (state) => state.CandidateReducer.candidates
@@ -125,6 +127,7 @@ const DynamicTableWrapper = ({
                         "Recommendation"
                       }
                       onChange={(e) => {
+                        setSelected([]);
                         if (e.target.checked) {
                           fodODTableShowType?.setFODTableShowType({
                             label: "Recommendation",
@@ -177,7 +180,7 @@ const DynamicTableWrapper = ({
                       )}
                     </div>
                     <div className="d-flex flex-row gap-3 align-items-center">
-                    <TableItemDisplay pageInfo={pageInfo} />
+                      <TableItemDisplay pageInfo={pageInfo} />
                       <div
                         style={{
                           width: "2px",
@@ -189,17 +192,20 @@ const DynamicTableWrapper = ({
                       <TableRowsPerPageWithNav
                         pageInfo={pageInfo}
                         pageRequestSet={pageRequestSet}
+                        defaultValue={5}
                       />
-                      <Button
-                        className="btn btn-custom-primary"
-                        onClick={() => handleTagAll()}
-                        style={{
-                          backgroundColor: "#0A65CC",
-                          height: "40px",
-                        }}
-                      >
-                        <i className="ri-user-add-fill fs-5"></i>
-                      </Button>
+                      <TooltipWrapper tooltipText="Tag Candidates">
+                        <Button
+                          className="btn btn-custom-primary"
+                          onClick={() => handleTagAll()}
+                          style={{
+                            backgroundColor: "#0A65CC",
+                            height: "40px",
+                          }}
+                        >
+                          <i className="ri-user-add-fill fs-5"></i>
+                        </Button>
+                      </TooltipWrapper>
                     </div>
                   </div>
                 </Col>
@@ -210,6 +216,8 @@ const DynamicTableWrapper = ({
                 pageRequestSet={pageRequestSet}
                 pageInfo={pageInfo}
                 isLoading={isRecommendationLoading}
+                freezeHeader={true}
+                tableHeight="500px"
               />
             </div>
           </Col>

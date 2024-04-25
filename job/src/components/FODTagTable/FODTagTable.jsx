@@ -67,6 +67,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   );
 
   const [selected, setSelected] = useState([]);
+  console.log("Selected", selected);
 
   const handleSelect = (id, isChecked) => {
     if (isChecked) {
@@ -121,6 +122,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   useEffect(() => {
     // Only create a new abort controller when tagOffcanvas is true
     if (tagOffcanvas) {
+      setSelected([]);
       const newAbortController = new AbortController();
       setAbortController(newAbortController);
       const jobPageRequest = { ...pageRequest, jobId: selectedRowData?.id };
@@ -180,10 +182,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       toast.error("Please select at least one checkbox.");
     }
   };
-
-  useEffect(() => {
-    setTableConfig(generateCandidateConfig(customConfig));
-  }, [fodTableShowType]);
 
   // Candidate Config
   const generateCandidateConfig = (customConfig) => {
@@ -251,6 +249,9 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         name: "action",
         sort: false,
         sortValue: "action",
+        sticky: "right",
+        expand: true,
+        center: true,
         render: (data) => (
           <Button
             className="btn btn-sm btn-custom-primary px-4 py-0"
@@ -278,7 +279,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   useEffect(() => {
     const newConfig = generateCandidateConfig(customConfig);
     setTableConfig(newConfig);
-  }, [customConfig, pageInfo]);
+  }, [customConfig, pageInfo, fodTableShowType, selected]);
 
   return (
     <DynamicTableWrapper
@@ -293,6 +294,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       setCustomConfigData={setCustomConfigData}
       handleTagAll={handleTagAll}
       setCustomQuery={setCustomQuery}
+      setSelected={setSelected}
       fodODTableShowType={{
         fodTableShowType,
         setFODTableShowType,

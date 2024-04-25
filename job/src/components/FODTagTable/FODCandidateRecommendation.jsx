@@ -39,7 +39,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
   return (
     <div>
       <div className="d-flex flex-column">
-        <p>
+        <div className="mb-1">
           <strong>Overall Match: </strong>
           <span
             style={{
@@ -48,7 +48,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
           >
             {(data.similarityScore * 100).toFixed(2)}%
           </span>
-        </p>
+        </div>
         <button
           onClick={() => setShowDetails(!showDetails)}
           className="btn btn-sm btn-custom-primary px-3 py-1"

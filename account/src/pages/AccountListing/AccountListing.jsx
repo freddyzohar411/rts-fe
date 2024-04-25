@@ -196,7 +196,6 @@ const AccountListing = () => {
         header: "Action",
         name: "action",
         sort: false,
-        // sortValue: "action",
         sticky: "right",
         expand: true,
         center: true,
