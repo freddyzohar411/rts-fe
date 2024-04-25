@@ -92,11 +92,16 @@ import TemplateAdvanceExportModal from "./TemplateDisplay/TemplateAdvanceExportM
 // Import Elements
 import SelectElement from "./Elements/SelectElement";
 import MultiInputFormik from "./Elements/MultiInputFormik";
+import MultiInputFormikNoBorder from "./Elements/MultiInputFormikNoBorder";
 
 // Import Email Component
 import EmailComponent from "./Email/EmailComponent";
 
 import CustomView from "./CustomView/CustomView";
+
+// Import Email V2 Component
+import EmailTo from "./EmailV2/EmailTo";
+import EmailCCBCC from "./EmailV2/EmailCCBCC";
 
 export {
   BreadCrumb,
@@ -180,6 +185,7 @@ export {
   // Export Elements
   SelectElement,
   MultiInputFormik,
+  MultiInputFormikNoBorder,
 
   // Export Email Component
   EmailComponent,
@@ -189,6 +195,10 @@ export {
 
   // Tool Tip
   TooltipWrapper,
+
+  // Email V2 Component
+  EmailTo,
+  EmailCCBCC,
 
 };
 
