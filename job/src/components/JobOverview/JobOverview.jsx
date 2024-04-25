@@ -140,9 +140,12 @@ const JobOverview = () => {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: DynamicTableHelper.generateSeachFieldArray(
-        JOB_TIMELINE_INITIAL_OPTIONS
-      ),
+      searchFields: [
+        "candidate.first_name",
+        "candidate.last_name",
+        "users.first_name",
+        "users.last_name",
+      ],
     },
     JOB_TIMELINE_INITIAL_OPTIONS,
     customRenderList
