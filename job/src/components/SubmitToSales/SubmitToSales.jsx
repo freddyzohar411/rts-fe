@@ -47,11 +47,16 @@ const SubmitToSales = () => {
       <Row>
         <Col>
           <EmailTo formik={formik} />
-          <hr className="mt-2"/>
-          <EmailCCBCC formik={formik} />
-          <hr className="mt-2"/>
         </Col>
       </Row>
+      <hr className="mt-2" />
+      <Row>
+ 
+        <Col>
+          <EmailCCBCC formik={formik} />
+        </Col>
+      </Row>
+      <hr className="mt-2" />
     </div>
   );
 };
