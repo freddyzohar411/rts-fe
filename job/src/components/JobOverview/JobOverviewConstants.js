@@ -109,7 +109,6 @@ export const timelineSkipModule = {
 };
 export const timelineSkipSubModule = {
   1: [
-    "Tag",
     "Untag",
     "Associate",
     "Submit To Sales",

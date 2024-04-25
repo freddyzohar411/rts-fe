@@ -182,7 +182,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
 
   useEffect(() => {
     setTableConfig(generateCandidateConfig(customConfig));
-  }, [fodTableShowType]);
+  }, [fodTableShowType, pageInfo]);
 
   // Candidate Config
   const generateCandidateConfig = (customConfig) => {

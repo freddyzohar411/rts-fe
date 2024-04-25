@@ -14,7 +14,6 @@ import {
   FETCH_JOB_CUSTOM_VIEW,
   SELECT_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW,
-
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -57,7 +56,7 @@ import {
   createJobCustomView,
   getJobCustomViews,
   selectJobCustomView,
-  deleteJobCustomView
+  deleteJobCustomView,
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
@@ -165,7 +164,6 @@ function* workUpdateJobEmbeddings(action) {
   try {
     const response = yield call(updateJobEmbedding, action.payload);
   } catch (error) {
-    console.log("Error updating job embeddings: ", error);
     yield put(updateJobEmbeddingsFailure(error));
   }
 }

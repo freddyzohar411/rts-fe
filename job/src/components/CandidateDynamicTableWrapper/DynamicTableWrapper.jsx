@@ -5,14 +5,12 @@ import {
   Row,
   Modal,
   ModalBody,
-  ModalFooter,
   ModalHeader,
   Input,
 } from "reactstrap";
 import { useSelector } from "react-redux";
 import { DynamicTable } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
-import { SelectElement } from "@workspace/common";
 
 const DynamicTableWrapper = ({
   data,
@@ -21,21 +19,10 @@ const DynamicTableWrapper = ({
   config,
   search,
   setSearch,
-  optGroup,
-  setCustomConfigData,
-  confirmDelete,
   handleTagAll,
   setCustomQuery,
   fodODTableShowType,
 }) => {
-  const candidatesData = useSelector(
-    (state) => state.CandidateReducer.candidates
-  );
-
-  const candidateMeta = useSelector(
-    (state) => state.CandidateReducer.candidateMeta
-  );
-
   const isRecommendationLoading = useSelector(
     (state) => state.CandidateReducer.candidateRecommendationLoading
   );
