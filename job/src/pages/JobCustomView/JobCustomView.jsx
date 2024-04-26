@@ -20,6 +20,7 @@ import { createJobCustomView } from "../../store/job/action";
 import { fetchJobListsFields } from "../../store/actions";
 import { Formik, Field, Form } from "formik";
 import DualListBox from "react-dual-listbox";
+import { JOB_MANDATORY_OPTIONS } from "../../components/JobListing/JobListingConstants";
 
 function JobCustomView() {
   document.title = "Create Job Custom View | RTS";
@@ -41,7 +42,12 @@ function JobCustomView() {
 
   useEffect(() => {
     if (jobFields?.length > 0) {
-      setOptions(jobFields);
+      const filteredOptions = jobFields.filter(
+        (field) => !JOB_MANDATORY_OPTIONS.some(
+          (option) => field?.value.includes(option.value)
+        )
+      );
+      setOptions(filteredOptions);
     }
   }, [jobFields]);
 

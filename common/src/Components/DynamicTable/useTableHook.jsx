@@ -10,7 +10,6 @@ const useTableHook = (
   mandatoryConfig = [],
   initialConfig = [],
   customConfigList = [],
-  generateConfigFunc
 ) => {
   // Set state for page request
   const [pageRequest, setPageRequest] = useState({
@@ -37,10 +36,6 @@ const useTableHook = (
   );
 
   const [tableConfig, setTableConfig] = useState();
-
-  // useEffect(() => {
-  //   setTableConfig(generateConfigFunc(customConfig));
-  // }, [customConfig, pageInfo, activeRow, tableData]);
 
   // Active Row Logic
   useEffect(() => {

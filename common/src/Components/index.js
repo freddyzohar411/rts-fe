@@ -97,7 +97,7 @@ import MultiInputFormikNoBorder from "./Elements/MultiInputFormikNoBorder";
 // Import Email Component
 import EmailComponent from "./Email/EmailComponent";
 
-import CustomView from "./CustomView/CustomView";
+// import CustomView from "./CustomView/CustomView";
 
 // Import Email V2 Component
 import EmailTo from "./EmailV2/EmailTo";
@@ -191,7 +191,7 @@ export {
   EmailComponent,
 
   // Custom View
-  CustomView,
+  // CustomView,
 
   // Tool Tip
   TooltipWrapper,

@@ -49,6 +49,7 @@ const CANDIDATE_MANDATORY_OPTIONS = [
     value: "candidateSubmissionData.firstName",
     sort: true,
     sortValue: "candidate_submission_data.firstName",
+    expand: true,
   },
 ];
 

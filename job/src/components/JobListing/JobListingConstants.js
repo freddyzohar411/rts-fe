@@ -4,6 +4,7 @@ const JOB_MANDATORY_OPTIONS = [
     label: "Job Title",
     value: "jobSubmissionData.jobTitle",
     sort: true,
+    expand: true,
   },
 ];
 
