@@ -1,164 +1,148 @@
-import { Form } from "@workspace/common";
-import React, { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { SUBMIT_TO_SALES } from "./constants";
-import { fetchJobForm, tagJob } from "../../store/actions";
-import { useUserAuth } from "@workspace/login";
-import { Row, Col, Button, Tooltip } from "reactstrap";
+import React, { useState, useRef } from "react";
+import { Row, Col, Button } from "reactstrap";
+import { useFormik } from "formik";
 import {
-  JOB_STAGE_IDS,
-  JOB_STAGE_STATUS,
-} from "../JobListing/JobListingConstants";
-import { Actions } from "@workspace/common";
-import { UseTemplateModuleDataHook } from "@workspace/common";
+  EmailTo,
+  EmailCCBCC,
+  EmailSubject,
+  SelectTemplateNoBorder,
+  EmailTemplateSelect,
+  TemplateDisplayV4,
+} from "@workspace/common";
+import { initialValues, schema } from "./formikConfig";
+import { toast } from "react-toastify";
 
-function SubmitToSales({
-  closeOffcanvas,
-  onPreviewCVClick,
-  templateData,
-  candidateId,
-  jobId,
-}) {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const formikRef = useRef(null);
+const SubmitToSales = () => {
+  const [formInitialValues, setFormInitialValues] = useState(initialValues);
+  const [formSchema, setFormSchema] = useState(schema);
 
-  const form = useSelector((state) => state.JobFormReducer.form);
+  /**
+   * Handle form submit event (Formik)
+   * @param {*} values
+   */
+  const handleFormSubmit = async (values) => {
+    const newValues = { ...values };
+    newValues.to = newValues.to.map((item) => item.value);
+    newValues.cc = newValues.cc.map((item) => item.value);
+    newValues.bcc = newValues.bcc.map((item) => item.value);
+    console.log("newValues", newValues);
+    const newFormData =
+      ObjectHelper.convertObjectToFormDataWithArray(newValues);
+    // dispatch(
+    //   Actions.sendEmail({
+    //     newFormData,
+    //     config: {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     },
+    //   })
+    // );
+  };
 
-  const linkState = location.state;
-  const { getAllUserGroups } = useUserAuth();
-
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-  const [view, setView] = useState(
-    linkState?.view !== null && linkState?.view !== undefined
-      ? linkState?.view
-      : false
-  );
-  const [formTemplate, setFormTemplate] = useState(null);
-  UseTemplateModuleDataHook.useTemplateModuleData({
-    candidateId: candidateId,
-    jobId: jobId,
+  /**
+   * Initialize Formik (useFormik Hook)
+   */
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: formInitialValues,
+    validationSchema: formSchema,
+    validateOnBlur: true,
+    onSubmit: handleFormSubmit,
   });
 
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
-
-  useEffect(() => {
-    dispatch(fetchJobForm(SUBMIT_TO_SALES));
-  }, []);
-
-  useEffect(() => {
-    if (form) {
-      setFormTemplate(form);
+  // Toast errors upn submit
+  const toastErrors = () => {
+    if (formik.errors) {
+      Object.keys(formik.errors).forEach((key) => {
+        toast.error(formik.errors[key]);
+      });
     }
-  }, [form]);
-
-  // Handle form submit
-  const handleFormSubmit = async (
-    event,
-    values,
-    newValues,
-    buttonNameHook,
-    formStateHook,
-    rerenderTable
-  ) => {
-    const payload = {
-      jobId: jobId,
-      jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
-      status: values?.candidateStatus ?? JOB_STAGE_STATUS?.COMPLETED,
-      candidateId,
-      formData: JSON.stringify(values),
-      formId: parseInt(form.formId),
-      jobType: "submit_to_sales",
-    };
-    dispatch(tagJob({ payload, navigate }));
-    closeOffcanvas();
-  };
-
-  const handleCancel = () => {
-    closeOffcanvas();
   };
 
   return (
-    <React.Fragment>
-      <div>
-        <Row>
-          <Col>
-            <Form
-              template={formTemplate}
-              userDetails={getAllUserGroups()}
-              country={null}
-              editData={null}
-              onSubmit={handleFormSubmit}
-              onFormFieldsChange={null}
-              errorMessage={null}
-              view={view}
-              ref={formikRef}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div className="d-flex flex-row justify-content-end gap-4 m-2">
-              <div className="d-flex flex-column flex-nowrap">
-                <div className="d-flex flex-row gap-2 flex-nowrap">
-                  <Button
-                    type="button"
-                    className="btn btn-custom-primary"
-                    onClick={onPreviewCVClick}
-                  >
-                    Preview CV
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn btn-custom-primary"
-                    onClick={() => {
-                      dispatch(
-                        Actions.setEmailOpen({
-                          category: "Email Templates",
-                          attachmentCategory: "CV",
-                        })
-                      );
-                    }}
-                  >
-                    Send Email
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn btn-custom-primary"
-                    id="update-btn"
-                    onClick={() => {
-                      formikRef?.current?.formik?.submitForm();
-                    }}
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => handleCancel()}
-                  >
-                    Cancel
-                  </Button>
-                  <Tooltip
-                    target="update-btn"
-                    isOpen={tooltipOpen}
-                    toggle={() => setTooltipOpen(!tooltipOpen)}
-                    placement="bottom"
-                  >
-                    <span>Update without Email</span>
-                  </Tooltip>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </div>
-    </React.Fragment>
+    <div>
+      <Row>
+        <Col>
+          <EmailTo formik={formik} />
+          <hr className="mt-2" />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <EmailCCBCC formik={formik} />
+          <hr className="mt-2" />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <EmailSubject formik={formik} name="subject" />
+          <hr className="mt-2" />
+        </Col>
+      </Row>
+
+      <Row className="d-flex">
+        <Col>
+          <EmailTemplateSelect
+            icon={<i className=" ri-file-list-2-line fs-5"></i>}
+          />
+          <hr className="mt-2" />
+        </Col>
+        <Col>
+          <EmailTemplateSelect icon={<i className=" ri-table-2 fs-5"></i>} />
+          <hr className="mt-2" />
+        </Col>
+      </Row>
+      <Row className="">
+        <Col
+          style={{
+            maxWidth: "50%",
+          }}
+        >
+          <EmailTemplateSelect
+            icon={<i className=" ri-file-list-2-line fs-5"></i>}
+          />
+          <hr className="mt-2" />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <TemplateDisplayV4
+            isAllLoading={false}
+            // content={templateData?.content ?? null}
+            // allData={allModuleData}
+            isView={false}
+            // handleOutputContent={setEmailContent}
+            autoResize={false}
+            height={280}
+            // minHeight={100}
+            // maxHeight={300}
+            onChange={(content) => {
+              formik.setFieldValue("content", content);
+            }}
+            value={formik?.values?.["content"]}
+            showLoading={false}
+          />
+        </Col>
+      </Row>
+
+      {/* <hr className="mt-2" /> */}
+      <Button
+        onClick={() => {
+          if (!formik.isValid) {
+            toastErrors();
+            return;
+          }
+          formik.handleSubmit();
+        }}
+      >
+        Submit
+      </Button>
+    </div>
   );
-}
+};
 
 export default SubmitToSales;

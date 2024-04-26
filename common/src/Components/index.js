@@ -84,6 +84,7 @@ import Ckeditor from "./ckeditor/build/ckeditor";
 
 // Import Template Display
 import TemplateDisplayV3 from "./TemplateDisplay/TemplateDisplayV3";
+import TemplateDisplayV4 from "./TemplateDisplay/TemplateDisplayV4";
 import TemplateSelectByCategoryElement from "./TemplateDisplay/TemplateSelectByCategoryElement/TemplateSelectByCategoryElement";
 import TemplateExportButtons from "./TemplateDisplay/TemplateExportButtons/TemplateExportButtons";
 import TemplatePagePreviewModal from "./TemplateDisplay/TemplatePagePreviewModal/TemplatePagePreviewModal";
@@ -102,6 +103,8 @@ import EmailComponent from "./Email/EmailComponent";
 // Import Email V2 Component
 import EmailTo from "./EmailV2/EmailTo";
 import EmailCCBCC from "./EmailV2/EmailCCBCC";
+import EmailSubject from "./EmailV2/EmailSubject";
+import EmailTemplateSelect from "./EmailV2/EmailTemplateSelect/EmailTemplateSelect";
 
 export {
   BreadCrumb,
@@ -177,6 +180,7 @@ export {
 
   // Export Template Display
   TemplateDisplayV3,
+  TemplateDisplayV4,
   TemplateSelectByCategoryElement,
   TemplateExportButtons,
   TemplatePagePreviewModal,
@@ -199,6 +203,8 @@ export {
   // Email V2 Component
   EmailTo,
   EmailCCBCC,
+  EmailSubject,
+  EmailTemplateSelect
 };
 
 
