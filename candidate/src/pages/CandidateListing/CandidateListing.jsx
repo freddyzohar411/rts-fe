@@ -68,7 +68,6 @@ function CandidateListing() {
         header: "#",
         name: "indexing",
         sort: false,
-        sortValue: "indexing",
         render: (data, index) => (
           <div className="d-flex column-gap-2">
             {pageInfo?.currentPage * pageInfo?.pageSize + (index + 1)}.
@@ -91,7 +90,6 @@ function CandidateListing() {
         ),
         name: "checkbox",
         sort: false,
-        sortValue: "checkbox",
         render: (data) => {
           return (
             <div className="form-check">

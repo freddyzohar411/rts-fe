@@ -122,9 +122,6 @@ function* login1FA({ payload: { userRequest1FA, navigate } }) {
       is2FAEnabled: true,
     });
     yield put(login1FASuccess(response));
-
-    console.log("Response", response)
-
     const isTemp = response?.user?.isTemp;
     if (isTemp) {
       yield call(storeUserData, response);

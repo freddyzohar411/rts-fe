@@ -67,7 +67,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   );
 
   const [selected, setSelected] = useState([]);
-  console.log("Selected", selected);
 
   const handleSelect = (id, isChecked) => {
     if (isChecked) {
