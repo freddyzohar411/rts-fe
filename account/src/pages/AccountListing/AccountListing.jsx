@@ -241,8 +241,24 @@ const AccountListing = () => {
   }, [accountsData]);
 
   useEffect(() => {
-    const newConfig = generateAccountConfig(customConfig);
-    setTableConfig(newConfig);
+    if (tableConfig) {
+      const newConfig = generateAccountConfig(customConfig);
+      newConfig.forEach((item, index) => {
+        const oldConfig = tableConfig?.find(
+          (oldItem) => oldItem?.name === item?.name
+        );
+        // If cannot find then continue
+        if (!oldConfig) return;
+        if (oldConfig?.expand) {
+          newConfig[index].expand = true;
+        } else {
+          newConfig[index].expand = false;
+        }
+      });
+      setTableConfig(newConfig);
+    } else {
+      setTableConfig(generateAccountConfig(customConfig));
+    }
   }, [customConfig, pageInfo, activeRow, tableData]);
 
   return (
