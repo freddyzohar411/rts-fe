@@ -1,4 +1,4 @@
-import { Form, Formik, Field, getIn } from "formik";
+import { Form, Formik, Field } from "formik";
 import { FormSelection } from "@workspace/common";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ import {
   Button,
   Card,
   FormFeedback,
+  Spinner,
 } from "reactstrap";
 import { initialValues, schema } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +24,6 @@ import { createUser, fetchUsers } from "../../../../store/users/action";
 import { fetchGroups } from "../../../../store/group/action";
 import { fetchCountryCurrency } from "@workspace/common/src/store/actions";
 import { encode } from "@workspace/common/src/helpers/string_helper";
-import { Actions } from "@workspace/common";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import DualListBox from "react-dual-listbox";
 
@@ -35,6 +35,9 @@ function CreateUser() {
   const allGroups = useSelector((state) => state?.GroupReducer?.groups);
   const allCountries = useSelector(
     (state) => state?.CountryCurrencyReducer?.countryCurrency
+  );
+  const userCreateMeta = useSelector(
+    (state) => state?.UserReducer?.userCreateMeta
   );
   // Manager Dropdown
   const [sortBy, setSortBy] = useState(null);
@@ -537,8 +540,12 @@ function CreateUser() {
                                 <Button
                                   className="btn btn-custom-primary"
                                   type="submit"
+                                  disabled={userCreateMeta?.isLoading}
                                 >
-                                  Submit
+                                  Submit{" "}
+                                  {userCreateMeta?.isLoading && (
+                                    <Spinner size="sm"></Spinner>
+                                  )}
                                 </Button>
                               </div>
                             </div>

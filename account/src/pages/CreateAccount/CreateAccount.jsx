@@ -16,11 +16,7 @@ import {
   AccountEntityConstant,
   AccountTableListConstant,
 } from "../../constants/accountConstant";
-import {
-  fetchDraftAccount,
-  deleteAccountId,
-  deleteAccountCountry,
-} from "../../store/accountregistration/action";
+import { fetchDraftAccount } from "../../store/accountregistration/action";
 import {
   fetchAccountFormSubmission,
   clearAccountFormSubmission,
@@ -55,14 +51,6 @@ const AccountCreation = () => {
 
   const editId = useSelector((state) => state.AccountFormReducer.editId);
 
-  const updateData = useSelector(
-    (state) => state.AccountFormReducer.formSubmission
-  );
-
-  const formSubmissionDataLoading = useSelector(
-    (state) => state.AccountFormReducer.formSubmissionLoading
-  );
-
   const createMetaData = useSelector(
     (state) => state.AccountReducer.createMeta
   );
@@ -93,14 +81,14 @@ const AccountCreation = () => {
   }, [accountCountry]);
 
   useEffect(() => {
-    if (formikValues?.values?.accountId?.length === 0) {
-      generateId("A")
+    if (country?.iso3) {
+      generateId("A", country?.iso3, "account")
         .then((id) => {
           formikRef.current.formik.setFieldValue("accountId", id);
         })
         .catch((e) => {});
     }
-  }, [formikRef?.current?.formik?.values]);
+  }, [country]);
 
   const onFormikChange = (formikValues) => {
     setFormikValues(formikValues);

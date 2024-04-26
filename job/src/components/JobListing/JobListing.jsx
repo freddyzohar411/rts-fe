@@ -20,10 +20,13 @@ import "./JobListing.scss";
 import { DateHelper, useTableHook } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
 import { DynamicTableHelper } from "@workspace/common";
+<<<<<<< HEAD
 import {
   JOB_INITIAL_OPTIONS,
   JOB_MANDATORY_OPTIONS,
 } from "./JobListingConstants";
+=======
+>>>>>>> main
 import { DeleteCustomModal } from "@workspace/common";
 import {
   createJobFOD,
@@ -74,9 +77,11 @@ const JobListing = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   // Placeholder Recruiter Name List
-  const [nestedVisible, setNestedVisible] = useState([]);
+  const [nestedVisible, setNestedVisible] = useState([true]);
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const hasPageRendered = useRef(false);
 
   const isFOD = gridView === "fod";
@@ -223,6 +228,10 @@ const JobListing = () => {
     }));
   };
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   const toggleNested = (index) => {
     setNestedVisible((prev) => {
       const updatedVisibility = [...prev];
@@ -355,6 +364,7 @@ const JobListing = () => {
         expand: true,
         center: true,
         render: (data) => (
+
           <ActionDropDown>
             {
               // checkAllPermission([Permission.JOB_EDIT]) &&
@@ -466,6 +476,120 @@ const JobListing = () => {
               //     </DropdownItem>
               //   )
             }
+
+      
+            {checkAllPermission([Permission.JOB_EDIT]) &&
+              (gridView === "new_job" || gridView === "active_jobs") && (
+                <Dropdown
+                  isOpen={fodAssign[data.id] || false}
+                  toggle={() => handleFodAssignDropdown(data.id)}
+                >
+                  <DropdownToggle
+                    className="btn btn-sm btn-custom-primary table-btn"
+                    style={{ fontSize: "0.65rem" }}
+                    onClick={() => {
+                      setActiveJob([data.id]);
+                      setSelectedRecruiter([]);
+                      setSearchQuery("");
+                    }}
+                  >
+                    FOD
+                  </DropdownToggle>
+                  <DropdownMenu className="p-3" style={{ width: "200px" }}>
+                    {/* Map Recruiter Checkbox Here */}
+                    <Row className="mb-2">
+                      <Col>
+                        <div className="search-box">
+                          <Input
+                            className="form-control form-control-sm"
+                            placeholder="Search.."
+                            type="text"
+                            value={searchQuery}
+                            onChange={handleSearch}
+                          />
+                          <i className="ri-search-eye-line search-icon"></i>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <ul className="ps-0 list-unstyled">
+                          {namesData?.map((item, index) => (
+                            <li key={index}>
+                              <div
+                                className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
+                                onClick={() => toggleNested(index)}
+                              >
+                                <span>{item.name}</span>
+                                <span>{nestedVisible[index] ? "-" : "+"}</span>
+                              </div>
+                              {nestedVisible[index] && (
+                                <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+                                  <div className="ps-0 ms-0 w-100">
+                                    <SimpleBar
+                                      className="simplebar-hght"
+                                      autoHide={false}
+                                    >
+                                      {item?.subNames
+                                        ?.filter((it) =>
+                                          it
+                                            ?.toLowerCase()
+                                            .includes(searchQuery.toLowerCase())
+                                        )
+                                        ?.map((subName, subIndex) => {
+                                          const split = subName?.split("@");
+                                          return (
+                                            <li
+                                              key={subIndex}
+                                              className="d-flex flew-row align-items-center justify-content-between me-3"
+                                            >
+                                              {truncate(split[1], 16)}
+                                              <Label
+                                                check
+                                                className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                                              >
+                                                <Input
+                                                  type="checkbox"
+                                                  checked={selectedRecruiter.includes(
+                                                    parseInt(split[0])
+                                                  )}
+                                                  onChange={(e) =>
+                                                    handleFODCheck(
+                                                      parseInt(split[0]),
+                                                      e.target.checked
+                                                    )
+                                                  }
+                                                />
+                                              </Label>
+                                            </li>
+                                          );
+                                        })}
+                                    </SimpleBar>
+                                  </div>
+                                </ul>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <div className="d-flex justify-content-end">
+                          <Button
+                            type="submit"
+                            className="btn btn-sm btn-custom-primary px-3"
+                            onClick={() => handleFODAssign()}
+                          >
+                            Assign
+                          </Button>
+                        </div>
+                      </Col>
+                    </Row>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
+
             {checkAllPermission([Permission.JOB_EDIT]) && (
               <DropdownItem>
                 <span

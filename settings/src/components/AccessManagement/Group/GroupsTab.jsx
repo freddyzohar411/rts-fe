@@ -12,6 +12,7 @@ import {
   ModalBody,
   ModalHeader,
   ModalFooter,
+  Spinner,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { debounce } from "lodash";
@@ -223,8 +224,10 @@ function GroupsTab() {
                 <Button
                   className="btn btn-custom-primary"
                   onClick={() => handleDelete()}
+                  disabled={deleteMeta?.isLoading}
                 >
-                  Delete
+                  Delete{" "}
+                  {deleteMeta?.isLoading && <Spinner size="sm"></Spinner>}
                 </Button>
                 <Button
                   className="btn btn-custom-primary"

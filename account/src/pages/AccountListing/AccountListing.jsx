@@ -31,10 +31,6 @@ const AccountListing = () => {
   const accountsFields = useSelector(
     (state) => state.AccountReducer.accountsFields
   );
-  const accountCustomView = useSelector(
-    (state) => state?.AccountReducer?.accountCustomViews
-  );
-  const [customConfigCV, setCustomConfigCV] = useState([]);
 
   // Table state
   const [tableConfig, setTableConfig] = useState([]);
@@ -86,7 +82,6 @@ const AccountListing = () => {
 
   useEffect(() => {
     dispatch(fetchAccountsFields());
-    dispatch(fetchAccountCustomView());
   }, []);
 
   // Table Hooks
@@ -242,11 +237,6 @@ const AccountListing = () => {
     dispatch(deleteAccount(deleteId));
     setIsDeleteModalOpen(false);
   };
-
-  // Get all the option groups
-  useEffect(() => {
-    dispatch(fetchAccountsFields());
-  }, []);
 
   // Fetch the account when the pageRequest changes
   useEffect(() => {

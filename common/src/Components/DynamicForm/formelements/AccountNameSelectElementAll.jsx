@@ -46,8 +46,7 @@ const AccountNameSelectElementAll = ({
       const accountId = parseInt(namesToid(formik?.values?.[field.name]));
       dispatch(fetchAccountContacts(accountId));
       dispatch(fetchAccountById(accountId));
-    }
-    if (formik?.values?.[field.name] === "") {
+    } else {
       dispatch(fetchAccountContacts(-99));
     }
   }, [formik?.values?.[field.name], accountNamesData]);

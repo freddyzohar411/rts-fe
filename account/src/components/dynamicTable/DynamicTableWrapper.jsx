@@ -68,11 +68,6 @@ const DynamicTableWrapper = ({
   ];
   // ==================================================
   const { Permission, checkAllPermission } = useUserAuth();
-  const [customViewShow, setCustomViewShow] = useState(false);
-  const [selectedOptGroup, setSelectedOptGroup] = useState(
-    ACCOUNT_INITIAL_OPTIONS
-  );
-  const [isCustomViewModalOpen, setIsCustomModalView] = useState(false);
   const dispatch = useDispatch();
   const [customViewDropdownOpen, setCustomViewDropdownOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);

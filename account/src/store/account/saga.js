@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import { AccountEntityConstant } from "../../constants/accountConstant";
 
 import {
@@ -33,8 +33,6 @@ import {
   fetchAccountDataFailure,
   fetchAccountsFieldsAllSuccess,
   fetchAccountsFieldsAllFailure,
-  fetchAccountsAdminSuccess,
-  fetchAccountsAdminFailure,
   createAccountCustomViewSuccess,
   createAccountCustomViewFailure,
   fetchAccountCustomViewSuccess,
@@ -222,7 +220,6 @@ function* workCreateAccountCustomView(action) {
       payload
     );
     yield put(createAccountCustomViewSuccess(accountCustomViewResponse));
-    yield put(fetchAccountCustomView());
     toast.success("Account custom view created successfully!");
     navigate("/accounts");
   } catch (error) {
@@ -235,7 +232,7 @@ function* workCreateAccountCustomView(action) {
   }
 }
 
-// Select Job Custom View
+// Select Account Custom View
 function* workSelectAccountCustomView(action) {
   const { id } = action.payload;
   try {
