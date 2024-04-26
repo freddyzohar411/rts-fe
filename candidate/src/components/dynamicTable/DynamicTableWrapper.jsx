@@ -32,6 +32,7 @@ import { DeleteCustomModal } from "@workspace/common";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
 import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 import { TooltipWrapper } from "@workspace/common";
+import { toast } from "react-toastify";
 
 const DynamicTableWrapper = ({
   data,
