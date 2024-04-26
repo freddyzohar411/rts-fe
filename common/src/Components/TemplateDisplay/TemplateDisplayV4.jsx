@@ -10,6 +10,7 @@ import { TemplateAdvanceExportModal } from "@workspace/common";
 import "./TinyCME.scss";
 
 const TemplateDisplayV3 = ({
+  injectData,
   content,
   allData, // All data by TemplateModule Hook
   isView, // If true, display only
@@ -27,6 +28,7 @@ const TemplateDisplayV3 = ({
   isAllLoading,
   showLoading = true,
 }) => {
+  const editorRef = useRef(null);
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
   const [fullHtmlString, setFullHtmlString] = useState("");
@@ -214,6 +216,23 @@ const TemplateDisplayV3 = ({
     plugins = [...plugins, "autoresize"];
   }
 
+    // Inject variable when it changes
+    useEffect(() => {
+      if (!injectData) return;
+      // Get the current editor instance
+      const editor = editorRef?.current;
+      // const editor = window?.tinymce?.activeEditor;
+  
+      // Check if there is a selection
+      if (editor?.selection) {
+        // Insert the variableString at the selection's end position
+        editor.selection.setContent(injectData);
+      } else {
+        // If no selection, insert the variableString at the end of the document
+        editor?.setContent(editor.getContent() + injectData);
+      }
+    }, [injectData]);
+
   return (
     <>
       {showLoading && isLoading && (
@@ -244,6 +263,7 @@ const TemplateDisplayV3 = ({
             }
             initialValue={initialValues && parsedContent}
             value={value}
+            onInit={(evt, editor) => (editorRef.current = editor)}
             init={{
               setup: (editor) => {
                 // Register Icons

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Row, Col, Button } from "reactstrap";
 import { useFormik } from "formik";
 import {
@@ -8,13 +8,23 @@ import {
   SelectTemplateNoBorder,
   EmailTemplateSelect,
   TemplateDisplayV4,
+  UseTemplateModuleDataHook,
 } from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
 import { toast } from "react-toastify";
+import { TemplateHelper } from "@workspace/common";
 
-const SubmitToSales = () => {
+const SubmitToSales = ({ candidateId, jobId }) => {
   const [formInitialValues, setFormInitialValues] = useState(initialValues);
   const [formSchema, setFormSchema] = useState(schema);
+  const [emailTemplateData, setEmailTemplateData] = useState(null);
+  const [tableTemplateData, setTableTemplateData] = useState(null);
+  const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
+    candidateId: candidateId,
+    jobId: jobId,
+  });
+
+  // console.log("emailTemplateData", emailTemplateData?.content);
 
   /**
    * Handle form submit event (Formik)
@@ -60,6 +70,40 @@ const SubmitToSales = () => {
     }
   };
 
+  useEffect(() => {
+    const setContentInFormik = async () => {
+      const processedContent = await TemplateHelper.runEffects(
+        emailTemplateData.content,
+        null,
+        allModuleData,
+        true
+      );
+      formik.setFieldValue("content", processedContent);
+    };
+
+    if (emailTemplateData) {
+      setContentInFormik();
+    }
+  }, [emailTemplateData, allModuleData]);
+
+  const setTableDataWithEffect = async (data) => {
+    const processedContent = await TemplateHelper.runEffects(
+      data.content,
+      null,
+      allModuleData,
+      true
+    );
+    setTableTemplateData({ ...data, content: processedContent });
+  };
+
+  useEffect(() => {
+    if (tableTemplateData) {
+      setTableTemplateData(null);
+    }
+  }, [tableTemplateData]);
+
+  console.log("tableTemplateData", tableTemplateData?.content);
+
   return (
     <div>
       <Row>
@@ -85,13 +129,21 @@ const SubmitToSales = () => {
 
       <Row className="d-flex">
         <Col>
+          {/* Main Template Select */}
           <EmailTemplateSelect
             icon={<i className=" ri-file-list-2-line fs-5"></i>}
+            category="Email Templates"
+            setTemplateData={setEmailTemplateData}
           />
           <hr className="mt-2" />
         </Col>
         <Col>
-          <EmailTemplateSelect icon={<i className=" ri-table-2 fs-5"></i>} />
+          <EmailTemplateSelect
+            icon={<i className=" ri-table-2 fs-5"></i>}
+            setTemplateData={setTableDataWithEffect}
+            value={tableTemplateData}
+            category="Table Templates"
+          />
           <hr className="mt-2" />
         </Col>
       </Row>
@@ -111,9 +163,11 @@ const SubmitToSales = () => {
       <Row>
         <Col>
           <TemplateDisplayV4
+            injectData={tableTemplateData?.content ?? null}
             isAllLoading={false}
-            // content={templateData?.content ?? null}
+            content={emailTemplateData?.content ?? null}
             // allData={allModuleData}
+            allData={"null"}
             isView={false}
             // handleOutputContent={setEmailContent}
             autoResize={false}
