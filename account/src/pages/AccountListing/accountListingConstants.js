@@ -1,9 +1,10 @@
-const ACCOUNT_INITIAL_OPTIONS = [
+const ACCOUNT_MANDATORY_OPTIONS = [
   {
-    label: "Account Source",
-    value: "accountSubmissionData.accountSource",
+    label: "Account Name",
+    value: "accountSubmissionData.accountName",
     sort: true,
-    sortValue: "account_submission_data.accountSource",
+    sortValue: "account_submission_data.accountName",
+    expand: true,
   },
   {
     label: "Account Number",
@@ -11,11 +12,14 @@ const ACCOUNT_INITIAL_OPTIONS = [
     sort: true,
     sortValue: "account_submission_data.accountNumber",
   },
+];
+
+const ACCOUNT_INITIAL_OPTIONS = [
   {
-    label: "Account Name",
-    value: "accountSubmissionData.accountName",
+    label: "Account Source",
+    value: "accountSubmissionData.accountSource",
     sort: true,
-    sortValue: "account_submission_data.accountName",
+    sortValue: "account_submission_data.accountSource",
   },
   {
     label: "Account Owner",
@@ -43,4 +47,4 @@ const ACCOUNT_INITIAL_OPTIONS = [
   },
 ];
 
-export { ACCOUNT_INITIAL_OPTIONS };
+export { ACCOUNT_INITIAL_OPTIONS, ACCOUNT_MANDATORY_OPTIONS };

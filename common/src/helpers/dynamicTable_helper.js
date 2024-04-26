@@ -59,6 +59,7 @@ function generateConfig(selectedOptGroup, customRender = []) {
         }
         return getDynamicNestedResult(data, opt.value) || "-";
       },
+      expand: opt?.expand || false,
     });
   });
   return config;

@@ -14,7 +14,6 @@ import {
   FETCH_JOB_CUSTOM_VIEW,
   SELECT_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW,
-
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -57,7 +56,8 @@ import {
   createJobCustomView,
   getJobCustomViews,
   selectJobCustomView,
-  deleteJobCustomView
+  deleteJobCustomView,
+  deleteJobs
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
@@ -223,6 +223,7 @@ function* workDeleteJobCustomView(action) {
   }
 }
 
+
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
@@ -236,4 +237,5 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB_CUSTOM_VIEW, workFetchJobCustomViews);
   yield takeEvery(SELECT_JOB_CUSTOM_VIEW, workSelectJobCustomView);
   yield takeEvery(DELETE_JOB_CUSTOM_VIEW, workDeleteJobCustomView);
+
 }

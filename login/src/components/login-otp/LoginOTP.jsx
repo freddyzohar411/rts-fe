@@ -135,7 +135,9 @@ const LoginOTP = (props) => {
                   <div className="p-2">
                     <div className="text-muted text-center mb-2 mx-lg-3">
                       <h4 className="">Verify Your Login</h4>
-                      <p>6 digits OTP code sent to your email</p>
+                      <p>
+                        6 digits OTP code sent to <i><b>{state?.email}</b></i>
+                      </p>
                     </div>
 
                     <form onSubmit={formik.handleSubmit}>

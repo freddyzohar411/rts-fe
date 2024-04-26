@@ -22,6 +22,7 @@ import {
   fetchCandidatesFields,
   createCandidateCustomView,
 } from "../../store/actions";
+import { CANDIDATE_MANDATORY_OPTIONS } from "../CandidateListing/candidateListingConstants";
 
 function CandidateCustomView() {
   document.title = "Create Candidate Custom View | RTS";
@@ -44,7 +45,12 @@ function CandidateCustomView() {
 
   useEffect(() => {
     if (candidateFields?.length > 0) {
-      setOptions(candidateFields);
+      const filteredOptions = candidateFields.filter(
+        (field) => !CANDIDATE_MANDATORY_OPTIONS.some(
+          (option) => field?.value.includes(option.value)
+        )
+      );
+      setOptions(filteredOptions);
     }
   }, [candidateFields]);
 

@@ -41,6 +41,10 @@ import {
   DELETE_ACCOUNT_CUSTOM_VIEW,
   DELETE_ACCOUNT_CUSTOM_VIEW_SUCCESS,
   DELETE_ACCOUNT_CUSTOM_VIEW_FAILURE,
+  DELETE_ACCOUNTS,
+  DELETE_ACCOUNTS_SUCCESS,
+  DELETE_ACCOUNTS_FAILURE,
+  DELETE_ACCOUNTS_RESET,
 } from "./actionTypes";
 
 // Fetch Account
@@ -248,3 +252,24 @@ export const deleteAccountCustomViewFailure = (error) => ({
   type: DELETE_ACCOUNT_CUSTOM_VIEW_FAILURE,
   payload: error,
 });
+
+export const deleteAccounts = (accountIds) => ({
+  type: DELETE_ACCOUNTS,
+  payload: accountIds,
+});
+
+export const deleteAccountsSuccess = (accountIds) => ({
+  type: DELETE_ACCOUNTS_SUCCESS,
+  payload: accountIds,
+});
+
+export const deleteAccountsFailure = (error) => ({
+  type: DELETE_ACCOUNTS_FAILURE,
+  payload: error,
+});
+
+export const deleteAccountsReset = () => ({
+  type: DELETE_ACCOUNTS_RESET,
+});
+
+

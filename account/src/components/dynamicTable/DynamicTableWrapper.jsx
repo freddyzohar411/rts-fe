@@ -15,6 +15,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  ButtonGroup,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { DynamicTable } from "@workspace/common";
@@ -30,17 +31,29 @@ import {
 } from "../../store/account/action";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDispatch, useSelector } from "react-redux";
+import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
+import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
+import {
+  fetchAccounts,
+  deleteAccounts,
+  deleteAccountsReset,
+} from "../../store/account/action";
+import { TooltipWrapper } from "@workspace/common";
 
 const DynamicTableWrapper = ({
   data,
   pageInfo,
+  pageRequest,
   pageRequestSet,
   config,
   search,
   setSearch,
   optGroup,
   setCustomConfigData,
-  confirmDelete,
+  header,
+  activeRow,
+  setActiveRow,
+  setTableConfig,
 }) => {
   // ================== Custom Render ==================
   const customRenderList = [
@@ -66,6 +79,13 @@ const DynamicTableWrapper = ({
   const allAccountCustomViews = useSelector(
     (state) => state?.AccountReducer?.accountCustomViews
   );
+
+  const deleteAccountsMeta = useSelector(
+    (state) => state.AccountReducer.deleteAccountsMeta
+  );
+
+  // Delete modal states
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAccountCustomView());
@@ -108,54 +128,98 @@ const DynamicTableWrapper = ({
     }
   }, [allAccountCustomViews, optGroup]);
 
+  const handleEportExcel = () => {
+    let exportData = null;
+    if (!activeRow) {
+      exportData = data;
+    } else if (activeRow?.length === 0) {
+      exportData = data;
+    } else {
+      exportData = data.filter((item) => activeRow.includes(item?.id));
+    }
+
+    DynamicTableHelper.handleExportExcel(
+      "Accounts",
+      exportData,
+      config.slice(2, -1),
+      customRenderList,
+      true
+    );
+  };
+
+  const handleDelete = () => {
+    if (activeRow?.length === 0) {
+      toast.error("Please select at least one record to delete.");
+      return;
+    }
+    setIsDeleteModalOpen(true);
+  };
+
+  // Modal Delete accounts
+  const confirmDelete = () => {
+    dispatch(deleteAccounts(activeRow));
+  };
+
+  useEffect(() => {
+    if (deleteAccountsMeta?.isSuccess) {
+      dispatch(deleteAccountsReset());
+      toast.success("Account deleted successfully");
+      setIsDeleteModalOpen(false);
+      if (pageRequest?.searchFields?.length > 0) {
+        setActiveRow([]);
+        dispatch(
+          fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest))
+        );
+      }
+    }
+  }, [deleteAccountsMeta?.isSuccess]);
+
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
           <Row>
             <Col lg={12}>
-              <Card className="m-3">
-                <CardBody>
-                  <div className="listjs-table">
-                    <Row className="d-flex column-gap-1 mb-3">
-                      {setSearch && (
-                        <Col>
-                          <div className="search-box">
-                            <form onSubmit={pageRequestSet.setSearchTerm}>
-                              <Input
-                                type="text"
-                                placeholder="Search"
-                                className="form-control search"
-                                value={search}
-                                style={{ width: "350px" }}
-                                onChange={(e) => setSearch(e.target.value)}
-                              />
-                            </form>
-                            <i className="ri-search-line search-icon"></i>
-                          </div>
-                        </Col>
-                      )}
-                      <Col>
-                        <div className="d-flex column-gap-2 justify-content-end">
-                          <Button
-                            type="button"
-                            className="btn btn-custom-primary d-flex align-items-center header-btn"
-                            onClick={() =>
-                              DynamicTableHelper.handleExportExcel(
-                                "Accounts",
-                                data,
-                                config.slice(2, -1),
-                                customRenderList,
-                                true
-                              )
-                            }
-                          >
-                            <span>
-                              <i className="mdi mdi-download me-1"></i>
-                            </span>
-                            Export
-                          </Button>
-                          {/* Custom View Button */}
+              <div className="listjs-table">
+                <Row className="d-flex mb-3">
+                  <Col className="d-flex align-items-center gap-3">
+                    <span className="fw-semibold fs-3 d-flex gap-1">
+                      <span>{header}</span>
+                      <span> {` (${pageInfo?.totalElements || 0})`}</span>
+                    </span>
+                    {setSearch && (
+                      <div className="search-box">
+                        <form onSubmit={pageRequestSet.setSearchTerm}>
+                          <Input
+                            type="text"
+                            placeholder="Search"
+                            className="form-control search"
+                            value={search}
+                            style={{ width: "300px", height: "40px" }}
+                            onChange={(e) => setSearch(e.target.value)}
+                          />
+                        </form>
+                        <i className="ri-search-line search-icon"></i>
+                      </div>
+                    )}
+                  </Col>
+                  <Col>
+                    <div className="d-flex column-gap  gap-1 justify-content-end align-items-center">
+                      <TableItemDisplay pageInfo={pageInfo} />
+                      <div
+                        style={{
+                          width: "2px",
+                          height: "20px",
+                          backgroundColor: "#adb5bd",
+                          marginLeft: "12px",
+                        }}
+                      ></div>
+                      <TableRowsPerPageWithNav
+                        pageInfo={pageInfo}
+                        pageRequestSet={pageRequestSet}
+                      />
+                      <ButtonGroup className="mx-1">
+                        <TooltipWrapper tooltipText="Custom View">
                           <Dropdown
                             isOpen={customViewDropdownOpen}
                             toggle={() =>
@@ -163,13 +227,17 @@ const DynamicTableWrapper = ({
                             }
                           >
                             <DropdownToggle
-                              caret
-                              className="btn btn-custom-primary py-2"
+                              color="light"
+                              className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                              style={{
+                                borderTopRightRadius: "0px",
+                                borderBottomRightRadius: "0px",
+                                height: "40px",
+                              }}
                             >
-                              <i className="ri-settings-3-fill me-2"></i>
-                              <span>Custom View</span>
+                              <i className="ri-settings-3-fill fs-5"></i>
                             </DropdownToggle>
-                            <DropdownMenu>
+                            <DropdownMenu className="mt-1">
                               <Link to="/accounts/custom-view">
                                 <DropdownItem>Create Custom View</DropdownItem>
                               </Link>
@@ -224,45 +292,93 @@ const DynamicTableWrapper = ({
                               )}
                             </DropdownMenu>
                           </Dropdown>
-                          <DeleteCustomModal
-                            isOpen={deleteModalOpen}
-                            setIsOpen={setDeleteModalOpen}
-                            confirmDelete={() =>
-                              handleDeleteCustomView(deletingCustomViewId)
-                            }
-                            header="Delete Custom View Confirmation"
-                            deleteText={`Are you sure you want to delete this custom view?`}
-                            confirmButtonText="Delete"
-                            isLoading={false}
-                          />
-                          {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
-                            <Link
-                              to="/accounts/create"
-                              style={{ color: "black" }}
+                        </TooltipWrapper>
+                        <TooltipWrapper tooltipText="Export to Excel">
+                          <Button
+                            color="light"
+                            className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                            onClick={handleEportExcel}
+                            style={{
+                              height: "40px",
+                              borderTopLeftRadius:
+                                checkAllPermission([
+                                  Permission.ACCOUNT_DELETE,
+                                ]) && "4px",
+                              borderBottomLeftRadius:
+                                checkAllPermission([
+                                  Permission.ACCOUNT_DELETE,
+                                ]) && "4px",
+                            }}
+                          >
+                            <i className="ri-download-fill align-bottom fs-5"></i>
+                          </Button>
+                        </TooltipWrapper>
+                        {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
+                          <TooltipWrapper tooltipText="Delete multiple">
+                            <Button
+                              color="light"
+                              className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+                              onClick={handleDelete}
+                              style={{
+                                height: "40px",
+                                borderTopRightRadius: "4px",
+                                borderBottomRightRadius: "4px",
+                              }}
                             >
-                              <Button
-                                type="button"
-                                className="btn btn-custom-primary header-btn"
-                              >
-                                Create New Account
-                              </Button>
-                            </Link>
-                          )}
-                        </div>
-                      </Col>
-                    </Row>
-                    <DynamicTable
-                      config={config}
-                      data={data}
-                      pageRequestSet={pageRequestSet}
-                      pageInfo={pageInfo}
-                      isLoading={accountsMeta?.isLoading}
-                    />
-                  </div>
-                </CardBody>
-              </Card>
+                              <i className="mdi mdi-delete align-bottom fs-5"></i>
+                            </Button>
+                          </TooltipWrapper>
+                        )}
+                      </ButtonGroup>
+                      {checkAllPermission([Permission.ACCOUNT_WRITE]) && (
+                        <Link to="/accounts/create" style={{ color: "black" }}>
+                          <TooltipWrapper tooltipText="Add Acount">
+                            <Button
+                              type="button"
+                              className="btn btn-custom-primary header-btn d-flex align-items-center"
+                              style={{
+                                height: "40px",
+                                backgroundColor: "#0A65CC",
+                              }}
+                            >
+                              <span className="fs-3 align-bottom">+</span>
+                            </Button>
+                          </TooltipWrapper>
+                        </Link>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
+                <DynamicTable
+                  config={config}
+                  data={data}
+                  pageRequestSet={pageRequestSet}
+                  pageInfo={pageInfo}
+                  isLoading={accountsMeta?.isLoading}
+                  freezeHeader={true}
+                  activeRow={activeRow}
+                  setTableConfig={setTableConfig}
+                />
+              </div>
             </Col>
           </Row>
+          <DeleteCustomModal
+            isOpen={deleteModalOpen}
+            setIsOpen={setDeleteModalOpen}
+            confirmDelete={() => handleDeleteCustomView(deletingCustomViewId)}
+            header="Delete Custom View Confirmation"
+            deleteText={`Are you sure you want to delete this custom view?`}
+            confirmButtonText="Delete"
+            isLoading={false}
+          />
+          <DeleteCustomModal
+            isOpen={isDeleteModalOpen}
+            setIsOpen={setIsDeleteModalOpen}
+            confirmDelete={confirmDelete}
+            header="Delete Account"
+            deleteText={"Are you sure you would like to delete this account?"}
+            isLoading={deleteAccountsMeta?.isLoading}
+          />
         </Container>
       </div>
     </React.Fragment>

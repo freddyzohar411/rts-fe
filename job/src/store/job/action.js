@@ -35,7 +35,7 @@ import {
   SELECT_JOB_CUSTOM_VIEW_FAILURE,
   DELETE_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW_SUCCESS,
-  DELETE_JOB_CUSTOM_VIEW_FAILURE
+  DELETE_JOB_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -227,3 +227,4 @@ export const deleteJobCustomViewFailure = (error) => ({
   type: DELETE_JOB_CUSTOM_VIEW_FAILURE,
   payload: error,
 });
+

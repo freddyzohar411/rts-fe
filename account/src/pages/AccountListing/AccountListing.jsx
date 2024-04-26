@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Badge, Button, Input } from "reactstrap";
+import { Badge, Input, DropdownItem } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import {
   useTableHook,
@@ -9,22 +9,31 @@ import {
   DynamicTableHelper,
 } from "@workspace/common";
 import DynamicTableWrapper from "../../components/dynamicTable/DynamicTableWrapper";
+import {
+  ACCOUNT_INITIAL_OPTIONS,
+  ACCOUNT_MANDATORY_OPTIONS,
+} from "./accountListingConstants";
 import "./AccountListing.scss";
 import {
-  deleteAccount,
   fetchAccounts,
   fetchAccountsFields,
+  fetchAccountCustomView,
+  deleteAccount,
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
+import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
 
 const AccountListing = () => {
-  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
+  const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const accountsData = useSelector((state) => state.AccountReducer.accounts);
   const accountsFields = useSelector(
     (state) => state.AccountReducer.accountsFields
   );
+
+  // Table state
+  const [tableConfig, setTableConfig] = useState([]);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -57,6 +66,18 @@ const AccountListing = () => {
         </Badge>
       ),
     },
+    {
+      names: ["accountSubmissionData.accountName"],
+      render: (data) => (
+        <Link
+          to={`/accounts/${data.id}/edit`}
+          className="text-custom-primary text-decoration-underline"
+          state={{ view: true }}
+        >
+          {data.accountSubmissionData.accountName}
+        </Link>
+      ),
+    },
   ];
 
   useEffect(() => {
@@ -73,6 +94,12 @@ const AccountListing = () => {
     setSearch,
     customConfig,
     setCustomConfigData,
+    setTableData,
+    tableData,
+    handleRowCheck,
+    selectAllRows,
+    activeRow,
+    setActiveRow,
   } = useTableHook(
     {
       page: 0,
@@ -80,9 +107,10 @@ const AccountListing = () => {
       sortBy: null,
       sortDirection: "asc",
       searchTerm: null,
-      searchFields: [],
+      searchFields: DynamicTableHelper.generateSeachFieldArray([]),
     },
-    [],
+    ACCOUNT_MANDATORY_OPTIONS,
+    ACCOUNT_INITIAL_OPTIONS,
     customRenderList
   );
 
@@ -94,7 +122,6 @@ const AccountListing = () => {
         header: "#",
         name: "indexing",
         sort: false,
-        sortValue: "indexing",
         render: (data, index) => (
           <div className="d-flex column-gap-2">
             {pageInfo?.currentPage * pageInfo?.pageSize + (index + 1)}.
@@ -108,21 +135,24 @@ const AccountListing = () => {
               className="form-check-input"
               type="checkbox"
               id="checkbox"
-              value="option"
+              checked={
+                activeRow?.length > 0 && activeRow?.length === tableData?.length
+              }
+              onChange={(e) => selectAllRows(e?.target?.checked)}
             />
           </div>
         ),
         name: "checkbox",
         sort: false,
-        sortValue: "checkbox",
-        render: () => {
+        render: (data) => {
           return (
             <div className="form-check">
               <Input
                 className="form-check-input"
                 type="checkbox"
                 name="chk_child"
-                value="option1"
+                checked={activeRow?.includes(parseInt(data?.id))}
+                onChange={(e) => handleRowCheck(data?.id, e.target.checked)}
               />
             </div>
           );
@@ -146,51 +176,42 @@ const AccountListing = () => {
         header: "Action",
         name: "action",
         sort: false,
-        sortValue: "action",
+        sticky: "right",
+        expand: true,
+        center: true,
         render: (data) => (
-          <div className="d-flex column-gap-2">
-            <Link
-              to={`/accounts/${data.id}/edit`}
-              style={{ color: "black" }}
-              // state={{ form: 3 }}
-              state={{ view: true }}
-            >
-              <Button
-                type="button"
-                className="btn btn-custom-primary table-btn"
-              >
-                <i className="ri-eye-line"></i>
-              </Button>
-            </Link>
+          <ActionDropDown>
             {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
-              <Link
-                to={`/accounts/${data.id}/edit`}
-                style={{ color: "black" }}
-                state={{ view: false }}
-              >
-                <Button
-                  type="button"
-                  className="btn btn-custom-primary table-btn"
+              <DropdownItem>
+                <Link
+                  to={`/accounts/${data.id}/edit`}
+                  style={{ color: "black" }}
+                  state={{ view: false }}
                 >
-                  <i className="mdi mdi-pencil"></i>
-                </Button>
-              </Link>
+                  <div className="d-flex  align-items-center gap-2">
+                    <i className="mdi mdi-pencil"></i>
+                    <span>Edit</span>
+                  </div>
+                </Link>
+              </DropdownItem>
             )}
             {checkAllPermission([Permission.ACCOUNT_DELETE]) && (
-              <Button
-                type="button"
-                className="btn btn-danger table-btn d-flex "
-                onClick={() => {
-                  setDeleteId(data.id);
-                  setIsDeleteModalOpen(true);
-                }}
-              >
-                <span>
-                  <i className="mdi mdi-delete"></i>
+              <DropdownItem>
+                <span
+                  type="button"
+                  onClick={() => {
+                    setDeleteId(data.id);
+                    setIsDeleteModalOpen(true);
+                  }}
+                >
+                  <div className="d-flex align-items-center gap-2">
+                    <i className="mdi mdi-delete"></i>
+                    <span>Delete</span>
+                  </div>
                 </span>
-              </Button>
+              </DropdownItem>
             )}
-          </div>
+          </ActionDropDown>
         ),
       },
     ];
@@ -206,6 +227,7 @@ const AccountListing = () => {
   // Fetch the account when the pageRequest changes
   useEffect(() => {
     if (pageRequest?.searchFields?.length > 0) {
+      setActiveRow([]);
       dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
   }, [JSON.stringify(pageRequest)]);
@@ -214,8 +236,14 @@ const AccountListing = () => {
   useEffect(() => {
     if (accountsData) {
       setPageInfoData(accountsData);
+      setTableData(accountsData?.accounts);
     }
   }, [accountsData]);
+
+  useEffect(() => {
+    const newConfig = generateAccountConfig(customConfig);
+    setTableConfig(newConfig);
+  }, [customConfig, pageInfo, activeRow, tableData]);
 
   return (
     <>
@@ -228,7 +256,7 @@ const AccountListing = () => {
       />
       <DynamicTableWrapper
         data={accountsData?.accounts}
-        config={generateAccountConfig(customConfig)}
+        config={tableConfig}
         pageInfo={pageInfo}
         pageRequest={pageRequest}
         pageRequestSet={pageRequestSet}
@@ -236,6 +264,10 @@ const AccountListing = () => {
         setSearch={setSearch}
         optGroup={accountsFields}
         setCustomConfigData={setCustomConfigData}
+        header="Accounts"
+        activeRow={activeRow}
+        setActiveRow={setActiveRow}
+        setTableConfig={setTableConfig}
       />
     </>
   );

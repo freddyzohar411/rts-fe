@@ -38,19 +38,7 @@ const JobManage = () => {
       text="Please wait..."
     >
       <div className="page-content">
-        <Container fluid>
-          <Row>
-            <Col>
-              <Breadcrumb>
-                <BreadcrumbItem>
-                  <Link to="/jobs">Jobs</Link>
-                </BreadcrumbItem>
-                <BreadcrumbItem active>{`${StringHelper.capitalizeFirstLetter(
-                  slug
-                )}`}</BreadcrumbItem>
-              </Breadcrumb>
-            </Col>
-          </Row>
+        <Container fluid className="p-0">
           <Nav className="nav-tabs-custom">
             <NavItem>
               <NavLink
