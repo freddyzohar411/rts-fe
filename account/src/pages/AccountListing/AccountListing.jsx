@@ -71,19 +71,6 @@ const AccountListing = () => {
       ),
     },
     {
-      names: ["accountNumber"],
-      render: (data) => (
-        <Link
-          to={`/accounts/${data.id}/edit`}
-          className="text-custom-primary text-decoration-underline"
-          state={{ view: true }}
-        >
-          {data.accountNumber}
-        </Link>
-      ),
-    },
-    // Same for account name
-    {
       names: ["accountSubmissionData.accountName"],
       render: (data) => (
         <Link

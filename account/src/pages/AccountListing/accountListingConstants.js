@@ -1,15 +1,15 @@
 const ACCOUNT_MANDATORY_OPTIONS = [
   {
-    label: "Account Number",
-    value: "accountNumber",
-    sort: true,
-    sortValue: "account_submission_data.accountNumber",
-  },
-  {
     label: "Account Name",
     value: "accountSubmissionData.accountName",
     sort: true,
     sortValue: "account_submission_data.accountName",
+  },
+  {
+    label: "Account Number",
+    value: "accountNumber",
+    sort: true,
+    sortValue: "account_submission_data.accountNumber",
   },
 ];
 
