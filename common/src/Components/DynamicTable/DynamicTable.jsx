@@ -1,17 +1,10 @@
 import React from "react";
 import {
-  Input,
   Table,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
 } from "reactstrap";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./DynamicTable.scss";
-import TablePagination from "./TablePagination";
-import TableRowsPerPage from "./TableRowsPerPage";
-import TableItemDisplay from "./TableItemDisplay";
 
 const DynamicTable = ({
   data,
@@ -192,32 +185,6 @@ const DynamicTable = ({
           </tbody>
         </Table>
       </div>
-
-      {/* Table Pagination */}
-      {/* {data?.length > 0 && (
-        <div className="d-flex flex-row justify-content-between align-items-baseline mt-2">
-          <div className="d-flex align-items-center fs-6">
-            <TableRowsPerPage pageRequestSet={pageRequestSet} />
-            <div
-              style={{
-                width: "2px",
-                height: "20px",
-                backgroundColor: "#adb5bd",
-                marginRight: "15px",
-              }}
-            ></div>
-            <TableItemDisplay pageInfo={pageInfo} />
-          </div>
-          <div className="d-flex flex-row justify-content-end align-items-baseline">
-            <TablePagination
-              currentPage={page + 1}
-              totalPages={pageInfo.totalPages}
-              pageWindow={1}
-              setCurrentPage={pageRequestSet?.setPage}
-            />
-          </div>
-        </div>
-      )} */}
     </>
   );
 };

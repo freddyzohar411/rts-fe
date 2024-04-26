@@ -4,6 +4,7 @@ const ACCOUNT_MANDATORY_OPTIONS = [
     value: "accountSubmissionData.accountName",
     sort: true,
     sortValue: "account_submission_data.accountName",
+    expand: true,
   },
   {
     label: "Account Number",

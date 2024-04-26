@@ -25,7 +25,7 @@ import { useUserAuth } from "@workspace/login";
 import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
 
 const AccountListing = () => {
-  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
+  const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const accountsData = useSelector((state) => state.AccountReducer.accounts);
   const accountsFields = useSelector(
@@ -183,18 +183,6 @@ const AccountListing = () => {
         center: true,
         render: (data) => (
           <ActionDropDown>
-            {/* <DropdownItem>
-              <Link
-                to={`/accounts/${data.id}/edit`}
-                style={{ color: "black" }}
-                state={{ view: true }}
-              >
-                <div className="d-flex  align-items-center gap-2">
-                  <i className="ri-eye-line"></i>
-                  <span>View</span>
-                </div>
-              </Link>
-            </DropdownItem> */}
             {checkAllPermission([Permission.ACCOUNT_EDIT]) && (
               <DropdownItem>
                 <Link

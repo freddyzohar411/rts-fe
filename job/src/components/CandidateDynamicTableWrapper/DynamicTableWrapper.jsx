@@ -5,14 +5,12 @@ import {
   Row,
   Modal,
   ModalBody,
-  ModalFooter,
   ModalHeader,
   Input,
 } from "reactstrap";
 import { useSelector } from "react-redux";
 import { DynamicTable } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
-import { SelectElement } from "@workspace/common";
 import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
 import { TooltipWrapper } from "@workspace/common";

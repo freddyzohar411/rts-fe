@@ -21,7 +21,7 @@ import { useUserAuth } from "@workspace/login";
 import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
 
 function CandidateListing() {
-  const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
+  const { Permission, checkAllPermission } = useUserAuth();
   const dispatch = useDispatch();
   const candidatesData = useSelector(
     (state) => state.CandidateReducer.candidates
@@ -130,18 +130,6 @@ function CandidateListing() {
         center: true,
         render: (data) => (
           <ActionDropDown>
-            {/* //   <DropdownItem>
-          //     <Link
-          //       to={`/candidates/${data.id}/snapshot`}
-          //       style={{ color: "black" }}
-          //       state={{ view: true }}
-          //     >
-          //       <div className="d-flex  align-items-center gap-2">
-          //         <i className="ri-eye-line"></i>
-          //         <span>View</span>
-          //       </div>
-          //     </Link>
-          //   </DropdownItem> */}
             {checkAllPermission([Permission.CANDIDATE_EDIT]) && (
               <DropdownItem>
                 <Link
