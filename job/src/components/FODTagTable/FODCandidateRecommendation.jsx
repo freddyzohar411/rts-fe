@@ -72,7 +72,7 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
               <div id="detailedScores" style={{ marginTop: "10px" }}>
                 {matchData?.generalScoreDetails &&
                   matchData?.generalScoreDetails.length > 0 && (
-                    <>
+                    <div className="mb-4">
                       <h4 className="fw-bold">
                         Candidate-Job Compatibility Highlights:
                       </h4>
@@ -144,12 +144,12 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                             ))}
                         </tbody>
                       </Table>
-                    </>
+                    </div>
                   )}
                 {matchData?.skillsScoreDetails &&
                   matchData?.skillsScoreDetails.length > 0 && (
-                    <>
-                      <h4 className="mt-4 fw-bold">Skills Matching:</h4>
+                    <div className="mb-4">
+                      <h4 className="fw-bold">Skills Matching:</h4>
                       <Table>
                         <thead>
                           <tr>
@@ -186,12 +186,12 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                             ))}
                         </tbody>
                       </Table>
-                    </>
+                    </div>
                   )}
                 {matchData?.jobTitleScoreDetails &&
                   matchData?.jobTitleScoreDetails.length > 0 && (
-                    <>
-                      <h4 className="mt-4 fw-bold">Job Title Matching:</h4>
+                    <div className="mb-4">
+                      <h4 className="fw-bold">Job Title Matching:</h4>
                       <Table>
                         <thead>
                           <tr>
@@ -230,12 +230,12 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                             ))}
                         </tbody>
                       </Table>
-                    </>
+                    </div>
                   )}
                 {matchData?.fieldOfStudyScoreDetails &&
                   matchData?.fieldOfStudyScoreDetails.length > 0 && (
-                    <>
-                      <h4 className="mt-4 fw-bold">Field Of Study Matching:</h4>
+                    <div className="mb-4">
+                      <h4 className="fw-bold">Field Of Study Matching:</h4>
                       <Table>
                         <thead>
                           <tr>
@@ -264,12 +264,12 @@ const FODCandidateRecommendation = ({ candidateId, jobId, data }) => {
                             ))}
                         </tbody>
                       </Table>
-                    </>
+                    </div>
                   )}
                 {matchData?.languageScoreDetails &&
                   matchData?.languageScoreDetails.length > 0 && (
                     <>
-                      <h4 className="mt-4 fw-bold">Language Matching:</h4>
+                      <h4 className="fw-bold">Language Matching:</h4>
                       <Table>
                         <thead>
                           <tr>
