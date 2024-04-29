@@ -69,6 +69,7 @@ import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
+import "./ViewTemplateSection.scss";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -99,6 +100,7 @@ const JobOverview = () => {
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
   const [tooltipIndexes, setTooltipIndexes] = useState();
+  const [isViewTemplate, setIsViewTemplate] = useState(true);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -988,6 +990,14 @@ const JobOverview = () => {
                       {stepperState}
                     </span>
                   </Row>
+                  <Row>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setIsViewTemplate(!isViewTemplate);
+                      }}
+                    >Click</Button>
+                  </Row>
                 </Col>
               </Row>
             </div>
@@ -1012,6 +1022,68 @@ const JobOverview = () => {
           <OffcanvasBody>
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
+          {/* View Template */}
+          {isViewTemplate && (
+            <div
+              className="view-template"
+              // style={{
+              //   border,
+              // }}
+            >
+              <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
+                <div className="avatar-md flex-shrink-0 d-flex gap-3">
+                  <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
+                    {formSubmissionData?.accountName.charAt(0)}
+                  </div>
+                  <Row className="d-flex flex-row justify-content-between align-items-end gap-5">
+                    <Col>
+                      <Row>
+                        <span className="h4 fw-bold">
+                          {formSubmissionData?.accountName}
+                        </span>
+                      </Row>
+                      <Row>
+                        <div className="d-flex flex-row gap-4">
+                          <span className="h6 fw-semibold text-nowrap">
+                            Job ID - {formSubmissionData?.clientJobId}
+                          </span>
+                          <span
+                            className="h6 fw-semibold text-nowrap cursor-pointer"
+                            title={formSubmissionData?.jobTitle}
+                          >
+                            Job Title -{" "}
+                            {truncate(formSubmissionData?.jobTitle, 55)}
+                          </span>
+                        </div>
+                      </Row>
+                      <Row>
+                        <span className="h6 text-muted fw-bold">
+                          {stepperState}
+                        </span>
+                      </Row>
+                    </Col>
+                  </Row>
+                </div>
+                {/* Template Selector */}
+                {(activeStep === 11 || isPreviewCV) && (
+                  <Col>
+                    <div>
+                      <TemplateSelectByCategoryElement
+                        categoryName={selectedCategory}
+                        placeholder="Select a template"
+                        onChange={(value) => {
+                          setTemplateData(value);
+                        }}
+                        defaultFirstValue
+                        width="300px"
+                        end
+                      />
+                    </div>
+                  </Col>
+                )}
+              </div>
+            </div>
+          )}
         </Offcanvas>
       </div>
     </React.Fragment>

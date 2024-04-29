@@ -5,7 +5,6 @@ import {
   EmailTo,
   EmailCCBCC,
   EmailSubject,
-  SelectTemplateNoBorder,
   EmailTemplateSelect,
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
@@ -218,6 +217,7 @@ const SubmitToSales = ({ candidateId, jobId }) => {
           <EmailTemplateSelect
             icon={<i className=" ri-file-list-2-line fs-5"></i>}
             value={CVTemplateData}
+            setTemplateData={setTableDataWithEffect}
             category="CV"
             selectRender={(data) => {
               return (
@@ -253,8 +253,6 @@ const SubmitToSales = ({ candidateId, jobId }) => {
             // handleOutputContent={setEmailContent}
             autoResize={false}
             height={280}
-            // minHeight={100}
-            // maxHeight={300}
             onChange={(content) => {
               formik.setFieldValue("content", content);
             }}
