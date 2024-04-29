@@ -8,3 +8,20 @@
     z-index: -100;
     overflow: hidden;
 }
+
+// .view-template {
+//     position: absolute;
+//     left: 0; /* Start outside of the viewport */
+//     width: 30vw;
+//     height: 100vh;
+//     background-color: white;
+//     z-index: -1000000000 !important;
+//     // overflow: hidden;
+//     transition: left 0.5s ease-in-out; /* Add transition effect */
+// }
+
+// .view-template.active {
+//     left: -30vw; /* Move into view */
+//     border-right: 1px solid #e0e0e0;
+//     z-index: -1000000000;
+// }

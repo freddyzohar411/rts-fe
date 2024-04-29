@@ -1,0 +1,19 @@
+.side-drawer {
+    position: absolute;
+    left:-30vw;
+    width:30vw;
+    height: 100vh;
+    background-color: white;
+    border-right: 1px solid #e0e0e0 !important;
+}
+
+.side-drawer__full-screen {
+    position: fixed; /* Ensure it's relative to the viewport */
+    top: 0;          /* Start from the top */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    border-right: 1px solid #e0e0e0;
+    z-index: 2;
+}

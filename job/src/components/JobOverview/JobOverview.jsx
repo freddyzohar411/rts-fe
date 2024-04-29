@@ -69,6 +69,7 @@ import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
+import { SideDrawer } from "@workspace/common";
 import "./ViewTemplateSection.scss";
 
 const JobOverview = () => {
@@ -100,7 +101,7 @@ const JobOverview = () => {
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
   const [tooltipIndexes, setTooltipIndexes] = useState();
-  const [isViewTemplate, setIsViewTemplate] = useState(true);
+  const [isViewTemplate, setIsViewTemplate] = useState(false);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -996,7 +997,9 @@ const JobOverview = () => {
                       onClick={() => {
                         setIsViewTemplate(!isViewTemplate);
                       }}
-                    >Click</Button>
+                    >
+                      Click
+                    </Button>
                   </Row>
                 </Col>
               </Row>
@@ -1025,7 +1028,7 @@ const JobOverview = () => {
           {/* View Template */}
           {isViewTemplate && (
             <div
-              className="view-template"
+              className={`view-template ${isViewTemplate ? "active" : ""}`}
               // style={{
               //   border,
               // }}
@@ -1084,6 +1087,25 @@ const JobOverview = () => {
               </div>
             </div>
           )}
+          <SideDrawer
+            width="40vw"
+            showSideDrawer={isViewTemplate}
+            setShowSideDrawer={setIsViewTemplate}
+            headerComponents={
+              <div>
+                <TemplateSelectByCategoryElement
+                  categoryName={selectedCategory}
+                  placeholder="Select a template"
+                  onChange={(value) => {
+                    setTemplateData(value);
+                  }}
+                  defaultFirstValue
+                  width="250px"
+                  end
+                />
+              </div>
+            }
+          />
         </Offcanvas>
       </div>
     </React.Fragment>

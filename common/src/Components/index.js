@@ -106,6 +106,9 @@ import EmailCCBCC from "./EmailV2/EmailCCBCC";
 import EmailSubject from "./EmailV2/EmailSubject";
 import EmailTemplateSelect from "./EmailV2/EmailTemplateSelect/EmailTemplateSelect";
 
+// Import Side drawer
+import SideDrawer from "./PreviewTemplateDrawer/SideDrawer";
+
 export {
   BreadCrumb,
   getChartColorsArray,
@@ -204,7 +207,10 @@ export {
   EmailTo,
   EmailCCBCC,
   EmailSubject,
-  EmailTemplateSelect
+  EmailTemplateSelect,
+
+  // Side Drawer
+  SideDrawer,
 };
 
 
