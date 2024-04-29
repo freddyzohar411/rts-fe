@@ -13,8 +13,10 @@ import {
 import { initialValues, schema } from "./formikConfig";
 import { toast } from "react-toastify";
 import { TemplateHelper } from "@workspace/common";
+import { useNavigate } from "react-router-dom";
 
 const SubmitToSales = ({ candidateId, jobId }) => {
+  const navigate = useNavigate();
   const [formInitialValues, setFormInitialValues] = useState(initialValues);
   const [formSchema, setFormSchema] = useState(schema);
   const [emailTemplateData, setEmailTemplateData] = useState(null);
@@ -134,6 +136,27 @@ const SubmitToSales = ({ candidateId, jobId }) => {
             icon={<i className=" ri-file-list-2-line fs-5"></i>}
             category="Email Templates"
             setTemplateData={setEmailTemplateData}
+            addMoreOptions={{
+              addMore: true,
+              addMoreLabel: "Add New Template",
+              render: (
+                <Button
+                  className="btn btn-custom-primary header-btn w-100"
+                  style={{
+                    height: "40px",
+                    backgroundColor: "#0A65CC",
+                  }}
+                  type="button"
+                  onClick={(event) => {
+                    event.preventDefault(); // Prevents the menu from closing
+                    event.stopPropagation(); // Stops selection
+                    navigate("/settings/templates/create");
+                  }}
+                >
+                  + New Email Template
+                </Button>
+              ),
+            }}
           />
           <hr className="mt-2" />
         </Col>
@@ -143,6 +166,27 @@ const SubmitToSales = ({ candidateId, jobId }) => {
             setTemplateData={setTableDataWithEffect}
             value={tableTemplateData}
             category="Table Templates"
+            addMoreOptions={{
+              addMore: true,
+              addMoreLabel: "Add New Template",
+              render: (
+                <Button
+                  type="button"
+                  className="btn btn-custom-primary header-btn w-100"
+                  style={{
+                    height: "40px",
+                    backgroundColor: "#0A65CC",
+                  }}
+                  onClick={(event) => {
+                    event.preventDefault(); // Prevents the menu from closing
+                    event.stopPropagation(); // Stops selection
+                    navigate("/settings/templates/create");
+                  }}
+                >
+                  + New Table Template
+                </Button>
+              ),
+            }}
           />
           <hr className="mt-2" />
         </Col>

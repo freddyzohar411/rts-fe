@@ -952,12 +952,11 @@ const JobOverview = () => {
             </Pagination>
           </div>
         </Row>
-
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
-          style={{ width: isMobile ? "100vw" : "75vw" }}
+          style={{ width: isMobile ? "100vw" : "55vw" }}
         >
           <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
             <div className="avatar-md flex-shrink-0 d-flex gap-3">

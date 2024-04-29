@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as TemplateActions from "../../../../../template/src/store/template/action";
 import Select from "react-select";
+import { Button } from "reactstrap";
+import { useNavigate } from "react-router-dom";
 
 const TemplateSelectByCategoryElement = ({
   categoryName = null,
@@ -11,8 +13,12 @@ const TemplateSelectByCategoryElement = ({
   end, // Justify content end
   value, // Use this to set a value
   flexGrow = false,
+  addMore = false,
+  addMoreLabel = "Label",
+  addMoreRender = null,
   ...props
 }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [templateList, setTemplateList] = useState([]);
@@ -64,14 +70,28 @@ const TemplateSelectByCategoryElement = ({
       if (!checkCategory) {
         return;
       }
+      const templateMapped = templatesByCategory.map((item) => {
+        if (item.category !== categoryName) return null;
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+      if (addMore) {
+        templateMapped.push({
+          value: "addMore",
+          label: addMoreLabel,
+        });
+      }
       setTemplateList(
-        templatesByCategory.map((item) => {
-          if (item.category !== categoryName) return null;
-          return {
-            value: item.id,
-            label: item.name,
-          };
-        })
+        // templatesByCategory.map((item) => {
+        //   if (item.category !== categoryName) return null;
+        //   return {
+        //     value: item.id,
+        //     label: item.name,
+        //   };
+        // })
+        templateMapped
       );
       setStoreTemplatesByCategory(templatesByCategory);
       if (defaultFirstValue && templatesByCategory.length > 0) {
@@ -127,6 +147,13 @@ const TemplateSelectByCategoryElement = ({
     }
   };
 
+  const formatOptionLabel = ({ value, label }) => {
+    if (value === "addMore") {
+      return addMoreRender ? addMoreRender : "";
+    }
+    return label;
+  };
+
   return (
     <>
       <div className={`${flexGrow ? "flex-grow-1" : ""}`}>
@@ -151,6 +178,7 @@ const TemplateSelectByCategoryElement = ({
           isSearchable
           placeholder={props.placeholder ?? "Select an option"}
           options={templateList}
+          formatOptionLabel={formatOptionLabel}
         />
         {props?.error && (
           <FormFeedback type="invalid">{props?.error}</FormFeedback>
