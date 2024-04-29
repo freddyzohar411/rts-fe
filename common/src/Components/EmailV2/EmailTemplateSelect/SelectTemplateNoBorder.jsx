@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as TemplateActions from "../../../../../template/src/store/template/action";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
@@ -16,6 +16,7 @@ const TemplateSelectByCategoryElement = ({
   addMore = false,
   addMoreLabel = "Label",
   addMoreRender = null,
+  selectRender = null,
   ...props
 }) => {
   const navigate = useNavigate();
@@ -75,6 +76,7 @@ const TemplateSelectByCategoryElement = ({
         return {
           value: item.id,
           label: item.name,
+          id: item.id,
         };
       });
       if (addMore) {
@@ -98,6 +100,7 @@ const TemplateSelectByCategoryElement = ({
         setTemplateSelected({
           value: templatesByCategory[0].id,
           label: templatesByCategory[0].name,
+          id: templatesByCategory[0].id,
         });
         props.onChange(templatesByCategory[0]);
       }
@@ -147,12 +150,22 @@ const TemplateSelectByCategoryElement = ({
     }
   };
 
-  const formatOptionLabel = ({ value, label }) => {
+  const formatOptionLabel = ({ value, label, id }) => {
     if (value === "addMore") {
       return addMoreRender ? addMoreRender : "";
     }
+    if (selectRender) {
+      return selectRender({ value, label, id });
+    }
     return label;
   };
+
+  // Customize how the selected option is displayed in the input field
+  const SingleValue = ({ children, ...props }) => (
+    <components.SingleValue {...props}>
+      {props.data.label}
+    </components.SingleValue>
+  );
 
   return (
     <>
@@ -179,6 +192,7 @@ const TemplateSelectByCategoryElement = ({
           placeholder={props.placeholder ?? "Select an option"}
           options={templateList}
           formatOptionLabel={formatOptionLabel}
+          components={{ SingleValue }}
         />
         {props?.error && (
           <FormFeedback type="invalid">{props?.error}</FormFeedback>

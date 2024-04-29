@@ -21,6 +21,7 @@ const SubmitToSales = ({ candidateId, jobId }) => {
   const [formSchema, setFormSchema] = useState(schema);
   const [emailTemplateData, setEmailTemplateData] = useState(null);
   const [tableTemplateData, setTableTemplateData] = useState(null);
+  const [CVTemplateData, setCVTemplateData] = useState(null);
   const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
     candidateId: candidateId,
     jobId: jobId,
@@ -166,6 +167,23 @@ const SubmitToSales = ({ candidateId, jobId }) => {
             setTemplateData={setTableDataWithEffect}
             value={tableTemplateData}
             category="Table Templates"
+            selectRender={(data) => {
+              return (
+                <>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <span>{data?.label}</span>
+                    <i
+                      className="ri-eye-line cursor-pointer"
+                      onClick={(event) => {
+                        event.preventDefault(); // Prevents the menu from closing
+                        event.stopPropagation(); // Stops selection
+                        console.log("View Table Template Data", data?.id);
+                      }}
+                    ></i>
+                  </div>
+                </>
+              );
+            }}
             addMoreOptions={{
               addMore: true,
               addMoreLabel: "Add New Template",
@@ -199,6 +217,25 @@ const SubmitToSales = ({ candidateId, jobId }) => {
         >
           <EmailTemplateSelect
             icon={<i className=" ri-file-list-2-line fs-5"></i>}
+            value={CVTemplateData}
+            category="CV"
+            selectRender={(data) => {
+              return (
+                <>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <span>{data?.label}</span>
+                    <i
+                      className="ri-eye-line cursor-pointer"
+                      onClick={(event) => {
+                        event.preventDefault(); // Prevents the menu from closing
+                        event.stopPropagation(); // Stops selection
+                        console.log("View Table Template Data", data?.id);
+                      }}
+                    ></i>
+                  </div>
+                </>
+              );
+            }}
           />
           <hr className="mt-2" />
         </Col>
