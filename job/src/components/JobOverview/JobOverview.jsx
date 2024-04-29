@@ -71,6 +71,7 @@ import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
 import { SideDrawer } from "@workspace/common";
 import "./ViewTemplateSection.scss";
+import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePreviewSideDrawer";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -1087,7 +1088,7 @@ const JobOverview = () => {
               </div>
             </div>
           )}
-          <SideDrawer
+          {/* <SideDrawer
             width="40vw"
             showSideDrawer={isViewTemplate}
             setShowSideDrawer={setIsViewTemplate}
@@ -1105,6 +1106,12 @@ const JobOverview = () => {
                 />
               </div>
             }
+          >
+            
+          </SideDrawer> */}
+          <TemplatePreviewSideDrawer
+            showSideDrawer={isViewTemplate}
+            setShowSideDrawer={setIsViewTemplate}
           />
         </Offcanvas>
       </div>

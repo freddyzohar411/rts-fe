@@ -9,6 +9,7 @@ const SideDrawer = ({
   isTemplateSelectorOn,
   headerComponents,
   width = "30vw",
+  children,
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   return (
@@ -54,6 +55,14 @@ const SideDrawer = ({
                 </span>
               </div>
             </div>
+          </div>
+          <div
+            className="d-flex flex-column"
+            style={{
+              height: "calc(100vh - 80px)",
+            }}
+          >
+            {children}
           </div>
         </div>
       )}
