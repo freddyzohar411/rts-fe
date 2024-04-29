@@ -3,7 +3,12 @@ import { Spinner } from "reactstrap";
 import "./PageSettingView.scss";
 import * as ExportHelper from "../../../helpers/export_helper";
 
-const PageSettingViewBackend = ({ settings, content }) => {
+const PageSettingViewBackend = ({
+  settings,
+  content,
+  width = "80%",
+  height = "635px",
+}) => {
   const iframeRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -70,8 +75,8 @@ const PageSettingViewBackend = ({ settings, content }) => {
         <iframe
           ref={iframeRef}
           title="PDF Viewer"
-          width="80%"
-          height="635px"
+          width={width}
+          height={height}
           className={isLoading ? "d-none" : "d-block"}
         />
       ) : (

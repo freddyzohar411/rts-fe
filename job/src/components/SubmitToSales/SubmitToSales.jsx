@@ -9,7 +9,7 @@ import {
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
   setIsViewTemplate,
-  FileHelper
+  FileHelper,
 } from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
 import { toast } from "react-toastify";
@@ -213,6 +213,27 @@ const SubmitToSales = ({
                 </Button>
               ),
             }}
+            selectRender={(data) => {
+              return (
+                <>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <span>{data?.label}</span>
+                    <i
+                      className="ri-eye-line cursor-pointer"
+                      onClick={(event) => {
+                        event.preventDefault(); // Prevents the menu from closing
+                        event.stopPropagation(); // Stops selection
+                        setIsViewTemplate(true);
+                        setTemplatePreviewInfo(data?.data);
+                        setTemplatePreviewAction({
+                          type: "VIEW",
+                        });
+                      }}
+                    ></i>
+                  </div>
+                </>
+              );
+            }}
           />
           <hr className="mt-2" />
         </Col>
@@ -234,6 +255,9 @@ const SubmitToSales = ({
                         event.stopPropagation(); // Stops selection
                         setIsViewTemplate(true);
                         setTemplatePreviewInfo(data?.data);
+                        setTemplatePreviewAction({
+                          type: "VIEW",
+                        });
                       }}
                     ></i>
                   </div>
@@ -281,7 +305,7 @@ const SubmitToSales = ({
                 <>
                   <div className="d-flex align-items-center">
                     <span
-                    className="flex-grow-1"
+                      className="flex-grow-1"
                       onClick={(event) => {
                         attachmentTemplate(data?.data);
                       }}
@@ -379,7 +403,6 @@ const SubmitToSales = ({
           })}
       </span>
     </div>
-    
   );
 };
 

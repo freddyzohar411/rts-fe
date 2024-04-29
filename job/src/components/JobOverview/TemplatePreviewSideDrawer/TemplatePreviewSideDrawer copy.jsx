@@ -10,7 +10,6 @@ import {
   FileHelper,
   PageSettingViewBackend,
 } from "@workspace/common";
-import Preview from "./Preview";
 
 const TemplatePreviewSideDrawer = ({
   showSideDrawer,
@@ -31,77 +30,77 @@ const TemplatePreviewSideDrawer = ({
     oldHtml: "",
     newHtml: "",
   });
-  const [previewJsx, setPreviewJsx] = useState(null);
 
   //   useEffect(() => {
-  //     console.log("Change", templatePreviewInfo);
-  //     setTemplateData(templatePreviewInfo);
-  //   }, [templatePreviewInfo?.content, templatePreviewInfo?.category]);
+  //     set;
+  //   }, [templateData, allModuleData]);
 
   useEffect(() => {
     const setSelectedContentAndProcessed = async () => {
-      if (templateData?.content) {
-        const processedContent = await TemplateHelper.runEffects(
-          templateData.content,
-          null,
-          allModuleData,
-          true
-        );
-        const removeEditableContent =
-          TemplateHelper.removeContentEditableAndStyles(processedContent);
-        const convertTableAttributesContent =
-          TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
-        const convertInlineStylesContent =
-          TemplateHelper.convertInlineStylesToClasses(
-            convertTableAttributesContent
-          );
+      const processedContent = await TemplateHelper.runEffects(
+        templatePreviewInfo?.content,
+        null,
+        allModuleData,
+        true
+      );
+      const removeEditableContent =
+        TemplateHelper.removeContentEditableAndStyles(processedContent);
 
-        setShowContent({
-          oldHtml: templateData.content,
-          newHtml: convertInlineStylesContent.newHtml,
-          ...convertInlineStylesContent,
-        });
-      }
+      const convertTableAttributesContent =
+        TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
+
+      const convertInlineStylesContent =
+        TemplateHelper.convertInlineStylesToClasses(
+          convertTableAttributesContent
+        );
+
+      setShowContent((prev) => ({
+        ...prev,
+        oldHtml: templatePreviewInfo?.content,
+        ...convertInlineStylesContent,
+      }));
     };
 
-    setSelectedContentAndProcessed();
-  }, [templateData?.content, allModuleData]);
-
-  useEffect(() => {
-    const setSelectedContentAndProcessed = async () => {
-      if (templatePreviewInfo?.content) {
-        const processedContent = await TemplateHelper.runEffects(
-          templatePreviewInfo?.content,
-          null,
-          allModuleData,
-          true
+    if (templatePreviewInfo?.content && allModuleData) {
+      setSelectedContentAndProcessed();
+      return;
+    }
+    // if (content || templateContent) {
+    if (templatePreviewInfo?.content && templatePreviewInfo?.content !== "") {
+      const removeEditableContent =
+        TemplateHelper.removeContentEditableAndStyles(
+          templatePreviewInfo?.content
         );
-        const removeEditableContent =
-          TemplateHelper.removeContentEditableAndStyles(processedContent);
-        const convertTableAttributesContent =
-          TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
-        const convertInlineStylesContent =
-          TemplateHelper.convertInlineStylesToClasses(
-            convertTableAttributesContent
-          );
 
-        setShowContent({
-          oldHtml: templatePreviewInfo?.content,
-          newHtml: convertInlineStylesContent.newHtml,
-          ...convertInlineStylesContent,
-        });
-      }
-    };
+      const convertTableAttributesContent =
+        TemplateHelper.convertStyleToAttributesTable(removeEditableContent);
 
-    setSelectedContentAndProcessed();
+      const convertInlineStylesContent =
+        TemplateHelper.convertInlineStylesToClasses(
+          convertTableAttributesContent
+        );
+      /*
+      setShowContent((prev) => ({
+        ...prev,
+        oldHtml: templatePreviewInfo?.content,
+        ...convertInlineStylesContent,
+      }));
+      */
+
+      setShowContent({
+        oldHtml: templatePreviewInfo?.content,
+        newHtml: "",
+        ...convertInlineStylesContent,
+      });
+    }
   }, [
+    templatePreviewInfo?.content,
     allModuleData,
     templatePreviewAction?.type,
-    templatePreviewInfo?.content,
   ]);
 
   const generatePreview = (actionType) => {
-    // console.log("showContent", showContent);
+    console.log("showContent", showContent);
     switch (actionType) {
       case "VIEW":
         return (
@@ -134,14 +133,18 @@ const TemplatePreviewSideDrawer = ({
         );
 
       default:
+      // return (
+      //   <TemplateDisplayV3
+      //     // content={templateData?.content ?? null}
+      //     content={showContent?.oldHtml ?? null}
+      //     isAllLoading={isAllLoading}
+      //     // allData={allModuleData}
+      //     isView={true}
+      //     initialValues
+      //     handleOutputContent={setExportContent}
+      //   />
     }
   };
-
-  useEffect(() => {
-    if (showContent) {
-      setPreviewJsx(generatePreview(templatePreviewAction?.type));
-    }
-  }, [showContent, templatePreviewAction?.type]);
 
   return (
     <SideDrawer
@@ -178,30 +181,26 @@ const TemplatePreviewSideDrawer = ({
           }}
         >
           <>
-            {/* {generatePreview(templatePreviewAction?.type)} */}
-            {/* {generatePreview(templatePreviewAction?.type)} */}
-            {previewJsx}
+            {generatePreview(templatePreviewAction?.type)}
+            {/* {templatePreviewAction?.type === "ATTACH_TEMPLATE" && (
+              <PageSettingViewBackend
+                content={showContent}
+                settings={{
+                  unit: "in",
+                  pageType: "A4",
+                  pageOrientation: "portrait",
+                  marginTop: 0,
+                  marginBottom: 0,
+                  marginLeft: 0,
+                  marginRight: 0,
+                }}
+              />
+            )}
 
-            {/* {templatePreviewAction?.type === "ATTACH_TEMPLATE" &&
-              showContent && (
-                <PageSettingViewBackend
-                  content={showContent}
-                  settings={{
-                    unit: "in",
-                    pageType: "A4",
-                    pageOrientation: "portrait",
-                    marginTop: 0,
-                    marginBottom: 0,
-                    marginLeft: 0,
-                    marginRight: 0,
-                  }}
-                />
-              )}
-
-            {templatePreviewAction?.type === "VIEW" && showContent && (
+            {!templatePreviewAction?.type && (
               <TemplateDisplayV3
                 content={templateData?.content ?? null}
-                isAllLoading={false}
+                isAllLoading={isAllLoading}
                 allData={allModuleData}
                 isView={true}
                 initialValues

@@ -966,7 +966,7 @@ const JobOverview = () => {
           toggle={() => {
             setOffcanvasForm(!offcanvasForm);
             setIsViewTemplate(false);
-            setTemplatePreviewInfo(null); 
+            setTemplatePreviewInfo(null);
           }}
           direction="end"
           style={{ width: isMobile ? "100vw" : "55vw" }}
