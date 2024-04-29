@@ -13,6 +13,7 @@ const TemplatePreviewSideDrawer = ({
   templatePreviewInfo,
   candidateId,
   jobId,
+  templatePreviewAction = null,
 }) => {
   const { allModuleData, isAllLoading } =
     UseTemplateModuleDataHook.useTemplateModuleData({
@@ -20,7 +21,9 @@ const TemplatePreviewSideDrawer = ({
       jobId: jobId,
     });
   const [templateData, setTemplateData] = useState(null);
+  const [exportContent, setExportContent] = useState("");
 
+  
   return (
     <SideDrawer
       width="40vw"
@@ -61,7 +64,7 @@ const TemplatePreviewSideDrawer = ({
             allData={allModuleData}
             isView={true}
             initialValues
-            //   handleOutputContent={setExportContent}
+            handleOutputContent={setExportContent}
           />
         </Container>
       </div>
@@ -70,13 +73,16 @@ const TemplatePreviewSideDrawer = ({
         className="d-flex justify-content-center align-items-center"
         style={{
           height: "65px",
-          //   border: "1px solid red",
           flexShrink: 0,
           flexGrow: 0,
         }}
       >
-        <Button type="button" className="btn btn-success w-75">
-          Attached
+        <Button
+          type="button"
+          className="btn btn-success w-75"
+          onClick={() => templatePreviewAction?.action(exportContent)}
+        >
+          {templatePreviewAction?.label || "Submit"}
         </Button>
       </div>
     </SideDrawer>

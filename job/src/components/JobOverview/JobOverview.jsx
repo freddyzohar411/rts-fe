@@ -104,6 +104,7 @@ const JobOverview = () => {
   const [tooltipIndexes, setTooltipIndexes] = useState();
   const [isViewTemplate, setIsViewTemplate] = useState(false);
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
+  const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -373,6 +374,7 @@ const JobOverview = () => {
             candidateId={candidateId}
             setIsViewTemplate={setIsViewTemplate}
             setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
           />
         );
       case 3:
@@ -1099,6 +1101,7 @@ const JobOverview = () => {
             showSideDrawer={isViewTemplate}
             setShowSideDrawer={setIsViewTemplate}
             templatePreviewInfo={templatePreviewInfo}
+            templatePreviewAction={templatePreviewAction}
             candidateId={candidateId}
             jobId={jobId}
           />

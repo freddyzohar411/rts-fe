@@ -9,10 +9,11 @@ import {
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
   setIsViewTemplate,
+  FileHelper
 } from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
 import { toast } from "react-toastify";
-import { TemplateHelper } from "@workspace/common";
+import { TemplateHelper, ExportHelper } from "@workspace/common";
 import { useNavigate } from "react-router-dom";
 
 const SubmitToSales = ({
@@ -20,6 +21,7 @@ const SubmitToSales = ({
   jobId,
   setIsViewTemplate,
   setTemplatePreviewInfo,
+  setTemplatePreviewAction,
 }) => {
   const navigate = useNavigate();
   const [formInitialValues, setFormInitialValues] = useState(initialValues);
@@ -31,6 +33,10 @@ const SubmitToSales = ({
     candidateId: candidateId,
     jobId: jobId,
   });
+  const [attachments, setAttachments] = useState([]);
+  const [attachmentLoading, setAttachmentLoading] = useState(false);
+
+  console.log("Attachment Data", attachments);
 
   // console.log("emailTemplateData", emailTemplateData?.content);
 
@@ -110,7 +116,51 @@ const SubmitToSales = ({
     }
   }, [tableTemplateData]);
 
-  console.log("tableTemplateData", tableTemplateData?.content);
+  const attachmentTemplate = async (filterTemplate) => {
+    console.log("filterTemplate", filterTemplate);
+    if (!filterTemplate) return;
+    setAttachmentLoading(true);
+    try {
+      const processedTemplate =
+        await TemplateHelper.setSelectedContentAndProcessed(
+          filterTemplate.content,
+          allModuleData
+        );
+
+      if (processedTemplate) {
+        const file = await ExportHelper.exportBackendHtml2PdfFile(
+          processedTemplate.html,
+          {
+            unit: "in",
+            pageType: "A4",
+            pageOrientation: "portrait",
+            marginTop: 0,
+            marginBottom: 0,
+            marginLeft: 0,
+            marginRight: 0,
+            exportType: "pdf",
+            fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`,
+          },
+          processedTemplate.styleTag
+        );
+        setAttachments([...attachments, file]);
+      }
+    } catch (error) {
+    } finally {
+      setAttachmentLoading(false);
+    }
+  };
+
+  const downloadAttachment = (attachment) => {
+    // Assuming attachment.file is a Blob or File object
+    const url = window.URL.createObjectURL(attachment);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = attachment.name;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+  };
 
   return (
     <div>
@@ -224,13 +274,20 @@ const SubmitToSales = ({
           <EmailTemplateSelect
             icon={<i className=" ri-file-list-2-line fs-5"></i>}
             value={CVTemplateData}
-            // setTemplateData={setTableDataWithEffect}
+            setTemplateData={setCVTemplateData}
             category="CV"
             selectRender={(data) => {
               return (
                 <>
-                  <div className="d-flex align-items-center justify-content-between">
-                    <span>{data?.label}</span>
+                  <div className="d-flex align-items-center">
+                    <span
+                    className="flex-grow-1"
+                      onClick={(event) => {
+                        attachmentTemplate(data?.data);
+                      }}
+                    >
+                      {data?.label}
+                    </span>
                     <i
                       className="ri-eye-line cursor-pointer"
                       onClick={(event) => {
@@ -238,6 +295,14 @@ const SubmitToSales = ({
                         event.stopPropagation(); // Stops selection
                         setIsViewTemplate(true);
                         setTemplatePreviewInfo(data?.data);
+                        setTemplatePreviewAction({
+                          type: "ATTACH_TEMPLATE",
+                          label: "Attach Template",
+                          action: (data) => {
+                            setAttachments((prev) => [...prev, data]);
+                            setIsViewTemplate(false);
+                          },
+                        });
                       }}
                     ></i>
                   </div>
@@ -255,7 +320,6 @@ const SubmitToSales = ({
             injectData={tableTemplateData?.content ?? null}
             isAllLoading={false}
             content={emailTemplateData?.content ?? null}
-            // allData={allModuleData}
             allData={"null"}
             isView={false}
             // handleOutputContent={setEmailContent}
@@ -282,7 +346,40 @@ const SubmitToSales = ({
       >
         Submit
       </Button>
+      <span className="text-muted">
+        {attachments.length > 0 &&
+          attachments.map((attachment, i) => {
+            return (
+              <div className="d-flex gap-3">
+                <span
+                  className="text-danger cursor-pointer"
+                  onClick={() => {
+                    setAttachments(
+                      attachments.filter((item, index) => index !== i)
+                    );
+                  }}
+                >
+                  <i className="ri-close-fill"></i>
+                </span>
+                <div className="d-flex gap-2">
+                  <span
+                    onClick={() => downloadAttachment(attachment)}
+                    className="cursor-pointer"
+                  >
+                    <strong>{attachment.name}</strong>
+                  </span>
+                  <span>
+                    <strong>
+                      ({FileHelper.displayFileSize(attachment.size)})
+                    </strong>
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+      </span>
     </div>
+    
   );
 };
 

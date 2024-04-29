@@ -89,7 +89,7 @@ import TemplateSelectByCategoryElement from "./TemplateDisplay/TemplateSelectByC
 import TemplateExportButtons from "./TemplateDisplay/TemplateExportButtons/TemplateExportButtons";
 import TemplatePagePreviewModal from "./TemplateDisplay/TemplatePagePreviewModal/TemplatePagePreviewModal";
 import TemplateAdvanceExportModal from "./TemplateDisplay/TemplateAdvanceExportModal/TemplateAdvanceExportModal";
-
+import PageSettingViewBackend from "./TemplateDisplay/components/PageSettingViewBackend";
 // Import Elements
 import SelectElement from "./Elements/SelectElement";
 import MultiInputFormik from "./Elements/MultiInputFormik";
@@ -188,6 +188,7 @@ export {
   TemplateExportButtons,
   TemplatePagePreviewModal,
   TemplateAdvanceExportModal,
+  PageSettingViewBackend,
 
   // Export Elements
   SelectElement,
