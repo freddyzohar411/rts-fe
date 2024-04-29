@@ -8,13 +8,19 @@ import {
   EmailTemplateSelect,
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
+  setIsViewTemplate,
 } from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
 import { toast } from "react-toastify";
 import { TemplateHelper } from "@workspace/common";
 import { useNavigate } from "react-router-dom";
 
-const SubmitToSales = ({ candidateId, jobId }) => {
+const SubmitToSales = ({
+  candidateId,
+  jobId,
+  setIsViewTemplate,
+  setTemplatePreviewInfo,
+}) => {
   const navigate = useNavigate();
   const [formInitialValues, setFormInitialValues] = useState(initialValues);
   const [formSchema, setFormSchema] = useState(schema);
@@ -176,7 +182,8 @@ const SubmitToSales = ({ candidateId, jobId }) => {
                       onClick={(event) => {
                         event.preventDefault(); // Prevents the menu from closing
                         event.stopPropagation(); // Stops selection
-                        console.log("View Table Template Data", data?.id);
+                        setIsViewTemplate(true);
+                        setTemplatePreviewInfo(data?.data);
                       }}
                     ></i>
                   </div>
@@ -217,7 +224,7 @@ const SubmitToSales = ({ candidateId, jobId }) => {
           <EmailTemplateSelect
             icon={<i className=" ri-file-list-2-line fs-5"></i>}
             value={CVTemplateData}
-            setTemplateData={setTableDataWithEffect}
+            // setTemplateData={setTableDataWithEffect}
             category="CV"
             selectRender={(data) => {
               return (
@@ -229,7 +236,8 @@ const SubmitToSales = ({ candidateId, jobId }) => {
                       onClick={(event) => {
                         event.preventDefault(); // Prevents the menu from closing
                         event.stopPropagation(); // Stops selection
-                        console.log("View Table Template Data", data?.id);
+                        setIsViewTemplate(true);
+                        setTemplatePreviewInfo(data?.data);
                       }}
                     ></i>
                   </div>

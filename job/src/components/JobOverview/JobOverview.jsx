@@ -103,6 +103,7 @@ const JobOverview = () => {
   const [timelineRowIndex, setTimelineRowIndex] = useState();
   const [tooltipIndexes, setTooltipIndexes] = useState();
   const [isViewTemplate, setIsViewTemplate] = useState(false);
+  const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -370,6 +371,8 @@ const JobOverview = () => {
             templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
           />
         );
       case 3:
@@ -958,7 +961,11 @@ const JobOverview = () => {
         </Row>
         <Offcanvas
           isOpen={offcanvasForm}
-          toggle={() => setOffcanvasForm(!offcanvasForm)}
+          toggle={() => {
+            setOffcanvasForm(!offcanvasForm);
+            setIsViewTemplate(false);
+            setTemplatePreviewInfo(null); 
+          }}
           direction="end"
           style={{ width: isMobile ? "100vw" : "55vw" }}
         >
@@ -1088,30 +1095,12 @@ const JobOverview = () => {
               </div>
             </div>
           )}
-          {/* <SideDrawer
-            width="40vw"
-            showSideDrawer={isViewTemplate}
-            setShowSideDrawer={setIsViewTemplate}
-            headerComponents={
-              <div>
-                <TemplateSelectByCategoryElement
-                  categoryName={selectedCategory}
-                  placeholder="Select a template"
-                  onChange={(value) => {
-                    setTemplateData(value);
-                  }}
-                  defaultFirstValue
-                  width="250px"
-                  end
-                />
-              </div>
-            }
-          >
-            
-          </SideDrawer> */}
           <TemplatePreviewSideDrawer
             showSideDrawer={isViewTemplate}
             setShowSideDrawer={setIsViewTemplate}
+            templatePreviewInfo={templatePreviewInfo}
+            candidateId={candidateId}
+            jobId={jobId}
           />
         </Offcanvas>
       </div>

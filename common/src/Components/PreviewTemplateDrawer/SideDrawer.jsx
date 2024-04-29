@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col } from "reactstrap";
 import "./SideDrawer.scss";
 
@@ -12,6 +12,11 @@ const SideDrawer = ({
   children,
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  useEffect(() => {
+    return () => {
+      setIsFullscreen(false);
+    };
+  }, []);
   return (
     <>
       {showSideDrawer && (
@@ -32,7 +37,7 @@ const SideDrawer = ({
           >
             <div className="d-flex justify-content-between align-items-center w-100 flex-wrap">
               <span className="fs-5 fw-bold">{headerLabel || "Preview"}</span>
-              <div className="d-flex align-items-center gap-2">
+              <div className="d-flex align-items-center gap-3">
                 {headerComponents}
                 <span
                   className="cursor-pointer"
@@ -49,7 +54,10 @@ const SideDrawer = ({
                 </span>
                 <span
                   className="cursor-pointer"
-                  onClick={() => setShowSideDrawer(false)}
+                  onClick={() => {
+                    setShowSideDrawer(false);
+                    setIsFullscreen(false);
+                  }}
                 >
                   <i className="ri-close-fill fs-5"></i>
                 </span>

@@ -4,11 +4,23 @@ import { SideDrawer } from "@workspace/common";
 import {
   TemplateSelectByCategoryElement,
   TemplateDisplayV3,
+  UseTemplateModuleDataHook,
 } from "@workspace/common";
 
-const TemplatePreviewSideDrawer = ({ showSideDrawer, setShowSideDrawer }) => {
+const TemplatePreviewSideDrawer = ({
+  showSideDrawer,
+  setShowSideDrawer,
+  templatePreviewInfo,
+  candidateId,
+  jobId,
+}) => {
+  const { allModuleData, isAllLoading } =
+    UseTemplateModuleDataHook.useTemplateModuleData({
+      candidateId: candidateId,
+      jobId: jobId,
+    });
   const [templateData, setTemplateData] = useState(null);
-  console.log("templateData", templateData);
+
   return (
     <SideDrawer
       width="40vw"
@@ -17,13 +29,14 @@ const TemplatePreviewSideDrawer = ({ showSideDrawer, setShowSideDrawer }) => {
       headerComponents={
         <div>
           <TemplateSelectByCategoryElement
-            categoryName={"CV"}
+            categoryName={templatePreviewInfo?.category}
             placeholder="Select a template"
             onChange={(value) => {
               setTemplateData(value);
             }}
             width="250px"
             end
+            value={templatePreviewInfo}
           />
         </div>
       }
@@ -44,8 +57,8 @@ const TemplatePreviewSideDrawer = ({ showSideDrawer, setShowSideDrawer }) => {
         >
           <TemplateDisplayV3
             content={templateData?.content ?? null}
-            isAllLoading={false}
-            allData={null}
+            isAllLoading={isAllLoading}
+            allData={allModuleData}
             isView={true}
             initialValues
             //   handleOutputContent={setExportContent}
@@ -57,12 +70,12 @@ const TemplatePreviewSideDrawer = ({ showSideDrawer, setShowSideDrawer }) => {
         className="d-flex justify-content-center align-items-center"
         style={{
           height: "65px",
-          border: "1px solid red",
+          //   border: "1px solid red",
           flexShrink: 0,
           flexGrow: 0,
         }}
       >
-        <Button type="button" className="btn btn-success">
+        <Button type="button" className="btn btn-success w-75">
           Attached
         </Button>
       </div>

@@ -77,6 +77,7 @@ const TemplateSelectByCategoryElement = ({
           value: item.id,
           label: item.name,
           id: item.id,
+          data: item,
         };
       });
       if (addMore) {
@@ -85,22 +86,14 @@ const TemplateSelectByCategoryElement = ({
           label: addMoreLabel,
         });
       }
-      setTemplateList(
-        // templatesByCategory.map((item) => {
-        //   if (item.category !== categoryName) return null;
-        //   return {
-        //     value: item.id,
-        //     label: item.name,
-        //   };
-        // })
-        templateMapped
-      );
+      setTemplateList(templateMapped);
       setStoreTemplatesByCategory(templatesByCategory);
       if (defaultFirstValue && templatesByCategory.length > 0) {
         setTemplateSelected({
           value: templatesByCategory[0].id,
           label: templatesByCategory[0].name,
           id: templatesByCategory[0].id,
+          data: templatesByCategory[0],
         });
         props.onChange(templatesByCategory[0]);
       }
@@ -150,12 +143,12 @@ const TemplateSelectByCategoryElement = ({
     }
   };
 
-  const formatOptionLabel = ({ value, label, id }) => {
+  const formatOptionLabel = ({ value, label, id, data }) => {
     if (value === "addMore") {
       return addMoreRender ? addMoreRender : "";
     }
     if (selectRender) {
-      return selectRender({ value, label, id });
+      return selectRender({ value, label, id, data });
     }
     return label;
   };

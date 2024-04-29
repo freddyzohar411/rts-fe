@@ -81,7 +81,7 @@ const TemplateDisplayV3 = ({
       if (!content) return;
       if (!processContent) return;
       try {
-        // setIsLoading(true);
+        setIsLoading(true);
         const result = await TemplateDisplayHelper.runEffects(
           content,
           null,
