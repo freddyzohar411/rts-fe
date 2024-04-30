@@ -30,3 +30,19 @@
     background-color: #AA00FF;
     border: #AA00FF;
 }
+
+.nav-pills .nav-link.active {
+    background-color: #0A56AE; 
+    color: #fefefe;
+    font-weight: 500;
+}
+.nav-pills .nav-link {
+    background-color: #fefefe;
+    color: #000000; 
+}
+
+.main-border-style {
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+}
