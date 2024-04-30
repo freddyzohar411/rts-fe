@@ -17,7 +17,7 @@ import {
   PaginationLink,
   Tooltip,
   ButtonGroup,
-  Spinner
+  Spinner,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -73,6 +73,7 @@ import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
 import { SideDrawer } from "@workspace/common";
 import "./ViewTemplateSection.scss";
 import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePreviewSideDrawer";
+import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -1092,6 +1093,9 @@ const JobOverview = () => {
             jobId={jobId}
           />
         </Offcanvas>
+        {/* // Form Modal */}
+        <ModalFormWrapper />
+        {/* // Delete Modal */}
       </div>
     </React.Fragment>
   );
