@@ -129,6 +129,24 @@ const TemplatePreviewSideDrawer = ({
     }
   };
 
+  const generateActionButton = (actionType) => {
+    switch (actionType) {
+      case "ATTACH_TEMPLATE":
+        return (
+          <span className="d-flex align-items-center gap-2 justify-content-center">
+            <i className=" ri-attachment-line fs-5"></i>
+            <span>{templatePreviewAction?.label}</span>
+          </span>
+        );
+      default:
+        return (
+          <>
+            <span>Submit</span>
+          </>
+        );
+    }
+  };
+
   useEffect(() => {
     if (showContent) {
       setPreviewJsx(generatePreview(templatePreviewAction?.type));
@@ -188,7 +206,7 @@ const TemplatePreviewSideDrawer = ({
             className="btn btn-success w-75"
             onClick={() => templatePreviewAction?.action(templateData)}
           >
-            {templatePreviewAction?.label || "Submit"}
+            {generateActionButton(templatePreviewAction?.type)}
           </Button>
         )}
       </div>

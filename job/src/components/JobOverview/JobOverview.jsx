@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Row,
   Col,
@@ -75,6 +75,7 @@ import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePrevi
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
+  const formikRef = useRef(); // Formik reference
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -375,6 +376,7 @@ const JobOverview = () => {
             setIsViewTemplate={setIsViewTemplate}
             setTemplatePreviewInfo={setTemplatePreviewInfo}
             setTemplatePreviewAction={setTemplatePreviewAction}
+            ref={formikRef}
           />
         );
       case 3:
@@ -636,6 +638,22 @@ const JobOverview = () => {
       ? tooltipIndexes?.[targetName]?.tooltipOpen
       : false;
   };
+
+  // Generate canvas header button
+  const generateCanvasHeaderButton = (step) => {
+    switch (step) {
+      case 2:
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <Button>Cancel</Button>
+            <Button onClick={()=>{
+              formikRef.current.submitForm();
+            }}>Send</Button>
+          </div>
+        );
+    }
+  };
+  console.log("Active Step", activeStep)
 
   return (
     <React.Fragment>
@@ -1021,69 +1039,13 @@ const JobOverview = () => {
                 </div>
               </Col>
             )}
+            {/* Canvas Header Button */}
+            {generateCanvasHeaderButton(activeStep)}
           </div>
           <OffcanvasBody>
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
           {/* View Template */}
-          {isViewTemplate && (
-            <div
-              className={`view-template ${isViewTemplate ? "active" : ""}`}
-            >
-              <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
-                <div className="avatar-md flex-shrink-0 d-flex gap-3">
-                  <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
-                    {formSubmissionData?.accountName.charAt(0)}
-                  </div>
-                  <Row className="d-flex flex-row justify-content-between align-items-end gap-5">
-                    <Col>
-                      <Row>
-                        <span className="h4 fw-bold">
-                          {formSubmissionData?.accountName}
-                        </span>
-                      </Row>
-                      <Row>
-                        <div className="d-flex flex-row gap-4">
-                          <span className="h6 fw-semibold text-nowrap">
-                            Job ID - {formSubmissionData?.clientJobId}
-                          </span>
-                          <span
-                            className="h6 fw-semibold text-nowrap cursor-pointer"
-                            title={formSubmissionData?.jobTitle}
-                          >
-                            Job Title -{" "}
-                            {truncate(formSubmissionData?.jobTitle, 55)}
-                          </span>
-                        </div>
-                      </Row>
-                      <Row>
-                        <span className="h6 text-muted fw-bold">
-                          {stepperState}
-                        </span>
-                      </Row>
-                    </Col>
-                  </Row>
-                </div>
-                {/* Template Selector */}
-                {(activeStep === 11 || isPreviewCV) && (
-                  <Col>
-                    <div>
-                      <TemplateSelectByCategoryElement
-                        categoryName={selectedCategory}
-                        placeholder="Select a template"
-                        onChange={(value) => {
-                          setTemplateData(value);
-                        }}
-                        defaultFirstValue
-                        width="300px"
-                        end
-                      />
-                    </div>
-                  </Col>
-                )}
-              </div>
-            </div>
-          )}
           <TemplatePreviewSideDrawer
             showSideDrawer={isViewTemplate}
             setShowSideDrawer={setIsViewTemplate}
