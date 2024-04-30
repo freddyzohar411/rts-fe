@@ -79,6 +79,7 @@ import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
 import OverviewStepComponent from "./OverviewStepComponent";
+import InnerTimelineStep from "./InnerTimelineStep";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -685,8 +686,7 @@ const JobOverview = () => {
                       </Link>
 
                       <div className="d-flex flex-row justify-content-center align-items-center text-muted text-small">
-                        <i className="mdi mdi-account-circle-outline me-1"></i>
-                        <span>{data?.createdByName}</span>
+                        <span className="form-text">{data?.createdByName}</span>
                       </div>
                     </div>
                   </td>
@@ -695,7 +695,7 @@ const JobOverview = () => {
                     style={{ width: "300px" }}
                     onClick={() => toggleJobOpen(data.id)}
                   >
-                    <OverviewStepComponent />
+                    <OverviewStepComponent data={data} />
                   </td>
                   {/* Current Status */}
                   <td style={{ width: "5rem" }}>
@@ -756,12 +756,14 @@ const JobOverview = () => {
                 </tr>
                 {openJobIndex === data.id && (
                   <tr>
-                    <td colSpan={10}>
-                      {Object.keys(steps).map((step, index) => {
+                    <td colSpan={10} className="px-3">
+                      <InnerTimelineStep data={data.timeline} />
+                      {/* {Object.keys(steps).map((step, index) => {
                         return (
                           <td key={index} className="px-0">
-                            {/* To replace with new timeline. */}
-                            {/* <StepComponent
+                            To replace with new timeline.
+                            <InnerTimelineStep data={data} />
+                            <StepComponent
                               index={stepOrders[step]}
                               maxOrder={maxOrder}
                               isRejected={isRejected}
@@ -771,10 +773,10 @@ const JobOverview = () => {
                               timeline={data?.timeline}
                               originalOrder={originalOrder}
                               step={step}
-                            /> */}
+                            />
                           </td>
                         );
-                      })}
+                      })} */}
                     </td>
                   </tr>
                 )}
@@ -977,6 +979,7 @@ const JobOverview = () => {
                     </tr>
                   </thead>
 
+                  // Checks for loading state
                   {jobTimelineMeta?.isLoading ? (
                     <tr>
                       <td colSpan={rtsStatusHeaders.length}>
