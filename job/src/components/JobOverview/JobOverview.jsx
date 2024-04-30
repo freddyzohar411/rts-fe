@@ -158,6 +158,8 @@ const JobOverview = () => {
     },
   ];
 
+  console.log("Job Timeline Data", skipComboOptions);
+
   // Table Hooks
   const {
     pageRequest,
@@ -348,6 +350,7 @@ const JobOverview = () => {
   const handleSkipSelection = (jobId, value) => {
     const newOb = { ...skipComboOptions };
     newOb[jobId] = value;
+    console.log("New Ob", newOb);
     setSkipComboOptions(newOb);
   };
 
@@ -375,6 +378,8 @@ const JobOverview = () => {
     }
     return status;
   };
+
+  console.log("Step", activeStep);
 
   const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
@@ -577,6 +582,7 @@ const JobOverview = () => {
    * @description Get form index on the basis of index
    */
   const getFormIndex = (originalOrder, jobId) => {
+    console.log("Original Order", originalOrder, jobId, skipComboOptions);
     let index = null;
     switch (originalOrder) {
       case 6:
@@ -749,7 +755,15 @@ const JobOverview = () => {
                       <Input
                         type="select"
                         className="form-select border-0"
+                        // value={skipComboOptions[data.id]}
                         disabled={!selectedModule}
+                        onChange={(e) => {
+                          console.log("Skip", e.target.value);
+                          handleSkipSelection(
+                            data.id,
+                            parseInt(e.target.value)
+                          );
+                        }}
                       >
                         <option value="">Select</option>
                         {selectedModule &&
@@ -769,6 +783,26 @@ const JobOverview = () => {
                       <div
                         className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
                         style={{ width: "30px", height: "30px" }}
+                        onClick={() => {
+                          console.log(
+                            "Save",
+                            data?.candidate?.id,
+                            data?.id,
+                            skipComboOptions[data.id],
+                            originalOrder
+                          );
+                          handleIconClick(
+                            data?.candidate?.id,
+                            data?.id,
+                            getFormIndex(
+                              skipComboOptions[data.id] < originalOrder
+                                ? originalOrder
+                                : skipComboOptions[data.id],
+                              data?.id
+                            )
+                          );
+                          setTimelineRowIndex(timelineIndex);
+                        }}
                       >
                         <i
                           className="mdi mdi-content-save-outline"
