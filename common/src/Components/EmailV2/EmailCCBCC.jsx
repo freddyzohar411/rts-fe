@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { Button } from "reactstrap";
 import { MultiInputFormikNoBorder } from "@workspace/common";
 
-const EmailCCBCC = ({ formik }) => {
+const EmailCCBCC = ({
+  formik,
+  CCicon,
+  CcName = "cc",
+  BCC = false,
+  BccIcon,
+  BccName = "bcc",
+}) => {
   const [isBCCOpen, setIsBCCOpen] = useState(false);
   return (
     <>
@@ -18,19 +25,19 @@ const EmailCCBCC = ({ formik }) => {
               height: "25px",
             }}
           >
-            <span>Cc</span>
+            {CCicon || <span>Cc</span>}
           </Button>
         </div>
         <div className="d-flex gap-3 w-100">
           <span className="text-muted">Cc</span>
           <MultiInputFormikNoBorder
-            name="cc"
+            name={CcName}
             formik={formik}
             placeholder=""
             containerWidth="100%"
             placeholderAlign="left"
           />
-          {!isBCCOpen && (
+          {!isBCCOpen && BCC && (
             <div
               className="px-2 py-1 d-flex gap-1 align-items-center cursor-pointer fw-semibold"
               style={{
@@ -42,7 +49,7 @@ const EmailCCBCC = ({ formik }) => {
               }}
               onClick={() => {
                 if (isBCCOpen) {
-                  formik.setFieldValue("bcc", []);
+                  formik.setFieldValue(BccName, []);
                   setIsBCCOpen(false);
                 } else {
                   setIsBCCOpen(true);
@@ -65,13 +72,13 @@ const EmailCCBCC = ({ formik }) => {
               }}
             >
               <Button className="px-1 py-0">
-                <span>Bcc</span>
+                {BccIcon || <span>Bcc</span>}
               </Button>
             </div>
             <div className="d-flex gap-3 w-100">
               <span className="text-muted">BCc</span>
               <MultiInputFormikNoBorder
-                name="bcc"
+                name={BccName}
                 formik={formik}
                 placeholder=""
                 containerWidth="100%"

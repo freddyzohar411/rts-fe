@@ -17,6 +17,7 @@ import {
   PaginationLink,
   Tooltip,
   ButtonGroup,
+  Spinner
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -106,6 +107,11 @@ const JobOverview = () => {
   const [isViewTemplate, setIsViewTemplate] = useState(false);
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
+
+  // Email Loading
+  const emailIsLoading = useSelector(
+    (state) => state.EmailCommonReducer.loading
+  );
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -376,6 +382,7 @@ const JobOverview = () => {
             setIsViewTemplate={setIsViewTemplate}
             setTemplatePreviewInfo={setTemplatePreviewInfo}
             setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
             ref={formikRef}
           />
         );
@@ -650,9 +657,9 @@ const JobOverview = () => {
               style={{
                 borderRadius: "8px",
               }}
-              onClick={() =>{
-                setOffcanvasForm(false)
-                setIsViewTemplate(false)
+              onClick={() => {
+                setOffcanvasForm(false);
+                setIsViewTemplate(false);
               }}
             >
               Cancel
@@ -666,7 +673,8 @@ const JobOverview = () => {
                 borderRadius: "8px",
               }}
             >
-              Send
+              {" "}
+              {emailIsLoading ? <Spinner size="sm" color="light" /> : "Send"}
             </Button>
           </div>
         );

@@ -5,7 +5,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Button } from "reactstrap";
 import { useFormik } from "formik";
 import {
@@ -32,6 +32,7 @@ const SubmitToSales = forwardRef(
       setIsViewTemplate,
       setTemplatePreviewInfo,
       setTemplatePreviewAction,
+      setOffcanvasForm,
     },
     ref
   ) => {
@@ -48,8 +49,17 @@ const SubmitToSales = forwardRef(
     });
     const [attachments, setAttachments] = useState([]);
     const [attachmentLoading, setAttachmentLoading] = useState(false);
+    const emailSuccess = useSelector(
+      (state) => state.EmailCommonReducer.success
+    );
 
-    console.log("Attachment Data", attachments);
+    useEffect(() => {
+      if (emailSuccess) {
+        dispatch(Actions.resetSendEmail());
+        toast.success("Email sent successfully");
+        setOffcanvasForm(false);
+      }
+    }, [emailSuccess]);
 
     /**
      * Handle form submit event (Formik)
@@ -60,7 +70,6 @@ const SubmitToSales = forwardRef(
       newValues.to = newValues.to.map((item) => item.value);
       newValues.cc = newValues.cc.map((item) => item.value);
       newValues.bcc = newValues.bcc.map((item) => item.value);
-      console.log("newValues", newValues);
       const newFormData =
         ObjectHelper.convertObjectToFormDataWithArray(newValues);
       dispatch(
@@ -93,7 +102,13 @@ const SubmitToSales = forwardRef(
 
     // Expose the submitForm method to the parent via ref
     useImperativeHandle(ref, () => ({
-      submitForm: formik.submitForm,
+      submitForm: () => {
+        if (formik.isValid) {
+          formik.handleSubmit();
+        } else {
+          toastErrors();
+        }
+      },
     }));
 
     // Toast errors upn submit
@@ -186,21 +201,32 @@ const SubmitToSales = forwardRef(
       <div>
         <Row>
           <Col>
-            <EmailTo formik={formik} />
+            <EmailTo
+              formik={formik}
+              icon={<i className="ri-mail-fill fs-5"></i>}
+            />
             <hr className="mt-2" />
           </Col>
         </Row>
 
         <Row>
           <Col>
-            <EmailCCBCC formik={formik} />
+            <EmailCCBCC
+              formik={formik}
+              icon={<span>Cc</span>}
+              BCC
+            />
             <hr className="mt-2" />
           </Col>
         </Row>
 
         <Row>
           <Col>
-            <EmailSubject formik={formik} name="subject" />
+            <EmailSubject
+              formik={formik}
+              name="subject"
+              icon={<i className="ri-text fs-5"></i>}
+            />
             <hr className="mt-2" />
           </Col>
         </Row>
