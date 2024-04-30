@@ -10,7 +10,6 @@ import {
   FileHelper,
   PageSettingViewBackend,
 } from "@workspace/common";
-import Preview from "./Preview";
 
 const TemplatePreviewSideDrawer = ({
   showSideDrawer,
@@ -32,11 +31,6 @@ const TemplatePreviewSideDrawer = ({
     newHtml: "",
   });
   const [previewJsx, setPreviewJsx] = useState(null);
-
-  //   useEffect(() => {
-  //     console.log("Change", templatePreviewInfo);
-  //     setTemplateData(templatePreviewInfo);
-  //   }, [templatePreviewInfo?.content, templatePreviewInfo?.category]);
 
   useEffect(() => {
     const setSelectedContentAndProcessed = async () => {
@@ -101,12 +95,10 @@ const TemplatePreviewSideDrawer = ({
   ]);
 
   const generatePreview = (actionType) => {
-    // console.log("showContent", showContent);
     switch (actionType) {
       case "VIEW":
         return (
           <TemplateDisplayV3
-            // content={templateData?.content ?? null}
             content={showContent?.oldHtml ?? null}
             isAllLoading={isAllLoading}
             allData={allModuleData}
@@ -175,40 +167,10 @@ const TemplatePreviewSideDrawer = ({
             width: "90%",
             borderRadius: "10px",
             boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+            overflow: "auto",
           }}
         >
-          <>
-            {/* {generatePreview(templatePreviewAction?.type)} */}
-            {/* {generatePreview(templatePreviewAction?.type)} */}
-            {previewJsx}
-
-            {/* {templatePreviewAction?.type === "ATTACH_TEMPLATE" &&
-              showContent && (
-                <PageSettingViewBackend
-                  content={showContent}
-                  settings={{
-                    unit: "in",
-                    pageType: "A4",
-                    pageOrientation: "portrait",
-                    marginTop: 0,
-                    marginBottom: 0,
-                    marginLeft: 0,
-                    marginRight: 0,
-                  }}
-                />
-              )}
-
-            {templatePreviewAction?.type === "VIEW" && showContent && (
-              <TemplateDisplayV3
-                content={templateData?.content ?? null}
-                isAllLoading={false}
-                allData={allModuleData}
-                isView={true}
-                initialValues
-                handleOutputContent={setExportContent}
-              />
-            )} */}
-          </>
+          <>{previewJsx}</>
         </Container>
       </div>
 
@@ -220,13 +182,15 @@ const TemplatePreviewSideDrawer = ({
           flexGrow: 0,
         }}
       >
-        <Button
-          type="button"
-          className="btn btn-success w-75"
-          onClick={() => templatePreviewAction?.action(exportContent)}
-        >
-          {templatePreviewAction?.label || "Submit"}
-        </Button>
+        {templatePreviewAction?.action && (
+          <Button
+            type="button"
+            className="btn btn-success w-75"
+            onClick={() => templatePreviewAction?.action(templateData)}
+          >
+            {templatePreviewAction?.label || "Submit"}
+          </Button>
+        )}
       </div>
     </SideDrawer>
   );

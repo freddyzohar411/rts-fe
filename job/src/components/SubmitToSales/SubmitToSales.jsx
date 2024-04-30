@@ -117,7 +117,6 @@ const SubmitToSales = ({
   }, [tableTemplateData]);
 
   const attachmentTemplate = async (filterTemplate) => {
-    console.log("filterTemplate", filterTemplate);
     if (!filterTemplate) return;
     setAttachmentLoading(true);
     try {
@@ -323,7 +322,8 @@ const SubmitToSales = ({
                           type: "ATTACH_TEMPLATE",
                           label: "Attach Template",
                           action: (data) => {
-                            setAttachments((prev) => [...prev, data]);
+                            attachmentTemplate(data);
+                            // setAttachments((prev) => [...prev, data]);
                             setIsViewTemplate(false);
                           },
                         });

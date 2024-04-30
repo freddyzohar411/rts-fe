@@ -1001,16 +1001,6 @@ const JobOverview = () => {
                       {stepperState}
                     </span>
                   </Row>
-                  <Row>
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        setIsViewTemplate(!isViewTemplate);
-                      }}
-                    >
-                      Click
-                    </Button>
-                  </Row>
                 </Col>
               </Row>
             </div>
@@ -1039,9 +1029,6 @@ const JobOverview = () => {
           {isViewTemplate && (
             <div
               className={`view-template ${isViewTemplate ? "active" : ""}`}
-              // style={{
-              //   border,
-              // }}
             >
               <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
                 <div className="avatar-md flex-shrink-0 d-flex gap-3">
