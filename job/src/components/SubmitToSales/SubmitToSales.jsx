@@ -366,9 +366,8 @@ const SubmitToSales = forwardRef(
               content={emailTemplateData?.content ?? null}
               allData={"null"}
               isView={false}
-              // handleOutputContent={setEmailContent}
               autoResize={false}
-              height={280}
+              height={385}
               onChange={(content) => {
                 formik.setFieldValue("content", content);
               }}
@@ -377,19 +376,6 @@ const SubmitToSales = forwardRef(
             />
           </Col>
         </Row>
-
-        {/* <hr className="mt-2" /> */}
-        <Button
-          onClick={() => {
-            if (!formik.isValid) {
-              toastErrors();
-              return;
-            }
-            formik.handleSubmit();
-          }}
-        >
-          Submit
-        </Button>
         <span className="text-muted">
           {attachments.length > 0 &&
             attachments.map((attachment, i) => {
