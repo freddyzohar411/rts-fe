@@ -673,14 +673,12 @@ const JobOverview = () => {
                 borderRadius: "8px",
               }}
             >
-              {" "}
               {emailIsLoading ? <Spinner size="sm" color="light" /> : "Send"}
             </Button>
           </div>
         );
     }
   };
-  console.log("Active Step", activeStep);
 
   return (
     <React.Fragment>
