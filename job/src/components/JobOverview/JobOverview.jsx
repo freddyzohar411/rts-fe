@@ -129,6 +129,8 @@ const JobOverview = () => {
   const [isViewTemplate, setIsViewTemplate] = useState(false);
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [formModalHeader, setFormModalHeader] = useState("Header");
 
   // Email Loading
   const emailIsLoading = useSelector(
@@ -1335,8 +1337,21 @@ const JobOverview = () => {
           />
         </Offcanvas>
         {/* // Form Modal */}
-        <ModalFormWrapper />
-        {/* // Delete Modal */}
+        <ModalFormWrapper
+          activeStep={activeStep}
+          isFormModalOpen={isFormModalOpen}
+          setIsFormModalOpen={setIsFormModalOpen}
+          header={stepperState}
+        />
+        <button
+          onClick={() => {
+            // Everytime i click i want it to render even if it is the same step
+            setIsFormModalOpen(true);
+            setActiveStep(2);
+          }}
+        >
+          SET STEP 99
+        </button>
       </div>
     </React.Fragment>
   );
