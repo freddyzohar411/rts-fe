@@ -23,7 +23,7 @@ import { initialValues, schema } from "./formikConfig";
 import { toast } from "react-toastify";
 import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
 import { useNavigate } from "react-router-dom";
-import { Actions } from "@workspace/common";
+import { Actions, AuditConstant } from "@workspace/common";
 
 const SubmitToSales = forwardRef(
   (
@@ -34,6 +34,7 @@ const SubmitToSales = forwardRef(
       setTemplatePreviewInfo,
       setTemplatePreviewAction,
       setOffcanvasForm,
+      jobTimeLineData,
     },
     ref
   ) => {
@@ -63,6 +64,16 @@ const SubmitToSales = forwardRef(
       }
     }, [emailSuccess]);
 
+    console.log(
+      "Audit Data",
+      JSON.stringify({
+        jobId: jobTimeLineData?.job?.id,
+        candidateId: jobTimeLineData?.candidate?.id,
+        recruiterId: jobTimeLineData?.createdBy,
+        salesId: jobTimeLineData?.job?.createdBy,
+      })
+    );
+
     /**
      * Handle form submit event (Formik)
      * @param {*} values
@@ -80,6 +91,15 @@ const SubmitToSales = forwardRef(
           config: {
             headers: {
               "Content-Type": "multipart/form-data",
+              Audit: JSON.stringify({
+                module: AuditConstant.moduleConstant.JOB_TIMELINE,
+                moduleId: jobTimeLineData?.id,
+                subModule: AuditConstant.subModuleConstant.SUBMIT_TO_SALES,
+                jobId: jobTimeLineData?.job?.id,
+                candidateId: jobTimeLineData?.candidate?.id,
+                recruiterId: jobTimeLineData?.createdBy,
+                salesId: jobTimeLineData?.job?.createdBy,
+              }),
             },
           },
         })

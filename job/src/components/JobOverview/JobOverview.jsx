@@ -149,6 +149,8 @@ const JobOverview = () => {
     (state) => state.JobStageReducer.jobTimeline
   );
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+  console.log("jobTimelineMeta", jobTimelineMeta);
+  console.log("jobTimelineData", jobTimelineData);
   // Custom renders
   const customRenderList = [
     {
@@ -382,6 +384,7 @@ const JobOverview = () => {
   };
 
   console.log("Step", activeStep);
+  console.log("timelineRowIndex", timelineRowIndex)
 
   const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
@@ -413,6 +416,7 @@ const JobOverview = () => {
             setTemplatePreviewAction={setTemplatePreviewAction}
             setOffcanvasForm={setOffcanvasForm}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 3:
@@ -803,7 +807,7 @@ const JobOverview = () => {
                           //     data?.id
                           //   )
                           // );
-                          // setTimelineRowIndex(timelineIndex);
+                          setTimelineRowIndex(timelineIndex);
                           setOffcanvasForm(true);
                         }}
                       >
