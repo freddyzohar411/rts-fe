@@ -9,7 +9,7 @@ import { generateOptions } from "./pdfOption";
 import { TemplateAdvanceExportModal } from "@workspace/common";
 import "./TinyCME.scss";
 
-const TemplateDisplayV3 = ({
+const TemplateDisplayV4 = ({
   injectData,
   content,
   allData, // All data by TemplateModule Hook
@@ -560,4 +560,4 @@ const TemplateDisplayV3 = ({
   );
 };
 
-export default TemplateDisplayV3;
+export default TemplateDisplayV4;

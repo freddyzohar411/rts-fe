@@ -26,6 +26,7 @@ const ModalFormWrapper = ({
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {
     console.log("Form values", newValues);
+    
   };
 
   useEffect(() => {
