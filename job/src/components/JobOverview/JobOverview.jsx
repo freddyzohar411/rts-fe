@@ -786,24 +786,25 @@ const JobOverview = () => {
                         className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
                         style={{ width: "30px", height: "30px" }}
                         onClick={() => {
-                          console.log(
-                            "Save",
-                            data?.candidate?.id,
-                            data?.id,
-                            skipComboOptions[data.id],
-                            originalOrder
-                          );
-                          handleIconClick(
-                            data?.candidate?.id,
-                            data?.id,
-                            getFormIndex(
-                              skipComboOptions[data.id] < originalOrder
-                                ? originalOrder
-                                : skipComboOptions[data.id],
-                              data?.id
-                            )
-                          );
-                          setTimelineRowIndex(timelineIndex);
+                          // console.log(
+                          //   "Save",
+                          //   data?.candidate?.id,
+                          //   data?.id,
+                          //   skipComboOptions[data.id],
+                          //   originalOrder
+                          // );
+                          // handleIconClick(
+                          //   data?.candidate?.id,
+                          //   data?.id,
+                          //   getFormIndex(
+                          //     skipComboOptions[data.id] < originalOrder
+                          //       ? originalOrder
+                          //       : skipComboOptions[data.id],
+                          //     data?.id
+                          //   )
+                          // );
+                          // setTimelineRowIndex(timelineIndex);
+                          setOffcanvasForm(true);
                         }}
                       >
                         <i
@@ -1346,7 +1347,7 @@ const JobOverview = () => {
         <button
           onClick={() => {
             // Everytime i click i want it to render even if it is the same step
-            setIsFormModalOpen(true);
+            // setIsFormModalOpen(true);
             setActiveStep(2);
           }}
         >

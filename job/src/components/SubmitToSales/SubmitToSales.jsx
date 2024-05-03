@@ -203,7 +203,7 @@ const SubmitToSales = forwardRef(
           <Col>
             <EmailTo
               formik={formik}
-              icon={<i className="ri-mail-fill fs-5"></i>}
+              ToIcon={<i className="ri-mail-fill fs-5"></i>}
             />
             <hr className="mt-2" />
           </Col>
@@ -213,7 +213,7 @@ const SubmitToSales = forwardRef(
           <Col>
             <EmailCCBCC
               formik={formik}
-              icon={<span>Cc</span>}
+              CCicon={<span>Cc</span>}
               BCC
             />
             <hr className="mt-2" />
