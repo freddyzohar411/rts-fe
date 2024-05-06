@@ -60,16 +60,6 @@ const SubmitToSales = forwardRef(
       }
     }, [emailSuccess]);
 
-    console.log(
-      "Audit Data",
-      JSON.stringify({
-        jobId: jobTimeLineData?.job?.id,
-        candidateId: jobTimeLineData?.candidate?.id,
-        recruiterId: jobTimeLineData?.createdBy,
-        salesId: jobTimeLineData?.job?.createdBy,
-      })
-    );
-
     /**
      * Handle form submit event (Formik)
      * @param {*} values
