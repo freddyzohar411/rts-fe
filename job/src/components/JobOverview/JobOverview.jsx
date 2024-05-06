@@ -1344,7 +1344,7 @@ const JobOverview = () => {
           onClick={() => {
             // Everytime i click i want it to render even if it is the same step
             // setIsFormModalOpen(true);
-            setActiveStep(2);
+            setActiveStep(3);
           }}
         >
           SET STEP (DEV)

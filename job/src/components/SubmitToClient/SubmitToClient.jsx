@@ -1,12 +1,11 @@
 import React, {
   useState,
-  useRef,
   useEffect,
   forwardRef,
   useImperativeHandle,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Button, Spinner } from "reactstrap";
+import { Row, Col, Button } from "reactstrap";
 import { useFormik } from "formik";
 import {
   EmailTo,
@@ -15,7 +14,6 @@ import {
   EmailTemplateSelect,
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
-  FileHelper,
   EmailAttachments,
 } from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
@@ -37,7 +35,6 @@ const SubmitToClient = forwardRef(
     },
     ref
   ) => {
-    const fileInputRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [formInitialValues, setFormInitialValues] = useState(initialValues);
@@ -165,7 +162,6 @@ const SubmitToClient = forwardRef(
 
     const attachmentTemplate = async (filterTemplate) => {
       if (!filterTemplate) return;
-      setAttachmentLoading(true);
       try {
         const processedTemplate =
           await TemplateHelper.setSelectedContentAndProcessed(
@@ -200,45 +196,7 @@ const SubmitToClient = forwardRef(
         }
       } catch (error) {
       } finally {
-        setAttachmentLoading(false);
       }
-    };
-
-    const supportedMimeTypes = [
-      "image/png",
-      "image/jpg",
-      "image/jpeg",
-      "image/gif",
-      "image/*",
-      "video/*",
-      "application/pdf",
-      "application/msword",
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // for docx
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // for xlsx
-      "application/vnd.ms-powerpoint",
-      "text/*",
-    ];
-
-    const handleAttachmentChange = (e) => {
-      const files = e.target.files;
-      if (!files) return;
-      const fileArray = [];
-      for (let i = 0; i < files.length; i++) {
-        // Check file type
-        if (!FileHelper.checkFileWithMimeType(files[i], supportedMimeTypes)) {
-          toast.error(`${files[i].name}: File type not supported`);
-          continue;
-        }
-        if (!FileHelper.checkFileSizeLimit(files[i], 10000000)) {
-          toast.error(`${files[i].name}: File size should be less than 10 MB`);
-          continue;
-        }
-        fileArray.push(files[i]);
-      }
-      setAttachments((prev) => [...prev, ...fileArray]);
-      // Reset the input
-      e.target.value = null;
     };
 
     return (
@@ -382,6 +340,7 @@ const SubmitToClient = forwardRef(
             }}
           >
             <EmailTemplateSelect
+              isLoading={attachmentLoading}
               icon={<i className=" ri-file-list-2-line fs-5"></i>}
               value={CVTemplateData}
               setTemplateData={setCVTemplateData}
@@ -391,9 +350,15 @@ const SubmitToClient = forwardRef(
                   <>
                     <div className="d-flex align-items-center">
                       <span
-                        className="flex-grow-1"
-                        onClick={(event) => {
-                          attachmentTemplate(data?.data);
+                        className="flex-grow-1 cursor-pointer"
+                        onClick={async (event) => {
+                          try {
+                            setAttachmentLoading(true);
+                            await attachmentTemplate(data?.data);
+                          } catch (error) {
+                          } finally {
+                            setAttachmentLoading(false);
+                          }
                         }}
                       >
                         {data?.label}
@@ -442,25 +407,7 @@ const SubmitToClient = forwardRef(
             />
           </Col>
         </Row>
-        <div className="text-muted d-flex gap-2 align-items-center mt-2">
-          <input
-            type="file"
-            style={{ display: "none" }} // Hide the file input
-            ref={fileInputRef}
-            onChange={handleAttachmentChange}
-          />
-          <Button
-            color="primary"
-            style={{
-              backgroundColor: "#0A65CC",
-              color: "#fff",
-            }}
-            onClick={() => fileInputRef.current.click()}
-            className="d-flex gap-1"
-          >
-            <i className="ri-attachment-line"></i>
-            <span>Attach </span>
-          </Button>
+        <div className="mt-2">
           <EmailAttachments
             attachments={attachments}
             setAttachments={setAttachments}

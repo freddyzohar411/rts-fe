@@ -1,6 +1,5 @@
 import React, {
   useState,
-  useRef,
   useEffect,
   forwardRef,
   useImperativeHandle,
@@ -15,8 +14,6 @@ import {
   EmailTemplateSelect,
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
-  setIsViewTemplate,
-  FileHelper,
   EmailAttachments,
 } from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
@@ -38,7 +35,6 @@ const SubmitToSales = forwardRef(
     },
     ref
   ) => {
-    const fileInputRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [formInitialValues, setFormInitialValues] = useState(initialValues);
@@ -212,43 +208,6 @@ const SubmitToSales = forwardRef(
       } catch (error) {
       } finally {
       }
-    };
-
-    const supportedMimeTypes = [
-      "image/png",
-      "image/jpg",
-      "image/jpeg",
-      "image/gif",
-      "image/*",
-      "video/*",
-      "application/pdf",
-      "application/msword",
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // for docx
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // for xlsx
-      "application/vnd.ms-powerpoint",
-      "text/*",
-    ];
-
-    const handleAttachmentChange = (e) => {
-      const files = e.target.files;
-      if (!files) return;
-      const fileArray = [];
-      for (let i = 0; i < files.length; i++) {
-        // Check file type
-        if (!FileHelper.checkFileWithMimeType(files[i], supportedMimeTypes)) {
-          toast.error(`${files[i].name}: File type not supported`);
-          continue;
-        }
-        if (!FileHelper.checkFileSizeLimit(files[i], 10000000)) {
-          toast.error(`${files[i].name}: File size should be less than 10 MB`);
-          continue;
-        }
-        fileArray.push(files[i]);
-      }
-      setAttachments((prev) => [...prev, ...fileArray]);
-      // Reset the input
-      e.target.value = null;
     };
 
     return (
@@ -459,25 +418,7 @@ const SubmitToSales = forwardRef(
             />
           </Col>
         </Row>
-        <div className="text-muted d-flex gap-2 align-items-center mt-2">
-          <input
-            type="file"
-            style={{ display: "none" }} // Hide the file input
-            ref={fileInputRef}
-            onChange={handleAttachmentChange}
-          />
-          <Button
-            color="primary"
-            style={{
-              backgroundColor: "#0A65CC",
-              color: "#fff",
-            }}
-            onClick={() => fileInputRef.current.click()}
-            className="d-flex gap-1"
-          >
-            <i className="ri-attachment-line"></i>
-            <span>Attach </span>
-          </Button>
+        <div className="mt-2">
           <EmailAttachments
             attachments={attachments}
             setAttachments={setAttachments}
