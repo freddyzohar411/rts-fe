@@ -7,12 +7,14 @@ import {
   BASE_JOB_TIMELINE,
   BASE_USER_GROUP,
   BASE_JOB_CUSTOM_VIEW,
+  BASE_USER
 } from "./url_helper";
 import {
   JOB_URL,
   DOCUMENT_URL,
   FORM_URL,
   GROUP_URL,
+  API_URL
 } from "@workspace/common/src/config";
 
 const { APIClient } = Axios;
@@ -110,3 +112,8 @@ export const deleteJobCustomView = (id) =>
   // Delete an jobs List
 export const deleteJobs = (jobIds) =>
 api.create(`${JOB_URL}${BASE_JOBS}/listing/delete`, jobIds);
+
+
+// Get User by Ids
+export const getUsersByIds = (userIds) =>
+  api.create(`${API_URL}${BASE_USER}/find-by-ids`, userIds);

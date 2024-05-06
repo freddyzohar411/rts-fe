@@ -18,3 +18,6 @@ export const BASE_USER_GROUP = "/api/usergroup";
 
 // Create Job Custom View
 export const BASE_JOB_CUSTOM_VIEW = "/api/job";
+
+// User 
+export const BASE_USER = "/api/user";

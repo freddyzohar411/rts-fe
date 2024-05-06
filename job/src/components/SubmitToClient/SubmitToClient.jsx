@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
 import { useNavigate } from "react-router-dom";
 import { Actions, AuditConstant } from "@workspace/common";
+import { getUsersByIds } from "../../helpers/backend_helper";
 
 const SubmitToClient = forwardRef(
   (
@@ -118,6 +119,49 @@ const SubmitToClient = forwardRef(
         }
       },
     }));
+
+    useEffect(() => {
+      const prePopulateEmails = async (data) => {
+        const response = await getUsersByIds({
+          userIds: [data?.recruiterId],
+        });
+        const userData = response?.data;
+        if (userData) {
+          const cc = userData.filter((item) => item.id === data.recruiterId);
+          if (data?.clientEmail) {
+            formik.setFieldValue("to", [
+              {
+                value: data?.clientEmail,
+                label: data?.clientEmail,
+              },
+            ]);
+          }
+          if (cc && cc.length > 0) {
+            formik.setFieldValue("cc", [
+              {
+                value: cc[0]?.email,
+                label: cc[0]?.email,
+              },
+            ]);
+          }
+        }
+      };
+
+      // Get Sales Email
+      if (
+        jobTimeLineData?.job?.jobSubmissionData?.clientEmail &&
+        jobTimeLineData?.candidate?.createdBy &&
+        formik
+      ) {
+        const clientEmail =
+          jobTimeLineData?.job?.jobSubmissionData?.clientEmail;
+        const recruiterId = jobTimeLineData?.candidate?.createdBy;
+        prePopulateEmails({
+          clientEmail,
+          recruiterId,
+        });
+      }
+    }, []);
 
     // Toast errors upn submit
     const toastErrors = () => {

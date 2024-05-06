@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
 import { useNavigate } from "react-router-dom";
 import { Actions, AuditConstant } from "@workspace/common";
+import { getUsersByIds } from "../../helpers/backend_helper";
 
 const SubmitToSales = forwardRef(
   (
@@ -51,6 +52,8 @@ const SubmitToSales = forwardRef(
     const emailSuccess = useSelector(
       (state) => state.EmailCommonReducer.success
     );
+
+    // console.log("jobTimeLineData", jobTimeLineData);
 
     useEffect(() => {
       if (emailSuccess) {
@@ -118,6 +121,52 @@ const SubmitToSales = forwardRef(
         }
       },
     }));
+
+    // PrePopulate Emails
+    useEffect(() => {
+      const prePopulateEmails = async (data) => {
+        const response = await getUsersByIds({
+          userIds: [data?.salesId, data?.recruiterId],
+        });
+        const userData = response?.data;
+        if (userData) {
+          const to = userData.filter((item) => item.id === data.salesId);
+          const cc = userData.filter((item) => item.id === data.recruiterId);
+          if (to && to.length > 0) {
+            formik.setFieldValue("to", [
+              {
+                value: to[0]?.email,
+                label: to[0]?.email,
+              },
+            ]);
+          }
+          if (cc && cc.length > 0) {
+            formik.setFieldValue("cc", [
+              {
+                value: cc[0]?.email,
+                label: cc[0]?.email,
+              },
+            ]);
+          }
+        }
+      };
+
+      // Get Sales Email
+      if (
+        jobTimeLineData?.job?.createdBy &&
+        jobTimeLineData?.candidate?.createdBy &&
+        formik
+      ) {
+        const salesId = jobTimeLineData?.job?.createdBy;
+        const recruiterId = jobTimeLineData?.candidate?.createdBy;
+        prePopulateEmails({
+          salesId,
+          recruiterId,
+        });
+      }
+    }, []);
+
+    console.log("Formik.values", formik.values);
 
     // Toast errors upn submit
     const toastErrors = () => {
