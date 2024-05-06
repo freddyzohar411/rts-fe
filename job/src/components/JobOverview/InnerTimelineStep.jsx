@@ -1,12 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, createRef } from "react";
 
 function InnerTimelineStep({ data }) {
   const containerRef = useRef(null);
   const timelineRef = useRef(null);
-  const [divWidth, setDivWidth] = useState(0);
+  const sectionRefs = useRef([]);
+  const [sectionRowIndexes, setSectionRowIndexes] = useState([]);
   const [noOfRows, setNoOfRows] = useState(0);
   const [rowDivs, setRowDivs] = useState(null);
   const [expandedSections, setExpandedSections] = useState({});
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [divWidth, setDivWidth] = useState("");
+  const [elementSizing, setElementSizing] = useState("");
 
   const sections = [
     {
@@ -23,7 +27,12 @@ function InnerTimelineStep({ data }) {
     {
       name: "Odin",
       expandCollapseButton: "OdinExpandCollapseButton",
-      subitems: ["Technical Assessment", "Coding Test", "Cultural Fit Test"],
+      subitems: [
+        "Skills Assessment",
+        "Coding Test",
+        "Technical Interview",
+        "Cultural Fit Test",
+      ],
     },
     {
       name: "Interviews",
@@ -41,6 +50,31 @@ function InnerTimelineStep({ data }) {
       subitems: ["Conditional Offer Status"],
     },
   ];
+
+  useEffect(() => {
+    const updateRowIndexes = () => {
+      const newIndexes = sectionRefs.current.map((ref) => {
+        const top = ref.current?.getBoundingClientRect().top;
+        const containerTop = containerRef.current?.getBoundingClientRect().top;
+        const rowIndex = Math.floor((top - containerTop) / 90);
+        return rowIndex;
+      });
+      setSectionRowIndexes(newIndexes);
+    };
+
+    updateRowIndexes();
+    window.addEventListener("resize", updateRowIndexes);
+
+    return () => {
+      window.removeEventListener("resize", updateRowIndexes);
+    };
+  }, [noOfRows]); 
+
+  useEffect(() => {
+    sectionRefs.current = sections.map(
+      (_, i) => sectionRefs.current[i] ?? createRef()
+    );
+  }, [sections]);
 
   const getStatus = (subitems) => {
     const statuses = subitems
@@ -174,12 +208,6 @@ function InnerTimelineStep({ data }) {
     setRowDivs(generateDivs(noOfRows));
   }, [noOfRows]);
 
-  useEffect(() => {
-    const timelineDiv = document.getElementById("timeline-line");
-    const timelineWidth = timelineDiv.offsetWidth;
-    setDivWidth(`${timelineWidth}px`);
-  }, []);
-
   const renderStyle = {
     COMPLETED: {
       icon: "mdi mdi-check",
@@ -214,7 +242,7 @@ function InnerTimelineStep({ data }) {
       case "INPROGRESS":
         return renderStyle.INPROGRESS;
       default:
-        return renderStyle.NOTSTARTED; // Default style for unknown status
+        return renderStyle.NOTSTARTED;
     }
   }
 
@@ -245,6 +273,23 @@ function InnerTimelineStep({ data }) {
     return romanNum;
   }
 
+  useEffect(() => {
+    const expandedTimeline = Object.values(expandedSections).includes(true);
+    if (expandedTimeline) {
+      setIsExpanded(true);
+    } else {
+      setIsExpanded(false);
+    }
+  }, [expandedSections]);
+
+  useEffect(() => {
+    const timelineElement = document.getElementById("timeline-line");
+    if (timelineElement && timelineElement.firstChild) {
+      setDivWidth(`${timelineElement.firstChild.offsetWidth}px`);
+      setElementSizing(`${timelineElement.firstChild.offsetWidth / 10}px`);
+    }
+  }, []);
+
   return (
     <div style={{ position: "relative" }}>
       <div className="py-2 w-100">
@@ -258,8 +303,8 @@ function InnerTimelineStep({ data }) {
           style={{
             position: "relative",
             zIndex: "2",
-            width: divWidth,
             left: "50px",
+            width: divWidth,
           }}
         >
           {sectionsWithStatus.map((section, index) => {
@@ -267,46 +312,45 @@ function InnerTimelineStep({ data }) {
               name: subitem,
               data: data[subitem] || {},
             }));
-            const expandedTimeline =
-              Object.values(expandedSections).includes(true);
-            const renderItemStyle = renderSectionStyle(section.status);
             return (
-              <React.Fragment key={index}>
-                <div className="d-flex flex-row">
+              <div key={index}>
+                <div className="d-flex flex-row justify-content-between">
                   <div
                     id="module-timeline"
-                    className="d-flex flex-column pb-4 align-items-start justify-content-center"
-                    style={{ width: expandedTimeline ? "150px" : "110px" }}
+                    className={`d-flex flex-column pb-4 align-items-start justify-content-center`}
+                    style={{ width: elementSizing }}
                   >
-                    <div
-                      className="mb-2"
-                      style={{
-                        width: "22px",
-                        height: "22px",
-                        border: "1px solid #0A56AE",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: "100%",
-                        backgroundColor: "#FFFFFF",
-                        color: "#0A56AE",
-                      }}
-                    >
-                      <span className="fw-semibold">{index + 1}</span>
+                    <div className="d-flex flex-column align-items-start">
+                      <div
+                        className="mb-2"
+                        style={{
+                          width: "22px",
+                          height: "22px",
+                          border: "1px solid #0A56AE",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: "100%",
+                          backgroundColor: "#FFFFFF",
+                          color: "#0A56AE",
+                        }}
+                      >
+                        <span className="fw-semibold">{index + 1}</span>
+                      </div>
+                      <span className="form-text text-muted">15/02/2024</span>
+                      <span
+                        className="fw-semibold text-dark"
+                        style={{ fontSize: "13px", whiteSpace: "nowrap" }}
+                      >
+                        {section.name}
+                      </span>
                     </div>
-                    <span className="form-text text-muted">15/02/2024</span>
-                    <span
-                      className="fw-semibold text-dark"
-                      style={{ fontSize: "13px", whiteSpace: "nowrap" }}
-                    >
-                      {section.name}
-                    </span>
                   </div>
 
                   <div
-                    className="cursor-pointer d-flex align-items-top justify-content-start"
+                    className={`cursor-pointer d-flex align-items-top justify-content-start`}
                     onClick={() => toggleSection(section.name)}
-                    style={{ width: expandedTimeline ? "150px" : "110px" }}
+                    style={{ width: elementSizing }}
                   >
                     <div
                       style={{
@@ -344,49 +388,53 @@ function InnerTimelineStep({ data }) {
                         );
                         return (
                           <div
-                            className="d-flex flex-column"
+                            className="d-flex flex-column align-items-center"
                             style={{
-                              width: expandedTimeline ? "150px" : "110px",
+                              width: isExpanded ? "140px" : "110px",
                             }}
                           >
-                            <div
-                              className="d-flex align-items-center justify-content-center mb-1"
-                              style={{
-                                width: "22px",
-                                height: "22px",
-                                border: "1px solid",
-                                borderRadius: "100%",
-                                backgroundColor: renderSubitemStyle.bgColor,
-                                color: renderSubitemStyle.color,
-                              }}
-                            >
-                              {renderSubitemStyle.icon ? (
-                                <i className={renderSubitemStyle.icon}></i>
-                              ) : (
-                                <span>{toRoman(subindex + 1)}</span>
-                              )}
+                            <div className="d-flex flex-column align-items-start">
+                              <div
+                                className="d-flex align-items-center justify-content-center mb-1"
+                                style={{
+                                  width: "22px",
+                                  height: "22px",
+                                  border: "1px solid",
+                                  borderRadius: "100%",
+                                  backgroundColor: renderSubitemStyle.bgColor,
+                                  color: renderSubitemStyle.color,
+                                }}
+                              >
+                                {renderSubitemStyle.icon ? (
+                                  <i className={renderSubitemStyle.icon}></i>
+                                ) : (
+                                  <span>{toRoman(subindex + 1)}</span>
+                                )}
+                              </div>
+                              <span className="form-text text-muted">
+                                {subitemsData[subindex].data.date
+                                  ? new Date(
+                                      subitemsData[subindex].data.date
+                                    ).toLocaleDateString()
+                                  : "Not Started"}
+                              </span>
+                              <span
+                                key={subindex}
+                                className="fw-semibold text-dark no-wrap"
+                                style={{
+                                  fontSize: "13px",
+                                }}
+                              >
+                                {subitem}
+                              </span>
                             </div>
-                            <span className="form-text text-muted">
-                              {subitemsData[subindex].data.date
-                                ? new Date(
-                                    subitemsData[subindex].data.date
-                                  ).toLocaleDateString()
-                                : "Not Started"}
-                            </span>
-                            <span
-                              key={subindex}
-                              className="fw-semibold text-dark no-wrap"
-                              style={{ fontSize: "13px", whiteSpace: "nowrap" }}
-                            >
-                              {subitem}
-                            </span>
                           </div>
                         );
                       })}
                     </div>
                   )}
                 </div>
-              </React.Fragment>
+              </div>
             );
           })}
         </div>
