@@ -22,6 +22,7 @@ import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
 import { useNavigate } from "react-router-dom";
 import { Actions, AuditConstant } from "@workspace/common";
 import { getUsersByIds } from "../../helpers/backend_helper";
+import { DeleteCustomModal } from "@workspace/common";
 
 const SubmitToClient = forwardRef(
   (
@@ -52,6 +53,8 @@ const SubmitToClient = forwardRef(
     const emailSuccess = useSelector(
       (state) => state.EmailCommonReducer.success
     );
+    const [confirmCVNotAttachedModal, setConfirmCVNotAttachedModal] =
+      useState(false);
 
     useEffect(() => {
       if (emailSuccess) {
@@ -113,6 +116,10 @@ const SubmitToClient = forwardRef(
     useImperativeHandle(ref, () => ({
       submitForm: () => {
         if (formik.isValid) {
+          if (attachments.length === 0) {
+            setConfirmCVNotAttachedModal(true);
+            return;
+          }
           formik.handleSubmit();
         } else {
           toastErrors();
@@ -241,6 +248,11 @@ const SubmitToClient = forwardRef(
       } catch (error) {
       } finally {
       }
+    };
+
+    const confirmSendEmail = () => {
+      setConfirmCVNotAttachedModal(false);
+      formik.handleSubmit();
     };
 
     return (
@@ -458,6 +470,16 @@ const SubmitToClient = forwardRef(
             num={4}
           />
         </div>
+        <DeleteCustomModal
+          confirmButtonText="Send"
+          isOpen={confirmCVNotAttachedModal}
+          setIsOpen={setConfirmCVNotAttachedModal}
+          confirmDelete={confirmSendEmail}
+          header="Confirmation"
+          deleteText={
+            "CV attachment not found. Would you like to proceed with sending the email to sales anyway?"
+          }
+        />
       </div>
     );
   }
