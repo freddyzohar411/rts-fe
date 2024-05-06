@@ -20,10 +20,11 @@ import {
   Spinner,
   Card,
   CardBody,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Label,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -55,6 +56,7 @@ import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import StepComponent from "./StepComponent";
 import { TimelineHeader } from "../TimelineHeader";
 import { CVPreview } from "../CVPreview";
+
 import {
   JOB_TIMELINE_INITIAL_OPTIONS,
   jobHeaders,
@@ -85,6 +87,7 @@ import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePrevi
 import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
 import OverviewStepComponent from "./OverviewStepComponent";
 import InnerTimelineStep from "./InnerTimelineStep";
+import "../ScheduleInterview/ScheduleInterview";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -94,10 +97,14 @@ const JobOverview = () => {
   const toggleJobOpen = (index) => {
     setOpenJobIndex(openJobIndex === index ? null : index);
   };
+
   // Next Step Dropdown States
-  const [selectedModule, setSelectedModule] = useState("");
-  const handleModuleChange = (e) => {
-    setSelectedModule(e.target.value);
+  const [selectedModules, setSelectedModules] = useState({});
+  const handleModuleChange = (id, event) => {
+    setSelectedModules((prevState) => ({
+      ...prevState,
+      [id]: event.target.value,
+    }));
   };
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
@@ -159,8 +166,6 @@ const JobOverview = () => {
         ),
     },
   ];
-
-  console.log("Job Timeline Data", skipComboOptions);
 
   // Table Hooks
   const {
@@ -352,7 +357,6 @@ const JobOverview = () => {
   const handleSkipSelection = (jobId, value) => {
     const newOb = { ...skipComboOptions };
     newOb[jobId] = value;
-    console.log("New Ob", newOb);
     setSkipComboOptions(newOb);
   };
 
@@ -380,8 +384,6 @@ const JobOverview = () => {
     }
     return status;
   };
-
-  console.log("Step", activeStep);
 
   const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
@@ -490,9 +492,15 @@ const JobOverview = () => {
         return (
           <ScheduleInterview
             closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
+            templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
           />
         );
       case 11:
@@ -584,7 +592,6 @@ const JobOverview = () => {
    * @description Get form index on the basis of index
    */
   const getFormIndex = (originalOrder, jobId) => {
-    console.log("Original Order", originalOrder, jobId, skipComboOptions);
     let index = null;
     switch (originalOrder) {
       case 6:
@@ -675,6 +682,9 @@ const JobOverview = () => {
       ? tooltipIndexes?.[targetName]?.tooltipOpen
       : false;
   };
+
+  const [interviewModalHeader, setInterviewModalHeader] = useState("");
+
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
     return (
@@ -743,8 +753,8 @@ const JobOverview = () => {
                       <Input
                         type="select"
                         className="form-select border-0"
-                        onChange={handleModuleChange}
-                        value={selectedModule}
+                        onChange={(event) => handleModuleChange(data.id, event)}
+                        value={selectedModules[data.id] || ""}
                       >
                         <option value="">Select</option>
                         {Object.keys(timelineSkipModule).map((item, index) => (
@@ -753,14 +763,13 @@ const JobOverview = () => {
                           </option>
                         ))}
                       </Input>
-
+                      {/* Next Step: Sub-module */}
                       <Input
                         type="select"
                         className="form-select border-0"
                         // value={skipComboOptions[data.id]}
-                        disabled={!selectedModule}
+                        // disabled={!selectedModule}
                         onChange={(e) => {
-                          console.log("Skip", e.target.value);
                           handleSkipSelection(
                             data.id,
                             parseInt(e.target.value)
@@ -768,8 +777,8 @@ const JobOverview = () => {
                         }}
                       >
                         <option value="">Select</option>
-                        {selectedModule &&
-                          timelineSkipSubModule[selectedModule]?.map(
+                        {selectedModules[data.id] &&
+                          timelineSkipSubModule[selectedModules[data.id]]?.map(
                             (item, index) => (
                               <option key={index} value={item}>
                                 {item}
@@ -815,6 +824,7 @@ const JobOverview = () => {
                     </div>
                   </td>
                 </tr>
+
                 {openJobIndex === data.id && (
                   <tr>
                     <td colSpan={10} className="px-3">
@@ -859,6 +869,34 @@ const JobOverview = () => {
   const generateCanvasHeaderButton = (step) => {
     switch (step) {
       case 2:
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <Button
+              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+              style={{
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                setOffcanvasForm(false);
+                setIsViewTemplate(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="btn btn-success"
+              onClick={() => {
+                formikRef.current.submitForm();
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {emailIsLoading ? <Spinner size="sm" color="light" /> : "Send"}
+            </Button>
+          </div>
+        );
+      case 10:
         return (
           <div className="d-flex align-items-center gap-2">
             <Button
@@ -1352,6 +1390,15 @@ const JobOverview = () => {
           }}
         >
           SET STEP 99
+        </button>
+        <button
+          onClick={() => {
+            // Everytime i click i want it to render even if it is the same step
+            // setIsFormModalOpen(true);
+            setActiveStep(10);
+          }}
+        >
+          SET INTERVIEW SCHED
         </button>
       </div>
     </React.Fragment>

@@ -9,7 +9,18 @@ const EmailSubject = ({ formik, name, icon }) => {
           width: "40px",
         }}
       >
-        <Button className="px-1 py-0">{icon && icon}</Button>
+        <Button
+          className="px-1 py-0"
+          style={{
+            height: "28px",
+            width: "28px",
+            backgroundColor: "#F5F5F5",
+            border: "1px solid #A8A8A8",
+            color: "#7A7A7A",
+          }}
+        >
+          {icon && icon}
+        </Button>
       </div>
       <div className="d-flex gap-3 w-100">
         <Input

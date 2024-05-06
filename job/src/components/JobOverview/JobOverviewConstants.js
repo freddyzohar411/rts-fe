@@ -117,9 +117,12 @@ export const timelineSkipSubModule = {
     "Profile Feedback Pending",
   ],
   2: [
-    "Schedule First Interview",
-    "Schedule Second Interview",
-    "Schedule Third Interview",
+    "Schedule",
+    "Backout-Candidate",
+    "Rescheduled",
+    "Cancelled by Client",
+    "Rejected",
+    "Selected",
   ],
   3: [
     "Skills Assessment",
@@ -133,6 +136,10 @@ export const timelineSkipSubModule = {
     "Conditional Offer Declined",
   ],
 };
+
+export const interviewSelection = [
+  
+]
 
 export const timelineLegend = [
   {
