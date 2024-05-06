@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./JobOverview.scss";
-function OverviewStepComponent() {
-  const stepStyles = [
-    { icon: "bx bx-check", color: "green", status: "Completed" },
-    { icon: "bx bx-x", color: "red", status: "Incomplete"},
-    { icon: "mdi mdi-thumb-down-outline", color: "purple", status: "No Progress" },
-    { icon: "mdi mdi-fast-forward-outline", color: "darkgray", status: "Skipped" },
-  ];
 
+function OverviewStepComponent({ data }) {
   const stepType = [
     { 1: "Profile" },
     { 2: "Odin Protocol" },
@@ -37,17 +31,19 @@ function OverviewStepComponent() {
         >
           {Object.values(stepType).map((step, index) => {
             return (
-              <div
-                className="rounded-circle bg-white d-flex justify-content-center align-items-center"
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  border: "1px solid #0A56AE",
-                }}
-              >
-                <span className="fw-semibold" style={{ color: "#0A56AE" }}>
-                  {index + 1}
-                </span>
+              <div className="d-flex align-items-center justify-content-center flex-column gap-2">
+                <div
+                  className="rounded-circle bg-white d-flex justify-content-center align-items-center"
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    border: "1px solid #0A56AE",
+                  }}
+                >
+                  <span className="fw-semibold" style={{ color: "#0A56AE" }}>
+                    {index + 1}
+                  </span>
+                </div>
               </div>
             );
           })}
