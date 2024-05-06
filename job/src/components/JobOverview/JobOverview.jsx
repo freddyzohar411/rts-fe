@@ -19,10 +19,6 @@ import {
   ButtonGroup,
   Card,
   CardBody,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -96,6 +92,7 @@ const JobOverview = () => {
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
   const [legendTooltip, setLegendTooltip] = useState(false);
   const [headerTooltip, setHeaderTooltip] = useState(false);
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
@@ -149,14 +146,12 @@ const JobOverview = () => {
     setPageInfoData,
     search,
     setSearch,
-    customConfig,
-    setCustomConfigData,
   } = useTableHook(
     {
       page: 0,
       pageSize: 20,
-      sortBy: null,
-      sortDirection: "asc",
+      sortBy: "candidate.first_name",
+      sortDirection: sortDirection,
       searchTerm: null,
       searchFields: [
         "candidate.first_name",
@@ -535,9 +530,16 @@ const JobOverview = () => {
   };
 
   const handleSort = (index) => {
-    if (index === 0 || index === 1) {
-      const option = JOB_TIMELINE_INITIAL_OPTIONS[index];
-      // pageRequestSet.setSortAndDirection(option);
+    if (index === 0) {
+      const direction = sortDirection === "asc" ? "desc" : "asc";
+      dispatch(
+        fetchJobTimelineList({
+          ...DynamicTableHelper.cleanPageRequest(pageRequest),
+          jobId: parseInt(jobId),
+          sortDirection: direction,
+        })
+      );
+      setSortDirection(direction);
     }
   };
 
@@ -645,6 +647,7 @@ const JobOverview = () => {
       ? tooltipIndexes?.[targetName]?.tooltipOpen
       : false;
   };
+
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
     return (
@@ -927,7 +930,11 @@ const JobOverview = () => {
                   <thead className="bg-white main-border-style">
                     <tr>
                       {newHeaders.map((header, index) => (
-                        <td key={index} className="main-border-style">
+                        <td
+                          key={index}
+                          className="main-border-style cursor-pointer"
+                          onClick={() => handleSort(index)}
+                        >
                           {header.name} <i className={header.icon}></i>
                         </td>
                       ))}
