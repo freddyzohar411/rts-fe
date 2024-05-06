@@ -10,6 +10,7 @@ import {
   FETCH_USER_GROUP_BY_NAME,
   CREATE_JOB_FOD,
   DELETE_FOD,
+  DELETE_JOBS,
 } from "./actionTypes";
 import {
   fetchJobListSuccess,
@@ -30,6 +31,8 @@ import {
   createJobFODFailure,
   deleteFODSuccess,
   deleteFODFailure,
+  deleteJobsSuccess,
+  deleteJobsFailure,
 } from "./action";
 import {
   getJobs,
@@ -41,6 +44,7 @@ import {
   getUserGroupByName,
   postJobFOD,
   deleteFOD,
+  deleteJobs,
 } from "../../helpers/backend_helper";
 import { toast } from "react-toastify";
 
@@ -187,6 +191,17 @@ function* workFetchUserGroupByName(action) {
   }
 }
 
+function* workDeleteJobs(action) {
+  try {
+    const response = yield call(deleteJobs, {
+      jobIds: action.payload,
+    });
+    yield put(deleteJobsSuccess(action.payload));
+  } catch (error) {
+    yield put(deleteJobsFailure(error));
+  }
+}
+
 export default function* watchFetchJobListSaga() {
   yield takeEvery(POST_JOB_LIST, workPostJobList);
   yield takeEvery(PUT_JOB_LIST, workPutJobList);
@@ -197,4 +212,5 @@ export default function* watchFetchJobListSaga() {
   yield takeEvery(FETCH_USER_GROUP_BY_NAME, workFetchUserGroupByName);
   yield takeEvery(CREATE_JOB_FOD, workJobFOD);
   yield takeEvery(DELETE_FOD, workDeleteFOD);
+  yield takeEvery(DELETE_JOBS, workDeleteJobs);
 }

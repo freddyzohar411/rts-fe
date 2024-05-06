@@ -133,7 +133,6 @@ const CandidateResumeParse = () => {
 
     // Set file object
     setFileObj(files);
-
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

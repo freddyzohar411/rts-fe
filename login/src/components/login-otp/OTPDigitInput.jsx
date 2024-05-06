@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Col } from "reactstrap";
 
 const OTPDigitInput = ({ noOfOtp, setOTP }) => {
+  const firstBoxRef = useRef(null);
   const [otp, setOtp] = useState(Array(noOfOtp).fill(""));
+
+  // Focus on first box
+  useEffect(() => {
+    firstBoxRef.current.focus();
+  }, []);
+
   useEffect(() => {
     setOTP(otp.join(""));
   }, [otp]);
@@ -45,6 +52,7 @@ const OTPDigitInput = ({ noOfOtp, setOTP }) => {
               {`Digit ${index + 1}`}
             </label>
             <input
+              ref={index === 0 ? firstBoxRef : null}
               type="text"
               className="form-control bg-light border-light text-center"
               style={{ fontSize: "1.5rem" }}

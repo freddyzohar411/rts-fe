@@ -3,7 +3,9 @@ import {
   pendingMetaData,
   resetMetaData,
   successMetaData,
+  resetAllMetaData,
 } from "@workspace/common";
+
 import {
   FETCH_JOB_LIST,
   FETCH_JOB_LIST_SUCCESS,
@@ -37,6 +39,10 @@ import {
   DELETE_FOD_FAILURE,
   DELETE_FOD_RESET,
   CREATE_JOB_FOD_RESET,
+  DELETE_JOBS,
+  DELETE_JOBS_SUCCESS,
+  DELETE_JOBS_FAILURE,
+  DELETE_JOBS_RESET,
 } from "./actionTypes";
 
 const initialState = {
@@ -53,6 +59,7 @@ const initialState = {
   success: false,
   deleteFOD: {},
   deleteFODMeta: {},
+  deleteJobsMeta: {}
 };
 
 const JobListReducer = (state = initialState, action) => {
@@ -276,6 +283,32 @@ const JobListReducer = (state = initialState, action) => {
         ...state,
         deleteFODMeta: errorMetaData(action.payload),
         deleteFOD: {},
+      };
+    case DELETE_JOBS:
+      return {
+        ...state,
+        deleteJobsMeta: pendingMetaData(),
+      };
+    case DELETE_JOBS_SUCCESS:
+      const newJobsTemp = JSON.parse(JSON.stringify(state.jobs));
+      const filteredJobsTemp = newJobsTemp?.jobs.filter(
+        (job) => !action.payload.includes(job.id)
+      );
+      newJobsTemp.jobs = filteredJobsTemp;
+      return {
+        ...state,
+        jobs: newJobsTemp,
+        deleteJobsMeta: successMetaData(),
+      };
+    case DELETE_JOBS_FAILURE:
+      return {
+        ...state,
+        deleteJobsMeta: errorMetaData(action.payload),
+      };
+    case DELETE_JOBS_RESET:
+      return {
+        ...state,
+        deleteJobsMeta: resetAllMetaData(),
       };
     default:
       return state;

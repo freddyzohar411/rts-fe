@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DateHelper } from "@workspace/common";
 import {
   generateSeachFieldArray,
@@ -7,8 +7,9 @@ import {
 
 const useTableHook = (
   initialPageRequest = {},
+  mandatoryConfig = [],
   initialConfig = [],
-  customConfigList = []
+  customConfigList = [],
 ) => {
   // Set state for page request
   const [pageRequest, setPageRequest] = useState({
@@ -28,18 +29,67 @@ const useTableHook = (
   });
 
   const [search, setSearch] = useState("");
-
+  const [activeRow, setActiveRow] = useState([]);
+  const [tableData, setTableData] = useState([]);
   const [customConfig, setCustomConfig] = useState(
-    generateConfig(initialConfig, customConfigList)
+    generateConfig([...mandatoryConfig,...initialConfig], customConfigList)
   );
 
+  const [tableConfig, setTableConfig] = useState();
+
+  // Active Row Logic
+  useEffect(() => {
+    setActiveRow([]);
+  }, [pageRequest]);
+
+  const handleRowCheck = (id, checked) => {
+    if (checked) {
+      setActiveRow([...activeRow, id]);
+    } else {
+      const updatedVal = activeRow?.filter((sid) => sid !== id);
+      setActiveRow(updatedVal);
+    }
+  };
+
+  const selectAllRows = (isChecked) => {
+    if (isChecked) {
+      if (tableData?.length > 0) {
+        const ids = [];
+        tableData.forEach((item) => {
+          ids.push(item?.id);
+        });
+        setActiveRow(ids);
+      }
+    } else {
+      setActiveRow([]);
+    }
+  };
+
+  // const setCustomConfigData = (selectedOptGroup) => {
+  //   setCustomConfig(generateConfig(selectedOptGroup, customConfigList));
+  //   const newSearchFields = generateSeachFieldArray(selectedOptGroup);
+  //   //Add in searchfields from tableConfig
+  //   setPageRequest((prev) => ({
+  //     ...prev,
+  //     searchFields: newSearchFields,
+  //   }));
+  // };
+
   const setCustomConfigData = (selectedOptGroup) => {
-    setCustomConfig(generateConfig(selectedOptGroup, customConfigList));
+    const newFields = selectedOptGroup?.filter((item) => {
+      if (!mandatoryConfig?.find((opt) => opt.value === item.value)) {
+        return item;
+      }
+    });
+    const newOptGroup = [...mandatoryConfig, ...newFields];
+    setCustomConfig(generateConfig(newOptGroup, customConfigList));
+    const newSearchFields = generateSeachFieldArray(newOptGroup);
     setPageRequest((prev) => ({
       ...prev,
-      searchFields: generateSeachFieldArray(selectedOptGroup),
+      searchFields: newSearchFields,
     }));
   };
+
 
   const setPageInfoData = (data) => {
     setPageInfo((prev) => ({
@@ -138,6 +188,14 @@ const useTableHook = (
     setSearch,
     customConfig,
     setCustomConfigData,
+    setTableData,
+    handleRowCheck,
+    selectAllRows,
+    activeRow,
+    setActiveRow,
+    tableData,
+    tableConfig,
+    setTableConfig,
   };
 };
 
