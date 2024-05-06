@@ -84,9 +84,14 @@ const JobOverview = () => {
   };
   // Next Step Dropdown States
   const [selectedModule, setSelectedModule] = useState("");
+  const [selectedSubModule, setSelectedSubModule] = useState("");
   const handleModuleChange = (e) => {
     setSelectedModule(e.target.value);
   };
+  const handleSubModuleChange = (e) => {
+    setSelectedSubModule(e.target.value);
+  };
+
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
@@ -126,6 +131,13 @@ const JobOverview = () => {
   const jobTimelineData = useSelector(
     (state) => state.JobStageReducer.jobTimeline
   );
+
+  const handleSaveClick = () => {
+    if (selectedModule == 1 && selectedSubModule == "Untag") {
+      console.log("Save Button called.", selectedModule, selectedSubModule);
+    }
+  };
+
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
   // Custom renders
   const customRenderList = [
@@ -732,6 +744,8 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         disabled={!selectedModule}
+                        onChange={handleSubModuleChange}
+                        value={selectedSubModule}
                       >
                         <option value="">Select</option>
                         {selectedModule &&
@@ -755,6 +769,7 @@ const JobOverview = () => {
                         <i
                           className="mdi mdi-content-save-outline"
                           style={{ color: "#0A56AE" }}
+                          onClick={() => handleSaveClick()}
                         ></i>
                       </div>
                     </div>
