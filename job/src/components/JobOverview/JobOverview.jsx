@@ -383,9 +383,6 @@ const JobOverview = () => {
     return status;
   };
 
-  console.log("Step", activeStep);
-  console.log("timelineRowIndex", timelineRowIndex)
-
   const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
       case 1:
@@ -398,16 +395,9 @@ const JobOverview = () => {
           />
         );
       case 2:
-        return isPreviewCV ? (
-          <CVPreview
-            onExitPreview={handleExitPreview}
-            templateData={templateData}
-            candidateId={candidateId}
-          />
-        ) : (
+        return (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
-            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
@@ -420,20 +410,18 @@ const JobOverview = () => {
           />
         );
       case 3:
-        return isPreviewCV ? (
-          <CVPreview
-            onExitPreview={handleExitPreview}
-            templateData={templateData}
-            candidateId={candidateId}
-            jobId={jobId}
-          />
-        ) : (
+        return (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
-            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 4:
@@ -862,7 +850,9 @@ const JobOverview = () => {
   // Generate canvas header button
   const generateCanvasHeaderButton = (step) => {
     switch (step) {
+      // Case 2 and 3 usese the same form
       case 2:
+      case 3:
         return (
           <div className="d-flex align-items-center gap-2">
             <Button
@@ -890,6 +880,8 @@ const JobOverview = () => {
             </Button>
           </div>
         );
+      default:
+        return null;
     }
   };
 
@@ -1355,7 +1347,7 @@ const JobOverview = () => {
             setActiveStep(2);
           }}
         >
-          SET STEP 99
+          SET STEP (DEV)
         </button>
       </div>
     </React.Fragment>

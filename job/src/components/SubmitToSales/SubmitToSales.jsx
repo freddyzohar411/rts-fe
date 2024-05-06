@@ -176,7 +176,7 @@ const SubmitToSales = forwardRef(
 
     const attachmentTemplate = async (filterTemplate) => {
       if (!filterTemplate) return;
-      setAttachmentLoading(true);
+
       try {
         const processedTemplate =
           await TemplateHelper.setSelectedContentAndProcessed(
@@ -185,6 +185,13 @@ const SubmitToSales = forwardRef(
           );
 
         if (processedTemplate) {
+          let fileName = "candidate_cv";
+          if (
+            allModuleData?.Candidates?.basicInfo?.firstName &&
+            allModuleData?.Candidates?.basicInfo?.lastName
+          ) {
+            fileName = `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`;
+          }
           const file = await ExportHelper.exportBackendHtml2PdfFile(
             processedTemplate.html,
             {
@@ -196,7 +203,7 @@ const SubmitToSales = forwardRef(
               marginLeft: 0,
               marginRight: 0,
               exportType: "pdf",
-              fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`,
+              fileName: fileName,
             },
             processedTemplate.styleTag
           );
@@ -204,7 +211,6 @@ const SubmitToSales = forwardRef(
         }
       } catch (error) {
       } finally {
-        setAttachmentLoading(false);
       }
     };
 
@@ -244,8 +250,6 @@ const SubmitToSales = forwardRef(
       // Reset the input
       e.target.value = null;
     };
-
-    console.log("attachments", attachments);
 
     return (
       <div>
@@ -388,6 +392,7 @@ const SubmitToSales = forwardRef(
             }}
           >
             <EmailTemplateSelect
+              isLoading={attachmentLoading}
               icon={<i className=" ri-file-list-2-line fs-5"></i>}
               value={CVTemplateData}
               setTemplateData={setCVTemplateData}
@@ -398,8 +403,14 @@ const SubmitToSales = forwardRef(
                     <div className="d-flex align-items-center">
                       <span
                         className="flex-grow-1"
-                        onClick={(event) => {
-                          attachmentTemplate(data?.data);
+                        onClick={async (event) => {
+                          try {
+                            setAttachmentLoading(true);
+                            await attachmentTemplate(data?.data);
+                          } catch (error) {
+                          } finally {
+                            setAttachmentLoading(false);
+                          }
                         }}
                       >
                         {data?.label}
@@ -414,8 +425,8 @@ const SubmitToSales = forwardRef(
                           setTemplatePreviewAction({
                             type: "ATTACH_TEMPLATE",
                             label: "Attach Template",
-                            action: (data) => {
-                              attachmentTemplate(data);
+                            action: async (data) => {
+                              await attachmentTemplate(data);
                               setIsViewTemplate(false);
                             },
                           });
@@ -460,8 +471,6 @@ const SubmitToSales = forwardRef(
             style={{
               backgroundColor: "#0A65CC",
               color: "#fff",
-              // paddingTop: "2px",
-              // paddingBottom: "2px",
             }}
             onClick={() => fileInputRef.current.click()}
             className="d-flex gap-1"
@@ -474,36 +483,6 @@ const SubmitToSales = forwardRef(
             setAttachments={setAttachments}
             num={4}
           />
-          {/* {attachments.length > 0 &&
-            attachments.map((attachment, i) => {
-              return (
-                <div className="d-flex gap-3">
-                  <span
-                    className="text-danger cursor-pointer"
-                    onClick={() => {
-                      setAttachments(
-                        attachments.filter((item, index) => index !== i)
-                      );
-                    }}
-                  >
-                    <i className="ri-close-fill"></i>
-                  </span>
-                  <div className="d-flex gap-2">
-                    <span
-                      onClick={() => downloadAttachment(attachment)}
-                      className="cursor-pointer"
-                    >
-                      <strong>{attachment.name}</strong>
-                    </span>
-                    <span>
-                      <strong>
-                        ({FileHelper.displayFileSize(attachment.size)})
-                      </strong>
-                    </span>
-                  </div>
-                </div>
-              );
-            })} */}
         </div>
       </div>
     );

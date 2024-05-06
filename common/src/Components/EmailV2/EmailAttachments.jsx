@@ -94,7 +94,7 @@ const EmailAttachments = ({ attachments, setAttachments, num = 3 }) => {
                   }}
                 >
                   <div
-                    className="d-flex gap-2 align-items-center cursor-pointer flex-grow-1"
+                    className="d-flex gap-1 align-items-center cursor-pointer flex-grow-1"
                     onClick={() => downloadAttachment(attachment)}
                     style={{
                       whiteSpace: "nowrap",
