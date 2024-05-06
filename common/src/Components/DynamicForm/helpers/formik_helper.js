@@ -344,7 +344,7 @@ const generateValidationSchema2 = (
                 value = "";
               }
               let isValidCombined = null;
-              validation.validationList.forEach((condition, index) => {
+              validation?.validationList?.forEach((condition, index) => {
                 let isValid = false;
                 if (condition?.type === 1) {
                   // Get value to compare
