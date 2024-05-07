@@ -103,21 +103,29 @@ export const timelineSkip = {
 
 export const timelineSkipModule = {
   Profile: 1,
-  Interviews: 2,
-  "Odin Protocol": 3,
-  "Conditional Offer": 4,
+  Odin: 2,
+  Interview: 3,
+  TOS: 4,
+  "Conditional Offer": 5,
 };
+
 export const timelineSkipSubModule = {
   1: [
     "Untag",
     "Associate",
-    "Profile withdrawn",
+    "Profile Withdrawn",
     "Submit To Sales",
     "Profile Rejected - Sales",
     "Submit To Client",
     "Profile Rejected - Client",
   ],
   2: [
+    "Skills Assessment",
+    "Coding Test",
+    "Technical Interview",
+    "Cultural Fit Test",
+  ],
+  3: [
     "Schedule",
     "Backout-Candidate",
     "Rescheduled",
@@ -125,13 +133,8 @@ export const timelineSkipSubModule = {
     "Rejected",
     "Selected",
   ],
-  3: [
-    "Skills Assessment",
-    "Coding Test",
-    "Technical Interview",
-    "Cultural Fit Test",
-  ],
-  4: ["Prepare", "Edit", "Release", "Accepted", "Rejected"],
+  4: ["Prepare TOS", "Edit TOS", "Approve TOS"],
+  5: ["Prepare", "Edit", "Release", "Accepted", "Rejected"],
 };
 
 export const timelineLegend = [
