@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Row,
   Col,
@@ -17,6 +17,7 @@ import {
   PaginationLink,
   Tooltip,
   ButtonGroup,
+  Spinner,
   Card,
   CardBody,
 } from "reactstrap";
@@ -73,6 +74,10 @@ import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
+import { SideDrawer } from "@workspace/common";
+import "./ViewTemplateSection.scss";
+import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePreviewSideDrawer";
+import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
 import OverviewStepComponent from "./OverviewStepComponent";
 import InnerTimelineStep from "./InnerTimelineStep";
 
@@ -81,6 +86,7 @@ const JobOverview = () => {
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
+  const formikRef = useRef();
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -108,6 +114,16 @@ const JobOverview = () => {
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
   const [tooltipIndexes, setTooltipIndexes] = useState();
+  const [isViewTemplate, setIsViewTemplate] = useState(false);
+  const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
+  const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [formModalHeader, setFormModalHeader] = useState("Header");
+
+  // Email Loading
+  const emailIsLoading = useSelector(
+    (state) => state.EmailCommonReducer.loading
+  );
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -373,36 +389,33 @@ const JobOverview = () => {
           />
         );
       case 2:
-        return isPreviewCV ? (
-          <CVPreview
-            onExitPreview={handleExitPreview}
-            templateData={templateData}
-            candidateId={candidateId}
-          />
-        ) : (
+        return (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
-            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 3:
-        return isPreviewCV ? (
-          <CVPreview
-            onExitPreview={handleExitPreview}
-            templateData={templateData}
-            candidateId={candidateId}
-            jobId={jobId}
-          />
-        ) : (
+        return (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
-            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 4:
@@ -737,9 +750,9 @@ const JobOverview = () => {
                       <Input
                         type="select"
                         className="form-select border-0"
+                        value={selectedSubModule}
                         disabled={!selectedModule}
                         onChange={handleSubModuleChange}
-                        value={selectedSubModule}
                       >
                         <option value="">Select</option>
                         {selectedModule &&
@@ -759,6 +772,20 @@ const JobOverview = () => {
                       <div
                         className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
                         style={{ width: "30px", height: "30px" }}
+                        onClick={() => {
+                          // handleIconClick(
+                          //   data?.candidate?.id,
+                          //   data?.id,
+                          //   getFormIndex(
+                          //     skipComboOptions[data.id] < originalOrder
+                          //       ? originalOrder
+                          //       : skipComboOptions[data.id],
+                          //     data?.id
+                          //   )
+                          // );
+                          // setTimelineRowIndex(timelineIndex);
+                          // setOffcanvasForm(true);
+                        }}
                       >
                         <i
                           className="mdi mdi-content-save-outline"
@@ -807,6 +834,44 @@ const JobOverview = () => {
         )}
       </React.Fragment>
     );
+  };
+
+  // Generate canvas header button
+  const generateCanvasHeaderButton = (step) => {
+    switch (step) {
+      // Case 2 and 3 usese the same form
+      case 2:
+      case 3:
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <Button
+              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+              style={{
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                setOffcanvasForm(false);
+                setIsViewTemplate(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="btn btn-success"
+              onClick={() => {
+                formikRef.current.submitForm();
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {emailIsLoading ? <Spinner size="sm" color="light" /> : "Send"}
+            </Button>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -1173,48 +1238,65 @@ const JobOverview = () => {
             </Pagination>
           </div>
         </Row>
-
         <Offcanvas
           isOpen={offcanvasForm}
-          toggle={() => setOffcanvasForm(!offcanvasForm)}
+          toggle={() => {
+            setOffcanvasForm(!offcanvasForm);
+            setIsViewTemplate(false);
+            setTemplatePreviewInfo(null);
+          }}
           direction="end"
-          style={{ width: isMobile ? "100vw" : "75vw" }}
+          style={{ width: isMobile ? "100vw" : "55vw" }}
         >
-          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
-            <div className="avatar-md flex-shrink-0 d-flex gap-3">
-              <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
-                {formSubmissionData?.accountName.charAt(0)}
+          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center py-2">
+            <div className="flex-grow-1 gap-3">
+              <div className="d-flex gap-2 align-items-center mb-1">
+                <span
+                  className="px-2 rounded-3"
+                  style={{
+                    backgroundColor: "#0A65CC",
+                    color: "#fff",
+                    paddingTop: "2px",
+                    paddingBottom: "2px",
+                  }}
+                >
+                  {stepperState}
+                </span>
+                <span className="fw-bold fs-4">
+                  {formSubmissionData?.accountName}
+                </span>
               </div>
-              <Row className="d-flex flex-row justify-content-between align-items-end gap-5">
-                <Col>
-                  <Row>
-                    <span className="h4 fw-bold">
-                      {formSubmissionData?.accountName}
-                    </span>
-                  </Row>
-                  <Row>
-                    <div className="d-flex flex-row gap-4">
-                      <span className="h6 fw-semibold text-nowrap">
-                        Job ID - {formSubmissionData?.clientJobId}
-                      </span>
-                      <span
-                        className="h6 fw-semibold text-nowrap cursor-pointer"
-                        title={formSubmissionData?.jobTitle}
-                      >
-                        Job Title - {truncate(formSubmissionData?.jobTitle, 55)}
-                      </span>
-                    </div>
-                  </Row>
-                  <Row>
-                    <span className="h6 text-muted fw-bold">
-                      {stepperState}
-                    </span>
-                  </Row>
-                </Col>
-              </Row>
+              <div className="d-flex flex-row gap-2 align-items-center">
+                <span
+                  className="fs-6 text-nowrap"
+                  style={{
+                    color: "#0A65CC",
+                  }}
+                >
+                  Job ID - {formSubmissionData?.clientJobId}
+                </span>
+                <span
+                  style={{
+                    color: "#0A65CC",
+                  }}
+                >
+                  |
+                </span>
+                <span
+                  className="fs-6 text-nowrap cursor-pointer"
+                  style={{
+                    color: "#0A65CC",
+                  }}
+                  title={formSubmissionData?.jobTitle}
+                >
+                  Job Title - {truncate(formSubmissionData?.jobTitle, 55)}
+                </span>
+              </div>
             </div>
+            {/* Canvas Header Button Add-on */}
+            {generateCanvasHeaderButton(activeStep)}
             {/* Template Selector */}
-            {(activeStep === 11 || isPreviewCV) && (
+            {/* {(activeStep === 11 || isPreviewCV) && (
               <Col>
                 <div>
                   <TemplateSelectByCategoryElement
@@ -1229,12 +1311,28 @@ const JobOverview = () => {
                   />
                 </div>
               </Col>
-            )}
+            )} */}
           </div>
           <OffcanvasBody>
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
+          {/* View Template */}
+          <TemplatePreviewSideDrawer
+            showSideDrawer={isViewTemplate}
+            setShowSideDrawer={setIsViewTemplate}
+            templatePreviewInfo={templatePreviewInfo}
+            templatePreviewAction={templatePreviewAction}
+            candidateId={candidateId}
+            jobId={jobId}
+          />
         </Offcanvas>
+        {/* // Form Modal */}
+        <ModalFormWrapper
+          activeStep={activeStep}
+          isFormModalOpen={isFormModalOpen}
+          setIsFormModalOpen={setIsFormModalOpen}
+          header={stepperState}
+        />
       </div>
     </React.Fragment>
   );

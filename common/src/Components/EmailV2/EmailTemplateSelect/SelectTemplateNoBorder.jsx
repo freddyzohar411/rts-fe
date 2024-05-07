@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as TemplateActions from "../../../../../template/src/store/template/action";
-import Select from "react-select";
+import Select, { components } from "react-select";
+import { Button } from "reactstrap";
+import { useNavigate } from "react-router-dom";
 
 const TemplateSelectByCategoryElement = ({
   categoryName = null,
@@ -10,8 +12,14 @@ const TemplateSelectByCategoryElement = ({
   width = "auto",
   end, // Justify content end
   value, // Use this to set a value
+  flexGrow = false,
+  addMore = false,
+  addMoreLabel = "Label",
+  addMoreRender = null,
+  selectRender = null,
   ...props
 }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [templateList, setTemplateList] = useState([]);
@@ -29,10 +37,7 @@ const TemplateSelectByCategoryElement = ({
       setTemplateSelected({
         value: value.id,
         label: value.name,
-        id: value?.id,
-        data: value?.data,
       });
-      props.onChange(value);
     }
   }, [value, categoryName, templatesByCategory]);
 
@@ -66,20 +71,29 @@ const TemplateSelectByCategoryElement = ({
       if (!checkCategory) {
         return;
       }
-      setTemplateList(
-        templatesByCategory.map((item) => {
-          if (item.category !== categoryName) return null;
-          return {
-            value: item.id,
-            label: item.name,
-          };
-        })
-      );
+      const templateMapped = templatesByCategory.map((item) => {
+        if (item.category !== categoryName) return null;
+        return {
+          value: item.id,
+          label: item.name,
+          id: item.id,
+          data: item,
+        };
+      });
+      if (addMore) {
+        templateMapped.push({
+          value: "addMore",
+          label: addMoreLabel,
+        });
+      }
+      setTemplateList(templateMapped);
       setStoreTemplatesByCategory(templatesByCategory);
       if (defaultFirstValue && templatesByCategory.length > 0) {
         setTemplateSelected({
           value: templatesByCategory[0].id,
           label: templatesByCategory[0].name,
+          id: templatesByCategory[0].id,
+          data: templatesByCategory[0],
         });
         props.onChange(templatesByCategory[0]);
       }
@@ -103,6 +117,11 @@ const TemplateSelectByCategoryElement = ({
       },
       backgroundColor: state.isDisabled ? "#EFF2F7" : base.backgroundColor,
       width: width,
+      border: "none", // Remove border
+      boxShadow: "none", // Remove focus shadow
+      padding: "0px", // Remove padding
+      margin: "0px", // Remove margin
+      minHeight: "0px", // Remove min height
     }),
     singleValue: (provided, state) => ({
       ...provided,
@@ -124,31 +143,55 @@ const TemplateSelectByCategoryElement = ({
     }
   };
 
+  const formatOptionLabel = ({ value, label, id, data }) => {
+    if (value === "addMore") {
+      return addMoreRender ? addMoreRender : "";
+    }
+    if (selectRender) {
+      return selectRender({ value, label, id, data });
+    }
+    return label;
+  };
+
+  // Customize how the selected option is displayed in the input field
+  const SingleValue = ({ children, ...props }) => (
+    <components.SingleValue {...props}>
+      {props.data.label}
+    </components.SingleValue>
+  );
+
   return (
-    <div className={` d-flex ${end ? "justify-content-end" : ""}`}>
-      {props?.label && (
-        <Label className="form-label" htmlFor={props?.htmlFor ?? "input-field"}>
-          {props?.label}
-        </Label>
-      )}
-      <Select
-        value={templateSelected}
-        styles={customStyles}
-        onChange={handleChange}
-        onInputChange={(inputValue) => {
-          setSearch(inputValue);
-        }}
-        inputValue={search}
-        menuShouldScrollIntoView={false}
-        isClearable
-        isSearchable
-        placeholder={props.placeholder ?? "Select an option"}
-        options={templateList}
-      />
-      {props?.error && (
-        <FormFeedback type="invalid">{props?.error}</FormFeedback>
-      )}
-    </div>
+    <>
+      <div className={`${flexGrow ? "flex-grow-1" : ""}`}>
+        {props?.label && (
+          <Label
+            className="form-label"
+            htmlFor={props?.htmlFor ?? "input-field"}
+          >
+            {props?.label}
+          </Label>
+        )}
+        <Select
+          value={templateSelected}
+          styles={customStyles}
+          onChange={handleChange}
+          onInputChange={(inputValue) => {
+            setSearch(inputValue);
+          }}
+          inputValue={search}
+          menuShouldScrollIntoView={false}
+          isClearable
+          isSearchable
+          placeholder={props.placeholder ?? "Select an option"}
+          options={templateList}
+          formatOptionLabel={formatOptionLabel}
+          components={{ SingleValue }}
+        />
+        {props?.error && (
+          <FormFeedback type="invalid">{props?.error}</FormFeedback>
+        )}
+      </div>
+    </>
   );
 };
 

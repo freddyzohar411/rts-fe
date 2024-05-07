@@ -360,145 +360,145 @@ const JobListing = () => {
         center: true,
         render: (data) => (
           <>
-          <ActionDropDown>
-            {
-              // {checkAllPermission([Permission.JOB_EDIT]) &&
-              //   (gridView === "new_job" || gridView === "active_jobs") && (
-              //     <Dropdown
-              //       isOpen={fodAssign[data.id] || false}
-              //       toggle={() => handleFodAssignDropdown(data.id)}
-              //     >
-              //       <DropdownToggle
-              //         className="btn btn-sm btn-custom-primary table-btn"
-              //         style={{ fontSize: "0.65rem" }}
-              //         onClick={() => {
-              //           setActiveJob([data.id]);
-              //           setSelectedRecruiter([]);
-              //           setSearchQuery("");
-              //         }}
-              //       >
-              //         FOD
-              //       </DropdownToggle>
-              //       <DropdownMenu className="p-3" style={{ width: "200px" }}>
-              //         {/* Map Recruiter Checkbox Here */}
-              //         <Row className="mb-2">
-              //           <Col>
-              //             <div className="search-box">
-              //               <Input
-              //                 className="form-control form-control-sm"
-              //                 placeholder="Search.."
-              //                 type="text"
-              //                 value={searchQuery}
-              //                 onChange={handleSearch}
-              //               />
-              //               <i className="ri-search-eye-line search-icon"></i>
-              //             </div>
-              //           </Col>
-              //         </Row>
-              //         <Row>
-              //           <Col>
-              //             <ul className="ps-0 list-unstyled">
-              //               {namesData?.map((item, index) => (
-              //                 <li key={index}>
-              //                   <div
-              //                     className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
-              //                     onClick={() => toggleNested(index)}
-              //                   >
-              //                     <span>{item.name}</span>
-              //                     <span>{nestedVisible[index] ? "-" : "+"}</span>
-              //                   </div>
-              //                   {nestedVisible[index] && (
-              //                     <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
-              //                       <div className="ps-0 ms-0 w-100">
-              //                         <SimpleBar
-              //                           className="simplebar-hght"
-              //                           autoHide={false}
-              //                         >
-              //                           {item?.subNames
-              //                             ?.filter((it) =>
-              //                               it
-              //                                 ?.toLowerCase()
-              //                                 .includes(searchQuery.toLowerCase())
-              //                             )
-              //                             ?.map((subName, subIndex) => {
-              //                               const split = subName?.split("@");
-              //                               return (
-              //                                 <li
-              //                                   key={subIndex}
-              //                                   className="d-flex flew-row align-items-center justify-content-between me-3"
-              //                                 >
-              //                                   {truncate(split[1], 16)}
-              //                                   <Label
-              //                                     check
-              //                                     className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
-              //                                   >
-              //                                     <Input
-              //                                       type="checkbox"
-              //                                       checked={selectedRecruiter.includes(
-              //                                         parseInt(split[0])
-              //                                       )}
-              //                                       onChange={(e) =>
-              //                                         handleFODCheck(
-              //                                           parseInt(split[0]),
-              //                                           e.target.checked
-              //                                         )
-              //                                       }
-              //                                     />
-              //                                   </Label>
-              //                                 </li>
-              //                               );
-              //                             })}
-              //                         </SimpleBar>
-              //                       </div>
-              //                     </ul>
-              //                   )}
-              //                 </li>
-              //               ))}
-              //             </ul>
-              //           </Col>
-              //         </Row>
-              //         <Row>
-              //           <Col>
-              //             <div className="d-flex justify-content-end">
-              //               <Button
-              //                 type="submit"
-              //                 className="btn btn-sm btn-custom-primary px-3"
-              //                 onClick={() => handleFODAssign()}
-              //               >
-              //                 Assign
-              //               </Button>
-              //             </div>
-              //           </Col>
-              //         </Row>
-              //       </DropdownMenu>
-              //     </Dropdown>
-              //   )}
-            }
-            {checkAllPermission([Permission.JOB_EDIT]) && (
+            <ActionDropDown>
+              {
+                // {checkAllPermission([Permission.JOB_EDIT]) &&
+                //   (gridView === "new_job" || gridView === "active_jobs") && (
+                //     <Dropdown
+                //       isOpen={fodAssign[data.id] || false}
+                //       toggle={() => handleFodAssignDropdown(data.id)}
+                //     >
+                //       <DropdownToggle
+                //         className="btn btn-sm btn-custom-primary table-btn"
+                //         style={{ fontSize: "0.65rem" }}
+                //         onClick={() => {
+                //           setActiveJob([data.id]);
+                //           setSelectedRecruiter([]);
+                //           setSearchQuery("");
+                //         }}
+                //       >
+                //         FOD
+                //       </DropdownToggle>
+                //       <DropdownMenu className="p-3" style={{ width: "200px" }}>
+                //         {/* Map Recruiter Checkbox Here */}
+                //         <Row className="mb-2">
+                //           <Col>
+                //             <div className="search-box">
+                //               <Input
+                //                 className="form-control form-control-sm"
+                //                 placeholder="Search.."
+                //                 type="text"
+                //                 value={searchQuery}
+                //                 onChange={handleSearch}
+                //               />
+                //               <i className="ri-search-eye-line search-icon"></i>
+                //             </div>
+                //           </Col>
+                //         </Row>
+                //         <Row>
+                //           <Col>
+                //             <ul className="ps-0 list-unstyled">
+                //               {namesData?.map((item, index) => (
+                //                 <li key={index}>
+                //                   <div
+                //                     className="d-flex flex-row justify-content-between mb-1 cursor-pointer"
+                //                     onClick={() => toggleNested(index)}
+                //                   >
+                //                     <span>{item.name}</span>
+                //                     <span>{nestedVisible[index] ? "-" : "+"}</span>
+                //                   </div>
+                //                   {nestedVisible[index] && (
+                //                     <ul className="d-flex flex-row justify-content-start gap-3 ps-0 ms-0">
+                //                       <div className="ps-0 ms-0 w-100">
+                //                         <SimpleBar
+                //                           className="simplebar-hght"
+                //                           autoHide={false}
+                //                         >
+                //                           {item?.subNames
+                //                             ?.filter((it) =>
+                //                               it
+                //                                 ?.toLowerCase()
+                //                                 .includes(searchQuery.toLowerCase())
+                //                             )
+                //                             ?.map((subName, subIndex) => {
+                //                               const split = subName?.split("@");
+                //                               return (
+                //                                 <li
+                //                                   key={subIndex}
+                //                                   className="d-flex flew-row align-items-center justify-content-between me-3"
+                //                                 >
+                //                                   {truncate(split[1], 16)}
+                //                                   <Label
+                //                                     check
+                //                                     className="d-flex flex-row align-items-center gap-2 mb-0 ms-2"
+                //                                   >
+                //                                     <Input
+                //                                       type="checkbox"
+                //                                       checked={selectedRecruiter.includes(
+                //                                         parseInt(split[0])
+                //                                       )}
+                //                                       onChange={(e) =>
+                //                                         handleFODCheck(
+                //                                           parseInt(split[0]),
+                //                                           e.target.checked
+                //                                         )
+                //                                       }
+                //                                     />
+                //                                   </Label>
+                //                                 </li>
+                //                               );
+                //                             })}
+                //                         </SimpleBar>
+                //                       </div>
+                //                     </ul>
+                //                   )}
+                //                 </li>
+                //               ))}
+                //             </ul>
+                //           </Col>
+                //         </Row>
+                //         <Row>
+                //           <Col>
+                //             <div className="d-flex justify-content-end">
+                //               <Button
+                //                 type="submit"
+                //                 className="btn btn-sm btn-custom-primary px-3"
+                //                 onClick={() => handleFODAssign()}
+                //               >
+                //                 Assign
+                //               </Button>
+                //             </div>
+                //           </Col>
+                //         </Row>
+                //       </DropdownMenu>
+                //     </Dropdown>
+                //   )}
+              }
+              {checkAllPermission([Permission.JOB_EDIT]) && (
+                <DropdownItem>
+                  <span
+                    onClick={() => {
+                      setSelectedRowData(data);
+                      setTagOffcanvas(!tagOffcanvas);
+                    }}
+                  >
+                    <div className="d-flex  align-items-center gap-2">
+                      <i className="ri-parent-fill"></i>
+                      <span>Tag</span>
+                    </div>
+                  </span>
+                </DropdownItem>
+              )}
+              {/* Clone Button */}
               <DropdownItem>
-                <span
-                  onClick={() => {
-                    setSelectedRowData(data);
-                    setTagOffcanvas(!tagOffcanvas);
-                  }}
-                >
+                <span onClick={() => handleCloneJob(data.id)}>
                   <div className="d-flex  align-items-center gap-2">
-                    <i className="ri-parent-fill"></i>
-                    <span>Tag</span>
+                    <i className="mdi mdi-content-copy"></i>
+                    <span>Clone</span>
                   </div>
                 </span>
               </DropdownItem>
-            )}
-            {/* Clone Button */}
-            <DropdownItem>
-              <span onClick={() => handleCloneJob(data.id)}>
-                <div className="d-flex  align-items-center gap-2">
-                  <i className="mdi mdi-content-copy"></i>
-                  <span>Clone</span>
-                </div>
-              </span>
-            </DropdownItem>
-            {/* <DropdownItem>
+              {/* <DropdownItem>
               <Link
                 to={`/jobs/${data.id}/snapshot`}
                 style={{ color: "black" }}
@@ -510,40 +510,40 @@ const JobListing = () => {
                 </div>
               </Link>
             </DropdownItem> */}
-            {checkAllPermission([Permission.JOB_EDIT]) && (
-              <DropdownItem>
-                <Link
-                  to={`/jobs/${data.id}/snapshot`}
-                  style={{ color: "black" }}
-                  state={{ view: false }}
-                >
-                  <div className="d-flex  align-items-center gap-2">
-                    <i className="mdi mdi-pencil"></i>
-                    <span>Edit</span>
-                  </div>
-                </Link>
-              </DropdownItem>
-            )}
-            {checkAllPermission([Permission.JOB_DELETE]) &&
-              showDelete &&
-              (userProfile?.id === data?.createdBy ||
-                checkAnyRole([Role.ADMIN])) && (
+              {checkAllPermission([Permission.JOB_EDIT]) && (
                 <DropdownItem>
-                  <span
-                    type="button"
-                    onClick={() => {
-                      setDeleteId(data.id);
-                      setIsDeleteModalOpen(true);
-                    }}
+                  <Link
+                    to={`/jobs/${data.id}/snapshot`}
+                    style={{ color: "black" }}
+                    state={{ view: false }}
                   >
-                    <div className="d-flex align-items-center gap-2">
-                      <i className="mdi mdi-delete"></i>
-                      <span>Delete</span>
+                    <div className="d-flex  align-items-center gap-2">
+                      <i className="mdi mdi-pencil"></i>
+                      <span>Edit</span>
                     </div>
-                  </span>
+                  </Link>
                 </DropdownItem>
               )}
-          </ActionDropDown>
+              {checkAllPermission([Permission.JOB_DELETE]) &&
+                showDelete &&
+                (userProfile?.id === data?.createdBy ||
+                  checkAnyRole([Role.ADMIN])) && (
+                  <DropdownItem>
+                    <span
+                      type="button"
+                      onClick={() => {
+                        setDeleteId(data.id);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    >
+                      <div className="d-flex align-items-center gap-2">
+                        <i className="mdi mdi-delete"></i>
+                        <span>Delete</span>
+                      </div>
+                    </span>
+                  </DropdownItem>
+                )}
+            </ActionDropDown>
           </>
         ),
       },
@@ -552,8 +552,26 @@ const JobListing = () => {
   // ==================================================================
 
   useEffect(() => {
-    setTableConfig(generateJobListConfig(customConfig));
+    if (tableConfig) {
+      const newConfig = generateJobListConfig(customConfig);
+      newConfig.forEach((item, index) => {
+        const oldConfig = tableConfig?.find(
+          (oldItem) => oldItem?.name === item?.name
+        );
+        // If cannot find then continue
+        if (!oldConfig) return;
+        if (oldConfig?.expand) {
+          newConfig[index].expand = true;
+        } else {
+          newConfig[index].expand = false;
+        }
+      });
+      setTableConfig(newConfig);
+    } else {
+      setTableConfig(generateJobListConfig(customConfig));
+    }
   }, [customConfig, pageInfo, activeRow, tableData]);
+
 
   return (
     <LoadingOverlay

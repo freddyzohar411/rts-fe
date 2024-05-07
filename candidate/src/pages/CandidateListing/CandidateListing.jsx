@@ -32,7 +32,7 @@ function CandidateListing() {
   );
 
   // Table state
-  const [tableConfig, setTableConfig] = useState([]);
+  const [tableConfig, setTableConfig] = useState(null);
 
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -226,7 +226,25 @@ function CandidateListing() {
   }, [candidatesData]);
 
   useEffect(() => {
-    setTableConfig(generateCandidateConfig(customConfig));
+    if (tableConfig) {
+      const newConfig = generateCandidateConfig(customConfig);
+      newConfig.forEach((item, index) => {
+        const oldConfig = tableConfig?.find(
+          (oldItem) => oldItem?.name === item?.name
+        );
+        // If cannot find then continue
+        if (!oldConfig) return;
+        if (oldConfig?.expand) {
+          newConfig[index].expand = true;
+        } else {
+          newConfig[index].expand = false;
+        }
+      });
+      setTableConfig(newConfig);
+    } else {
+      setTableConfig(generateCandidateConfig(customConfig));
+    }
+    // setTableConfig(generateCandidateConfig(customConfig));
   }, [customConfig, pageInfo, activeRow, tableData]);
 
   return (

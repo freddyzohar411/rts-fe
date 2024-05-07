@@ -107,7 +107,7 @@ const DynamicTableWrapper = ({
                     <Input
                       className="mt-0"
                       type="checkbox"
-                      id="checkbox"
+                      id="recommendation"
                       value="option"
                       defaultChecked={
                         fodODTableShowType?.fodTableShowType?.value ===
@@ -128,7 +128,7 @@ const DynamicTableWrapper = ({
                         }
                       }}
                     />
-                    <label className="form-check-label" htmlFor="checkbox">
+                    <label className="form-check-label" htmlFor="recommendation">
                       Recommend Candidates
                     </label>
                   </div>
