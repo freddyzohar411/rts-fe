@@ -62,6 +62,17 @@ const SubmitToSales = forwardRef(
       if (emailSuccess) {
         dispatch(Actions.resetSendEmail());
         toast.success("Email sent successfully");
+        // Dispatch Submit to sales backend logic to update the time line
+        // const payload = {
+        //   jobId: jobId,
+        //   jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
+        //   status: JOB_STAGE_STATUS?.COMPLETED,
+        //   candidateId,
+        //   formData: null,
+        //   formId: null,
+        //   jobType: "submit_to_sales",
+        // };
+        // dispatch(tagJob({ payload, navigate }));
         setOffcanvasForm(false);
       }
     }, [emailSuccess]);
