@@ -100,7 +100,6 @@ const TemplatePreviewSideDrawer = ({
   ]);
 
   const generatePreview = (actionType) => {
-    console.log("showContent", showContent);
     switch (actionType) {
       case "VIEW":
         return (

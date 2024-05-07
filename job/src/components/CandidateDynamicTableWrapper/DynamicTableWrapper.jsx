@@ -22,22 +22,11 @@ const DynamicTableWrapper = ({
   config,
   search,
   setSearch,
-  optGroup,
-  setCustomConfigData,
-  confirmDelete,
   handleTagAll,
   setCustomQuery,
   fodODTableShowType,
   setSelected,
 }) => {
-  const candidatesData = useSelector(
-    (state) => state.CandidateReducer.candidates
-  );
-
-  const candidateMeta = useSelector(
-    (state) => state.CandidateReducer.candidateMeta
-  );
-
   const isRecommendationLoading = useSelector(
     (state) => state.CandidateReducer.candidateRecommendationLoading
   );
