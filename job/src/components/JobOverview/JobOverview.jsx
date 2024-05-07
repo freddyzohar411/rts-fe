@@ -149,8 +149,7 @@ const JobOverview = () => {
     (state) => state.JobStageReducer.jobTimeline
   );
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
-  // console.log("jobTimelineMeta", jobTimelineMeta);
-  // console.log("jobTimelineData", jobTimelineData);
+
   // Custom renders
   const customRenderList = [
     {
@@ -161,8 +160,6 @@ const JobOverview = () => {
         ),
     },
   ];
-
-  // console.log("Job Timeline Data", skipComboOptions);
 
   // Table Hooks
   const {
@@ -354,7 +351,6 @@ const JobOverview = () => {
   const handleSkipSelection = (jobId, value) => {
     const newOb = { ...skipComboOptions };
     newOb[jobId] = value;
-    console.log("New Ob", newOb);
     setSkipComboOptions(newOb);
   };
 
@@ -576,7 +572,6 @@ const JobOverview = () => {
    * @description Get form index on the basis of index
    */
   const getFormIndex = (originalOrder, jobId) => {
-    console.log("Original Order", originalOrder, jobId, skipComboOptions);
     let index = null;
     switch (originalOrder) {
       case 6:
@@ -749,10 +744,9 @@ const JobOverview = () => {
                       <Input
                         type="select"
                         className="form-select border-0"
-                        // value={skipComboOptions[data.id]}
+                        value={skipComboOptions[data.id]}
                         disabled={!selectedModule}
                         onChange={(e) => {
-                          console.log("Skip", e.target.value);
                           handleSkipSelection(
                             data.id,
                             parseInt(e.target.value)
@@ -778,13 +772,6 @@ const JobOverview = () => {
                         className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
                         style={{ width: "30px", height: "30px" }}
                         onClick={() => {
-                          // console.log(
-                          //   "Save",
-                          //   data?.candidate?.id,
-                          //   data?.id,
-                          //   skipComboOptions[data.id],
-                          //   originalOrder
-                          // );
                           // handleIconClick(
                           //   data?.candidate?.id,
                           //   data?.id,
@@ -795,8 +782,8 @@ const JobOverview = () => {
                           //     data?.id
                           //   )
                           // );
-                          setTimelineRowIndex(timelineIndex);
-                          setOffcanvasForm(true);
+                          // setTimelineRowIndex(timelineIndex);
+                          // setOffcanvasForm(true);
                         }}
                       >
                         <i
@@ -1340,15 +1327,6 @@ const JobOverview = () => {
           setIsFormModalOpen={setIsFormModalOpen}
           header={stepperState}
         />
-        <button
-          onClick={() => {
-            // Everytime i click i want it to render even if it is the same step
-            // setIsFormModalOpen(true);
-            setActiveStep(3);
-          }}
-        >
-          SET STEP (DEV)
-        </button>
       </div>
     </React.Fragment>
   );

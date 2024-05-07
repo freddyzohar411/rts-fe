@@ -56,8 +56,6 @@ const SubmitToSales = forwardRef(
     const [confirmCVNotAttachedModal, setConfirmCVNotAttachedModal] =
       useState(false);
 
-    // console.log("jobTimeLineData", jobTimeLineData);
-
     useEffect(() => {
       if (emailSuccess) {
         dispatch(Actions.resetSendEmail());
