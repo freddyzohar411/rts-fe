@@ -484,9 +484,7 @@ function* workImportCandidateMulti(action) {
 function* workUpdateCandidateEmbeddings(action) {
   try {
     const response = yield call(updateCandidateEmbeddings, action.payload);
-  } catch (error) {
-    console.log("Error updating candidate embeddings", error);
-  }
+  } catch (error) {}
 }
 
 // Candidate Recommendation List

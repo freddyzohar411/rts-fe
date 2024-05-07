@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  CardTitle,
-  CardText,
-  CardImg,
-  CardImgOverlay,
-} from "reactstrap";
+import { Container, Row, Col, Card, CardBody } from "reactstrap";
 import { JobCreation } from "../../components";
 
 const JobCreate = () => {

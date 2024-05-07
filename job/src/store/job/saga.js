@@ -57,7 +57,6 @@ import {
   getJobCustomViews,
   selectJobCustomView,
   deleteJobCustomView,
-  deleteJobs
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
@@ -165,7 +164,6 @@ function* workUpdateJobEmbeddings(action) {
   try {
     const response = yield call(updateJobEmbedding, action.payload);
   } catch (error) {
-    console.log("Error updating job embeddings: ", error);
     yield put(updateJobEmbeddingsFailure(error));
   }
 }
@@ -223,7 +221,6 @@ function* workDeleteJobCustomView(action) {
   }
 }
 
-
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
@@ -237,5 +234,4 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB_CUSTOM_VIEW, workFetchJobCustomViews);
   yield takeEvery(SELECT_JOB_CUSTOM_VIEW, workSelectJobCustomView);
   yield takeEvery(DELETE_JOB_CUSTOM_VIEW, workDeleteJobCustomView);
-
 }
