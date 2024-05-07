@@ -1,11 +1,135 @@
-.table-card th {
+// .table-card th {
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+// }
+
+// .table-card td {
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+// }
+
+.dynamic-table-main tr {
+  border: none !important;
+}
+
+.dynamic-table-main td {
+  border: none !important;
+}
+
+.dynamic-table-main thead {
+  border: none !important;
+}
+
+.dynamic-table-main th {
+  border: none !important;
+}
+
+.dynamic-table-main  tbody {
+  border: none !important;
+}
+
+.dynamic-table-main  thead {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  background-color: #fff !important;
+  z-index: 1 !important;
+}
+
+.dynamic-table-main  .sticky-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.dynamic-table-main  .sticky-head-border:not(:first-child):not(:last-child) {
+  box-shadow: 1px 0 0 0 #e0e0e0 inset !important; /* Mimicking a right border on middle headers */
+}
+
+.dynamic-table-main  .non-sticky-head {
+  border-bottom: #e0e0e0 1px solid !important;
+}
+
+// First tbody tr no border-top
+.dynamic-table-main  tbody tr:first-child {
+  border-top: none !important;
+}
+
+.dynamic-table-main  tbody tr {
+  background-color: #fff !important;
+  border-width: 1px 0 1px 0 !important;
+  border-color: #e0e0e0 !important;
+  border-style: solid !important;
+}
+
+.dynamic-table-main td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.table-card td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+// Table last row no border-bottom
+.dynamic-table-main .table tr:last-child {
+  border-bottom: none !important;
+}
+
+// Tablebody first tr no border-top
+.dynamic-table-main .table tbody tr:first-child {
+  border-top: none !important;
+}
+
+.table-custom {
+  border-radius: 6px;
+  background-color: #fff !important;
+  border-width: 1px;
+  border-color: #e0e0e0;
+  border-style: solid;
+}
+
+.dynamic-table-main .sticky-right {
+  position: sticky;
+  right: 0;
+  // background-color: white !important; /* Ensures the cell background isn't transparent */
+  // border-bottom: 2px solid #e0e0e0 !important;
+}
+
+.dynamic-table-main .sticky-color {
+  background-color: #fff !important;
+}
+
+.dynamic-table-main .sticky-color-checked {
+  background-color: #daecfb !important;
+}
+
+.dynamic-table-main .sticky-left {
+  position: sticky;
+  left: 0;
+  // background-color: white !important; /* Ensures the cell background isn't transparent */
+}
+
+.dynamic-table-main .sticky-right::before {
+  content: "";
+  position: absolute;
+  left: 0px; /* Adjust this to position the shadow slightly to the left */
+  top: 0;
+  bottom: 0;
+  width: 8px; /* Width can be adjusted to control the spread of the shadow */
+  // box-shadow: -3px 0 5px -2px rgba(0, 0, 0, 0.3); /* Box shadow to mimic a border effect */
+  box-shadow: -3px 0 5px -2px rgba(0, 0, 0, 0.1); /* Box shadow to mimic a border effect */
+  z-index: 1;
+}
+
+.dynamic-table-main .sticky-left::before {
+  content: "";
+  position: absolute;
+  right: 0px; /* Adjust this to position the shadow slightly to the right */
+  top: 0;
+  bottom: 0;
+  width: 6px; /* Width can be adjusted to control the spread of the shadow */
+  box-shadow: 3px 0 5px -2px rgba(0, 0, 0, 0.3); /* Box shadow to mimic a border effect */
+  z-index: 1;
+}
+
+.dynamic-table-main .row-selected {
+  background-color: #daecfb !important;
 }

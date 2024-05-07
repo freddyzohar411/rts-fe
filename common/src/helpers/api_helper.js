@@ -90,9 +90,9 @@ class APIClient {
 
   /**
    * get with config
-   * @param {*} url 
-   * @param {*} config 
-   * @returns 
+   * @param {*} url
+   * @param {*} config
+   * @returns
    */
   getWithConfig = (url, config) => {
     return axios.get(url, config);
@@ -120,6 +120,7 @@ class APIClient {
   delete = (url, config) => {
     return axios.delete(url, { ...config });
   };
+
 }
 
 const getLoggedinUser = () => {

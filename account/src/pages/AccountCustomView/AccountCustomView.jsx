@@ -23,6 +23,7 @@ import {
 } from "../../store/account/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
+import { ACCOUNT_MANDATORY_OPTIONS } from "../AccountListing/accountListingConstants";
 
 function AccountCustomView() {
   document.title = "Create Account Custom View | RTS";
@@ -46,7 +47,13 @@ function AccountCustomView() {
 
   useEffect(() => {
     if (accountFields?.length > 0) {
-      setOptions(accountFields);
+      // Filter out the mandatory options
+      const filteredOptions = accountFields.filter(
+        (field) => !ACCOUNT_MANDATORY_OPTIONS.some(
+          (option) => field?.value.includes(option.value)
+        )
+      );
+      setOptions(filteredOptions);
     }
   }, [accountFields]);
 

@@ -55,7 +55,11 @@ import {
   SELECT_CANDIDATE_CUSTOM_VIEW_FAILURE,
   DELETE_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW_SUCCESS,
-  DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE
+  DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  DELETE_CANDIDATES,
+  DELETE_CANDIDATES_SUCCESS,
+  DELETE_CANDIDATES_FAILURE,
+  DELETE_CANDIDATES_RESET
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -352,3 +356,24 @@ export const deleteCandidateCustomViewFailure = (error) => ({
   type: DELETE_CANDIDATE_CUSTOM_VIEW_FAILURE,
   payload: error,
 });
+
+export const deleteCandidates = (candidateIds) => ({
+  type: DELETE_CANDIDATES,
+  payload: candidateIds,
+});
+
+export const deleteCandidatesSuccess = (candidateIds) => ({
+  type: DELETE_CANDIDATES_SUCCESS,
+  payload: candidateIds,
+});
+
+export const deleteCandidatesFailure = (error) => ({
+  type: DELETE_CANDIDATES_FAILURE,
+  payload: error,
+});
+
+export const deleteCandidatesReset = () => ({
+  type: DELETE_CANDIDATES_RESET,
+});
+
+

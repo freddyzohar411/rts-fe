@@ -9,7 +9,7 @@ function* workSendEmail(action) {
   try {
     const response = yield call(sendEmail, newFormData, config);
     yield put(sendEmailSuccess(response.data));
-    toast.success("Email sent successfully");
+    // toast.success("Email sent successfully");
   } catch (error) {
     yield put(sendEmailFailure(error));
     toast.error("Email sent failed");

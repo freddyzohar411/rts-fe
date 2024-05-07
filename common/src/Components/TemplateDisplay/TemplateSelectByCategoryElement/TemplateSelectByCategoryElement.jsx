@@ -29,7 +29,10 @@ const TemplateSelectByCategoryElement = ({
       setTemplateSelected({
         value: value.id,
         label: value.name,
+        id: value?.id,
+        data: value?.data,
       });
+      props.onChange(value);
     }
   }, [value, categoryName, templatesByCategory]);
 

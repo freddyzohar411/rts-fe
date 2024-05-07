@@ -106,26 +106,28 @@ export const useTemplateModuleData = (dataId) => {
 
   // }, [allIds]);
 
-
   useEffect(() => {
     const getData = async () => {
       if (accountId || jobId || candidateId) {
-
         // Start loading
-        setIsAllLoading(true);
-  
-        // Fetch all data
-        await Promise.all([
-          accountId && dispatch(fetchAccountData(accountId)),
-          jobId && dispatch(fetchJobData(jobId)),
-          candidateId && dispatch(fetchCandidateData(candidateId))
-        ]);
 
-        // Stop loading
-        setIsAllLoading(false);
+        try {
+          setIsAllLoading(true);
+          // Fetch all data
+          await Promise.all([
+            accountId && dispatch(fetchAccountData(accountId)),
+            jobId && dispatch(fetchJobData(jobId)),
+            candidateId && dispatch(fetchCandidateData(candidateId)),
+          ]);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          // Stop loading
+          setIsAllLoading(false);
+        }
       }
     };
-  
+
     getData();
   }, [accountId, jobId, candidateId]);
 

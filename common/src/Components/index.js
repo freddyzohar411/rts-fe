@@ -41,6 +41,8 @@ import UiContent from "./Common/UiContent";
 import WebAppsDropdown from "./Common/WebAppsDropdown";
 import FormInput from "./Common/FormInput";
 import FormSelection from "./Common/FormSelection";
+import CustomViewButton from "./Common/CustomViewButton";
+import TooltipWrapper from "./Tooltip/TooltipWrapper";
 
 // Router
 import withRouter from "./Common/withRouter";
@@ -82,17 +84,31 @@ import Ckeditor from "./ckeditor/build/ckeditor";
 
 // Import Template Display
 import TemplateDisplayV3 from "./TemplateDisplay/TemplateDisplayV3";
+import TemplateDisplayV4 from "./TemplateDisplay/TemplateDisplayV4";
 import TemplateSelectByCategoryElement from "./TemplateDisplay/TemplateSelectByCategoryElement/TemplateSelectByCategoryElement";
 import TemplateExportButtons from "./TemplateDisplay/TemplateExportButtons/TemplateExportButtons";
 import TemplatePagePreviewModal from "./TemplateDisplay/TemplatePagePreviewModal/TemplatePagePreviewModal";
 import TemplateAdvanceExportModal from "./TemplateDisplay/TemplateAdvanceExportModal/TemplateAdvanceExportModal";
-
+import PageSettingViewBackend from "./TemplateDisplay/components/PageSettingViewBackend";
 // Import Elements
 import SelectElement from "./Elements/SelectElement";
 import MultiInputFormik from "./Elements/MultiInputFormik";
+import MultiInputFormikNoBorder from "./Elements/MultiInputFormikNoBorder";
 
 // Import Email Component
 import EmailComponent from "./Email/EmailComponent";
+
+// import CustomView from "./CustomView/CustomView";
+
+// Import Email V2 Component
+import EmailTo from "./EmailV2/EmailTo";
+import EmailCCBCC from "./EmailV2/EmailCCBCC";
+import EmailSubject from "./EmailV2/EmailSubject";
+import EmailTemplateSelect from "./EmailV2/EmailTemplateSelect/EmailTemplateSelect";
+import EmailAttachments from "./EmailV2/EmailAttachments";
+
+// Import Side drawer
+import SideDrawer from "./PreviewTemplateDrawer/SideDrawer";
 
 export {
   BreadCrumb,
@@ -168,17 +184,36 @@ export {
 
   // Export Template Display
   TemplateDisplayV3,
+  TemplateDisplayV4,
   TemplateSelectByCategoryElement,
   TemplateExportButtons,
   TemplatePagePreviewModal,
   TemplateAdvanceExportModal,
+  PageSettingViewBackend,
 
   // Export Elements
   SelectElement,
   MultiInputFormik,
+  MultiInputFormikNoBorder,
 
   // Export Email Component
   EmailComponent,
+
+  // Custom View
+  // CustomView,
+
+  // Tool Tip
+  TooltipWrapper,
+
+  // Email V2 Component
+  EmailTo,
+  EmailCCBCC,
+  EmailSubject,
+  EmailTemplateSelect,
+  EmailAttachments,
+
+  // Side Drawer
+  SideDrawer,
 };
 
 

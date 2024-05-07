@@ -405,7 +405,15 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
           </Container>
         </div>
       ) : (
-        <p>No Parsed Data...</p>
+        <div
+          className="d-flex flex-column align-items-center justify-content-center"
+          style={{
+            height: "375px",
+          }}
+        >
+          <h4>No resume data to display.</h4>
+          <h4>Please upload a resume to preview.</h4>
+        </div>
       )}
     </>
   );
