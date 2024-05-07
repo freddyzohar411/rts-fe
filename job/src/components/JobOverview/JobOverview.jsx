@@ -149,8 +149,7 @@ const JobOverview = () => {
     (state) => state.JobStageReducer.jobTimeline
   );
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
-  // console.log("jobTimelineMeta", jobTimelineMeta);
-  // console.log("jobTimelineData", jobTimelineData);
+
   // Custom renders
   const customRenderList = [
     {
@@ -796,7 +795,8 @@ const JobOverview = () => {
                           //   )
                           // );
                           setTimelineRowIndex(timelineIndex);
-                          setOffcanvasForm(true);
+                          actionButtonTrigger(activeStep);
+                          // setOffcanvasForm(true);
                         }}
                       >
                         <i
@@ -876,12 +876,30 @@ const JobOverview = () => {
                 borderRadius: "8px",
               }}
             >
-              {emailIsLoading ? <Spinner size="sm" color="light" /> : "Send"}
+              {jobTagMeta?.isLoading ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Send"
+              )}
             </Button>
           </div>
         );
       default:
         return null;
+    }
+  };
+
+  const actionButtonTrigger = (step) => {
+    switch (step) {
+      case 2:
+      case 3:
+        setOffcanvasForm(true);
+      break;
+      case 99:
+        setIsFormModalOpen(true);
+        break;
+      default:
+        break;
     }
   };
 
@@ -1344,7 +1362,7 @@ const JobOverview = () => {
           onClick={() => {
             // Everytime i click i want it to render even if it is the same step
             // setIsFormModalOpen(true);
-            setActiveStep(3);
+            setActiveStep(2);
           }}
         >
           SET STEP (DEV)

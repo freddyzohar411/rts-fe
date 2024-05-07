@@ -67,14 +67,6 @@ const MultiInputFormikNoBorder = ({
     }
   };
 
-  // useEffect(() => {
-  //   // console.log("formik.values[name]", formik.values[name])
-  //   if (formik.values[name] !== "" && formik.values[name] !== undefined) {
-  //     setSelectedOptions(convertStringToOptions(formik.values[name]));
-  //   }
-  // }, [formik.values[name]]);
-
-  // console.log("selectedOptions", selectedOptions);
 
   // Check if formik value changes, add it to value
   useEffect(() => {

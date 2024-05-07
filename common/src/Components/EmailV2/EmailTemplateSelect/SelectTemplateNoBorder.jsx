@@ -17,6 +17,7 @@ const TemplateSelectByCategoryElement = ({
   addMoreLabel = "Label",
   addMoreRender = null,
   selectRender = null,
+  placeholder = "Select an option",
   ...props
 }) => {
   const navigate = useNavigate();
@@ -182,7 +183,7 @@ const TemplateSelectByCategoryElement = ({
           menuShouldScrollIntoView={false}
           isClearable
           isSearchable
-          placeholder={props.placeholder ?? "Select an option"}
+          placeholder={placeholder}
           options={templateList}
           formatOptionLabel={formatOptionLabel}
           components={{ SingleValue }}

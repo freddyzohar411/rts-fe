@@ -172,3 +172,8 @@ export const timelineLegend = [
     tooltip: "The step has been skipped.",
   },
 ];
+
+export const jobTimelineType = {
+  SUBMIT_TO_SALES: "submit_to_sales",
+  SUBMIT_TO_CLIENT: "submit_to_client",
+}

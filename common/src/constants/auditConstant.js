@@ -1,3 +1,5 @@
+import { SUBMIT_TO_CLIENT } from "../../../job/src/components/JobOverview/JobOverviewConstants"
+
 export const moduleConstant = {
     ACCOUNT: "account",
     JOB: "job",
@@ -8,6 +10,7 @@ export const moduleConstant = {
 
 export const subModuleConstant = {
     SUBMIT_TO_SALES: "submit_to_sales",
+    SUBMIT_TO_CLIENT: "submit_to_client",
 }
 
 

@@ -10,6 +10,7 @@ const EmailTemplateSelect = ({
   addMoreOptions,
   selectRender,
   isLoading = false,
+  placeholder,
 }) => {
   return ( 
       <div className="d-flex gap-2 align-items-center">
@@ -32,6 +33,7 @@ const EmailTemplateSelect = ({
             addMore={addMoreOptions?.addMore}
             addMoreLabel={addMoreOptions?.addMoreLabel}
             addMoreRender={addMoreOptions?.render}
+            placeholder={placeholder}
           />
         )}
       </div>

@@ -72,6 +72,7 @@ import useTableHook from "./DynamicTable/useTableHook";
 
 // Import Delete Modal
 import DeleteCustomModal from "./DeleteModal/DeleteCustomModal";
+import DeleteCustomModal2 from "./DeleteModal2/DeleteCustomModal2";
 
 // Import general Modal
 import GeneralModal from "./GeneralModal/GeneralModal";
@@ -172,6 +173,7 @@ export {
 
   // Export Delete Modal
   DeleteCustomModal,
+  DeleteCustomModal2,
 
   // Export general Modal
   GeneralModal,
