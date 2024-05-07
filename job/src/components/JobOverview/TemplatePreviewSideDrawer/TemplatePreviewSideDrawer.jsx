@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Container, Button } from "reactstrap";
+import { Container, Button, Spinner } from "reactstrap";
 import { SideDrawer } from "@workspace/common";
 import {
   TemplateSelectByCategoryElement,
@@ -31,6 +31,7 @@ const TemplatePreviewSideDrawer = ({
     newHtml: "",
   });
   const [previewJsx, setPreviewJsx] = useState(null);
+  const [isAttachmentLoading, setIsAttachmentLoading] = useState(false);
 
   useEffect(() => {
     const setSelectedContentAndProcessed = async () => {
@@ -204,9 +205,17 @@ const TemplatePreviewSideDrawer = ({
           <Button
             type="button"
             className="btn btn-success w-75"
-            onClick={() => templatePreviewAction?.action(templateData)}
+            onClick={async () => {
+              setIsAttachmentLoading(true);
+              await templatePreviewAction?.action(templateData);
+              setIsAttachmentLoading(false);
+            }}
           >
-            {generateActionButton(templatePreviewAction?.type)}
+            {isAttachmentLoading ? (
+              <Spinner size="sm"></Spinner>
+            ) : (
+              generateActionButton(templatePreviewAction?.type)
+            )}
           </Button>
         )}
       </div>

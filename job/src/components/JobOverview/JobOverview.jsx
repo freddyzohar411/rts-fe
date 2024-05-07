@@ -156,6 +156,7 @@ const JobOverview = () => {
     (state) => state.JobStageReducer.jobTimeline
   );
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+
   // Custom renders
   const customRenderList = [
     {
@@ -397,16 +398,9 @@ const JobOverview = () => {
           />
         );
       case 2:
-        return isPreviewCV ? (
-          <CVPreview
-            onExitPreview={handleExitPreview}
-            templateData={templateData}
-            candidateId={candidateId}
-          />
-        ) : (
+        return (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
-            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
@@ -415,23 +409,22 @@ const JobOverview = () => {
             setTemplatePreviewAction={setTemplatePreviewAction}
             setOffcanvasForm={setOffcanvasForm}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 3:
-        return isPreviewCV ? (
-          <CVPreview
-            onExitPreview={handleExitPreview}
-            templateData={templateData}
-            candidateId={candidateId}
-            jobId={jobId}
-          />
-        ) : (
+        return (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
-            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 4:
@@ -767,8 +760,8 @@ const JobOverview = () => {
                       <Input
                         type="select"
                         className="form-select border-0"
-                        // value={skipComboOptions[data.id]}
-                        // disabled={!selectedModule}
+                        value={skipComboOptions[data.id]}
+                        disabled={!selectedModule}
                         onChange={(e) => {
                           handleSkipSelection(
                             data.id,
@@ -795,13 +788,6 @@ const JobOverview = () => {
                         className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
                         style={{ width: "30px", height: "30px" }}
                         onClick={() => {
-                          // console.log(
-                          //   "Save",
-                          //   data?.candidate?.id,
-                          //   data?.id,
-                          //   skipComboOptions[data.id],
-                          //   originalOrder
-                          // );
                           // handleIconClick(
                           //   data?.candidate?.id,
                           //   data?.id,
@@ -813,7 +799,7 @@ const JobOverview = () => {
                           //   )
                           // );
                           // setTimelineRowIndex(timelineIndex);
-                          setOffcanvasForm(true);
+                          // setOffcanvasForm(true);
                         }}
                       >
                         <i
@@ -868,7 +854,9 @@ const JobOverview = () => {
   // Generate canvas header button
   const generateCanvasHeaderButton = (step) => {
     switch (step) {
+      // Case 2 and 3 usese the same form
       case 2:
+      case 3:
         return (
           <div className="d-flex align-items-center gap-2">
             <Button
@@ -924,6 +912,8 @@ const JobOverview = () => {
             </Button>
           </div>
         );
+      default:
+        return null;
     }
   };
 
@@ -1382,24 +1372,6 @@ const JobOverview = () => {
           setIsFormModalOpen={setIsFormModalOpen}
           header={stepperState}
         />
-        <button
-          onClick={() => {
-            // Everytime i click i want it to render even if it is the same step
-            // setIsFormModalOpen(true);
-            setActiveStep(2);
-          }}
-        >
-          SET STEP 99
-        </button>
-        <button
-          onClick={() => {
-            // Everytime i click i want it to render even if it is the same step
-            // setIsFormModalOpen(true);
-            setActiveStep(10);
-          }}
-        >
-          SET INTERVIEW SCHED
-        </button>
       </div>
     </React.Fragment>
   );

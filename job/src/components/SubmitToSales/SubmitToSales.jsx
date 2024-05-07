@@ -1,6 +1,5 @@
 import React, {
   useState,
-  useRef,
   useEffect,
   forwardRef,
   useImperativeHandle,
@@ -15,14 +14,15 @@ import {
   EmailTemplateSelect,
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
-  setIsViewTemplate,
-  FileHelper,
+  EmailAttachments,
 } from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
 import { toast } from "react-toastify";
 import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
 import { useNavigate } from "react-router-dom";
-import { Actions } from "@workspace/common";
+import { Actions, AuditConstant } from "@workspace/common";
+import { getUsersByIds } from "../../helpers/backend_helper";
+import { DeleteCustomModal } from "@workspace/common";
 
 const SubmitToSales = forwardRef(
   (
@@ -33,6 +33,7 @@ const SubmitToSales = forwardRef(
       setTemplatePreviewInfo,
       setTemplatePreviewAction,
       setOffcanvasForm,
+      jobTimeLineData,
     },
     ref
   ) => {
@@ -52,6 +53,8 @@ const SubmitToSales = forwardRef(
     const emailSuccess = useSelector(
       (state) => state.EmailCommonReducer.success
     );
+    const [confirmCVNotAttachedModal, setConfirmCVNotAttachedModal] =
+      useState(false);
 
     useEffect(() => {
       if (emailSuccess) {
@@ -78,6 +81,15 @@ const SubmitToSales = forwardRef(
           config: {
             headers: {
               "Content-Type": "multipart/form-data",
+              Audit: JSON.stringify({
+                module: AuditConstant.moduleConstant.JOB_TIMELINE,
+                moduleId: jobTimeLineData?.id,
+                subModule: AuditConstant.subModuleConstant.SUBMIT_TO_SALES,
+                jobId: jobTimeLineData?.job?.id,
+                candidateId: jobTimeLineData?.candidate?.id,
+                recruiterId: jobTimeLineData?.createdBy,
+                salesId: jobTimeLineData?.job?.createdBy,
+              }),
             },
           },
         })
@@ -104,12 +116,60 @@ const SubmitToSales = forwardRef(
     useImperativeHandle(ref, () => ({
       submitForm: () => {
         if (formik.isValid) {
+          if (attachments.length === 0) {
+            setConfirmCVNotAttachedModal(true);
+            return;
+          }
           formik.handleSubmit();
         } else {
           toastErrors();
         }
       },
     }));
+
+    // PrePopulate Emails
+    useEffect(() => {
+      const prePopulateEmails = async (data) => {
+        const response = await getUsersByIds({
+          userIds: [data?.salesId, data?.recruiterId],
+        });
+        const userData = response?.data;
+        if (userData) {
+          const to = userData.filter((item) => item.id === data.salesId);
+          const cc = userData.filter((item) => item.id === data.recruiterId);
+          if (to && to.length > 0) {
+            formik.setFieldValue("to", [
+              {
+                value: to[0]?.email,
+                label: to[0]?.email,
+              },
+            ]);
+          }
+          if (cc && cc.length > 0) {
+            formik.setFieldValue("cc", [
+              {
+                value: cc[0]?.email,
+                label: cc[0]?.email,
+              },
+            ]);
+          }
+        }
+      };
+
+      // Get Sales Email
+      if (
+        jobTimeLineData?.job?.createdBy &&
+        jobTimeLineData?.candidate?.createdBy &&
+        formik
+      ) {
+        const salesId = jobTimeLineData?.job?.createdBy;
+        const recruiterId = jobTimeLineData?.candidate?.createdBy;
+        prePopulateEmails({
+          salesId,
+          recruiterId,
+        });
+      }
+    }, []);
 
     // Toast errors upn submit
     const toastErrors = () => {
@@ -154,7 +214,7 @@ const SubmitToSales = forwardRef(
 
     const attachmentTemplate = async (filterTemplate) => {
       if (!filterTemplate) return;
-      setAttachmentLoading(true);
+
       try {
         const processedTemplate =
           await TemplateHelper.setSelectedContentAndProcessed(
@@ -163,6 +223,13 @@ const SubmitToSales = forwardRef(
           );
 
         if (processedTemplate) {
+          let fileName = "candidate_cv";
+          if (
+            allModuleData?.Candidates?.basicInfo?.firstName &&
+            allModuleData?.Candidates?.basicInfo?.lastName
+          ) {
+            fileName = `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`;
+          }
           const file = await ExportHelper.exportBackendHtml2PdfFile(
             processedTemplate.html,
             {
@@ -174,7 +241,7 @@ const SubmitToSales = forwardRef(
               marginLeft: 0,
               marginRight: 0,
               exportType: "pdf",
-              fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`,
+              fileName: fileName,
             },
             processedTemplate.styleTag
           );
@@ -182,19 +249,12 @@ const SubmitToSales = forwardRef(
         }
       } catch (error) {
       } finally {
-        setAttachmentLoading(false);
       }
     };
 
-    const downloadAttachment = (attachment) => {
-      // Assuming attachment.file is a Blob or File object
-      const url = window.URL.createObjectURL(attachment);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = attachment.name;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      a.remove();
+    const confirmSendEmail = () => {
+      setConfirmCVNotAttachedModal(false);
+      formik.handleSubmit();
     };
 
     return (
@@ -211,11 +271,7 @@ const SubmitToSales = forwardRef(
 
         <Row>
           <Col>
-            <EmailCCBCC
-              formik={formik}
-              CCicon={<span>Cc</span>}
-              BCC
-            />
+            <EmailCCBCC formik={formik} CCicon={<span>Cc</span>} BCC />
             <hr className="mt-2" />
           </Col>
         </Row>
@@ -342,6 +398,7 @@ const SubmitToSales = forwardRef(
             }}
           >
             <EmailTemplateSelect
+              isLoading={attachmentLoading}
               icon={<i className=" ri-file-list-2-line fs-5"></i>}
               value={CVTemplateData}
               setTemplateData={setCVTemplateData}
@@ -352,8 +409,14 @@ const SubmitToSales = forwardRef(
                     <div className="d-flex align-items-center">
                       <span
                         className="flex-grow-1"
-                        onClick={(event) => {
-                          attachmentTemplate(data?.data);
+                        onClick={async (event) => {
+                          try {
+                            setAttachmentLoading(true);
+                            await attachmentTemplate(data?.data);
+                          } catch (error) {
+                          } finally {
+                            setAttachmentLoading(false);
+                          }
                         }}
                       >
                         {data?.label}
@@ -368,8 +431,8 @@ const SubmitToSales = forwardRef(
                           setTemplatePreviewAction({
                             type: "ATTACH_TEMPLATE",
                             label: "Attach Template",
-                            action: (data) => {
-                              attachmentTemplate(data);
+                            action: async (data) => {
+                              await attachmentTemplate(data);
                               setIsViewTemplate(false);
                             },
                           });
@@ -393,7 +456,7 @@ const SubmitToSales = forwardRef(
               allData={"null"}
               isView={false}
               autoResize={false}
-              height={385}
+              height={350}
               onChange={(content) => {
                 formik.setFieldValue("content", content);
               }}
@@ -402,38 +465,23 @@ const SubmitToSales = forwardRef(
             />
           </Col>
         </Row>
-        <span className="text-muted">
-          {attachments.length > 0 &&
-            attachments.map((attachment, i) => {
-              return (
-                <div className="d-flex gap-3">
-                  <span
-                    className="text-danger cursor-pointer"
-                    onClick={() => {
-                      setAttachments(
-                        attachments.filter((item, index) => index !== i)
-                      );
-                    }}
-                  >
-                    <i className="ri-close-fill"></i>
-                  </span>
-                  <div className="d-flex gap-2">
-                    <span
-                      onClick={() => downloadAttachment(attachment)}
-                      className="cursor-pointer"
-                    >
-                      <strong>{attachment.name}</strong>
-                    </span>
-                    <span>
-                      <strong>
-                        ({FileHelper.displayFileSize(attachment.size)})
-                      </strong>
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-        </span>
+        <div className="mt-2">
+          <EmailAttachments
+            attachments={attachments}
+            setAttachments={setAttachments}
+            num={4}
+          />
+        </div>
+        <DeleteCustomModal
+          confirmButtonText="Send"
+          isOpen={confirmCVNotAttachedModal}
+          setIsOpen={setConfirmCVNotAttachedModal}
+          confirmDelete={confirmSendEmail}
+          header="Confirmation"
+          deleteText={
+            "CV attachment not found. Would you like to proceed with sending the email to sales anyway?"
+          }
+        />
       </div>
     );
   }
