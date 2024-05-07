@@ -894,7 +894,7 @@ const JobOverview = () => {
       case 2:
       case 3:
         setOffcanvasForm(true);
-      break;
+        break;
       case 99:
         setIsFormModalOpen(true);
         break;
@@ -1357,6 +1357,7 @@ const JobOverview = () => {
           isFormModalOpen={isFormModalOpen}
           setIsFormModalOpen={setIsFormModalOpen}
           header={stepperState}
+          jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
         />
         <button
           onClick={() => {
