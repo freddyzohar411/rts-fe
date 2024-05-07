@@ -47,7 +47,6 @@ import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterv
 import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
-import StepComponent from "./StepComponent";
 import { TimelineHeader } from "../TimelineHeader";
 import { CVPreview } from "../CVPreview";
 import {
@@ -79,29 +78,20 @@ import InnerTimelineStep from "./InnerTimelineStep";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
-  const [openJobIndex, setOpenJobIndex] = useState(null);
-  const toggleJobOpen = (index) => {
-    setOpenJobIndex(openJobIndex === index ? null : index);
-  };
-  // Next Step Dropdown States
-  const [selectedModule, setSelectedModule] = useState("");
-  const [selectedSubModule, setSelectedSubModule] = useState("");
-  const handleModuleChange = (e) => {
-    setSelectedModule(e.target.value);
-  };
-  const handleSubModuleChange = (e) => {
-    setSelectedSubModule(e.target.value);
-  };
-
-  const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
-  const [legendTooltip, setLegendTooltip] = useState(false);
-  const [headerTooltip, setHeaderTooltip] = useState(false);
-  const [sortDirection, setSortDirection] = useState("asc");
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
+
+  const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
+  const [openJobIndex, setOpenJobIndex] = useState(null);
+  // Next Step Dropdown States
+  const [selectedModule, setSelectedModule] = useState("");
+  const [selectedSubModule, setSelectedSubModule] = useState("");
+  const [legendTooltip, setLegendTooltip] = useState(false);
+  const [headerTooltip, setHeaderTooltip] = useState(false);
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
@@ -110,8 +100,6 @@ const JobOverview = () => {
 
   const [templateData, setTemplateData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
-
-  const [formTemplate, setFormTemplate] = useState(null);
   const [candidateId, setCandidateId] = useState();
 
   const [isPreviewCV, setIsPreviewCV] = useState(false);
@@ -124,7 +112,7 @@ const JobOverview = () => {
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
   );
-  const form = useSelector((state) => state.JobFormReducer.form);
+
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
@@ -133,13 +121,8 @@ const JobOverview = () => {
     (state) => state.JobStageReducer.jobTimeline
   );
 
-  const handleSaveClick = () => {
-    if (selectedModule == 1 && selectedSubModule == "Untag") {
-      console.log("Save Button called.", selectedModule, selectedSubModule);
-    }
-  };
-
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+
   // Custom renders
   const customRenderList = [
     {
@@ -231,12 +214,6 @@ const JobOverview = () => {
     dispatch(fetchJobForm(JOB_FORM_NAME));
     dispatch(fetchJobtimeineCount({ jobId }));
   }, []);
-
-  useEffect(() => {
-    if (form) {
-      setFormTemplate(form);
-    }
-  }, [form]);
 
   useEffect(() => {
     dispatch(clearJobFormSubmission());
@@ -334,6 +311,23 @@ const JobOverview = () => {
 
   const handleExitPreview = () => {
     setIsPreviewCV(false);
+  };
+
+  const toggleJobOpen = (index) => {
+    setOpenJobIndex(openJobIndex === index ? null : index);
+  };
+
+  const handleModuleChange = (e) => {
+    setSelectedModule(e.target.value);
+  };
+
+  const handleSubModuleChange = (e) => {
+    setSelectedSubModule(e.target.value);
+  };
+
+  const handleSaveClick = () => {
+    if (selectedModule == 1 && selectedSubModule == "Untag") {
+    }
   };
 
   const handleSkipSelection = (jobId, value) => {

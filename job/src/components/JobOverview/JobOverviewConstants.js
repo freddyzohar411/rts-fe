@@ -111,14 +111,19 @@ export const timelineSkipSubModule = {
   1: [
     "Untag",
     "Associate",
+    "Profile withdrawn",
     "Submit To Sales",
+    "Profile Rejected - Sales",
     "Submit To Client",
-    "Profile Feedback Pending",
+    "Profile Rejected - Client",
   ],
   2: [
-    "Schedule First Interview",
-    "Schedule Second Interview",
-    "Schedule Third Interview",
+    "Schedule",
+    "Backout-Candidate",
+    "Rescheduled",
+    "Cancelled by Client",
+    "Rejected",
+    "Selected",
   ],
   3: [
     "Skills Assessment",
@@ -126,11 +131,7 @@ export const timelineSkipSubModule = {
     "Technical Interview",
     "Cultural Fit Test",
   ],
-  4: [
-    "Conditional Offer Sent",
-    "Conditional Offer Accepted",
-    "Conditional Offer Declined",
-  ],
+  4: ["Prepare", "Edit", "Release", "Accepted", "Rejected"],
 };
 
 export const timelineLegend = [
