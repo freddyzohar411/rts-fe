@@ -737,6 +737,31 @@ const EditorElement2 = ({
               },
             });
 
+            // Add Attribute Button
+            editor.ui.registry.addButton("myAddAttributeButton", {
+              text: "Add Attribute",
+              onAction: function () {
+                // Select the element the cursor is on and add a data attribute
+                // var element = editor.selection.getNode();
+                // if (element) {
+                //   element.setAttribute("data-attribute", "value");
+                // }
+
+                var selectedText = editor.selection.getContent();
+                var range = editor.selection.getRng();
+
+                // If currently non-editable, wrap the selected text with a span and apply a class
+                editor.selection.setContent(
+                  `<span style="border: 1px solid #2196F3; background-color: #E3F2FD;" contenteditable="true">${selectedText}</span>`
+                );
+
+                // Move the cursor to the end of the inserted content
+                range.setStartAfter(range.endContainer);
+                range.collapse(true);
+                editor.selection.setRng(range);
+              },
+            });
+
             // editor.on("GetContent", function (e) {
             //   var content = e.content;
             //   // A simple example to add inline style to paragraphs
@@ -772,7 +797,7 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
+            "myAddAttributeButton | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak | insertLogo insertHeader exitHeader removeHeader |" +
             "removeformat | searchreplace |" +
