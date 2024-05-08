@@ -59,14 +59,6 @@ const SubmitToSales = forwardRef(
     const [confirmCVNotAttachedModal, setConfirmCVNotAttachedModal] =
       useState(false);
 
-    useEffect(() => {
-      if (emailSuccess) {
-        dispatch(Actions.resetSendEmail());
-        toast.success("Email sent successfully");
-        setOffcanvasForm(false);
-      }
-    }, [emailSuccess]);
-
     /**
      * Handle form submit event (Formik)
      * @param {*} values
