@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Label,
+  Input,
+} from "reactstrap";
+import { v4 as uuid } from "uuid";
+import { CreateSelectElement } from "@workspace/common";
 
-const EditorDataAttributeModal = () => {
+const EditorDataAttributeModal = ({
+  isModalOpen,
+  setIsModalOpen,
+  header = "My Header",
+  data,
+  setData,
+  action,
+}) => {
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  console.log("Data", data);
   return (
     <Modal
-      isOpen={isFormModalOpen}
+      isOpen={isModalOpen}
       closeModal={closeModal}
       centered
       scrollable
@@ -18,17 +41,33 @@ const EditorDataAttributeModal = () => {
         <h3>{header || "Header"}</h3>
       </ModalHeader>
       <ModalBody>
-        <Form
-          template={formTemplate}
-          userDetails={getAllUserGroups()}
-          country={null}
-          editData={null}
-          onSubmit={handleFormSubmit}
-          onFormFieldsChange={null}
-          errorMessage={null}
-          view={false}
-          ref={formikRef}
-        />
+        <div>
+          <CreateSelectElement
+            label="Choose Section"
+            value={{
+              value: data?.section,
+              label: data?.section,
+            }}
+            setSelectedOptionData={(dataIn) => {
+              setData((prev) => ({ ...prev, section: dataIn?.value }));
+            }}
+            optionsData={[
+              { value: "section1", label: "Section 1" },
+              { value: "section2", label: "Section 2" },
+              { value: "section3", label: "Section 3" },
+            ]}
+          />
+          <div className="mt-2">
+            <Label>Field Label</Label>
+            <Input
+              type="text"
+              value={data?.label}
+              onChange={(e) => {
+                setData((prev) => ({ ...prev, label: e.target.value }));
+              }}
+            />
+          </div>
+        </div>
       </ModalBody>
       <ModalFooter>
         <div className="d-flex justify-content-end gap-2">
@@ -38,10 +77,10 @@ const EditorDataAttributeModal = () => {
           <Button
             className="btn-danger"
             onClick={() => {
-              console.log("Hello")
+                action(data);
             }}
           >
-            Confirm
+            Add Attribute
           </Button>
         </div>
       </ModalFooter>

@@ -95,6 +95,7 @@ import PageSettingViewBackend from "./TemplateDisplay/components/PageSettingView
 import SelectElement from "./Elements/SelectElement";
 import MultiInputFormik from "./Elements/MultiInputFormik";
 import MultiInputFormikNoBorder from "./Elements/MultiInputFormikNoBorder";
+import CreateSelectElement from "./Elements/CreateSelectElement";
 
 // Import Email Component
 import EmailComponent from "./Email/EmailComponent";
@@ -197,6 +198,7 @@ export {
   SelectElement,
   MultiInputFormik,
   MultiInputFormikNoBorder,
+  CreateSelectElement,
 
   // Export Email Component
   EmailComponent,

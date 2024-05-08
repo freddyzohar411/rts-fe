@@ -885,6 +885,7 @@ const JobOverview = () => {
     switch (step) {
       case 2:
       case 3:
+      case 16:
         setOffcanvasForm(true);
         break;
       case 99:
@@ -1317,11 +1318,11 @@ const JobOverview = () => {
             {/* Canvas Header Button Add-on */}
             {generateCanvasHeaderButton(activeStep)}
             {/* Template Selector */}
-            {/* {(activeStep === 11 || isPreviewCV) && (
+            {(activeStep === 16 || isPreviewCV) && (
               <Col>
                 <div>
                   <TemplateSelectByCategoryElement
-                    categoryName={selectedCategory}
+                    categoryName="Conditional Offer"
                     placeholder="Select a template"
                     onChange={(value) => {
                       setTemplateData(value);
@@ -1332,7 +1333,7 @@ const JobOverview = () => {
                   />
                 </div>
               </Col>
-            )} */}
+            )}
           </div>
           <OffcanvasBody>
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
@@ -1360,7 +1361,7 @@ const JobOverview = () => {
           onClick={() => {
             // Everytime i click i want it to render even if it is the same step
             // setIsFormModalOpen(true);
-            setActiveStep(2);
+            setActiveStep(16);
           }}
         >
           SET STEP (DEV)
