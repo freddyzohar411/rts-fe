@@ -88,6 +88,7 @@ const JobOverview = () => {
   const dispatch = useDispatch();
   const { jobId } = useParams();
   const formikRef = useRef();
+  const ref = useRef();
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
