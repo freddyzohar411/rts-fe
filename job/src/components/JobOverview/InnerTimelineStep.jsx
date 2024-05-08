@@ -68,7 +68,7 @@ function InnerTimelineStep({ data }) {
     return () => {
       window.removeEventListener("resize", updateRowIndexes);
     };
-  }, [noOfRows]); 
+  }, [noOfRows]);
 
   useEffect(() => {
     sectionRefs.current = sections.map(
@@ -388,6 +388,7 @@ function InnerTimelineStep({ data }) {
                         );
                         return (
                           <div
+                            key={subindex}
                             className="d-flex flex-column align-items-center"
                             style={{
                               width: isExpanded ? "140px" : "110px",

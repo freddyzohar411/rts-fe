@@ -72,8 +72,12 @@ import { CodingTest } from "../CodingTest";
 import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
-import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
-import { SideDrawer } from "@workspace/common";
+import {
+  getMaxOrder,
+  getStatus,
+  overviewHeaders,
+  overviewValues,
+} from "./JobOverviewUtil";
 import "./ViewTemplateSection.scss";
 import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePreviewSideDrawer";
 import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
@@ -210,13 +214,11 @@ const JobOverview = () => {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
-        const status = getStatus(data, maxOrder);
-        if (maxOrder >= 6 && maxOrder < 9) {
-          maxOrder = 5;
-        } else if (maxOrder === 9) {
-          maxOrder = status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
-        } else if (maxOrder >= 10 && maxOrder < 13) {
-          maxOrder = 9;
+        // const status = getStatus(data, maxOrder);
+        if (maxOrder >= 1 && maxOrder <= 5) {
+          maxOrder = 1;
+        } else if (maxOrder >= 1 && maxOrder <= 5) {
+          maxOrder = 1;
         }
         jsonObject[data?.id] = maxOrder;
       });
@@ -348,31 +350,6 @@ const JobOverview = () => {
     const newOb = { ...skipComboOptions };
     newOb[jobId] = value;
     setSkipComboOptions(newOb);
-  };
-
-  const getMaxOrder = (data) => {
-    const values = Object.values(data?.timeline);
-    let maxOrder = 1;
-    if (values) {
-      let orders = values?.map((item) => item?.order);
-      if (orders) {
-        orders = orders.sort((a, b) => b - a);
-        maxOrder = orders?.[0] ?? 1;
-      }
-    }
-    return maxOrder;
-  };
-
-  const getStatus = (data, orderNo) => {
-    const values = Object.values(data?.timeline);
-    let status;
-    if (values) {
-      let orders = values?.filter((item) => item?.order === orderNo);
-      if (orders) {
-        status = orders?.[0]?.status ?? null;
-      }
-    }
-    return status;
   };
 
   const getFormComponent = (step, closeOffcanvas) => {
@@ -709,7 +686,7 @@ const JobOverview = () => {
                       </Link>
 
                       <div className="d-flex gap-1 flex-row justify-content-center align-items-center text-muted text-small">
-                        <i class="ri-account-circle-line ri-lg mt-1 "></i>{" "}
+                        <i className="ri-account-circle-line ri-lg mt-1 "></i>{" "}
                         <span className="form-text">{data?.createdByName}</span>
                       </div>
                     </div>
