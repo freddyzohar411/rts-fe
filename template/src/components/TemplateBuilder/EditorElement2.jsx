@@ -395,11 +395,7 @@ const EditorElement2 = ({
 
     // If currently non-editable, wrap the selected text with a span and apply a class
     editor.selection.setContent(
-      `<span style="border: 1px solid #2196F3; background-color: #E3F2FD;" contenteditable="true" data-section=${
-        editorAttributesData?.section
-      } data-label=${
-        editorAttributesData?.label
-      } data-key=${uuid()}>${selectedText}</span>`
+      `<span style="border: 1px solid #2196F3; background-color: #E3F2FD;" data-section="${editorAttributesData?.section}" data-label="${editorAttributesData?.label}" data-key="${uuid()}">${selectedText}</span>`
     );
 
     // Move the cursor to the end of the inserted content

@@ -103,11 +103,18 @@ const TemplateSelectByCategoryElement = ({
       },
       backgroundColor: state.isDisabled ? "#EFF2F7" : base.backgroundColor,
       width: width,
+      height: '30px', // Example height, adjust this value as needed
+      minHeight: '30px', // Ensures the minimum height is respected
+      padding: '0px 8px', // Reduces padding, adjust as necessary
     }),
     singleValue: (provided, state) => ({
       ...provided,
       color: state.isDisabled ? "black !important" : provided.color,
     }),
+    // valueContainer: (provided, state) => ({
+    //   ...provided,
+    //   padding: "0px 0px",
+    // }),
   };
 
   const handleChange = (selectedOptions) => {
