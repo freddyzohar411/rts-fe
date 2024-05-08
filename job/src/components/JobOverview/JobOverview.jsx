@@ -136,7 +136,7 @@ const JobOverview = () => {
   );
 
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
-  const totalElements = jobTimelineData?.totalElements;
+
   // Custom renders
   const customRenderList = [
     {
@@ -1189,74 +1189,53 @@ const JobOverview = () => {
             </TabPane>
           </TabContent>
           {/* Table Pagination */}
-          <Row>
-            <Col>
-              <div className="d-flex flex-row justify-content-between align-items-baseline">
-                <div
-                  className="d-flex gap-2 flex-row align-items-center"
-                  style={{ fontWeight: 600 }}
+          <div className="d-flex flex-row justify-content-end my-3">
+            <Input
+              onChange={(e) =>
+                pageRequestSet.setPageSize(parseInt(e.target.value))
+              }
+              type="select"
+              className="form-select border-secondary"
+              style={{ height: "34px", marginRight: "10px", width: "70px" }}
+              defaultValue="20"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+            </Input>
+
+            <Pagination>
+              <PaginationItem
+                disabled={pageInfo.currentPage === 0}
+                onClick={pageRequestSet.setPreviousPage}
+              >
+                <PaginationLink
+                  className={`${
+                    pageInfo.currentPage === 0
+                      ? "bg-secondary border-primary text-muted disabled"
+                      : "bg-secondary border-primary text-dark"
+                  }`}
                 >
-                  <div>Rows per page:</div>
-
-                  <Input
-                    onChange={(e) =>
-                      pageRequestSet.setPageSize(parseInt(e.target.value))
-                    }
-                    type="select"
-                    className="form-select border-secondary"
-                    style={{
-                      height: "34px",
-                      fontWeight: 600,
-                      width: "70px",
-                      marginLeft: "3px",
-                    }}
-                    defaultValue="20"
-                  >
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                  </Input>
-
-                  <span>of {totalElements}</span>
-                </div>
-                <div className="d-flex flex-row justify-content-end my-3">
-                  <Pagination>
-                    <PaginationItem
-                      disabled={pageInfo.currentPage === 0}
-                      onClick={pageRequestSet.setPreviousPage}
-                    >
-                      <PaginationLink
-                        className={`${
-                          pageInfo.currentPage === 0
-                            ? "bg-secondary border-primary text-muted disabled"
-                            : "bg-secondary border-primary text-dark"
-                        }`}
-                      >
-                        Previous
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem
-                      disabled={
-                        pageInfo.currentPage === pageInfo.totalPages - 1
-                      }
-                      onClick={pageRequestSet.setNextPage}
-                    >
-                      <PaginationLink
-                        className={`${
-                          pageInfo.currentPage === pageInfo.totalPages - 1
-                            ? "bg-secondary border-primary text-muted disabled"
-                            : "bg-secondary border-primary text-dark"
-                        }`}
-                      >
-                        Next
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </div>
-              </div>
-            </Col>
-          </Row>
+                  Previous
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem
+                disabled={pageInfo.currentPage === pageInfo.totalPages - 1}
+                onClick={pageRequestSet.setNextPage}
+              >
+                <PaginationLink
+                  className={`${
+                    pageInfo.currentPage === pageInfo.totalPages - 1
+                      ? "bg-secondary border-primary text-muted disabled"
+                      : "bg-secondary border-primary text-dark"
+                  }`}
+                >
+                  Next
+                </PaginationLink>
+              </PaginationItem>
+            </Pagination>
+          </div>
         </Row>
 
         <Offcanvas
