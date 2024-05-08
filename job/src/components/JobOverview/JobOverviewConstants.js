@@ -83,7 +83,7 @@ export const rtsStatusHeaders = [
 ];
 
 export const newHeaders = [
-  { name: "Candidate & Recruiter", icon: "mdi mdi-sort-reverse-variant" },
+  { name: "Candidate & Recruiter", icon: "mdi mdi-sort-descending" },
   { name: "Progress", icon: "" },
   { name: "Current Status", icon: "" },
   { name: "Next Step", icon: "" },
@@ -103,35 +103,38 @@ export const timelineSkip = {
 
 export const timelineSkipModule = {
   Profile: 1,
-  Interviews: 2,
-  "Odin Protocol": 3,
-  "Conditional Offer": 4,
+  Odin: 2,
+  Interview: 3,
+  TOS: 4,
+  "Conditional Offer": 5,
 };
+
 export const timelineSkipSubModule = {
   1: [
-    "Tag",
     "Untag",
     "Associate",
+    "Profile Withdrawn",
     "Submit To Sales",
+    "Profile Rejected - Sales",
     "Submit To Client",
-    "Profile Feedback Pending",
+    "Profile Rejected - Client",
   ],
   2: [
-    "Schedule First Interview",
-    "Schedule Second Interview",
-    "Schedule Third Interview",
-  ],
-  3: [
     "Skills Assessment",
     "Coding Test",
     "Technical Interview",
     "Cultural Fit Test",
   ],
-  4: [
-    "Conditional Offer Sent",
-    "Conditional Offer Accepted",
-    "Conditional Offer Declined",
+  3: [
+    "Schedule",
+    "Backout-Candidate",
+    "Rescheduled",
+    "Cancelled by Client",
+    "Rejected",
+    "Selected",
   ],
+  4: ["Prepare TOS", "Edit TOS", "Approve TOS"],
+  5: ["Prepare", "Edit", "Release", "Accepted", "Rejected"],
 };
 
 export const timelineLegend = [
