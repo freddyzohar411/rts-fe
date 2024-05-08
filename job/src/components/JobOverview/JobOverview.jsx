@@ -46,7 +46,7 @@ import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
 import FirstInterviewFeedbackPending from "../FirstInterviewFeedback/FirstInterviewFeedback";
 import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterviewFeedback";
 import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
-import { ConditionalOffer } from "../ConditionalOffer";
+import ConditionalOffer from "../ConditionalOffer/ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
 import { CVPreview } from "../CVPreview";
@@ -529,12 +529,20 @@ const JobOverview = () => {
         );
       case 16:
         return (
+          // <ConditionalOffer
+          //   templateData={templateData}
+          //   closeOffcanvas={closeOffcanvas}
+          //   candidateId={candidateId}
+          //   jobId={parseInt(jobId)}
+          //   activeStep={step}
+          // />
           <ConditionalOffer
-            templateData={templateData}
             closeOffcanvas={closeOffcanvas}
             candidateId={candidateId}
             jobId={parseInt(jobId)}
             activeStep={step}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 17:
@@ -1318,7 +1326,7 @@ const JobOverview = () => {
             {/* Canvas Header Button Add-on */}
             {generateCanvasHeaderButton(activeStep)}
             {/* Template Selector */}
-            {(activeStep === 16 || isPreviewCV) && (
+            {/* {(activeStep === 16 || isPreviewCV) && (
               <Col>
                 <div>
                   <TemplateSelectByCategoryElement
@@ -1333,9 +1341,9 @@ const JobOverview = () => {
                   />
                 </div>
               </Col>
-            )}
+            )} */}
           </div>
-          <OffcanvasBody>
+          <OffcanvasBody className="p-0">
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
           {/* View Template */}

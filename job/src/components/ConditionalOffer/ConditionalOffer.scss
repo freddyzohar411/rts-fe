@@ -1,0 +1,9 @@
+.prepare-button {
+    border-bottom: transparent 2px solid;
+}
+
+.prepare-button.active {
+    background-color: rgba(10, 86, 174, 0.15);
+    color: #0A56AE;
+    border-bottom:#0A56AE 2px solid;
+}

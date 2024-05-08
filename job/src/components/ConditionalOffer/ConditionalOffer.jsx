@@ -1,217 +1,95 @@
-import React from "react";
-import { useState } from "react";
-import {
-  Row,
-  Col,
-  Container,
-  Input,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane,
-  Button,
-  UncontrolledDropdown,
-  DropdownItem,
-  DropdownToggle,
-  DropdownMenu,
-} from "reactstrap";
-import ReviewTos from "./ReviewTos";
-import { TemplateDisplayV3 } from "@workspace/common";
-import { UseTemplateModuleDataHook } from "@workspace/common";
-import { TemplateAdvanceExportModal } from "@workspace/common";
-import { ExportHelper, TemplateHelper } from "@workspace/common";
+import React, { useState } from "react";
+import { ButtonGroup, Button } from "reactstrap";
+import "./ConditionalOffer.scss";
+import ConditionalOfferSideDrawer from "./ConditionalOfferSideDrawer";
 
-function ConditionalOffer({
-  templateData,
-  closeOffcanvas,
-  candidateId,
-  jobId,
-  activeStep,
-}) {
-  const [activeTab, setActiveTab] = useState("1");
-  const [conditionalOfferContent, setConditionalOfferContent] = useState("");
-  const [releaseValue, setReleaseValue] = useState("");
-  const { allModuleData, isAllLoading } =
-    UseTemplateModuleDataHook.useTemplateModuleData({
-      candidateId: candidateId,
-      jobId: jobId,
-    });
-  const [templateDownloadModalShow, setTemplateDownloadModalShow] =
-    useState(false);
-  const [downloadLoading, setDownloadLoading] = useState(false);
-
-  // Handle realease event
-  const handleRelease = () => {
-    if (releaseValue) {
-      // Release conditional offer logic
-    } else {
-      closeOffcanvas();
-    }
-  };
-
-  const downloadHandler = async (content, type) => {
-    if (!content) return;
-    const processedTemplate =
-      await TemplateHelper.setSelectedContentAndProcessed(
-        content,
-        allModuleData
-      );
-
-    if (type === "pdf") {
-      await ExportHelper.exportBackendHtml2Pdf(
-        processedTemplate.html,
-        {
-          unit: "in",
-          pageType: "A4",
-          pageOrientation: "portrait",
-          marginTop: 0,
-          marginBottom: 0,
-          marginLeft: 0,
-          marginRight: 0,
-          exportType: "pdf",
-          fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}_ConditionOffer`,
-        },
-        processedTemplate.styleTag
-      );
-    }
-    s;
-  };
+const ConditionalOffer = () => {
+  const [isPrepareDrawerOpen, setIsPrepareDrawerOpen] = useState(true);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   return (
-    <React.Fragment>
-      <div>
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={`cursor-pointer ${activeTab === "1" ? "active" : ""}`}
-              onClick={() => setActiveTab("1")}
+    <div>
+      <div
+        className=" d-flex justify-content-between align-items-center pe-2"
+        style={{
+          borderBottom: "1px solid #D9E2EC",
+        }}
+      >
+        <div
+          className={`px-2 d-flex gap-2 align-items-center prepare-button cursor-pointer ${
+            isPrepareDrawerOpen && "active"
+          }`}
+          style={{
+            paddingTop: "8px",
+            paddingBottom: "8px",
+          }}
+          onClick={() => setIsPrepareDrawerOpen((prev) => !prev)}
+        >
+          <i className=" ri-file-list-2-line fs-5"></i>
+          <span className="fw-semibold fs-6">Prepare</span>
+        </div>
+        <div className="d-flex gap-2 align-items-center">
+          <ButtonGroup>
+            <Button
+              color="light"
+              className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+              style={{ height: "30px" }}
             >
-              CONDITIONAL OFFER
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={`cursor-pointer ${activeTab === "2" ? "active" : ""}`}
-              onClick={() => setActiveTab("2")}
-            >
-              REVIEW TOS
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={`cursor-pointer ${activeTab === "3" ? "active" : ""}`}
-              onClick={() => setActiveTab("3")}
-            >
-              PREVIEW CONDITIONAL OFFER
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={activeTab}>
-          <TabPane tabId="1">
-            <Container
-              className="p-3 mt-3"
-              style={{ height: "100%", minWidth: "100%" }}
-            >
-              <TemplateDisplayV3
-                content={templateData?.content ?? null}
-                allData={allModuleData}
-                isView={true}
-                handleOutputContent={setConditionalOfferContent}
-                autoResize={true}
-                initialValues
-              />
-            </Container>
-          </TabPane>
-          <TabPane tabId="2">
-            <div className="mt-4">
-              <ReviewTos
-                activeStep={activeStep}
-                closeOffcanvas={closeOffcanvas}
-                candidateId={candidateId}
-                jobId={jobId}
-              />
-            </div>
-          </TabPane>
-          <TabPane tabId="3">
-            <Container
-              className="p-3 mt-3"
-              style={{ height: "100%", minWidth: "100%" }}
-            >
-              <TemplateDisplayV3
-                content={conditionalOfferContent ?? null}
-                isAllLoading={isAllLoading}
-                allData={null}
-                isView={true}
-                initialValues
-              />
-            </Container>
-          </TabPane>
-        </TabContent>
-        <div className="d-flex justify-content-end gap-3">
-          {activeTab == "3" && (
-            <UncontrolledDropdown className="btn-group">
-              <Button
-                type="submit"
-                className="btn btn-custom-primary"
-                onClick={async () => {
-                  // Download pdf here
-                  setDownloadLoading(true);
-                  await downloadHandler(templateData?.content, "pdf");
-                  setDownloadLoading(false);
-                }}
-              >
-                {downloadLoading ? "Downloading..." : "Download"}
-              </Button>
-              <DropdownToggle
-                tag="button"
-                type="button"
-                className="btn btn-custom-primary"
-                split
-              >
-                <span className="visually-hidden">Toggle Dropdown</span>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-end">
-                {/* Start here */}
-                <li>
-                  <DropdownItem
-                    onClick={() => {
-                      setTemplateDownloadModalShow(true);
-                    }}
-                  >
-                    Advanced Options
-                  </DropdownItem>
-                </li>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          )}
-          {activeTab == "1" && (
-            <Input
-              type="number"
-              className="mr-2"
-              style={{ width: "200px" }}
-              placeholder="Time in minutes"
-              value={releaseValue}
-              onChange={(e) => setReleaseValue(e.target.value)}
-            />
-          )}
-          {(activeTab == "1" || activeTab == "3") && (
-            <Button className="btn btn-custom-primary" onClick={handleRelease}>
-              Release
+              <i className="ri-zoom-out-line align-bottom fs-6"></i>
             </Button>
-          )}
+            <Button
+              color="light"
+              className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+              style={{ height: "30px" }}
+            >
+              <i className="ri-zoom-in-line align-bottom fs-6"></i>
+            </Button>
+          </ButtonGroup>
+          <ButtonGroup>
+            <Button
+              color="light"
+              className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+              style={{ height: "30px" }}
+            >
+              <i className="ri-download-fill align-bottom fs-6"></i>
+            </Button>
+            <Button
+              color="light"
+              className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
+              style={{ height: "30px" }}
+            >
+              <i className="bx bx-window align-bottom fs-6"></i>
+            </Button>
+          </ButtonGroup>
         </div>
       </div>
-      <TemplateAdvanceExportModal
-        content={conditionalOfferContent}
-        isAllLoading={false}
-        showInsertModal={templateDownloadModalShow}
-        setShowInsertModal={setTemplateDownloadModalShow}
-        toExport={true}
-        allData={allModuleData}
-      />
-    </React.Fragment>
+
+      {/*Drawer and canvas*/}
+      <div className="d-flex" style={{ height: "calc(100vh - 115px)" }}>
+        {isPrepareDrawerOpen && (
+          <div
+            className="flex-shrink-0"
+            style={{
+              width: "30%",
+
+              overflowY: "auto",
+              boxShadow: "rgba(100, 100, 111, 0.3) 0px 14px 0px 0px",
+            }}
+          >
+            <ConditionalOfferSideDrawer />
+          </div>
+        )}
+        <div
+          className="flex-grow-1"
+          style={{
+            backgroundColor: "#F7F9FC",
+          }}
+        >
+          hello
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
 export default ConditionalOffer;
