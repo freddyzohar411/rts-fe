@@ -20,10 +20,6 @@ import {
   Spinner,
   Card,
   CardBody,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -52,7 +48,6 @@ import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterv
 import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
-import StepComponent from "./StepComponent";
 import { TimelineHeader } from "../TimelineHeader";
 import { CVPreview } from "../CVPreview";
 import {
@@ -88,26 +83,21 @@ import InnerTimelineStep from "./InnerTimelineStep";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
-  const formikRef = useRef(); // Formik reference
-
-  const [openJobIndex, setOpenJobIndex] = useState(null);
-  const toggleJobOpen = (index) => {
-    setOpenJobIndex(openJobIndex === index ? null : index);
-  };
-  // Next Step Dropdown States
-  const [selectedModule, setSelectedModule] = useState("");
-  const handleModuleChange = (e) => {
-    setSelectedModule(e.target.value);
-  };
-
-  const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
-  const [legendTooltip, setLegendTooltip] = useState(false);
-  const [headerTooltip, setHeaderTooltip] = useState(false);
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
+  const formikRef = useRef();
+
+  const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
+  const [openJobIndex, setOpenJobIndex] = useState(null);
+  // Next Step Dropdown States
+  const [selectedModule, setSelectedModule] = useState("");
+  const [selectedSubModule, setSelectedSubModule] = useState("");
+  const [legendTooltip, setLegendTooltip] = useState(false);
+  const [headerTooltip, setHeaderTooltip] = useState(false);
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
@@ -116,8 +106,6 @@ const JobOverview = () => {
 
   const [templateData, setTemplateData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
-
-  const [formTemplate, setFormTemplate] = useState(null);
   const [candidateId, setCandidateId] = useState();
 
   const [isPreviewCV, setIsPreviewCV] = useState(false);
@@ -140,7 +128,7 @@ const JobOverview = () => {
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
   );
-  const form = useSelector((state) => state.JobFormReducer.form);
+
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
@@ -148,6 +136,9 @@ const JobOverview = () => {
   const jobTimelineData = useSelector(
     (state) => state.JobStageReducer.jobTimeline
   );
+
+  console.log("jobTimelineData", jobTimelineData);
+
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
 
   // Custom renders
@@ -161,8 +152,6 @@ const JobOverview = () => {
     },
   ];
 
-  // console.log("Job Timeline Data", skipComboOptions);
-
   // Table Hooks
   const {
     pageRequest,
@@ -171,14 +160,12 @@ const JobOverview = () => {
     setPageInfoData,
     search,
     setSearch,
-    customConfig,
-    setCustomConfigData,
   } = useTableHook(
     {
       page: 0,
       pageSize: 20,
-      sortBy: null,
-      sortDirection: "asc",
+      sortBy: "candidate.first_name",
+      sortDirection: sortDirection,
       searchTerm: null,
       searchFields: [
         "candidate.first_name",
@@ -245,12 +232,6 @@ const JobOverview = () => {
     dispatch(fetchJobForm(JOB_FORM_NAME));
     dispatch(fetchJobtimeineCount({ jobId }));
   }, []);
-
-  useEffect(() => {
-    if (form) {
-      setFormTemplate(form);
-    }
-  }, [form]);
 
   useEffect(() => {
     dispatch(clearJobFormSubmission());
@@ -350,10 +331,26 @@ const JobOverview = () => {
     setIsPreviewCV(false);
   };
 
+  const toggleJobOpen = (index) => {
+    setOpenJobIndex(openJobIndex === index ? null : index);
+  };
+
+  const handleModuleChange = (e) => {
+    setSelectedModule(e.target.value);
+  };
+
+  const handleSubModuleChange = (e) => {
+    setSelectedSubModule(e.target.value);
+  };
+
+  const handleSaveClick = () => {
+    if (selectedModule == 1 && selectedSubModule == "Untag") {
+    }
+  };
+
   const handleSkipSelection = (jobId, value) => {
     const newOb = { ...skipComboOptions };
     newOb[jobId] = value;
-    console.log("New Ob", newOb);
     setSkipComboOptions(newOb);
   };
 
@@ -555,9 +552,16 @@ const JobOverview = () => {
   };
 
   const handleSort = (index) => {
-    if (index === 0 || index === 1) {
-      const option = JOB_TIMELINE_INITIAL_OPTIONS[index];
-      // pageRequestSet.setSortAndDirection(option);
+    if (index === 0) {
+      const direction = sortDirection === "asc" ? "desc" : "asc";
+      dispatch(
+        fetchJobTimelineList({
+          ...DynamicTableHelper.cleanPageRequest(pageRequest),
+          jobId: parseInt(jobId),
+          sortDirection: direction,
+        })
+      );
+      setSortDirection(direction);
     }
   };
 
@@ -575,7 +579,6 @@ const JobOverview = () => {
    * @description Get form index on the basis of index
    */
   const getFormIndex = (originalOrder, jobId) => {
-    console.log("Original Order", originalOrder, jobId, skipComboOptions);
     let index = null;
     switch (originalOrder) {
       case 6:
@@ -666,6 +669,7 @@ const JobOverview = () => {
       ? tooltipIndexes?.[targetName]?.tooltipOpen
       : false;
   };
+
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
     return (
@@ -748,15 +752,9 @@ const JobOverview = () => {
                       <Input
                         type="select"
                         className="form-select border-0"
-                        // value={skipComboOptions[data.id]}
+                        value={selectedSubModule}
                         disabled={!selectedModule}
-                        onChange={(e) => {
-                          console.log("Skip", e.target.value);
-                          handleSkipSelection(
-                            data.id,
-                            parseInt(e.target.value)
-                          );
-                        }}
+                        onChange={handleSubModuleChange}
                       >
                         <option value="">Select</option>
                         {selectedModule &&
@@ -777,13 +775,6 @@ const JobOverview = () => {
                         className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
                         style={{ width: "30px", height: "30px" }}
                         onClick={() => {
-                          // console.log(
-                          //   "Save",
-                          //   data?.candidate?.id,
-                          //   data?.id,
-                          //   skipComboOptions[data.id],
-                          //   originalOrder
-                          // );
                           // handleIconClick(
                           //   data?.candidate?.id,
                           //   data?.id,
@@ -802,6 +793,7 @@ const JobOverview = () => {
                         <i
                           className="mdi mdi-content-save-outline"
                           style={{ color: "#0A56AE" }}
+                          onClick={() => handleSaveClick()}
                         ></i>
                       </div>
                     </div>
@@ -1035,7 +1027,11 @@ const JobOverview = () => {
                   <thead className="bg-white main-border-style">
                     <tr>
                       {newHeaders.map((header, index) => (
-                        <td key={index} className="main-border-style">
+                        <td
+                          key={index}
+                          className="main-border-style cursor-pointer"
+                          onClick={() => handleSort(index)}
+                        >
                           {header.name} <i className={header.icon}></i>
                         </td>
                       ))}
@@ -1359,6 +1355,7 @@ const JobOverview = () => {
           header={stepperState}
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
         />
+
         <button
           onClick={() => {
             // Everytime i click i want it to render even if it is the same step
