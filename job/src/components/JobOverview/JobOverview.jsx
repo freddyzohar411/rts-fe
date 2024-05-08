@@ -85,10 +85,12 @@ import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePrevi
 import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
 import OverviewStepComponent from "./OverviewStepComponent";
 import InnerTimelineStep from "./InnerTimelineStep";
+import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
   const formikRef = useRef(); // Formik reference
+  const ref = useRef();
 
   const [openJobIndex, setOpenJobIndex] = useState(null);
   const toggleJobOpen = (index) => {
@@ -436,6 +438,7 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             activeStep={step}
+            ref={ref}
           />
         );
       case 6:
@@ -445,6 +448,7 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             activeStep={step}
+            ref={ref}
           />
         );
       case 7:
@@ -454,6 +458,7 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             activeStep={step}
+            ref={ref}
           />
         );
       case 8:
@@ -463,6 +468,7 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             activeStep={step}
+            ref={ref}
           />
         );
       case 9:
@@ -472,6 +478,7 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             activeStep={step}
+            ref={ref}
           />
         );
       case 10:
@@ -867,6 +874,189 @@ const JobOverview = () => {
             </Button>
           </div>
         );
+
+      case 5:
+        return (
+          <div className="d-flex flex-row justify-content-start gap-2">
+            <Button
+              type="button"
+              style={{
+                backgroundColor: "#FFFFFF",
+                border: "1px solid #E7EAEE",
+                color: "#000000",
+                fontWeight: "500",
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                ref.current.handleCancel();
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              style={{
+                backgroundColor: "#0A56AE",
+                color: "#FFFFFF",
+                fontWeight: "500",
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                ref.current.handleUpdate();
+              }}
+            >
+              Invite Candidate
+            </Button>
+          </div>
+        );
+
+      case 6:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#0A56AE",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    ref.current.submitForm();
+                  }}
+                >
+                  Update
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+
+      case 7:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#0A56AE",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    ref.current.submitForm();
+                  }}
+                >
+                  Update
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+
+      case 8:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#0A56AE",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    ref.current.submitForm();
+                  }}
+                >
+                  Update
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+
+      case 9:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#0A56AE",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    ref.current.submitForm();
+                  }}
+                >
+                  Update
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
       default:
         return null;
     }
@@ -1242,71 +1432,13 @@ const JobOverview = () => {
           direction="end"
           style={{ width: isMobile ? "100vw" : "55vw" }}
         >
-          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center py-2">
-            <div className="flex-grow-1 gap-3">
-              <div className="d-flex gap-2 align-items-center mb-1">
-                <span
-                  className="px-2 rounded-3"
-                  style={{
-                    backgroundColor: "#0A65CC",
-                    color: "#fff",
-                    paddingTop: "2px",
-                    paddingBottom: "2px",
-                  }}
-                >
-                  {stepperState}
-                </span>
-                <span className="fw-bold fs-4">
-                  {formSubmissionData?.accountName}
-                </span>
-              </div>
-              <div className="d-flex flex-row gap-2 align-items-center">
-                <span
-                  className="fs-6 text-nowrap"
-                  style={{
-                    color: "#0A65CC",
-                  }}
-                >
-                  Job ID - {formSubmissionData?.clientJobId}
-                </span>
-                <span
-                  style={{
-                    color: "#0A65CC",
-                  }}
-                >
-                  |
-                </span>
-                <span
-                  className="fs-6 text-nowrap cursor-pointer"
-                  style={{
-                    color: "#0A65CC",
-                  }}
-                  title={formSubmissionData?.jobTitle}
-                >
-                  Job Title - {truncate(formSubmissionData?.jobTitle, 55)}
-                </span>
-              </div>
-            </div>
-            {/* Canvas Header Button Add-on */}
-            {generateCanvasHeaderButton(activeStep)}
-            {/* Template Selector */}
-            {/* {(activeStep === 11 || isPreviewCV) && (
-              <Col>
-                <div>
-                  <TemplateSelectByCategoryElement
-                    categoryName={selectedCategory}
-                    placeholder="Select a template"
-                    onChange={(value) => {
-                      setTemplateData(value);
-                    }}
-                    defaultFirstValue
-                    width="300px"
-                    end
-                  />
-                </div>
-              </Col>
-            )} */}
-          </div>
+          <OffCanvasHeaderComponent
+            stepperState={stepperState}
+            formSubmissionData={formSubmissionData}
+            activeStep={activeStep}
+            generateCanvasHeaderButton={generateCanvasHeaderButton}
+          />
+
           <OffcanvasBody>
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
