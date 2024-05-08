@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Row,
   Col,
@@ -17,9 +17,6 @@ import {
   PaginationLink,
   Tooltip,
   ButtonGroup,
-  Spinner,
-  Card,
-  CardBody,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -30,7 +27,7 @@ import {
   tagReset,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 import "./StepComponent.scss";
 import Skeleton from "react-loading-skeleton";
@@ -48,18 +45,17 @@ import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterv
 import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
+import StepComponent from "./StepComponent";
 import { TimelineHeader } from "../TimelineHeader";
+import { CVPreview } from "../CVPreview";
 import {
   JOB_TIMELINE_INITIAL_OPTIONS,
   jobHeaders,
   rtsStatusHeaders,
   steps,
   timelineSkip,
-  timelineSkipModule,
-  timelineSkipSubModule,
   timelineLegend,
   stepOrders,
-  newHeaders,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -73,30 +69,18 @@ import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
-import { SideDrawer } from "@workspace/common";
-import "./ViewTemplateSection.scss";
-import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePreviewSideDrawer";
-import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
-import OverviewStepComponent from "./OverviewStepComponent";
-import InnerTimelineStep from "./InnerTimelineStep";
 
-const JobOverview = () => {
+const JobOverviewOld = () => {
   document.title = "Job Timeline | RTS";
-
-  const dispatch = useDispatch();
-  const { jobId } = useParams();
-  const formikRef = useRef();
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
-  const [openJobIndex, setOpenJobIndex] = useState(null);
-  // Next Step Dropdown States
-  const [selectedModule, setSelectedModule] = useState("");
-  const [selectedSubModule, setSelectedSubModule] = useState("");
+  const isBigScreen = useMediaQuery({ query: "(max-width: 1440px)" });
   const [legendTooltip, setLegendTooltip] = useState(false);
   const [headerTooltip, setHeaderTooltip] = useState(false);
-  const [sortDirection, setSortDirection] = useState("asc");
+
+  const dispatch = useDispatch();
+  const { jobId } = useParams();
 
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
@@ -105,6 +89,8 @@ const JobOverview = () => {
 
   const [templateData, setTemplateData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const [formTemplate, setFormTemplate] = useState(null);
   const [candidateId, setCandidateId] = useState();
 
   const [isPreviewCV, setIsPreviewCV] = useState(false);
@@ -113,20 +99,11 @@ const JobOverview = () => {
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
   const [tooltipIndexes, setTooltipIndexes] = useState();
-  const [isViewTemplate, setIsViewTemplate] = useState(false);
-  const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
-  const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
-  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-
-  // Email Loading
-  const emailIsLoading = useSelector(
-    (state) => state.EmailCommonReducer.loading
-  );
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
   );
-
+  const form = useSelector((state) => state.JobFormReducer.form);
   const formSubmissionData = useSelector(
     (state) => state.JobFormReducer.formSubmission
   );
@@ -134,9 +111,7 @@ const JobOverview = () => {
   const jobTimelineData = useSelector(
     (state) => state.JobStageReducer.jobTimeline
   );
-
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
-  const totalElements = jobTimelineData?.totalElements;
   // Custom renders
   const customRenderList = [
     {
@@ -156,19 +131,18 @@ const JobOverview = () => {
     setPageInfoData,
     search,
     setSearch,
+    customConfig,
+    setCustomConfigData,
   } = useTableHook(
     {
       page: 0,
       pageSize: 20,
-      sortBy: "candidate.first_name",
-      sortDirection: sortDirection,
+      sortBy: null,
+      sortDirection: "asc",
       searchTerm: null,
-      searchFields: [
-        "candidate.first_name",
-        "candidate.last_name",
-        "users.first_name",
-        "users.last_name",
-      ],
+      searchFields: DynamicTableHelper.generateSeachFieldArray(
+        JOB_TIMELINE_INITIAL_OPTIONS
+      ),
     },
     JOB_TIMELINE_INITIAL_OPTIONS,
     customRenderList
@@ -228,6 +202,12 @@ const JobOverview = () => {
     dispatch(fetchJobForm(JOB_FORM_NAME));
     dispatch(fetchJobtimeineCount({ jobId }));
   }, []);
+
+  useEffect(() => {
+    if (form) {
+      setFormTemplate(form);
+    }
+  }, [form]);
 
   useEffect(() => {
     dispatch(clearJobFormSubmission());
@@ -327,23 +307,6 @@ const JobOverview = () => {
     setIsPreviewCV(false);
   };
 
-  const toggleJobOpen = (index) => {
-    setOpenJobIndex(openJobIndex === index ? null : index);
-  };
-
-  const handleModuleChange = (e) => {
-    setSelectedModule(e.target.value);
-  };
-
-  const handleSubModuleChange = (e) => {
-    setSelectedSubModule(e.target.value);
-  };
-
-  const handleSaveClick = () => {
-    if (selectedModule == 1 && selectedSubModule == "Untag") {
-    }
-  };
-
   const handleSkipSelection = (jobId, value) => {
     const newOb = { ...skipComboOptions };
     newOb[jobId] = value;
@@ -387,33 +350,36 @@ const JobOverview = () => {
           />
         );
       case 2:
-        return (
+        return isPreviewCV ? (
+          <CVPreview
+            onExitPreview={handleExitPreview}
+            templateData={templateData}
+            candidateId={candidateId}
+          />
+        ) : (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
-            setIsViewTemplate={setIsViewTemplate}
-            setTemplatePreviewInfo={setTemplatePreviewInfo}
-            setTemplatePreviewAction={setTemplatePreviewAction}
-            setOffcanvasForm={setOffcanvasForm}
-            ref={formikRef}
-            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 3:
-        return (
+        return isPreviewCV ? (
+          <CVPreview
+            onExitPreview={handleExitPreview}
+            templateData={templateData}
+            candidateId={candidateId}
+            jobId={jobId}
+          />
+        ) : (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
             templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
-            setIsViewTemplate={setIsViewTemplate}
-            setTemplatePreviewInfo={setTemplatePreviewInfo}
-            setTemplatePreviewAction={setTemplatePreviewAction}
-            setOffcanvasForm={setOffcanvasForm}
-            ref={formikRef}
-            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case 4:
@@ -548,16 +514,9 @@ const JobOverview = () => {
   };
 
   const handleSort = (index) => {
-    if (index === 0) {
-      const direction = sortDirection === "asc" ? "desc" : "asc";
-      dispatch(
-        fetchJobTimelineList({
-          ...DynamicTableHelper.cleanPageRequest(pageRequest),
-          jobId: parseInt(jobId),
-          sortDirection: direction,
-        })
-      );
-      setSortDirection(direction);
+    if (index === 0 || index === 1) {
+      const option = JOB_TIMELINE_INITIAL_OPTIONS[index];
+      // pageRequestSet.setSortAndDirection(option);
     }
   };
 
@@ -666,217 +625,10 @@ const JobOverview = () => {
       : false;
   };
 
-  // Retrieve individual candidate data - job timeline
-  const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
-    return (
-      <React.Fragment>
-        {jobTimelineData?.jobs && jobTimelineData?.jobs?.length > 0 ? (
-          jobTimelineData?.jobs?.map((data, timelineIndex) => {
-            const candidateData = data?.candidate;
-            let maxOrder = getMaxOrder(data);
-            const status = getStatus(data, maxOrder);
-            maxOrder =
-              status !== JOB_STAGE_STATUS.REJECTED &&
-              status !== JOB_STAGE_STATUS.WITHDRAWN
-                ? maxOrder
-                : maxOrder - 1;
-            const isRejected =
-              status === JOB_STAGE_STATUS.REJECTED ||
-              status === JOB_STAGE_STATUS.WITHDRAWN;
-            const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
-            const originalOrder = maxOrder;
-            if (maxOrder >= 6 && maxOrder < 9) {
-              maxOrder = 5;
-            } else if (maxOrder === 9) {
-              maxOrder = status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
-            } else if (maxOrder >= 10 && maxOrder < 13) {
-              maxOrder = 9;
-            }
-            return (
-              <>
-                <tr className="cursor-pointer">
-                  {/* Candidate */}
-                  <td style={{ width: "160px" }}>
-                    <div className="d-flex flex-column align-items-start">
-                      <Link
-                        to={`/candidates/${candidateData.id}/snapshot`}
-                        className="fw-semibold"
-                        style={{ color: "#0A56AE" }}
-                      >
-                        <span>
-                          {candidateData?.firstName} {candidateData?.lastName}
-                        </span>
-                      </Link>
-
-                      <div className="d-flex gap-1 flex-row justify-content-center align-items-center text-muted text-small">
-                        <i class="ri-account-circle-line ri-lg mt-1 "></i>{" "}
-                        <span className="form-text">{data?.createdByName}</span>
-                      </div>
-                    </div>
-                  </td>
-                  {/* Progress Bar */}
-                  <td
-                    style={{ width: "300px" }}
-                    onClick={() => toggleJobOpen(data.id)}
-                  >
-                    <OverviewStepComponent data={data} />
-                  </td>
-                  {/* Current Status */}
-                  <td style={{ width: "5rem" }}>
-                    <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
-                      <span>Profile</span>
-                      <i className="ri-arrow-right-s-line"></i>
-                      <span className="fw-semibold">Tagged</span>
-                    </div>
-                  </td>
-                  {/* Next Step */}
-                  <td style={{ width: "15rem" }}>
-                    <div className="d-flex flex-row gap-1">
-                      <Input
-                        type="select"
-                        className="form-select border-0"
-                        onChange={handleModuleChange}
-                        value={selectedModule}
-                      >
-                        <option value="">Select</option>
-                        {Object.keys(timelineSkipModule).map((item, index) => (
-                          <option key={index} value={timelineSkipModule[item]}>
-                            {item}
-                          </option>
-                        ))}
-                      </Input>
-
-                      <Input
-                        type="select"
-                        className="form-select border-0"
-                        value={selectedSubModule}
-                        disabled={!selectedModule}
-                        onChange={handleSubModuleChange}
-                      >
-                        <option value="">Select</option>
-                        {selectedModule &&
-                          timelineSkipSubModule[selectedModule]?.map(
-                            (item, index) => (
-                              <option key={index} value={item}>
-                                {item}
-                              </option>
-                            )
-                          )}
-                      </Input>
-                    </div>
-                  </td>
-                  {/* Save Button */}
-                  <td style={{ width: "50px" }}>
-                    <div>
-                      <div
-                        className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
-                        style={{ width: "30px", height: "30px" }}
-                        onClick={() => {
-                          // handleIconClick(
-                          //   data?.candidate?.id,
-                          //   data?.id,
-                          //   getFormIndex(
-                          //     skipComboOptions[data.id] < originalOrder
-                          //       ? originalOrder
-                          //       : skipComboOptions[data.id],
-                          //     data?.id
-                          //   )
-                          // );
-                          // setTimelineRowIndex(timelineIndex);
-                          // setOffcanvasForm(true);
-                        }}
-                      >
-                        <i
-                          className="mdi mdi-content-save-outline mdi-18px"
-                          style={{ color: "#0A56AE" }}
-                          onClick={() => handleSaveClick()}
-                        ></i>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                {openJobIndex === data.id && (
-                  <tr>
-                    <td colSpan={10} className="px-3">
-                      <InnerTimelineStep data={data.timeline} />
-                      {/* {Object.keys(steps).map((step, index) => {
-                        return (
-                          <td key={index} className="px-0">
-                            To replace with new timeline.
-                            <InnerTimelineStep data={data} />
-                            <StepComponent
-                              index={stepOrders[step]}
-                              maxOrder={maxOrder}
-                              isRejected={isRejected}
-                              isInProgress={isInProgress}
-                              data={data?.timeline?.[steps[step]]}
-                              candidateId={data?.candidate?.id}
-                              timeline={data?.timeline}
-                              originalOrder={originalOrder}
-                              step={step}
-                            />
-                          </td>
-                        );
-                      })} */}
-                    </td>
-                  </tr>
-                )}
-              </>
-            );
-          })
-        ) : (
-          <tr>
-            <td colSpan={10} className="fw-semibold text-center">
-              No candidates tagged.
-            </td>
-          </tr>
-        )}
-      </React.Fragment>
-    );
-  };
-
-  // Generate canvas header button
-  const generateCanvasHeaderButton = (step) => {
-    switch (step) {
-      // Case 2 and 3 usese the same form
-      case 2:
-      case 3:
-        return (
-          <div className="d-flex align-items-center gap-2">
-            <Button
-              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
-              style={{
-                borderRadius: "8px",
-              }}
-              onClick={() => {
-                setOffcanvasForm(false);
-                setIsViewTemplate(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="btn btn-success"
-              onClick={() => {
-                formikRef.current.submitForm();
-              }}
-              style={{
-                borderRadius: "8px",
-              }}
-            >
-              {emailIsLoading ? <Spinner size="sm" color="light" /> : "Send"}
-            </Button>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <React.Fragment>
-      <div className="p-2">
-        <Row className="mb-2">
+      <div>
+        <Row lg={12} className="m-1 p-0">
           {overviewHeaders.map((header, index) => {
             const mobile = isMobile | isTablet;
             const values = overviewValues(
@@ -891,11 +643,8 @@ const JobOverview = () => {
                   id={`btn-${index}`}
                   onClick={() => setHeaderTooltip(!headerTooltip)}
                 >
-                  <span className="fw-medium text-muted">{header}</span>
-                  <span
-                    className="fw-semibold gap-1 text-nowrap"
-                    style={{ color: "#0A56AE" }}
-                  >
+                  <span className="fw-medium h6 text-muted">{header}</span>
+                  <span className="h5 fw-bold gap-1 text-nowrap">
                     {values?.[header]?.trimValue}
                   </span>
                 </div>
@@ -911,19 +660,15 @@ const JobOverview = () => {
             );
           })}
         </Row>
-        <hr className="w-100"></hr>
-        <Row className="mb-2">
-          <Card style={{ backgroundColor: "#F3F8FF" }}>
-            <CardBody>
-              <TimelineHeader data={jobHeaders} />
-            </CardBody>
-          </Card>
+        <Row lg={12} className="m-0 p-0">
+          <TimelineHeader data={jobHeaders} />
         </Row>
-        <Row className="mb-2">
-          <Nav pills>
+        <hr className="border border-dashed border-dark" />
+        <Row>
+          <Nav tabs>
             <NavItem>
               <NavLink
-                className={`cursor-pointer rounded-0 ${
+                className={`cursor-pointer ${
                   timelineTab === "1" ? "active" : ""
                 }`}
                 onClick={() => setTimelineTab("1")}
@@ -933,7 +678,7 @@ const JobOverview = () => {
             </NavItem>
             <NavItem>
               <NavLink
-                className={`cursor-pointer rounded-0 ${
+                className={`cursor-pointer ${
                   timelineTab === "2" ? "active" : ""
                 }`}
                 onClick={() => setTimelineTab("2")}
@@ -943,94 +688,63 @@ const JobOverview = () => {
             </NavItem>
           </Nav>
         </Row>
-        <Row className="mb-2">
-          <div
-            className={`d-flex ${
-              isMobile
-                ? "flex-column align-items-start"
-                : "flex-row align-items-center px-0"
-            } justify-content-between`}
-          >
-            <div className="d-flex flex-row gap-2 align-items-center">
-              <div className="search-box">
-                <form onSubmit={pageRequestSet.setSearchTerm}>
-                  <Input
-                    type="text"
-                    placeholder="Search"
-                    className="form-control search main-border-style"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </form>
+        <Row className="mb-2 mt-2">
+          <Col>
+            <div
+              className={`d-flex ${
+                isMobile
+                  ? "flex-column align-items-start"
+                  : "flex-row align-items-center"
+              } justify-content-between gap-1`}
+            >
+              <div className="d-flex flex-row gap-2 align-items-center">
+                <div className="search-box">
+                  <form onSubmit={pageRequestSet.setSearchTerm}>
+                    <Input
+                      type="text"
+                      placeholder="Search"
+                      className="form-control search"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </form>
+                  <i className="ri-search-eye-line search-icon"></i>
+                </div>
                 <i
-                  className="ri-search-line fw-semibold search-icon"
-                  style={{ color: "#0A56AE" }}
+                  id="legendInfo"
+                  className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
+                  onClick={() => setLegendTooltip(!legendTooltip)}
                 ></i>
+                <Tooltip
+                  target="legendInfo"
+                  placement="bottom"
+                  isOpen={legendTooltip}
+                  toggle={() => setLegendTooltip(!legendTooltip)}
+                  className="legend-tooltip"
+                >
+                  {renderLegend()}
+                </Tooltip>
               </div>
-              <i
-                id="legendInfo"
-                className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
-                onClick={() => setLegendTooltip(!legendTooltip)}
-              ></i>
-              <Tooltip
-                target="legendInfo"
-                placement="bottom"
-                isOpen={legendTooltip}
-                toggle={() => setLegendTooltip(!legendTooltip)}
-                className="legend-tooltip"
-              >
-                {renderLegend()}
-              </Tooltip>
+              <div className="d-flex flex-row gap-2 ">
+                <ButtonGroup>
+                  <Button color="light" className="bg-gradient border-dark">
+                    <i className="ri-filter-3-line align-bottom me-1"></i>Filter
+                  </Button>
+                  <Button color="light" className="bg-gradient border-dark">
+                    <i className="ri-download-fill align-bottom me-1"></i>
+                  </Button>
+                  <Button color="light" className="bg-gradient border-dark">
+                    <i className="ri-fullscreen-line align-bottom me-1"></i>
+                  </Button>
+                </ButtonGroup>
+              </div>
             </div>
-            <div className="d-flex flex-row gap-2 ">
-              <ButtonGroup>
-                <Button className="bg-white main-border-style">
-                  <i className="ri-filter-3-line align-bottom me-1"></i>Filter
-                </Button>
-                <Button className="bg-white main-border-style">
-                  <i className="ri-download-fill align-bottom me-1"></i>
-                </Button>
-                <Button className="bg-white main-border-style">
-                  <i className="ri-fullscreen-line align-bottom me-1"></i>
-                </Button>
-              </ButtonGroup>
-            </div>
-          </div>
+          </Col>
         </Row>
         <Row>
           <TabContent activeTab={timelineTab} className="p-0">
             <TabPane tabId="1">
               <div className="overflow-auto">
-                <Table>
-                  <thead className="bg-white main-border-style">
-                    <tr>
-                      {newHeaders.map((header, index) => (
-                        <td
-                          key={index}
-                          className="main-border-style cursor-pointer"
-                          onClick={() => handleSort(index)}
-                        >
-                          {header.name} <i className={header.icon}></i>
-                        </td>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="main-border-style bg-white">
-                    {jobTimelineMeta?.isLoading ? (
-                      <tr className="border border-light">
-                        <td colSpan={newHeaders.length}>
-                          <Skeleton count="1" />
-                        </td>
-                      </tr>
-                    ) : (
-                      generateBodyJsx(jobTimelineMeta, jobTimelineData)
-                    )}
-                  </tbody>
-                </Table>
-              </div>
-
-              {/* Old Timeline Code: For Reference */}
-              {/* <div className="overflow-auto">
                 <Table
                   className="table table-striped align-middle jobtimeline"
                   style={{ tableLayout: "fixed", wordWrap: "break-word" }}
@@ -1062,7 +776,6 @@ const JobOverview = () => {
                     </tr>
                   </thead>
 
-                  // Checks for loading state
                   {jobTimelineMeta?.isLoading ? (
                     <tr>
                       <td colSpan={rtsStatusHeaders.length}>
@@ -1179,9 +892,8 @@ const JobOverview = () => {
                     </tr>
                   )}
                 </Table>
-              </div> */}
+              </div>
             </TabPane>
-
             <TabPane tabId="2">
               <div>
                 <BSGTimeline />
@@ -1189,135 +901,96 @@ const JobOverview = () => {
             </TabPane>
           </TabContent>
           {/* Table Pagination */}
-          <Row>
-            <Col>
-              <div className="d-flex flex-row justify-content-between align-items-baseline">
-                <div
-                  className="d-flex gap-2 flex-row align-items-center"
-                  style={{ fontWeight: 600 }}
+          <div className="d-flex flex-row justify-content-end my-3">
+            <Input
+              onChange={(e) =>
+                pageRequestSet.setPageSize(parseInt(e.target.value))
+              }
+              type="select"
+              className="form-select border-secondary"
+              style={{ height: "34px", marginRight: "10px", width: "70px" }}
+              defaultValue="20"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+            </Input>
+
+            <Pagination>
+              <PaginationItem
+                disabled={pageInfo.currentPage === 0}
+                onClick={pageRequestSet.setPreviousPage}
+              >
+                <PaginationLink
+                  className={`${
+                    pageInfo.currentPage === 0
+                      ? "bg-secondary border-primary text-muted disabled"
+                      : "bg-secondary border-primary text-dark"
+                  }`}
                 >
-                  <div>Rows per page:</div>
-
-                  <Input
-                    onChange={(e) =>
-                      pageRequestSet.setPageSize(parseInt(e.target.value))
-                    }
-                    type="select"
-                    className="form-select border-secondary"
-                    style={{
-                      height: "34px",
-                      fontWeight: 600,
-                      width: "70px",
-                      marginLeft: "3px",
-                    }}
-                    defaultValue="20"
-                  >
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                  </Input>
-
-                  <span>of {totalElements}</span>
-                </div>
-                <div className="d-flex flex-row justify-content-end my-3">
-                  <Pagination>
-                    <PaginationItem
-                      disabled={pageInfo.currentPage === 0}
-                      onClick={pageRequestSet.setPreviousPage}
-                    >
-                      <PaginationLink
-                        className={`${
-                          pageInfo.currentPage === 0
-                            ? "bg-secondary border-primary text-muted disabled"
-                            : "bg-secondary border-primary text-dark"
-                        }`}
-                      >
-                        Previous
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem
-                      disabled={
-                        pageInfo.currentPage === pageInfo.totalPages - 1
-                      }
-                      onClick={pageRequestSet.setNextPage}
-                    >
-                      <PaginationLink
-                        className={`${
-                          pageInfo.currentPage === pageInfo.totalPages - 1
-                            ? "bg-secondary border-primary text-muted disabled"
-                            : "bg-secondary border-primary text-dark"
-                        }`}
-                      >
-                        Next
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </div>
-              </div>
-            </Col>
-          </Row>
+                  Previous
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem
+                disabled={pageInfo.currentPage === pageInfo.totalPages - 1}
+                onClick={pageRequestSet.setNextPage}
+              >
+                <PaginationLink
+                  className={`${
+                    pageInfo.currentPage === pageInfo.totalPages - 1
+                      ? "bg-secondary border-primary text-muted disabled"
+                      : "bg-secondary border-primary text-dark"
+                  }`}
+                >
+                  Next
+                </PaginationLink>
+              </PaginationItem>
+            </Pagination>
+          </div>
         </Row>
 
         <Offcanvas
           isOpen={offcanvasForm}
-          toggle={() => {
-            setOffcanvasForm(!offcanvasForm);
-            setIsViewTemplate(false);
-            setTemplatePreviewInfo(null);
-          }}
+          toggle={() => setOffcanvasForm(!offcanvasForm)}
           direction="end"
-          style={{ width: isMobile ? "100vw" : "55vw" }}
+          style={{ width: isMobile ? "100vw" : "75vw" }}
         >
-          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center py-2">
-            <div className="flex-grow-1 gap-3">
-              <div className="d-flex gap-2 align-items-center mb-1">
-                <span
-                  className="px-2 rounded-3"
-                  style={{
-                    backgroundColor: "#0A65CC",
-                    color: "#fff",
-                    paddingTop: "2px",
-                    paddingBottom: "2px",
-                  }}
-                >
-                  {stepperState}
-                </span>
-                <span className="fw-bold fs-4">
-                  {formSubmissionData?.accountName}
-                </span>
+          <div className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center">
+            <div className="avatar-md flex-shrink-0 d-flex gap-3">
+              <div className="avatar-title rounded-circle fs-4 flex-shrink-0">
+                {formSubmissionData?.accountName.charAt(0)}
               </div>
-              <div className="d-flex flex-row gap-2 align-items-center">
-                <span
-                  className="fs-6 text-nowrap"
-                  style={{
-                    color: "#0A65CC",
-                  }}
-                >
-                  Job ID - {formSubmissionData?.clientJobId}
-                </span>
-                <span
-                  style={{
-                    color: "#0A65CC",
-                  }}
-                >
-                  |
-                </span>
-                <span
-                  className="fs-6 text-nowrap cursor-pointer"
-                  style={{
-                    color: "#0A65CC",
-                  }}
-                  title={formSubmissionData?.jobTitle}
-                >
-                  Job Title - {truncate(formSubmissionData?.jobTitle, 55)}
-                </span>
-              </div>
+              <Row className="d-flex flex-row justify-content-between align-items-end gap-5">
+                <Col>
+                  <Row>
+                    <span className="h4 fw-bold">
+                      {formSubmissionData?.accountName}
+                    </span>
+                  </Row>
+                  <Row>
+                    <div className="d-flex flex-row gap-4">
+                      <span className="h6 fw-semibold text-nowrap">
+                        Job ID - {formSubmissionData?.clientJobId}
+                      </span>
+                      <span
+                        className="h6 fw-semibold text-nowrap cursor-pointer"
+                        title={formSubmissionData?.jobTitle}
+                      >
+                        Job Title - {truncate(formSubmissionData?.jobTitle, 55)}
+                      </span>
+                    </div>
+                  </Row>
+                  <Row>
+                    <span className="h6 text-muted fw-bold">
+                      {stepperState}
+                    </span>
+                  </Row>
+                </Col>
+              </Row>
             </div>
-            {/* Canvas Header Button Add-on */}
-            {generateCanvasHeaderButton(activeStep)}
             {/* Template Selector */}
-            {/* {(activeStep === 11 || isPreviewCV) && (
+            {(activeStep === 11 || isPreviewCV) && (
               <Col>
                 <div>
                   <TemplateSelectByCategoryElement
@@ -1332,31 +1005,15 @@ const JobOverview = () => {
                   />
                 </div>
               </Col>
-            )} */}
+            )}
           </div>
           <OffcanvasBody>
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
-          {/* View Template */}
-          <TemplatePreviewSideDrawer
-            showSideDrawer={isViewTemplate}
-            setShowSideDrawer={setIsViewTemplate}
-            templatePreviewInfo={templatePreviewInfo}
-            templatePreviewAction={templatePreviewAction}
-            candidateId={candidateId}
-            jobId={jobId}
-          />
         </Offcanvas>
-        {/* // Form Modal */}
-        <ModalFormWrapper
-          activeStep={activeStep}
-          isFormModalOpen={isFormModalOpen}
-          setIsFormModalOpen={setIsFormModalOpen}
-          header={stepperState}
-        />
       </div>
     </React.Fragment>
   );
 };
 
-export default JobOverview;
+export default JobOverviewOld;
