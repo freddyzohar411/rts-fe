@@ -38,9 +38,10 @@ const JobStageReducer = (state = initialState, action) => {
   switch (action.type) {
     // tag a job
     case TAG_JOB:
+      console.log("ACTION", action.payload);
       return {
         ...state,
-        jobTagMeta: pendingMetaData(),
+        jobTagMeta: { ...pendingMetaData(), jobType: action.payload.jobType },
       };
     case TAG_JOB_SUCCESS:
       return {

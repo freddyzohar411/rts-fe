@@ -137,7 +137,7 @@ const JobOverview = () => {
     (state) => state.JobStageReducer.jobTimeline
   );
 
-  console.log("jobTimelineData", jobTimelineData);
+  // console.log("jobTimelineData", jobTimelineData);
 
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
 
@@ -880,6 +880,55 @@ const JobOverview = () => {
                 <Spinner size="sm" color="light" />
               ) : (
                 "Send"
+              )}
+            </Button>
+          </div>
+        );
+      case 16:
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <Button
+              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+              style={{
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                setOffcanvasForm(false);
+                setIsViewTemplate(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="btn btn-outline-success"
+              onClick={() => {
+                formikRef.current.submitForm("draft");
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {jobTagMeta?.isLoading &&
+              jobTagMeta?.jobType === "conditional_offer_draft" ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Safe As Draft"
+              )}
+            </Button>
+            <Button
+              className="btn btn-success"
+              onClick={() => {
+                formikRef.current.submitForm("submit");
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {jobTagMeta?.isLoading &&
+              jobTagMeta?.jobType === "conditional_offer_sent" ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Submit"
               )}
             </Button>
           </div>

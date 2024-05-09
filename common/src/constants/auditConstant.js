@@ -1,4 +1,4 @@
-import { SUBMIT_TO_CLIENT } from "../../../job/src/components/JobOverview/JobOverviewConstants"
+import { CONDITIONAL_OFFER_SENT, SUBMIT_TO_CLIENT } from "../../../job/src/components/JobOverview/JobOverviewConstants"
 
 export const moduleConstant = {
     ACCOUNT: "account",
@@ -11,6 +11,7 @@ export const moduleConstant = {
 export const subModuleConstant = {
     SUBMIT_TO_SALES: "submit_to_sales",
     SUBMIT_TO_CLIENT: "submit_to_client",
+    CONDITIONAL_OFFER_DRAFT: "conditional_offer_draft",
 }
 
 
