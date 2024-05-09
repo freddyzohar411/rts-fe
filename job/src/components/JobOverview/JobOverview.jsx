@@ -81,6 +81,8 @@ import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
 import OverviewStepComponent from "./OverviewStepComponent";
 import InnerTimelineStep from "./InnerTimelineStep";
 import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
+import PrepareTOS from "../PrepareTOS/PrepareTOS";
+import ApproveTOS from "../ApproveTOS/ApproveTOS";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -121,6 +123,7 @@ const JobOverview = () => {
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [formModalHeader, setFormModalHeader] = useState("Header");
+  const [modalFormName, setModalFormName] = useState({});
 
   // Email Loading
   const emailIsLoading = useSelector(
@@ -293,6 +296,12 @@ const JobOverview = () => {
         break;
       case 17:
         setStepperState("Conditional Offer Status");
+        break;
+      case 18:
+        setStepperState("Prepare TOS");
+        break;
+      case 19:
+        setStepperState("Approve TOS");
         break;
       default:
         setStepperState("");
@@ -551,6 +560,28 @@ const JobOverview = () => {
             activeStep={step}
           />
         );
+      case 18:
+        return (
+          <PrepareTOS
+            setOffcanvasForm={setOffcanvasForm}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+            ref={ref}
+          />
+        );
+      case 19:
+        return (
+          <ApproveTOS
+            setOffcanvasForm={setOffcanvasForm}
+            setIsFormModalOpen={setIsFormModalOpen}
+            setModalFormName={setModalFormName}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+            ref={ref}
+          />
+        );
       default:
         return null;
     }
@@ -791,7 +822,7 @@ const JobOverview = () => {
                           //   )
                           // );
                           // setTimelineRowIndex(timelineIndex);
-                          // setOffcanvasForm(true);
+                          setOffcanvasForm(true);
                         }}
                       >
                         <i
@@ -1059,6 +1090,92 @@ const JobOverview = () => {
             </Col>
           </Row>
         );
+
+      case 18:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  // onClick={() => setOffcanvasForm(false)}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#12A35D",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    ref.current.submitForm();
+                  }}
+                >
+                  Submit
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+
+      case 19:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => ref.current.rejectTos()}
+                  style={{
+                    backgroundColor: "#D92D20",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Reject
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={() => ref.current.approveTos()}
+                  style={{
+                    backgroundColor: "#12A35D",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Approve
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+
       default:
         return null;
     }
@@ -1464,6 +1581,8 @@ const JobOverview = () => {
           isFormModalOpen={isFormModalOpen}
           setIsFormModalOpen={setIsFormModalOpen}
           header={stepperState}
+          modalFormName={modalFormName}
+          setModalFormName={setModalFormName}
         />
       </div>
     </React.Fragment>

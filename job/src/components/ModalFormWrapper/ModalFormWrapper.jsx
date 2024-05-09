@@ -2,15 +2,18 @@ import React, { useEffect, useState, useRef } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchJobForm, tagJob } from "../../store/actions";
+import { fetchJob, fetchJobForm, tagJob } from "../../store/actions";
 import { Form } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
+import "./ModalFormWrapper.scss";
 
 const ModalFormWrapper = ({
   activeStep = 0,
   header = "header",
   isFormModalOpen,
   setIsFormModalOpen,
+  modalFormName,
+  setModalFormName,
 }) => {
   // const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -24,15 +27,15 @@ const ModalFormWrapper = ({
   const [editData, setEditData] = useState({});
 
   // Handle form submit
-  const handleFormSubmit = async (event, values, newValues) => {
-    
-  };
+  const handleFormSubmit = async (event, values, newValues) => {};
 
   useEffect(() => {
     if (activeStep === 99) {
-      dispatch(fetchJobForm("rejection"));
+      dispatch(fetchJobForm(form));
+    } else if (Object.keys(modalFormName).length > 0) {
+      dispatch(fetchJobForm(modalFormName?.formName));
     }
-  }, [activeStep]);
+  }, [modalFormName, activeStep]);
 
   useEffect(() => {
     if (form) {
@@ -58,9 +61,9 @@ const ModalFormWrapper = ({
           paddingBottom: "0px",
         }}
       >
-        <h3>{header || "Header"}</h3>
+        <span className="fw-bold fs-5 text-black">{modalFormName?.header}</span>
       </ModalHeader>
-      <ModalBody>
+      <ModalBody className="px-2 pb-1 pt-2">
         <Form
           template={formTemplate}
           userDetails={getAllUserGroups()}
@@ -73,15 +76,33 @@ const ModalFormWrapper = ({
           ref={formikRef}
         />
       </ModalBody>
-      <ModalFooter>
+      <ModalFooter className="pt-0">
         <div className="d-flex justify-content-end gap-2">
-          <Button className="btn-danger" onClick={() => closeModal()}>
+          <Button
+            style={{
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #E7EAEE",
+              color: "#000000",
+              fontWeight: "500",
+              borderRadius: "8px",
+            }}
+            onClick={() => {
+              closeModal();
+              setModalFormName({});
+            }}
+          >
             Cancel
           </Button>
           <Button
-            className="btn-danger"
+            style={{
+              backgroundColor: "#D92D20",
+              color: "#FFFFFF",
+              fontWeight: "500",
+              borderRadius: "8px",
+            }}
             onClick={() => {
               formikRef.current.formik?.submitForm();
+              setModalFormName({});
             }}
           >
             Confirm
