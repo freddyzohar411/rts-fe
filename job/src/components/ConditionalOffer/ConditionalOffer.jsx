@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { ButtonGroup, Button, Container } from "reactstrap";
+import { ButtonGroup, Button, Container, Spinner } from "reactstrap";
 import "./ConditionalOffer.scss";
 import ConditionalOfferSideDrawer from "./ConditionalOfferSideDrawer";
 import {
   TemplateDisplayV3,
   TemplateSelectByCategoryElement,
+  TemplateHelper,
+  UseTemplateModuleDataHook,
+  ExportHelper,
 } from "@workspace/common";
 
-const ConditionalOffer = () => {
+
+const ConditionalOffer = ({ candidateId, jobId }) => {
   const [isPrepareDrawerOpen, setIsPrepareDrawerOpen] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [conditionalOfferContent, setConditionalOfferContent] = useState("");
   const [SideDrawerContent, setSideDrawerContent] = useState(null);
   const [selectedKey, setSelectedKey] = useState(null);
-  console.log("selectedTemplate", selectedTemplate);
-  console.log("conditionalOfferContent", conditionalOfferContent);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [transformScale, setTransformScale] = useState(1);
+  const [downloadLoading, setDownloadLoading] = useState(false);
+  const { allModuleData, isAllLoading } =
+    UseTemplateModuleDataHook.useTemplateModuleData({
+      candidateId: candidateId,
+      jobId: jobId,
+    });
 
   function getSideDrawerData(content) {
     // Parse the HTML string into a DOM object
@@ -49,6 +59,7 @@ const ConditionalOffer = () => {
   useEffect(() => {
     if (selectedTemplate?.content) {
       setSideDrawerContent(getSideDrawerData(selectedTemplate.content));
+      setSelectedKey(null);
     }
   }, [selectedTemplate]);
 
@@ -58,33 +69,66 @@ const ConditionalOffer = () => {
     // else set the editable content to false
     // First Find all and set all with data-key to false
     const allElements = document.querySelectorAll("[data-key]");
+    // Set all contenteditable to false
+    // Remove all styles and background color and border
     allElements.forEach((element) => {
       element.setAttribute("contenteditable", "false");
+      element.style.border = "none";
+      element.style.backgroundColor = "transparent";
     });
-    
+
     if (selectedKey) {
-      console.log("selectedKey", selectedKey);
       const element = document.querySelector(`[data-key="${selectedKey}"]`);
       if (element) {
-        console.log("element", element);
         if (
           element.getAttribute("contenteditable") === "false" ||
           !element.getAttribute("contenteditable")
         ) {
           element.setAttribute("contenteditable", "true");
+          element.style.border = "2px solid #D6CE0B";
+          element.style.backgroundColor = "rgb(214, 206, 11, 0.2)";
         } else {
           element.setAttribute("contenteditable", "false");
         }
       }
-      const element2 = document.querySelector(`[data-key="${selectedKey}"]`);
-      console.log("element2", element2);
+      // Scroll to the selected element
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [selectedKey]);
 
-  console.log("SideDrawerContent", SideDrawerContent);
+  const downloadHandler = async (content, type) => {
+    if (!content) return;
+    const processedTemplate =
+      await TemplateHelper.setSelectedContentAndProcessed(
+        content,
+        allModuleData
+      );
+
+    if (type === "pdf") {
+      await ExportHelper.exportBackendHtml2Pdf(
+        processedTemplate.html,
+        {
+          unit: "in",
+          pageType: "A4",
+          pageOrientation: "portrait",
+          marginTop: 0.25,
+          marginBottom: 0.25,
+          marginLeft: 0.25,
+          marginRight: 0.25,
+          exportType: "pdf",
+          // fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}_ConditionOffer`,
+          fileName: `Condition Offer`,
+
+        },
+        processedTemplate.styleTag
+      );
+    }
+  };
+
+  console.log("conditionalOfferContent", conditionalOfferContent);
 
   return (
-    <div>
+    <div className={`${isFullScreen && "condition-offer__full-screen"}`}>
       <div
         className=" d-flex justify-content-between align-items-center pe-2"
         style={{
@@ -120,6 +164,7 @@ const ConditionalOffer = () => {
               color="light"
               className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
               style={{ height: "30px" }}
+              onClick={() => setTransformScale((prev) => prev - 0.1)}
             >
               <i className="ri-zoom-out-line align-bottom fs-6"></i>
             </Button>
@@ -127,6 +172,7 @@ const ConditionalOffer = () => {
               color="light"
               className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
               style={{ height: "30px" }}
+              onClick={() => setTransformScale((prev) => prev + 0.1)}
             >
               <i className="ri-zoom-in-line align-bottom fs-6"></i>
             </Button>
@@ -136,13 +182,25 @@ const ConditionalOffer = () => {
               color="light"
               className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
               style={{ height: "30px" }}
+              onClick={async () => {
+                // Download pdf here
+                setDownloadLoading(true);
+                await downloadHandler(conditionalOfferContent, "pdf");
+                setDownloadLoading(false);
+              }}
+              disabled={!conditionalOfferContent}
             >
-              <i className="ri-download-fill align-bottom fs-6"></i>
+              {downloadLoading ? (
+                <Spinner size="sm"></Spinner>
+              ) : (
+                <i className="ri-download-fill align-bottom fs-6"></i>
+              )}
             </Button>
             <Button
               color="light"
               className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
               style={{ height: "30px" }}
+              onClick={() => setIsFullScreen((prev) => !prev)}
             >
               <i className="bx bx-window align-bottom fs-6"></i>
             </Button>
@@ -151,7 +209,12 @@ const ConditionalOffer = () => {
       </div>
 
       {/*Drawer and canvas*/}
-      <div className="d-flex" style={{ height: "calc(100vh - 115px)" }}>
+      <div
+        className="d-flex"
+        style={{
+          height: isFullScreen ? "calc(100vh - 40px)" : "calc(100vh - 115px)",
+        }}
+      >
         {isPrepareDrawerOpen && (
           <div
             className="flex-shrink-0"
@@ -182,7 +245,7 @@ const ConditionalOffer = () => {
               borderRadius: "10px",
               boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
               overflow: "auto",
-              minHeight: "95%",
+              height: "95%",
             }}
           >
             <TemplateDisplayV3
@@ -192,6 +255,8 @@ const ConditionalOffer = () => {
               handleOutputContent={setConditionalOfferContent}
               autoResize={true}
               initialValues
+              initializeDataAttributesElement={true}
+              transformScale={transformScale}
             />
           </Container>
         </div>

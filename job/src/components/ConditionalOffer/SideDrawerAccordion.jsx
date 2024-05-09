@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const SideDrawerAccordion = ({
   sectionData,
   sectionHeader,
-  selectedKey = 1234567,
+  selectedKey,
   setSelectedKey,
 }) => {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);

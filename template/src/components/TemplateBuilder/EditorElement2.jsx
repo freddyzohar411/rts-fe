@@ -395,7 +395,7 @@ const EditorElement2 = ({
 
     // If currently non-editable, wrap the selected text with a span and apply a class
     editor.selection.setContent(
-      `<span style="border: 1px solid #2196F3; background-color: #E3F2FD;" data-section="${editorAttributesData?.section}" data-label="${editorAttributesData?.label}" data-key="${uuid()}">${selectedText}</span>`
+      `<span style="border: 2px solid #D6CE0B; background-color: 	rgb(214, 206, 11, 0.2);" data-type="data-attribute" data-section="${editorAttributesData?.section}" data-label="${editorAttributesData?.label}" data-key="${uuid()}">${selectedText}</span>`
     );
 
     // Move the cursor to the end of the inserted content
@@ -771,26 +771,6 @@ const EditorElement2 = ({
               text: "Add Attribute",
               onAction: function () {
                 setEditorAtrributeModalOpen(true);
-                // Select the element the cursor is on and add a data attribute
-                // var element = editor.selection.getNode();
-                // if (element) {
-                //   element.setAttribute("data-attribute", "value");
-                // }
-
-                // Set Modal to open to key in data value
-
-                // var selectedText = editor.selection.getContent();
-                // var range = editor.selection.getRng();
-
-                // // If currently non-editable, wrap the selected text with a span and apply a class
-                // editor.selection.setContent(
-                //   `<span style="border: 1px solid #2196F3; background-color: #E3F2FD;" contenteditable="true" data-section="header">${selectedText}</span>`
-                // );
-
-                // // Move the cursor to the end of the inserted content
-                // range.setStartAfter(range.endContainer);
-                // range.collapse(true);
-                // editor.selection.setRng(range);
               },
             });
 

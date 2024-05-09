@@ -75,7 +75,6 @@ function ConditionalOffer({
         processedTemplate.styleTag
       );
     }
-    s;
   };
 
   return (
