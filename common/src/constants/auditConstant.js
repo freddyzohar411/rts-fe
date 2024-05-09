@@ -11,7 +11,8 @@ export const moduleConstant = {
 export const subModuleConstant = {
     SUBMIT_TO_SALES: "submit_to_sales",
     SUBMIT_TO_CLIENT: "submit_to_client",
-    CONDITIONAL_OFFER_DRAFT: "conditional_offer_draft",
+    CONDITIONAL_OFFER: "conditional_offer",
+
 }
 
 

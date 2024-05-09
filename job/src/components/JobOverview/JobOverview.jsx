@@ -137,7 +137,7 @@ const JobOverview = () => {
     (state) => state.JobStageReducer.jobTimeline
   );
 
-  // console.log("jobTimelineData", jobTimelineData);
+  console.log("jobTimelineData", jobTimelineData);
 
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
 
@@ -543,6 +543,7 @@ const JobOverview = () => {
             activeStep={step}
             ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            edit={true}
           />
         );
       case 17:

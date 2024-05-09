@@ -25,9 +25,10 @@ import {
 } from "../JobListing/JobListingConstants";
 import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
 import { tagJobAttachment, tagJob } from "../../store/jobStage/action";
+import { getJobCandidateStage } from "../../helpers/backend_helper";
 
 const ConditionalOffer = forwardRef(
-  ({ candidateId, jobId, jobTimeLineData }, ref) => {
+  ({ candidateId, jobId, jobTimeLineData, edit }, ref) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isPrepareDrawerOpen, setIsPrepareDrawerOpen] = useState(true);
@@ -38,6 +39,7 @@ const ConditionalOffer = forwardRef(
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [transformScale, setTransformScale] = useState(1);
     const [downloadLoading, setDownloadLoading] = useState(false);
+    const [editContentLoading, setEditContentLoading] = useState(false);
     const { allModuleData, isAllLoading } =
       UseTemplateModuleDataHook.useTemplateModuleData({
         candidateId: candidateId,
@@ -45,7 +47,30 @@ const ConditionalOffer = forwardRef(
       });
     const [submitType, setSubmitType] = useState(null);
 
-    console.log("jobTimeLineDataIN", jobTimeLineData);
+    // console.log("jobTimeLineDataIN", jobTimeLineData);
+
+    useEffect(() => {
+      if (
+        edit &&
+        jobTimeLineData?.timeline?.["Conditional Offer Sent"]?.status ===
+          "DRAFT"
+      ) {
+        setEditContentLoading(true);
+        getJobCandidateStage({
+          jobId: jobId,
+          candidateId: jobTimeLineData?.candidate?.id,
+          jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
+        })
+          .then((res) => {
+            if (res?.data) {
+              setSelectedTemplate(res?.data?.submissionData);
+            }
+          })
+          .finally(() => {
+            setEditContentLoading(false);
+          });
+      }
+    }, []);
 
     /**
      * Handle form submit event (Formik)
@@ -73,7 +98,7 @@ const ConditionalOffer = forwardRef(
                   module: AuditConstant.moduleConstant.JOB_TIMELINE,
                   moduleId: jobTimeLineData?.id,
                   subModule:
-                    AuditConstant.subModuleConstant.CONDITIONAL_OFFER_DRAFT,
+                    AuditConstant.subModuleConstant.CONDITIONAL_OFFER,
                   jobId: jobTimeLineData?.job?.id,
                   candidateId: jobTimeLineData?.candidate?.id,
                   recruiterId: jobTimeLineData?.createdBy,
@@ -86,7 +111,36 @@ const ConditionalOffer = forwardRef(
           })
         );
       } else if (submitType === "submit") {
-        console.log("SUBMIT");
+        const payload = {
+          jobId: jobId,
+          jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
+          status: JOB_STAGE_STATUS?.COMPLETED,
+          candidateId: jobTimeLineData?.candidate?.id,
+          formData: JSON.stringify(newValues),
+          formId: null,
+          jobType: jobTimelineType.CONDITIONAL_OFFER_SENT,
+        };
+        dispatch(
+          tagJob({
+            payload,
+            config: {
+              headers: {
+                Audit: JSON.stringify({
+                  module: AuditConstant.moduleConstant.JOB_TIMELINE,
+                  moduleId: jobTimeLineData?.id,
+                  subModule:
+                    AuditConstant.subModuleConstant.CONDITIONAL_OFFER,
+                  jobId: jobTimeLineData?.job?.id,
+                  candidateId: jobTimeLineData?.candidate?.id,
+                  recruiterId: jobTimeLineData?.createdBy,
+                  salesId: jobTimeLineData?.job?.createdBy,
+                }),
+              },
+            },
+            jobType: jobTimelineType.CONDITIONAL_OFFER_SENT,
+            navigate,
+          })
+        );
       }
     };
 
@@ -243,16 +297,18 @@ const ConditionalOffer = forwardRef(
             <span className="fw-semibold fs-6">Prepare</span>
           </div>
           <div className="d-flex gap-2 align-items-center">
-            <TemplateSelectByCategoryElement
-              categoryName="Conditional Offer"
-              placeholder="Select a template"
-              onChange={(value) => {
-                setSelectedTemplate(value);
-              }}
-              defaultFirstValue
-              width="300px"
-              end
-            />
+            {!edit && (
+              <TemplateSelectByCategoryElement
+                categoryName="Conditional Offer"
+                placeholder="Select a template"
+                onChange={(value) => {
+                  setSelectedTemplate(value);
+                }}
+                defaultFirstValue
+                width="300px"
+                end
+              />
+            )}
             <ButtonGroup>
               <Button
                 color="light"
@@ -342,21 +398,32 @@ const ConditionalOffer = forwardRef(
                 height: "95%",
               }}
             >
-              <TemplateDisplayV3
-                content={selectedTemplate?.content ?? null}
-                allData={null}
-                isView={true}
-                handleOutputContent={(newContent) => {
-                  setConditionalOfferContent(newContent);
-                  if (formik && formik.values) {
-                    formik.setFieldValue("content", newContent);
-                  }
-                }}
-                autoResize={true}
-                initialValues
-                initializeDataAttributesElement={true}
-                transformScale={transformScale}
-              />
+              {editContentLoading ? (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{
+                    height: "100%",
+                  }}
+                >
+                  <Spinner size="lg"></Spinner>
+                </div>
+              ) : (
+                <TemplateDisplayV3
+                  content={selectedTemplate?.content ?? null}
+                  allData={null}
+                  isView={true}
+                  handleOutputContent={(newContent) => {
+                    setConditionalOfferContent(newContent);
+                    if (formik && formik.values) {
+                      formik.setFieldValue("content", newContent);
+                    }
+                  }}
+                  autoResize={true}
+                  initialValues
+                  initializeDataAttributesElement={true}
+                  transformScale={transformScale}
+                />
+              )}
             </Container>
           </div>
         </div>

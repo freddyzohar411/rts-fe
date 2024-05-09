@@ -180,4 +180,5 @@ export const jobTimelineType = {
   SUBMIT_TO_SALES: "submit_to_sales",
   SUBMIT_TO_CLIENT: "submit_to_client",
   CONDITIONAL_OFFER_DRAFT: "conditional_offer_draft",
+  CONDITIONAL_OFFER_SENT: "conditional_offer_sent",
 }
