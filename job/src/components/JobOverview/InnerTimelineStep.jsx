@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, createRef } from "react";
 
-function InnerTimelineStep({ data }) {
+const InnerTimelineStep = ({ data }) => {
   const containerRef = useRef(null);
   const timelineRef = useRef(null);
   const sectionRefs = useRef([]);
@@ -442,6 +442,6 @@ function InnerTimelineStep({ data }) {
       </div>
     </div>
   );
-}
+};
 
 export default InnerTimelineStep;

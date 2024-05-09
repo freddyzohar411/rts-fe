@@ -73,6 +73,7 @@ import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 import {
+  getLastSubmittedStage,
   getMaxOrder,
   getStatus,
   overviewHeaders,
@@ -651,6 +652,7 @@ const JobOverview = () => {
           jobTimelineData?.jobs?.map((data, timelineIndex) => {
             const candidateData = data?.candidate;
             let maxOrder = getMaxOrder(data);
+            const lastSubmittedStage = getLastSubmittedStage(data, maxOrder);
             const status = getStatus(data, maxOrder);
             maxOrder =
               status !== JOB_STAGE_STATUS.REJECTED &&
@@ -671,7 +673,7 @@ const JobOverview = () => {
             }
             return (
               <>
-                <tr className="cursor-pointer">
+                <tr className="cursor-pointer" key={timelineIndex}>
                   {/* Candidate */}
                   <td style={{ width: "160px" }}>
                     <div className="d-flex flex-column align-items-start">
@@ -703,7 +705,7 @@ const JobOverview = () => {
                     <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
                       <span>Profile</span>
                       <i className="ri-arrow-right-s-line"></i>
-                      <span className="fw-semibold">Tagged</span>
+                      <span className="fw-semibold">{lastSubmittedStage}</span>
                     </div>
                   </td>
                   {/* Next Step */}
@@ -722,7 +724,6 @@ const JobOverview = () => {
                           </option>
                         ))}
                       </Input>
-
                       <Input
                         type="select"
                         className="form-select border-0"
@@ -776,25 +777,6 @@ const JobOverview = () => {
                   <tr>
                     <td colSpan={10} className="px-3">
                       <InnerTimelineStep data={data.timeline} />
-                      {/* {Object.keys(steps).map((step, index) => {
-                        return (
-                          <td key={index} className="px-0">
-                            To replace with new timeline.
-                            <InnerTimelineStep data={data} />
-                            <StepComponent
-                              index={stepOrders[step]}
-                              maxOrder={maxOrder}
-                              isRejected={isRejected}
-                              isInProgress={isInProgress}
-                              data={data?.timeline?.[steps[step]]}
-                              candidateId={data?.candidate?.id}
-                              timeline={data?.timeline}
-                              originalOrder={originalOrder}
-                              step={step}
-                            />
-                          </td>
-                        );
-                      })} */}
                     </td>
                   </tr>
                 )}
