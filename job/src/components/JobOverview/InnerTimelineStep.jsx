@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, createRef } from "react";
+import { sections } from "./InnerTimelineStepConstants";
 
 const InnerTimelineStep = ({ data }) => {
   const containerRef = useRef(null);
@@ -11,45 +12,6 @@ const InnerTimelineStep = ({ data }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [divWidth, setDivWidth] = useState("");
   const [elementSizing, setElementSizing] = useState("");
-
-  const sections = [
-    {
-      name: "Profile",
-      expandCollapseButton: "ProfileExpandCollapseButton",
-      subitems: [
-        "Tag",
-        "Associate",
-        "Submit to Sales",
-        "Submit to Client",
-        "Profile Feedback Pending",
-      ],
-    },
-    {
-      name: "Odin",
-      expandCollapseButton: "OdinExpandCollapseButton",
-      subitems: [
-        "Skills Assessment",
-        "Coding Test",
-        "Technical Interview",
-        "Cultural Fit Test",
-      ],
-    },
-    {
-      name: "Interviews",
-      expandCollapseButton: "InterviewsExpandCollapseButton",
-      subitems: ["Interview 1", "Interview 2", "Interview 3"],
-    },
-    {
-      name: "TOS",
-      expandCollapseButton: "TOSExpandCollapseButton",
-      subitems: ["TOS Status"],
-    },
-    {
-      name: "Conditional Offer",
-      expandCollapseButton: "ConditionalOfferExpandCollapseButton",
-      subitems: ["Conditional Offer Status"],
-    },
-  ];
 
   useEffect(() => {
     const updateRowIndexes = () => {
@@ -379,7 +341,6 @@ const InnerTimelineStep = ({ data }) => {
                       )}
                     </div>
                   </div>
-
                   {expandedSections[section.name] && (
                     <div className="d-flex flex-row align-items-top justify-content-center">
                       {section.subitems.map((subitem, subindex) => {

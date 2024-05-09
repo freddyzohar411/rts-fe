@@ -156,7 +156,7 @@ const OverviewStepComponent = ({ data }) => {
             <div
               key={index}
               className="d-flex align-items-center justify-content-center flex-column gap-2"
-              id={`step-btn-${step?.order}-${index}`}
+              id={`step-btn-${data?.candidate?.id}-${index}`}
             >
               <div
                 className={`rounded-circle d-flex justify-content-center align-items-center circles-width ${getBulletBgColor(
@@ -166,10 +166,14 @@ const OverviewStepComponent = ({ data }) => {
                 {GetLabel(step, status)}
               </div>
               <Tooltip
-                isOpen={isStepToolTipOpen(`step-btn-${step?.order}-${index}`)}
+                isOpen={isStepToolTipOpen(
+                  `step-btn-${data?.candidate?.id}-${index}`
+                )}
                 placement="top-start"
-                target={`step-btn-${step?.order}-${index}`}
-                toggle={() => stepToggle(`step-btn-${step?.order}-${index}`)}
+                target={`step-btn-${data?.candidate?.id}-${index}`}
+                toggle={() =>
+                  stepToggle(`step-btn-${data?.candidate?.id}-${index}`)
+                }
               >
                 {step?.name}
                 <br />

@@ -75,7 +75,7 @@ export const getStatus = (data, orderNo) => {
 
 export const getLastSubmittedStage = (data, maxOrder) => {
   const keys = Object.keys(data?.timeline);
-  let lastSubmittedStage = {};
+  let lastSubmittedStage = "N/A";
   if (keys) {
     lastSubmittedStage = keys.find(
       (key) => data?.timeline?.[key]?.order === maxOrder
