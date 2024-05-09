@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { Row, Col, Button } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
@@ -10,123 +16,110 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
-function TechnicalInterview({ closeOffcanvas, jobId, candidateId }) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const formikRef = useRef(null);
+const TechnicalInterview = forwardRef(
+  ({ closeOffcanvas, jobId, candidateId }, parentRef) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const formikRef = useRef(null);
 
-  const form = useSelector((state) => state.JobFormReducer.form);
-  const [formTemplate, setFormTemplate] = useState(null);
+    const form = useSelector((state) => state.JobFormReducer.form);
+    const [formTemplate, setFormTemplate] = useState(null);
 
-  const linkState = location.state;
-  const { getAllUserGroups } = useUserAuth();
-  const [view, setView] = useState(
-    linkState?.view !== null && linkState?.view !== undefined
-      ? linkState?.view
-      : false
-  );
+    const linkState = location.state;
+    const { getAllUserGroups } = useUserAuth();
+    const [view, setView] = useState(
+      linkState?.view !== null && linkState?.view !== undefined
+        ? linkState?.view
+        : false
+    );
 
-  useEffect(() => {
-    dispatch(fetchJobForm("technical_interview"));
-  }, []);
+    useEffect(() => {
+      dispatch(fetchJobForm("technical_interview"));
+    }, []);
 
-  useEffect(() => {
-    if (form) {
-      setFormTemplate(form);
-    }
-  }, [form]);
-
-  const handleFormSubmit = async (
-    event,
-    values,
-    newValues,
-    buttonNameHook,
-    formStateHook,
-    rerenderTable
-  ) => {
-    if (values?.technicalInterviewResults === "false") {
-      const payload = {
-        jobId: jobId,
-        jobStageId: JOB_STAGE_IDS?.TECHNICAL_INTERVIEW,
-        status: JOB_STAGE_STATUS?.REJECTED,
-        candidateId,
-        jobType: "technical_interview",
-      };
-      dispatch(tagJob({ payload, navigate }));
-    } else if (values?.technicalInterviewResults === "true") {
-      const payload = {
-        jobId: jobId,
-        jobStageId: JOB_STAGE_IDS?.CULTURAL_FIT_TEST,
-        status: JOB_STAGE_STATUS?.IN_PROGRESS,
-        candidateId,
-        formData: JSON.stringify(values),
-        formId: parseInt(form.formId),
-        jobType: "cultural_fit_test",
-      };
-      dispatch(tagJob({ payload, navigate }));
-      if (values?.scheduleForCulturalFitTest === "true") {
-        window.open(
-          "https://app.hackerearth.com/recruiter/interview/",
-          "_blank"
-        );
+    useEffect(() => {
+      if (form) {
+        setFormTemplate(form);
       }
-    }
-    closeOffcanvas();
-  };
+    }, [form]);
 
-  const handleCancel = () => {
-    closeOffcanvas();
-  };
+    const handleFormSubmit = async (
+      event,
+      values,
+      newValues,
+      buttonNameHook,
+      formStateHook,
+      rerenderTable
+    ) => {
+      if (values?.technicalInterviewResults === "false") {
+        const payload = {
+          jobId: jobId,
+          jobStageId: JOB_STAGE_IDS?.TECHNICAL_INTERVIEW,
+          status: JOB_STAGE_STATUS?.REJECTED,
+          candidateId,
+          jobType: "technical_interview",
+        };
+        dispatch(tagJob({ payload, navigate }));
+      } else if (values?.technicalInterviewResults === "true") {
+        const payload = {
+          jobId: jobId,
+          jobStageId: JOB_STAGE_IDS?.CULTURAL_FIT_TEST,
+          status: JOB_STAGE_STATUS?.IN_PROGRESS,
+          candidateId,
+          formData: JSON.stringify(values),
+          formId: parseInt(form.formId),
+          jobType: "cultural_fit_test",
+        };
+        dispatch(tagJob({ payload, navigate }));
+        if (values?.scheduleForCulturalFitTest === "true") {
+          window.open(
+            "https://app.hackerearth.com/recruiter/interview/",
+            "_blank"
+          );
+        }
+      }
+      closeOffcanvas();
+    };
 
-  return (
-    <React.Fragment>
-      <div
-        className="d-flex flex-column justiy-content-between h-100"
-        style={{ height: "500px" }}
-      >
-        <Row>
-          <Col>
-            <div>
-              <Form
-                template={formTemplate}
-                userDetails={getAllUserGroups()}
-                country={null}
-                editData={null}
-                onSubmit={handleFormSubmit}
-                onFormFieldsChange={null}
-                errorMessage={null}
-                view={view}
-                ref={formikRef}
-              />
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div className="d-flex justify-content-end gap-2  ">
-              <Button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => handleCancel()}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="btn btn-custom-primary"
-                onClick={() => {
-                  formikRef?.current?.formik?.submitForm();
-                }}
-              >
-                Update
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </div>
-    </React.Fragment>
-  );
-}
+    const handleCancel = () => {
+      closeOffcanvas();
+    };
+
+    useImperativeHandle(parentRef, () => ({
+      submitForm: () => {
+        formikRef?.current?.formik?.submitForm();
+      },
+      handleCancel,
+    }));
+
+    return (
+      <React.Fragment>
+        <div
+          className="d-flex flex-column justiy-content-between h-100"
+          style={{ height: "500px" }}
+        >
+          <Row>
+            <Col>
+              <div>
+                <Form
+                  template={formTemplate}
+                  userDetails={getAllUserGroups()}
+                  country={null}
+                  editData={null}
+                  onSubmit={handleFormSubmit}
+                  onFormFieldsChange={null}
+                  errorMessage={null}
+                  view={view}
+                  ref={formikRef}
+                />
+              </div>
+            </Col>
+          </Row>
+        </div>
+      </React.Fragment>
+    );
+  }
+);
 
 export default TechnicalInterview;
