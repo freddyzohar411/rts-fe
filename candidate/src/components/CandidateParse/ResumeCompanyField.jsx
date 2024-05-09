@@ -96,7 +96,7 @@ const ResumeCompanyField = ({ company, index }) => {
         <ul className="px-5" style={{ listStyleType: "circle" }}>
           {companyDetail.responsibilities.map((responsibility, i) => (
             <li className="d-flex gap-2 m-1">
-              <span class="bullet">&#8226;</span>
+              <span className="bullet">&#8226;</span>
               <span>{responsibility}</span>
             </li>
           ))}

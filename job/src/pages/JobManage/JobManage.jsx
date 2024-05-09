@@ -17,6 +17,7 @@ import {
   TabPane,
 } from "reactstrap";
 import classnames from "classnames";
+import JobOverviewOld from "../../components/JobOverview/JobOverviewOld";
 
 const JobManage = () => {
   const { jobId, slug } = useParams();
@@ -53,6 +54,21 @@ const JobManage = () => {
                 }}
               >
                 <span>Overview</span>
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={classnames(
+                  {
+                    active: ugTab === "6",
+                  },
+                  "cursor-pointer"
+                )}
+                onClick={() => {
+                  toggleUg("6");
+                }}
+              >
+                <span>Overview Old</span>
               </NavLink>
             </NavItem>
             <NavItem>
@@ -149,6 +165,13 @@ const JobManage = () => {
             <TabPane tabId="5" id="manageSnapshot">
               <Card>
                 <CardBody>TBA</CardBody>
+              </Card>
+            </TabPane>
+            <TabPane tabId="6" id="manageSnapshot">
+              <Card>
+                <CardBody>
+                  <JobOverviewOld />
+                </CardBody>
               </Card>
             </TabPane>
           </TabContent>
