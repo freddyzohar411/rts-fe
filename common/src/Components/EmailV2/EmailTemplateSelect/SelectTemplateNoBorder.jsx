@@ -16,6 +16,7 @@ const TemplateSelectByCategoryElement = ({
   addMore = false,
   addMoreLabel = "Label",
   addMoreRender = null,
+  addMoreStart = false,
   selectRender = null,
   placeholder = "Select an option",
   ...props
@@ -82,10 +83,17 @@ const TemplateSelectByCategoryElement = ({
         };
       });
       if (addMore) {
-        templateMapped.push({
-          value: "addMore",
-          label: addMoreLabel,
-        });
+        if (addMoreStart) {
+          templateMapped.unshift({
+            value: "addMore",
+            label: addMoreLabel,
+          });
+        } else {
+          templateMapped.push({
+            value: "addMore",
+            label: addMoreLabel,
+          });
+        }
       }
       setTemplateList(templateMapped);
       setStoreTemplatesByCategory(templatesByCategory);

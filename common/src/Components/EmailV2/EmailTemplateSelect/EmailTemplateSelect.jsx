@@ -33,6 +33,7 @@ const EmailTemplateSelect = ({
             addMore={addMoreOptions?.addMore}
             addMoreLabel={addMoreOptions?.addMoreLabel}
             addMoreRender={addMoreOptions?.render}
+            addMoreStart={addMoreOptions?.addMoreStart}
             placeholder={placeholder}
           />
         )}

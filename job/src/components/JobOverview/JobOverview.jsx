@@ -47,6 +47,7 @@ import FirstInterviewFeedbackPending from "../FirstInterviewFeedback/FirstInterv
 import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterviewFeedback";
 import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
 import ConditionalOffer from "../ConditionalOffer/ConditionalOffer";
+import ConditionalOfferRelease from "../ConditionalOfferRelease.jsx/ConditionalOfferRelease.jsx";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
 import { CVPreview } from "../CVPreview";
@@ -543,10 +544,44 @@ const JobOverview = () => {
             activeStep={step}
             ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
-            edit={true}
+            edit={false}
           />
         );
       case 17:
+        return (
+          // <ConditionalOffer
+          //   templateData={templateData}
+          //   closeOffcanvas={closeOffcanvas}
+          //   candidateId={candidateId}
+          //   jobId={parseInt(jobId)}
+          //   activeStep={step}
+          // />
+          <ConditionalOffer
+            closeOffcanvas={closeOffcanvas}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            edit={true}
+          />
+        );
+      case 18:
+        return (
+          <ConditionalOfferRelease
+            closeOffcanvas={closeOffcanvas}
+            templateData={templateData}
+            jobId={jobId}
+            candidateId={candidateId}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+          />
+        );
+      case 19:
         return (
           <ConditionalOfferStatus
             closeOffcanvas={closeOffcanvas}
@@ -854,6 +889,7 @@ const JobOverview = () => {
       // Case 2 and 3 usese the same form
       case 2:
       case 3:
+      case 18:
         return (
           <div className="d-flex align-items-center gap-2">
             <Button
@@ -886,6 +922,7 @@ const JobOverview = () => {
           </div>
         );
       case 16:
+      case 17:
         return (
           <div className="d-flex align-items-center gap-2">
             <Button
@@ -944,6 +981,8 @@ const JobOverview = () => {
       case 2:
       case 3:
       case 16:
+      case 17:
+      case 18:
         setOffcanvasForm(true);
         break;
       case 99:
@@ -1419,7 +1458,7 @@ const JobOverview = () => {
           onClick={() => {
             // Everytime i click i want it to render even if it is the same step
             // setIsFormModalOpen(true);
-            setActiveStep(16);
+            setActiveStep(18);
           }}
         >
           SET STEP (DEV)
