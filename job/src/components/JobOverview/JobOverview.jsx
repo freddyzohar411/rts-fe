@@ -347,6 +347,8 @@ const JobOverview = () => {
     setSkipComboOptions(newOb);
   };
 
+  console.log("Active Step", activeStep);
+
   const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
       case 1:
@@ -1110,6 +1112,7 @@ const JobOverview = () => {
 
   const actionButtonTrigger = (step) => {
     switch (step) {
+      case 1:
       case 2:
       case 3:
       case 16:
@@ -1383,16 +1386,20 @@ const JobOverview = () => {
           <Input
             type="text"
             onChange={(e) => setMyNumber(parseInt(e.target.value))}
-          />{" "}
-          <button
+          />
+          <Button
+          className="btn btn-primary fs-semibold"
             onClick={() => {
               // Everytime i click i want it to render even if it is the same step
               // setIsFormModalOpen(true);
               setActiveStep(myNumber);
             }}
+            style={{
+              textWrap: "nowrap"
+            }}
           >
-            SET STEP (DEV)
-          </button>
+            STEP (DEV)
+          </Button>
         </div>
       </div>
     </React.Fragment>
