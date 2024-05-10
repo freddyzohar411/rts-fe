@@ -347,8 +347,6 @@ const JobOverview = () => {
     setSkipComboOptions(newOb);
   };
 
-  console.log("Active Step", activeStep);
-
   const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
       case 1:
