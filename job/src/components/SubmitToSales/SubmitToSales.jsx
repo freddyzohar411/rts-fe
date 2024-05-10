@@ -51,8 +51,8 @@ const SubmitToSales = forwardRef(
     const [tableTemplateData, setTableTemplateData] = useState(null);
     const [CVTemplateData, setCVTemplateData] = useState(null);
     const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
-      candidateId: candidateId,
-      jobId: jobId,
+      candidateId: jobTimeLineData?.candidate?.id,
+      jobId: jobTimeLineData?.job?.id,
     });
     const [attachments, setAttachments] = useState([]);
     const [attachmentLoading, setAttachmentLoading] = useState(false);
@@ -69,7 +69,7 @@ const SubmitToSales = forwardRef(
       newValues.cc = newValues.cc.map((item) => item.value);
       newValues.bcc = newValues.bcc.map((item) => item.value);
       const payload = {
-        jobId: jobId,
+        jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
@@ -464,7 +464,7 @@ const SubmitToSales = forwardRef(
               injectData={tableTemplateData?.content ?? null}
               isAllLoading={false}
               content={emailTemplateData?.content ?? null}
-              allData={"null"}
+              allData={allModuleData}
               isView={false}
               autoResize={false}
               height={335}

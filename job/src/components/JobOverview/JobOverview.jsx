@@ -125,7 +125,7 @@ const JobOverview = () => {
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-
+  const [myNumber, setMyNumber] = useState(1);
   // Email Loading
   const emailIsLoading = useSelector(
     (state) => state.EmailCommonReducer.loading
@@ -1353,7 +1353,7 @@ const JobOverview = () => {
             activeStep={activeStep}
             generateCanvasHeaderButton={generateCanvasHeaderButton}
           />
-          
+
           <OffcanvasBody className="p-0">
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
@@ -1366,6 +1366,7 @@ const JobOverview = () => {
             templatePreviewAction={templatePreviewAction}
             candidateId={candidateId}
             jobId={jobId}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         </Offcanvas>
 
@@ -1378,16 +1379,21 @@ const JobOverview = () => {
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           isLoading={jobTimelineMeta?.isLoading}
         />
-
-        <button
-          onClick={() => {
-            // Everytime i click i want it to render even if it is the same step
-            // setIsFormModalOpen(true);
-            setActiveStep(16);
-          }}
-        >
-          SET STEP (DEV)
-        </button>
+        <div className="d-flex gap-2 w-25">
+          <Input
+            type="text"
+            onChange={(e) => setMyNumber(parseInt(e.target.value))}
+          />{" "}
+          <button
+            onClick={() => {
+              // Everytime i click i want it to render even if it is the same step
+              // setIsFormModalOpen(true);
+              setActiveStep(myNumber);
+            }}
+          >
+            SET STEP (DEV)
+          </button>
+        </div>
       </div>
     </React.Fragment>
   );
