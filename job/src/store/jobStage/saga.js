@@ -5,6 +5,7 @@ import {
   JOB_TIMELINE_COUNT,
   TAG_JOB,
   TAG_JOB_ALL,
+  TAG_JOB_ATTACHMENT,
 } from "./actionTypes";
 import {
   tagJobSuccess,
@@ -15,18 +16,20 @@ import {
   fetchJobTimelineListFailure,
   fetchJobtimeineCountSuccess,
   fetchJobtimeineCountFailure,
+  tagJobAttachmentSuccess,
+  tagJobAttachmentFailure,
 } from "./action";
 import {
   getJobTimeline,
   getJobTimelineCount,
   tagAllJob,
   tagJob,
+  tagJobWithAttachments,
 } from "../../helpers/backend_helper";
 
 function* workTagJob(action) {
   const { payload, navigate } = action.payload;
   try {
-    // Tag a job
     const response = yield call(tagJob, payload);
     yield put(tagJobSuccess(response.data));
     if (payload?.jobType) {
@@ -82,9 +85,34 @@ function* workFetchJobTimelineCount(action) {
   }
 }
 
+// Tag job attachment
+function* workTagJobAttachment(action) {
+  const { formData, navigate, jobType, config } = action.payload;
+  try {
+    // Tag a job
+    const response = yield call(tagJobWithAttachments, formData, config);
+    yield put(tagJobAttachmentSuccess(response.data));
+    if (jobType) {
+      if (jobType === "submit_to_sales") {
+        toast.success("Job has been submitted to sales.");
+      } else if (jobType === "submit_to_client") {
+        toast.success("Job has been submitted to client.");
+      } else {
+        toast.success("Operation submitted successfully.");
+      }
+    } else {
+      toast.success(response?.message);
+      navigate(`/jobs/${payload?.jobId}/overview`);
+    }
+  } catch (error) {
+    yield put(tagJobAttachmentFailure(error));
+  }
+}
+
 export default function* watchTagJobSaga() {
   yield takeEvery(TAG_JOB, workTagJob);
   yield takeEvery(TAG_JOB_ALL, workTagAllJob);
   yield takeEvery(FETCH_JOB_TIMELINE_LIST, workFetchJobTimelineList);
   yield takeEvery(JOB_TIMELINE_COUNT, workFetchJobTimelineCount);
+  yield takeEvery(TAG_JOB_ATTACHMENT, workTagJobAttachment);
 }

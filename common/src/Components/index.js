@@ -72,6 +72,7 @@ import useTableHook from "./DynamicTable/useTableHook";
 
 // Import Delete Modal
 import DeleteCustomModal from "./DeleteModal/DeleteCustomModal";
+import DeleteCustomModal2 from "./DeleteModal2/DeleteCustomModal2";
 
 // Import general Modal
 import GeneralModal from "./GeneralModal/GeneralModal";
@@ -94,6 +95,7 @@ import PageSettingViewBackend from "./TemplateDisplay/components/PageSettingView
 import SelectElement from "./Elements/SelectElement";
 import MultiInputFormik from "./Elements/MultiInputFormik";
 import MultiInputFormikNoBorder from "./Elements/MultiInputFormikNoBorder";
+import CreateSelectElement from "./Elements/CreateSelectElement";
 
 // Import Email Component
 import EmailComponent from "./Email/EmailComponent";
@@ -172,6 +174,7 @@ export {
 
   // Export Delete Modal
   DeleteCustomModal,
+  DeleteCustomModal2,
 
   // Export general Modal
   GeneralModal,
@@ -195,6 +198,7 @@ export {
   SelectElement,
   MultiInputFormik,
   MultiInputFormikNoBorder,
+  CreateSelectElement,
 
   // Export Email Component
   EmailComponent,

@@ -1,7 +1,12 @@
 import React from "react";
 import { Button, Input } from "reactstrap";
 
-const EmailSubject = ({ formik, name, icon }) => {
+const EmailSubject = ({
+  formik,
+  name,
+  icon,
+  placeholder = "Enter Subject",
+}) => {
   return (
     <div className="d-flex align-items-center gap-2 ">
       <div
@@ -21,7 +26,7 @@ const EmailSubject = ({ formik, name, icon }) => {
             formik.setFieldValue(name, event.target.value);
           }}
           onBlur={formik.handleBlur}
-          placeholder="Enter Subject"
+          placeholder={placeholder}
         />
       </div>
     </div>

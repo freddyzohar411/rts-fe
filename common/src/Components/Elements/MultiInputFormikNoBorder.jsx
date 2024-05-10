@@ -66,7 +66,6 @@ const MultiInputFormikNoBorder = ({
       return formik.values[name];
     }
   };
-
   // Check if formik value changes, add it to value
   useEffect(() => {
     if (formik.values[name] && isString) {
