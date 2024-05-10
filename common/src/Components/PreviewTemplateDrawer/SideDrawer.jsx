@@ -32,7 +32,7 @@ const SideDrawer = ({
           <div
             className="offcanvas-header border-bottom border-bottom-dashed d-flex flex-row gap-4 align-items-center flex-wrap"
             style={{
-              height: "80px",
+              height: "86px",
             }}
           >
             <div className="d-flex justify-content-between align-items-center w-100 flex-wrap">
