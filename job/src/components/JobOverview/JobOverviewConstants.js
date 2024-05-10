@@ -90,6 +90,29 @@ export const newHeaders = [
   { name: "Actions", icon: "" },
 ];
 
+export const progressSteps = [
+  {
+    order: 1,
+    name: "Profile",
+  },
+  {
+    order: 2,
+    name: "Odin",
+  },
+  {
+    order: 3,
+    name: "Interviews",
+  },
+  {
+    order: 4,
+    name: "TOS",
+  },
+  {
+    order: 5,
+    name: "Conditional Offer",
+  },
+];
+
 export const timelineSkip = {
   Associate: 1,
   "Submit to Sales": 2,

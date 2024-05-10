@@ -1,0 +1,64 @@
+.circles-width {
+  width: 30px;
+  height: 30px;
+}
+
+.text-black {
+  color: #000000;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.text-disabled {
+  color: #b6cde7;
+}
+
+.bg-disabled {
+  background-color: #ffffff;
+}
+
+.border-disabled {
+  border: 1px solid #b6cde7;
+}
+
+.bg-in-progress {
+  background-color: #0A56AE;
+}
+
+.border-in-progress {
+  border: 1px solid #0A56AE;
+}
+
+.bg-completed {
+  background-color: #10B967;
+}
+
+.border-completed {
+  border: 1px solid #10B967;
+}
+
+.bg-withdrawn {
+  background-color: #992ef2;
+}
+
+.border-withdrawn {
+  border: 1px solid #992ef2;
+}
+
+.bg-rejected {
+  background-color: #D90909;
+}
+
+.border-rejected {
+  border: 1px solid #D90909;
+}
+
+.bg-skipped {
+  background-color: #868384;
+}
+
+.border-skipped {
+  border: 1px solid #868384;
+}

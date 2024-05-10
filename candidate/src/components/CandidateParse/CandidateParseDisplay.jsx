@@ -89,9 +89,9 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                     <Row>
                       <Col>
                         <div className="resume-main-section">
-                          <div class="resume-personal-details-section">
+                          <div className="resume-personal-details-section">
                             {/* About me */}
-                            <div class="resume-details-part">
+                            <div className="resume-details-part">
                               <div className="d-flex align-items-center gap-2">
                                 <h3>About Me</h3>
                               </div>
@@ -102,13 +102,13 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
 
                             {/* Firstname and lastname */}
                             <div className="d-flex">
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>First Name</h3>
                                 </div>
                                 <p>{resumeData?.firstName || "-"}</p>
                               </div>
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Last Name</h3>
                                 </div>
@@ -118,13 +118,13 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
 
                             {/* //Email and mobile */}
                             <div className="d-flex">
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Email</h3>
                                 </div>
                                 <p>{resumeData?.email || "-"}</p>
                               </div>
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Mobile</h3>
                                 </div>
@@ -140,14 +140,14 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
 
                             {/* Gender and nationality */}
                             <div className="d-flex">
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Gender</h3>
                                 </div>
                                 <p>{resumeData?.gender || "-"}</p>
                               </div>
 
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Nationality</h3>
                                 </div>
@@ -159,7 +159,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
 
                             {/* Current Location and Years of experience */}
                             <div className="d-flex">
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Current Location</h3>
                                 </div>
@@ -168,7 +168,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                                 </div>
                               </div>
 
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Age</h3>
                                 </div>
@@ -180,7 +180,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
 
                             {/* Expected Salary & Years of Experience*/}
                             <div className="d-flex">
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Years of Experience</h3>
                                 </div>
@@ -208,7 +208,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                                 </div>
                               </div>
 
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Expected Salary</h3>
                                 </div>
@@ -219,7 +219,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                             </div>
 
                             {/* Highest Qualification */}
-                            <div class="resume-details-part">
+                            <div className="resume-details-part">
                               <div className="d-flex align-items-center gap-2">
                                 <h3 className="m-0">Highest Qualification</h3>
                                 <button
@@ -269,7 +269,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
 
                             {/* Last Job Title */}
                             <div className="flex-form">
-                              <div class="resume-details-part w-100">
+                              <div className="resume-details-part w-100">
                                 <div className="d-flex align-items-center gap-2">
                                   <h3>Last Job Title</h3>
                                 </div>
@@ -280,7 +280,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                             </div>
 
                             {/* Spoken Languages */}
-                            <div class="resume-skills-section">
+                            <div className="resume-skills-section">
                               <div className="d-flex align-items-center gap-2">
                                 <h3>Spoken Languages</h3>
                               </div>
@@ -298,7 +298,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                       <Col>
                         {/* Companies */}
                         <div className="resume-main-section mt-4">
-                          <div class="resume-companies-section mt-2 mb-3">
+                          <div className="resume-companies-section mt-2 mb-3">
                             <div className="d-flex align-items-center gap-2">
                               <h3 className="m-0">Companies</h3>
                               <button
@@ -351,7 +351,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                     {/* Primary Skills */}
                     <Row>
                       <Col>
-                        <div class="resume-skills-section">
+                        <div className="resume-skills-section">
                           <div className="d-flex align-items-center gap-2">
                             <h3>Primary Skills</h3>
                           </div>
@@ -363,7 +363,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                     {/* Secondary Skills */}
                     <Row>
                       <Col>
-                        <div class="resume-skills-section mt-4">
+                        <div className="resume-skills-section mt-4">
                           <div className="d-flex align-items-center gap-2">
                             <h3>Secondary Skills</h3>
                           </div>
@@ -375,7 +375,7 @@ const CandidateParseDisplay = ({ resumeParseDataList }) => {
                     {/* Certifications */}
                     <Row>
                       <Col>
-                        <div class="resume-skills-section mt-4">
+                        <div className="resume-skills-section mt-4">
                           <div className="d-flex align-items-center gap-2">
                             <h3>Certifications</h3>
                           </div>
