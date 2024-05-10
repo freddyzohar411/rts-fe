@@ -1119,6 +1119,7 @@ const JobOverview = () => {
       case 18:
         setOffcanvasForm(true);
         break;
+      case 98:
       case 99:
         setIsFormModalOpen(true);
         break;
@@ -1354,8 +1355,8 @@ const JobOverview = () => {
             activeStep={activeStep}
             generateCanvasHeaderButton={generateCanvasHeaderButton}
           />
-
-          <OffcanvasBody>
+          
+          <OffcanvasBody className="p-0">
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
 
@@ -1377,13 +1378,14 @@ const JobOverview = () => {
           setIsFormModalOpen={setIsFormModalOpen}
           header={stepperState}
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+          isLoading={jobTimelineMeta?.isLoading}
         />
 
         <button
           onClick={() => {
             // Everytime i click i want it to render even if it is the same step
             // setIsFormModalOpen(true);
-            setActiveStep(18);
+            setActiveStep(98);
           }}
         >
           SET STEP (DEV)

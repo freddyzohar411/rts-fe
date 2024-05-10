@@ -70,7 +70,7 @@ const SubmitToClient = forwardRef(
       newValues.bcc = newValues.bcc.map((item) => item.value);
       const payload = {
         jobId: jobId,
-        jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
+        jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_CLIENT,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: null,
@@ -264,7 +264,7 @@ const SubmitToClient = forwardRef(
     };
 
     return (
-      <div>
+      <div className="p-3">
         <Row>
           <Col>
             <EmailTo
@@ -462,7 +462,7 @@ const SubmitToClient = forwardRef(
               allData={"null"}
               isView={false}
               autoResize={false}
-              height={350}
+              height={335}
               onChange={(content) => {
                 formik.setFieldValue("content", content);
               }}

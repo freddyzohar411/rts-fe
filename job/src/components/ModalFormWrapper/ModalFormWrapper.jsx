@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Spinner,
+} from "reactstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchJobForm, tagJob, tagJobAttachment } from "../../store/actions";
@@ -28,32 +35,42 @@ const ModalFormWrapper = ({
   const [formTemplate, setFormTemplate] = useState(null);
   const [activeTab, setActiveTab] = useState("1");
   const [editData, setEditData] = useState({});
+  const jobTimelineMeta = useSelector(
+    (state) => state.JobStageReducer.jobTimelineMeta
+  );
+
+  useEffect(() => {
+    if (jobTimelineMeta?.isSuccess) {
+      setIsFormModalOpen(false);
+    }
+  }, [jobTimelineMeta?.isSuccess]);
 
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {
     console.log("Form values", newValues);
-
+    // Submit to sale profile rejected
     if (activeStep === 99) {
       const payload = {
-        jobId: jobId,
+        jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
         status: JOB_STAGE_STATUS?.REJECTED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
-        formId: parseInt(form.formId),
+        formId: parseInt(form?.formId),
         jobType: jobTimelineType.SUBMIT_TO_SALES,
       };
       dispatch(tagJob({ payload, navigate }));
     }
 
+    // Submit to client profile rejected
     if (activeStep === 98) {
       const payload = {
-        jobId: jobId,
+        jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_CLIENT,
         status: JOB_STAGE_STATUS?.REJECTED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
-        formId: parseInt(form.formId),
+        formId: parseInt(form?.formId),
         jobType: jobTimelineType.SUBMIT_TO_CLIENT,
       };
       dispatch(tagJob({ payload, navigate }));
@@ -119,7 +136,7 @@ const ModalFormWrapper = ({
               formikRef.current.formik?.submitForm();
             }}
           >
-            Confirm
+            {jobTimelineMeta?.isLoading ? <Spinner size="sm" /> : "Confirm"}
           </Button>
         </div>
       </ModalFooter>

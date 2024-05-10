@@ -266,7 +266,7 @@ const SubmitToSales = forwardRef(
     };
 
     return (
-      <div>
+      <div className="p-3">
         <Row>
           <Col>
             <EmailTo
@@ -467,7 +467,7 @@ const SubmitToSales = forwardRef(
               allData={"null"}
               isView={false}
               autoResize={false}
-              height={350}
+              height={335}
               onChange={(content) => {
                 formik.setFieldValue("content", content);
               }}
