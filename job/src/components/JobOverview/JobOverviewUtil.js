@@ -47,3 +47,39 @@ export const overviewValues = (data, deliveryTeam, isMobile) => {
   };
   return output;
 };
+
+export const getMaxOrder = (data) => {
+  const values = Object.values(data?.timeline);
+  let maxOrder = 1;
+  if (values) {
+    let orders = values?.map((item) => item?.order);
+    if (orders) {
+      orders = orders.sort((a, b) => b - a);
+      maxOrder = orders?.[0] ?? 1;
+    }
+  }
+  return maxOrder;
+};
+
+export const getStatus = (data, orderNo) => {
+  const values = Object.values(data?.timeline);
+  let status;
+  if (values) {
+    let orders = values?.filter((item) => item?.order === orderNo);
+    if (orders) {
+      status = orders?.[0]?.status ?? null;
+    }
+  }
+  return status;
+};
+
+export const getLastSubmittedStage = (data, maxOrder) => {
+  const keys = Object.keys(data?.timeline);
+  let lastSubmittedStage = "N/A";
+  if (keys) {
+    lastSubmittedStage = keys.find(
+      (key) => data?.timeline?.[key]?.order === maxOrder
+    );
+  }
+  return lastSubmittedStage;
+};

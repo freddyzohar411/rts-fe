@@ -49,7 +49,6 @@ import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInt
 import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
-import { CVPreview } from "../CVPreview";
 import {
   JOB_TIMELINE_INITIAL_OPTIONS,
   jobHeaders,
@@ -73,8 +72,13 @@ import { CodingTest } from "../CodingTest";
 import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
-import { overviewHeaders, overviewValues } from "./JobOverviewUtil";
-import { SideDrawer } from "@workspace/common";
+import {
+  getLastSubmittedStage,
+  getMaxOrder,
+  getStatus,
+  overviewHeaders,
+  overviewValues,
+} from "./JobOverviewUtil";
 import "./ViewTemplateSection.scss";
 import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePreviewSideDrawer";
 import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
@@ -122,7 +126,6 @@ const JobOverview = () => {
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  const [formModalHeader, setFormModalHeader] = useState("Header");
   const [modalFormName, setModalFormName] = useState({});
 
   // Email Loading
@@ -217,13 +220,10 @@ const JobOverview = () => {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
-        const status = getStatus(data, maxOrder);
-        if (maxOrder >= 6 && maxOrder < 9) {
-          maxOrder = 5;
-        } else if (maxOrder === 9) {
-          maxOrder = status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
-        } else if (maxOrder >= 10 && maxOrder < 13) {
-          maxOrder = 9;
+        if (maxOrder >= 1 && maxOrder <= 5) {
+          maxOrder = 1;
+        } else if (maxOrder >= 1 && maxOrder <= 5) {
+          maxOrder = 1;
         }
         jsonObject[data?.id] = maxOrder;
       });
@@ -332,14 +332,6 @@ const JobOverview = () => {
     }
   }, [offcanvasForm]);
 
-  const handlePreviewCVClick = () => {
-    setIsPreviewCV(true);
-  };
-
-  const handleExitPreview = () => {
-    setIsPreviewCV(false);
-  };
-
   const toggleJobOpen = (index) => {
     setOpenJobIndex(openJobIndex === index ? null : index);
   };
@@ -361,31 +353,6 @@ const JobOverview = () => {
     const newOb = { ...skipComboOptions };
     newOb[jobId] = value;
     setSkipComboOptions(newOb);
-  };
-
-  const getMaxOrder = (data) => {
-    const values = Object.values(data?.timeline);
-    let maxOrder = 1;
-    if (values) {
-      let orders = values?.map((item) => item?.order);
-      if (orders) {
-        orders = orders.sort((a, b) => b - a);
-        maxOrder = orders?.[0] ?? 1;
-      }
-    }
-    return maxOrder;
-  };
-
-  const getStatus = (data, orderNo) => {
-    const values = Object.values(data?.timeline);
-    let status;
-    if (values) {
-      let orders = values?.filter((item) => item?.order === orderNo);
-      if (orders) {
-        status = orders?.[0]?.status ?? null;
-      }
-    }
-    return status;
   };
 
   const getFormComponent = (step, closeOffcanvas) => {
@@ -714,17 +681,13 @@ const JobOverview = () => {
           jobTimelineData?.jobs?.map((data, timelineIndex) => {
             const candidateData = data?.candidate;
             let maxOrder = getMaxOrder(data);
+            const lastSubmittedStage = getLastSubmittedStage(data, maxOrder);
             const status = getStatus(data, maxOrder);
-            maxOrder =
-              status !== JOB_STAGE_STATUS.REJECTED &&
-              status !== JOB_STAGE_STATUS.WITHDRAWN
-                ? maxOrder
-                : maxOrder - 1;
             const isRejected =
               status === JOB_STAGE_STATUS.REJECTED ||
               status === JOB_STAGE_STATUS.WITHDRAWN;
             const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
-            const originalOrder = maxOrder;
+
             if (maxOrder >= 6 && maxOrder < 9) {
               maxOrder = 5;
             } else if (maxOrder === 9) {
@@ -734,7 +697,7 @@ const JobOverview = () => {
             }
             return (
               <>
-                <tr className="cursor-pointer">
+                <tr className="cursor-pointer" key={timelineIndex}>
                   {/* Candidate */}
                   <td style={{ width: "160px" }}>
                     <div className="d-flex flex-column align-items-start">
@@ -748,7 +711,8 @@ const JobOverview = () => {
                         </span>
                       </Link>
 
-                      <div className="d-flex flex-row justify-content-center align-items-center text-muted text-small">
+                      <div className="d-flex gap-1 flex-row justify-content-center align-items-center text-muted text-small">
+                        <i className="ri-account-circle-line ri-lg mt-1 "></i>{" "}
                         <span className="form-text">{data?.createdByName}</span>
                       </div>
                     </div>
@@ -765,7 +729,7 @@ const JobOverview = () => {
                     <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
                       <span>Profile</span>
                       <i className="ri-arrow-right-s-line"></i>
-                      <span className="fw-semibold">Tagged</span>
+                      <span className="fw-semibold">{lastSubmittedStage}</span>
                     </div>
                   </td>
                   {/* Next Step */}
@@ -784,7 +748,6 @@ const JobOverview = () => {
                           </option>
                         ))}
                       </Input>
-
                       <Input
                         type="select"
                         className="form-select border-0"
@@ -810,23 +773,9 @@ const JobOverview = () => {
                       <div
                         className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
                         style={{ width: "30px", height: "30px" }}
-                        onClick={() => {
-                          // handleIconClick(
-                          //   data?.candidate?.id,
-                          //   data?.id,
-                          //   getFormIndex(
-                          //     skipComboOptions[data.id] < originalOrder
-                          //       ? originalOrder
-                          //       : skipComboOptions[data.id],
-                          //     data?.id
-                          //   )
-                          // );
-                          // setTimelineRowIndex(timelineIndex);
-                          setOffcanvasForm(true);
-                        }}
                       >
                         <i
-                          className="mdi mdi-content-save-outline"
+                          className="mdi mdi-content-save-outline mdi-18px"
                           style={{ color: "#0A56AE" }}
                           onClick={() => handleSaveClick()}
                         ></i>
@@ -838,25 +787,6 @@ const JobOverview = () => {
                   <tr>
                     <td colSpan={10} className="px-3">
                       <InnerTimelineStep data={data.timeline} />
-                      {/* {Object.keys(steps).map((step, index) => {
-                        return (
-                          <td key={index} className="px-0">
-                            To replace with new timeline.
-                            <InnerTimelineStep data={data} />
-                            <StepComponent
-                              index={stepOrders[step]}
-                              maxOrder={maxOrder}
-                              isRejected={isRejected}
-                              isInProgress={isInProgress}
-                              data={data?.timeline?.[steps[step]]}
-                              candidateId={data?.candidate?.id}
-                              timeline={data?.timeline}
-                              originalOrder={originalOrder}
-                              step={step}
-                            />
-                          </td>
-                        );
-                      })} */}
                     </td>
                   </tr>
                 )}
@@ -1336,160 +1266,7 @@ const JobOverview = () => {
                   </tbody>
                 </Table>
               </div>
-
-              {/* Old Timeline Code: For Reference */}
-              {/* <div className="overflow-auto">
-                <Table
-                  className="table table-striped align-middle jobtimeline"
-                  style={{ tableLayout: "fixed", wordWrap: "break-word" }}
-                >
-                  <thead className="table-light">
-                    <tr>
-                      {rtsStatusHeaders.map((header, index) => {
-                        const isLabels = index === 0 || index === 1;
-                        return (
-                          <th
-                            className={`text-center align-middle cursor-pointer ${
-                              isLabels && "text-nowrap"
-                            }`}
-                            key={index}
-                            scope="col"
-                            style={{
-                              width: isLabels ? "120px" : "150px",
-                            }}
-                            onClick={() => handleSort(index)}
-                          >
-                            {header}
-                          </th>
-                        );
-                      })}
-                      <th
-                        className="text-center align-middle"
-                        style={{ width: "260px" }}
-                      ></th>
-                    </tr>
-                  </thead>
-
-                  // Checks for loading state
-                  {jobTimelineMeta?.isLoading ? (
-                    <tr>
-                      <td colSpan={rtsStatusHeaders.length}>
-                        <Skeleton count={1} />
-                      </td>
-                    </tr>
-                  ) : jobTimelineData?.jobs?.length > 0 ? (
-                    jobTimelineData?.jobs?.map((data, timelineIndex) => {
-                      let maxOrder = getMaxOrder(data);
-                      const status = getStatus(data, maxOrder);
-                      maxOrder =
-                        status !== JOB_STAGE_STATUS.REJECTED &&
-                        status !== JOB_STAGE_STATUS.WITHDRAWN
-                          ? maxOrder
-                          : maxOrder - 1;
-                      const isRejected =
-                        status === JOB_STAGE_STATUS.REJECTED ||
-                        status === JOB_STAGE_STATUS.WITHDRAWN;
-                      const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
-                      const originalOrder = maxOrder;
-                      if (maxOrder >= 6 && maxOrder < 9) {
-                        maxOrder = 5;
-                      } else if (maxOrder === 9) {
-                        maxOrder =
-                          status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
-                      } else if (maxOrder >= 10 && maxOrder < 13) {
-                        maxOrder = 9;
-                      }
-                      return (
-                        <tbody key={timelineIndex}>
-                          <tr className="text-center align-top">
-                            <td className="pt-4">{`${data?.candidate?.firstName} ${data?.candidate?.lastName}`}</td>
-                            <td className="pt-4">{`${data?.createdByName}`}</td>
-                            {Object.keys(steps).map((step, index) => {
-                              return (
-                                <td key={index} className="px-0">
-                                  <StepComponent
-                                    index={stepOrders[step]}
-                                    maxOrder={maxOrder}
-                                    isRejected={isRejected}
-                                    isInProgress={isInProgress}
-                                    data={data?.timeline?.[steps[step]]}
-                                    candidateId={data?.candidate?.id}
-                                    timeline={data?.timeline}
-                                    originalOrder={originalOrder}
-                                    step={step}
-                                  />
-                                </td>
-                              );
-                            })}
-                            <td>
-                              {!isRejected && maxOrder < 15 && (
-                                <div className="d-flex flex-row gap-3 align-items-center">
-                                  <Input
-                                    type="select"
-                                    value={skipComboOptions?.[data?.id]}
-                                    onChange={(e) =>
-                                      handleSkipSelection(
-                                        data?.id,
-                                        parseInt(e.target.value)
-                                      )
-                                    }
-                                  >
-                                    <option value="">Select</option>
-                                    {Object.keys(timelineSkip).map(
-                                      (item, index) => {
-                                        if (
-                                          maxOrder >=
-                                          timelineSkip[item] + 1
-                                        ) {
-                                          return null;
-                                        }
-                                        return (
-                                          <option
-                                            key={index}
-                                            value={timelineSkip[item]}
-                                          >
-                                            {item}
-                                          </option>
-                                        );
-                                      }
-                                    )}
-                                  </Input>
-                                  <i
-                                    onClick={() => {
-                                      handleIconClick(
-                                        data?.candidate?.id,
-                                        data?.id,
-                                        getFormIndex(
-                                          skipComboOptions[data.id] <
-                                            originalOrder
-                                            ? originalOrder
-                                            : skipComboOptions[data.id],
-                                          data?.id
-                                        )
-                                      );
-                                      setTimelineRowIndex(timelineIndex);
-                                    }}
-                                    id="next-step"
-                                    className="ri-share-forward-fill fs-5 text-custom-primary cursor-pointer"
-                                  ></i>
-                                </div>
-                              )}
-                            </td>
-                          </tr>
-                        </tbody>
-                      );
-                    })
-                  ) : (
-                    <tr>
-                      <td colSpan={rtsStatusHeaders.length}>
-                        <span className="pt-3">No data available.</span>
-                      </td>
-                    </tr>
-                  )}
-                </Table>
-              </div> */}
             </TabPane>
-
             <TabPane tabId="2">
               <div>
                 <BSGTimeline />
@@ -1545,6 +1322,7 @@ const JobOverview = () => {
             </Pagination>
           </div>
         </Row>
+
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => {
@@ -1565,6 +1343,7 @@ const JobOverview = () => {
           <OffcanvasBody>
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
+
           {/* View Template */}
           <TemplatePreviewSideDrawer
             showSideDrawer={isViewTemplate}
@@ -1575,7 +1354,8 @@ const JobOverview = () => {
             jobId={jobId}
           />
         </Offcanvas>
-        {/* // Form Modal */}
+
+        {/* Form Modal */}
         <ModalFormWrapper
           activeStep={activeStep}
           isFormModalOpen={isFormModalOpen}

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, createRef } from "react";
+import { sections } from "./InnerTimelineStepConstants";
 
-function InnerTimelineStep({ data }) {
+const InnerTimelineStep = ({ data }) => {
   const containerRef = useRef(null);
   const timelineRef = useRef(null);
   const sectionRefs = useRef([]);
@@ -11,45 +12,6 @@ function InnerTimelineStep({ data }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [divWidth, setDivWidth] = useState("");
   const [elementSizing, setElementSizing] = useState("");
-
-  const sections = [
-    {
-      name: "Profile",
-      expandCollapseButton: "ProfileExpandCollapseButton",
-      subitems: [
-        "Tag",
-        "Associate",
-        "Submit to Sales",
-        "Submit to Client",
-        "Profile Feedback Pending",
-      ],
-    },
-    {
-      name: "Odin",
-      expandCollapseButton: "OdinExpandCollapseButton",
-      subitems: [
-        "Skills Assessment",
-        "Coding Test",
-        "Technical Interview",
-        "Cultural Fit Test",
-      ],
-    },
-    {
-      name: "Interviews",
-      expandCollapseButton: "InterviewsExpandCollapseButton",
-      subitems: ["Interview 1", "Interview 2", "Interview 3"],
-    },
-    {
-      name: "TOS",
-      expandCollapseButton: "TOSExpandCollapseButton",
-      subitems: ["TOS Status"],
-    },
-    {
-      name: "Conditional Offer",
-      expandCollapseButton: "ConditionalOfferExpandCollapseButton",
-      subitems: ["Conditional Offer Status"],
-    },
-  ];
 
   useEffect(() => {
     const updateRowIndexes = () => {
@@ -68,7 +30,7 @@ function InnerTimelineStep({ data }) {
     return () => {
       window.removeEventListener("resize", updateRowIndexes);
     };
-  }, [noOfRows]); 
+  }, [noOfRows]);
 
   useEffect(() => {
     sectionRefs.current = sections.map(
@@ -379,7 +341,6 @@ function InnerTimelineStep({ data }) {
                       )}
                     </div>
                   </div>
-
                   {expandedSections[section.name] && (
                     <div className="d-flex flex-row align-items-top justify-content-center">
                       {section.subitems.map((subitem, subindex) => {
@@ -388,6 +349,7 @@ function InnerTimelineStep({ data }) {
                         );
                         return (
                           <div
+                            key={subindex}
                             className="d-flex flex-column align-items-center"
                             style={{
                               width: isExpanded ? "140px" : "110px",
@@ -441,6 +403,6 @@ function InnerTimelineStep({ data }) {
       </div>
     </div>
   );
-}
+};
 
 export default InnerTimelineStep;
