@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect, createRef } from "react";
 import { sections } from "./InnerTimelineStepConstants";
+import {
+  JOB_STAGE_STATUS,
+  JOB_STAGE_STATUS_LABELS,
+} from "../JobListing/JobListingConstants";
 
 const InnerTimelineStep = ({ data }) => {
   const containerRef = useRef(null);
@@ -178,10 +182,14 @@ const InnerTimelineStep = ({ data }) => {
       bgColor: "#10B967",
       color: "#FFFFFF",
     },
-    WITHDRAWN: { icon: "ri-close-line", bgColor: "#D90909", color: "#FFFFFF" },
-    REJECTED: {
+    WITHDRAWN: {
       icon: "mdi mdi-thumb-down-outline",
       bgColor: "#992EF2",
+      color: "#FFFFFF",
+    },
+    REJECTED: {
+      icon: "ri-close-line",
+      bgColor: "#D90909",
       color: "#FFFFFF",
     },
     SKIPPED: {
@@ -253,6 +261,21 @@ const InnerTimelineStep = ({ data }) => {
       setElementSizing(`${timelineElement.firstChild.offsetWidth / 10}px`);
     }
   }, [timelineElement]);
+
+  const getStatusValue = (data) => {
+    switch (data?.status) {
+      case JOB_STAGE_STATUS.COMPLETED:
+      case JOB_STAGE_STATUS.WITHDRAWN:
+      case JOB_STAGE_STATUS.REJECTED:
+        return new Date(data?.date).toLocaleDateString();
+      case JOB_STAGE_STATUS.SKIPPED:
+        return JOB_STAGE_STATUS_LABELS.SKIPPED;
+      case JOB_STAGE_STATUS.IN_PROGRESS:
+        return JOB_STAGE_STATUS_LABELS.IN_PROGRESS;
+      default:
+        return "Not Started";
+    }
+  };
 
   return (
     <div style={{ position: "relative" }}>
@@ -377,11 +400,7 @@ const InnerTimelineStep = ({ data }) => {
                                 )}
                               </div>
                               <span className="form-text text-muted">
-                                {subitemsData[subindex].data.date
-                                  ? new Date(
-                                      subitemsData[subindex].data.date
-                                    ).toLocaleDateString()
-                                  : "Not Started"}
+                                {getStatusValue(subitemsData?.[subindex]?.data)}
                               </span>
                               <span
                                 key={subindex}
