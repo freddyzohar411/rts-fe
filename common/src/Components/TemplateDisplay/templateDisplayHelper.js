@@ -101,7 +101,7 @@ export async function replaceTemplateOnly(htmlString) {
 
   return result;
 
-  return null
+  return null;
 }
 
 /**
@@ -200,6 +200,26 @@ export function removeContentEditableAndStyles(htmlString) {
   );
 
   return withoutContentEditable;
+}
+
+export function removeStylesFromDataAttributes(htmlString) {
+  if (!htmlString) return htmlString;
+
+  // This updated regex matches elements more broadly and is insensitive to case.
+  const dataTypeRegex = /<([a-z][a-z0-9]*)([^>]*data-type=["']data-attribute["'][^>]*)>/gi;
+
+  return htmlString.replace(dataTypeRegex, function(match) {
+    // Remove all style attributes in the match
+    return match.replace(/ style="[^"]*"/gi, '');
+  });
+}
+
+export function removeContentStyles(htmlString) {
+  if (!htmlString) return;
+  // Identify elements with contenteditable attribute
+  const styleRegex = new RegExp(` style="[^"]*"`, "g");
+  const elementWithoutStyle = htmlString.replace(styleRegex, "");
+  return elementWithoutStyle;
 }
 
 /**
@@ -311,7 +331,6 @@ export async function runEffectsTemplateInjection(
   }
 
   const templateListCriteria = getAllTemplatesToRenderFromHTML(htmlString);
- 
 
   // Effect 1: Replace variables with mappedVariableData
   let updatedContent = htmlString;
@@ -496,12 +515,12 @@ export async function setSelectedContentAndProcessed(templateContent, allData) {
 }
 
 export async function setOnlyTemplateInjection(templateContent) {
-    const processedContent = await runEffectsTemplateInjection(
-      templateContent,
-      null,
-      true
-    );
-    return processedContent;
+  const processedContent = await runEffectsTemplateInjection(
+    templateContent,
+    null,
+    true
+  );
+  return processedContent;
 }
 
 // ============================== Helper Function ===============================

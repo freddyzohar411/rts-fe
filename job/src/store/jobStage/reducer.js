@@ -17,6 +17,10 @@ import {
   JOB_TIMELINE_COUNT_SUCCESS,
   JOB_TIMELINE_COUNT_FAILURE,
   TAG_JOB_RESET,
+  TAG_JOB_ATTACHMENT,
+  TAG_JOB_ATTACHMENT_SUCCESS,
+  TAG_JOB_ATTACHMENT_FAILURE,
+  TAG_JOB_ATTACHMENT_RESET,
 } from "./actionTypes";
 
 const initialState = {
@@ -36,7 +40,7 @@ const JobStageReducer = (state = initialState, action) => {
     case TAG_JOB:
       return {
         ...state,
-        jobTagMeta: pendingMetaData(),
+        jobTagMeta: { ...pendingMetaData(), jobType: action.payload.jobType },
       };
     case TAG_JOB_SUCCESS:
       return {
@@ -109,6 +113,27 @@ const JobStageReducer = (state = initialState, action) => {
         ...state,
         jobTimelineCount: {},
         jobTimelineCountMeta: errorMetaData(action.payload),
+      };
+    case TAG_JOB_ATTACHMENT:
+      return {
+        ...state,
+        jobTagMeta: pendingMetaData(),
+      };
+    case TAG_JOB_ATTACHMENT_SUCCESS:
+      return {
+        ...state,
+        jobTagMeta: successMetaData(action.payload),
+        jobTag: action.payload,
+      };
+    case TAG_JOB_ATTACHMENT_FAILURE:
+      return {
+        ...state,
+        jobTagMeta: errorMetaData(action.payload),
+      };
+    case TAG_JOB_ATTACHMENT_RESET:
+      return {
+        ...state,
+        jobTagMeta: {},
       };
     default:
       return state;
