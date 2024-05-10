@@ -31,7 +31,7 @@ const ConditionalOffer = forwardRef(
   ({ candidateId, jobId, jobTimeLineData, edit }, ref) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [isPrepareDrawerOpen, setIsPrepareDrawerOpen] = useState(true);
+    const [isPrepareDrawerOpen, setIsPrepareDrawerOpen] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [conditionalOfferContent, setConditionalOfferContent] = useState("");
     const [SideDrawerContent, setSideDrawerContent] = useState(null);
@@ -278,7 +278,7 @@ const ConditionalOffer = forwardRef(
     return (
       <div className={`${isFullScreen && "condition-offer__full-screen"}`}>
         <div
-          className=" d-flex justify-content-between align-items-center pe-2"
+          className=" d-flex justify-content-between align-items-center pe-2 "
           style={{
             borderBottom: "1px solid #D9E2EC",
           }}
@@ -288,8 +288,8 @@ const ConditionalOffer = forwardRef(
               isPrepareDrawerOpen && "active"
             }`}
             style={{
-              paddingTop: "8px",
-              paddingBottom: "8px",
+              paddingTop: "12px",
+              paddingBottom: "12px",
             }}
             onClick={() => setIsPrepareDrawerOpen((prev) => !prev)}
           >
@@ -313,25 +313,25 @@ const ConditionalOffer = forwardRef(
               <Button
                 color="light"
                 className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                style={{ height: "30px" }}
+                style={{ height: "38px" }}
                 onClick={() => setTransformScale((prev) => prev - 0.1)}
               >
-                <i className="ri-zoom-out-line align-bottom fs-6"></i>
+                <i className="ri-zoom-out-line align-bottom fs-5"></i>
               </Button>
               <Button
                 color="light"
                 className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                style={{ height: "30px" }}
+                style={{ height: "38px" }}
                 onClick={() => setTransformScale((prev) => prev + 0.1)}
               >
-                <i className="ri-zoom-in-line align-bottom fs-6"></i>
+                <i className="ri-zoom-in-line align-bottom fs-5"></i>
               </Button>
             </ButtonGroup>
             <ButtonGroup>
               <Button
                 color="light"
                 className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                style={{ height: "30px" }}
+                style={{ height: "38px" }}
                 onClick={async () => {
                   // Download pdf here
                   setDownloadLoading(true);
@@ -343,16 +343,16 @@ const ConditionalOffer = forwardRef(
                 {downloadLoading ? (
                   <Spinner size="sm"></Spinner>
                 ) : (
-                  <i className="ri-download-fill align-bottom fs-6"></i>
+                  <i className="ri-download-fill align-bottom fs-5"></i>
                 )}
               </Button>
               <Button
                 color="light"
                 className="p-2 btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
-                style={{ height: "30px" }}
+                style={{ height: "38px" }}
                 onClick={() => setIsFullScreen((prev) => !prev)}
               >
-                <i className="bx bx-window align-bottom fs-6"></i>
+                <i className="bx bx-window align-bottom fs-5"></i>
               </Button>
             </ButtonGroup>
           </div>
