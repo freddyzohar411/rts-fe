@@ -47,6 +47,8 @@ const ConditionalOffer = forwardRef(
       });
     const [submitType, setSubmitType] = useState(null);
 
+    // console.log("jobTimeLineDataIN", jobTimeLineData);
+
     useEffect(() => {
       if (
         edit &&
@@ -76,6 +78,7 @@ const ConditionalOffer = forwardRef(
      */
     const handleFormSubmit = async (values) => {
       const newValues = { ...values };
+      console.log("newValues", newValues);
       if (submitType === "draft") {
         const payload = {
           jobId: jobId,
