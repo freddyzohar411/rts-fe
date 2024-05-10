@@ -94,13 +94,11 @@ const ApproveTOS = forwardRef(
     };
 
     const approveTos = () => {
-      console.log("Approved TOS");
       setIsFormModalOpen(true);
       setModalFormName({ header: "Confirmation", formName: "approve_tos" });
       setOffcanvasForm(false);
     };
     const rejectTos = () => {
-      console.log("Rejected TOS");
       setIsFormModalOpen(true);
       setModalFormName({ header: "TOS Rejected", formName: "rejected_tos" });
       setOffcanvasForm(false);
