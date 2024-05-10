@@ -44,7 +44,8 @@ import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
 import FirstInterviewFeedbackPending from "../FirstInterviewFeedback/FirstInterviewFeedback";
 import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterviewFeedback";
 import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
-import { ConditionalOffer } from "../ConditionalOffer";
+import ConditionalOffer from "../ConditionalOffer/ConditionalOffer";
+import ConditionalOfferRelease from "../ConditionalOfferRelease.jsx/ConditionalOfferRelease.jsx";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
 import {
@@ -78,6 +79,8 @@ import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
 import OverviewStepComponent from "./OverviewStepComponent";
 import InnerTimelineStep from "./InnerTimelineStep";
 import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
+import PrepareTOS from "../PrepareTOS/PrepareTOS";
+import ApproveTOS from "../ApproveTOS/ApproveTOS";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -119,6 +122,7 @@ const JobOverview = () => {
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [modalFormName, setModalFormName] = useState({});
 
   // Email Loading
   const emailIsLoading = useSelector(
@@ -290,6 +294,12 @@ const JobOverview = () => {
         break;
       case 17:
         setStepperState("Conditional Offer Status");
+        break;
+      case 18:
+        setStepperState("Prepare TOS");
+        break;
+      case 19:
+        setStepperState("Approve TOS");
         break;
       default:
         setStepperState("");
@@ -504,21 +514,86 @@ const JobOverview = () => {
         );
       case 16:
         return (
+          // <ConditionalOffer
+          //   templateData={templateData}
+          //   closeOffcanvas={closeOffcanvas}
+          //   candidateId={candidateId}
+          //   jobId={parseInt(jobId)}
+          //   activeStep={step}
+          // />
           <ConditionalOffer
-            templateData={templateData}
             closeOffcanvas={closeOffcanvas}
             candidateId={candidateId}
             jobId={parseInt(jobId)}
             activeStep={step}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            edit={false}
           />
         );
       case 17:
+        return (
+          // <ConditionalOffer
+          //   templateData={templateData}
+          //   closeOffcanvas={closeOffcanvas}
+          //   candidateId={candidateId}
+          //   jobId={parseInt(jobId)}
+          //   activeStep={step}
+          // />
+          <ConditionalOffer
+            closeOffcanvas={closeOffcanvas}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            edit={true}
+          />
+        );
+      case 18:
+        return (
+          <ConditionalOfferRelease
+            closeOffcanvas={closeOffcanvas}
+            templateData={templateData}
+            jobId={jobId}
+            candidateId={candidateId}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+          />
+        );
+      case 19:
         return (
           <ConditionalOfferStatus
             closeOffcanvas={closeOffcanvas}
             candidateId={candidateId}
             jobId={parseInt(jobId)}
             activeStep={step}
+          />
+        );
+      case 18:
+        return (
+          <PrepareTOS
+            setOffcanvasForm={setOffcanvasForm}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+            ref={ref}
+          />
+        );
+      case 19:
+        return (
+          <ApproveTOS
+            setOffcanvasForm={setOffcanvasForm}
+            setIsFormModalOpen={setIsFormModalOpen}
+            setModalFormName={setModalFormName}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+            ref={ref}
           />
         );
       default:
@@ -719,6 +794,21 @@ const JobOverview = () => {
                       <div
                         className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
                         style={{ width: "30px", height: "30px" }}
+                        onClick={() => {
+                          // handleIconClick(
+                          //   data?.candidate?.id,
+                          //   data?.id,
+                          //   getFormIndex(
+                          //     skipComboOptions[data.id] < originalOrder
+                          //       ? originalOrder
+                          //       : skipComboOptions[data.id],
+                          //     data?.id
+                          //   )
+                          // );
+                          setTimelineRowIndex(timelineIndex);
+                          actionButtonTrigger(activeStep);
+                          // setOffcanvasForm(true);
+                        }}
                       >
                         <i
                           className="mdi mdi-content-save-outline mdi-18px"
@@ -756,6 +846,7 @@ const JobOverview = () => {
       // Case 2 and 3 usese the same form
       case 2:
       case 3:
+      case 18:
         return (
           <div className="d-flex align-items-center gap-2">
             <Button
@@ -779,7 +870,61 @@ const JobOverview = () => {
                 borderRadius: "8px",
               }}
             >
-              {emailIsLoading ? <Spinner size="sm" color="light" /> : "Send"}
+              {jobTagMeta?.isLoading ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Send"
+              )}
+            </Button>
+          </div>
+        );
+      case 16:
+      case 17:
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <Button
+              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+              style={{
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                setOffcanvasForm(false);
+                setIsViewTemplate(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="btn btn-outline-success"
+              onClick={() => {
+                formikRef.current.submitForm("draft");
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {jobTagMeta?.isLoading &&
+              jobTagMeta?.jobType === "conditional_offer_draft" ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Safe As Draft"
+              )}
+            </Button>
+            <Button
+              className="btn btn-success"
+              onClick={() => {
+                formikRef.current.submitForm("submit");
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {jobTagMeta?.isLoading &&
+              jobTagMeta?.jobType === "conditional_offer_sent" ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Submit"
+              )}
             </Button>
           </div>
         );
@@ -966,8 +1111,112 @@ const JobOverview = () => {
             </Col>
           </Row>
         );
+
+      case 18:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  // onClick={() => setOffcanvasForm(false)}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#12A35D",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    ref.current.submitForm();
+                  }}
+                >
+                  Submit
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+
+      case 19:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => ref.current.rejectTos()}
+                  style={{
+                    backgroundColor: "#D92D20",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Reject
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={() => ref.current.approveTos()}
+                  style={{
+                    backgroundColor: "#12A35D",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Approve
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+
       default:
         return null;
+    }
+  };
+
+  const actionButtonTrigger = (step) => {
+    switch (step) {
+      case 2:
+      case 3:
+      case 16:
+      case 17:
+      case 18:
+        setOffcanvasForm(true);
+        break;
+      case 98:
+      case 99:
+        setIsFormModalOpen(true);
+        break;
+      default:
+        break;
     }
   };
 
@@ -1149,7 +1398,6 @@ const JobOverview = () => {
               <option value="20">20</option>
               <option value="30">30</option>
             </Input>
-
             <Pagination>
               <PaginationItem
                 disabled={pageInfo.currentPage === 0}
@@ -1200,7 +1448,7 @@ const JobOverview = () => {
             generateCanvasHeaderButton={generateCanvasHeaderButton}
           />
 
-          <OffcanvasBody>
+          <OffcanvasBody className="p-0">
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>
 
@@ -1221,7 +1469,19 @@ const JobOverview = () => {
           isFormModalOpen={isFormModalOpen}
           setIsFormModalOpen={setIsFormModalOpen}
           header={stepperState}
+          jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+          isLoading={jobTimelineMeta?.isLoading}
         />
+
+        <button
+          onClick={() => {
+            // Everytime i click i want it to render even if it is the same step
+            // setIsFormModalOpen(true);
+            setActiveStep(16);
+          }}
+        >
+          SET STEP (DEV)
+        </button>
       </div>
     </React.Fragment>
   );

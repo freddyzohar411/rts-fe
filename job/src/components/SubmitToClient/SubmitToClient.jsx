@@ -20,9 +20,15 @@ import { initialValues, schema } from "./formikConfig";
 import { toast } from "react-toastify";
 import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
 import { useNavigate } from "react-router-dom";
-import { Actions, AuditConstant } from "@workspace/common";
+import { AuditConstant } from "@workspace/common";
 import { getUsersByIds } from "../../helpers/backend_helper";
-import { DeleteCustomModal } from "@workspace/common";
+import { DeleteCustomModal2 } from "@workspace/common";
+import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
+import { tagJobAttachment } from "../../store/jobStage/action";
+import {
+  JOB_STAGE_IDS,
+  JOB_STAGE_STATUS,
+} from "../JobListing/JobListingConstants";
 
 const SubmitToClient = forwardRef(
   (
@@ -50,19 +56,8 @@ const SubmitToClient = forwardRef(
     });
     const [attachments, setAttachments] = useState([]);
     const [attachmentLoading, setAttachmentLoading] = useState(false);
-    const emailSuccess = useSelector(
-      (state) => state.EmailCommonReducer.success
-    );
     const [confirmCVNotAttachedModal, setConfirmCVNotAttachedModal] =
       useState(false);
-
-    useEffect(() => {
-      if (emailSuccess) {
-        dispatch(Actions.resetSendEmail());
-        toast.success("Email sent successfully");
-        setOffcanvasForm(false);
-      }
-    }, [emailSuccess]);
 
     /**
      * Handle form submit event (Formik)
@@ -73,18 +68,29 @@ const SubmitToClient = forwardRef(
       newValues.to = newValues.to.map((item) => item.value);
       newValues.cc = newValues.cc.map((item) => item.value);
       newValues.bcc = newValues.bcc.map((item) => item.value);
-      const newFormData =
-        ObjectHelper.convertObjectToFormDataWithArray(newValues);
+      const payload = {
+        jobId: jobId,
+        jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_CLIENT,
+        status: JOB_STAGE_STATUS?.COMPLETED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: null,
+        formId: null,
+        jobType: jobTimelineType.SUBMIT_TO_CLIENT,
+        emailRequest: {
+          ...newValues,
+        },
+      };
+      const formData = ObjectHelper.convertToFormDataNested(payload);
       dispatch(
-        Actions.sendEmail({
-          newFormData,
+        tagJobAttachment({
+          formData,
           config: {
             headers: {
               "Content-Type": "multipart/form-data",
               Audit: JSON.stringify({
                 module: AuditConstant.moduleConstant.JOB_TIMELINE,
                 moduleId: jobTimeLineData?.id,
-                subModule: AuditConstant.subModuleConstant.SUBMIT_TO_SALES,
+                subModule: AuditConstant.subModuleConstant.SUBMIT_TO_CLIENT,
                 jobId: jobTimeLineData?.job?.id,
                 candidateId: jobTimeLineData?.candidate?.id,
                 recruiterId: jobTimeLineData?.createdBy,
@@ -92,6 +98,8 @@ const SubmitToClient = forwardRef(
               }),
             },
           },
+          jobType: jobTimelineType.SUBMIT_TO_CLIENT,
+          navigate,
         })
       );
     };
@@ -256,7 +264,7 @@ const SubmitToClient = forwardRef(
     };
 
     return (
-      <div>
+      <div className="p-3">
         <Row>
           <Col>
             <EmailTo
@@ -454,7 +462,7 @@ const SubmitToClient = forwardRef(
               allData={"null"}
               isView={false}
               autoResize={false}
-              height={350}
+              height={335}
               onChange={(content) => {
                 formik.setFieldValue("content", content);
               }}
@@ -470,7 +478,7 @@ const SubmitToClient = forwardRef(
             num={4}
           />
         </div>
-        <DeleteCustomModal
+        <DeleteCustomModal2
           confirmButtonText="Send"
           isOpen={confirmCVNotAttachedModal}
           setIsOpen={setConfirmCVNotAttachedModal}

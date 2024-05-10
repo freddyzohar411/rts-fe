@@ -29,8 +29,9 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
+import { getJobCandidateStage } from "../../helpers/backend_helper";
 
-const SubmitToSales = forwardRef(
+const ConditionalOfferRelease = forwardRef(
   (
     {
       candidateId,
@@ -58,6 +59,31 @@ const SubmitToSales = forwardRef(
     const [attachmentLoading, setAttachmentLoading] = useState(false);
     const [confirmCVNotAttachedModal, setConfirmCVNotAttachedModal] =
       useState(false);
+    const [preparedConditionalOffer, setPreparedConditionalOffer] =
+      useState(null);
+
+    useEffect(() => {
+      if (
+        jobTimeLineData?.timeline?.["Conditional Offer Sent"]?.status ===
+        "COMPLETED"
+      ) {
+        // setEditContentLoading(true);
+        getJobCandidateStage({
+          jobId: jobId,
+          candidateId: jobTimeLineData?.candidate?.id,
+          jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
+        })
+          .then((res) => {
+            if (res?.data) {
+              setPreparedConditionalOffer(res?.data?.submissionData);
+              attachmentTemplate(res?.data?.submissionData);
+            }
+          })
+          .finally(() => {
+            // setEditContentLoading(false);
+          });
+      }
+    }, []);
 
     /**
      * Handle form submit event (Formik)
@@ -70,12 +96,12 @@ const SubmitToSales = forwardRef(
       newValues.bcc = newValues.bcc.map((item) => item.value);
       const payload = {
         jobId: jobId,
-        jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
-        status: JOB_STAGE_STATUS?.COMPLETED,
+        jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
+        status: JOB_STAGE_STATUS?.RELEASED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: null,
         formId: null,
-        jobType: jobTimelineType.SUBMIT_TO_SALES,
+        jobType: jobTimelineType.CONDITIONAL_OFFER_RELEASED,
         emailRequest: {
           ...newValues,
         },
@@ -90,7 +116,7 @@ const SubmitToSales = forwardRef(
               Audit: JSON.stringify({
                 module: AuditConstant.moduleConstant.JOB_TIMELINE,
                 moduleId: jobTimeLineData?.id,
-                subModule: AuditConstant.subModuleConstant.SUBMIT_TO_SALES,
+                subModule: AuditConstant.subModuleConstant.CONDITIONAL_OFFER,
                 jobId: jobTimeLineData?.job?.id,
                 candidateId: jobTimeLineData?.candidate?.id,
                 recruiterId: jobTimeLineData?.createdBy,
@@ -98,7 +124,7 @@ const SubmitToSales = forwardRef(
               }),
             },
           },
-          jobType: jobTimelineType.SUBMIT_TO_SALES,
+          jobType: jobTimelineType.CONDITIONAL_OFFER_RELEASED,
           navigate,
         })
       );
@@ -139,17 +165,16 @@ const SubmitToSales = forwardRef(
     useEffect(() => {
       const prePopulateEmails = async (data) => {
         const response = await getUsersByIds({
-          userIds: [data?.salesId, data?.recruiterId],
+          userIds: [data?.recruiterId],
         });
         const userData = response?.data;
         if (userData) {
-          const to = userData.filter((item) => item.id === data.salesId);
           const cc = userData.filter((item) => item.id === data.recruiterId);
-          if (to && to.length > 0) {
+          if (data?.candidateEmail) {
             formik.setFieldValue("to", [
               {
-                value: to[0]?.email,
-                label: to[0]?.email,
+                value: data?.candidateEmail,
+                label: data?.candidateEmail,
               },
             ]);
           }
@@ -163,17 +188,17 @@ const SubmitToSales = forwardRef(
           }
         }
       };
-
       // Get Sales Email
       if (
         jobTimeLineData?.job?.createdBy &&
-        jobTimeLineData?.candidate?.createdBy &&
+        jobTimeLineData?.candidate &&
         formik
       ) {
-        const salesId = jobTimeLineData?.job?.createdBy;
+        const candidateEmail =
+          jobTimeLineData?.candidate?.candidateSubmissionData?.email;
         const recruiterId = jobTimeLineData?.candidate?.createdBy;
         prePopulateEmails({
-          salesId,
+          candidateEmail,
           recruiterId,
         });
       }
@@ -231,12 +256,12 @@ const SubmitToSales = forwardRef(
           );
 
         if (processedTemplate) {
-          let fileName = "candidate_cv";
+          let fileName = "Conditional Offer";
           if (
             allModuleData?.Candidates?.basicInfo?.firstName &&
             allModuleData?.Candidates?.basicInfo?.lastName
           ) {
-            fileName = `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`;
+            fileName = `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}_Conditional_Offer.pdf`;
           }
           const file = await ExportHelper.exportBackendHtml2PdfFile(
             processedTemplate.html,
@@ -350,70 +375,12 @@ const SubmitToSales = forwardRef(
           </Col>
           <Col>
             <EmailTemplateSelect
-              icon={<i className=" ri-table-2 fs-5"></i>}
-              setTemplateData={setTableDataWithEffect}
-              value={tableTemplateData}
-              category="Table Templates"
-              placeholder="Select Table Template"
-              selectRender={(data) => {
-                return (
-                  <>
-                    <div className="d-flex align-items-center justify-content-between">
-                      <span>{data?.label}</span>
-                      <i
-                        className="ri-eye-line cursor-pointer"
-                        onClick={(event) => {
-                          event.preventDefault(); // Prevents the menu from closing
-                          event.stopPropagation(); // Stops selection
-                          setIsViewTemplate(true);
-                          setTemplatePreviewInfo(data?.data);
-                          setTemplatePreviewAction({
-                            type: "VIEW",
-                          });
-                        }}
-                      ></i>
-                    </div>
-                  </>
-                );
-              }}
-              addMoreOptions={{
-                addMore: true,
-                addMoreLabel: "Add New Template",
-                render: (
-                  <Button
-                    type="button"
-                    className="btn btn-custom-primary header-btn w-100"
-                    style={{
-                      height: "40px",
-                      backgroundColor: "#0A65CC",
-                    }}
-                    onClick={(event) => {
-                      event.preventDefault(); // Prevents the menu from closing
-                      event.stopPropagation(); // Stops selection
-                      navigate("/settings/templates/create");
-                    }}
-                  >
-                    + New Table Template
-                  </Button>
-                ),
-              }}
-            />
-            <hr className="mt-2" />
-          </Col>
-        </Row>
-        <Row className="">
-          <Col
-            style={{
-              maxWidth: "50%",
-            }}
-          >
-            <EmailTemplateSelect
               isLoading={attachmentLoading}
-              placeholder="Attach CV Template"
+              placeholder="Attach Condition Offer"
               icon={<i className=" ri-file-list-2-line fs-5"></i>}
               value={CVTemplateData}
               setTemplateData={setCVTemplateData}
-              category="CV"
+              category="Conditional Offer"
               selectRender={(data) => {
                 return (
                   <>
@@ -453,6 +420,48 @@ const SubmitToSales = forwardRef(
                   </>
                 );
               }}
+              addMoreOptions={{
+                addMoreStart: true,
+                addMore: true,
+                addMoreLabel: "Add New Template",
+                render: (
+                  <>
+                    <div className="d-flex align-items-center">
+                      <span
+                        className="flex-grow-1 fw-semibold cursor-pointer"
+                        onClick={async (event) => {
+                          try {
+                            setAttachmentLoading(true);
+                            await attachmentTemplate(null);
+                          } catch (error) {
+                          } finally {
+                            setAttachmentLoading(false);
+                          }
+                        }}
+                      >
+                        {"Prepared Conditional Offer"}
+                      </span>
+                      <i
+                        className="ri-eye-line cursor-pointer"
+                        onClick={(event) => {
+                          event.preventDefault(); // Prevents the menu from closing
+                          event.stopPropagation(); // Stops selection
+                          setIsViewTemplate(true);
+                          setTemplatePreviewInfo(preparedConditionalOffer);
+                          setTemplatePreviewAction({
+                            type: "ATTACH_TEMPLATE",
+                            label: "Attach Template",
+                            action: async (data) => {
+                              await attachmentTemplate(data);
+                              setIsViewTemplate(false);
+                            },
+                          });
+                        }}
+                      ></i>
+                    </div>
+                  </>
+                ),
+              }}
             />
             <hr className="mt-2" />
           </Col>
@@ -467,7 +476,7 @@ const SubmitToSales = forwardRef(
               allData={"null"}
               isView={false}
               autoResize={false}
-              height={335}
+              height={405}
               onChange={(content) => {
                 formik.setFieldValue("content", content);
               }}
@@ -490,7 +499,7 @@ const SubmitToSales = forwardRef(
           confirmDelete={confirmSendEmail}
           header="Confirmation"
           deleteText={
-            "CV attachment not found. Would you like to proceed with sending the email to sales anyway?"
+            "Conditional offer attachment not found. Would you like to proceed with sending the email to sales anyway?"
           }
           toggle
           width="350px"
@@ -500,4 +509,4 @@ const SubmitToSales = forwardRef(
   }
 );
 
-export default SubmitToSales;
+export default ConditionalOfferRelease;

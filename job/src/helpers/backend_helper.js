@@ -7,14 +7,14 @@ import {
   BASE_JOB_TIMELINE,
   BASE_USER_GROUP,
   BASE_JOB_CUSTOM_VIEW,
-  BASE_USER
+  BASE_USER,
 } from "./url_helper";
 import {
   JOB_URL,
   DOCUMENT_URL,
   FORM_URL,
   GROUP_URL,
-  API_URL
+  API_URL,
 } from "@workspace/common/src/config";
 
 const { APIClient } = Axios;
@@ -83,6 +83,17 @@ export const tagJob = (data, config) =>
 export const tagAllJob = (data, config) =>
   api.create(`${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}/createAll`, data, config);
 
+export const getJobCandidateStage = (data) =>
+  api.create(`${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}/get-stage`, data);
+
+// Added Endpoints - Job Timeline 07052024
+export const tagJobWithAttachments = (data, config) =>
+  api.create(
+    `${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}/create-with-attachments`,
+    data,
+    config
+  );
+
 export const getJobTimeline = (data) =>
   api.create(`${JOB_URL}${BASE_JOB_TIMELINE}/listing`, data);
 
@@ -109,10 +120,9 @@ export const selectJobCustomView = (id) =>
 export const deleteJobCustomView = (id) =>
   api.delete(`${JOB_URL}${BASE_JOB_CUSTOM_VIEW}/customView/delete/${id}`);
 
-  // Delete an jobs List
+// Delete an jobs List
 export const deleteJobs = (jobIds) =>
-api.create(`${JOB_URL}${BASE_JOBS}/listing/delete`, jobIds);
-
+  api.create(`${JOB_URL}${BASE_JOBS}/listing/delete`, jobIds);
 
 // Get User by Ids
 export const getUsersByIds = (userIds) =>
