@@ -86,6 +86,8 @@ import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
 import OverviewStepComponent from "./OverviewStepComponent";
 import InnerTimelineStep from "./InnerTimelineStep";
 import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
+import PrepareTOS from "../PrepareTOS/PrepareTOS";
+import ApproveTOS from "../ApproveTOS/ApproveTOS";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -125,7 +127,9 @@ const JobOverview = () => {
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  const [myNumber, setMyNumber] = useState(1);
+  // const [myNumber, setMyNumber] = useState(1);
+  const [modalFormName, setModalFormName] = useState({});
+
   // Email Loading
   const emailIsLoading = useSelector(
     (state) => state.EmailCommonReducer.loading
@@ -294,6 +298,12 @@ const JobOverview = () => {
         break;
       case 17:
         setStepperState("Conditional Offer Status");
+        break;
+      case 18:
+        setStepperState("Prepare TOS");
+        break;
+      case 19:
+        setStepperState("Approve TOS");
         break;
       default:
         setStepperState("");
@@ -560,6 +570,28 @@ const JobOverview = () => {
             candidateId={candidateId}
             jobId={parseInt(jobId)}
             activeStep={step}
+          />
+        );
+      case 18:
+        return (
+          <PrepareTOS
+            setOffcanvasForm={setOffcanvasForm}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+            ref={ref}
+          />
+        );
+      case 19:
+        return (
+          <ApproveTOS
+            setOffcanvasForm={setOffcanvasForm}
+            setIsFormModalOpen={setIsFormModalOpen}
+            setModalFormName={setModalFormName}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+            ref={ref}
           />
         );
       default:
@@ -1103,6 +1135,92 @@ const JobOverview = () => {
             </Col>
           </Row>
         );
+
+      case 18:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  // onClick={() => setOffcanvasForm(false)}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#12A35D",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    ref.current.submitForm();
+                  }}
+                >
+                  Submit
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+
+      case 19:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => ref.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => ref.current.rejectTos()}
+                  style={{
+                    backgroundColor: "#D92D20",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Reject
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={() => ref.current.approveTos()}
+                  style={{
+                    backgroundColor: "#12A35D",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Approve
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+
       default:
         return null;
     }
@@ -1380,7 +1498,7 @@ const JobOverview = () => {
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           isLoading={jobTimelineMeta?.isLoading}
         />
-        <div className="d-flex gap-2 w-25">
+        {/* <div className="d-flex gap-2 w-25">
           <Input
             type="text"
             onChange={(e) => setMyNumber(parseInt(e.target.value))}
@@ -1398,7 +1516,7 @@ const JobOverview = () => {
           >
             STEP (DEV)
           </Button>
-        </div>
+        </div> */}
       </div>
     </React.Fragment>
   );

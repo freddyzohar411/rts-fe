@@ -38,6 +38,8 @@ const InnerTimelineStep = ({ data }) => {
     );
   }, [sections]);
 
+  const timelineElement = document.getElementById("timeline-container");
+
   const getStatus = (subitems) => {
     const statuses = subitems
       .map((subitem) => data[subitem]?.status)
@@ -250,7 +252,7 @@ const InnerTimelineStep = ({ data }) => {
       setDivWidth(`${timelineElement.firstChild.offsetWidth}px`);
       setElementSizing(`${timelineElement.firstChild.offsetWidth / 10}px`);
     }
-  }, []);
+  }, [timelineElement]);
 
   return (
     <div style={{ position: "relative" }}>
@@ -341,8 +343,9 @@ const InnerTimelineStep = ({ data }) => {
                       )}
                     </div>
                   </div>
+
                   {expandedSections[section.name] && (
-                    <div className="d-flex flex-row align-items-top justify-content-center">
+                    <div className="d-flex flex-row align-items-top justify-content-center gap-3">
                       {section.subitems.map((subitem, subindex) => {
                         const renderSubitemStyle = renderSectionStyle(
                           subitemsData[subindex]?.data?.status
@@ -352,7 +355,7 @@ const InnerTimelineStep = ({ data }) => {
                             key={subindex}
                             className="d-flex flex-column align-items-center"
                             style={{
-                              width: isExpanded ? "140px" : "110px",
+                              width: elementSizing,
                             }}
                           >
                             <div className="d-flex flex-column align-items-start">
