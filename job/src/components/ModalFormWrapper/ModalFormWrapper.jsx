@@ -47,6 +47,7 @@ const ModalFormWrapper = ({
 
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {
+    console.log("Form values", newValues);
     // Submit to sale profile rejected
     if (activeStep === 99) {
       const payload = {
@@ -83,7 +84,7 @@ const ModalFormWrapper = ({
     if (activeStep === 98) {
       dispatch(fetchJobForm("submit_to_client_rejection"));
     }
-  }, [modalFormName, activeStep]);
+  }, [activeStep]);
 
   useEffect(() => {
     if (form) {
@@ -109,9 +110,9 @@ const ModalFormWrapper = ({
           paddingBottom: "0px",
         }}
       >
-        <span className="fw-bold fs-5 text-black">{modalFormName?.header}</span>
+        <h3>{header || "Header"}</h3>
       </ModalHeader>
-      <ModalBody className="px-2 pb-1 pt-2">
+      <ModalBody>
         <Form
           template={formTemplate}
           userDetails={getAllUserGroups()}
@@ -124,29 +125,13 @@ const ModalFormWrapper = ({
           ref={formikRef}
         />
       </ModalBody>
-      <ModalFooter className="pt-0">
+      <ModalFooter>
         <div className="d-flex justify-content-end gap-2">
-          <Button
-            style={{
-              backgroundColor: "#FFFFFF",
-              border: "1px solid #E7EAEE",
-              color: "#000000",
-              fontWeight: "500",
-              borderRadius: "8px",
-            }}
-            onClick={() => {
-              closeModal();
-            }}
-          >
+          <Button className="btn-danger" onClick={() => closeModal()}>
             Cancel
           </Button>
           <Button
-            style={{
-              backgroundColor: "#D92D20",
-              color: "#FFFFFF",
-              fontWeight: "500",
-              borderRadius: "8px",
-            }}
+            className="btn-danger"
             onClick={() => {
               formikRef.current.formik?.submitForm();
             }}
