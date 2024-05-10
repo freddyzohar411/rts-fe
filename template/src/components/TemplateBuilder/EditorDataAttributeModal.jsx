@@ -8,7 +8,6 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import { v4 as uuid } from "uuid";
 import { CreateSelectElement } from "@workspace/common";
 
 const EditorDataAttributeModal = ({
@@ -23,7 +22,6 @@ const EditorDataAttributeModal = ({
     setIsModalOpen(false);
   };
 
-  console.log("Data", data);
   return (
     <Modal
       isOpen={isModalOpen}

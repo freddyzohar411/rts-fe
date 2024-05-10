@@ -143,8 +143,6 @@ const JobOverview = () => {
     (state) => state.JobStageReducer.jobTimeline
   );
 
-  console.log("jobTimelineData", jobTimelineData);
-
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
 
   // Custom renders
