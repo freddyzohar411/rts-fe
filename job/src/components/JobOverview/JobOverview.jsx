@@ -680,6 +680,16 @@ const JobOverview = () => {
       : false;
   };
 
+  const getMainStage = (maxOrder) => {
+    let stage = "Profile";
+    if (maxOrder === 2) {
+      stage = "Odin";
+    } else if (maxOrder === 3) {
+      stage = "Interview";
+    }
+    return stage;
+  };
+
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
     return (
@@ -702,7 +712,7 @@ const JobOverview = () => {
             } else if (maxOrder >= 10 && maxOrder <= 13) {
               maxOrder = 3;
             }
-
+            const mainStage = getMainStage(maxOrder);
             return (
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
@@ -735,7 +745,7 @@ const JobOverview = () => {
                   {/* Current Status */}
                   <td style={{ width: "5rem" }}>
                     <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
-                      <span>Profile</span>
+                      <span>{mainStage}</span>
                       <i className="ri-arrow-right-s-line"></i>
                       <span className="fw-semibold">{lastSubmittedStage}</span>
                     </div>
@@ -772,19 +782,17 @@ const JobOverview = () => {
                       <Input
                         type="select"
                         className="form-select border-0"
-                        value={selectedSubModule}
-                        disabled={!selectedModule}
+                        value={selectedSubModule?.[data?.id]}
                         onChange={handleSubModuleChange}
                       >
                         <option value="">Select</option>
-                        {selectedModule &&
-                          timelineSkipSubModule[selectedModule]?.map(
-                            (item, index) => (
-                              <option key={index} value={item}>
-                                {item}
-                              </option>
-                            )
-                          )}
+                        {timelineSkipSubModule?.[skipSteps?.[data?.id]]?.map(
+                          (item, index) => (
+                            <option key={index} value={item}>
+                              {item}
+                            </option>
+                          )
+                        )}
                       </Input>
                     </div>
                   </td>
