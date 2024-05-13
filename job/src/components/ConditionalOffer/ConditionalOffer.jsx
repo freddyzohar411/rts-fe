@@ -42,12 +42,10 @@ const ConditionalOffer = forwardRef(
     const [editContentLoading, setEditContentLoading] = useState(false);
     const { allModuleData, isAllLoading } =
       UseTemplateModuleDataHook.useTemplateModuleData({
-        candidateId: candidateId,
-        jobId: jobId,
+        candidateId: jobTimeLineData?.candidate?.id,
+        jobId: jobTimeLineData?.job?.id,
       });
     const [submitType, setSubmitType] = useState(null);
-
-    // console.log("jobTimeLineDataIN", jobTimeLineData);
 
     useEffect(() => {
       if (
@@ -57,7 +55,7 @@ const ConditionalOffer = forwardRef(
       ) {
         setEditContentLoading(true);
         getJobCandidateStage({
-          jobId: jobId,
+          jobId: jobTimeLineData?.job?.id,
           candidateId: jobTimeLineData?.candidate?.id,
           jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
         })
@@ -78,7 +76,6 @@ const ConditionalOffer = forwardRef(
      */
     const handleFormSubmit = async (values) => {
       const newValues = { ...values };
-      console.log("newValues", newValues);
       if (submitType === "draft") {
         const payload = {
           jobId: jobId,
@@ -97,8 +94,7 @@ const ConditionalOffer = forwardRef(
                 Audit: JSON.stringify({
                   module: AuditConstant.moduleConstant.JOB_TIMELINE,
                   moduleId: jobTimeLineData?.id,
-                  subModule:
-                    AuditConstant.subModuleConstant.CONDITIONAL_OFFER,
+                  subModule: AuditConstant.subModuleConstant.CONDITIONAL_OFFER,
                   jobId: jobTimeLineData?.job?.id,
                   candidateId: jobTimeLineData?.candidate?.id,
                   recruiterId: jobTimeLineData?.createdBy,
@@ -128,8 +124,7 @@ const ConditionalOffer = forwardRef(
                 Audit: JSON.stringify({
                   module: AuditConstant.moduleConstant.JOB_TIMELINE,
                   moduleId: jobTimeLineData?.id,
-                  subModule:
-                    AuditConstant.subModuleConstant.CONDITIONAL_OFFER,
+                  subModule: AuditConstant.subModuleConstant.CONDITIONAL_OFFER,
                   jobId: jobTimeLineData?.job?.id,
                   candidateId: jobTimeLineData?.candidate?.id,
                   recruiterId: jobTimeLineData?.createdBy,
@@ -410,7 +405,7 @@ const ConditionalOffer = forwardRef(
               ) : (
                 <TemplateDisplayV3
                   content={selectedTemplate?.content ?? null}
-                  allData={null}
+                  allData={allModuleData}
                   isView={true}
                   handleOutputContent={(newContent) => {
                     setConditionalOfferContent(newContent);
@@ -422,6 +417,8 @@ const ConditionalOffer = forwardRef(
                   initialValues
                   initializeDataAttributesElement={true}
                   transformScale={transformScale}
+                  isAllLoading={isAllLoading}
+                  showLoading={true}
                 />
               )}
             </Container>

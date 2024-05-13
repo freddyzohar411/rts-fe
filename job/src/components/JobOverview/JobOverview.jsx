@@ -122,6 +122,7 @@ const JobOverview = () => {
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  // const [myNumber, setMyNumber] = useState(1);
   const [modalFormName, setModalFormName] = useState({});
 
   // Email Loading
@@ -1212,6 +1213,7 @@ const JobOverview = () => {
 
   const actionButtonTrigger = (step) => {
     switch (step) {
+      case 1:
       case 2:
       case 3:
       case 16:
@@ -1468,6 +1470,7 @@ const JobOverview = () => {
             templatePreviewAction={templatePreviewAction}
             candidateId={candidateId}
             jobId={jobId}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         </Offcanvas>
 
@@ -1480,16 +1483,25 @@ const JobOverview = () => {
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           isLoading={jobTimelineMeta?.isLoading}
         />
-
-        <button
-          onClick={() => {
-            // Everytime i click i want it to render even if it is the same step
-            // setIsFormModalOpen(true);
-            setActiveStep(16);
-          }}
-        >
-          SET STEP (DEV)
-        </button>
+        {/* <div className="d-flex gap-2 w-25">
+          <Input
+            type="text"
+            onChange={(e) => setMyNumber(parseInt(e.target.value))}
+          />
+          <Button
+          className="btn btn-primary fs-semibold"
+            onClick={() => {
+              // Everytime i click i want it to render even if it is the same step
+              // setIsFormModalOpen(true);
+              setActiveStep(myNumber);
+            }}
+            style={{
+              textWrap: "nowrap"
+            }}
+          >
+            STEP (DEV)
+          </Button>
+        </div> */}
       </div>
     </React.Fragment>
   );
