@@ -122,7 +122,7 @@ const JobOverview = () => {
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  // const [myNumber, setMyNumber] = useState(1);
+  const [myNumber, setMyNumber] = useState(1);
   const [modalFormName, setModalFormName] = useState({});
 
   // Email Loading
@@ -369,6 +369,7 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             timelineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            ref={formikRef}
           />
         );
       case 2:
@@ -852,6 +853,38 @@ const JobOverview = () => {
   // Generate canvas header button
   const generateCanvasHeaderButton = (step) => {
     switch (step) {
+      case 1:
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <Button
+              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+              style={{
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                setOffcanvasForm(false);
+                setIsViewTemplate(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="btn btn-success"
+              onClick={() => {
+                formikRef.current.submitForm();
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {jobTagMeta?.isLoading ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </div>
+        );
       // Case 2 and 3 usese the same form
       case 2:
       case 3:
@@ -1216,11 +1249,24 @@ const JobOverview = () => {
       case 1:
       case 2:
       case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+      case 10:
+      case 11:
+      case 12:
+      case 13:
+      case 14:
+      case 15:
       case 16:
       case 17:
       case 18:
         setOffcanvasForm(true);
         break;
+      case 19:
       case 98:
       case 99:
         setIsFormModalOpen(true);
@@ -1483,7 +1529,7 @@ const JobOverview = () => {
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           isLoading={jobTimelineMeta?.isLoading}
         />
-        {/* <div className="d-flex gap-2 w-25">
+        <div className="d-flex gap-2 w-25">
           <Input
             type="text"
             onChange={(e) => setMyNumber(parseInt(e.target.value))}
@@ -1492,7 +1538,7 @@ const JobOverview = () => {
           className="btn btn-primary fs-semibold"
             onClick={() => {
               // Everytime i click i want it to render even if it is the same step
-              // setIsFormModalOpen(true);
+               setIsFormModalOpen(true);
               setActiveStep(myNumber);
             }}
             style={{
@@ -1501,7 +1547,7 @@ const JobOverview = () => {
           >
             STEP (DEV)
           </Button>
-        </div> */}
+        </div>
       </div>
     </React.Fragment>
   );

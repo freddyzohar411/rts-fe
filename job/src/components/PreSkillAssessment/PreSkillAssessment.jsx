@@ -41,7 +41,7 @@ const PreSkillAssessment = forwardRef(
 
     return (
       <React.Fragment>
-        <div className="d-flex flex-column gap-4">
+        <div className="d-flex flex-column gap-4 p-4">
           <Row>
             <Col>
               <h5>Invite Candidate to Skill Assessment</h5>
