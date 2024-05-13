@@ -35,8 +35,6 @@ import { JOB_FORM_NAME } from "../JobCreation/constants";
 import "./StepComponent.scss";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-// Elements
-import { TemplateSelectByCategoryElement } from "@workspace/common";
 // Forms
 import AssociateCandidate from "../AssociateCandidate/AssociateCandidate";
 import SubmitToSales from "../SubmitToSales/SubmitToSales";
@@ -53,13 +51,9 @@ import { TimelineHeader } from "../TimelineHeader";
 import {
   JOB_TIMELINE_INITIAL_OPTIONS,
   jobHeaders,
-  rtsStatusHeaders,
-  steps,
-  timelineSkip,
   timelineSkipModule,
   timelineSkipSubModule,
   timelineLegend,
-  stepOrders,
   newHeaders,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
@@ -67,7 +61,6 @@ import "./JobOverview.scss";
 import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
 import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
-import { truncate } from "@workspace/common/src/helpers/string_helper";
 import { SkillAssessment } from "../SkillAssessment";
 import { CodingTest } from "../CodingTest";
 import { CulturalFitTest } from "../CulturalFitTest";
@@ -119,6 +112,8 @@ const JobOverview = () => {
 
   const [isPreviewCV, setIsPreviewCV] = useState(false);
   const [skipComboOptions, setSkipComboOptions] = useState({});
+  const [skipSteps, setSkipSteps] = useState({});
+  const [skipSubsteps, setSkipSubsteps] = useState({});
 
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
@@ -223,12 +218,14 @@ const JobOverview = () => {
         let maxOrder = getMaxOrder(data);
         if (maxOrder >= 1 && maxOrder <= 5) {
           maxOrder = 1;
-        } else if (maxOrder >= 1 && maxOrder <= 5) {
-          maxOrder = 1;
+        } else if (maxOrder >= 6 && maxOrder <= 9) {
+          maxOrder = 2;
+        } else if (maxOrder >= 10 && maxOrder <= 13) {
+          maxOrder = 3;
         }
         jsonObject[data?.id] = maxOrder;
       });
-      setSkipComboOptions(jsonObject);
+      setSkipSteps(jsonObject);
     }
   }, [jobTimelineData]);
 
@@ -348,6 +345,12 @@ const JobOverview = () => {
   const handleSaveClick = () => {
     if (selectedModule == 1 && selectedSubModule == "Untag") {
     }
+  };
+
+  const handleStepsSelection = (jobId, value) => {
+    const newOb = { ...skipSteps };
+    newOb[jobId] = value;
+    setSkipSteps(newOb);
   };
 
   const handleSkipSelection = (jobId, value) => {
@@ -621,46 +624,6 @@ const JobOverview = () => {
     setCandidateId(id);
   };
 
-  /**
-   * @author Rahul Sahu
-   * @description Get form index on the basis of index
-   */
-  const getFormIndex = (originalOrder, jobId) => {
-    let index = null;
-    switch (originalOrder) {
-      case 6:
-        index = 6;
-        break;
-      case 7:
-        index = 7;
-        break;
-      case 8:
-        index = 8;
-        break;
-      case 9:
-        index = skipComboOptions?.[jobId] === 9 ? 10 : 9;
-        break;
-      case 10:
-        index = 11;
-        break;
-      case 11:
-        index = 13;
-        break;
-      case 12:
-        index = 15;
-        break;
-      case 13:
-        index = 16;
-        break;
-      case 14:
-        index = 17;
-        break;
-      default:
-        break;
-    }
-    return index;
-  };
-
   const renderLegend = () => {
     return (
       <div className="d-flex flex-wrap">
@@ -717,6 +680,16 @@ const JobOverview = () => {
       : false;
   };
 
+  const getMainStage = (maxOrder) => {
+    let stage = "Profile";
+    if (maxOrder === 2) {
+      stage = "Odin";
+    } else if (maxOrder === 3) {
+      stage = "Interview";
+    }
+    return stage;
+  };
+
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
     return (
@@ -732,13 +705,14 @@ const JobOverview = () => {
               status === JOB_STAGE_STATUS.WITHDRAWN;
             const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
 
-            if (maxOrder >= 6 && maxOrder < 9) {
-              maxOrder = 5;
-            } else if (maxOrder === 9) {
-              maxOrder = status === JOB_STAGE_STATUS.IN_PROGRESS ? 5 : 9;
-            } else if (maxOrder >= 10 && maxOrder < 13) {
-              maxOrder = 9;
+            if (maxOrder >= 1 && maxOrder <= 5) {
+              maxOrder = 1;
+            } else if (maxOrder >= 6 && maxOrder <= 9) {
+              maxOrder = 2;
+            } else if (maxOrder >= 10 && maxOrder <= 13) {
+              maxOrder = 3;
             }
+            const mainStage = getMainStage(maxOrder);
             return (
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
@@ -771,7 +745,7 @@ const JobOverview = () => {
                   {/* Current Status */}
                   <td style={{ width: "5rem" }}>
                     <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
-                      <span>Profile</span>
+                      <span>{mainStage}</span>
                       <i className="ri-arrow-right-s-line"></i>
                       <span className="fw-semibold">{lastSubmittedStage}</span>
                     </div>
@@ -782,32 +756,43 @@ const JobOverview = () => {
                       <Input
                         type="select"
                         className="form-select border-0"
-                        onChange={handleModuleChange}
-                        value={selectedModule}
+                        value={skipSteps?.[data?.id]}
+                        onChange={(e) =>
+                          handleStepsSelection(
+                            data?.id,
+                            parseInt(e.target.value)
+                          )
+                        }
                       >
                         <option value="">Select</option>
-                        {Object.keys(timelineSkipModule).map((item, index) => (
-                          <option key={index} value={timelineSkipModule[item]}>
-                            {item}
-                          </option>
-                        ))}
+                        {Object.keys(timelineSkipModule).map((item, index) => {
+                          if (maxOrder >= timelineSkipModule[item] + 1) {
+                            return null;
+                          }
+                          return (
+                            <option
+                              key={index}
+                              value={timelineSkipModule[item]}
+                            >
+                              {item}
+                            </option>
+                          );
+                        })}
                       </Input>
                       <Input
                         type="select"
                         className="form-select border-0"
-                        value={selectedSubModule}
-                        disabled={!selectedModule}
+                        value={selectedSubModule?.[data?.id]}
                         onChange={handleSubModuleChange}
                       >
                         <option value="">Select</option>
-                        {selectedModule &&
-                          timelineSkipSubModule[selectedModule]?.map(
-                            (item, index) => (
-                              <option key={index} value={item}>
-                                {item}
-                              </option>
-                            )
-                          )}
+                        {timelineSkipSubModule?.[skipSteps?.[data?.id]]?.map(
+                          (item, index) => (
+                            <option key={index} value={item}>
+                              {item}
+                            </option>
+                          )
+                        )}
                       </Input>
                     </div>
                   </td>

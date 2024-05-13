@@ -65,13 +65,13 @@ const OverviewStepComponent = ({ data }) => {
       case JOB_STAGE_STATUS_LABELS.COMPLETED:
         customCSS = "text-white bg-completed border-completed";
         break;
-      case JOB_STAGE_STATUS_LABELS.WITHDRAWN:
+      case JOB_STAGE_STATUS.WITHDRAWN:
         customCSS = "text-white bg-withdrawn border-withdrawn";
         break;
-      case JOB_STAGE_STATUS_LABELS.REJECTED:
+      case JOB_STAGE_STATUS.REJECTED:
         customCSS = "text-white bg-rejected border-rejected";
         break;
-      case JOB_STAGE_STATUS_LABELS.SKIPPED:
+      case JOB_STAGE_STATUS.SKIPPED:
         customCSS = "text-white bg-skipped border-skipped";
         break;
       default:
