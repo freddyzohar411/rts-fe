@@ -10,7 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Form } from "@workspace/common";
 import { useNavigate, useLocation } from "react-router-dom";
 // Fetching the forms and tagging the job once created.
-import { fetchJobForm, tagJob } from "../../store/actions";
+import {
+  fetchJobForm,
+  tagJob,
+  fetchJobFormSubmission,
+  clearJobFormSubmission,
+} from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import {
   JOB_STAGE_IDS,
@@ -28,6 +33,11 @@ const PrepareTOS = forwardRef(
 
     const form = useSelector((state) => state.JobFormReducer.form);
     const [formTemplate, setFormTemplate] = useState(null);
+    const formSubmissionData = useSelector(
+      (state) => state.JobFormReducer.formSubmission
+    );
+    const editId = useSelector((state) => state.JobFormReducer.editId);
+    const [randomId, setRandomId] = useState();
 
     const linkState = location.state;
     const [view, setView] = useState(
@@ -39,6 +49,22 @@ const PrepareTOS = forwardRef(
     useEffect(() => {
       dispatch(fetchJobForm("review_tos"));
     }, []);
+
+    // useEffect(() => {
+    //   if (jobId) {
+    //     setRandomId(jobId);
+    //   } else if (editId && formSubmissionData) {
+    //     setRandomId(editId);
+    //   } else {
+    //     setRandomId(-99);
+    //   }
+    // }, [jobId, editId]);
+
+    // useEffect(() => {
+    //   if (jobId) {
+    //     dispatch(fetchJobFormSubmission(jobId))
+    //   }
+    // }, [jobId])
 
     useEffect(() => {
       if (form) {

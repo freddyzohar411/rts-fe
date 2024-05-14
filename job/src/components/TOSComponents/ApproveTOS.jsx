@@ -9,7 +9,7 @@ import { Row, Col } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Form } from "@workspace/common";
 import { useNavigate, useLocation } from "react-router-dom";
-import { fetchJobForm, tagJob } from "../../store/actions";
+import { fetchJobForm, fetchJobFormSubmission } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import {
   JOB_STAGE_IDS,
@@ -38,6 +38,9 @@ const ApproveTOS = forwardRef(
 
     const form = useSelector((state) => state.JobFormReducer.form);
     const [formTemplate, setFormTemplate] = useState(null);
+    const formSubmissionData = useSelector(
+      (state) => state.JobFormReducer.formSubmission
+    );
 
     const linkState = location.state;
     const [view, setView] = useState(
@@ -67,6 +70,7 @@ const ApproveTOS = forwardRef(
       setModalFormName({ header: "Confirmation", formName: "approve_tos" });
       setOffcanvasForm(false);
     };
+
     const rejectTos = () => {
       setIsFormModalOpen(true);
       setModalFormName({ header: "TOS Rejected", formName: "rejected_tos" });
