@@ -85,7 +85,7 @@ function AssociateCandidate({
     const payload = {
       jobId: jobId,
       jobStageId: JOB_STAGE_IDS?.ASSOCIATE,
-      status: values?.candidateStatus ?? JOB_STAGE_STATUS?.COMPLETED,
+      status: JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
       formData: JSON.stringify(values),
       formId: parseInt(form.formId),

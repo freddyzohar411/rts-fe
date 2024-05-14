@@ -20,6 +20,11 @@ import {
   Spinner,
   Card,
   CardBody,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Label,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -48,6 +53,8 @@ import ConditionalOffer from "../ConditionalOffer/ConditionalOffer";
 import ConditionalOfferRelease from "../ConditionalOfferRelease.jsx/ConditionalOfferRelease.jsx";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
+import { CVPreview } from "../CVPreview";
+
 import {
   JOB_TIMELINE_INITIAL_OPTIONS,
   jobHeaders,
@@ -79,8 +86,8 @@ import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
 import OverviewStepComponent from "./OverviewStepComponent";
 import InnerTimelineStep from "./InnerTimelineStep";
 import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
-import PrepareTOS from "../PrepareTOS/PrepareTOS";
-import ApproveTOS from "../ApproveTOS/ApproveTOS";
+import PrepareTOS from "../TOSComponents/PrepareTOS.jsx";
+import ApproveTOS from "../TOSComponents/ApproveTOS.jsx";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -296,10 +303,10 @@ const JobOverview = () => {
       case 17:
         setStepperState("Conditional Offer Status");
         break;
-      case 18:
+      case 20:
         setStepperState("Prepare TOS");
         break;
-      case 19:
+      case 21:
         setStepperState("Approve TOS");
         break;
       default:
@@ -465,9 +472,15 @@ const JobOverview = () => {
         return (
           <ScheduleInterview
             closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
+            templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
           />
         );
       case 11:
@@ -576,7 +589,7 @@ const JobOverview = () => {
             activeStep={step}
           />
         );
-      case 18:
+      case 20:
         return (
           <PrepareTOS
             setOffcanvasForm={setOffcanvasForm}
@@ -586,7 +599,7 @@ const JobOverview = () => {
             ref={ref}
           />
         );
-      case 19:
+      case 21:
         return (
           <ApproveTOS
             setOffcanvasForm={setOffcanvasForm}
@@ -602,6 +615,8 @@ const JobOverview = () => {
         return null;
     }
   };
+
+  console.log(candidateId);
 
   const handleSort = (index) => {
     if (index === 0) {
@@ -815,6 +830,7 @@ const JobOverview = () => {
                           //     data?.id
                           //   )
                           // );
+                          setCandidateId(data?.candidate?.id);
                           setTimelineRowIndex(timelineIndex);
                           actionButtonTrigger(activeStep);
                           // setOffcanvasForm(true);
@@ -829,6 +845,7 @@ const JobOverview = () => {
                     </div>
                   </td>
                 </tr>
+
                 {openJobIndex === data.id && (
                   <tr>
                     <td colSpan={10} className="px-3">
@@ -1154,7 +1171,7 @@ const JobOverview = () => {
           </Row>
         );
 
-      case 18:
+      case 20:
         return (
           <Row>
             <Col>
@@ -1162,7 +1179,6 @@ const JobOverview = () => {
                 <Button
                   type="button"
                   onClick={() => ref.current.handleCancel()}
-                  // onClick={() => setOffcanvasForm(false)}
                   style={{
                     backgroundColor: "#FFFFFF",
                     border: "1px solid #E7EAEE",
@@ -1192,7 +1208,7 @@ const JobOverview = () => {
           </Row>
         );
 
-      case 19:
+      case 21:
         return (
           <Row>
             <Col>
@@ -1264,6 +1280,8 @@ const JobOverview = () => {
       case 16:
       case 17:
       case 18:
+      case 20:
+      case 21:
         setOffcanvasForm(true);
         break;
       case 19:
@@ -1271,6 +1289,7 @@ const JobOverview = () => {
       case 99:
         setIsFormModalOpen(true);
         break;
+
       default:
         break;
     }
@@ -1486,6 +1505,56 @@ const JobOverview = () => {
             </Pagination>
           </div>
         </Row>
+        <Row className="d-flex flex-row align-items-center">
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(1)}
+          >
+            Associate
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(2)}
+          >
+            Submit to Sales
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(3)}
+          >
+            Submit to Client
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(16)}
+          >
+            Profile Feedback Pending{" "}
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(20)}
+          >
+            Prepare TOS
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(21)}
+          >
+            Accept or Decline
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(16)}
+          >
+            Conditional Offer
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(17)}
+          >
+            Accept or Decline
+          </div>
+        </Row>
 
         <Offcanvas
           isOpen={offcanvasForm}
@@ -1528,6 +1597,8 @@ const JobOverview = () => {
           header={stepperState}
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           isLoading={jobTimelineMeta?.isLoading}
+          modalFormName={modalFormName}
+          setModalFormName={setModalFormName}
         />
         <div className="d-flex gap-2 w-25">
           <Input
