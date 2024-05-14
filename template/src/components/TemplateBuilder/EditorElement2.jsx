@@ -6,6 +6,8 @@ import { ExportHelper } from "@workspace/common";
 import { generateOptions } from "./pdfOption";
 import { TemplateAdvanceExportModal } from "@workspace/common";
 import AvensysLogo from "../../../assets/images/AvensysLogo.png";
+import EditorDataAttributeModal from "./EditorDataAttributeModal";
+import { v4 as uuid } from "uuid";
 
 const EditorElement2 = ({
   name,
@@ -22,6 +24,9 @@ const EditorElement2 = ({
   const editorRef = useRef(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [base64ImgLogo, setBase64ImgLogo] = useState(null);
+  const [editorAtrributeModalOpen, setEditorAtrributeModalOpen] =
+    useState(false);
+  const [editorAttributesData, setEditorAttributesData] = useState({});
 
   // Apply canvas style
   function applyCanvasStyle(editor, size, orientation) {
@@ -384,8 +389,32 @@ const EditorElement2 = ({
     }
   };
 
+  const addAttributeToElement = (editor) => {
+    var selectedText = editor.selection.getContent();
+    var range = editor.selection.getRng();
+
+    // If currently non-editable, wrap the selected text with a span and apply a class
+    editor.selection.setContent(
+      `<span style="border: 2px solid #D6CE0B; background-color: 	rgb(214, 206, 11, 0.2);" data-type="data-attribute" data-section="${editorAttributesData?.section}" data-label="${editorAttributesData?.label}" data-key="${uuid()}">${selectedText}</span>`
+    );
+
+    // Move the cursor to the end of the inserted content
+    range.setStartAfter(range.endContainer);
+    range.collapse(true);
+    editor.selection.setRng(range);
+    setEditorAttributesData({});
+    setEditorAtrributeModalOpen(false);
+  };
+
   return (
     <>
+      <EditorDataAttributeModal
+        isModalOpen={editorAtrributeModalOpen}
+        setIsModalOpen={setEditorAtrributeModalOpen}
+        data={editorAttributesData}
+        setData={setEditorAttributesData}
+        action={() => addAttributeToElement(editorRef.current)}
+      />
       <TemplateAdvanceExportModal
         content={formik?.values?.[name]}
         showInsertModal={showExportModal}
@@ -737,6 +766,61 @@ const EditorElement2 = ({
               },
             });
 
+            // Add Attribute Button
+            editor.ui.registry.addButton("myAddAttributeButton", {
+              text: "Add Attribute",
+              onAction: function () {
+                setEditorAtrributeModalOpen(true);
+              },
+            });
+
+            // Remove Attribute Button
+            editor.ui.registry.addButton("myRemoveAttributeButton", {
+              text: "Remove Attribute",
+              onAction: function () {
+                var selectedText = editor.selection.getContent();
+                var range = editor.selection.getRng();
+
+                const span = editor.selection.getNode();
+                if (span && span.tagName === "SPAN") {
+                  const selectedRange = editor.selection.getRng();
+                  const selectedText =
+                    selectedRange.cloneContents().textContent;
+
+                  // Create a new span for the selected text
+                  const nonEditableSpan = document.createElement("span");
+                  nonEditableSpan.textContent = selectedText;
+                  nonEditableSpan.style =
+                    "border: none; background-color: initial;"; // Override the parent style
+
+                  // Split the span into three parts: before, selected, and after
+                  const before = span.textContent.substring(
+                    0,
+                    selectedRange.startOffset
+                  );
+                  const after = span.textContent.substring(
+                    selectedRange.endOffset
+                  );
+
+                  // Create a new span for the third section (the text after the selection)
+                  const afterSpan = document.createElement("span");
+                  afterSpan.textContent = after;
+                  afterSpan.style = span.style.cssText; // Match the style of the first section
+                  afterSpan.contentEditable = "true"; // Set contenteditable to true
+
+                  // Replace the original span with the three new parts
+                  span.textContent = before;
+                  span.after(nonEditableSpan);
+                  nonEditableSpan.after(afterSpan);
+
+                  // Move the cursor to the end of the inserted content
+                  range.setStartAfter(nonEditableSpan);
+                  range.collapse(true);
+                  editor.selection.setRng(range);
+                }
+              },
+            });
+
             // editor.on("GetContent", function (e) {
             //   var content = e.content;
             //   // A simple example to add inline style to paragraphs
@@ -772,7 +856,7 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
+            "myAddAttributeButton myRemoveAttributeButton | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak | insertLogo insertHeader exitHeader removeHeader |" +
             "removeformat | searchreplace |" +

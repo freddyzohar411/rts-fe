@@ -18,11 +18,12 @@ const TemplatePreviewSideDrawer = ({
   candidateId,
   jobId,
   templatePreviewAction = null,
+  jobTimeLineData,
 }) => {
   const { allModuleData, isAllLoading } =
     UseTemplateModuleDataHook.useTemplateModuleData({
-      candidateId: candidateId,
-      jobId: jobId,
+      candidateId: jobTimeLineData?.candidate?.id,
+      jobId: jobTimeLineData?.job?.id,
     });
   const [templateData, setTemplateData] = useState(null);
   const [exportContent, setExportContent] = useState("");
@@ -122,7 +123,7 @@ const TemplatePreviewSideDrawer = ({
               marginRight: 0,
             }}
             width="100%"
-            height="570px"
+            height="560px"
           />
         );
 
@@ -192,16 +193,16 @@ const TemplatePreviewSideDrawer = ({
           <>{previewJsx}</>
         </Container>
       </div>
-
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{
-          height: "65px",
-          flexShrink: 0,
-          flexGrow: 0,
-        }}
-      >
-        {templatePreviewAction?.action && (
+      {templatePreviewAction?.action && (
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{
+            height: "65px",
+            flexShrink: 0,
+            flexGrow: 0,
+            marginBottom: "10px",
+          }}
+        >
           <Button
             type="button"
             className="btn btn-success w-75"
@@ -217,8 +218,8 @@ const TemplatePreviewSideDrawer = ({
               generateActionButton(templatePreviewAction?.type)
             )}
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </SideDrawer>
   );
 };

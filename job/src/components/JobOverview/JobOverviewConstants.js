@@ -83,11 +83,34 @@ export const rtsStatusHeaders = [
 ];
 
 export const newHeaders = [
-  { name: "Candidate & Recruiter", icon: "mdi mdi-sort-reverse-variant" },
+  { name: "Candidate & Recruiter", icon: "mdi mdi-sort-descending" },
   { name: "Progress", icon: "" },
   { name: "Current Status", icon: "" },
   { name: "Next Step", icon: "" },
   { name: "Actions", icon: "" },
+];
+
+export const progressSteps = [
+  {
+    order: 1,
+    name: "Profile",
+  },
+  {
+    order: 2,
+    name: "Odin",
+  },
+  {
+    order: 3,
+    name: "Interviews",
+  },
+  {
+    order: 4,
+    name: "TOS",
+  },
+  {
+    order: 5,
+    name: "Conditional Offer",
+  },
 ];
 
 export const timelineSkip = {
@@ -103,20 +126,29 @@ export const timelineSkip = {
 
 export const timelineSkipModule = {
   Profile: 1,
-  Interviews: 2,
-  "Odin Protocol": 3,
-  "Conditional Offer": 4,
+  Odin: 2,
+  Interview: 3,
+  TOS: 4,
+  "Conditional Offer": 5,
 };
+
 export const timelineSkipSubModule = {
   1: [
-    "Tag",
     "Untag",
     "Associate",
+    "Profile Withdrawn",
     "Submit To Sales",
+    "Profile Rejected - Sales",
     "Submit To Client",
-    "Profile Feedback Pending",
+    "Profile Rejected - Client",
   ],
   2: [
+    "Skills Assessment",
+    "Coding Test",
+    "Technical Interview",
+    "Cultural Fit Test",
+  ],
+  3: [
     "Schedule",
     "Backout-Candidate",
     "Rescheduled",
@@ -124,22 +156,9 @@ export const timelineSkipSubModule = {
     "Rejected",
     "Selected",
   ],
-  3: [
-    "Skills Assessment",
-    "Coding Test",
-    "Technical Interview",
-    "Cultural Fit Test",
-  ],
-  4: [
-    "Conditional Offer Sent",
-    "Conditional Offer Accepted",
-    "Conditional Offer Declined",
-  ],
+  4: ["Prepare TOS", "Edit TOS", "Approve TOS"],
+  5: ["Prepare", "Edit", "Release", "Accepted", "Rejected"],
 };
-
-export const interviewSelection = [
-  
-]
 
 export const timelineLegend = [
   {
@@ -179,3 +198,11 @@ export const timelineLegend = [
     tooltip: "The step has been skipped.",
   },
 ];
+
+export const jobTimelineType = {
+  SUBMIT_TO_SALES: "submit_to_sales",
+  SUBMIT_TO_CLIENT: "submit_to_client",
+  CONDITIONAL_OFFER_DRAFT: "conditional_offer_draft",
+  CONDITIONAL_OFFER_SAVED: "conditional_offer_saved",
+  CONDITIONAL_OFFER_RELEASED: "conditional_offer_released",
+}

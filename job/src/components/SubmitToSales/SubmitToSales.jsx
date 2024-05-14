@@ -20,9 +20,15 @@ import { initialValues, schema } from "./formikConfig";
 import { toast } from "react-toastify";
 import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
 import { useNavigate } from "react-router-dom";
-import { Actions, AuditConstant } from "@workspace/common";
+import { AuditConstant } from "@workspace/common";
 import { getUsersByIds } from "../../helpers/backend_helper";
-import { DeleteCustomModal } from "@workspace/common";
+import { DeleteCustomModal2 } from "@workspace/common";
+import { tagJobAttachment } from "../../store/jobStage/action";
+import {
+  JOB_STAGE_IDS,
+  JOB_STAGE_STATUS,
+} from "../JobListing/JobListingConstants";
+import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
 
 const SubmitToSales = forwardRef(
   (
@@ -45,24 +51,13 @@ const SubmitToSales = forwardRef(
     const [tableTemplateData, setTableTemplateData] = useState(null);
     const [CVTemplateData, setCVTemplateData] = useState(null);
     const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
-      candidateId: candidateId,
-      jobId: jobId,
+      candidateId: jobTimeLineData?.candidate?.id,
+      jobId: jobTimeLineData?.job?.id,
     });
     const [attachments, setAttachments] = useState([]);
     const [attachmentLoading, setAttachmentLoading] = useState(false);
-    const emailSuccess = useSelector(
-      (state) => state.EmailCommonReducer.success
-    );
     const [confirmCVNotAttachedModal, setConfirmCVNotAttachedModal] =
       useState(false);
-
-    useEffect(() => {
-      if (emailSuccess) {
-        dispatch(Actions.resetSendEmail());
-        toast.success("Email sent successfully");
-        setOffcanvasForm(false);
-      }
-    }, [emailSuccess]);
 
     /**
      * Handle form submit event (Formik)
@@ -73,11 +68,22 @@ const SubmitToSales = forwardRef(
       newValues.to = newValues.to.map((item) => item.value);
       newValues.cc = newValues.cc.map((item) => item.value);
       newValues.bcc = newValues.bcc.map((item) => item.value);
-      const newFormData =
-        ObjectHelper.convertObjectToFormDataWithArray(newValues);
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
+        status: JOB_STAGE_STATUS?.COMPLETED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: null,
+        formId: null,
+        jobType: jobTimelineType.SUBMIT_TO_SALES,
+        emailRequest: {
+          ...newValues,
+        },
+      };
+      const formData = ObjectHelper.convertToFormDataNested(payload);
       dispatch(
-        Actions.sendEmail({
-          newFormData,
+        tagJobAttachment({
+          formData,
           config: {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -92,6 +98,8 @@ const SubmitToSales = forwardRef(
               }),
             },
           },
+          jobType: jobTimelineType.SUBMIT_TO_SALES,
+          navigate,
         })
       );
     };
@@ -258,7 +266,7 @@ const SubmitToSales = forwardRef(
     };
 
     return (
-      <div>
+      <div className="p-3">
         <Row>
           <Col>
             <EmailTo
@@ -293,6 +301,7 @@ const SubmitToSales = forwardRef(
             <EmailTemplateSelect
               icon={<i className=" ri-file-list-2-line fs-5"></i>}
               category="Email Templates"
+              placeholder="Select Email Template"
               setTemplateData={setEmailTemplateData}
               addMoreOptions={{
                 addMore: true,
@@ -345,6 +354,7 @@ const SubmitToSales = forwardRef(
               setTemplateData={setTableDataWithEffect}
               value={tableTemplateData}
               category="Table Templates"
+              placeholder="Select Table Template"
               selectRender={(data) => {
                 return (
                   <>
@@ -399,6 +409,7 @@ const SubmitToSales = forwardRef(
           >
             <EmailTemplateSelect
               isLoading={attachmentLoading}
+              placeholder="Attach CV Template"
               icon={<i className=" ri-file-list-2-line fs-5"></i>}
               value={CVTemplateData}
               setTemplateData={setCVTemplateData}
@@ -453,10 +464,10 @@ const SubmitToSales = forwardRef(
               injectData={tableTemplateData?.content ?? null}
               isAllLoading={false}
               content={emailTemplateData?.content ?? null}
-              allData={"null"}
+              allData={allModuleData}
               isView={false}
               autoResize={false}
-              height={350}
+              height={335}
               onChange={(content) => {
                 formik.setFieldValue("content", content);
               }}
@@ -472,7 +483,7 @@ const SubmitToSales = forwardRef(
             num={4}
           />
         </div>
-        <DeleteCustomModal
+        <DeleteCustomModal2
           confirmButtonText="Send"
           isOpen={confirmCVNotAttachedModal}
           setIsOpen={setConfirmCVNotAttachedModal}
@@ -481,6 +492,8 @@ const SubmitToSales = forwardRef(
           deleteText={
             "CV attachment not found. Would you like to proceed with sending the email to sales anyway?"
           }
+          toggle
+          width="350px"
         />
       </div>
     );

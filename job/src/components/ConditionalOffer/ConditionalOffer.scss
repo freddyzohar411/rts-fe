@@ -1,0 +1,20 @@
+.prepare-button {
+    border-bottom: transparent 2px solid;
+}
+
+.prepare-button.active {
+    background-color: rgba(10, 86, 174, 0.15);
+    color: #0A56AE;
+    border-bottom:#0A56AE 2px solid;
+}
+
+.condition-offer__full-screen {
+    position: fixed; /* Ensure it's relative to the viewport */
+    top: 0;          /* Start from the top */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    border-right: 1px solid #e0e0e0;
+    z-index: 2;
+}

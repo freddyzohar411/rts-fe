@@ -12,6 +12,10 @@ import {
   JOB_TIMELINE_COUNT_SUCCESS,
   JOB_TIMELINE_COUNT_FAILURE,
   TAG_JOB_RESET,
+  TAG_JOB_ATTACHMENT,
+  TAG_JOB_ATTACHMENT_SUCCESS,
+  TAG_JOB_ATTACHMENT_FAILURE,
+  TAG_JOB_ATTACHMENT_RESET,
 } from "./actionTypes";
 
 // tag a job
@@ -81,3 +85,24 @@ export const fetchJobtimeineCountFailure = (error) => ({
   type: JOB_TIMELINE_COUNT_FAILURE,
   payload: error,
 });
+
+export const tagJobAttachment = (params) => ({
+  type: TAG_JOB_ATTACHMENT,
+  payload: params,
+});
+
+export const tagJobAttachmentSuccess = (data) => ({
+  type: TAG_JOB_ATTACHMENT_SUCCESS,
+  payload: data,
+});
+
+export const tagJobAttachmentFailure = (error) => ({
+  type: TAG_JOB_ATTACHMENT_FAILURE,
+  payload: error,
+});
+
+export const tagJobAttachmentReset = () => ({
+  type: TAG_JOB_ATTACHMENT_RESET,
+});
+
+

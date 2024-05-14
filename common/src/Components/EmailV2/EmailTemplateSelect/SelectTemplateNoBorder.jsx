@@ -16,7 +16,9 @@ const TemplateSelectByCategoryElement = ({
   addMore = false,
   addMoreLabel = "Label",
   addMoreRender = null,
+  addMoreStart = false,
   selectRender = null,
+  placeholder = "Select an option",
   ...props
 }) => {
   const navigate = useNavigate();
@@ -81,10 +83,17 @@ const TemplateSelectByCategoryElement = ({
         };
       });
       if (addMore) {
-        templateMapped.push({
-          value: "addMore",
-          label: addMoreLabel,
-        });
+        if (addMoreStart) {
+          templateMapped.unshift({
+            value: "addMore",
+            label: addMoreLabel,
+          });
+        } else {
+          templateMapped.push({
+            value: "addMore",
+            label: addMoreLabel,
+          });
+        }
       }
       setTemplateList(templateMapped);
       setStoreTemplatesByCategory(templatesByCategory);
@@ -182,7 +191,7 @@ const TemplateSelectByCategoryElement = ({
           menuShouldScrollIntoView={false}
           isClearable
           isSearchable
-          placeholder={props.placeholder ?? "Select an option"}
+          placeholder={placeholder}
           options={templateList}
           formatOptionLabel={formatOptionLabel}
           components={{ SingleValue }}

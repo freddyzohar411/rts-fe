@@ -26,6 +26,8 @@ const TemplateDisplayV3 = ({
   initialValues,
   isAllLoading,
   showLoading = true,
+  initializeDataAttributesElement = false,
+  transformScale = 1,
 }) => {
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
   const [parsedContent, setParsedContent] = useState(content || "");
@@ -82,12 +84,15 @@ const TemplateDisplayV3 = ({
       if (!processContent) return;
       try {
         setIsLoading(true);
-        const result = await TemplateDisplayHelper.runEffects(
+        let result = await TemplateDisplayHelper.runEffects(
           content,
           null,
           mappedVariableData,
           recursive
         );
+        if (initializeDataAttributesElement) {
+          result = TemplateDisplayHelper.removeStylesFromDataAttributes(result);
+        }
         setParsedContent(result);
       } catch (error) {
         console.error("Error applying effects:", error);
@@ -226,7 +231,13 @@ const TemplateDisplayV3 = ({
       {isView ? (
         !isLoading &&
         !isAllLoading && (
-          <div className="tinyCME">
+          <div
+            className="tinyCME"
+            style={{
+              transform: `scale(${transformScale})`,
+              transformOrigin: "top left",
+            }}
+          >
             <div ref={displayRef}> {ReactHtmlParser(parsedContent)}</div>
           </div>
         )

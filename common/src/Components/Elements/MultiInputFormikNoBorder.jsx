@@ -22,10 +22,10 @@ const MultiInputFormikNoBorder = ({
     const options = [];
     // Check if string has comma separated values first
     // if (string.includes(",")) {
-      string.split(",").forEach((element) => {
-        options.push({ value: element, label: element });
-      });
-      return options;
+    string.split(",").forEach((element) => {
+      options.push({ value: element, label: element });
+    });
+    return options;
     // }
     // return [
     //   {
@@ -66,16 +66,6 @@ const MultiInputFormikNoBorder = ({
       return formik.values[name];
     }
   };
-
-  // useEffect(() => {
-  //   // console.log("formik.values[name]", formik.values[name])
-  //   if (formik.values[name] !== "" && formik.values[name] !== undefined) {
-  //     setSelectedOptions(convertStringToOptions(formik.values[name]));
-  //   }
-  // }, [formik.values[name]]);
-
-  // console.log("selectedOptions", selectedOptions);
-
   // Check if formik value changes, add it to value
   useEffect(() => {
     if (formik.values[name] && isString) {
