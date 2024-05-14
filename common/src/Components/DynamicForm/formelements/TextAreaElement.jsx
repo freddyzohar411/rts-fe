@@ -12,6 +12,7 @@ const TextAreaElement = ({ formik, field, formStateHook, tabIndexData }) => {
       placeholder={field.placeholder}
       disabled={formState === "view" ? true : false}
       tabIndex={tabIndexData?.[field?.fieldId]}
+      style={{ border: "1px solid #E7EAEE" }}
     />
   );
 };

@@ -32,7 +32,8 @@ import useImportCandidate from "./useImportCandidate";
 import CandidateMappingTable from "../../components/CandidateParse/CandidateMapping/CandidateMappingTable";
 import { setParseAndImportLoading } from "../../store/candidate/action";
 import { parseResumeMulti } from "../../helpers/backend_helper";
-import jsonData from "../../components/CandidateParse/data2.json";
+// import jsonData from "../../components/CandidateParse/data2.json";
+const jsonData = [];
 
 const CandidateResumeParse = () => {
   const dispatch = useDispatch();

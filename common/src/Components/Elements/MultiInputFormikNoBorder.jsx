@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 
 const MultiInputFormikNoBorder = ({
@@ -8,6 +8,7 @@ const MultiInputFormikNoBorder = ({
   isString,
   ...props
 }) => {
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const convertOptionsToCommaseparatedString = (options) => {
     let string = "";
     options.forEach((option) => {
@@ -19,10 +20,19 @@ const MultiInputFormikNoBorder = ({
   const convertStringToOptions = (string) => {
     if (!string) return [];
     const options = [];
+    // Check if string has comma separated values first
+    // if (string.includes(",")) {
     string.split(",").forEach((element) => {
       options.push({ value: element, label: element });
     });
     return options;
+    // }
+    // return [
+    //   {
+    //     value: string,
+    //     label: string,
+    //   },
+    // ];
   };
 
   const handleChange = (selectedOptions, name) => {
@@ -56,6 +66,14 @@ const MultiInputFormikNoBorder = ({
       return formik.values[name];
     }
   };
+  // Check if formik value changes, add it to value
+  useEffect(() => {
+    if (formik.values[name] && isString) {
+      formik.setFieldValue(name, convertStringToOptions(formik.values[name]));
+    } else {
+      formik.setFieldValue(name, formik.values[name]);
+    }
+  }, [formik.values[name]]);
 
   const customStyles = {
     container: (provided) => ({
@@ -88,19 +106,18 @@ const MultiInputFormikNoBorder = ({
     }),
     multiValue: (provided) => ({
       ...provided,
-      margin:"0px 5px 5px 0px", // Adds a small margin between tags
+      margin: "0px 5px 5px 0px", // Adds a small margin between tags
       paddingLeft: "2px", // Removes default padding
       paddingRight: "2px", // Removes default padding
       borderRadius: "100vh", // Removes default border radius
-
     }),
     multiValueRemove: (provided) => ({
       ...provided,
-      ':hover': {
+      ":hover": {
         // Use default hover effect defult red color with opacity
         backgroundColor: "rgba(220, 53, 69, 0.5)",
-        borderRadius: '100vh'  // Makes the remove button circular on hover
-      }
+        borderRadius: "100vh", // Makes the remove button circular on hover
+      },
     }),
   };
 

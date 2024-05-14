@@ -1,164 +1,503 @@
-import { Form } from "@workspace/common";
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { SUBMIT_TO_SALES } from "./constants";
-import { fetchJobForm, tagJob } from "../../store/actions";
-import { useUserAuth } from "@workspace/login";
-import { Row, Col, Button, Tooltip } from "reactstrap";
+import { Row, Col, Button } from "reactstrap";
+import { useFormik } from "formik";
+import {
+  EmailTo,
+  EmailCCBCC,
+  EmailSubject,
+  EmailTemplateSelect,
+  TemplateDisplayV4,
+  UseTemplateModuleDataHook,
+  EmailAttachments,
+} from "@workspace/common";
+import { initialValues, schema } from "./formikConfig";
+import { toast } from "react-toastify";
+import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
+import { useNavigate } from "react-router-dom";
+import { AuditConstant } from "@workspace/common";
+import { getUsersByIds } from "../../helpers/backend_helper";
+import { DeleteCustomModal2 } from "@workspace/common";
+import { tagJobAttachment } from "../../store/jobStage/action";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
-import { Actions } from "@workspace/common";
-import { UseTemplateModuleDataHook } from "@workspace/common";
+import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
 
-function SubmitToSales({
-  closeOffcanvas,
-  onPreviewCVClick,
-  templateData,
-  candidateId,
-  jobId,
-}) {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const formikRef = useRef(null);
-
-  const form = useSelector((state) => state.JobFormReducer.form);
-
-  const linkState = location.state;
-  const { getAllUserGroups } = useUserAuth();
-
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-  const [view, setView] = useState(
-    linkState?.view !== null && linkState?.view !== undefined
-      ? linkState?.view
-      : false
-  );
-  const [formTemplate, setFormTemplate] = useState(null);
-  UseTemplateModuleDataHook.useTemplateModuleData({
-    candidateId: candidateId,
-    jobId: jobId,
-  });
-
-  const toggleFormViewState = () => {
-    setView(!view);
-  };
-
-  useEffect(() => {
-    dispatch(fetchJobForm(SUBMIT_TO_SALES));
-  }, []);
-
-  useEffect(() => {
-    if (form) {
-      setFormTemplate(form);
-    }
-  }, [form]);
-
-  // Handle form submit
-  const handleFormSubmit = async (
-    event,
-    values,
-    newValues,
-    buttonNameHook,
-    formStateHook,
-    rerenderTable
-  ) => {
-    const payload = {
-      jobId: jobId,
-      jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
-      status: values?.candidateStatus ?? JOB_STAGE_STATUS?.COMPLETED,
+const SubmitToSales = forwardRef(
+  (
+    {
       candidateId,
-      formData: JSON.stringify(values),
-      formId: parseInt(form.formId),
-      jobType: "submit_to_sales",
+      jobId,
+      setIsViewTemplate,
+      setTemplatePreviewInfo,
+      setTemplatePreviewAction,
+      setOffcanvasForm,
+      jobTimeLineData,
+    },
+    ref
+  ) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [formInitialValues, setFormInitialValues] = useState(initialValues);
+    const [formSchema, setFormSchema] = useState(schema);
+    const [emailTemplateData, setEmailTemplateData] = useState(null);
+    const [tableTemplateData, setTableTemplateData] = useState(null);
+    const [CVTemplateData, setCVTemplateData] = useState(null);
+    const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
+      candidateId: jobTimeLineData?.candidate?.id,
+      jobId: jobTimeLineData?.job?.id,
+    });
+    const [attachments, setAttachments] = useState([]);
+    const [attachmentLoading, setAttachmentLoading] = useState(false);
+    const [confirmCVNotAttachedModal, setConfirmCVNotAttachedModal] =
+      useState(false);
+
+    /**
+     * Handle form submit event (Formik)
+     * @param {*} values
+     */
+    const handleFormSubmit = async (values) => {
+      const newValues = { ...values };
+      newValues.to = newValues.to.map((item) => item.value);
+      newValues.cc = newValues.cc.map((item) => item.value);
+      newValues.bcc = newValues.bcc.map((item) => item.value);
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
+        status: JOB_STAGE_STATUS?.COMPLETED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: null,
+        formId: null,
+        jobType: jobTimelineType.SUBMIT_TO_SALES,
+        emailRequest: {
+          ...newValues,
+        },
+      };
+      const formData = ObjectHelper.convertToFormDataNested(payload);
+      dispatch(
+        tagJobAttachment({
+          formData,
+          config: {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Audit: JSON.stringify({
+                module: AuditConstant.moduleConstant.JOB_TIMELINE,
+                moduleId: jobTimeLineData?.id,
+                subModule: AuditConstant.subModuleConstant.SUBMIT_TO_SALES,
+                jobId: jobTimeLineData?.job?.id,
+                candidateId: jobTimeLineData?.candidate?.id,
+                recruiterId: jobTimeLineData?.createdBy,
+                salesId: jobTimeLineData?.job?.createdBy,
+              }),
+            },
+          },
+          jobType: jobTimelineType.SUBMIT_TO_SALES,
+          navigate,
+        })
+      );
     };
-    dispatch(tagJob({ payload, navigate }));
-    closeOffcanvas();
-  };
 
-  const handleCancel = () => {
-    closeOffcanvas();
-  };
+    // Set formik when attachments change
+    useEffect(() => {
+      formik.setFieldValue("attachments", attachments);
+    }, [attachments]);
 
-  return (
-    <React.Fragment>
-      <div>
+    /**
+     * Initialize Formik (useFormik Hook)
+     */
+    const formik = useFormik({
+      enableReinitialize: true,
+      initialValues: formInitialValues,
+      validationSchema: formSchema,
+      validateOnBlur: true,
+      onSubmit: handleFormSubmit,
+    });
+
+    // Expose the submitForm method to the parent via ref
+    useImperativeHandle(ref, () => ({
+      submitForm: () => {
+        if (formik.isValid) {
+          if (attachments.length === 0) {
+            setConfirmCVNotAttachedModal(true);
+            return;
+          }
+          formik.handleSubmit();
+        } else {
+          toastErrors();
+        }
+      },
+    }));
+
+    // PrePopulate Emails
+    useEffect(() => {
+      const prePopulateEmails = async (data) => {
+        const response = await getUsersByIds({
+          userIds: [data?.salesId, data?.recruiterId],
+        });
+        const userData = response?.data;
+        if (userData) {
+          const to = userData.filter((item) => item.id === data.salesId);
+          const cc = userData.filter((item) => item.id === data.recruiterId);
+          if (to && to.length > 0) {
+            formik.setFieldValue("to", [
+              {
+                value: to[0]?.email,
+                label: to[0]?.email,
+              },
+            ]);
+          }
+          if (cc && cc.length > 0) {
+            formik.setFieldValue("cc", [
+              {
+                value: cc[0]?.email,
+                label: cc[0]?.email,
+              },
+            ]);
+          }
+        }
+      };
+
+      // Get Sales Email
+      if (
+        jobTimeLineData?.job?.createdBy &&
+        jobTimeLineData?.candidate?.createdBy &&
+        formik
+      ) {
+        const salesId = jobTimeLineData?.job?.createdBy;
+        const recruiterId = jobTimeLineData?.candidate?.createdBy;
+        prePopulateEmails({
+          salesId,
+          recruiterId,
+        });
+      }
+    }, []);
+
+    // Toast errors upn submit
+    const toastErrors = () => {
+      if (formik.errors) {
+        Object.keys(formik.errors).forEach((key) => {
+          toast.error(formik.errors[key]);
+        });
+      }
+    };
+
+    useEffect(() => {
+      const setContentInFormik = async () => {
+        const processedContent = await TemplateHelper.runEffects(
+          emailTemplateData.content,
+          null,
+          allModuleData,
+          true
+        );
+        formik.setFieldValue("content", processedContent);
+      };
+
+      if (emailTemplateData) {
+        setContentInFormik();
+      }
+    }, [emailTemplateData, allModuleData]);
+
+    const setTableDataWithEffect = async (data) => {
+      const processedContent = await TemplateHelper.runEffects(
+        data.content,
+        null,
+        allModuleData,
+        true
+      );
+      setTableTemplateData({ ...data, content: processedContent });
+    };
+
+    useEffect(() => {
+      if (tableTemplateData) {
+        setTableTemplateData(null);
+      }
+    }, [tableTemplateData]);
+
+    const attachmentTemplate = async (filterTemplate) => {
+      if (!filterTemplate) return;
+
+      try {
+        const processedTemplate =
+          await TemplateHelper.setSelectedContentAndProcessed(
+            filterTemplate.content,
+            allModuleData
+          );
+
+        if (processedTemplate) {
+          let fileName = "candidate_cv";
+          if (
+            allModuleData?.Candidates?.basicInfo?.firstName &&
+            allModuleData?.Candidates?.basicInfo?.lastName
+          ) {
+            fileName = `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`;
+          }
+          const file = await ExportHelper.exportBackendHtml2PdfFile(
+            processedTemplate.html,
+            {
+              unit: "in",
+              pageType: "A4",
+              pageOrientation: "portrait",
+              marginTop: 0,
+              marginBottom: 0,
+              marginLeft: 0,
+              marginRight: 0,
+              exportType: "pdf",
+              fileName: fileName,
+            },
+            processedTemplate.styleTag
+          );
+          setAttachments([...attachments, file]);
+        }
+      } catch (error) {
+      } finally {
+      }
+    };
+
+    const confirmSendEmail = () => {
+      setConfirmCVNotAttachedModal(false);
+      formik.handleSubmit();
+    };
+
+    return (
+      <div className="p-3">
         <Row>
           <Col>
-            <Form
-              template={formTemplate}
-              userDetails={getAllUserGroups()}
-              country={null}
-              editData={null}
-              onSubmit={handleFormSubmit}
-              onFormFieldsChange={null}
-              errorMessage={null}
-              view={view}
-              ref={formikRef}
+            <EmailTo
+              formik={formik}
+              ToIcon={<i className="ri-mail-fill fs-5"></i>}
+            />
+            <hr className="mt-2" />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <EmailCCBCC formik={formik} CCicon={<span>Cc</span>} BCC />
+            <hr className="mt-2" />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <EmailSubject
+              formik={formik}
+              name="subject"
+              icon={<i className="ri-text fs-5"></i>}
+            />
+            <hr className="mt-2" />
+          </Col>
+        </Row>
+
+        <Row className="d-flex">
+          <Col>
+            {/* Main Template Select */}
+            <EmailTemplateSelect
+              icon={<i className=" ri-file-list-2-line fs-5"></i>}
+              category="Email Templates"
+              placeholder="Select Email Template"
+              setTemplateData={setEmailTemplateData}
+              addMoreOptions={{
+                addMore: true,
+                addMoreLabel: "Add New Template",
+                render: (
+                  <Button
+                    className="btn btn-custom-primary header-btn w-100"
+                    style={{
+                      height: "40px",
+                      backgroundColor: "#0A65CC",
+                    }}
+                    type="button"
+                    onClick={(event) => {
+                      event.preventDefault(); // Prevents the menu from closing
+                      event.stopPropagation(); // Stops selection
+                      navigate("/settings/templates/create");
+                    }}
+                  >
+                    + New Email Template
+                  </Button>
+                ),
+              }}
+              selectRender={(data) => {
+                return (
+                  <>
+                    <div className="d-flex align-items-center justify-content-between">
+                      <span>{data?.label}</span>
+                      <i
+                        className="ri-eye-line cursor-pointer"
+                        onClick={(event) => {
+                          event.preventDefault(); // Prevents the menu from closing
+                          event.stopPropagation(); // Stops selection
+                          setIsViewTemplate(true);
+                          setTemplatePreviewInfo(data?.data);
+                          setTemplatePreviewAction({
+                            type: "VIEW",
+                          });
+                        }}
+                      ></i>
+                    </div>
+                  </>
+                );
+              }}
+            />
+            <hr className="mt-2" />
+          </Col>
+          <Col>
+            <EmailTemplateSelect
+              icon={<i className=" ri-table-2 fs-5"></i>}
+              setTemplateData={setTableDataWithEffect}
+              value={tableTemplateData}
+              category="Table Templates"
+              placeholder="Select Table Template"
+              selectRender={(data) => {
+                return (
+                  <>
+                    <div className="d-flex align-items-center justify-content-between">
+                      <span>{data?.label}</span>
+                      <i
+                        className="ri-eye-line cursor-pointer"
+                        onClick={(event) => {
+                          event.preventDefault(); // Prevents the menu from closing
+                          event.stopPropagation(); // Stops selection
+                          setIsViewTemplate(true);
+                          setTemplatePreviewInfo(data?.data);
+                          setTemplatePreviewAction({
+                            type: "VIEW",
+                          });
+                        }}
+                      ></i>
+                    </div>
+                  </>
+                );
+              }}
+              addMoreOptions={{
+                addMore: true,
+                addMoreLabel: "Add New Template",
+                render: (
+                  <Button
+                    type="button"
+                    className="btn btn-custom-primary header-btn w-100"
+                    style={{
+                      height: "40px",
+                      backgroundColor: "#0A65CC",
+                    }}
+                    onClick={(event) => {
+                      event.preventDefault(); // Prevents the menu from closing
+                      event.stopPropagation(); // Stops selection
+                      navigate("/settings/templates/create");
+                    }}
+                  >
+                    + New Table Template
+                  </Button>
+                ),
+              }}
+            />
+            <hr className="mt-2" />
+          </Col>
+        </Row>
+        <Row className="">
+          <Col
+            style={{
+              maxWidth: "50%",
+            }}
+          >
+            <EmailTemplateSelect
+              isLoading={attachmentLoading}
+              placeholder="Attach CV Template"
+              icon={<i className=" ri-file-list-2-line fs-5"></i>}
+              value={CVTemplateData}
+              setTemplateData={setCVTemplateData}
+              category="CV"
+              selectRender={(data) => {
+                return (
+                  <>
+                    <div className="d-flex align-items-center">
+                      <span
+                        className="flex-grow-1"
+                        onClick={async (event) => {
+                          try {
+                            setAttachmentLoading(true);
+                            await attachmentTemplate(data?.data);
+                          } catch (error) {
+                          } finally {
+                            setAttachmentLoading(false);
+                          }
+                        }}
+                      >
+                        {data?.label}
+                      </span>
+                      <i
+                        className="ri-eye-line cursor-pointer"
+                        onClick={(event) => {
+                          event.preventDefault(); // Prevents the menu from closing
+                          event.stopPropagation(); // Stops selection
+                          setIsViewTemplate(true);
+                          setTemplatePreviewInfo(data?.data);
+                          setTemplatePreviewAction({
+                            type: "ATTACH_TEMPLATE",
+                            label: "Attach Template",
+                            action: async (data) => {
+                              await attachmentTemplate(data);
+                              setIsViewTemplate(false);
+                            },
+                          });
+                        }}
+                      ></i>
+                    </div>
+                  </>
+                );
+              }}
+            />
+            <hr className="mt-2" />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <TemplateDisplayV4
+              injectData={tableTemplateData?.content ?? null}
+              isAllLoading={false}
+              content={emailTemplateData?.content ?? null}
+              allData={allModuleData}
+              isView={false}
+              autoResize={false}
+              height={335}
+              onChange={(content) => {
+                formik.setFieldValue("content", content);
+              }}
+              value={formik?.values?.["content"]}
+              showLoading={false}
             />
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <div className="d-flex flex-row justify-content-end gap-4 m-2">
-              <div className="d-flex flex-column flex-nowrap">
-                <div className="d-flex flex-row gap-2 flex-nowrap">
-                  <Button
-                    type="button"
-                    className="btn btn-custom-primary"
-                    onClick={onPreviewCVClick}
-                  >
-                    Preview CV
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn btn-custom-primary"
-                    onClick={() => {
-                      dispatch(
-                        Actions.setEmailOpen({
-                          category: "Email Templates",
-                          attachmentCategory: "CV",
-                        })
-                      );
-                    }}
-                  >
-                    Send Email
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn btn-custom-primary"
-                    id="update-btn"
-                    onClick={() => {
-                      formikRef?.current?.formik?.submitForm();
-                    }}
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => handleCancel()}
-                  >
-                    Cancel
-                  </Button>
-                  <Tooltip
-                    target="update-btn"
-                    isOpen={tooltipOpen}
-                    toggle={() => setTooltipOpen(!tooltipOpen)}
-                    placement="bottom"
-                  >
-                    <span>Update without Email</span>
-                  </Tooltip>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
+        <div className="mt-2">
+          <EmailAttachments
+            attachments={attachments}
+            setAttachments={setAttachments}
+            num={4}
+          />
+        </div>
+        <DeleteCustomModal2
+          confirmButtonText="Send"
+          isOpen={confirmCVNotAttachedModal}
+          setIsOpen={setConfirmCVNotAttachedModal}
+          confirmDelete={confirmSendEmail}
+          header="Confirmation"
+          deleteText={
+            "CV attachment not found. Would you like to proceed with sending the email to sales anyway?"
+          }
+          toggle
+          width="350px"
+        />
       </div>
-    </React.Fragment>
-  );
-}
+    );
+  }
+);
 
 export default SubmitToSales;

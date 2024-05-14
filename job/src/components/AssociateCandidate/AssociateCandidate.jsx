@@ -103,7 +103,7 @@ function AssociateCandidate({
 
   return (
     <React.Fragment>
-      <div>
+      <div className="p-3">
         <Row>
           <Col lg={4} className="mb-3">
             <span className="h5 fw-bold text-dark">Associate Candidate</span>

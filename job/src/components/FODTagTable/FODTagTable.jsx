@@ -4,7 +4,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  fetchCandidates,
   fetchCandidatesFields,
   candidateRecommendationList,
   resetCandidateRecommendationList,
@@ -104,7 +103,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 10,
+      pageSize: 5,
       sortBy: null,
       sortDirection: null,
       searchTerm: null,
