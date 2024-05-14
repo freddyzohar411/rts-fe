@@ -616,8 +616,6 @@ const JobOverview = () => {
     }
   };
 
-  console.log(candidateId);
-
   const handleSort = (index) => {
     if (index === 0) {
       const direction = sortDirection === "asc" ? "desc" : "asc";
@@ -1606,14 +1604,14 @@ const JobOverview = () => {
             onChange={(e) => setMyNumber(parseInt(e.target.value))}
           />
           <Button
-          className="btn btn-primary fs-semibold"
+            className="btn btn-primary fs-semibold"
             onClick={() => {
               // Everytime i click i want it to render even if it is the same step
-               setIsFormModalOpen(true);
+              setIsFormModalOpen(true);
               setActiveStep(myNumber);
             }}
             style={{
-              textWrap: "nowrap"
+              textWrap: "nowrap",
             }}
           >
             STEP (DEV)
