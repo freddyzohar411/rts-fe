@@ -25,7 +25,7 @@ import {
 import "./ScheduleInterview.scss";
 import {
   EmailTo,
-  EmailCCBCC,
+  EmailTitle,
   EmailSubject,
   EmailTemplateSelect,
   TemplateDisplayV4,
@@ -36,6 +36,9 @@ import {
 import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
 import { Actions } from "@workspace/common";
+import EmailDateTime from "@workspace/common/src/Components/EmailV2/EmailDateTime";
+import EmailReminder from "@workspace/common/src/Components/EmailV2/EmailReminder";
+import EmailLocation from "@workspace/common/src/Components/EmailV2/EmailLocation";
 
 function ScheduleInterview(
   {
@@ -66,6 +69,12 @@ function ScheduleInterview(
   const [selectedVirtualMeeting, setSelectedVirtualMeeting] = useState(
     "Select Virtual Meeting"
   );
+  const [disableVirtualMeeting, setDisableVirtualMeeting] = useState(true);
+  const [disableEmailLocation, setDisableEmailLocation] = useState(false);
+  const handleSwitchChange = () => {
+    setDisableVirtualMeeting(!disableVirtualMeeting);
+    setDisableEmailLocation(!disableEmailLocation);
+  };
 
   useEffect(() => {
     if (emailSuccess) {
@@ -211,177 +220,13 @@ function ScheduleInterview(
     a.remove();
   };
 
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  // const location = useLocation();
-  // const linkState = location.state;
-  // const { getAllUserGroups } = useUserAuth();
-  // const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
-  //   candidateId: candidateId,
-  //   jobId: jobId,
-  // });
-  // const [attachments, setAttachments] = useState([]);
-  // const [attachmentLoading, setAttachmentLoading] = useState(false);
-  // const emailSuccess = useSelector((state) => state.EmailCommonReducer.success);
-
-
-  // const [formInitialValues, setFormInitialValues] = useState(initialValues);
-  // const [formSchema, setFormSchema] = useState(schema);
-
-  // const handleFormSubmit = async (values) => {
-  //   const newValues = { ...values };
-  //   newValues.to = newValues.to.map((item) => item.value);
-  //   newValues.cc = newValues.cc.map((item) => item.value);
-  //   newValues.bcc = newValues.bcc.map((item) => item.value);
-  //   const newFormData =
-  //     ObjectHelper.convertObjectToFormDataWithArray(newValues);
-  //   dispatch(
-  //     Actions.sendEmail({
-  //       newFormData,
-  //       config: {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       },
-  //     })
-  //   );
-  // };
-
-  // const formik = useFormik({
-  //   enableReinitialize: true,
-  //   initialValues: formInitialValues,
-  //   validationSchema: formSchema,
-  //   validateOnBlur: true,
-  //   onSubmit: handleFormSubmit,
-  // });
-
-  // const [emailTemplateData, setEmailTemplateData] = useState(null);
-  // const [tableTemplateData, setTableTemplateData] = useState(null);
-  // const [CVTemplateData, setCVTemplateData] = useState(null);
-
-  // const [view] = useState(
-  //   linkState?.view !== null && linkState?.view !== undefined
-  //     ? linkState?.view
-  //     : false
-  // );
-
-  // const formikRef = useRef(null);
-  // const form = useSelector((state) => state.JobFormReducer.form);
-  // const [formTemplate, setFormTemplate] = useState(null);
-
-  // useEffect(() => {
-  //   dispatch(fetchJobForm(SCHEDULE_INTERVIEW));
-  // }, []);
-
-  // useEffect(() => {
-  //   if (form) {
-  //     setFormTemplate(form);
-  //   }
-  // }, [form]);
-
-  // const setTableDataWithEffect = async (data) => {
-  //   const processedContent = await TemplateHelper.runEffects(
-  //     data.content,
-  //     null,
-  //     allModuleData,
-  //     true
-  //   );
-  //   setTableTemplateData({ ...data, content: processedContent });
-  // };
-
-  // useEffect(() => {
-  //   if (tableTemplateData) {
-  //     setTableTemplateData(null);
-  //   }
-  // }, [tableTemplateData]);
-
-  // const attachmentTemplate = async (filterTemplate) => {
-  //   if (!filterTemplate) return;
-  //   setAttachmentLoading(true);
-  //   try {
-  //     const processedTemplate =
-  //       await TemplateHelper.setSelectedContentAndProcessed(
-  //         filterTemplate.content,
-  //         allModuleData
-  //       );
-
-  //     if (processedTemplate) {
-  //       const file = await ExportHelper.exportBackendHtml2PdfFile(
-  //         processedTemplate.html,
-  //         {
-  //           unit: "in",
-  //           pageType: "A4",
-  //           pageOrientation: "portrait",
-  //           marginTop: 0,
-  //           marginBottom: 0,
-  //           marginLeft: 0,
-  //           marginRight: 0,
-  //           exportType: "pdf",
-  //           fileName: `${allModuleData?.Candidates?.basicInfo?.firstName}_${allModuleData?.Candidates?.basicInfo?.lastName}`,
-  //         },
-  //         processedTemplate.styleTag
-  //       );
-  //       setAttachments([...attachments, file]);
-  //     }
-  //   } catch (error) {
-  //   } finally {
-  //     setAttachmentLoading(false);
-  //   }
-  // };
-
-  // const downloadAttachment = (attachment) => {
-  //   // Assuming attachment.file is a Blob or File object
-  //   const url = window.URL.createObjectURL(attachment);
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = attachment.name;
-  //   a.click();
-  //   window.URL.revokeObjectURL(url);
-  //   a.remove();
-  // };
-
-  // Handle form submit
-  // const handleFormSubmit = async (
-  //   event,
-  //   values,
-  //   newValues,
-  //   buttonNameHook,
-  //   formStateHook,
-  //   rerenderTable
-  // ) => {
-  //   let stageId = JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED;
-  //   let type = "first_interview_scheduled";
-
-  //   if (activeStep === 12) {
-  //     stageId = JOB_STAGE_IDS?.SECOND_INTERVIEW_SCHEDULED;
-  //     type = "second_interview_scheduled";
-  //   }
-
-  //   if (activeStep === 14) {
-  //     stageId = JOB_STAGE_IDS?.THIRD_INTERVIEW_SCHEDULED;
-  //     type = "third_interview_scheduled";
-  //   }
-
-  //   const payload = {
-  //     jobId: jobId,
-  //     jobStageId: stageId,
-  //     status: values?.profileFeedbackStatus ?? JOB_STAGE_STATUS?.COMPLETED,
-  //     candidateId,
-  //     formData: JSON.stringify(values),
-  //     formId: parseInt(form.formId),
-  //     jobType: type,
-  //   };
-  //   dispatch(tagJob({ payload, navigate }));
-  //   closeOffcanvas();
-  // };
-
   return (
     <React.Fragment>
       <div>
         {/* Title */}
         <Row>
           <Col>
-            <EmailSubject
+            <EmailTitle
               formik={formik}
               name="subject"
               icon={<i className="mdi mdi-format-text fs-5"></i>}
@@ -418,42 +263,9 @@ function ScheduleInterview(
               <i className="mdi mdi-calendar-plus fs-5"></i>
             </div>
             <div className="d-flex flex-row justify-content-between gap-2 w-100">
-              <div className="d-flex flex-row justify-content-center align-items-center gap-2 3 w-100">
-                <span
-                  style={{
-                    color: "#7A7A7A",
-                    fontWeight: "100",
-                  }}
-                >
-                  From
-                </span>
-                <Input type="date" className="input-custom" />
-                <Input type="time" className="input-custom" />
-              </div>
-
-              <div className="d-flex flex-row justify-content-center align-items-center gap-2 w-100">
-                <span
-                  style={{
-                    color: "#7A7A7A",
-                    fontWeight: "100",
-                  }}
-                >
-                  To
-                </span>
-                <Input className="input-custom" type="date" />
-                <Input className="input-custom" type="time" />
-              </div>
-
-              <div className="w-100">
-                <Input type="select" className="input-custom">
-                  <option value="">Reminder</option>
-                  <option value="Does not repeat">Does not repeat</option>
-                  <option value="Daily">Daily</option>
-                  <option value="Weekly">Weekly</option>
-                  <option value="Monthly">Monthly</option>
-                  <option value="Yearly">Yearly</option>
-                </Input>
-              </div>
+              <EmailDateTime formik={formik} period="From" />
+              <EmailDateTime formik={formik} period="To" />
+              <EmailReminder formik={formik} />
             </div>
           </div>
         </Row>
@@ -474,13 +286,9 @@ function ScheduleInterview(
                 >
                   <i className="mdi mdi-map-marker-plus fs-5"></i>
                 </div>
-
-                {/* Use Bootstrap's form-control class to make the input 100% width */}
-                <Input
-                  type="text"
-                  className="form-control"
-                  style={{ border: "none" }}
-                  placeholder="Enter Location"
+                <EmailLocation
+                  formik={formik}
+                  disabled={disableEmailLocation}
                 />
               </div>
               <hr className="m-0 p-0" />
@@ -491,9 +299,10 @@ function ScheduleInterview(
                   <span>Or</span>
                   <FormGroup switch>
                     <Input
-                      className="input-custom"
                       type="switch"
                       role="switch"
+                      onChange={handleSwitchChange}
+                      checked={!disableVirtualMeeting}
                     />
                   </FormGroup>
                   <span className="fw-semibold">Virtual Meeting</span>
@@ -501,9 +310,8 @@ function ScheduleInterview(
                 <div className="w-100">
                   <Dropdown
                     isOpen={virtualMeetingOpen}
-                    toggle={() => {
-                      setVirtualMeetingOpen(!virtualMeetingOpen);
-                    }}
+                    toggle={() => setVirtualMeetingOpen(!virtualMeetingOpen)}
+                    disabled={disableVirtualMeeting}
                   >
                     <DropdownToggle
                       className="input-custom"
@@ -646,51 +454,6 @@ function ScheduleInterview(
             <hr className="mt-2" />
           </Col>
         </Row>
-
-        {/* <Row className="mt-2 mb-3">
-          <Col lg={6}>
-            <div className="d-flex flex-row justify-content-start align-items-center gap-2">
-              <div
-                className="rounded d-flex justify-content-center align-items-center"
-                style={{
-                  height: "28px",
-                  width: "28px",
-                  backgroundColor: "#F5F5F5",
-                  border: "1px solid #A8A8A8",
-                  color: "#7A7A7A",
-                }}
-              >
-                <i className="mdi mdi-text-box-outline fs-5"></i>
-              </div>
-              <div className="w-100">
-                <Input className="input-custom" type="select">
-                  <option value="">Select Body Template</option>
-                </Input>
-              </div>
-            </div>
-          </Col>
-          <Col lg={6}>
-            <div className="d-flex flex-row justify-content-start align-items-center gap-2">
-              <div
-                className="rounded d-flex justify-content-center align-items-center"
-                style={{
-                  height: "28px",
-                  width: "28px",
-                  backgroundColor: "#F5F5F5",
-                  border: "1px solid #A8A8A8",
-                  color: "#7A7A7A",
-                }}
-              >
-                <i className="mdi mdi-text-box-outline fs-5"></i>
-              </div>
-              <div className="w-100">
-                <Input className="input-custom" type="select">
-                  <option value="">Select CV Template</option>
-                </Input>
-              </div>
-            </div>
-          </Col>
-        </Row> */}
         <Row>
           <Col>
             <TemplateDisplayV4
@@ -709,45 +472,6 @@ function ScheduleInterview(
             />
           </Col>
         </Row>
-        {/* <Row>
-          <Col>
-            <Form
-              template={formTemplate}
-              userDetails={getAllUserGroups()}
-              country={null}
-              editData={null}
-              onSubmit={handleFormSubmit}
-              onFormFieldsChange={null}
-              errorMessage={null}
-              view={view}
-              ref={formikRef}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div className="d-flex flex-row justify-content-end gap-4 m-2">
-              <div className="d-flex flex-row gap-2 flex-nowrap">
-                <Button
-                  type="submit"
-                  className="btn btn-custom-primary"
-                  onClick={() => {
-                    formikRef?.current?.formik?.submitForm();
-                  }}
-                >
-                  Send Invite
-                </Button>
-                <Button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={() => handleCancel()}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </Col>
-        </Row> */}
       </div>
     </React.Fragment>
   );

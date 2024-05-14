@@ -761,7 +761,6 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         value={skipComboOptions[data.id]}
-                        disabled={!selectedModule}
                         onChange={(e) => {
                           handleSkipSelection(
                             data.id,
@@ -799,7 +798,7 @@ const JobOverview = () => {
                           //   )
                           // );
                           // setTimelineRowIndex(timelineIndex);
-                          // setOffcanvasForm(true);
+                          setOffcanvasForm(true);
                         }}
                       >
                         <i
@@ -1277,6 +1276,16 @@ const JobOverview = () => {
             </Pagination>
           </div>
         </Row>
+        <Row>
+            <Col>
+              <Button
+                onClick={() => setActiveStep(10)}
+                className="btn btn-dark"
+              >
+                Interview Schedule
+              </Button>
+            </Col>
+          </Row>
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => {
@@ -1352,6 +1361,7 @@ const JobOverview = () => {
               </Col>
             )} */}
           </div>
+          
           <OffcanvasBody>
             {getFormComponent(activeStep, () => setOffcanvasForm(false))}
           </OffcanvasBody>

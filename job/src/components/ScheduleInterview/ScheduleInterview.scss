@@ -17,3 +17,7 @@ input[type="text"]:focus {
   background-color: transparent !important;
   color: inherit !important;
 }
+
+.location-input:disabled {
+  background-color: transparent !important;
+}
