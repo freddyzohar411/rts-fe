@@ -25,7 +25,6 @@ import {
 import "./ScheduleInterview.scss";
 import {
   EmailTo,
-  EmailTitle,
   EmailSubject,
   EmailTemplateSelect,
   TemplateDisplayV4,
@@ -39,6 +38,7 @@ import { Actions } from "@workspace/common";
 import EmailDateTime from "@workspace/common/src/Components/EmailV2/EmailDateTime";
 import EmailReminder from "@workspace/common/src/Components/EmailV2/EmailReminder";
 import EmailLocation from "@workspace/common/src/Components/EmailV2/EmailLocation";
+import EmailTitle from "@workspace/common/src/Components/EmailV2/EmailTitle";
 
 function ScheduleInterview(
   {
@@ -222,7 +222,7 @@ function ScheduleInterview(
 
   return (
     <React.Fragment>
-      <div>
+      <div className="p-3">
         {/* Title */}
         <Row>
           <Col>

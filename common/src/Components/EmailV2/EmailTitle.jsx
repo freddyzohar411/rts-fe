@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "reactstrap";
+import { Button, Input } from "reactstrap";
 
 const EmailTitle = ({ formik, name, icon }) => {
   return (
@@ -17,6 +17,7 @@ const EmailTitle = ({ formik, name, icon }) => {
             backgroundColor: "#F5F5F5",
             border: "1px solid #A8A8A8",
             color: "#7A7A7A",
+            borderRadius: "5px"
           }}
         >
           {icon && icon}

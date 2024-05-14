@@ -1231,6 +1231,7 @@ const JobOverview = () => {
       case 1:
       case 2:
       case 3:
+      case 14:
       case 16:
       case 17:
       case 18:
@@ -1240,10 +1241,13 @@ const JobOverview = () => {
       case 99:
         setIsFormModalOpen(true);
         break;
+
       default:
         break;
     }
   };
+
+  console.log("Active Step", activeStep);
 
   return (
     <React.Fragment>
@@ -1456,15 +1460,12 @@ const JobOverview = () => {
           </div>
         </Row>
         <Row>
-            <Col>
-              <Button
-                onClick={() => setActiveStep(14)}
-                className="btn btn-dark"
-              >
-                Interview Schedule
-              </Button>
-            </Col>
-          </Row>
+          <Col>
+            <Button onClick={() => setActiveStep(14)} className="btn btn-dark">
+              Interview Schedule
+            </Button>
+          </Col>
+        </Row>
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => {
