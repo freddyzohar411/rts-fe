@@ -20,6 +20,11 @@ import {
   Spinner,
   Card,
   CardBody,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Label,
 } from "reactstrap";
 import {
   fetchJobForm,
@@ -48,6 +53,8 @@ import ConditionalOffer from "../ConditionalOffer/ConditionalOffer";
 import ConditionalOfferRelease from "../ConditionalOfferRelease.jsx/ConditionalOfferRelease.jsx";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
+import { CVPreview } from "../CVPreview";
+
 import {
   JOB_TIMELINE_INITIAL_OPTIONS,
   jobHeaders,
@@ -464,9 +471,15 @@ const JobOverview = () => {
         return (
           <ScheduleInterview
             closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
+            templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
           />
         );
       case 11:
@@ -831,6 +844,7 @@ const JobOverview = () => {
                     </div>
                   </td>
                 </tr>
+
                 {openJobIndex === data.id && (
                   <tr>
                     <td colSpan={10} className="px-3">
@@ -1218,6 +1232,7 @@ const JobOverview = () => {
       case 1:
       case 2:
       case 3:
+      case 14:
       case 16:
       case 17:
       case 18:
@@ -1229,6 +1244,7 @@ const JobOverview = () => {
       case 99:
         setIsFormModalOpen(true);
         break;
+
       default:
         break;
     }

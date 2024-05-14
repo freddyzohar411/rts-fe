@@ -43,7 +43,7 @@ import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
 import FirstInterviewFeedbackPending from "../FirstInterviewFeedback/FirstInterviewFeedback";
 import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterviewFeedback";
 import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
-import { ConditionalOffer } from "../ConditionalOffer";
+// import { ConditionalOffer } from "../ConditionalOffer";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import StepComponent from "./StepComponent";
 import { TimelineHeader } from "../TimelineHeader";
