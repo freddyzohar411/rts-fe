@@ -307,7 +307,7 @@ const JobOverview = () => {
         setStepperState("Prepare TOS");
         break;
       case 21:
-        setStepperState("Approve TOS");
+        setStepperState("TOS Accepted/Declined");
         break;
       default:
         setStepperState("");
@@ -614,8 +614,6 @@ const JobOverview = () => {
         return null;
     }
   };
-
-  console.log(candidateId);
 
   const handleSort = (index) => {
     if (index === 0) {
@@ -1242,6 +1240,8 @@ const JobOverview = () => {
         break;
       case 98:
       case 99:
+      case 22:
+      case 23:
         setIsFormModalOpen(true);
         break;
 
@@ -1501,13 +1501,25 @@ const JobOverview = () => {
             className="btn btn-info w-25 me-3 mb-3"
             onClick={() => setActiveStep(16)}
           >
-            Conditional Offer
+            Prepare Conditional Offer
           </div>
           <div
             className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(17)}
+            onClick={() => setActiveStep(18)}
           >
-            Accept or Decline
+            Conditional Offer Release
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(22)}
+          >
+            Conditional Offer Accepted
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(23)}
+          >
+            Conditional Offer Rejected
           </div>
         </Row>
 
