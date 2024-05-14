@@ -124,6 +124,35 @@ export const timelineSkip = {
   "Conditional Offer Status": 14,
 };
 
+//Profile
+export const UNTAG_FORM_INDEX = 1;
+export const ASSOCIATE_FORM_INDEX = 2;
+export const PRF_WTDWN_FORM_INDEX = 3;
+export const SUB_TO_SALES_FORM_INDEX = 4;
+export const PRF_REJ_SALES_FORM_INDEX = 5;
+export const SUB_TO_CLIENT_FORM_INDEX = 6;
+export const PRF_REJ_CLIENT_FORM_INDEX = 7;
+
+//Odin
+export const SKILLS_ASSESSMENT_FORM_INDEX = 8;
+export const CODING_TEST_FORM_INDEX = 9;
+export const TEC_INTRW_FORM_INDEX = 10;
+export const CULTURAL_FIT_TEST_FORM_INDEX = 11;
+export const SCHEDULE_FORM_INDEX = 12;
+export const BACKOUT_CANDIE_FORM_INDEX = 13;
+export const RESCHEDULED_FORM_INDEX = 14;
+export const CANCL_BY_CLIENT_FORM_INDEX = 15;
+export const REJECTED_INTRW_FORM_INDEX = 16;
+export const SELECTED_FORM_INDEX = 17;
+export const PREPARE_TOS_FORM_INDEX = 18;
+export const EDIT_TOS_FORM_INDEX = 19;
+export const APPROVE_TOS_FORM_INDEX = 20;
+export const PREPARE_FORM_INDEX = 21;
+export const EDIT_FORM_INDEX = 22;
+export const RELEASE_FORM_INDEX = 23;
+export const ACCEPTED_FORM_INDEX = 24;
+export const REJECTED_FORM_INDEX = 25;
+
 export const timelineSkipModule = {
   Profile: 1,
   Odin: 2,
@@ -134,30 +163,40 @@ export const timelineSkipModule = {
 
 export const timelineSkipSubModule = {
   1: [
-    "Untag",
-    "Associate",
-    "Profile Withdrawn",
-    "Submit To Sales",
-    "Profile Rejected - Sales",
-    "Submit To Client",
-    "Profile Rejected - Client",
+    { id: UNTAG_FORM_INDEX, form: "Untag" },
+    { id: ASSOCIATE_FORM_INDEX, form: "Associate" },
+    { id: PRF_WTDWN_FORM_INDEX, form: "Profile Withdrawn" },
+    { id: SUB_TO_SALES_FORM_INDEX, form: "Submit To Sales" },
+    { id: PRF_REJ_SALES_FORM_INDEX, form: "Profile Rejected - Sales" },
+    { id: SUB_TO_CLIENT_FORM_INDEX, form: "Submit To Client" },
+    { id: PRF_REJ_CLIENT_FORM_INDEX, form: "Profile Rejected - Client" },
   ],
   2: [
-    "Skills Assessment",
-    "Coding Test",
-    "Technical Interview",
-    "Cultural Fit Test",
+    { id: SKILLS_ASSESSMENT_FORM_INDEX, form: "Skills Assessment" },
+    { id: CODING_TEST_FORM_INDEX, form: "Coding Test" },
+    { id: TEC_INTRW_FORM_INDEX, form: "Technical Interview" },
+    { id: CULTURAL_FIT_TEST_FORM_INDEX, form: "Cultural Fit Test" },
   ],
   3: [
-    "Schedule",
-    "Backout-Candidate",
-    "Rescheduled",
-    "Cancelled by Client",
-    "Rejected",
-    "Selected",
+    { id: SCHEDULE_FORM_INDEX, form: "Schedule" },
+    { id: BACKOUT_CANDIE_FORM_INDEX, form: "Backout-Candidate" },
+    { id: RESCHEDULED_FORM_INDEX, form: "Rescheduled" },
+    { id: CANCL_BY_CLIENT_FORM_INDEX, form: "Cancelled by Client" },
+    { id: REJECTED_FORM_INDEX, form: "Rejected" },
+    { id: SELECTED_FORM_INDEX, form: "Selected" },
   ],
-  4: ["Prepare TOS", "Edit TOS", "Approve TOS"],
-  5: ["Prepare", "Edit", "Release", "Accepted", "Rejected"],
+  4: [
+    { id: PREPARE_TOS_FORM_INDEX, form: "Prepare TOS" },
+    { id: EDIT_TOS_FORM_INDEX, form: "Edit TOS" },
+    { id: APPROVE_TOS_FORM_INDEX, form: "Approve TOS" },
+  ],
+  5: [
+    { id: PREPARE_FORM_INDEX, form: "Prepare" },
+    { id: EDIT_FORM_INDEX, form: "Edit" },
+    { id: RELEASE_FORM_INDEX, form: "Release" },
+    { id: ACCEPTED_FORM_INDEX, form: "Accepted" },
+    { id: REJECTED_FORM_INDEX, form: "Rejected" },
+  ],
 };
 
 export const timelineLegend = [
@@ -205,4 +244,4 @@ export const jobTimelineType = {
   CONDITIONAL_OFFER_DRAFT: "conditional_offer_draft",
   CONDITIONAL_OFFER_SAVED: "conditional_offer_saved",
   CONDITIONAL_OFFER_RELEASED: "conditional_offer_released",
-}
+};
