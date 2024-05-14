@@ -9,6 +9,7 @@ import { Row, Col } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Form } from "@workspace/common";
 import { useNavigate, useLocation } from "react-router-dom";
+// Fetching the forms and tagging the job once created.
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import {
@@ -17,12 +18,13 @@ import {
 } from "../JobListing/JobListingConstants";
 
 const PrepareTOS = forwardRef(
-  ({ closeOffCanvas, jobId, candidateId, setOffcanvasForm }, parentRef) => {
+  ({ jobId, candidateId, setOffcanvasForm }, parentRef) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
     const formikRef = useRef(null);
     const { getAllUserGroups } = useUserAuth();
+    const [editData, setEditData] = useState({});
 
     const form = useSelector((state) => state.JobFormReducer.form);
     const [formTemplate, setFormTemplate] = useState(null);
@@ -44,39 +46,19 @@ const PrepareTOS = forwardRef(
       }
     }, [form]);
 
-    const handleFormSubmit = async (
-      event,
-      values,
-      newValues,
-      buttonNameHook,
-      formStateHook,
-      rerenderTable
-    ) => {
-      if (values?.skillAssessmentResults === "false") {
-        const payload = {
-          jobId: jobId,
-          jobStageId: JOB_STAGE_IDS?.SKILLS_ASSESSMENT,
-          status: JOB_STAGE_STATUS?.REJECTED,
-          candidateId,
-          jobType: "skills_assessment",
-        };
-        dispatch(tagJob({ payload, navigate }));
-      } else if (values?.skillAssessmentResults === "true") {
-        const payload = {
-          jobId: jobId,
-          jobStageId: JOB_STAGE_IDS?.CODING_TEST,
-          status: JOB_STAGE_STATUS?.IN_PROGRESS,
-          candidateId,
-          formData: JSON.stringify(values),
-          formId: parseInt(form.formId),
-          jobType: "coding_test",
-        };
-        dispatch(tagJob({ payload, navigate }));
-        if (values?.scheduleForCodingTest === "true") {
-          window.open("https://app.hackerearth.com/recruiter/", "_blank");
-        }
-      }
-      closeOffcanvas();
+    // Handle Form Submit
+    const handleFormSubmit = async (values) => {
+      const payload = {
+        jobId: jobId,
+        jobStageId: JOB_STAGE_IDS?.PREPARE_TOS,
+        status: values?.candidateStatus ?? JOB_STAGE_STATUS?.COMPLETED,
+        candidateId,
+        formData: JSON.stringify(values),
+        formId: parseInt(form.formId),
+        jobType: "prepare_tos",
+      };
+      dispatch(tagJob({ payload, navigate }));
+      setOffcanvasForm(false);
     };
 
     const handleCancel = () => {
@@ -93,7 +75,7 @@ const PrepareTOS = forwardRef(
     return (
       <React.Fragment>
         <div
-          className="d-flex flex-column justiy-content-between h-100"
+          className="d-flex flex-column justiy-content-between h-100 p-3"
           style={{ height: "500px" }}
         >
           <Row>
@@ -103,7 +85,7 @@ const PrepareTOS = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={null}
+                  editData={editData}
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}
