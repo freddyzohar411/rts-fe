@@ -1247,8 +1247,6 @@ const JobOverview = () => {
     }
   };
 
-  console.log("Active Step", activeStep);
-
   return (
     <React.Fragment>
       <div className="p-2">
