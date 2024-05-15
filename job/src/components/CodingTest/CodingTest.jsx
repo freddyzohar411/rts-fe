@@ -5,9 +5,9 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { Form } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -15,6 +15,7 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import { OdinURLs } from "../JobOverview/JobOverviewConstants";
 
 const CodingTest = forwardRef(
   ({ closeOffcanvas, jobId, candidateId }, parentRef) => {
@@ -73,13 +74,9 @@ const CodingTest = forwardRef(
         };
         dispatch(tagJob({ payload, navigate }));
         if (values?.scheduleForTechnicalInterview === "true") {
-          window.open("https://app.hackerearth.com/recruiter/", "_blank");
+          window.open(OdinURLs.TECHNICAL_INTERVIEW_ASSESSMENT, "_blank");
         }
       }
-      closeOffcanvas();
-    };
-
-    const handleCancel = () => {
       closeOffcanvas();
     };
 
@@ -87,7 +84,6 @@ const CodingTest = forwardRef(
       submitForm: () => {
         formikRef?.current?.formik?.submitForm();
       },
-      handleCancel,
     }));
 
     return (

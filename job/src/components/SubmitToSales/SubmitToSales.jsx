@@ -100,6 +100,7 @@ const SubmitToSales = forwardRef(
           navigate,
         })
       );
+      closeOffcanvas();
     };
 
     // Set formik when attachments change

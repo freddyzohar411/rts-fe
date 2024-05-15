@@ -72,6 +72,7 @@ import {
   PRF_WTDWN_FORM_INDEX,
   PRF_REJ_SALES_FORM_INDEX,
   PRF_REJ_CLIENT_FORM_INDEX,
+  PRE_SKILLS_ASSESSMENT_FORM_INDEX,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -97,6 +98,7 @@ import InnerTimelineStep from "./InnerTimelineStep";
 import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
 import PrepareTOS from "../TOSComponents/PrepareTOS.jsx";
 import ApproveTOS from "../TOSComponents/ApproveTOS.jsx";
+import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment.jsx";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -292,8 +294,10 @@ const JobOverview = () => {
         setModalFormName({ header: "Profile Rejected - Client" });
         break;
       // Odin
+      case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
+        setStepperState("Pre-Skill Assessment");
+        break;
       case SKILLS_ASSESSMENT_FORM_INDEX:
-        // setStepperState("Pre-Skill Assessment");
         setStepperState("Review Skill Assessment Results");
         break;
       case CODING_TEST_FORM_INDEX:
@@ -384,6 +388,7 @@ const JobOverview = () => {
       case SUB_TO_SALES_FORM_INDEX:
       case SUB_TO_CLIENT_FORM_INDEX:
       //Odin
+      case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
       case SKILLS_ASSESSMENT_FORM_INDEX:
       case CODING_TEST_FORM_INDEX:
       case TEC_INTRW_FORM_INDEX:
@@ -429,14 +434,11 @@ const JobOverview = () => {
         return (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
-            jobId={jobId}
-            candidateId={candidateId}
             setIsViewTemplate={setIsViewTemplate}
             setTemplatePreviewInfo={setTemplatePreviewInfo}
             setTemplatePreviewAction={setTemplatePreviewAction}
-            setOffcanvasForm={setOffcanvasForm}
-            ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            ref={formikRef}
           />
         );
       case 4:
@@ -448,23 +450,21 @@ const JobOverview = () => {
             handleIconClick={handleIconClick}
           />
         );
-      // case SKILLS_ASSESSMENT_FORM_INDEX:
-      //   return (
-      //     <PreSkillAssessment
-      //       closeOffcanvas={closeOffcanvas}
-      //       jobId={jobId}
-      //       candidateId={candidateId}
-      //       activeStep={step}
-      //       ref={formikRef}
-      //     />
-      //   );
+      case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
+        return (
+          <PreSkillAssessment
+            closeOffcanvas={closeOffcanvas}
+            jobId={jobId}
+            candidateId={candidateId}
+            ref={formikRef}
+          />
+        );
       case SKILLS_ASSESSMENT_FORM_INDEX:
         return (
           <SkillAssessment
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
             ref={formikRef}
           />
         );
@@ -474,7 +474,6 @@ const JobOverview = () => {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
             ref={formikRef}
           />
         );
@@ -484,7 +483,6 @@ const JobOverview = () => {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
             ref={formikRef}
           />
         );
@@ -876,6 +874,9 @@ const JobOverview = () => {
       case SUB_TO_CLIENT_FORM_INDEX:
         submitLabel = "Send";
         break;
+      case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
+        submitLabel = "Invite Candidate";
+        break;
       default:
         break;
     }
@@ -904,6 +905,7 @@ const JobOverview = () => {
             style={{
               borderRadius: "8px",
             }}
+            disabled={jobTagMeta?.isLoading}
           >
             {jobTagMeta?.isLoading ? (
               <Spinner size="sm" color="light" />
