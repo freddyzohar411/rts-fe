@@ -377,7 +377,7 @@ const InnerTimelineStep = ({ data }) => {
                   >
                     <div className="d-flex flex-column align-items-start">
                       <div
-                        className={`rounded-circle d-flex justify-content-center align-items-center mb-2 ${getBulletBgColor(
+                        className={`rounded-circle d-flex justify-content-center mb-2 ${getBulletBgColor(
                           status
                         )}`}
                         style={{
