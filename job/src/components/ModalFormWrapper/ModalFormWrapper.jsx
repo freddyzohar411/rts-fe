@@ -38,6 +38,7 @@ const ModalFormWrapper = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
+  const [modalName, setModalName]= useState("")
 
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
@@ -62,8 +63,10 @@ const ModalFormWrapper = ({
       dispatch(fetchJobForm("rejected_tos"));
     } else if (activeStep === ACCEPTED_FORM_INDEX) {
       dispatch(fetchJobForm("conditional_offer_accepted"));
+      setModalName('Conditional Offer Accepted by Candidate');
     } else if (activeStep === REJECTED_FORM_INDEX) {
       dispatch(fetchJobForm("conditional_offer_rejected"));
+      setModalName('Conditional Offer Rejected by Candidate');
     }
   }, [activeStep]);
 
@@ -132,7 +135,7 @@ const ModalFormWrapper = ({
     }
 
     // Conditional Offer Accepted
-    if (activeStep === 22) {
+    if (activeStep === ACCEPTED_FORM_INDEX) {
       const payload = {
         jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
@@ -146,7 +149,7 @@ const ModalFormWrapper = ({
     }
 
     // Conditional Offer Rejected
-    if (activeStep === 23) {
+    if (activeStep === REJECTED_FORM_INDEX) {
       const payload = {
         jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
