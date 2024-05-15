@@ -79,7 +79,7 @@ const ConditionalOffer = forwardRef(
       if (submitType === "draft") {
         const payload = {
           jobId: jobId,
-          jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
+          jobStageId: JOB_STAGE_IDS?.PREPARE_CONDITIONAL_OFFER,
           status: JOB_STAGE_STATUS?.DRAFT,
           candidateId: jobTimeLineData?.candidate?.id,
           formData: JSON.stringify(newValues),
@@ -109,7 +109,7 @@ const ConditionalOffer = forwardRef(
       } else if (submitType === "submit") {
         const payload = {
           jobId: jobId,
-          jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
+          jobStageId: JOB_STAGE_IDS?.PREPARE_CONDITIONAL_OFFER,
           status: JOB_STAGE_STATUS?.COMPLETED,
           candidateId: jobTimeLineData?.candidate?.id,
           formData: JSON.stringify(newValues),

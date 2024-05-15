@@ -43,7 +43,6 @@ const ModalFormWrapper = ({
   );
 
   console.log("modalFormName", modalFormName);
-  console.log("modalFormName name", modalFormName.header)
 
   useEffect(() => {
     if (jobTimelineMeta?.isSuccess) {
@@ -108,6 +107,34 @@ const ModalFormWrapper = ({
       };
       dispatch(tagJob({ payload, navigate }));
     }
+
+    // Conditional Offer Accepted
+    if (activeStep === 22) {
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
+        status: JOB_STAGE_STATUS?.COMPLETED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form?.formId),
+        jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
+      }
+      dispatch(tagJob({ payload, navigate })); 
+    }
+
+    // Conditional Offer Rejected
+    if (activeStep === 23) {
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
+        status: JOB_STAGE_STATUS?.REJECTED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form?.formId),
+        jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
+      }
+      dispatch(tagJob({ payload, navigate })); 
+    }
   };
 
   useEffect(() => {
@@ -119,9 +146,19 @@ const ModalFormWrapper = ({
     }
     if (modalFormName?.formName === "approve_tos") {
       dispatch(fetchJobForm("approve_tos"));
+      
     }
     if (modalFormName?.formName === "rejected_tos") {
       dispatch(fetchJobForm("rejected_tos"));
+      console.log("Test")
+    }
+    if (activeStep === 22) {
+      dispatch(fetchJobForm("conditional_offer_accepted"));
+      setModalName("Approve Conditional Offer");
+    }
+    if (activeStep === 23) {
+      dispatch(fetchJobForm("conditional_offer_rejected"));
+      setModalName("Reject Conditional Offer");
     }
   }, [activeStep]);
 
@@ -150,8 +187,7 @@ const ModalFormWrapper = ({
           paddingBottom: "0px",
         }}
       >
-        {/* <h3>{modalFormName?.modalFormName || header || "Header"}</h3> */}
-        <h4>{modalFormName ? modalFormName?.header : (header || "Header")}</h4>
+        <h5>{modalFormName ? modalFormName?.header : (modalName || header || "Header")}</h5>
       </ModalHeader>
       <ModalBody>
         <Form

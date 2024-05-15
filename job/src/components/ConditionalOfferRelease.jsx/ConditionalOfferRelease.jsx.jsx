@@ -96,8 +96,8 @@ const ConditionalOfferRelease = forwardRef(
       newValues.bcc = newValues.bcc.map((item) => item.value);
       const payload = {
         jobId: jobId,
-        jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
-        status: JOB_STAGE_STATUS?.RELEASED,
+        jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_RELEASE,
+        status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: null,
         formId: null,
