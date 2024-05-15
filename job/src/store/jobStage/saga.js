@@ -30,6 +30,7 @@ import {
   tagJobWithAttachments,
   untagJob,
 } from "../../helpers/backend_helper";
+import { JOB_STAGE_STATUS } from "../../components/JobListing/JobListingConstants";
 
 function* workTagJob(action) {
   const { payload, navigate } = action.payload;
@@ -38,7 +39,11 @@ function* workTagJob(action) {
     yield put(tagJobSuccess(response.data));
     if (payload?.jobType) {
       if (payload?.jobType === "associate_candidate") {
-        toast.success("Job has been associated successfully.");
+        if (payload?.status === JOB_STAGE_STATUS?.WITHDRAWN) {
+          toast.success("Profile Withdrawn Successfully.");
+        } else {
+          toast.success("Profile Associated Successfully.");
+        }
       } else if (payload?.jobType === "submit_to_sales") {
         toast.success("Job has been submitted to sales.");
       } else if (payload?.jobType === "submit_to_client") {

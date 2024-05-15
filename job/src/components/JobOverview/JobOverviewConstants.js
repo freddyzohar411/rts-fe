@@ -241,6 +241,7 @@ export const timelineLegend = [
 ];
 
 export const jobTimelineType = {
+  ASSOCIATE: "associate_candidate",
   SUBMIT_TO_SALES: "submit_to_sales",
   SUBMIT_TO_CLIENT: "submit_to_client",
   CONDITIONAL_OFFER_DRAFT: "conditional_offer_draft",

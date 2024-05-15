@@ -46,6 +46,7 @@ const ModalFormWrapper = ({
   );
 
   useEffect(() => {
+    console.log("test activeStep load", activeStep);
     if (activeStep === UNTAG_FORM_INDEX) {
       dispatch(fetchJobForm("job_untag"));
     } else if (activeStep === PRF_WTDWN_FORM_INDEX) {
@@ -69,6 +70,7 @@ const ModalFormWrapper = ({
 
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {
+    console.log("test activeStep submit", activeStep);
     if (activeStep === UNTAG_FORM_INDEX) {
       // Untag candidate
       const payload = {
@@ -76,6 +78,18 @@ const ModalFormWrapper = ({
         candidateId: jobTimeLineData?.candidate?.id,
       };
       dispatch(untagJob(payload));
+    } else if (activeStep === PRF_WTDWN_FORM_INDEX) {
+      // Profile withdrawn
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.ASSOCIATE,
+        status: JOB_STAGE_STATUS?.WITHDRAWN,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form?.formId),
+        jobType: jobTimelineType.ASSOCIATE,
+      };
+      dispatch(tagJob({ payload, navigate }));
     } else if (activeStep === 99) {
       // Submit to sale profile rejected
       const payload = {
