@@ -771,6 +771,7 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         value={skipSteps?.[data?.id]}
+                        disabled={isRejected}
                         onChange={(e) =>
                           handleStepsSelection(
                             data?.id,
@@ -797,6 +798,7 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         value={selectedSubSteps?.[candidateData?.id]}
+                        disabled={isRejected}
                         onChange={(e) =>
                           handleSubStepsSelection(
                             candidateData?.id,
@@ -827,7 +829,9 @@ const JobOverview = () => {
                         );
                         setTimelineRowIndex(timelineIndex);
                       }}
-                      disabled={!selectedSubSteps?.[candidateData?.id]}
+                      disabled={
+                        isRejected || !selectedSubSteps?.[candidateData?.id]
+                      }
                     >
                       <i
                         className="mdi mdi-content-save-outline mdi-18px"
