@@ -16,6 +16,9 @@ import {
   TAG_JOB_ATTACHMENT_SUCCESS,
   TAG_JOB_ATTACHMENT_FAILURE,
   TAG_JOB_ATTACHMENT_RESET,
+  UNTAG_JOB,
+  UNTAG_JOB_SUCCESS,
+  UNTAG_JOB_FAILURE,
 } from "./actionTypes";
 
 // tag a job
@@ -51,6 +54,22 @@ export const tagJobAllSuccess = (job) => ({
 
 export const tagJobAllFailure = (error) => ({
   type: TAG_JOB_ALL_FAILURE,
+  payload: error,
+});
+
+// Untag a job
+export const untagJob = (job) => ({
+  type: UNTAG_JOB,
+  payload: job,
+});
+
+export const untagJobSuccess = (job) => ({
+  type: UNTAG_JOB_SUCCESS,
+  payload: job,
+});
+
+export const untagJobFailure = (error) => ({
+  type: UNTAG_JOB_FAILURE,
   payload: error,
 });
 
@@ -104,5 +123,3 @@ export const tagJobAttachmentFailure = (error) => ({
 export const tagJobAttachmentReset = () => ({
   type: TAG_JOB_ATTACHMENT_RESET,
 });
-
-

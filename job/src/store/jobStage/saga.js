@@ -6,6 +6,7 @@ import {
   TAG_JOB,
   TAG_JOB_ALL,
   TAG_JOB_ATTACHMENT,
+  UNTAG_JOB,
 } from "./actionTypes";
 import {
   tagJobSuccess,
@@ -18,6 +19,8 @@ import {
   fetchJobtimeineCountFailure,
   tagJobAttachmentSuccess,
   tagJobAttachmentFailure,
+  untagJobSuccess,
+  untagJobFailure,
 } from "./action";
 import {
   getJobTimeline,
@@ -25,6 +28,7 @@ import {
   tagAllJob,
   tagJob,
   tagJobWithAttachments,
+  untagJob,
 } from "../../helpers/backend_helper";
 
 function* workTagJob(action) {
@@ -61,6 +65,18 @@ function* workTagAllJob(action) {
     navigate(`/jobs/${payload?.[0]?.jobId}/overview`);
   } catch (error) {
     yield put(tagJobAllFailure(error));
+  }
+}
+
+function* workUntagJob(action) {
+  const { jobId, candidateId } = action.payload;
+  try {
+    // Untag a job
+    const response = yield call(untagJob, jobId, candidateId);
+    yield put(untagJobSuccess(response.data));
+    toast.success(response?.message);
+  } catch (error) {
+    yield put(untagJobFailure(error));
   }
 }
 
@@ -112,6 +128,7 @@ function* workTagJobAttachment(action) {
 export default function* watchTagJobSaga() {
   yield takeEvery(TAG_JOB, workTagJob);
   yield takeEvery(TAG_JOB_ALL, workTagAllJob);
+  yield takeEvery(UNTAG_JOB, workUntagJob);
   yield takeEvery(FETCH_JOB_TIMELINE_LIST, workFetchJobTimelineList);
   yield takeEvery(JOB_TIMELINE_COUNT, workFetchJobTimelineCount);
   yield takeEvery(TAG_JOB_ATTACHMENT, workTagJobAttachment);

@@ -283,9 +283,7 @@ const JobOverview = () => {
         break;
       // Odin
       case SKILLS_ASSESSMENT_FORM_INDEX:
-        setStepperState("Pre-Skill Assessment");
-        break;
-      case 6:
+        // setStepperState("Pre-Skill Assessment");
         setStepperState("Review Skill Assessment Results");
         break;
       case CODING_TEST_FORM_INDEX:
@@ -375,19 +373,11 @@ const JobOverview = () => {
       case ASSOCIATE_FORM_INDEX:
       case SUB_TO_SALES_FORM_INDEX:
       case SUB_TO_CLIENT_FORM_INDEX:
-      case 8:
-      case 9:
-      case 10:
-      case 11:
-      case 12:
-      case 13:
-      case 14:
-      case 15:
-      case 16:
-      case 17:
-      case 18:
-      case 20:
-      case 21:
+      //Odin
+      case SKILLS_ASSESSMENT_FORM_INDEX:
+      case CODING_TEST_FORM_INDEX:
+      case TEC_INTRW_FORM_INDEX:
+      case CULTURAL_FIT_TEST_FORM_INDEX:
         setOffcanvasForm(true);
         break;
       //Profile
@@ -395,8 +385,6 @@ const JobOverview = () => {
       case PRF_WTDWN_FORM_INDEX:
       case PRF_REJ_SALES_FORM_INDEX:
       case PRF_REJ_CLIENT_FORM_INDEX:
-      case 98:
-      case 99:
         setIsFormModalOpen(true);
         break;
       default:
@@ -453,17 +441,17 @@ const JobOverview = () => {
             handleIconClick={handleIconClick}
           />
         );
+      // case SKILLS_ASSESSMENT_FORM_INDEX:
+      //   return (
+      //     <PreSkillAssessment
+      //       closeOffcanvas={closeOffcanvas}
+      //       jobId={jobId}
+      //       candidateId={candidateId}
+      //       activeStep={step}
+      //       ref={ref}
+      //     />
+      //   );
       case SKILLS_ASSESSMENT_FORM_INDEX:
-        return (
-          <PreSkillAssessment
-            closeOffcanvas={closeOffcanvas}
-            jobId={jobId}
-            candidateId={candidateId}
-            activeStep={step}
-            ref={ref}
-          />
-        );
-      case 6:
         return (
           <SkillAssessment
             closeOffcanvas={closeOffcanvas}

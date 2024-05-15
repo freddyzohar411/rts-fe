@@ -83,6 +83,11 @@ export const tagJob = (data, config) =>
 export const tagAllJob = (data, config) =>
   api.create(`${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}/createAll`, data, config);
 
+export const untagJob = (jobId, candidateId) =>
+  api.delete(
+    `${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}/untag/${jobId}/${candidateId}`
+  );
+
 export const getJobCandidateStage = (data) =>
   api.create(`${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}/get-stage`, data);
 

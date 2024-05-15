@@ -132,21 +132,23 @@ export const SUB_TO_SALES_FORM_INDEX = 4;
 export const PRF_REJ_SALES_FORM_INDEX = 5;
 export const SUB_TO_CLIENT_FORM_INDEX = 6;
 export const PRF_REJ_CLIENT_FORM_INDEX = 7;
-
 //Odin
 export const SKILLS_ASSESSMENT_FORM_INDEX = 8;
 export const CODING_TEST_FORM_INDEX = 9;
 export const TEC_INTRW_FORM_INDEX = 10;
 export const CULTURAL_FIT_TEST_FORM_INDEX = 11;
+//Interview
 export const SCHEDULE_FORM_INDEX = 12;
 export const BACKOUT_CANDIE_FORM_INDEX = 13;
 export const RESCHEDULED_FORM_INDEX = 14;
 export const CANCL_BY_CLIENT_FORM_INDEX = 15;
 export const REJECTED_INTRW_FORM_INDEX = 16;
 export const SELECTED_FORM_INDEX = 17;
+//TOS
 export const PREPARE_TOS_FORM_INDEX = 18;
 export const EDIT_TOS_FORM_INDEX = 19;
 export const APPROVE_TOS_FORM_INDEX = 20;
+//Conditional Offer
 export const PREPARE_FORM_INDEX = 21;
 export const EDIT_FORM_INDEX = 22;
 export const RELEASE_FORM_INDEX = 23;
