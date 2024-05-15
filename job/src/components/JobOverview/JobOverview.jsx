@@ -28,6 +28,7 @@ import {
   fetchJobTimelineList,
   fetchJobtimeineCount,
   tagReset,
+  untagJobReset,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
@@ -153,6 +154,9 @@ const JobOverview = () => {
   );
 
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+  const jobUntagMeta = useSelector(
+    (state) => state.JobStageReducer?.jobUntagMeta
+  );
 
   // Custom renders
   const customRenderList = [
@@ -215,6 +219,19 @@ const JobOverview = () => {
     );
   }, [pageRequest]);
 
+  useEffect(() => {
+    if (jobUntagMeta?.isSuccess) {
+      setIsFormModalOpen(false);
+      dispatch(
+        fetchJobTimelineList({
+          ...DynamicTableHelper.cleanPageRequest(pageRequest),
+          jobId: parseInt(jobId),
+        })
+      );
+      dispatch(untagJobReset());
+    }
+  }, [jobUntagMeta]);
+
   // Update the page info when job Data changes
   useEffect(() => {
     if (jobTimelineData) {
@@ -257,11 +274,12 @@ const JobOverview = () => {
   }, [jobId]);
 
   useEffect(() => {
+    console.log("test effect");
     // Set the stepper state based on the active step
     switch (activeStep) {
       // Profile
       case UNTAG_FORM_INDEX:
-        setModalFormName({ header: "Confirm" });
+        setModalFormName({ header: "Confirmation" });
         break;
       case PRF_WTDWN_FORM_INDEX:
         setModalFormName({ header: "Profile Withdrawn Confirmation" });

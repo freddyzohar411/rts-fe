@@ -19,6 +19,7 @@ import {
   UNTAG_JOB,
   UNTAG_JOB_SUCCESS,
   UNTAG_JOB_FAILURE,
+  UNTAG_JOB_RESET,
 } from "./actionTypes";
 
 // tag a job
@@ -71,6 +72,10 @@ export const untagJobSuccess = (job) => ({
 export const untagJobFailure = (error) => ({
   type: UNTAG_JOB_FAILURE,
   payload: error,
+});
+
+export const untagJobReset = () => ({
+  type: UNTAG_JOB_RESET,
 });
 
 // Fetch JobLists

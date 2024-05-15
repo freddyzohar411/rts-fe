@@ -74,7 +74,7 @@ function* workUntagJob(action) {
     // Untag a job
     const response = yield call(untagJob, jobId, candidateId);
     yield put(untagJobSuccess(response.data));
-    toast.success(response?.message);
+    toast.success("Profile Untagged Successfully.");
   } catch (error) {
     yield put(untagJobFailure(error));
   }

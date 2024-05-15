@@ -24,6 +24,7 @@ import {
   UNTAG_JOB,
   UNTAG_JOB_SUCCESS,
   UNTAG_JOB_FAILURE,
+  UNTAG_JOB_RESET,
 } from "./actionTypes";
 
 const initialState = {
@@ -96,6 +97,11 @@ const JobStageReducer = (state = initialState, action) => {
       return {
         ...state,
         jobUntagMeta: errorMetaData(action.payload),
+      };
+    case UNTAG_JOB_RESET:
+      return {
+        ...state,
+        jobUntagMeta: {},
       };
 
     // Fetch job timeline

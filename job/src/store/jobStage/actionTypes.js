@@ -6,6 +6,7 @@ export const TAG_JOB_RESET = "TAG_JOB_RESET";
 export const UNTAG_JOB = "UNTAG_JOB";
 export const UNTAG_JOB_SUCCESS = "UNTAG_JOB_SUCCESS";
 export const UNTAG_JOB_FAILURE = "UNTAG_JOB_FAILURE";
+export const UNTAG_JOB_RESET = "UNTAG_JOB_RESET";
 
 export const TAG_JOB_ALL = "TAG_JOB_ALL";
 export const TAG_JOB_ALL_SUCCESS = "TAG_JOB_ALL_SUCCESS";
