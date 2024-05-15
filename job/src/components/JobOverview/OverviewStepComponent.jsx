@@ -59,19 +59,24 @@ const OverviewStepComponent = ({ data }) => {
       case undefined:
         customCSS = "text-disabled bg-disabled border-disabled";
         break;
-      case JOB_STAGE_STATUS.IN_PROGRESS || JOB_STAGE_STATUS_LABELS.IN_PROGRESS:
+      case JOB_STAGE_STATUS_LABELS.IN_PROGRESS:
+      case JOB_STAGE_STATUS.IN_PROGRESS:
         customCSS = "text-white bg-in-progress border-in-progress";
         break;
-      case JOB_STAGE_STATUS.COMPLETED || JOB_STAGE_STATUS_LABELS.COMPLETED:
+      case JOB_STAGE_STATUS.COMPLETED:
+      case JOB_STAGE_STATUS_LABELS.COMPLETED:
         customCSS = "text-white bg-completed border-completed";
         break;
-      case JOB_STAGE_STATUS.WITHDRAWN || JOB_STAGE_STATUS.WITHDRAWN:
+      case JOB_STAGE_STATUS.WITHDRAWN:
+      case JOB_STAGE_STATUS.WITHDRAWN:
         customCSS = "text-white bg-withdrawn border-withdrawn";
         break;
-      case JOB_STAGE_STATUS.REJECTED || JOB_STAGE_STATUS.REJECTED:
+      case JOB_STAGE_STATUS.REJECTED:
+      case JOB_STAGE_STATUS.REJECTED:
         customCSS = "text-white bg-rejected border-rejected";
         break;
-      case JOB_STAGE_STATUS.SKIPPED || JOB_STAGE_STATUS.SKIPPED:
+      case JOB_STAGE_STATUS.SKIPPED:
+      case JOB_STAGE_STATUS.SKIPPED:
         customCSS = "text-white bg-skipped border-skipped";
         break;
       default:
@@ -82,22 +87,26 @@ const OverviewStepComponent = ({ data }) => {
 
   const GetLabel = (step, status) => {
     switch (status) {
-      case JOB_STAGE_STATUS.COMPLETED || JOB_STAGE_STATUS_LABELS.COMPLETED:
+      case JOB_STAGE_STATUS.COMPLETED:
+      case JOB_STAGE_STATUS_LABELS.COMPLETED:
         return (
           <i className="ri-check-line ri-xl" style={{ color: "#ffffff" }}></i>
         );
-      case JOB_STAGE_STATUS.WITHDRAWN || JOB_STAGE_STATUS_LABELS.WITHDRAWN:
+      case JOB_STAGE_STATUS.WITHDRAWN:
+      case JOB_STAGE_STATUS_LABELS.WITHDRAWN:
         return (
           <i
             className="ri-thumb-down-line ri-xl"
             style={{ color: "#ffffff" }}
           ></i>
         );
-      case JOB_STAGE_STATUS.REJECTED || JOB_STAGE_STATUS_LABELS.REJECTED:
+      case JOB_STAGE_STATUS.REJECTED:
+      case JOB_STAGE_STATUS_LABELS.REJECTED:
         return (
           <i className="ri-close-fill ri-xl " style={{ color: "#ffffff" }}></i>
         );
-      case JOB_STAGE_STATUS.SKIPPED || JOB_STAGE_STATUS_LABELS.SKIPPED:
+      case JOB_STAGE_STATUS.SKIPPED:
+      case JOB_STAGE_STATUS_LABELS.SKIPPED:
         return (
           <i
             className="las la-forward icon-10x"
