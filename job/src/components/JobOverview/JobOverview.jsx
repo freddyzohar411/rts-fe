@@ -71,6 +71,8 @@ import {
   PRF_WTDWN_FORM_INDEX,
   PRF_REJ_SALES_FORM_INDEX,
   PRF_REJ_CLIENT_FORM_INDEX,
+  ACCEPTED_FORM_INDEX,
+  REJECTED_FORM_INDEX,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -395,6 +397,8 @@ const JobOverview = () => {
       case PRF_WTDWN_FORM_INDEX:
       case PRF_REJ_SALES_FORM_INDEX:
       case PRF_REJ_CLIENT_FORM_INDEX:
+      case ACCEPTED_FORM_INDEX:
+      case REJECTED_FORM_INDEX:
       case 98:
       case 99:
         setIsFormModalOpen(true);
@@ -1517,15 +1521,15 @@ const JobOverview = () => {
           </div>
           <div
             className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(22)}
+            onClick={() => setActiveStep(24)}
           >
             Conditional Offer Accepted
           </div>
           <div
             className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(23)}
+            onClick={() => setActiveStep(25)}
           >
-            Conditional Offer Rejected
+            Conditional Offer Rejected  
           </div>
         </Row>
 
