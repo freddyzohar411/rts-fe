@@ -7,16 +7,24 @@ import {
   ModalFooter,
   Spinner,
 } from "reactstrap";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchJobForm, tagJob, tagJobAttachment } from "../../store/actions";
+import { fetchJobForm, tagJob } from "../../store/actions";
 import { Form } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
-import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
+import {
+  PRF_REJ_CLIENT_FORM_INDEX,
+  PRF_REJ_SALES_FORM_INDEX,
+  PRF_WTDWN_FORM_INDEX,
+  UNTAG_FORM_INDEX,
+  ACCEPTED_FORM_INDEX,
+  REJECTED_FORM_INDEX,
+  jobTimelineType,
+} from "../JobOverview/JobOverviewConstants";
 
 const ModalFormWrapper = ({
   activeStep = 0,
@@ -25,24 +33,39 @@ const ModalFormWrapper = ({
   setIsFormModalOpen,
   jobTimeLineData,
   modalFormName,
-  setModalFormName
+  setModalFormName,
 }) => {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
-  const [modalName, setModalName]= useState('')
 
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
-  const [activeTab, setActiveTab] = useState("1");
-  const [editData, setEditData] = useState({});
+
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
   );
 
-  console.log("modalFormName", modalFormName);
+  useEffect(() => {
+    if (activeStep === UNTAG_FORM_INDEX) {
+      dispatch(fetchJobForm("job_untag"));
+    } else if (activeStep === PRF_WTDWN_FORM_INDEX) {
+      dispatch(fetchJobForm("profile_withdrawn_job"));
+    } else if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
+      dispatch(fetchJobForm("submit_to_sales_rejection"));
+    } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
+      dispatch(fetchJobForm("submit_to_client_rejection"));
+    } else if (modalFormName?.formName === "approve_tos") {
+      dispatch(fetchJobForm("approve_tos"));
+    } else if (modalFormName?.formName === "rejected_tos") {
+      dispatch(fetchJobForm("rejected_tos"));
+    } else if (activeStep === ACCEPTED_FORM_INDEX) {
+      dispatch(fetchJobForm("conditional_offer_accepted"));
+    } else if (activeStep === REJECTED_FORM_INDEX) {
+      dispatch(fetchJobForm("conditional_offer_rejected"));
+    }
+  }, [activeStep]);
 
   useEffect(() => {
     if (jobTimelineMeta?.isSuccess) {
@@ -118,8 +141,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
-      }
-      dispatch(tagJob({ payload, navigate })); 
+      };
+      dispatch(tagJob({ payload, navigate }));
     }
 
     // Conditional Offer Rejected
@@ -132,35 +155,10 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
-      }
-      dispatch(tagJob({ payload, navigate })); 
+      };
+      dispatch(tagJob({ payload, navigate }));
     }
   };
-
-  useEffect(() => {
-    if (activeStep === 99) {
-      dispatch(fetchJobForm("submit_to_sales_rejection"));
-    }
-    if (activeStep === 98) {
-      dispatch(fetchJobForm("submit_to_client_rejection"));
-    }
-    if (modalFormName?.formName === "approve_tos") {
-      dispatch(fetchJobForm("approve_tos"));
-      
-    }
-    if (modalFormName?.formName === "rejected_tos") {
-      dispatch(fetchJobForm("rejected_tos"));
-      console.log("Test")
-    }
-    if (activeStep === 22) {
-      dispatch(fetchJobForm("conditional_offer_accepted"));
-      setModalName("Approve Conditional Offer");
-    }
-    if (activeStep === 23) {
-      dispatch(fetchJobForm("conditional_offer_rejected"));
-      setModalName("Reject Conditional Offer");
-    }
-  }, [activeStep]);
 
   useEffect(() => {
     if (form) {
@@ -187,7 +185,11 @@ const ModalFormWrapper = ({
           paddingBottom: "0px",
         }}
       >
-        <h5>{modalFormName ? modalFormName?.header : (modalName || header || "Header")}</h5>
+        <h5>
+          {modalFormName
+            ? modalFormName?.header
+            : modalName || header || "Header"}
+        </h5>
       </ModalHeader>
       <ModalBody>
         <Form
@@ -204,11 +206,16 @@ const ModalFormWrapper = ({
       </ModalBody>
       <ModalFooter>
         <div className="d-flex justify-content-end gap-2">
-          <Button className="btn btn-white border-dark fw-semibold" style={{borderRadius: "8px"}} onClick={() => closeModal()}>
+          <Button
+            className="btn btn-white border-dark fw-semibold"
+            style={{ borderRadius: "8px" }}
+            onClick={() => closeModal()}
+          >
             Cancel
           </Button>
           <Button
-            className="btn-danger fw-semibold" style={{borderRadius: "8px"}}
+            className="btn-danger fw-semibold"
+            style={{ borderRadius: "8px" }}
             onClick={() => {
               formikRef.current.formik?.submitForm();
             }}

@@ -61,23 +61,6 @@ function OffCanvasHeaderComponent({
       </div>
       {/* Canvas Header Button Add-on */}
       {generateCanvasHeaderButton(activeStep)}
-      {/* Template Selector */}
-      {/* {(activeStep === 11 || isPreviewCV) && (
-              <Col>
-                <div>
-                  <TemplateSelectByCategoryElement
-                    categoryName={selectedCategory}
-                    placeholder="Select a template"
-                    onChange={(value) => {
-                      setTemplateData(value);
-                    }}
-                    defaultFirstValue
-                    width="300px"
-                    end
-                  />
-                </div>
-              </Col>
-            )} */}
     </div>
   );
 }
