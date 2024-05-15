@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tooltip } from "reactstrap";
 import { progressSteps } from "./JobOverviewConstants";
 import { useEffect } from "react";
-import { getMaxOrder, getStatus } from "./JobOverviewUtil";
+import { getMaxOrder } from "./JobOverviewUtil";
 import {
   JOB_STAGE_STATUS,
   JOB_STAGE_STATUS_LABELS,
@@ -20,34 +20,85 @@ const OverviewStepComponent = ({ data }) => {
     if (data?.timeline) {
       let progressStatus = {};
       let maxOrder = getMaxOrder(data);
-      const status = getStatus(data, maxOrder);
-      const isRejected =
-        status === JOB_STAGE_STATUS.REJECTED ||
-        status === JOB_STAGE_STATUS.WITHDRAWN;
+      let timelineStations = {};
+
+      if (data?.timeline) {
+        Object.values(data?.timeline)
+          ?.sort((a, b) => b?.order - a?.order)
+          ?.forEach((dt) => {
+            timelineStations[dt?.order] = dt?.status;
+          });
+      }
 
       //Profile Status
-      if (maxOrder >= 1 && maxOrder <= 5) {
-        progressStatus["Profile"] = !isRejected
-          ? JOB_STAGE_STATUS_LABELS.IN_PROGRESS
-          : status;
-      }
-      //Odin Status
-      if (maxOrder >= 6 && maxOrder <= 9) {
-        progressStatus["Profile"] = JOB_STAGE_STATUS_LABELS.COMPLETED;
-        progressStatus["Odin"] = !isRejected
-          ? JOB_STAGE_STATUS_LABELS.IN_PROGRESS
-          : status;
-      }
+      if (timelineStations) {
+        let profileStatus = "";
+        if (timelineStations?.[5]) {
+          profileStatus = timelineStations?.[5];
+        } else if (timelineStations?.[4]) {
+          profileStatus = timelineStations?.[4];
+        } else if (timelineStations?.[3]) {
+          profileStatus = timelineStations?.[3];
+        } else if (timelineStations?.[2]) {
+          profileStatus = timelineStations?.[2];
+        } else if (timelineStations?.[1]) {
+          profileStatus = timelineStations?.[1];
+        }
+        progressStatus["Profile"] = profileStatus;
 
-      //Interviews Status
-      if (maxOrder >= 10 && maxOrder <= 13) {
-        progressStatus["Profile"] = JOB_STAGE_STATUS_LABELS.COMPLETED;
-        progressStatus["Odin"] = JOB_STAGE_STATUS_LABELS.COMPLETED;
-        progressStatus["Interviews"] = !isRejected
-          ? JOB_STAGE_STATUS_LABELS.IN_PROGRESS
-          : status;
+        //Odin Status
+        if (maxOrder > 5) {
+          let odinStatus = "";
+          if (timelineStations?.[9]) {
+            odinStatus = timelineStations?.[9];
+          } else if (timelineStations?.[8]) {
+            odinStatus = timelineStations?.[8];
+          } else if (timelineStations?.[7]) {
+            odinStatus = timelineStations?.[7];
+          } else if (timelineStations?.[6]) {
+            odinStatus = timelineStations?.[6];
+          }
+          progressStatus["Odin"] = odinStatus;
+        }
+
+        //Interviews Status
+        if (maxOrder > 9) {
+          let interviewsStatus = "";
+          if (timelineStations?.[13]) {
+            interviewsStatus = timelineStations?.[13];
+          } else if (timelineStations?.[12]) {
+            interviewsStatus = timelineStations?.[12];
+          } else if (timelineStations?.[11]) {
+            interviewsStatus = timelineStations?.[11];
+          } else if (timelineStations?.[10]) {
+            interviewsStatus = timelineStations?.[10];
+          }
+          progressStatus["Interviews"] = interviewsStatus;
+        }
+
+        //TOS Status
+        if (maxOrder > 13) {
+          let tosStatus = "";
+          if (timelineStations?.[15]) {
+            tosStatus = timelineStations?.[15];
+          } else if (timelineStations?.[14]) {
+            tosStatus = timelineStations?.[14];
+          }
+          progressStatus["TOS"] = tosStatus;
+        }
+
+        //Conditional Offer Status
+        if (maxOrder > 15) {
+          let coStatus = "";
+          if (timelineStations?.[17]) {
+            coStatus = timelineStations?.[17];
+          } else if (timelineStations?.[16]) {
+            coStatus = timelineStations?.[16];
+          }
+          progressStatus["Conditional Offer"] = coStatus;
+        }
+        setProgressStatus(progressStatus);
       }
-      setProgressStatus(progressStatus);
     }
   }, [data]);
 
@@ -118,6 +169,23 @@ const OverviewStepComponent = ({ data }) => {
     }
   };
 
+  const getStatusValue = (status) => {
+    switch (status) {
+      case JOB_STAGE_STATUS.COMPLETED:
+        return JOB_STAGE_STATUS_LABELS.COMPLETED;
+      case JOB_STAGE_STATUS.WITHDRAWN:
+        return JOB_STAGE_STATUS_LABELS.WITHDRAWN;
+      case JOB_STAGE_STATUS.REJECTED:
+        return JOB_STAGE_STATUS_LABELS.REJECTED;
+      case JOB_STAGE_STATUS.SKIPPED:
+        return JOB_STAGE_STATUS_LABELS.SKIPPED;
+      case JOB_STAGE_STATUS.IN_PROGRESS:
+        return JOB_STAGE_STATUS_LABELS.IN_PROGRESS;
+      default:
+        return "";
+    }
+  };
+
   const isStepToolTipOpen = (targetName) => {
     return stepTooltipIndexes?.[targetName]
       ? stepTooltipIndexes?.[targetName]?.tooltipOpen
@@ -160,7 +228,7 @@ const OverviewStepComponent = ({ data }) => {
         style={{ position: "relative", zIndex: "2" }}
       >
         {Object.values(progressSteps).map((step, index) => {
-          const status = progressStatus?.[step?.name];
+          const status = getStatusValue(progressStatus?.[step?.name]);
           return (
             <div
               key={index}

@@ -1164,13 +1164,12 @@ const JobOverview = () => {
         {/* Form Modal */}
         <ModalFormWrapper
           activeStep={activeStep}
-          isFormModalOpen={isFormModalOpen}
-          setIsFormModalOpen={setIsFormModalOpen}
           header={stepperState}
+          isFormModalOpen={isFormModalOpen}
+          closeModal={() => setIsFormModalOpen(false)}
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
-          isLoading={jobTimelineMeta?.isLoading}
           modalFormName={modalFormName}
-          setModalFormName={setModalFormName}
+          isLoading={jobTagMeta?.isLoading}
         />
       </div>
     </React.Fragment>

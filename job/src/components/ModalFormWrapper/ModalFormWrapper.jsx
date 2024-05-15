@@ -29,10 +29,10 @@ const ModalFormWrapper = ({
   activeStep = 0,
   header = "header",
   isFormModalOpen,
-  setIsFormModalOpen,
+  closeModal,
   jobTimeLineData,
   modalFormName,
-  setModalFormName,
+  isLoading,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -42,9 +42,11 @@ const ModalFormWrapper = ({
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
 
-  const jobTimelineMeta = useSelector(
-    (state) => state.JobStageReducer.jobTimelineMeta
-  );
+  useEffect(() => {
+    if (form) {
+      setFormTemplate(form);
+    }
+  }, [form]);
 
   useEffect(() => {
     console.log("test activeStep load", activeStep);
@@ -62,12 +64,6 @@ const ModalFormWrapper = ({
       dispatch(fetchJobForm("rejected_tos"));
     }
   }, [activeStep]);
-
-  useEffect(() => {
-    if (jobTimelineMeta?.isSuccess) {
-      setIsFormModalOpen(false);
-    }
-  }, [jobTimelineMeta?.isSuccess]);
 
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {
@@ -146,17 +142,7 @@ const ModalFormWrapper = ({
       };
       dispatch(tagJob({ payload, navigate }));
     }
-  };
-
-  useEffect(() => {
-    if (form) {
-      setFormTemplate(form);
-    }
-  }, [form]);
-
-  const closeModal = () => {
-    setIsFormModalOpen(false);
-    setModalFormName("");
+    closeModal();
   };
 
   return (
@@ -204,7 +190,7 @@ const ModalFormWrapper = ({
               formikRef.current.formik?.submitForm();
             }}
           >
-            {jobTimelineMeta?.isLoading ? <Spinner size="sm" /> : "Confirm"}
+            {isLoading ? <Spinner size="sm" /> : "Confirm"}
           </Button>
         </div>
       </ModalFooter>
