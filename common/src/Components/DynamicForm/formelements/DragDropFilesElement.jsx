@@ -30,16 +30,11 @@ const DragDropFilesElement = ({
     }
   }, [formik?.values?.[field.name]]);
 
-  console.log()
-
   const handleFileUpload = (e) => {
-    console.log("e", e)
-    // Add new files to the existing array
     formik.setFieldTouched(field.name, "");
     if (e.length > 0) {
       setFiles([...files, ...e]);
     }
-    console.log("files", files)
     setFilesData([
       ...filesData,
       {
@@ -47,8 +42,6 @@ const DragDropFilesElement = ({
         fileName: e.target.files[0].name,
       },
     ]);
-    console.log("filesData", filesData)
-    console.log("field.name", field.name) 
     formik.setFieldValue(field.name, newFiles);
   };
 
@@ -60,7 +53,6 @@ const DragDropFilesElement = ({
   };
 
   const onDrop = useCallback((acceptedFiles) => {
-    console.log("Accepted files", acceptedFiles)
     handleFileUpload(acceptedFiles);
   }, []);
 
@@ -69,9 +61,15 @@ const DragDropFilesElement = ({
   return (
     <>
       <div className="mb-3">
-        <div {...getRootProps()} className="dropzone dropzone-custom">
+        <div
+          {...getRootProps()}
+          className="dropzone dropzone-custom"
+          id={field.name}
+          name={field.name}
+          style={{ height: "200px" }}
+        >
           {isDragActive ? (
-            <div>
+            <div className="d-flex flex-column align-items-center justify-content-center">
               <div className="upload-div">
                 <span className="mdi mdi-cloud-upload-outline upload-icon fs-4"></span>
               </div>
