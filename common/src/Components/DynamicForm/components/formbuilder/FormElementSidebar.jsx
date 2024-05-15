@@ -129,6 +129,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableId: "buttonupdate",
       type: "field",
     },
+    {
+      draggableLabelIcon: "mdi mdi-cloud-upload-outline",
+      draggableLabel: "Drag & Drop Files",
+      draggablePrefix: "element",
+      draggableId: "dragdropfiles",
+      type: "field",
+    }
   ];
 
   // Custom Element List

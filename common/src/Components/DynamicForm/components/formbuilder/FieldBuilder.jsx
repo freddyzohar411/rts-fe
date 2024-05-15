@@ -153,6 +153,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -215,6 +216,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -272,6 +274,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -325,6 +328,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -380,6 +384,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -480,6 +485,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -525,6 +531,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -632,25 +639,25 @@ const FieldBuilder = ({
         { label: "jpeg", value: "jpeg" },
         { label: "png", value: "png" },
       ],
-      apply: ["file", "multifile"],
+      apply: ["file", "multifile", "dragdropfiles"],
     },
     {
       label: "File Type Validation Error Message",
       type: "text",
       name: "fileTypeValidationErrorMessage",
-      apply: ["file", "multifile"],
+      apply: ["file", "multifile", "dragdropfiles"],
     },
     {
       label: "File Size Validation (MB)",
       type: "number",
       name: "fileSizeValidation",
-      apply: ["file", "multifile"],
+      apply: ["file", "multifile", "dragdropfiles"],
     },
     {
       label: "File Size Validation Error Message",
       type: "text",
       name: "fileSizeValidationErrorMessage",
-      apply: ["file", "multifile"],
+      apply: ["file", "multifile", "dragdropfiles"],
     },
 
     {
@@ -914,6 +921,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -977,6 +985,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -1033,6 +1042,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -1085,6 +1095,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -1135,6 +1146,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -1180,6 +1192,7 @@ const FieldBuilder = ({
         "singleselectapi",
         "multiselectapi",
         "multifile",
+        "dragdropfiles",
         "selectformtemplate",
         "multiinput",
       ],
@@ -1358,6 +1371,9 @@ const FieldBuilder = ({
       break;
     case "selectformtemplate":
       header = "Select Form Template Field";
+      break;
+    case "dragdropfiles":
+      header = "Drag and Drop Files Field";
       break;
     default:
   }
