@@ -233,6 +233,10 @@ const JobOverview = () => {
           maxOrder = 2;
         } else if (maxOrder >= 10 && maxOrder <= 13) {
           maxOrder = 3;
+        } else if (maxOrder >= 14 && maxOrder <= 15) {
+          maxOrder = 4;
+        } else if (maxOrder >= 16 && maxOrder <= 17) {
+          maxOrder = 5;
         }
         jsonObject[data?.id] = maxOrder;
       });
@@ -449,7 +453,7 @@ const JobOverview = () => {
             handleIconClick={handleIconClick}
           />
         );
-      case 5:
+      case SKILLS_ASSESSMENT_FORM_INDEX:
         return (
           <PreSkillAssessment
             closeOffcanvas={closeOffcanvas}
@@ -459,7 +463,7 @@ const JobOverview = () => {
             ref={ref}
           />
         );
-      case SKILLS_ASSESSMENT_FORM_INDEX:
+      case 6:
         return (
           <SkillAssessment
             closeOffcanvas={closeOffcanvas}
@@ -718,6 +722,10 @@ const JobOverview = () => {
               maxOrder = 2;
             } else if (maxOrder >= 10 && maxOrder <= 13) {
               maxOrder = 3;
+            } else if (maxOrder >= 14 && maxOrder <= 15) {
+              maxOrder = 4;
+            } else if (maxOrder >= 16 && maxOrder <= 17) {
+              maxOrder = 5;
             }
             const mainStage = getMainStage(maxOrder);
             return (
@@ -972,7 +980,7 @@ const JobOverview = () => {
           </div>
         );
 
-      case 5:
+      case SKILLS_ASSESSMENT_FORM_INDEX:
         return (
           <div className="d-flex flex-row justify-content-start gap-2">
             <Button
