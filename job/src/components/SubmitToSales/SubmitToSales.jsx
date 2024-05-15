@@ -33,23 +33,21 @@ import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
 const SubmitToSales = forwardRef(
   (
     {
-      candidateId,
-      jobId,
+      closeOffcanvas,
       setIsViewTemplate,
       setTemplatePreviewInfo,
       setTemplatePreviewAction,
-      setOffcanvasForm,
       jobTimeLineData,
     },
     ref
   ) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [formInitialValues, setFormInitialValues] = useState(initialValues);
-    const [formSchema, setFormSchema] = useState(schema);
+
     const [emailTemplateData, setEmailTemplateData] = useState(null);
     const [tableTemplateData, setTableTemplateData] = useState(null);
     const [CVTemplateData, setCVTemplateData] = useState(null);
+
     const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
       candidateId: jobTimeLineData?.candidate?.id,
       jobId: jobTimeLineData?.job?.id,
@@ -114,8 +112,8 @@ const SubmitToSales = forwardRef(
      */
     const formik = useFormik({
       enableReinitialize: true,
-      initialValues: formInitialValues,
-      validationSchema: formSchema,
+      initialValues: initialValues,
+      validationSchema: schema,
       validateOnBlur: true,
       onSubmit: handleFormSubmit,
     });

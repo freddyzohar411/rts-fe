@@ -21,6 +21,10 @@ import {
   TAG_JOB_ATTACHMENT_SUCCESS,
   TAG_JOB_ATTACHMENT_FAILURE,
   TAG_JOB_ATTACHMENT_RESET,
+  UNTAG_JOB,
+  UNTAG_JOB_SUCCESS,
+  UNTAG_JOB_FAILURE,
+  UNTAG_JOB_RESET,
 } from "./actionTypes";
 
 const initialState = {
@@ -28,6 +32,7 @@ const initialState = {
   jobTagMeta: {},
   jobAllTag: {},
   jobAllTagMeta: {},
+  jobUntagMeta: {},
   jobTimeline: {},
   jobTimelineMeta: {},
   jobTimelineCount: {},
@@ -75,6 +80,28 @@ const JobStageReducer = (state = initialState, action) => {
       return {
         ...state,
         jobAllTagMeta: errorMetaData(action.payload),
+      };
+
+    // untag a job
+    case UNTAG_JOB:
+      return {
+        ...state,
+        jobUntagMeta: pendingMetaData(),
+      };
+    case UNTAG_JOB_SUCCESS:
+      return {
+        ...state,
+        jobUntagMeta: successMetaData(action.payload),
+      };
+    case UNTAG_JOB_FAILURE:
+      return {
+        ...state,
+        jobUntagMeta: errorMetaData(action.payload),
+      };
+    case UNTAG_JOB_RESET:
+      return {
+        ...state,
+        jobUntagMeta: {},
       };
 
     // Fetch job timeline
