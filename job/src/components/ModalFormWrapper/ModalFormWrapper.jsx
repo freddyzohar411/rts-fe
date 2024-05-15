@@ -19,6 +19,7 @@ import {
 import {
   PRF_REJ_CLIENT_FORM_INDEX,
   PRF_REJ_SALES_FORM_INDEX,
+  PRF_WTDWN_FORM_INDEX,
   UNTAG_FORM_INDEX,
   jobTimelineType,
 } from "../JobOverview/JobOverviewConstants";
@@ -48,6 +49,8 @@ const ModalFormWrapper = ({
   useEffect(() => {
     if (activeStep === UNTAG_FORM_INDEX) {
       dispatch(fetchJobForm("job_untag"));
+    } else if (activeStep === PRF_WTDWN_FORM_INDEX) {
+      dispatch(fetchJobForm("profile_withdrawn_job"));
     } else if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
       dispatch(fetchJobForm("submit_to_sales_rejection"));
     } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {

@@ -257,8 +257,10 @@ const JobOverview = () => {
     switch (activeStep) {
       // Profile
       case UNTAG_FORM_INDEX:
-      case PRF_WTDWN_FORM_INDEX:
         setModalFormName({ header: "Confirm" });
+        break;
+      case PRF_WTDWN_FORM_INDEX:
+        setModalFormName({ header: "Profile Withdrawn Confirmation" });
         break;
       case ASSOCIATE_FORM_INDEX:
         setStepperState("Associate");
@@ -315,6 +317,7 @@ const JobOverview = () => {
       case 17:
         setStepperState("Conditional Offer Status");
         break;
+      // TOS
       case PREPARE_TOS_FORM_INDEX:
         setStepperState("Prepare TOS");
         break;
