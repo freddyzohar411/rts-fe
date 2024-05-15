@@ -872,6 +872,10 @@ const JobOverview = () => {
       case ASSOCIATE_FORM_INDEX:
         submitLabel = "Submit";
         break;
+      case SUB_TO_SALES_FORM_INDEX:
+      case SUB_TO_CLIENT_FORM_INDEX:
+        submitLabel = "Send";
+        break;
       default:
         break;
     }

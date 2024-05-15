@@ -17,6 +17,7 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 import {
+  APPROVE_TOS_FORM_INDEX,
   PRF_REJ_CLIENT_FORM_INDEX,
   PRF_REJ_SALES_FORM_INDEX,
   PRF_WTDWN_FORM_INDEX,
@@ -90,7 +91,7 @@ const ModalFormWrapper = ({
         jobType: jobTimelineType.ASSOCIATE,
       };
       dispatch(tagJob({ payload, navigate }));
-    } else if (activeStep === 99) {
+    } else if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
       // Submit to sale profile rejected
       const payload = {
         jobId: jobTimeLineData?.job?.id,
@@ -102,7 +103,7 @@ const ModalFormWrapper = ({
         jobType: jobTimelineType.SUBMIT_TO_SALES,
       };
       dispatch(tagJob({ payload, navigate }));
-    } else if (activeStep === 98) {
+    } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
       // Submit to client profile rejected
       const payload = {
         jobId: jobTimeLineData?.job?.id,
@@ -114,7 +115,10 @@ const ModalFormWrapper = ({
         jobType: jobTimelineType.SUBMIT_TO_CLIENT,
       };
       dispatch(tagJob({ payload, navigate }));
-    } else if (activeStep === 21 && modalFormName?.formName === "approve_tos") {
+    } else if (
+      activeStep === APPROVE_TOS_FORM_INDEX &&
+      modalFormName?.formName === "approve_tos"
+    ) {
       // Approve TOS
       const payload = {
         jobId: jobTimeLineData?.job?.id,
@@ -127,7 +131,7 @@ const ModalFormWrapper = ({
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (
-      activeStep === 21 &&
+      activeStep === APPROVE_TOS_FORM_INDEX &&
       modalFormName?.formName === "rejected_tos"
     ) {
       // Reject TOS
