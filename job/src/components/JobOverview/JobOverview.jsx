@@ -697,6 +697,10 @@ const JobOverview = () => {
       stage = "Odin";
     } else if (maxOrder === 3) {
       stage = "Interview";
+    } else if (maxOrder === 4) {
+      stage = "TOS";
+    } else if (maxOrder === 5) {
+      stage = "Conditional Offer";
     }
     return stage;
   };
