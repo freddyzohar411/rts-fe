@@ -1,12 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Input } from "reactstrap";
 
-const EmailSubject = ({
-  formik,
-  name,
-  icon,
-  placeholder = "Enter Subject",
-}) => {
+const EmailTitle = ({ formik, name, icon }) => {
   return (
     <div className="d-flex align-items-center gap-2 ">
       <div
@@ -14,7 +9,7 @@ const EmailSubject = ({
           width: "40px",
         }}
       >
-        <Button
+        <div
           className="px-1 py-0"
           style={{
             height: "28px",
@@ -22,10 +17,11 @@ const EmailSubject = ({
             backgroundColor: "#F5F5F5",
             border: "1px solid #A8A8A8",
             color: "#7A7A7A",
+            borderRadius: "5px"
           }}
         >
           {icon && icon}
-        </Button>
+        </div>
       </div>
       <div className="d-flex gap-3 w-100">
         <Input
@@ -37,11 +33,11 @@ const EmailSubject = ({
             formik.setFieldValue(name, event.target.value);
           }}
           onBlur={formik.handleBlur}
-          placeholder={placeholder}
+          placeholder="Enter Title"
         />
       </div>
     </div>
   );
 };
 
-export default EmailSubject;
+export default EmailTitle;

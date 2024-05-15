@@ -48,6 +48,7 @@ import ConditionalOffer from "../ConditionalOffer/ConditionalOffer";
 import ConditionalOfferRelease from "../ConditionalOfferRelease.jsx/ConditionalOfferRelease.jsx";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
+
 import {
   JOB_TIMELINE_INITIAL_OPTIONS,
   jobHeaders,
@@ -55,6 +56,21 @@ import {
   timelineSkipSubModule,
   timelineLegend,
   newHeaders,
+  ASSOCIATE_FORM_INDEX,
+  SUB_TO_SALES_FORM_INDEX,
+  SUB_TO_CLIENT_FORM_INDEX,
+  SKILLS_ASSESSMENT_FORM_INDEX,
+  CODING_TEST_FORM_INDEX,
+  TEC_INTRW_FORM_INDEX,
+  CULTURAL_FIT_TEST_FORM_INDEX,
+  SCHEDULE_FORM_INDEX,
+  RELEASE_FORM_INDEX,
+  PREPARE_TOS_FORM_INDEX,
+  APPROVE_TOS_FORM_INDEX,
+  UNTAG_FORM_INDEX,
+  PRF_WTDWN_FORM_INDEX,
+  PRF_REJ_SALES_FORM_INDEX,
+  PRF_REJ_CLIENT_FORM_INDEX,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -79,8 +95,8 @@ import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
 import OverviewStepComponent from "./OverviewStepComponent";
 import InnerTimelineStep from "./InnerTimelineStep";
 import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
-import PrepareTOS from "../PrepareTOS/PrepareTOS";
-import ApproveTOS from "../ApproveTOS/ApproveTOS";
+import PrepareTOS from "../TOSComponents/PrepareTOS.jsx";
+import ApproveTOS from "../TOSComponents/ApproveTOS.jsx";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -94,26 +110,20 @@ const JobOverview = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const [openJobIndex, setOpenJobIndex] = useState(null);
+
+  const [candidateId, setCandidateId] = useState();
+
   // Next Step Dropdown States
-  const [selectedModule, setSelectedModule] = useState("");
-  const [selectedSubModule, setSelectedSubModule] = useState("");
   const [legendTooltip, setLegendTooltip] = useState(false);
   const [headerTooltip, setHeaderTooltip] = useState(false);
   const [sortDirection, setSortDirection] = useState("asc");
-
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
   const [stepperState, setStepperState] = useState("");
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState();
 
-  const [templateData, setTemplateData] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [candidateId, setCandidateId] = useState();
-
-  const [isPreviewCV, setIsPreviewCV] = useState(false);
-  const [skipComboOptions, setSkipComboOptions] = useState({});
   const [skipSteps, setSkipSteps] = useState({});
-  const [skipSubsteps, setSkipSubsteps] = useState({});
+  const [selectedSubSteps, setSelectedSubSteps] = useState({});
 
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
@@ -122,7 +132,7 @@ const JobOverview = () => {
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  // const [myNumber, setMyNumber] = useState(1);
+  const [myNumber, setMyNumber] = useState(1);
   const [modalFormName, setModalFormName] = useState({});
 
   // Email Loading
@@ -245,31 +255,42 @@ const JobOverview = () => {
   useEffect(() => {
     // Set the stepper state based on the active step
     switch (activeStep) {
-      case 1:
+      // Profile
+      case UNTAG_FORM_INDEX:
+        setModalFormName({ header: "Confirm" });
+        break;
+      case PRF_WTDWN_FORM_INDEX:
+        setModalFormName({ header: "Profile Withdrawn Confirmation" });
+        break;
+      case ASSOCIATE_FORM_INDEX:
         setStepperState("Associate");
         break;
-      case 2:
+      case SUB_TO_SALES_FORM_INDEX:
         setStepperState("Submit to Sales");
         break;
-      case 3:
+      case PRF_REJ_SALES_FORM_INDEX:
+        setModalFormName({ header: "Profile Rejected - Sales" });
+        break;
+      case SUB_TO_CLIENT_FORM_INDEX:
         setStepperState("Submit to Client");
         break;
-      case 4:
-        setStepperState("Profile Feedback Pending");
+      case PRF_REJ_CLIENT_FORM_INDEX:
+        setModalFormName({ header: "Profile Rejected - Client" });
         break;
-      case 5:
+      // Odin
+      case SKILLS_ASSESSMENT_FORM_INDEX:
         setStepperState("Pre-Skill Assessment");
         break;
       case 6:
         setStepperState("Review Skill Assessment Results");
         break;
-      case 7:
+      case CODING_TEST_FORM_INDEX:
         setStepperState("Review Coding Test Results");
         break;
-      case 8:
+      case TEC_INTRW_FORM_INDEX:
         setStepperState("Review Technical Interview Results");
         break;
-      case 9:
+      case CULTURAL_FIT_TEST_FORM_INDEX:
         setStepperState("Review Cultural Fit Test Results");
         break;
       case 10:
@@ -296,10 +317,11 @@ const JobOverview = () => {
       case 17:
         setStepperState("Conditional Offer Status");
         break;
-      case 18:
+      // TOS
+      case PREPARE_TOS_FORM_INDEX:
         setStepperState("Prepare TOS");
         break;
-      case 19:
+      case APPROVE_TOS_FORM_INDEX:
         setStepperState("Approve TOS");
         break;
       default:
@@ -307,45 +329,8 @@ const JobOverview = () => {
     }
   }, [activeStep]);
 
-  // Close Preview CV when OffCanvas is Closed
-  useEffect(() => {
-    // Set Category for Template
-    switch (activeStep) {
-      case 2:
-        setSelectedCategory("CV");
-        break;
-      case 3:
-        setSelectedCategory("CV");
-        break;
-      case 11:
-        setSelectedCategory("Conditional Offer");
-        break;
-      default:
-        setSelectedCategory(null);
-    }
-  }, [activeStep]);
-
-  useEffect(() => {
-    if (offcanvasForm === false) {
-      setIsPreviewCV(false);
-    }
-  }, [offcanvasForm]);
-
   const toggleJobOpen = (index) => {
     setOpenJobIndex(openJobIndex === index ? null : index);
-  };
-
-  const handleModuleChange = (e) => {
-    setSelectedModule(e.target.value);
-  };
-
-  const handleSubModuleChange = (e) => {
-    setSelectedSubModule(e.target.value);
-  };
-
-  const handleSaveClick = () => {
-    if (selectedModule == 1 && selectedSubModule == "Untag") {
-    }
   };
 
   const handleStepsSelection = (jobId, value) => {
@@ -354,28 +339,83 @@ const JobOverview = () => {
     setSkipSteps(newOb);
   };
 
-  const handleSkipSelection = (jobId, value) => {
-    const newOb = { ...skipComboOptions };
-    newOb[jobId] = value;
-    setSkipComboOptions(newOb);
+  const handleSubStepsSelection = (candidateId, value) => {
+    const newOb = { ...selectedSubSteps };
+    newOb[candidateId] = value;
+    setSelectedSubSteps(newOb);
+  };
+
+  const handleSort = (index) => {
+    if (index === 0) {
+      const direction = sortDirection === "asc" ? "desc" : "asc";
+      dispatch(
+        fetchJobTimelineList({
+          ...DynamicTableHelper.cleanPageRequest(pageRequest),
+          jobId: parseInt(jobId),
+          sortDirection: direction,
+        })
+      );
+      setSortDirection(direction);
+    }
+  };
+
+  const handleIconClick = (candidateId, actStep) => {
+    setActiveStep(actStep);
+    actionButtonTrigger(actStep);
+    setCandidateId(candidateId);
+  };
+
+  const actionButtonTrigger = (step) => {
+    switch (step) {
+      //Profile
+      case ASSOCIATE_FORM_INDEX:
+      case SUB_TO_SALES_FORM_INDEX:
+      case SUB_TO_CLIENT_FORM_INDEX:
+      case 8:
+      case 9:
+      case 10:
+      case 11:
+      case 12:
+      case 13:
+      case 14:
+      case 15:
+      case 16:
+      case 17:
+      case 18:
+      case 20:
+      case 21:
+        setOffcanvasForm(true);
+        break;
+      //Profile
+      case UNTAG_FORM_INDEX:
+      case PRF_WTDWN_FORM_INDEX:
+      case PRF_REJ_SALES_FORM_INDEX:
+      case PRF_REJ_CLIENT_FORM_INDEX:
+      case 98:
+      case 99:
+        setIsFormModalOpen(true);
+        break;
+      default:
+        break;
+    }
   };
 
   const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
-      case 1:
+      case ASSOCIATE_FORM_INDEX:
         return (
           <AssociateCandidate
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
             timelineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            ref={formikRef}
           />
         );
-      case 2:
+      case SUB_TO_SALES_FORM_INDEX:
         return (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
-            templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
             setIsViewTemplate={setIsViewTemplate}
@@ -386,11 +426,10 @@ const JobOverview = () => {
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
-      case 3:
+      case SUB_TO_CLIENT_FORM_INDEX:
         return (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
-            templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
             setIsViewTemplate={setIsViewTemplate}
@@ -420,7 +459,7 @@ const JobOverview = () => {
             ref={ref}
           />
         );
-      case 6:
+      case SKILLS_ASSESSMENT_FORM_INDEX:
         return (
           <SkillAssessment
             closeOffcanvas={closeOffcanvas}
@@ -430,7 +469,7 @@ const JobOverview = () => {
             ref={ref}
           />
         );
-      case 7:
+      case CODING_TEST_FORM_INDEX:
         return (
           <CodingTest
             closeOffcanvas={closeOffcanvas}
@@ -440,7 +479,7 @@ const JobOverview = () => {
             ref={ref}
           />
         );
-      case 8:
+      case TEC_INTRW_FORM_INDEX:
         return (
           <TechnicalInterview
             closeOffcanvas={closeOffcanvas}
@@ -450,7 +489,7 @@ const JobOverview = () => {
             ref={ref}
           />
         );
-      case 9:
+      case CULTURAL_FIT_TEST_FORM_INDEX:
         return (
           <CulturalFitTest
             closeOffcanvas={closeOffcanvas}
@@ -460,13 +499,18 @@ const JobOverview = () => {
             ref={ref}
           />
         );
-      case 10:
+      case SCHEDULE_FORM_INDEX:
         return (
           <ScheduleInterview
             closeOffcanvas={closeOffcanvas}
+            onPreviewCVClick={handlePreviewCVClick}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
+            setOffcanvasForm={setOffcanvasForm}
+            ref={formikRef}
           />
         );
       case 11:
@@ -515,13 +559,6 @@ const JobOverview = () => {
         );
       case 16:
         return (
-          // <ConditionalOffer
-          //   templateData={templateData}
-          //   closeOffcanvas={closeOffcanvas}
-          //   candidateId={candidateId}
-          //   jobId={parseInt(jobId)}
-          //   activeStep={step}
-          // />
           <ConditionalOffer
             closeOffcanvas={closeOffcanvas}
             candidateId={candidateId}
@@ -534,13 +571,6 @@ const JobOverview = () => {
         );
       case 17:
         return (
-          // <ConditionalOffer
-          //   templateData={templateData}
-          //   closeOffcanvas={closeOffcanvas}
-          //   candidateId={candidateId}
-          //   jobId={parseInt(jobId)}
-          //   activeStep={step}
-          // />
           <ConditionalOffer
             closeOffcanvas={closeOffcanvas}
             candidateId={candidateId}
@@ -551,11 +581,10 @@ const JobOverview = () => {
             edit={true}
           />
         );
-      case 18:
+      case RELEASE_FORM_INDEX:
         return (
           <ConditionalOfferRelease
             closeOffcanvas={closeOffcanvas}
-            templateData={templateData}
             jobId={jobId}
             candidateId={candidateId}
             setIsViewTemplate={setIsViewTemplate}
@@ -575,7 +604,7 @@ const JobOverview = () => {
             activeStep={step}
           />
         );
-      case 18:
+      case PREPARE_TOS_FORM_INDEX:
         return (
           <PrepareTOS
             setOffcanvasForm={setOffcanvasForm}
@@ -585,7 +614,7 @@ const JobOverview = () => {
             ref={ref}
           />
         );
-      case 19:
+      case APPROVE_TOS_FORM_INDEX:
         return (
           <ApproveTOS
             setOffcanvasForm={setOffcanvasForm}
@@ -600,29 +629,6 @@ const JobOverview = () => {
       default:
         return null;
     }
-  };
-
-  const handleSort = (index) => {
-    if (index === 0) {
-      const direction = sortDirection === "asc" ? "desc" : "asc";
-      dispatch(
-        fetchJobTimelineList({
-          ...DynamicTableHelper.cleanPageRequest(pageRequest),
-          jobId: parseInt(jobId),
-          sortDirection: direction,
-        })
-      );
-      setSortDirection(direction);
-    }
-  };
-
-  const handleIconClick = (id, jobId, actStep, openCanvas) => {
-    const activeStep = actStep ?? skipComboOptions[jobId];
-    setActiveStep(activeStep);
-    if (!openCanvas) {
-      setOffcanvasForm(!offcanvasForm);
-    }
-    setCandidateId(id);
   };
 
   const renderLegend = () => {
@@ -783,14 +789,19 @@ const JobOverview = () => {
                       <Input
                         type="select"
                         className="form-select border-0"
-                        value={selectedSubModule?.[data?.id]}
-                        onChange={handleSubModuleChange}
+                        value={selectedSubSteps?.[candidateData?.id]}
+                        onChange={(e) =>
+                          handleSubStepsSelection(
+                            candidateData?.id,
+                            parseInt(e.target.value)
+                          )
+                        }
                       >
                         <option value="">Select</option>
                         {timelineSkipSubModule?.[skipSteps?.[data?.id]]?.map(
                           (item, index) => (
-                            <option key={index} value={item}>
-                              {item}
+                            <option key={index} value={item?.id}>
+                              {item?.form}
                             </option>
                           )
                         )}
@@ -799,35 +810,26 @@ const JobOverview = () => {
                   </td>
                   {/* Save Button */}
                   <td style={{ width: "50px" }}>
-                    <div>
-                      <div
-                        className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
-                        style={{ width: "30px", height: "30px" }}
-                        onClick={() => {
-                          // handleIconClick(
-                          //   data?.candidate?.id,
-                          //   data?.id,
-                          //   getFormIndex(
-                          //     skipComboOptions[data.id] < originalOrder
-                          //       ? originalOrder
-                          //       : skipComboOptions[data.id],
-                          //     data?.id
-                          //   )
-                          // );
-                          setTimelineRowIndex(timelineIndex);
-                          actionButtonTrigger(activeStep);
-                          // setOffcanvasForm(true);
-                        }}
-                      >
-                        <i
-                          className="mdi mdi-content-save-outline mdi-18px"
-                          style={{ color: "#0A56AE" }}
-                          onClick={() => handleSaveClick()}
-                        ></i>
-                      </div>
-                    </div>
+                    <button
+                      className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
+                      style={{ width: "30px", height: "30px" }}
+                      onClick={() => {
+                        handleIconClick(
+                          candidateData?.id,
+                          selectedSubSteps?.[candidateData?.id]
+                        );
+                        setTimelineRowIndex(timelineIndex);
+                      }}
+                      disabled={!selectedSubSteps?.[candidateData?.id]}
+                    >
+                      <i
+                        className="mdi mdi-content-save-outline mdi-18px"
+                        style={{ color: "#0A56AE" }}
+                      ></i>
+                    </button>
                   </td>
                 </tr>
+
                 {openJobIndex === data.id && (
                   <tr>
                     <td colSpan={10} className="px-3">
@@ -852,6 +854,38 @@ const JobOverview = () => {
   // Generate canvas header button
   const generateCanvasHeaderButton = (step) => {
     switch (step) {
+      case 1:
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <Button
+              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+              style={{
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                setOffcanvasForm(false);
+                setIsViewTemplate(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="btn btn-success"
+              onClick={() => {
+                formikRef.current.submitForm();
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {jobTagMeta?.isLoading ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </div>
+        );
       // Case 2 and 3 usese the same form
       case 2:
       case 3:
@@ -1121,7 +1155,7 @@ const JobOverview = () => {
           </Row>
         );
 
-      case 18:
+      case 20:
         return (
           <Row>
             <Col>
@@ -1129,7 +1163,6 @@ const JobOverview = () => {
                 <Button
                   type="button"
                   onClick={() => ref.current.handleCancel()}
-                  // onClick={() => setOffcanvasForm(false)}
                   style={{
                     backgroundColor: "#FFFFFF",
                     border: "1px solid #E7EAEE",
@@ -1159,7 +1192,7 @@ const JobOverview = () => {
           </Row>
         );
 
-      case 19:
+      case 21:
         return (
           <Row>
             <Col>
@@ -1208,25 +1241,6 @@ const JobOverview = () => {
 
       default:
         return null;
-    }
-  };
-
-  const actionButtonTrigger = (step) => {
-    switch (step) {
-      case 1:
-      case 2:
-      case 3:
-      case 16:
-      case 17:
-      case 18:
-        setOffcanvasForm(true);
-        break;
-      case 98:
-      case 99:
-        setIsFormModalOpen(true);
-        break;
-      default:
-        break;
     }
   };
 
@@ -1440,6 +1454,56 @@ const JobOverview = () => {
             </Pagination>
           </div>
         </Row>
+        <Row className="d-flex flex-row align-items-center">
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(1)}
+          >
+            Associate
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(2)}
+          >
+            Submit to Sales
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(3)}
+          >
+            Submit to Client
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(16)}
+          >
+            Profile Feedback Pending{" "}
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(20)}
+          >
+            Prepare TOS
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(21)}
+          >
+            Accept or Decline
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(16)}
+          >
+            Conditional Offer
+          </div>
+          <div
+            className="btn btn-info w-25 me-3 mb-3"
+            onClick={() => setActiveStep(17)}
+          >
+            Accept or Decline
+          </div>
+        </Row>
 
         <Offcanvas
           isOpen={offcanvasForm}
@@ -1482,26 +1546,28 @@ const JobOverview = () => {
           header={stepperState}
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           isLoading={jobTimelineMeta?.isLoading}
+          modalFormName={modalFormName}
+          setModalFormName={setModalFormName}
         />
-        {/* <div className="d-flex gap-2 w-25">
+        <div className="d-flex gap-2 w-25">
           <Input
             type="text"
             onChange={(e) => setMyNumber(parseInt(e.target.value))}
           />
           <Button
-          className="btn btn-primary fs-semibold"
+            className="btn btn-primary fs-semibold"
             onClick={() => {
               // Everytime i click i want it to render even if it is the same step
-              // setIsFormModalOpen(true);
+              setIsFormModalOpen(true);
               setActiveStep(myNumber);
             }}
             style={{
-              textWrap: "nowrap"
+              textWrap: "nowrap",
             }}
           >
             STEP (DEV)
           </Button>
-        </div> */}
+        </div>
       </div>
     </React.Fragment>
   );

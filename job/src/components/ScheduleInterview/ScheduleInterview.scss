@@ -1,0 +1,23 @@
+input::placeholder {
+  font-weight: 100;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="text"]:focus {
+  font-weight: 100;
+}
+
+.input-custom {
+  border: 1px solid #d1d1d1ce;
+  background-color: #ffffff;
+}
+
+.input-custom:hover {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+.location-input:disabled {
+  background-color: transparent !important;
+}

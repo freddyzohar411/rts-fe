@@ -16,6 +16,8 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 
+// Display uneditable form for approving TOS.
+// User should be able to select reject or accept TOS.
 const ApproveTOS = forwardRef(
   (
     {
@@ -54,44 +56,11 @@ const ApproveTOS = forwardRef(
       }
     }, [form]);
 
-    const handleFormSubmit = async (
-      event,
-      values,
-      newValues,
-      buttonNameHook,
-      formStateHook,
-      rerenderTable
-    ) => {
-      if (values?.skillAssessmentResults === "false") {
-        const payload = {
-          jobId: jobId,
-          jobStageId: JOB_STAGE_IDS?.SKILLS_ASSESSMENT,
-          status: JOB_STAGE_STATUS?.REJECTED,
-          candidateId,
-          jobType: "skills_assessment",
-        };
-        dispatch(tagJob({ payload, navigate }));
-      } else if (values?.skillAssessmentResults === "true") {
-        const payload = {
-          jobId: jobId,
-          jobStageId: JOB_STAGE_IDS?.CODING_TEST,
-          status: JOB_STAGE_STATUS?.IN_PROGRESS,
-          candidateId,
-          formData: JSON.stringify(values),
-          formId: parseInt(form.formId),
-          jobType: "coding_test",
-        };
-        dispatch(tagJob({ payload, navigate }));
-        if (values?.scheduleForCodingTest === "true") {
-          window.open("https://app.hackerearth.com/recruiter/", "_blank");
-        }
-      }
-      closeOffcanvas();
-    };
-
     const handleCancel = () => {
       setOffcanvasForm(false);
     };
+
+    const handleFormSubmit = async (values) => {};
 
     const approveTos = () => {
       setIsFormModalOpen(true);
@@ -113,7 +82,7 @@ const ApproveTOS = forwardRef(
     return (
       <React.Fragment>
         <div
-          className="d-flex flex-column justiy-content-between h-100"
+          className="d-flex flex-column justiy-content-between h-100 p-3"
           style={{ height: "500px" }}
         >
           <Row>
