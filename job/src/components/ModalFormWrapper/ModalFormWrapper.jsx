@@ -33,7 +33,6 @@ const ModalFormWrapper = ({
   modalFormName,
   setModalFormName,
 }) => {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
@@ -152,7 +151,6 @@ const ModalFormWrapper = ({
           paddingBottom: "0px",
         }}
       >
-        {/* <h3>{modalFormName?.modalFormName || header || "Header"}</h3> */}
         <h4>{modalFormName ? modalFormName?.header : header || "Header"}</h4>
       </ModalHeader>
       <ModalBody>
