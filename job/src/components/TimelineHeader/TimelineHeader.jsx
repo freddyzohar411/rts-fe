@@ -21,9 +21,10 @@ function TimelineHeader({ data }) {
     (state) => state.JobStageReducer.jobTimelineCount
   );
 
+  const [candidatesExist, setCandidatesExist] = useState(false);
   const [counts, setCounts] = useState({});
   // default to 1 to avoid division by zero
-  const [maxCount, setMaxCount] = useState(1); 
+  const [maxCount, setMaxCount] = useState(1);
 
   useEffect(() => {
     let data = {};
@@ -34,6 +35,11 @@ function TimelineHeader({ data }) {
       setCounts(data);
       const max = Math.max(...jobTimelineCount.map((item) => item.count));
       setMaxCount(max);
+    }
+    if ("Tag" in data) {
+      setCandidatesExist(true);
+    } else {
+      setCandidatesExist(false);
     }
   }, [jobTimelineCount]);
 
@@ -73,7 +79,7 @@ function TimelineHeader({ data }) {
             style={{
               width: "130px",
               height:
-                counts[item] === 0
+                (counts[item] === 0 || !candidatesExist)
                   ? "7.5%"
                   : `${(counts[item] / maxCount) * 60}%`,
               transition: "height 0.3s ease",
