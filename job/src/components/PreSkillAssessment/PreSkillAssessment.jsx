@@ -1,42 +1,38 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 import { tagJob } from "../../store/actions";
+import { OdinURLs, jobTimelineType } from "../JobOverview/JobOverviewConstants";
 
 const PreSkillAssessment = forwardRef(
   ({ closeOffcanvas, jobId, candidateId }, ref) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleUpdate = () => {
+    const submitForm = () => {
       try {
         const payload = {
           jobId: jobId,
           jobStageId: JOB_STAGE_IDS?.SKILLS_ASSESSMENT,
           status: JOB_STAGE_STATUS?.IN_PROGRESS,
           candidateId,
-          jobType: "skills_assessment",
+          jobType: jobTimelineType.SKILLS_ASSESSMENT,
         };
         dispatch(tagJob({ payload, navigate }));
         closeOffcanvas();
       } catch (e) {}
 
       closeOffcanvas();
-      window.open("https://app.hackerearth.com/recruiter/", "_blank");
-    };
-
-    const handleCancel = () => {
-      closeOffcanvas();
+      window.open(OdinURLs.PRE_SKILL_ASSESSMENT, "_blank");
     };
 
     useImperativeHandle(ref, () => ({
-      handleCancel,
-      handleUpdate,
+      submitForm,
     }));
 
     return (

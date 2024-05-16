@@ -6,6 +6,7 @@ import {
   TAG_JOB,
   TAG_JOB_ALL,
   TAG_JOB_ATTACHMENT,
+  UNTAG_JOB,
 } from "./actionTypes";
 import {
   tagJobSuccess,
@@ -18,6 +19,8 @@ import {
   fetchJobtimeineCountFailure,
   tagJobAttachmentSuccess,
   tagJobAttachmentFailure,
+  untagJobSuccess,
+  untagJobFailure,
 } from "./action";
 import {
   getJobTimeline,
@@ -25,7 +28,9 @@ import {
   tagAllJob,
   tagJob,
   tagJobWithAttachments,
+  untagJob,
 } from "../../helpers/backend_helper";
+import { JOB_STAGE_STATUS } from "../../components/JobListing/JobListingConstants";
 
 function* workTagJob(action) {
   const { payload, navigate } = action.payload;
@@ -34,7 +39,11 @@ function* workTagJob(action) {
     yield put(tagJobSuccess(response.data));
     if (payload?.jobType) {
       if (payload?.jobType === "associate_candidate") {
-        toast.success("Job has been associated successfully.");
+        if (payload?.status === JOB_STAGE_STATUS?.WITHDRAWN) {
+          toast.success("Profile Withdrawn Successfully.");
+        } else {
+          toast.success("Profile Associated Successfully.");
+        }
       } else if (payload?.jobType === "submit_to_sales") {
         toast.success("Job has been submitted to sales.");
       } else if (payload?.jobType === "submit_to_client") {
@@ -61,6 +70,18 @@ function* workTagAllJob(action) {
     navigate(`/jobs/${payload?.[0]?.jobId}/overview`);
   } catch (error) {
     yield put(tagJobAllFailure(error));
+  }
+}
+
+function* workUntagJob(action) {
+  const { jobId, candidateId } = action.payload;
+  try {
+    // Untag a job
+    const response = yield call(untagJob, jobId, candidateId);
+    yield put(untagJobSuccess(response.data));
+    toast.success("Profile Untagged Successfully.");
+  } catch (error) {
+    yield put(untagJobFailure(error));
   }
 }
 
@@ -112,6 +133,7 @@ function* workTagJobAttachment(action) {
 export default function* watchTagJobSaga() {
   yield takeEvery(TAG_JOB, workTagJob);
   yield takeEvery(TAG_JOB_ALL, workTagAllJob);
+  yield takeEvery(UNTAG_JOB, workUntagJob);
   yield takeEvery(FETCH_JOB_TIMELINE_LIST, workFetchJobTimelineList);
   yield takeEvery(JOB_TIMELINE_COUNT, workFetchJobTimelineCount);
   yield takeEvery(TAG_JOB_ATTACHMENT, workTagJobAttachment);

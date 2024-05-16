@@ -132,26 +132,29 @@ export const SUB_TO_SALES_FORM_INDEX = 4;
 export const PRF_REJ_SALES_FORM_INDEX = 5;
 export const SUB_TO_CLIENT_FORM_INDEX = 6;
 export const PRF_REJ_CLIENT_FORM_INDEX = 7;
-
 //Odin
-export const SKILLS_ASSESSMENT_FORM_INDEX = 8;
-export const CODING_TEST_FORM_INDEX = 9;
-export const TEC_INTRW_FORM_INDEX = 10;
-export const CULTURAL_FIT_TEST_FORM_INDEX = 11;
-export const SCHEDULE_FORM_INDEX = 12;
-export const BACKOUT_CANDIE_FORM_INDEX = 13;
-export const RESCHEDULED_FORM_INDEX = 14;
-export const CANCL_BY_CLIENT_FORM_INDEX = 15;
-export const REJECTED_INTRW_FORM_INDEX = 16;
-export const SELECTED_FORM_INDEX = 17;
-export const PREPARE_TOS_FORM_INDEX = 18;
-export const EDIT_TOS_FORM_INDEX = 19;
-export const APPROVE_TOS_FORM_INDEX = 20;
-export const PREPARE_FORM_INDEX = 21;
-export const EDIT_FORM_INDEX = 22;
-export const RELEASE_FORM_INDEX = 23;
-export const ACCEPTED_FORM_INDEX = 24;
-export const REJECTED_FORM_INDEX = 25;
+export const PRE_SKILLS_ASSESSMENT_FORM_INDEX = 8;
+export const SKILLS_ASSESSMENT_FORM_INDEX = 9;
+export const CODING_TEST_FORM_INDEX = 10;
+export const TEC_INTRW_FORM_INDEX = 11;
+export const CULTURAL_FIT_TEST_FORM_INDEX = 12;
+//Interview
+export const SCHEDULE_FORM_INDEX = 13;
+export const BACKOUT_CANDIE_FORM_INDEX = 14;
+export const RESCHEDULED_FORM_INDEX = 15;
+export const CANCL_BY_CLIENT_FORM_INDEX = 16;
+export const REJECTED_INTRW_FORM_INDEX = 17;
+export const SELECTED_FORM_INDEX = 18;
+//TOS
+export const PREPARE_TOS_FORM_INDEX = 19;
+export const EDIT_TOS_FORM_INDEX = 20;
+export const APPROVE_TOS_FORM_INDEX = 21;
+//Conditional Offer
+export const PREPARE_FORM_INDEX = 22;
+export const EDIT_FORM_INDEX = 23;
+export const RELEASE_FORM_INDEX = 24;
+export const ACCEPTED_FORM_INDEX = 25;
+export const REJECTED_FORM_INDEX = 26;
 
 export const timelineSkipModule = {
   Profile: 1,
@@ -172,6 +175,7 @@ export const timelineSkipSubModule = {
     { id: PRF_REJ_CLIENT_FORM_INDEX, form: "Profile Rejected - Client" },
   ],
   2: [
+    { id: PRE_SKILLS_ASSESSMENT_FORM_INDEX, form: "Pre Skills Assessment" },
     { id: SKILLS_ASSESSMENT_FORM_INDEX, form: "Skills Assessment" },
     { id: CODING_TEST_FORM_INDEX, form: "Coding Test" },
     { id: TEC_INTRW_FORM_INDEX, form: "Technical Interview" },
@@ -239,9 +243,21 @@ export const timelineLegend = [
 ];
 
 export const jobTimelineType = {
+  //Profile
+  ASSOCIATE: "associate_candidate",
   SUBMIT_TO_SALES: "submit_to_sales",
   SUBMIT_TO_CLIENT: "submit_to_client",
+  //Odin
+  SKILLS_ASSESSMENT: "skills_assessment",
+  //Condition Offer
   CONDITIONAL_OFFER_DRAFT: "conditional_offer_draft",
   CONDITIONAL_OFFER_SAVED: "conditional_offer_saved",
   CONDITIONAL_OFFER_RELEASED: "conditional_offer_released",
+};
+
+export const OdinURLs = {
+  PRE_SKILL_ASSESSMENT: "https://app.hackerearth.com/recruiter/",
+  CODING_TEST_ASSESSMENT: "https://app.hackerearth.com/recruiter/",
+  TECHNICAL_INTERVIEW_ASSESSMENT: "https://app.hackerearth.com/recruiter/",
+  CULTURAL_FIT_TEST: "https://app.hackerearth.com/recruiter/interview/",
 };

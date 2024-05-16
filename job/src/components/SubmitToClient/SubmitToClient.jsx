@@ -4,7 +4,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Row, Col, Button } from "reactstrap";
 import { useFormik } from "formik";
 import {
@@ -33,26 +33,23 @@ import {
 const SubmitToClient = forwardRef(
   (
     {
-      candidateId,
-      jobId,
+      closeOffcanvas,
       setIsViewTemplate,
       setTemplatePreviewInfo,
       setTemplatePreviewAction,
-      setOffcanvasForm,
       jobTimeLineData,
     },
     ref
   ) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [formInitialValues, setFormInitialValues] = useState(initialValues);
-    const [formSchema, setFormSchema] = useState(schema);
+
     const [emailTemplateData, setEmailTemplateData] = useState(null);
     const [tableTemplateData, setTableTemplateData] = useState(null);
     const [CVTemplateData, setCVTemplateData] = useState(null);
     const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
-      candidateId: candidateId,
-      jobId: jobId,
+      candidateId: jobTimeLineData?.candidate?.id,
+      jobId: jobTimeLineData?.job?.id,
     });
     const [attachments, setAttachments] = useState([]);
     const [attachmentLoading, setAttachmentLoading] = useState(false);
@@ -69,7 +66,7 @@ const SubmitToClient = forwardRef(
       newValues.cc = newValues.cc.map((item) => item.value);
       newValues.bcc = newValues.bcc.map((item) => item.value);
       const payload = {
-        jobId: jobId,
+        jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_CLIENT,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
@@ -102,6 +99,7 @@ const SubmitToClient = forwardRef(
           navigate,
         })
       );
+      closeOffcanvas();
     };
 
     // Set formik when attachments change
@@ -114,8 +112,8 @@ const SubmitToClient = forwardRef(
      */
     const formik = useFormik({
       enableReinitialize: true,
-      initialValues: formInitialValues,
-      validationSchema: formSchema,
+      initialValues: initialValues,
+      validationSchema: schema,
       validateOnBlur: true,
       onSubmit: handleFormSubmit,
     });
