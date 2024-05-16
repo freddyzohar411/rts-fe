@@ -32,7 +32,6 @@ function AccountCustomView() {
   const accountFields = useSelector(
     (state) => state?.AccountReducer?.accountsFields
   );
-
   const [selectedOption, setSelectedOption] = useState([]);
   const [dualListBoxError, setDualListBoxError] = useState(false);
   const [options, setOptions] = useState([]);
@@ -49,30 +48,38 @@ function AccountCustomView() {
     if (accountFields?.length > 0) {
       // Filter out the mandatory options
       const filteredOptions = accountFields.filter(
-        (field) => !ACCOUNT_MANDATORY_OPTIONS.some(
-          (option) => field?.value.includes(option.value)
-        )
+        (field) =>
+          !ACCOUNT_MANDATORY_OPTIONS.some((option) =>
+            field?.value.includes(option.value)
+          )
       );
       setOptions(filteredOptions);
     }
   }, [accountFields]);
 
   const handleSubmit = async (values) => {
-    if (selectedOption.length === 0) {
-      setDualListBoxError(true);
-      return;
-    } else {
+    try {
+      if (selectedOption.length === 0) {
+        setDualListBoxError(true);
+        return;
+      }
       setDualListBoxError(false);
       const newCustomView = {
         name: values.name,
         type: "Account",
         columnName: selectedOption,
       };
-      dispatch(
+
+      const response = await dispatch(
         createAccountCustomView({ payload: newCustomView, navigate: navigate })
       );
-      dispatch(fetchAccountCustomView());
-    }
+
+      if (response) {
+        setTimeout(async () => {
+          await dispatch(fetchAccountCustomView());
+        }, 1500); // Delay the fetch to allow the backend to update the data
+      }
+    } catch (error) {}
   };
 
   return (
