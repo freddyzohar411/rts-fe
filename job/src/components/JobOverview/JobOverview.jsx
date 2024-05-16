@@ -1154,6 +1154,7 @@ const JobOverview = () => {
 
         {/* Form Modal */}
         <ModalFormWrapper
+          originalOrder={originalOrder}
           activeStep={activeStep}
           header={stepperState}
           isFormModalOpen={isFormModalOpen}

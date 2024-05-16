@@ -31,6 +31,7 @@ import {
 } from "../JobOverview/JobOverviewConstants";
 
 const ModalFormWrapper = ({
+  originalOrder,
   activeStep = 0,
   header = "header",
   isFormModalOpen,
@@ -54,7 +55,6 @@ const ModalFormWrapper = ({
   }, [form]);
 
   useEffect(() => {
-    console.log("test activeStep load", activeStep);
     if (activeStep === UNTAG_FORM_INDEX) {
       dispatch(fetchJobForm("job_untag"));
     } else if (
@@ -83,7 +83,15 @@ const ModalFormWrapper = ({
 
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {
-    console.log("test activeStep submit", activeStep);
+    // Job Stage Id and Type for Interview module -- Start
+    let stageId = JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED;
+    if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
+      stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
+    } else if (originalOrder === JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED) {
+      stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
+    }
+    // Job Stage Id and Type for Interview module -- End
+
     if (activeStep === UNTAG_FORM_INDEX) {
       // Untag candidate
       const payload = {
@@ -128,15 +136,30 @@ const ModalFormWrapper = ({
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (activeStep === BACKOUT_CANDIE_FORM_INDEX) {
-      // Profile withdrawn
+      // Profile backout by candidate
       const payload = {
         jobId: jobTimeLineData?.job?.id,
-        jobStageId: JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED,
+        jobStageId: stageId,
         status: JOB_STAGE_STATUS?.WITHDRAWN,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
-        jobType: jobTimelineType.FIRST_INTERVIEW_SCHEDULED,
+        jobType: jobTimelineType.INTERVIEW_BACKOUT,
+      };
+      dispatch(tagJob({ payload, navigate }));
+    } else if (
+      activeStep === REJECTED_INTRW_FORM_INDEX ||
+      activeStep === CANCL_BY_CLIENT_FORM_INDEX
+    ) {
+      // Profile rejected or cancelled by the client
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: stageId,
+        status: JOB_STAGE_STATUS?.REJECTED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form?.formId),
+        jobType: jobTimelineType.INTERVIEW_REJECTED,
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (
