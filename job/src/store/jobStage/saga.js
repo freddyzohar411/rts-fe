@@ -31,6 +31,7 @@ import {
   tagAllJob,
   tagJob,
   tagJobWithAttachments,
+  tagJobWithFiles,
   untagJob,
 } from "../../helpers/backend_helper";
 import { JOB_STAGE_STATUS } from "../../components/JobListing/JobListingConstants";
