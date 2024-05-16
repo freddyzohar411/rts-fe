@@ -77,7 +77,7 @@ function AccountCustomView() {
       if (response) {
         setTimeout(async () => {
           await dispatch(fetchAccountCustomView());
-        }, 2000); // Delay the fetch by 2 seconds to allow the backend to update the data
+        }, 1500); // Delay the fetch to allow the backend to update the data
       }
     } catch (error) {}
   };
