@@ -50,6 +50,7 @@ const ScheduleInterview = forwardRef(
       setTemplatePreviewInfo,
       setTemplatePreviewAction,
       jobTimeLineData,
+      originalOrder,
     },
     ref
   ) => {
@@ -100,19 +101,6 @@ const ScheduleInterview = forwardRef(
       newValues.to = newValues.to.map((item) => item.value);
       newValues.cc = newValues.cc.map((item) => item.value);
       newValues.bcc = newValues.bcc.map((item) => item.value);
-      // const newFormData =
-      //   ObjectHelper.convertObjectToFormDataWithArray(newValues);
-      // dispatch(
-      //   Actions.sendEmail({
-      //     newFormData,
-      //     config: {
-      //       headers: {
-      //         "Content-Type": "multipart/form-data",
-      //       },
-      //     },
-      //   })
-      // );
-
       const payload = {
         jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED,

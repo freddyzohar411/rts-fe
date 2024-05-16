@@ -75,6 +75,10 @@ import {
   PRE_SKILLS_ASSESSMENT_FORM_INDEX,
   ACCEPTED_FORM_INDEX,
   REJECTED_FORM_INDEX,
+  BACKOUT_CANDIE_FORM_INDEX,
+  RESCHEDULED_FORM_INDEX,
+  REJECTED_INTRW_FORM_INDEX,
+  CANCL_BY_CLIENT_FORM_INDEX,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -116,6 +120,7 @@ const JobOverview = () => {
   const [openJobIndex, setOpenJobIndex] = useState(null);
 
   const [candidateId, setCandidateId] = useState();
+  const [originalOrder, setOriginalOrder] = useState();
 
   // Next Step Dropdown States
   const [legendTooltip, setLegendTooltip] = useState(false);
@@ -311,31 +316,20 @@ const JobOverview = () => {
       case CULTURAL_FIT_TEST_FORM_INDEX:
         setStepperState("Review Cultural Fit Test Results");
         break;
+      // Interview
       case SCHEDULE_FORM_INDEX:
+      case RESCHEDULED_FORM_INDEX:
         setStepperState("Schedule First Interview");
         break;
-      case 11:
-        setStepperState("Update 1st Interview Feedback");
+      case BACKOUT_CANDIE_FORM_INDEX:
+        setModalFormName({ header: "Backout-Candidate" });
         break;
-      case 12:
-        setStepperState("Schedule Second Interview");
+      case REJECTED_INTRW_FORM_INDEX:
+        setModalFormName({ header: "Interview Rejected" });
         break;
-      case 13:
-        setStepperState("Update 2nd Interview Feedback");
+      case CANCL_BY_CLIENT_FORM_INDEX:
+        setModalFormName({ header: "Interview Cancelled by Client" });
         break;
-      case 14:
-        setStepperState("Schedule Third Interview");
-        break;
-      case 15:
-        setStepperState("Interview Feedback Pending");
-        break;
-      case 16:
-        setStepperState("Conditional Offer");
-        break;
-      case 17:
-        setStepperState("Conditional Offer Status");
-        break;
-
       // TOS
       case PREPARE_TOS_FORM_INDEX:
         setStepperState("Prepare TOS");
@@ -385,10 +379,11 @@ const JobOverview = () => {
     }
   };
 
-  const handleIconClick = (candidateId, actStep) => {
+  const handleIconClick = (candidateId, actStep, originalOrder) => {
     setActiveStep(actStep);
     actionButtonTrigger(actStep);
     setCandidateId(candidateId);
+    setOriginalOrder(originalOrder);
   };
 
   const actionButtonTrigger = (step) => {
@@ -405,6 +400,7 @@ const JobOverview = () => {
       case CULTURAL_FIT_TEST_FORM_INDEX:
       //Interview
       case SCHEDULE_FORM_INDEX:
+      case RESCHEDULED_FORM_INDEX:
         setOffcanvasForm(true);
         break;
       //Profile
@@ -414,6 +410,10 @@ const JobOverview = () => {
       case PRF_REJ_CLIENT_FORM_INDEX:
       case ACCEPTED_FORM_INDEX:
       case REJECTED_FORM_INDEX:
+      //Interview
+      case BACKOUT_CANDIE_FORM_INDEX:
+      case REJECTED_INTRW_FORM_INDEX:
+      case CANCL_BY_CLIENT_FORM_INDEX:
         setIsFormModalOpen(true);
         break;
       default:
@@ -423,6 +423,7 @@ const JobOverview = () => {
 
   const getFormComponent = (step, closeOffcanvas) => {
     switch (step) {
+      //Profile
       case ASSOCIATE_FORM_INDEX:
         return (
           <AssociateCandidate
@@ -464,6 +465,7 @@ const JobOverview = () => {
             handleIconClick={handleIconClick}
           />
         );
+      //Odin
       case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
         return (
           <PreSkillAssessment
@@ -510,7 +512,9 @@ const JobOverview = () => {
             ref={formikRef}
           />
         );
+      //Interview
       case SCHEDULE_FORM_INDEX:
+      case RESCHEDULED_FORM_INDEX:
         return (
           <ScheduleInterview
             closeOffcanvas={closeOffcanvas}
@@ -518,51 +522,8 @@ const JobOverview = () => {
             setTemplatePreviewInfo={setTemplatePreviewInfo}
             setTemplatePreviewAction={setTemplatePreviewAction}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            originalOrder={originalOrder}
             ref={formikRef}
-          />
-        );
-      case 11:
-        return (
-          <FirstInterviewFeedbackPending
-            closeOffcanvas={closeOffcanvas}
-            jobId={jobId}
-            candidateId={candidateId}
-            handleIconClick={handleIconClick}
-          />
-        );
-      case 12:
-        return (
-          <ScheduleInterview
-            closeOffcanvas={closeOffcanvas}
-            jobId={jobId}
-            candidateId={candidateId}
-            activeStep={step}
-          />
-        );
-      case 13:
-        return (
-          <SecondInterviewFeedbackPending
-            closeOffcanvas={closeOffcanvas}
-            jobId={jobId}
-            candidateId={candidateId}
-            handleIconClick={handleIconClick}
-          />
-        );
-      case 14:
-        return (
-          <ScheduleInterview
-            closeOffcanvas={closeOffcanvas}
-            jobId={jobId}
-            candidateId={candidateId}
-            activeStep={step}
-          />
-        );
-      case 15:
-        return (
-          <ThirdInterviewFeedbackPending
-            closeOffcanvas={closeOffcanvas}
-            jobId={jobId}
-            candidateId={candidateId}
           />
         );
       case 16:
@@ -715,6 +676,7 @@ const JobOverview = () => {
           jobTimelineData?.jobs?.map((data, timelineIndex) => {
             const candidateData = data?.candidate;
             let maxOrder = getMaxOrder(data);
+            const originalOrder = maxOrder;
             const lastSubmittedStage = getLastSubmittedStage(data, maxOrder);
             const status = getStatus(data, maxOrder);
             const isRejected =
@@ -832,7 +794,8 @@ const JobOverview = () => {
                       onClick={() => {
                         handleIconClick(
                           candidateData?.id,
-                          selectedSubSteps?.[candidateData?.id]
+                          selectedSubSteps?.[candidateData?.id],
+                          originalOrder
                         );
                         setTimelineRowIndex(timelineIndex);
                       }}
@@ -882,6 +845,7 @@ const JobOverview = () => {
       case SUB_TO_SALES_FORM_INDEX:
       case SUB_TO_CLIENT_FORM_INDEX:
       case SCHEDULE_FORM_INDEX:
+      case RESCHEDULED_FORM_INDEX:
         submitLabel = "Send";
         break;
       case PRE_SKILLS_ASSESSMENT_FORM_INDEX:

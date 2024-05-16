@@ -25,6 +25,9 @@ import {
   ACCEPTED_FORM_INDEX,
   REJECTED_FORM_INDEX,
   jobTimelineType,
+  BACKOUT_CANDIE_FORM_INDEX,
+  REJECTED_INTRW_FORM_INDEX,
+  CANCL_BY_CLIENT_FORM_INDEX,
 } from "../JobOverview/JobOverviewConstants";
 
 const ModalFormWrapper = ({
@@ -54,9 +57,16 @@ const ModalFormWrapper = ({
     console.log("test activeStep load", activeStep);
     if (activeStep === UNTAG_FORM_INDEX) {
       dispatch(fetchJobForm("job_untag"));
-    } else if (activeStep === PRF_WTDWN_FORM_INDEX) {
+    } else if (
+      activeStep === PRF_WTDWN_FORM_INDEX ||
+      activeStep === BACKOUT_CANDIE_FORM_INDEX
+    ) {
       dispatch(fetchJobForm("profile_withdrawn_job"));
-    } else if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
+    } else if (
+      activeStep === PRF_REJ_SALES_FORM_INDEX ||
+      activeStep === REJECTED_INTRW_FORM_INDEX ||
+      activeStep === CANCL_BY_CLIENT_FORM_INDEX
+    ) {
       dispatch(fetchJobForm("submit_to_sales_rejection"));
     } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
       dispatch(fetchJobForm("submit_to_client_rejection"));
@@ -115,6 +125,18 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.SUBMIT_TO_CLIENT,
+      };
+      dispatch(tagJob({ payload, navigate }));
+    } else if (activeStep === BACKOUT_CANDIE_FORM_INDEX) {
+      // Profile withdrawn
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED,
+        status: JOB_STAGE_STATUS?.WITHDRAWN,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form?.formId),
+        jobType: jobTimelineType.FIRST_INTERVIEW_SCHEDULED,
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (
