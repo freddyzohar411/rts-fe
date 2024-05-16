@@ -15,6 +15,7 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import { OdinURLs } from "../JobOverview/JobOverviewConstants";
 
 const TechnicalInterview = forwardRef(
   ({ closeOffcanvas, jobId, candidateId }, parentRef) => {
@@ -28,6 +29,7 @@ const TechnicalInterview = forwardRef(
 
     const linkState = location.state;
     const { getAllUserGroups } = useUserAuth();
+
     const [view, setView] = useState(
       linkState?.view !== null && linkState?.view !== undefined
         ? linkState?.view
@@ -73,16 +75,9 @@ const TechnicalInterview = forwardRef(
         };
         dispatch(tagJob({ payload, navigate }));
         if (values?.scheduleForCulturalFitTest === "true") {
-          window.open(
-            "https://app.hackerearth.com/recruiter/interview/",
-            "_blank"
-          );
+          window.open(OdinURLs.CULTURAL_FIT_TEST, "_blank");
         }
       }
-      closeOffcanvas();
-    };
-
-    const handleCancel = () => {
       closeOffcanvas();
     };
 
@@ -90,7 +85,6 @@ const TechnicalInterview = forwardRef(
       submitForm: () => {
         formikRef?.current?.formik?.submitForm();
       },
-      handleCancel,
     }));
 
     return (

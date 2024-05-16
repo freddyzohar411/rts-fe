@@ -201,7 +201,7 @@ const InnerTimelineStep = ({ data }) => {
     NOTSTARTED: { icon: "", bgColor: "#F5B617", color: "#FFFFFF" },
   };
 
-  function renderSectionStyle(status) {
+  const renderSectionStyle = (status) => {
     switch (status) {
       case "COMPLETED":
         return renderStyle.COMPLETED;
@@ -212,11 +212,12 @@ const InnerTimelineStep = ({ data }) => {
       case "SKIPPED":
         return renderStyle.SKIPPED;
       case "INPROGRESS":
+      case "IN_PROGRESS":
         return renderStyle.INPROGRESS;
       default:
         return renderStyle.NOTSTARTED;
     }
-  }
+  };
 
   function toRoman(num) {
     const roman = [
@@ -262,6 +263,16 @@ const InnerTimelineStep = ({ data }) => {
     }
   }, [timelineElement]);
 
+  const getSubmittedDate = (items) => {
+    let date = "Not Started";
+    const firstItem =
+      items?.sort((a, b) => b?.data?.order - a?.data?.order)?.[0] ?? {};
+    if (firstItem?.data?.date) {
+      date = new Date(firstItem?.data?.date).toLocaleDateString();
+    }
+    return date;
+  };
+
   const getStatusValue = (data) => {
     switch (data?.status) {
       case JOB_STAGE_STATUS.COMPLETED:
@@ -274,6 +285,53 @@ const InnerTimelineStep = ({ data }) => {
         return JOB_STAGE_STATUS_LABELS.IN_PROGRESS;
       default:
         return "Not Started";
+    }
+  };
+
+  // Get bollets border, text and background color
+  const getBulletBgColor = (status) => {
+    let customCSS;
+    switch (status) {
+      case "NOTSTARTED":
+        customCSS = "text-notstarted bg-notstarted border-notstarted";
+        break;
+      case JOB_STAGE_STATUS.IN_PROGRESS:
+      case JOB_STAGE_STATUS_LABELS.IN_PROGRESS:
+        customCSS = "text-white bg-in-progress border-in-progress";
+        break;
+      case JOB_STAGE_STATUS.COMPLETED:
+      case JOB_STAGE_STATUS_LABELS.COMPLETED:
+        customCSS = "text-white bg-completed border-completed";
+        break;
+      case JOB_STAGE_STATUS.WITHDRAWN:
+      case JOB_STAGE_STATUS.WITHDRAWN:
+        customCSS = "text-white bg-withdrawn border-withdrawn";
+        break;
+      case JOB_STAGE_STATUS.REJECTED:
+      case JOB_STAGE_STATUS.REJECTED:
+        customCSS = "text-white bg-rejected border-rejected";
+        break;
+      case JOB_STAGE_STATUS.SKIPPED:
+      case JOB_STAGE_STATUS.SKIPPED:
+        customCSS = "text-white bg-skipped border-skipped";
+        break;
+      default:
+        break;
+    }
+    return customCSS;
+  };
+
+  const GetLabel = (step, status) => {
+    const renderSubitemStyle = renderSectionStyle(status);
+    if (renderSubitemStyle?.icon?.length > 0) {
+      return (
+        <i
+          className={renderSubitemStyle.icon}
+          style={{ color: renderSubitemStyle?.color }}
+        ></i>
+      );
+    } else {
+      return <span className="fw-semibold">{step}</span>;
     }
   };
 
@@ -299,6 +357,16 @@ const InnerTimelineStep = ({ data }) => {
               name: subitem,
               data: data[subitem] || {},
             }));
+            const submittedDate = getSubmittedDate([...subitemsData]);
+            const lastItem = subitemsData?.[subitemsData?.length - 1];
+            const status =
+              section?.status === "NOTSTARTED" ||
+              section?.status === "WITHDRAWN" ||
+              section?.status === "REJECTED"
+                ? section?.status
+                : lastItem?.data?.status
+                ? lastItem?.data?.status
+                : JOB_STAGE_STATUS.IN_PROGRESS;
             return (
               <div key={index}>
                 <div className="d-flex flex-row justify-content-between">
@@ -309,22 +377,21 @@ const InnerTimelineStep = ({ data }) => {
                   >
                     <div className="d-flex flex-column align-items-start">
                       <div
-                        className="mb-2"
+                        className={`rounded-circle d-flex justify-content-center mb-2 ${getBulletBgColor(
+                          status
+                        )}`}
                         style={{
                           width: "22px",
                           height: "22px",
-                          border: "1px solid #0A56AE",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRadius: "100%",
-                          backgroundColor: "#FFFFFF",
-                          color: "#0A56AE",
                         }}
                       >
-                        <span className="fw-semibold">{index + 1}</span>
+                        <span className="fw-semibold">
+                          {GetLabel(index + 1, status)}
+                        </span>
                       </div>
-                      <span className="form-text text-muted">15/02/2024</span>
+                      <span className="form-text text-muted">
+                        {submittedDate}
+                      </span>
                       <span
                         className="fw-semibold text-dark"
                         style={{ fontSize: "13px", whiteSpace: "nowrap" }}

@@ -28,6 +28,7 @@ import {
   fetchJobTimelineList,
   fetchJobtimeineCount,
   tagReset,
+  untagJobReset,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
@@ -71,6 +72,7 @@ import {
   PRF_WTDWN_FORM_INDEX,
   PRF_REJ_SALES_FORM_INDEX,
   PRF_REJ_CLIENT_FORM_INDEX,
+  PRE_SKILLS_ASSESSMENT_FORM_INDEX,
   ACCEPTED_FORM_INDEX,
   REJECTED_FORM_INDEX,
 } from "./JobOverviewConstants";
@@ -83,7 +85,6 @@ import { SkillAssessment } from "../SkillAssessment";
 import { CodingTest } from "../CodingTest";
 import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
-import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment";
 import {
   getLastSubmittedStage,
   getMaxOrder,
@@ -99,14 +100,15 @@ import InnerTimelineStep from "./InnerTimelineStep";
 import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
 import PrepareTOS from "../TOSComponents/PrepareTOS.jsx";
 import ApproveTOS from "../TOSComponents/ApproveTOS.jsx";
+import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment.jsx";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
 
   const dispatch = useDispatch();
   const { jobId } = useParams();
+
   const formikRef = useRef();
-  const ref = useRef();
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -134,13 +136,7 @@ const JobOverview = () => {
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  const [myNumber, setMyNumber] = useState(1);
   const [modalFormName, setModalFormName] = useState({});
-
-  // Email Loading
-  const emailIsLoading = useSelector(
-    (state) => state.EmailCommonReducer.loading
-  );
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -155,6 +151,9 @@ const JobOverview = () => {
   );
 
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+  const jobUntagMeta = useSelector(
+    (state) => state.JobStageReducer?.jobUntagMeta
+  );
 
   // Custom renders
   const customRenderList = [
@@ -217,6 +216,19 @@ const JobOverview = () => {
     );
   }, [pageRequest]);
 
+  useEffect(() => {
+    if (jobUntagMeta?.isSuccess) {
+      setIsFormModalOpen(false);
+      dispatch(
+        fetchJobTimelineList({
+          ...DynamicTableHelper.cleanPageRequest(pageRequest),
+          jobId: parseInt(jobId),
+        })
+      );
+      dispatch(untagJobReset());
+    }
+  }, [jobUntagMeta]);
+
   // Update the page info when job Data changes
   useEffect(() => {
     if (jobTimelineData) {
@@ -263,7 +275,7 @@ const JobOverview = () => {
     switch (activeStep) {
       // Profile
       case UNTAG_FORM_INDEX:
-        setModalFormName({ header: "Confirm" });
+        setModalFormName({ header: "Confirmation" });
         break;
       case PRF_WTDWN_FORM_INDEX:
         setModalFormName({ header: "Profile Withdrawn Confirmation" });
@@ -284,10 +296,10 @@ const JobOverview = () => {
         setModalFormName({ header: "Profile Rejected - Client" });
         break;
       // Odin
-      case SKILLS_ASSESSMENT_FORM_INDEX:
+      case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
         setStepperState("Pre-Skill Assessment");
         break;
-      case 6:
+      case SKILLS_ASSESSMENT_FORM_INDEX:
         setStepperState("Review Skill Assessment Results");
         break;
       case CODING_TEST_FORM_INDEX:
@@ -377,19 +389,12 @@ const JobOverview = () => {
       case ASSOCIATE_FORM_INDEX:
       case SUB_TO_SALES_FORM_INDEX:
       case SUB_TO_CLIENT_FORM_INDEX:
-      case 8:
-      case 9:
-      case 10:
-      case 11:
-      case 12:
-      case 13:
-      case 14:
-      case 15:
-      case 16:
-      case 17:
-      case 18:
-      case 20:
-      case 21:
+      //Odin
+      case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
+      case SKILLS_ASSESSMENT_FORM_INDEX:
+      case CODING_TEST_FORM_INDEX:
+      case TEC_INTRW_FORM_INDEX:
+      case CULTURAL_FIT_TEST_FORM_INDEX:
         setOffcanvasForm(true);
         break;
       //Profile
@@ -399,8 +404,6 @@ const JobOverview = () => {
       case PRF_REJ_CLIENT_FORM_INDEX:
       case ACCEPTED_FORM_INDEX:
       case REJECTED_FORM_INDEX:
-      case 98:
-      case 99:
         setIsFormModalOpen(true);
         break;
       default:
@@ -416,7 +419,7 @@ const JobOverview = () => {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            timelineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             ref={formikRef}
           />
         );
@@ -424,28 +427,22 @@ const JobOverview = () => {
         return (
           <SubmitToSales
             closeOffcanvas={closeOffcanvas}
-            jobId={jobId}
-            candidateId={candidateId}
             setIsViewTemplate={setIsViewTemplate}
             setTemplatePreviewInfo={setTemplatePreviewInfo}
             setTemplatePreviewAction={setTemplatePreviewAction}
-            setOffcanvasForm={setOffcanvasForm}
-            ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            ref={formikRef}
           />
         );
       case SUB_TO_CLIENT_FORM_INDEX:
         return (
           <SubmitToClient
             closeOffcanvas={closeOffcanvas}
-            jobId={jobId}
-            candidateId={candidateId}
             setIsViewTemplate={setIsViewTemplate}
             setTemplatePreviewInfo={setTemplatePreviewInfo}
             setTemplatePreviewAction={setTemplatePreviewAction}
-            setOffcanvasForm={setOffcanvasForm}
-            ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            ref={formikRef}
           />
         );
       case 4:
@@ -457,24 +454,22 @@ const JobOverview = () => {
             handleIconClick={handleIconClick}
           />
         );
-      case SKILLS_ASSESSMENT_FORM_INDEX:
+      case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
         return (
           <PreSkillAssessment
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
-            ref={ref}
+            ref={formikRef}
           />
         );
-      case 6:
+      case SKILLS_ASSESSMENT_FORM_INDEX:
         return (
           <SkillAssessment
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
-            ref={ref}
+            ref={formikRef}
           />
         );
       case CODING_TEST_FORM_INDEX:
@@ -483,8 +478,7 @@ const JobOverview = () => {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
-            ref={ref}
+            ref={formikRef}
           />
         );
       case TEC_INTRW_FORM_INDEX:
@@ -493,8 +487,7 @@ const JobOverview = () => {
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            activeStep={step}
-            ref={ref}
+            ref={formikRef}
           />
         );
       case CULTURAL_FIT_TEST_FORM_INDEX:
@@ -504,7 +497,7 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             activeStep={step}
-            ref={ref}
+            ref={formikRef}
           />
         );
       case SCHEDULE_FORM_INDEX:
@@ -619,7 +612,7 @@ const JobOverview = () => {
             candidateId={candidateId}
             jobId={parseInt(jobId)}
             activeStep={step}
-            ref={ref}
+            ref={formikRef}
           />
         );
       case APPROVE_TOS_FORM_INDEX:
@@ -631,7 +624,7 @@ const JobOverview = () => {
             candidateId={candidateId}
             jobId={parseInt(jobId)}
             activeStep={step}
-            ref={ref}
+            ref={formikRef}
           />
         );
       default:
@@ -780,6 +773,7 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         value={skipSteps?.[data?.id]}
+                        disabled={isRejected}
                         onChange={(e) =>
                           handleStepsSelection(
                             data?.id,
@@ -806,6 +800,7 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         value={selectedSubSteps?.[candidateData?.id]}
+                        disabled={isRejected}
                         onChange={(e) =>
                           handleSubStepsSelection(
                             candidateData?.id,
@@ -836,7 +831,9 @@ const JobOverview = () => {
                         );
                         setTimelineRowIndex(timelineIndex);
                       }}
-                      disabled={!selectedSubSteps?.[candidateData?.id]}
+                      disabled={
+                        isRejected || !selectedSubSteps?.[candidateData?.id]
+                      }
                     >
                       <i
                         className="mdi mdi-content-save-outline mdi-18px"
@@ -869,395 +866,60 @@ const JobOverview = () => {
 
   // Generate canvas header button
   const generateCanvasHeaderButton = (step) => {
+    let showCancel = true;
+    let showSubmit = true;
+    let cancelLabel = "Cancel";
+    let submitLabel = "Update";
     switch (step) {
-      case 1:
-        return (
-          <div className="d-flex align-items-center gap-2">
-            <Button
-              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
-              style={{
-                borderRadius: "8px",
-              }}
-              onClick={() => {
-                setOffcanvasForm(false);
-                setIsViewTemplate(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="btn btn-success"
-              onClick={() => {
-                formikRef.current.submitForm();
-              }}
-              style={{
-                borderRadius: "8px",
-              }}
-            >
-              {jobTagMeta?.isLoading ? (
-                <Spinner size="sm" color="light" />
-              ) : (
-                "Submit"
-              )}
-            </Button>
-          </div>
-        );
-      // Case 2 and 3 usese the same form
-      case 2:
-      case 3:
-      case 18:
-        return (
-          <div className="d-flex align-items-center gap-2">
-            <Button
-              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
-              style={{
-                borderRadius: "8px",
-              }}
-              onClick={() => {
-                setOffcanvasForm(false);
-                setIsViewTemplate(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="btn btn-success"
-              onClick={() => {
-                formikRef.current.submitForm();
-              }}
-              style={{
-                borderRadius: "8px",
-              }}
-            >
-              {jobTagMeta?.isLoading ? (
-                <Spinner size="sm" color="light" />
-              ) : (
-                "Send"
-              )}
-            </Button>
-          </div>
-        );
-      case 16:
-      case 17:
-        return (
-          <div className="d-flex align-items-center gap-2">
-            <Button
-              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
-              style={{
-                borderRadius: "8px",
-              }}
-              onClick={() => {
-                setOffcanvasForm(false);
-                setIsViewTemplate(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="btn btn-outline-success"
-              onClick={() => {
-                formikRef.current.submitForm("draft");
-              }}
-              style={{
-                borderRadius: "8px",
-              }}
-            >
-              {jobTagMeta?.isLoading &&
-              jobTagMeta?.jobType === "conditional_offer_draft" ? (
-                <Spinner size="sm" color="light" />
-              ) : (
-                "Safe As Draft"
-              )}
-            </Button>
-            <Button
-              className="btn btn-success"
-              onClick={() => {
-                formikRef.current.submitForm("submit");
-              }}
-              style={{
-                borderRadius: "8px",
-              }}
-            >
-              {jobTagMeta?.isLoading &&
-              jobTagMeta?.jobType === "conditional_offer_sent" ? (
-                <Spinner size="sm" color="light" />
-              ) : (
-                "Submit"
-              )}
-            </Button>
-          </div>
-        );
-
-      case SKILLS_ASSESSMENT_FORM_INDEX:
-        return (
-          <div className="d-flex flex-row justify-content-start gap-2">
-            <Button
-              type="button"
-              style={{
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #E7EAEE",
-                color: "#000000",
-                fontWeight: "500",
-                borderRadius: "8px",
-              }}
-              onClick={() => {
-                ref.current.handleCancel();
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              style={{
-                backgroundColor: "#0A56AE",
-                color: "#FFFFFF",
-                fontWeight: "500",
-                borderRadius: "8px",
-              }}
-              onClick={() => {
-                ref.current.handleUpdate();
-              }}
-            >
-              Invite Candidate
-            </Button>
-          </div>
-        );
-
-      case 6:
-        return (
-          <Row>
-            <Col>
-              <div className="d-flex justify-content-end gap-2">
-                <Button
-                  type="button"
-                  onClick={() => ref.current.handleCancel()}
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #E7EAEE",
-                    color: "#000000",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  style={{
-                    backgroundColor: "#0A56AE",
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                  onClick={() => {
-                    ref.current.submitForm();
-                  }}
-                >
-                  Update
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        );
-
-      case 7:
-        return (
-          <Row>
-            <Col>
-              <div className="d-flex justify-content-end gap-2">
-                <Button
-                  type="button"
-                  onClick={() => ref.current.handleCancel()}
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #E7EAEE",
-                    color: "#000000",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  style={{
-                    backgroundColor: "#0A56AE",
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                  onClick={() => {
-                    ref.current.submitForm();
-                  }}
-                >
-                  Update
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        );
-
-      case 8:
-        return (
-          <Row>
-            <Col>
-              <div className="d-flex justify-content-end gap-2">
-                <Button
-                  type="button"
-                  onClick={() => ref.current.handleCancel()}
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #E7EAEE",
-                    color: "#000000",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  style={{
-                    backgroundColor: "#0A56AE",
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                  onClick={() => {
-                    ref.current.submitForm();
-                  }}
-                >
-                  Update
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        );
-
-      case 9:
-        return (
-          <Row>
-            <Col>
-              <div className="d-flex justify-content-end gap-2">
-                <Button
-                  type="button"
-                  onClick={() => ref.current.handleCancel()}
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #E7EAEE",
-                    color: "#000000",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  style={{
-                    backgroundColor: "#0A56AE",
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                  onClick={() => {
-                    ref.current.submitForm();
-                  }}
-                >
-                  Update
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        );
-
-      case 20:
-        return (
-          <Row>
-            <Col>
-              <div className="d-flex justify-content-end gap-2">
-                <Button
-                  type="button"
-                  onClick={() => ref.current.handleCancel()}
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #E7EAEE",
-                    color: "#000000",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  style={{
-                    backgroundColor: "#12A35D",
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                  onClick={() => {
-                    ref.current.submitForm();
-                  }}
-                >
-                  Submit
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        );
-
-      case 21:
-        return (
-          <Row>
-            <Col>
-              <div className="d-flex justify-content-end gap-2">
-                <Button
-                  type="button"
-                  onClick={() => ref.current.handleCancel()}
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #E7EAEE",
-                    color: "#000000",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => ref.current.rejectTos()}
-                  style={{
-                    backgroundColor: "#D92D20",
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Reject
-                </Button>
-                <Button
-                  type="submit"
-                  onClick={() => ref.current.approveTos()}
-                  style={{
-                    backgroundColor: "#12A35D",
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Approve
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        );
-
+      case ASSOCIATE_FORM_INDEX:
+        submitLabel = "Submit";
+        break;
+      case SUB_TO_SALES_FORM_INDEX:
+      case SUB_TO_CLIENT_FORM_INDEX:
+        submitLabel = "Send";
+        break;
+      case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
+        submitLabel = "Invite Candidate";
+        break;
       default:
-        return null;
+        break;
     }
+    return (
+      <div className="d-flex align-items-center gap-2">
+        {showCancel && (
+          <Button
+            className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+            style={{
+              borderRadius: "8px",
+            }}
+            onClick={() => {
+              setOffcanvasForm(false);
+              setIsViewTemplate(false);
+            }}
+          >
+            {cancelLabel}
+          </Button>
+        )}
+        {showSubmit && (
+          <Button
+            className="btn btn-success"
+            onClick={() => {
+              formikRef.current.submitForm();
+            }}
+            style={{
+              borderRadius: "8px",
+            }}
+            disabled={jobTagMeta?.isLoading}
+          >
+            {jobTagMeta?.isLoading ? (
+              <Spinner size="sm" color="light" />
+            ) : (
+              <span>{submitLabel}</span>
+            )}
+          </Button>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -1569,33 +1231,13 @@ const JobOverview = () => {
         {/* Form Modal */}
         <ModalFormWrapper
           activeStep={activeStep}
-          isFormModalOpen={isFormModalOpen}
-          setIsFormModalOpen={setIsFormModalOpen}
           header={stepperState}
+          isFormModalOpen={isFormModalOpen}
+          closeModal={() => setIsFormModalOpen(false)}
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
-          isLoading={jobTimelineMeta?.isLoading}
           modalFormName={modalFormName}
-          setModalFormName={setModalFormName}
+          isLoading={jobTagMeta?.isLoading}
         />
-        <div className="d-flex gap-2 w-25">
-          <Input
-            type="text"
-            onChange={(e) => setMyNumber(parseInt(e.target.value))}
-          />
-          <Button
-            className="btn btn-primary fs-semibold"
-            onClick={() => {
-              // Everytime i click i want it to render even if it is the same step
-              setIsFormModalOpen(true);
-              setActiveStep(myNumber);
-            }}
-            style={{
-              textWrap: "nowrap",
-            }}
-          >
-            STEP (DEV)
-          </Button>
-        </div>
       </div>
     </React.Fragment>
   );
