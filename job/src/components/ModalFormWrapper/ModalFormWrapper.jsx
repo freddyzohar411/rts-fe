@@ -100,8 +100,8 @@ const ModalFormWrapper = ({
     } else if (originalOrder === JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED) {
       stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
     }
-    // Job Stage Id and Type for Interview module -- End
 
+    // Job Stage Id and Type for Interview module -- End
     if (activeStep === UNTAG_FORM_INDEX) {
       // Untag candidate
       const payload = {

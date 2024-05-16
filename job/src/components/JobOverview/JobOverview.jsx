@@ -328,7 +328,10 @@ const JobOverview = () => {
         let formName = "Schedule First Interview";
         if (originalOrder === JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED) {
           formName = "Schedule Second Interview";
-        } else if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
+        } else if (
+          originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED ||
+          originalOrder === JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED
+        ) {
           formName = "Schedule Third Interview";
         }
         setStepperState(formName);
