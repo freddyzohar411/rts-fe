@@ -116,7 +116,10 @@ const ScheduleInterview = forwardRef(
         if (originalOrder === JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED) {
           stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
           jobType = jobTimelineType.SECOND_INTERVIEW_SCHEDULED;
-        } else if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
+        } else if (
+          originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED ||
+          originalOrder === JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED
+        ) {
           stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
           jobType = jobTimelineType.THIRD_INTERVIEW_SCHEDULED;
         }
