@@ -170,47 +170,66 @@ export function getAllTemplatesToRenderFromHTML(htmlString) {
 }
 
 /**
- * Remove contenteditable attribute and style attribute from html string for output
+ * Remove contenteditable attribute and style attribute from html string for output (OLD)
  * @param {*} htmlString
  * @returns
  */
+// export function removeContentEditableAndStyles(htmlString) {
+//   if (!htmlString) return;
+//   // Identify elements with contenteditable attribute
+//   const contentEditableRegex =
+//     /<([a-z][a-z0-9]*)([^>]*contenteditable="[^"]*"[^>]*)>/gi;
+//   let match;
+//   if (!htmlString) return;
+//   while ((match = contentEditableRegex.exec(htmlString)) !== null) {
+//     // For each matched element, remove the style attribute
+//     const styleRegex = new RegExp(` style="[^"]*"`, "g");
+//     const elementWithoutStyle = match[0].replace(styleRegex, "");
+//     // Replace the original element with the element without style in the HTML string
+//     const elementRegex = new RegExp(
+//       match[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+//       "g"
+//     );
+//     htmlString = htmlString?.replace(elementRegex, elementWithoutStyle);
+//   }
+
+//   // Remove contenteditable attribute
+//   const withoutContentEditable = htmlString?.replace(
+//     / contenteditable="true"| contenteditable="false"/g,
+//     ""
+//   );
+
+//   return withoutContentEditable;
+// }
+
 export function removeContentEditableAndStyles(htmlString) {
-  if (!htmlString) return;
-  // Identify elements with contenteditable attribute
-  const contentEditableRegex =
-    /<([a-z][a-z0-9]*)([^>]*contenteditable="[^"]*"[^>]*)>/gi;
-  let match;
-  if (!htmlString) return;
-  while ((match = contentEditableRegex.exec(htmlString)) !== null) {
-    // For each matched element, remove the style attribute
-    const styleRegex = new RegExp(` style="[^"]*"`, "g");
-    const elementWithoutStyle = match[0].replace(styleRegex, "");
-    // Replace the original element with the element without style in the HTML string
-    const elementRegex = new RegExp(
-      match[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-      "g"
-    );
-    htmlString = htmlString?.replace(elementRegex, elementWithoutStyle);
-  }
-
-  // Remove contenteditable attribute
-  const withoutContentEditable = htmlString?.replace(
-    / contenteditable="true"| contenteditable="false"/g,
-    ""
+  if (!htmlString) return htmlString;
+  // Use a regex to find tags with contenteditable, capturing the entire tag
+  return htmlString.replace(
+    /<([a-z][a-z0-9]*)([^>]*?)\s*(contenteditable="[^"]*")([^>]*?)>/gi,
+    (match, tagName, preAttributes, contentEditableAttr, postAttributes) => {
+      // Remove the contenteditable attribute from the match
+      const tagWithoutContentEditable = [
+        tagName,
+        preAttributes,
+        postAttributes,
+      ].join("");
+      // Remove the style attribute from the new string without contenteditable
+      return `<${tagWithoutContentEditable.replace(/\s*style="[^"]*"/gi, "")}>`;
+    }
   );
-
-  return withoutContentEditable;
 }
 
 export function removeStylesFromDataAttributes(htmlString) {
   if (!htmlString) return htmlString;
 
   // This updated regex matches elements more broadly and is insensitive to case.
-  const dataTypeRegex = /<([a-z][a-z0-9]*)([^>]*data-type=["']data-attribute["'][^>]*)>/gi;
+  const dataTypeRegex =
+    /<([a-z][a-z0-9]*)([^>]*data-type=["']data-attribute["'][^>]*)>/gi;
 
-  return htmlString.replace(dataTypeRegex, function(match) {
+  return htmlString.replace(dataTypeRegex, function (match) {
     // Remove all style attributes in the match
-    return match.replace(/ style="[^"]*"/gi, '');
+    return match.replace(/ style="[^"]*"/gi, "");
   });
 }
 

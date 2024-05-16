@@ -173,5 +173,10 @@ export const downloadDocumentByEntityAndId = (entityInfo) =>
     `${configURL.DOCUMENT_URL}/${baseURL.DOCUMENTS}/download/entity/${entityInfo?.entityType}/${entityInfo?.entityId}`
   );
 
+export const downloadDocumentByEntityAndIdAndType = (entityInfo) =>
+  api.get(
+    `${configURL.DOCUMENT_URL}/${baseURL.DOCUMENTS}/download/entity/${entityInfo?.entityType}/${entityInfo?.entityId}/${entityInfo?.documentKey}`
+  );
+
 export const getIdCount = (module) =>
   api.get(`${configURL.COMMON_URL}/${baseURL.GENERATE_ID}/getCount/${module}`);

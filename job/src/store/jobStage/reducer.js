@@ -10,6 +10,10 @@ import {
   TAG_JOB_ALL,
   TAG_JOB_ALL_SUCCESS,
   TAG_JOB_ALL_FAILURE,
+  TAG_JOB_FILES,
+  TAG_JOB_FILES_SUCCESS,
+  TAG_JOB_FILES_FAILURE,
+  TAG_JOB_FILES_RESET,
   FETCH_JOB_TIMELINE_LIST,
   FETCH_JOB_TIMELINE_LIST_SUCCESS,
   FETCH_JOB_TIMELINE_LIST_FAILURE,
@@ -158,6 +162,27 @@ const JobStageReducer = (state = initialState, action) => {
         jobTagMeta: errorMetaData(action.payload),
       };
     case TAG_JOB_ATTACHMENT_RESET:
+      return {
+        ...state,
+        jobTagMeta: {},
+      };
+    case TAG_JOB_FILES:
+      return {
+        ...state,
+        jobTagMeta: pendingMetaData(),
+      };
+    case TAG_JOB_FILES_SUCCESS:
+      return {
+        ...state,
+        jobTagMeta: successMetaData(action.payload),
+        jobTag: action.payload,
+      };
+    case TAG_JOB_FILES_FAILURE:
+      return {
+        ...state,
+        jobTagMeta: errorMetaData(action.payload),
+      };
+    case TAG_JOB_FILES_RESET:
       return {
         ...state,
         jobTagMeta: {},

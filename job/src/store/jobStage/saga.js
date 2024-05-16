@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import {
   FETCH_JOB_TIMELINE_LIST,
   JOB_TIMELINE_COUNT,
+  TAG_JOB_FILES,
   TAG_JOB,
   TAG_JOB_ALL,
   TAG_JOB_ATTACHMENT,
@@ -13,6 +14,8 @@ import {
   tagJobFailure,
   tagJobAllSuccess,
   tagJobAllFailure,
+  tagJobFilesSuccess,
+  tagJobFilesFailure,
   fetchJobTimelineListSuccess,
   fetchJobTimelineListFailure,
   fetchJobtimeineCountSuccess,
@@ -28,6 +31,7 @@ import {
   tagAllJob,
   tagJob,
   tagJobWithAttachments,
+  tagJobWithFiles,
   untagJob,
 } from "../../helpers/backend_helper";
 import { JOB_STAGE_STATUS } from "../../components/JobListing/JobListingConstants";
@@ -130,6 +134,26 @@ function* workTagJobAttachment(action) {
   }
 }
 
+// Tag job files
+function* workTagJobFiles(action) {
+  const { formData, navigate, jobType, config } = action.payload;
+  try {
+    // Tag a job
+    const response = yield call(tagJobWithFiles, formData, config);
+    yield put(tagJobFilesSuccess(response.data));
+    if (jobType) {
+      if (jobType === "prepare_tos") {
+        toast.success("Prepare TOS has been submitted successfully.");
+      }
+    } else {
+      toast.success(response?.message);
+      navigate(`/jobs/${payload?.jobId}/overview`);
+    }
+  } catch (error) {
+    yield put(tagJobFilesFailure(error));
+  }
+}
+
 export default function* watchTagJobSaga() {
   yield takeEvery(TAG_JOB, workTagJob);
   yield takeEvery(TAG_JOB_ALL, workTagAllJob);
@@ -137,4 +161,5 @@ export default function* watchTagJobSaga() {
   yield takeEvery(FETCH_JOB_TIMELINE_LIST, workFetchJobTimelineList);
   yield takeEvery(JOB_TIMELINE_COUNT, workFetchJobTimelineCount);
   yield takeEvery(TAG_JOB_ATTACHMENT, workTagJobAttachment);
+  yield takeEvery(TAG_JOB_FILES, workTagJobFiles);
 }

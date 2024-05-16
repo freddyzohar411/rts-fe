@@ -256,9 +256,11 @@ export const jobTimelineType = {
   INTERVIEW_BACKOUT: "interview_backout",
   INTERVIEW_REJECTED: "interview_rejected",
   //Condition Offer
-  CONDITIONAL_OFFER_DRAFT: "conditional_offer_draft",
-  CONDITIONAL_OFFER_SAVED: "conditional_offer_saved",
-  CONDITIONAL_OFFER_RELEASED: "conditional_offer_released",
+  CONDITIONAL_OFFER_PREPARE: "conditional_offer_prepare",
+  CONDITIONAL_OFFER_EDIT: "conditional_offer_edit",
+  CONDITIONAL_OFFER_RELEASE: "conditional_offer_release",
+  CONDITIONAL_OFFER_APPROVAL: "conditional_offer_approval",
+  CONDITIONAL_OFFER_REJECTED: "conditional_offer_rejected",
 };
 
 export const OdinURLs = {
