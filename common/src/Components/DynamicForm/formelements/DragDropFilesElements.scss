@@ -1,0 +1,39 @@
+.dropzone-custom {
+    border: 1px solid #0A56AE;
+    border-radius: 20px;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-icon {
+    color: #697483
+}
+
+.upload-div {
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.upload-span {
+    font-weight: 500;
+    color: purple;
+}
+
+.uploaded-files-div {
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}

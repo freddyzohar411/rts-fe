@@ -36,6 +36,7 @@ import FirstInterviewFeedbackStatus from "./FirstInterviewFeedbackStatus";
 import SecondInterviewFeedbackStatus from "./SecondInterviewFeedbackStatus";
 import AccountOwnerSelectElement from "./AccountOwnerSelectElement";
 import AccountTypeElement from "./AccountTypeElement";
+import DragDropFilesElement from "./DragDropFilesElement";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -417,6 +418,18 @@ const generateFormField = (
   if (type === "multifile") {
     return (
       <MultiFileInputElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+        formFieldsHook={formFieldsHook}
+        tabIndexData={tabIndexData}
+      />
+    );
+  }
+
+  if (type === "dragdropfiles") {
+    return (
+      <DragDropFilesElement
         field={field}
         formik={formik}
         formStateHook={formStateHook}

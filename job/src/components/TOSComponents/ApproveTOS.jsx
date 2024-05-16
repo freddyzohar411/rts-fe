@@ -8,13 +8,9 @@ import React, {
 import { Row, Col } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Form } from "@workspace/common";
-import { useNavigate, useLocation } from "react-router-dom";
-import { fetchJobForm, tagJob } from "../../store/actions";
+import { useLocation } from "react-router-dom";
+import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
-import {
-  JOB_STAGE_IDS,
-  JOB_STAGE_STATUS,
-} from "../JobListing/JobListingConstants";
 
 // Display uneditable form for approving TOS.
 // User should be able to select reject or accept TOS.
@@ -31,7 +27,6 @@ const ApproveTOS = forwardRef(
     parentRef
   ) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const location = useLocation();
     const formikRef = useRef(null);
     const { getAllUserGroups } = useUserAuth();
@@ -40,7 +35,7 @@ const ApproveTOS = forwardRef(
     const [formTemplate, setFormTemplate] = useState(null);
 
     const linkState = location.state;
-    const [view, setView] = useState(
+    const [view] = useState(
       linkState?.view !== null && linkState?.view !== undefined
         ? linkState?.view
         : false
@@ -67,6 +62,7 @@ const ApproveTOS = forwardRef(
       setModalFormName({ header: "Confirmation", formName: "approve_tos" });
       setOffcanvasForm(false);
     };
+
     const rejectTos = () => {
       setIsFormModalOpen(true);
       setModalFormName({ header: "TOS Rejected", formName: "rejected_tos" });
@@ -87,19 +83,17 @@ const ApproveTOS = forwardRef(
         >
           <Row>
             <Col>
-              <div>
-                <Form
-                  template={formTemplate}
-                  userDetails={getAllUserGroups()}
-                  country={null}
-                  editData={null}
-                  onSubmit={handleFormSubmit}
-                  onFormFieldsChange={null}
-                  errorMessage={null}
-                  view={view}
-                  ref={formikRef}
-                />
-              </div>
+              <Form
+                template={formTemplate}
+                userDetails={getAllUserGroups()}
+                country={null}
+                editData={null}
+                onSubmit={handleFormSubmit}
+                onFormFieldsChange={null}
+                errorMessage={null}
+                view={view}
+                ref={formikRef}
+              />
             </Col>
           </Row>
         </div>

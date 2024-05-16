@@ -73,6 +73,8 @@ import {
   PRF_REJ_SALES_FORM_INDEX,
   PRF_REJ_CLIENT_FORM_INDEX,
   PRE_SKILLS_ASSESSMENT_FORM_INDEX,
+  ACCEPTED_FORM_INDEX,
+  REJECTED_FORM_INDEX,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -333,12 +335,20 @@ const JobOverview = () => {
       case 17:
         setStepperState("Conditional Offer Status");
         break;
+
       // TOS
       case PREPARE_TOS_FORM_INDEX:
         setStepperState("Prepare TOS");
         break;
       case APPROVE_TOS_FORM_INDEX:
         setStepperState("Approve TOS");
+        break;
+      // Conditional Offer
+      case ACCEPTED_FORM_INDEX:
+        setModalFormName({ header: "Conditional Offer Accepted by Candidate" });
+        break;
+      case REJECTED_FORM_INDEX:
+        setModalFormName({ header: "Conditional Offer Rejected by Candidate" });
         break;
       default:
         setStepperState("");
@@ -400,6 +410,8 @@ const JobOverview = () => {
       case PRF_WTDWN_FORM_INDEX:
       case PRF_REJ_SALES_FORM_INDEX:
       case PRF_REJ_CLIENT_FORM_INDEX:
+      case ACCEPTED_FORM_INDEX:
+      case REJECTED_FORM_INDEX:
         setIsFormModalOpen(true);
         break;
       default:
@@ -607,7 +619,6 @@ const JobOverview = () => {
             setOffcanvasForm={setOffcanvasForm}
             candidateId={candidateId}
             jobId={parseInt(jobId)}
-            activeStep={step}
             ref={formikRef}
           />
         );
@@ -619,7 +630,6 @@ const JobOverview = () => {
             setModalFormName={setModalFormName}
             candidateId={candidateId}
             jobId={parseInt(jobId)}
-            activeStep={step}
             ref={formikRef}
           />
         );

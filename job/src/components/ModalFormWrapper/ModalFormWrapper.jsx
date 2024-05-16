@@ -22,6 +22,8 @@ import {
   PRF_REJ_SALES_FORM_INDEX,
   PRF_WTDWN_FORM_INDEX,
   UNTAG_FORM_INDEX,
+  ACCEPTED_FORM_INDEX,
+  REJECTED_FORM_INDEX,
   jobTimelineType,
 } from "../JobOverview/JobOverviewConstants";
 
@@ -62,6 +64,10 @@ const ModalFormWrapper = ({
       dispatch(fetchJobForm("approve_tos"));
     } else if (modalFormName?.formName === "rejected_tos") {
       dispatch(fetchJobForm("rejected_tos"));
+    } else if (activeStep === ACCEPTED_FORM_INDEX) {
+      dispatch(fetchJobForm("conditional_offer_accepted"));
+    } else if (activeStep === REJECTED_FORM_INDEX) {
+      dispatch(fetchJobForm("conditional_offer_rejected"));
     }
   }, [activeStep]);
 
@@ -141,6 +147,30 @@ const ModalFormWrapper = ({
         jobType: "tos_approval",
       };
       dispatch(tagJob({ payload, navigate }));
+    } else if (activeStep === ACCEPTED_FORM_INDEX) {
+      // Conditional Offer Accepted
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
+        status: JOB_STAGE_STATUS?.COMPLETED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form?.formId),
+        jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
+      };
+      dispatch(tagJob({ payload, navigate }));
+    } else if (activeStep === REJECTED_FORM_INDEX) {
+      // Conditional Offer Rejected
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
+        status: JOB_STAGE_STATUS?.REJECTED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form?.formId),
+        jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
+      };
+      dispatch(tagJob({ payload, navigate }));
     }
     closeModal();
   };
@@ -159,7 +189,7 @@ const ModalFormWrapper = ({
           paddingBottom: "0px",
         }}
       >
-        <h4>{modalFormName ? modalFormName?.header : header || "Header"}</h4>
+        <h5>{modalFormName ? modalFormName?.header : header || "Header"}</h5>
       </ModalHeader>
       <ModalBody>
         <Form

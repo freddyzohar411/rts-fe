@@ -28,11 +28,11 @@ export const sections = [
   {
     name: "TOS",
     expandCollapseButton: "TOSExpandCollapseButton",
-    subitems: ["Prepare TOS", "Approve TOS"],
+    subitems: ["Prepare TOS", "TOS Approval"],
   },
   {
     name: "Conditional Offer",
     expandCollapseButton: "ConditionalOfferExpandCollapseButton",
-    subitems: ["Prepare Conditional Offer", "Release Conditional Offer", "Conditional Offer Status"],
+    subitems: ["Prepare Conditional Offer", "Release Conditional Offer", "Conditional Offer Approval"],
   },
 ];
