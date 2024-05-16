@@ -4,7 +4,7 @@ import SideDrawerAccordion from "./SideDrawerAccordion";
 const ConditionalOfferSideDrawer = ({ selectedKey, setSelectedKey, data }) => {
   return (
     <div className="p-2">
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
         data?.map((item, index) => (
           <SideDrawerAccordion
             key={index}
