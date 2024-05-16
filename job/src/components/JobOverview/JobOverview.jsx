@@ -311,7 +311,7 @@ const JobOverview = () => {
       case CULTURAL_FIT_TEST_FORM_INDEX:
         setStepperState("Review Cultural Fit Test Results");
         break;
-      case 10:
+      case SCHEDULE_FORM_INDEX:
         setStepperState("Schedule First Interview");
         break;
       case 11:
@@ -403,6 +403,8 @@ const JobOverview = () => {
       case CODING_TEST_FORM_INDEX:
       case TEC_INTRW_FORM_INDEX:
       case CULTURAL_FIT_TEST_FORM_INDEX:
+      //Interview
+      case SCHEDULE_FORM_INDEX:
         setOffcanvasForm(true);
         break;
       //Profile
@@ -512,13 +514,10 @@ const JobOverview = () => {
         return (
           <ScheduleInterview
             closeOffcanvas={closeOffcanvas}
-            onPreviewCVClick={handlePreviewCVClick}
-            jobId={jobId}
-            candidateId={candidateId}
             setIsViewTemplate={setIsViewTemplate}
             setTemplatePreviewInfo={setTemplatePreviewInfo}
             setTemplatePreviewAction={setTemplatePreviewAction}
-            setOffcanvasForm={setOffcanvasForm}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             ref={formikRef}
           />
         );
@@ -882,6 +881,7 @@ const JobOverview = () => {
         break;
       case SUB_TO_SALES_FORM_INDEX:
       case SUB_TO_CLIENT_FORM_INDEX:
+      case SCHEDULE_FORM_INDEX:
         submitLabel = "Send";
         break;
       case PRE_SKILLS_ASSESSMENT_FORM_INDEX:

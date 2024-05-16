@@ -23,7 +23,12 @@ export const sections = [
   {
     name: "Interviews",
     expandCollapseButton: "InterviewsExpandCollapseButton",
-    subitems: ["Interview 1", "Interview 2", "Interview 3"],
+    subitems: [
+      "First Interview Scheduled",
+      "Second Interview Scheduled",
+      "Third Interview Scheduled",
+      "Interview Feedback Pending",
+    ],
   },
   {
     name: "TOS",
@@ -33,6 +38,10 @@ export const sections = [
   {
     name: "Conditional Offer",
     expandCollapseButton: "ConditionalOfferExpandCollapseButton",
-    subitems: ["Prepare Conditional Offer", "Release Conditional Offer", "Conditional Offer Approval"],
+    subitems: [
+      "Prepare Conditional Offer",
+      "Release Conditional Offer",
+      "Conditional Offer Approval",
+    ],
   },
 ];
