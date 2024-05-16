@@ -156,6 +156,7 @@ const generateValidationSchema2 = (
         case "radio":
         case "select":
         case "multifile":
+        case "dragdropfiles":
           fieldValidation = Yup.mixed();
           break;
         // case "multifile":
@@ -283,7 +284,7 @@ const generateValidationSchema2 = (
         }
       }
 
-      if (field.type === "multifile") {
+      if (field.type === "multifile" || field.type === "dragdropfiles") {
         if (field.fileTypeValidation) {
           fieldValidation = fieldValidation.test(
             "fileType",
