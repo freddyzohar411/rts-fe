@@ -93,6 +93,8 @@ const ApproveTOS = forwardRef(
       setOffcanvasForm(false);
     };
 
+    const handleFormSubmit = (values) => {};
+
     const approveTos = () => {
       setIsFormModalOpen(true);
       setModalFormName({ header: "Confirmation", formName: "approve_tos" });
