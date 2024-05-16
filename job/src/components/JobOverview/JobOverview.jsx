@@ -46,7 +46,7 @@ import FirstInterviewFeedbackPending from "../FirstInterviewFeedback/FirstInterv
 import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterviewFeedback";
 import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
 import ConditionalOffer from "../ConditionalOffer/ConditionalOffer";
-import ConditionalOfferRelease from "../ConditionalOfferRelease.jsx/ConditionalOfferRelease.jsx";
+import ConditionalOfferRelease from "../ConditionalOfferRelease/ConditionalOfferRelease.jsx";
 import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
 
@@ -79,6 +79,9 @@ import {
   RESCHEDULED_FORM_INDEX,
   REJECTED_INTRW_FORM_INDEX,
   CANCL_BY_CLIENT_FORM_INDEX,
+  EDIT_TOS_FORM_INDEX,
+  PREPARE_FORM_INDEX,
+  EDIT_FORM_INDEX,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -334,10 +337,22 @@ const JobOverview = () => {
       case PREPARE_TOS_FORM_INDEX:
         setStepperState("Prepare TOS");
         break;
+      case EDIT_TOS_FORM_INDEX:
+        setStepperState("Edit TOS");
+        break;
       case APPROVE_TOS_FORM_INDEX:
         setStepperState("Approve TOS");
         break;
       // Conditional Offer
+      case PREPARE_FORM_INDEX:
+        setStepperState("Conditional Offer Prepare");
+        break;
+      case EDIT_FORM_INDEX:
+        setStepperState("Conditional Offer Edit");
+        break;
+      case RELEASE_FORM_INDEX:
+        setStepperState("Conditional Offer Release");
+        break;
       case ACCEPTED_FORM_INDEX:
         setModalFormName({ header: "Conditional Offer Accepted by Candidate" });
         break;
@@ -348,6 +363,8 @@ const JobOverview = () => {
         setStepperState("");
     }
   }, [activeStep]);
+
+  console.log("Active Step", activeStep);
 
   const toggleJobOpen = (index) => {
     setOpenJobIndex(openJobIndex === index ? null : index);
@@ -401,6 +418,14 @@ const JobOverview = () => {
       //Interview
       case SCHEDULE_FORM_INDEX:
       case RESCHEDULED_FORM_INDEX:
+      //TOS
+      case PREPARE_TOS_FORM_INDEX:
+      case EDIT_TOS_FORM_INDEX:
+      case APPROVE_TOS_FORM_INDEX:
+      //Conditional Offer
+      case PREPARE_FORM_INDEX:
+      case EDIT_FORM_INDEX:
+      case RELEASE_FORM_INDEX:
         setOffcanvasForm(true);
         break;
       //Profile
@@ -526,7 +551,8 @@ const JobOverview = () => {
             ref={formikRef}
           />
         );
-      case 16:
+      //Conditional Offer
+      case PREPARE_FORM_INDEX:
         return (
           <ConditionalOffer
             closeOffcanvas={closeOffcanvas}
@@ -538,7 +564,7 @@ const JobOverview = () => {
             edit={false}
           />
         );
-      case 17:
+      case EDIT_FORM_INDEX:
         return (
           <ConditionalOffer
             closeOffcanvas={closeOffcanvas}
@@ -564,24 +590,41 @@ const JobOverview = () => {
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
-      case 19:
-        return (
-          <ConditionalOfferStatus
-            closeOffcanvas={closeOffcanvas}
-            candidateId={candidateId}
-            jobId={parseInt(jobId)}
-            activeStep={step}
-          />
-        );
+      // TOS
       case PREPARE_TOS_FORM_INDEX:
         return (
           <PrepareTOS
             setOffcanvasForm={setOffcanvasForm}
             candidateId={candidateId}
-            jobId={parseInt(jobId)}
+            jobId={jobId}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.[timelineRowIndex]}
           />
         );
+
+      case EDIT_TOS_FORM_INDEX:
+        return (
+          <PrepareTOS
+            setOffcanvasForm={setOffcanvasForm}
+            candidateId={candidateId}
+            jobId={parseInt(jobId)}
+            activeStep={step}
+            ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+          />
+        );
+      // case EDIT_TOS_FORM_INDEX:
+      //   return (
+      //     <PrepareTOS
+      //       setOffcanvasForm={setOffcanvasForm}
+      //       candidateId={candidateId}
+      //       jobId={parseInt(jobId)}
+      //       activeStep={step}
+      //       ref={formikRef}
+      //       jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+      //       edit={true}
+      //     />
+      //   );
       case APPROVE_TOS_FORM_INDEX:
         return (
           <ApproveTOS
@@ -591,6 +634,7 @@ const JobOverview = () => {
             candidateId={candidateId}
             jobId={parseInt(jobId)}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       default:
@@ -851,6 +895,216 @@ const JobOverview = () => {
       case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
         submitLabel = "Invite Candidate";
         break;
+      // Tos Form
+      case PREPARE_TOS_FORM_INDEX:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => formikRef.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#12A35D",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    formikRef.current.submitForm();
+                  }}
+                >
+                  {jobTagMeta?.isLoading ? (
+                    <Spinner size="sm" color="light" />
+                  ) : (
+                    "Submit"
+                  )}
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+      case EDIT_TOS_FORM_INDEX:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => formikRef.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#12A35D",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    formikRef.current.submitForm();
+                  }}
+                >
+                  {jobTagMeta?.isLoading ? (
+                    <Spinner size="sm" color="light" />
+                  ) : (
+                    "Submit"
+                  )}
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+      case APPROVE_TOS_FORM_INDEX:
+        return (
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  type="button"
+                  onClick={() => formikRef.current.handleCancel()}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #E7EAEE",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => formikRef.current.rejectTos()}
+                  style={{
+                    backgroundColor: "#D92D20",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Reject
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={() => formikRef.current.approveTos()}
+                  style={{
+                    backgroundColor: "#12A35D",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Approve
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        );
+      // Conditional Offer prepare and edit
+      case PREPARE_FORM_INDEX:
+      case EDIT_FORM_INDEX:
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <Button
+              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+              style={{
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                setOffcanvasForm(false);
+                setIsViewTemplate(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="btn btn-outline-success"
+              onClick={() => {
+                formikRef.current.submitForm("draft");
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {jobTagMeta?.isLoading &&
+              jobTagMeta?.jobType === "conditional_offer_prepare" ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Safe As Draft"
+              )}
+            </Button>
+            <Button
+              className="btn btn-success"
+              onClick={() => {
+                formikRef.current.submitForm("submit");
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {jobTagMeta?.isLoading &&
+              jobTagMeta?.jobType === "conditional_offer_edit" ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </div>
+        );
+      case RELEASE_FORM_INDEX:
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <Button
+              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+              style={{
+                borderRadius: "8px",
+              }}
+              onClick={() => {
+                setOffcanvasForm(false);
+                setIsViewTemplate(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="btn btn-success"
+              onClick={() => {
+                formikRef.current.submitForm();
+              }}
+              style={{
+                borderRadius: "8px",
+              }}
+            >
+              {jobTagMeta?.isLoading ? (
+                <Spinner size="sm" color="light" />
+              ) : (
+                "Send"
+              )}
+            </Button>
+          </div>
+        );
       default:
         break;
     }

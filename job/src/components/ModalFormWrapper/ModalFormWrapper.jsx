@@ -9,7 +9,12 @@ import {
 } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchJobForm, tagJob, untagJob } from "../../store/actions";
+import {
+  fetchJobForm,
+  tagJob,
+  untagJob,
+  tagJobFiles,
+} from "../../store/actions";
 import { Form } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
 import {
@@ -53,8 +58,12 @@ const ModalFormWrapper = ({
     }
   }, [form]);
 
+  const getStringNameCommaSeperated = (filesData) => {
+    if (!filesData || filesData?.length == 0) return "";
+    return filesData.map((fileData) => fileData?.name).join(",");
+  };
+
   useEffect(() => {
-    console.log("test activeStep load", activeStep);
     if (activeStep === UNTAG_FORM_INDEX) {
       dispatch(fetchJobForm("job_untag"));
     } else if (
@@ -83,7 +92,6 @@ const ModalFormWrapper = ({
 
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {
-    console.log("test activeStep submit", activeStep);
     if (activeStep === UNTAG_FORM_INDEX) {
       // Untag candidate
       const payload = {
@@ -146,7 +154,7 @@ const ModalFormWrapper = ({
       // Approve TOS
       const payload = {
         jobId: jobTimeLineData?.job?.id,
-        jobStageId: JOB_STAGE_IDS?.TOS_ACCEPTED_OR_DECLINED,
+        jobStageId: JOB_STAGE_IDS?.TOS_APPROVAL,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
@@ -161,7 +169,7 @@ const ModalFormWrapper = ({
       // Reject TOS
       const payload = {
         jobId: jobTimeLineData?.job?.id,
-        jobStageId: JOB_STAGE_IDS?.TOS_ACCEPTED_OR_DECLINED,
+        jobStageId: JOB_STAGE_IDS?.TOS_APPROVAL,
         status: JOB_STAGE_STATUS?.REJECTED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
@@ -169,18 +177,58 @@ const ModalFormWrapper = ({
         jobType: "tos_approval",
       };
       dispatch(tagJob({ payload, navigate }));
+      
     } else if (activeStep === ACCEPTED_FORM_INDEX) {
       // Conditional Offer Accepted
+      const filesData = newValues?.files;
+      const fileNames = getStringNameCommaSeperated(filesData);
+      const updatedValues = { ...newValues, files: fileNames };
+      // Transform file (key = "files" because in dynamic form key is "files" for file upload)
+      const newFilesData = filesData.map((fileData) => {
+        if (fileData instanceof File) {
+          return {
+            file: fileData,
+            fileKey: "files",
+          };
+        } else {
+          return null;
+        }
+      });
       const payload = {
         jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
+        formData: JSON.stringify(updatedValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
       };
-      dispatch(tagJob({ payload, navigate }));
+      const formData = new FormData();
+      for (const key in payload) {
+        formData.append(key, payload[key]);
+      }
+
+      if (newFilesData.length > 0) {
+        newFilesData?.forEach((fileData, index) => {
+          formData.append(`files[${index}].fileKey`, fileData?.fileKey);
+          if (fileData?.file) {
+            formData.append(`files[${index}].file`, fileData?.file);
+          }
+        });
+      }
+      dispatch(
+        tagJobFiles({
+          formData,
+          config: {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+          jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
+          navigate,
+        })
+      );
     } else if (activeStep === REJECTED_FORM_INDEX) {
       // Conditional Offer Rejected
       const payload = {
@@ -190,12 +238,18 @@ const ModalFormWrapper = ({
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
-        jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
+        jobType: jobTimelineType.CONDITIONAL_OFFER_REJECTED,
       };
       dispatch(tagJob({ payload, navigate }));
     }
     closeModal();
   };
+
+  useEffect(() => {
+    if (form) {
+      setFormTemplate(form);
+    }
+  }, [form]);
 
   return (
     <Modal
