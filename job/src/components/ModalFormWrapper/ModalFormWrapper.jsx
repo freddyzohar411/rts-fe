@@ -202,7 +202,6 @@ const ModalFormWrapper = ({
         jobType: "tos_approval",
       };
       dispatch(tagJob({ payload, navigate }));
-      
     } else if (activeStep === ACCEPTED_FORM_INDEX) {
       // Conditional Offer Accepted
       const filesData = newValues?.files;

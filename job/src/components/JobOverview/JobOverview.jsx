@@ -385,8 +385,6 @@ const JobOverview = () => {
     }
   }, [activeStep, originalOrder]);
 
-  console.log("Active Step", activeStep);
-
   const toggleJobOpen = (index) => {
     setOpenJobIndex(openJobIndex === index ? null : index);
   };
@@ -635,18 +633,6 @@ const JobOverview = () => {
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
-      // case EDIT_TOS_FORM_INDEX:
-      //   return (
-      //     <PrepareTOS
-      //       setOffcanvasForm={setOffcanvasForm}
-      //       candidateId={candidateId}
-      //       jobId={parseInt(jobId)}
-      //       activeStep={step}
-      //       ref={formikRef}
-      //       jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
-      //       edit={true}
-      //     />
-      //   );
       case APPROVE_TOS_FORM_INDEX:
         return (
           <ApproveTOS
@@ -905,98 +891,21 @@ const JobOverview = () => {
     let submitLabel = "Update";
     switch (step) {
       case ASSOCIATE_FORM_INDEX:
+      case PREPARE_TOS_FORM_INDEX:
+      case EDIT_TOS_FORM_INDEX:
         submitLabel = "Submit";
         break;
       case SUB_TO_SALES_FORM_INDEX:
       case SUB_TO_CLIENT_FORM_INDEX:
       case SCHEDULE_FORM_INDEX:
       case RESCHEDULED_FORM_INDEX:
+      case RELEASE_FORM_INDEX:
         submitLabel = "Send";
         break;
       case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
         submitLabel = "Invite Candidate";
         break;
       // Tos Form
-      case PREPARE_TOS_FORM_INDEX:
-        return (
-          <Row>
-            <Col>
-              <div className="d-flex justify-content-end gap-2">
-                <Button
-                  type="button"
-                  onClick={() => formikRef.current.handleCancel()}
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #E7EAEE",
-                    color: "#000000",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  style={{
-                    backgroundColor: "#12A35D",
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                  onClick={() => {
-                    formikRef.current.submitForm();
-                  }}
-                >
-                  {jobTagMeta?.isLoading ? (
-                    <Spinner size="sm" color="light" />
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        );
-      case EDIT_TOS_FORM_INDEX:
-        return (
-          <Row>
-            <Col>
-              <div className="d-flex justify-content-end gap-2">
-                <Button
-                  type="button"
-                  onClick={() => formikRef.current.handleCancel()}
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #E7EAEE",
-                    color: "#000000",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  style={{
-                    backgroundColor: "#12A35D",
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    borderRadius: "8px",
-                  }}
-                  onClick={() => {
-                    formikRef.current.submitForm();
-                  }}
-                >
-                  {jobTagMeta?.isLoading ? (
-                    <Spinner size="sm" color="light" />
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        );
       case APPROVE_TOS_FORM_INDEX:
         return (
           <Row>
@@ -1090,38 +999,6 @@ const JobOverview = () => {
                 <Spinner size="sm" color="light" />
               ) : (
                 "Submit"
-              )}
-            </Button>
-          </div>
-        );
-      case RELEASE_FORM_INDEX:
-        return (
-          <div className="d-flex align-items-center gap-2">
-            <Button
-              className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
-              style={{
-                borderRadius: "8px",
-              }}
-              onClick={() => {
-                setOffcanvasForm(false);
-                setIsViewTemplate(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="btn btn-success"
-              onClick={() => {
-                formikRef.current.submitForm();
-              }}
-              style={{
-                borderRadius: "8px",
-              }}
-            >
-              {jobTagMeta?.isLoading ? (
-                <Spinner size="sm" color="light" />
-              ) : (
-                "Send"
               )}
             </Button>
           </div>
