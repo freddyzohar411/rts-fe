@@ -85,7 +85,10 @@ import {
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
-import { JOB_STAGE_STATUS } from "../JobListing/JobListingConstants";
+import {
+  JOB_STAGE_IDS,
+  JOB_STAGE_STATUS,
+} from "../JobListing/JobListingConstants";
 import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
 import { SkillAssessment } from "../SkillAssessment";
@@ -321,8 +324,22 @@ const JobOverview = () => {
         break;
       // Interview
       case SCHEDULE_FORM_INDEX:
+        let formName = "Schedule First Interview";
+        if (originalOrder === JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED) {
+          formName = "Schedule Second Interview";
+        } else if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
+          formName = "Schedule Third Interview";
+        }
+        setStepperState(formName);
+        break;
       case RESCHEDULED_FORM_INDEX:
-        setStepperState("Schedule First Interview");
+        let frmName = "Reschedule First Interview";
+        if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
+          frmName = "Reschedule Second Interview";
+        } else if (originalOrder === JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED) {
+          frmName = "Reschedule Third Interview";
+        }
+        setStepperState(frmName);
         break;
       case BACKOUT_CANDIE_FORM_INDEX:
         setModalFormName({ header: "Backout-Candidate" });
@@ -362,7 +379,7 @@ const JobOverview = () => {
       default:
         setStepperState("");
     }
-  }, [activeStep]);
+  }, [activeStep, originalOrder]);
 
   console.log("Active Step", activeStep);
 
@@ -548,6 +565,7 @@ const JobOverview = () => {
             setTemplatePreviewAction={setTemplatePreviewAction}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             originalOrder={originalOrder}
+            activeStep={activeStep}
             ref={formikRef}
           />
         );
@@ -726,7 +744,6 @@ const JobOverview = () => {
             const isRejected =
               status === JOB_STAGE_STATUS.REJECTED ||
               status === JOB_STAGE_STATUS.WITHDRAWN;
-            const isInProgress = JOB_STAGE_STATUS.IN_PROGRESS;
 
             if (maxOrder >= 1 && maxOrder <= 5) {
               maxOrder = 1;
@@ -1391,6 +1408,7 @@ const JobOverview = () => {
 
         {/* Form Modal */}
         <ModalFormWrapper
+          originalOrder={originalOrder}
           activeStep={activeStep}
           header={stepperState}
           isFormModalOpen={isFormModalOpen}

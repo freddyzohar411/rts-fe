@@ -253,6 +253,8 @@ export const jobTimelineType = {
   FIRST_INTERVIEW_SCHEDULED: "first_interview_scheduled",
   SECOND_INTERVIEW_SCHEDULED: "second_interview_scheduled",
   THIRD_INTERVIEW_SCHEDULED: "third_interview_scheduled",
+  INTERVIEW_BACKOUT: "interview_backout",
+  INTERVIEW_REJECTED: "interview_rejected",
   //Condition Offer
   CONDITIONAL_OFFER_PREPARE: "conditional_offer_prepare",
   CONDITIONAL_OFFER_EDIT: "conditional_offer_edit",

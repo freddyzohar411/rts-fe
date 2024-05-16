@@ -40,7 +40,11 @@ import EmailReminder from "@workspace/common/src/Components/EmailV2/EmailReminde
 import EmailLocation from "@workspace/common/src/Components/EmailV2/EmailLocation";
 import EmailTitle from "@workspace/common/src/Components/EmailV2/EmailTitle";
 import { toast } from "react-toastify";
-import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
+import {
+  RESCHEDULED_FORM_INDEX,
+  SCHEDULE_FORM_INDEX,
+  jobTimelineType,
+} from "../JobOverview/JobOverviewConstants";
 
 const ScheduleInterview = forwardRef(
   (
@@ -51,6 +55,7 @@ const ScheduleInterview = forwardRef(
       setTemplatePreviewAction,
       jobTimeLineData,
       originalOrder,
+      activeStep,
     },
     ref
   ) => {
@@ -101,14 +106,40 @@ const ScheduleInterview = forwardRef(
       newValues.to = newValues.to.map((item) => item.value);
       newValues.cc = newValues.cc.map((item) => item.value);
       newValues.bcc = newValues.bcc.map((item) => item.value);
+
+      let stageId;
+      let jobType;
+
+      if (activeStep === SCHEDULE_FORM_INDEX) {
+        stageId = JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED;
+        jobType = jobTimelineType.FIRST_INTERVIEW_SCHEDULED;
+        if (originalOrder === JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED) {
+          stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
+          jobType = jobTimelineType.SECOND_INTERVIEW_SCHEDULED;
+        } else if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
+          stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
+          jobType = jobTimelineType.THIRD_INTERVIEW_SCHEDULED;
+        }
+      } else if (activeStep === RESCHEDULED_FORM_INDEX) {
+        stageId = JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED;
+        jobType = jobTimelineType.FIRST_INTERVIEW_SCHEDULED;
+        if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
+          stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
+          jobType = jobTimelineType.SECOND_INTERVIEW_SCHEDULED;
+        } else if (originalOrder === JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED) {
+          stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
+          jobType = jobTimelineType.THIRD_INTERVIEW_SCHEDULED;
+        }
+      }
+
       const payload = {
         jobId: jobTimeLineData?.job?.id,
-        jobStageId: JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED,
+        jobStageId: stageId,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: null,
         formId: null,
-        jobType: jobTimelineType.FIRST_INTERVIEW_SCHEDULED,
+        jobType: jobType,
         emailRequest: {
           ...newValues,
         },
@@ -132,7 +163,7 @@ const ScheduleInterview = forwardRef(
               }),
             },
           },
-          jobType: jobTimelineType.FIRST_INTERVIEW_SCHEDULED,
+          jobType: jobType,
           navigate,
         })
       );
