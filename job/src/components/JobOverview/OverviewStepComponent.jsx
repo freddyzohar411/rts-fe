@@ -131,9 +131,9 @@ const OverviewStepComponent = ({ data }) => {
   const getProgressStatus = (status, inprogresFlag) => {
     let response = "";
     if (
-      (status !== JOB_STAGE_STATUS.REJECTED ||
-        status !== JOB_STAGE_STATUS.WITHDRAWN ||
-        status !== JOB_STAGE_STATUS.SKIPPED) &&
+      status !== JOB_STAGE_STATUS.REJECTED &&
+      status !== JOB_STAGE_STATUS.WITHDRAWN &&
+      status !== JOB_STAGE_STATUS.SKIPPED &&
       inprogresFlag
     ) {
       response = JOB_STAGE_STATUS.IN_PROGRESS;
