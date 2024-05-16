@@ -11,6 +11,7 @@ import { Form } from "@workspace/common";
 import { useLocation } from "react-router-dom";
 import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
+import { getTOSByJobIdAndCandidateIdAndStatus } from "../../helpers/backend_helper";
 
 // Display uneditable form for approving TOS.
 // User should be able to select reject or accept TOS.
@@ -23,6 +24,8 @@ const ApproveTOS = forwardRef(
       setOffcanvasForm,
       setIsFormModalOpen,
       setModalFormName,
+      jobTimeLineData,
+      edit = true,
     },
     parentRef
   ) => {
@@ -33,16 +36,51 @@ const ApproveTOS = forwardRef(
 
     const form = useSelector((state) => state.JobFormReducer.form);
     const [formTemplate, setFormTemplate] = useState(null);
-
-    const linkState = location.state;
-    const [view] = useState(
-      linkState?.view !== null && linkState?.view !== undefined
-        ? linkState?.view
-        : false
-    );
+    const [formSubmissionData, setFormSubmissionData] = useState(null);
+    const [tosId, setTosId] = useState(null);
 
     useEffect(() => {
-      dispatch(fetchJobForm("review_tos"));
+      if (form && tosId && formTemplate) {
+        const newFormTemplate = setEntityInfo({ ...formTemplate });
+
+        // Deep compare to check if the update is necessary
+        if (JSON.stringify(formTemplate) !== JSON.stringify(newFormTemplate)) {
+          setFormTemplate(newFormTemplate);
+        }
+      }
+    }, [tosId, formSubmissionData, form, formTemplate]);
+
+    // Set entity info for file upload to the form schema
+    const setEntityInfo = (form) => {
+      const newForm = JSON.parse(JSON.stringify(form));
+      newForm?.formSchema?.forEach((field) => {
+        if (field.type === "file") {
+          field.entityInfo = {
+            entityId: tosId,
+            entityType: "TOS",
+            documentKey: field.name,
+          };
+        }
+      });
+      return newForm;
+    };
+
+    useEffect(() => {
+      // Get TOS SUbmission data
+      if (jobTimeLineData && edit) {
+        getTOSByJobIdAndCandidateIdAndStatus(
+          jobTimeLineData?.job?.id,
+          jobTimeLineData?.candidate?.id,
+          "PREPARE"
+        ).then((response) => {
+          setTosId(response?.data?.id);
+          setFormSubmissionData(response?.data?.tosSubmissionData);
+        });
+      }
+    }, [jobTimeLineData]);
+
+    useEffect(() => {
+      dispatch(fetchJobForm("prepare_tos"));
     }, []);
 
     useEffect(() => {
@@ -54,8 +92,6 @@ const ApproveTOS = forwardRef(
     const handleCancel = () => {
       setOffcanvasForm(false);
     };
-
-    const handleFormSubmit = async (values) => {};
 
     const approveTos = () => {
       setIsFormModalOpen(true);
@@ -83,17 +119,19 @@ const ApproveTOS = forwardRef(
         >
           <Row>
             <Col>
-              <Form
-                template={formTemplate}
-                userDetails={getAllUserGroups()}
-                country={null}
-                editData={null}
-                onSubmit={handleFormSubmit}
-                onFormFieldsChange={null}
-                errorMessage={null}
-                view={view}
-                ref={formikRef}
-              />
+              <div>
+                <Form
+                  template={formTemplate}
+                  userDetails={getAllUserGroups()}
+                  country={null}
+                  editData={formSubmissionData}
+                  onSubmit={handleFormSubmit}
+                  onFormFieldsChange={null}
+                  errorMessage={null}
+                  view={true}
+                  ref={formikRef}
+                />
+              </div>
             </Col>
           </Row>
         </div>
