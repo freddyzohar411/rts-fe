@@ -8,6 +8,7 @@ import {
   BASE_USER_GROUP,
   BASE_JOB_CUSTOM_VIEW,
   BASE_USER,
+  BASE_TOS,
 } from "./url_helper";
 import {
   JOB_URL,
@@ -132,3 +133,25 @@ export const deleteJobs = (jobIds) =>
 // Get User by Ids
 export const getUsersByIds = (userIds) =>
   api.create(`${API_URL}${BASE_USER}/find-by-ids`, userIds);
+
+// Added Endpoints - Job Timeline 15052024
+export const tagJobWithFiles = (data, config) =>
+  api.create(
+    `${JOB_URL}${BASE_JOBS_CONADIDATE_STATE}/create-with-files`,
+    data,
+    config
+  );
+
+// Get TOS by candidate ID and Job ID
+export const getTOSByJobIdAndCandidateId = (jobId, candidateId) =>
+  api.get(`${JOB_URL}${BASE_TOS}/jobs/${jobId}/candidates/${candidateId}`);
+
+// Get TOS by candidate ID and Job ID
+export const getTOSByJobIdAndCandidateIdAndStatus = (
+  jobId,
+  candidateId,
+  status
+) =>
+  api.get(
+    `${JOB_URL}${BASE_TOS}/jobs/${jobId}/candidates/${candidateId}/status/${status}`
+  );

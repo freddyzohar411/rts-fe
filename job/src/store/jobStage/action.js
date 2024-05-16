@@ -16,6 +16,9 @@ import {
   TAG_JOB_ATTACHMENT_SUCCESS,
   TAG_JOB_ATTACHMENT_FAILURE,
   TAG_JOB_ATTACHMENT_RESET,
+  TAG_JOB_FILES,
+  TAG_JOB_FILES_SUCCESS,
+  TAG_JOB_FILES_FAILURE,
   UNTAG_JOB,
   UNTAG_JOB_SUCCESS,
   UNTAG_JOB_FAILURE,
@@ -128,3 +131,30 @@ export const tagJobAttachmentFailure = (error) => ({
 export const tagJobAttachmentReset = () => ({
   type: TAG_JOB_ATTACHMENT_RESET,
 });
+
+export const tagJobFiles = (params) => {
+  return {
+    type: TAG_JOB_FILES,
+    payload: params,
+  };
+};
+
+export const tagJobFilesSuccess = (data) => {
+  return {
+    type: TAG_JOB_FILES_SUCCESS,
+    payload: data,
+  };
+};
+
+export const tagJobFilesFailure = (error) => {
+  return {
+    type: TAG_JOB_FILES_FAILURE,
+    payload: error,
+  };
+};
+
+export const tagJobFilesReset = () => {
+  return {
+    type: TAG_JOB_FILES_RESET,
+  };
+};

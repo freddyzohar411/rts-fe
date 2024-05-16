@@ -21,3 +21,6 @@ export const BASE_JOB_CUSTOM_VIEW = "/api/job";
 
 // User 
 export const BASE_USER = "/api/user";
+
+// TOS
+export const BASE_TOS = "/api/tos";
