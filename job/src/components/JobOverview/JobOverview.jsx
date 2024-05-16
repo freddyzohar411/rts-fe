@@ -206,6 +206,7 @@ const JobOverview = () => {
   useEffect(() => {
     if (jobTagMeta?.isSuccess) {
       setOffcanvasForm(false);
+      setModalFormName(null);
       dispatch(
         fetchJobTimelineList({
           ...DynamicTableHelper.cleanPageRequest(pageRequest),
