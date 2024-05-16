@@ -39,7 +39,6 @@ const ModalFormWrapper = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getAllUserGroups } = useUserAuth();
-  const [modalName, setModalName]= useState("")
 
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
@@ -67,10 +66,8 @@ const ModalFormWrapper = ({
       dispatch(fetchJobForm("rejected_tos"));
     } else if (activeStep === ACCEPTED_FORM_INDEX) {
       dispatch(fetchJobForm("conditional_offer_accepted"));
-      setModalName('Conditional Offer Accepted by Candidate');
     } else if (activeStep === REJECTED_FORM_INDEX) {
       dispatch(fetchJobForm("conditional_offer_rejected"));
-      setModalName('Conditional Offer Rejected by Candidate');
     }
   }, [activeStep]);
 
@@ -150,10 +147,8 @@ const ModalFormWrapper = ({
         jobType: "tos_approval",
       };
       dispatch(tagJob({ payload, navigate }));
-    }
-
-    // Conditional Offer Accepted
-    if (activeStep === ACCEPTED_FORM_INDEX) {
+    } else if (activeStep === ACCEPTED_FORM_INDEX) {
+      // Conditional Offer Accepted
       const payload = {
         jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
@@ -164,10 +159,8 @@ const ModalFormWrapper = ({
         jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
       };
       dispatch(tagJob({ payload, navigate }));
-    }
-
-    // Conditional Offer Rejected
-    if (activeStep === REJECTED_FORM_INDEX) {
+    } else if (activeStep === REJECTED_FORM_INDEX) {
+      // Conditional Offer Rejected
       const payload = {
         jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
@@ -196,11 +189,7 @@ const ModalFormWrapper = ({
           paddingBottom: "0px",
         }}
       >
-        <h5>
-          {modalFormName
-            ? modalFormName?.header
-            : modalName || header || "Header"}
-        </h5>
+        <h5>{modalFormName ? modalFormName?.header : header || "Header"}</h5>
       </ModalHeader>
       <ModalBody>
         <Form

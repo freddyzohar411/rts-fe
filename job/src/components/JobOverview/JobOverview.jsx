@@ -335,12 +335,20 @@ const JobOverview = () => {
       case 17:
         setStepperState("Conditional Offer Status");
         break;
+
       // TOS
       case PREPARE_TOS_FORM_INDEX:
         setStepperState("Prepare TOS");
         break;
       case APPROVE_TOS_FORM_INDEX:
         setStepperState("Approve TOS");
+        break;
+      // Conditional Offer
+      case ACCEPTED_FORM_INDEX:
+        setModalFormName({ header: "Conditional Offer Accepted by Candidate" });
+        break;
+      case REJECTED_FORM_INDEX:
+        setModalFormName({ header: "Conditional Offer Rejected by Candidate" });
         break;
       default:
         setStepperState("");
@@ -611,7 +619,6 @@ const JobOverview = () => {
             setOffcanvasForm={setOffcanvasForm}
             candidateId={candidateId}
             jobId={parseInt(jobId)}
-            activeStep={step}
             ref={formikRef}
           />
         );
@@ -623,7 +630,6 @@ const JobOverview = () => {
             setModalFormName={setModalFormName}
             candidateId={candidateId}
             jobId={parseInt(jobId)}
-            activeStep={step}
             ref={formikRef}
           />
         );
@@ -1132,69 +1138,6 @@ const JobOverview = () => {
             </Pagination>
           </div>
         </Row>
-        <Row className="d-flex flex-row align-items-center">
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(1)}
-          >
-            Associate
-          </div>
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(2)}
-          >
-            Submit to Sales
-          </div>
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(3)}
-          >
-            Submit to Client
-          </div>
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(16)}
-          >
-            Profile Feedback Pending{" "}
-          </div>
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(20)}
-          >
-            Prepare TOS
-          </div>
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(21)}
-          >
-            Accept or Decline
-          </div>
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(16)}
-          >
-            Prepare Conditional Offer
-          </div>
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(18)}
-          >
-            Conditional Offer Release
-          </div>
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(24)}
-          >
-            Conditional Offer Accepted
-          </div>
-          <div
-            className="btn btn-info w-25 me-3 mb-3"
-            onClick={() => setActiveStep(25)}
-          >
-            Conditional Offer Rejected  
-          </div>
-        </Row>
-
         <Offcanvas
           isOpen={offcanvasForm}
           toggle={() => {

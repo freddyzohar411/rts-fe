@@ -10,12 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Form } from "@workspace/common";
 import { useNavigate, useLocation } from "react-router-dom";
 // Fetching the forms and tagging the job once created.
-import {
-  fetchJobForm,
-  tagJob,
-  fetchJobFormSubmission,
-  clearJobFormSubmission,
-} from "../../store/actions";
+import { fetchJobForm, tagJob } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import {
   JOB_STAGE_IDS,
@@ -29,18 +24,12 @@ const PrepareTOS = forwardRef(
     const location = useLocation();
     const formikRef = useRef(null);
     const { getAllUserGroups } = useUserAuth();
-    const [editData, setEditData] = useState({});
 
     const form = useSelector((state) => state.JobFormReducer.form);
     const [formTemplate, setFormTemplate] = useState(null);
-    const formSubmissionData = useSelector(
-      (state) => state.JobFormReducer.formSubmission
-    );
-    const editId = useSelector((state) => state.JobFormReducer.editId);
-    const [randomId, setRandomId] = useState();
 
     const linkState = location.state;
-    const [view, setView] = useState(
+    const [view] = useState(
       linkState?.view !== null && linkState?.view !== undefined
         ? linkState?.view
         : false
@@ -49,22 +38,6 @@ const PrepareTOS = forwardRef(
     useEffect(() => {
       dispatch(fetchJobForm("review_tos"));
     }, []);
-
-    // useEffect(() => {
-    //   if (jobId) {
-    //     setRandomId(jobId);
-    //   } else if (editId && formSubmissionData) {
-    //     setRandomId(editId);
-    //   } else {
-    //     setRandomId(-99);
-    //   }
-    // }, [jobId, editId]);
-
-    // useEffect(() => {
-    //   if (jobId) {
-    //     dispatch(fetchJobFormSubmission(jobId))
-    //   }
-    // }, [jobId])
 
     useEffect(() => {
       if (form) {
@@ -111,7 +84,7 @@ const PrepareTOS = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={editData}
+                  editData={null}
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}
