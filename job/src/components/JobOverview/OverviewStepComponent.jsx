@@ -33,8 +33,10 @@ const OverviewStepComponent = ({ data }) => {
       //Profile Status
       if (timelineStations) {
         let profileStatus = "";
+        let isProfileStatusInprogress = true;
         if (timelineStations?.[5]) {
           profileStatus = timelineStations?.[5];
+          isProfileStatusInprogress = false;
         } else if (timelineStations?.[4]) {
           profileStatus = timelineStations?.[4];
         } else if (timelineStations?.[3]) {
@@ -44,13 +46,19 @@ const OverviewStepComponent = ({ data }) => {
         } else if (timelineStations?.[1]) {
           profileStatus = timelineStations?.[1];
         }
-        progressStatus["Profile"] = profileStatus;
+
+        progressStatus["Profile"] = getProgressStatus(
+          profileStatus,
+          isProfileStatusInprogress
+        );
 
         //Odin Status
         if (maxOrder > 5) {
           let odinStatus = "";
+          let isOdinStatusInprogress = true;
           if (timelineStations?.[9]) {
             odinStatus = timelineStations?.[9];
+            isOdinStatusInprogress = false;
           } else if (timelineStations?.[8]) {
             odinStatus = timelineStations?.[8];
           } else if (timelineStations?.[7]) {
@@ -58,14 +66,19 @@ const OverviewStepComponent = ({ data }) => {
           } else if (timelineStations?.[6]) {
             odinStatus = timelineStations?.[6];
           }
-          progressStatus["Odin"] = odinStatus;
+          progressStatus["Odin"] = getProgressStatus(
+            odinStatus,
+            isOdinStatusInprogress
+          );
         }
 
         //Interviews Status
         if (maxOrder > 9) {
           let interviewsStatus = "";
+          let isInterviewsStatusInprogress = true;
           if (timelineStations?.[13]) {
             interviewsStatus = timelineStations?.[13];
+            isInterviewsStatusInprogress = false;
           } else if (timelineStations?.[12]) {
             interviewsStatus = timelineStations?.[12];
           } else if (timelineStations?.[11]) {
@@ -73,34 +86,62 @@ const OverviewStepComponent = ({ data }) => {
           } else if (timelineStations?.[10]) {
             interviewsStatus = timelineStations?.[10];
           }
-          progressStatus["Interviews"] = interviewsStatus;
+          progressStatus["Interviews"] = getProgressStatus(
+            interviewsStatus,
+            isInterviewsStatusInprogress
+          );
         }
 
         //TOS Status
         if (maxOrder > 13) {
           let tosStatus = "";
+          let isTosStatusInprogress = true;
           if (timelineStations?.[15]) {
             tosStatus = timelineStations?.[15];
+            isTosStatusInprogress = false;
           } else if (timelineStations?.[14]) {
             tosStatus = timelineStations?.[14];
           }
-          progressStatus["TOS"] = tosStatus;
+          progressStatus["TOS"] = getProgressStatus(
+            tosStatus,
+            isTosStatusInprogress
+          );
         }
 
         //Conditional Offer Status
         if (maxOrder > 15) {
           let coStatus = "";
+          let isCOStatusInprogress = true;
           if (timelineStations?.[17]) {
             coStatus = timelineStations?.[17];
+            isCOStatusInprogress = false;
           } else if (timelineStations?.[16]) {
             coStatus = timelineStations?.[16];
           }
-          progressStatus["Conditional Offer"] = coStatus;
+          progressStatus["Conditional Offer"] = getProgressStatus(
+            coStatus,
+            isCOStatusInprogress
+          );
         }
         setProgressStatus(progressStatus);
       }
     }
   }, [data]);
+
+  const getProgressStatus = (status, inprogresFlag) => {
+    let response = "";
+    if (
+      (status !== JOB_STAGE_STATUS.REJECTED ||
+        status !== JOB_STAGE_STATUS.WITHDRAWN ||
+        status !== JOB_STAGE_STATUS.SKIPPED) &&
+      inprogresFlag
+    ) {
+      response = JOB_STAGE_STATUS.IN_PROGRESS;
+    } else {
+      response = status;
+    }
+    return response;
+  };
 
   // Get bollets border, text and background color
   const getBulletBgColor = (stepName) => {

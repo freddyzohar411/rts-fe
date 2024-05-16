@@ -249,6 +249,10 @@ export const jobTimelineType = {
   SUBMIT_TO_CLIENT: "submit_to_client",
   //Odin
   SKILLS_ASSESSMENT: "skills_assessment",
+  //Interview
+  FIRST_INTERVIEW_SCHEDULED: "first_interview_scheduled",
+  SECOND_INTERVIEW_SCHEDULED: "second_interview_scheduled",
+  THIRD_INTERVIEW_SCHEDULED: "third_interview_scheduled",
   //Condition Offer
   CONDITIONAL_OFFER_DRAFT: "conditional_offer_draft",
   CONDITIONAL_OFFER_SAVED: "conditional_offer_saved",
