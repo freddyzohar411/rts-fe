@@ -29,12 +29,16 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
     try {
       setDownloadLoading(true);
       let documentData = null;
-      if (entityInfo?.entityType && entityInfo?.entityId) {
-        const res = await BackendHelper.downloadDocumentByEntityAndId(
+      if (
+        entityInfo?.entityType &&
+        entityInfo?.entityId &&
+        entityInfo?.documentKey
+      ) {
+        const res = await BackendHelper.downloadDocumentByEntityAndIdAndType(
           entityInfo
         );
         documentData = res.data;
-      } else {
+      } else if (entityInfo?.entityType && entityInfo?.entityId) {
         const res = await BackendHelper.downloadDocumentById(
           entityInfo?.entityId
         );
@@ -71,13 +75,16 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
     try {
       setPreviewLoading(true);
       let documentData = null;
-      if (entityInfo?.entityType && entityInfo?.entityId) {
-        const res = await BackendHelper.downloadDocumentByEntityAndId({
-          entityType: entityInfo?.entityType,
-          entityId: entityInfo?.entityId,
-        });
+      if (
+        entityInfo?.entityType &&
+        entityInfo?.entityId &&
+        entityInfo?.documentKey
+      ) {
+        const res = await BackendHelper.downloadDocumentByEntityAndIdAndType(
+          entityInfo
+        );
         documentData = res.data;
-      } else {
+      } else if (entityInfo?.entityType && entityInfo?.entityId) {
         const res = await BackendHelper.downloadDocumentById(
           entityInfo?.entityId
         );

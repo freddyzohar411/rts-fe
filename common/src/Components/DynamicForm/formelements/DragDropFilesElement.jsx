@@ -35,14 +35,7 @@ const DragDropFilesElement = ({
     if (e.length > 0) {
       setFiles([...files, ...e]);
     }
-    setFilesData([
-      ...filesData,
-      {
-        file: e.target.files[0],
-        fileName: e.target.files[0].name,
-      },
-    ]);
-    formik.setFieldValue(field.name, newFiles);
+    formik.setFieldValue(field.name, [...files, ...e]);
   };
 
   const handleDeleteFile = (index) => {
