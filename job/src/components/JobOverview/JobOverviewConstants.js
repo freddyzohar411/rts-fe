@@ -186,7 +186,7 @@ export const timelineSkipSubModule = {
     { id: BACKOUT_CANDIE_FORM_INDEX, form: "Backout-Candidate" },
     { id: RESCHEDULED_FORM_INDEX, form: "Rescheduled" },
     { id: CANCL_BY_CLIENT_FORM_INDEX, form: "Cancelled by Client" },
-    { id: REJECTED_FORM_INDEX, form: "Rejected" },
+    { id: REJECTED_INTRW_FORM_INDEX, form: "Rejected" },
     { id: SELECTED_FORM_INDEX, form: "Selected" },
   ],
   4: [
