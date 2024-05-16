@@ -96,12 +96,12 @@ const ConditionalOfferRelease = forwardRef(
       newValues.bcc = newValues.bcc.map((item) => item.value);
       const payload = {
         jobId: jobId,
-        jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_RELEASE,
+        jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
-        formData: null,
+        formData: JSON.stringify(newValues),
         formId: null,
-        jobType: jobTimelineType.CONDITIONAL_OFFER_RELEASED,
+        jobType: jobTimelineType.CONDITIONAL_OFFER_RELEASE,
         emailRequest: {
           ...newValues,
         },
@@ -124,7 +124,7 @@ const ConditionalOfferRelease = forwardRef(
               }),
             },
           },
-          jobType: jobTimelineType.CONDITIONAL_OFFER_RELEASED,
+          jobType: jobTimelineType.CONDITIONAL_OFFER_RELEASE,
           navigate,
         })
       );
