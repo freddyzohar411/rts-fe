@@ -5,6 +5,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ButtonGroup, Button, Container, Spinner } from "reactstrap";
@@ -109,7 +110,7 @@ const ConditionalOffer = forwardRef(
         const payload = {
           jobId: jobId,
           jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER,
-          status: JOB_STAGE_STATUS?.COMPLETED,
+          status: JOB_STAGE_STATUS?.DRAFT,
           candidateId: jobTimeLineData?.candidate?.id,
           formData: JSON.stringify(newValues),
           formId: null,
@@ -418,7 +419,6 @@ const ConditionalOffer = forwardRef(
                   transformScale={transformScale}
                   isAllLoading={isAllLoading}
                   showLoading={true}
-                  cleanContent={true}
                 />
               )}
             </Container>
