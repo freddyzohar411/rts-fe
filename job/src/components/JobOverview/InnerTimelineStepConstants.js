@@ -33,15 +33,14 @@ export const sections = [
   {
     name: "TOS",
     expandCollapseButton: "TOSExpandCollapseButton",
-    subitems: ["Prepare TOS", "TOS Approval"],
+    subitems: ["Prepare TOS", "TOS Accepted/Declined"],
   },
   {
     name: "Conditional Offer",
     expandCollapseButton: "ConditionalOfferExpandCollapseButton",
     subitems: [
-      "Prepare Conditional Offer",
-      "Release Conditional Offer",
-      "Conditional Offer Approval",
+      "Conditional Offer Sent",
+      "Conditional Offer Accepted/Declined",
     ],
   },
 ];
