@@ -135,7 +135,7 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggablePrefix: "element",
       draggableId: "dragdropfiles",
       type: "field",
-    }
+    },
   ];
 
   // Custom Element List
@@ -278,13 +278,6 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableLabel: "Form Template Select",
       draggablePrefix: "element",
       draggableId: "selectformtemplate",
-      type: "field",
-    },
-    {
-      draggableLabelIcon: "ri-file-text-line",
-      draggableLabel: "Candidate Status Select",
-      draggablePrefix: "element",
-      draggableId: "selectcandidatestatus",
       type: "field",
     },
     {

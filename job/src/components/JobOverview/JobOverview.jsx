@@ -78,6 +78,7 @@ import {
   EDIT_TOS_FORM_INDEX,
   PREPARE_FORM_INDEX,
   EDIT_FORM_INDEX,
+  SELECTED_FORM_INDEX,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -349,6 +350,9 @@ const JobOverview = () => {
       case CANCL_BY_CLIENT_FORM_INDEX:
         setModalFormName({ header: "Interview Cancelled by Client" });
         break;
+      case SELECTED_FORM_INDEX:
+        setModalFormName({ header: "Candidate Select" });
+        break;
       // TOS
       case PREPARE_TOS_FORM_INDEX:
         setStepperState("Prepare TOS");
@@ -453,6 +457,7 @@ const JobOverview = () => {
       case BACKOUT_CANDIE_FORM_INDEX:
       case REJECTED_INTRW_FORM_INDEX:
       case CANCL_BY_CLIENT_FORM_INDEX:
+      case SELECTED_FORM_INDEX:
         setIsFormModalOpen(true);
         break;
       default:
