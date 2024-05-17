@@ -218,6 +218,7 @@ const ModalFormWrapper = ({
           return null;
         }
       });
+      
       const payload = {
         jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
