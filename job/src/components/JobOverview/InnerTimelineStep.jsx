@@ -376,10 +376,6 @@ const InnerTimelineStep = ({ data }) => {
 
     setPositions({ sectionPositions, subSectionPositions, stepperPositions });
 
-    console.log("Section Positions:", sectionPositions);
-    console.log("Sub-section Positions:", subSectionPositions);
-    console.log("Stepper Positions:", stepperPositions);
-    console.log("Total Positions", positions);
   }, [containerRef, sectionRefs, subSectionRefs, stepperRefs, noOfRows]);
 
   useEffect(() => {
@@ -394,7 +390,6 @@ const InnerTimelineStep = ({ data }) => {
       const allTopValues = [...sectionTopValues, ...subSectionTopValues];
       const uniqueTopValues = [...new Set(allTopValues)];
       setUniqueTopValues(uniqueTopValues);
-      console.log("Unique Top Values:", uniqueTopValues);
     }
   }, [positions]);
 
@@ -411,9 +406,6 @@ const InnerTimelineStep = ({ data }) => {
         ),
       };
 
-      // Debugging logs
-      console.log("Elements in the last row:", elementsInLastRow);
-
       const sectionLefts = elementsInLastRow.sections.map((pos) => pos.left);
       const subSectionRights = elementsInLastRow.subSections.map(
         (pos) => pos.right,
@@ -428,12 +420,8 @@ const InnerTimelineStep = ({ data }) => {
         const minLeft = Math.min(...sectionLefts);
         const maxRight = Math.max(...subSectionRights);
 
-        console.log("Smallest left value in sections:", minLeft);
-        console.log("Right value of last subsection:", maxRight);
-
         // Calculate and set bottom width
         const newBottomWidth = maxRight - minLeft;
-        console.log("Calculated bottomWidth:", newBottomWidth);
         setBottomWidth(newBottomWidth);
       }
     }
