@@ -79,6 +79,7 @@ import {
   PREPARE_FORM_INDEX,
   EDIT_FORM_INDEX,
   SELECTED_FORM_INDEX,
+  PROFILE_FEEDBACK_PENDING_INDEX,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -353,6 +354,9 @@ const JobOverview = () => {
       case SELECTED_FORM_INDEX:
         setModalFormName({ header: "Candidate Select" });
         break;
+      case PROFILE_FEEDBACK_PENDING_INDEX:
+        setStepperState("Profile Status");
+        break;
       // TOS
       case PREPARE_TOS_FORM_INDEX:
         setStepperState("Prepare TOS");
@@ -436,6 +440,7 @@ const JobOverview = () => {
       //Interview
       case SCHEDULE_FORM_INDEX:
       case RESCHEDULED_FORM_INDEX:
+      case PROFILE_FEEDBACK_PENDING_INDEX:
       //TOS
       case PREPARE_TOS_FORM_INDEX:
       case EDIT_TOS_FORM_INDEX:
@@ -500,13 +505,14 @@ const JobOverview = () => {
             ref={formikRef}
           />
         );
-      case 4:
+      case PROFILE_FEEDBACK_PENDING_INDEX:
         return (
           <ProfileFeedbackPending
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            handleIconClick={handleIconClick}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            ref={formikRef}
           />
         );
       //Odin
@@ -903,6 +909,9 @@ const JobOverview = () => {
       case RESCHEDULED_FORM_INDEX:
       case RELEASE_FORM_INDEX:
         submitLabel = "Send";
+        break;
+      case PROFILE_FEEDBACK_PENDING_INDEX:
+        submitLabel = "Update";
         break;
       case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
         submitLabel = "Invite Candidate";

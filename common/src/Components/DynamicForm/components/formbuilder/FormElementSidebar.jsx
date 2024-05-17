@@ -288,20 +288,6 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
-      draggableLabelIcon: "ri-file-text-line",
-      draggableLabel: "First Interview Feedback Status Select",
-      draggablePrefix: "element",
-      draggableId: "selectfirstintrvfdbkstatus",
-      type: "field",
-    },
-    {
-      draggableLabelIcon: "ri-file-text-line",
-      draggableLabel: "Second Interview Feedback Status Select",
-      draggablePrefix: "element",
-      draggableId: "selectsecondintrvfdbkstatus",
-      type: "field",
-    },
-    {
       draggableLabelIcon: "ri-account-box-fill",
       draggableLabel: "Account Owner",
       draggablePrefix: "element",
