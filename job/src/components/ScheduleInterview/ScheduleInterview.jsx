@@ -308,9 +308,100 @@ const ScheduleInterview = forwardRef(
                 <i className="mdi mdi-calendar-plus fs-5"></i>
               </div>
               <div className="d-flex flex-row justify-content-between gap-2 w-100">
-                <EmailDateTime formik={formik} period="From" />
-                <EmailDateTime formik={formik} period="To" />
-                <EmailReminder formik={formik} />
+                {/* From Date Time */}
+                <div className="d-flex flex-row align-items-center justify-content-start gap-1">
+                  <div>
+                    <span style={{ fontWeight: "100", marginRight: "5px" }}>
+                      From
+                    </span>
+                  </div>
+                  <div>
+                    <Input
+                      type="date"
+                      name="fromDate"
+                      value={formik?.values?.fromDate}
+                      onChange={(event) =>
+                        formik.setFieldValue("fromDate", event.target.value)
+                      }
+                      style={{
+                        border: "1px solid #d1d1d1ce",
+                        backgroundColor: "#ffffff",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="time"
+                      name="fromTime"
+                      value={formik?.values?.fromTime}
+                      onChange={(event) =>
+                        formik.setFieldValue("fromTime", event.target.value)
+                      }
+                      style={{
+                        border: "1px solid #d1d1d1ce",
+                        backgroundColor: "#ffffff",
+                      }}
+                    />
+                  </div>
+                </div>
+                {/* To Date Time */}
+                <div className="d-flex flex-row align-items-center justify-content-start gap-1">
+                  <div>
+                    <span style={{ fontWeight: "100", marginRight: "5px" }}>
+                      To
+                    </span>
+                  </div>
+                  <div>
+                    <Input
+                      type="date"
+                      name="toDate"
+                      value={formik?.values?.toDate}
+                      onChange={(event) =>
+                        formik.setFieldValue("toDate", event.target.value)
+                      }
+                      style={{
+                        border: "1px solid #d1d1d1ce",
+                        backgroundColor: "#ffffff",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="time"
+                      name="toTime"
+                      value={formik?.values?.toTime}
+                      onChange={(event) =>
+                        formik.setFieldValue("toTime", event.target.value)
+                      }
+                      style={{
+                        border: "1px solid #d1d1d1ce",
+                        backgroundColor: "#ffffff",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="w-100">
+                  <Input
+                    type="select"
+                    style={{
+                      border: "1px solid #d1d1d1ce",
+                      backgroundColor: "#ffffff",
+                    }}
+                    name="reminder"
+                    value={formik?.values?.reminder}
+                    onChange={(event) =>
+                      formik.setFieldValue(reminder, event.target.value)
+                    }
+                  >
+                    <option value="">Reminder</option>
+                    <option value="Does not repeat">Does not repeat</option>
+                    <option value="Daily">Daily</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Yearly">Yearly</option>
+                  </Input>
+                </div>
               </div>
             </div>
           </Row>
@@ -331,9 +422,17 @@ const ScheduleInterview = forwardRef(
                   >
                     <i className="mdi mdi-map-marker-plus fs-5"></i>
                   </div>
-                  <EmailLocation
-                    formik={formik}
+                  <Input
+                    type="text"
                     disabled={disableEmailLocation}
+                    className="form-control location-input"
+                    style={{ border: "none" }}
+                    placeholder="Enter Location"
+                    name="location"
+                    value={formik?.values?.location}
+                    onChange={(event) =>
+                      formik.setFieldValue("location", event.target.value)
+                    }
                   />
                 </div>
                 <hr className="m-0 p-0" />
