@@ -30,7 +30,6 @@ import AccountContactSelectElement from "./AccountContactSelectElement";
 import AccountOwnerElement from "./AccountOwnerElement";
 import FormTemplateSelectElement from "./FormTemplateSelectElement";
 import MultiInputElement from "./MultiInputElement";
-import CandidateStatusSelectElement from "./CandidateStatusSelectElement";
 import ProfileFeedbackStatusSelectElement from "./ProfileFeedbackStatusSelectElement";
 import FirstInterviewFeedbackStatus from "./FirstInterviewFeedbackStatus";
 import SecondInterviewFeedbackStatus from "./SecondInterviewFeedbackStatus";
@@ -162,17 +161,6 @@ const generateFormField = (
   if (type === "selectaccountcontact") {
     return (
       <AccountContactSelectElement
-        formik={formik}
-        field={field}
-        formStateHook={formStateHook}
-        tabIndexData={tabIndexData}
-      />
-    );
-  }
-
-  if (type === "selectcandidatestatus") {
-    return (
-      <CandidateStatusSelectElement
         formik={formik}
         field={field}
         formStateHook={formStateHook}

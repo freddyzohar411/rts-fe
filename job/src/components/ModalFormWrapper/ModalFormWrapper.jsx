@@ -33,6 +33,7 @@ import {
   BACKOUT_CANDIE_FORM_INDEX,
   REJECTED_INTRW_FORM_INDEX,
   CANCL_BY_CLIENT_FORM_INDEX,
+  SELECTED_FORM_INDEX,
 } from "../JobOverview/JobOverviewConstants";
 
 const ModalFormWrapper = ({
@@ -75,7 +76,8 @@ const ModalFormWrapper = ({
     } else if (
       activeStep === PRF_REJ_SALES_FORM_INDEX ||
       activeStep === REJECTED_INTRW_FORM_INDEX ||
-      activeStep === CANCL_BY_CLIENT_FORM_INDEX
+      activeStep === CANCL_BY_CLIENT_FORM_INDEX ||
+      activeStep === SELECTED_FORM_INDEX
     ) {
       dispatch(fetchJobForm("submit_to_sales_rejection"));
     } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
@@ -170,6 +172,18 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.INTERVIEW_REJECTED,
+      };
+      dispatch(tagJob({ payload, navigate }));
+    } else if (activeStep === SELECTED_FORM_INDEX) {
+      // Interview selected
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.INTERVIEW_FEEDBACK_PENDING,
+        status: JOB_STAGE_STATUS?.COMPLETED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form?.formId),
+        jobType: "interview_feedbak",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (
