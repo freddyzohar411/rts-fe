@@ -4,11 +4,15 @@ import {
   JOB_STAGE_STATUS,
   JOB_STAGE_STATUS_LABELS,
 } from "../JobListing/JobListingConstants";
+import "./InnerTimelineStep.scss";
 
 const InnerTimelineStep = ({ data }) => {
   const containerRef = useRef(null);
   const timelineRef = useRef(null);
   const sectionRefs = useRef([]);
+  const subSectionRefs = useRef([]);
+  const stepperRefs = useRef([]);
+  const [positions, setPositions] = useState({});
   const [sectionRowIndexes, setSectionRowIndexes] = useState([]);
   const [noOfRows, setNoOfRows] = useState(0);
   const [rowDivs, setRowDivs] = useState(null);
@@ -16,29 +20,12 @@ const InnerTimelineStep = ({ data }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [divWidth, setDivWidth] = useState("");
   const [elementSizing, setElementSizing] = useState("");
-
-  useEffect(() => {
-    const updateRowIndexes = () => {
-      const newIndexes = sectionRefs.current.map((ref) => {
-        const top = ref.current?.getBoundingClientRect().top;
-        const containerTop = containerRef.current?.getBoundingClientRect().top;
-        const rowIndex = Math.floor((top - containerTop) / 90);
-        return rowIndex;
-      });
-      setSectionRowIndexes(newIndexes);
-    };
-
-    updateRowIndexes();
-    window.addEventListener("resize", updateRowIndexes);
-
-    return () => {
-      window.removeEventListener("resize", updateRowIndexes);
-    };
-  }, [noOfRows]);
+  const [uniqueTopValues, setUniqueTopValues] = useState([]);
+  const [bottomWidth, setBottomWidth] = useState(0);
 
   useEffect(() => {
     sectionRefs.current = sections.map(
-      (_, i) => sectionRefs.current[i] ?? createRef()
+      (_, i) => sectionRefs.current[i] ?? createRef(),
     );
   }, [sections]);
 
@@ -92,9 +79,12 @@ const InnerTimelineStep = ({ data }) => {
 
   function calculateNoOfRows() {
     if (containerRef.current) {
+      // get height of container
       const containerHeight = containerRef.current.clientHeight;
+      // get height of each row
       const timelineModule = document.getElementById("module-timeline");
       const rowHeight = timelineModule.offsetHeight;
+      // divide container height by row height to get number of rows
       const calculatedRows = Math.ceil(containerHeight / rowHeight);
       setNoOfRows(calculatedRows);
     }
@@ -128,12 +118,12 @@ const InnerTimelineStep = ({ data }) => {
                 left: "20px",
                 height: "95px",
                 top: `${i * 95}px`,
-                width: "91%",
+                width: bottomWidth ? `${bottomWidth}px` : "91%",
                 position: "absolute",
                 borderRight: "none",
                 borderTop: "none",
               }}
-            ></div>
+            ></div>,
           );
         } else {
           // If the row is even, add a dashed line with border radius on the right
@@ -150,7 +140,7 @@ const InnerTimelineStep = ({ data }) => {
                 position: "absolute",
                 borderLeft: "none",
               }}
-            ></div>
+            ></div>,
           );
         }
       }
@@ -164,9 +154,9 @@ const InnerTimelineStep = ({ data }) => {
             position: "absolute",
             top: 0,
             left: "60px",
-            width: "91%",
+            width: "89%",
           }}
-        ></div>
+        ></div>,
       );
     }
     return divs;
@@ -335,6 +325,120 @@ const InnerTimelineStep = ({ data }) => {
     }
   };
 
+  useEffect(() => {
+    const sectionPositions = sectionRefs.current
+      .map((ref, index) => {
+        if (ref) {
+          const rect = ref.getBoundingClientRect();
+          return {
+            index,
+            top: rect.top,
+            left: rect.left,
+            bottom: rect.bottom,
+            right: rect.right,
+          };
+        }
+        return null;
+      })
+      .filter((pos) => pos !== null);
+
+    const subSectionPositions = subSectionRefs.current
+      .map((ref, index) => {
+        if (ref) {
+          const rect = ref.getBoundingClientRect();
+          return {
+            index,
+            top: rect.top,
+            left: rect.left,
+            bottom: rect.bottom,
+            right: rect.right,
+          };
+        }
+        return null;
+      })
+      .filter((pos) => pos !== null);
+
+    const stepperPositions = stepperRefs.current
+      .map((ref, index) => {
+        if (ref) {
+          const rect = ref.getBoundingClientRect();
+          return {
+            index,
+            top: rect.top,
+            left: rect.left,
+            bottom: rect.bottom,
+            right: rect.right,
+          };
+        }
+        return null;
+      })
+      .filter((pos) => pos !== null);
+
+    setPositions({ sectionPositions, subSectionPositions, stepperPositions });
+
+    console.log("Section Positions:", sectionPositions);
+    console.log("Sub-section Positions:", subSectionPositions);
+    console.log("Stepper Positions:", stepperPositions);
+    console.log("Total Positions", positions);
+  }, [containerRef, sectionRefs, subSectionRefs, stepperRefs, noOfRows]);
+
+  useEffect(() => {
+    if (subSectionRefs.current.length === 0) {
+      return;
+    } else {
+      const sectionTopValues = positions.sectionPositions.map((pos) => pos.top);
+      const subSectionTopValues = positions.subSectionPositions.map(
+        (pos) => pos.top,
+      );
+
+      const allTopValues = [...sectionTopValues, ...subSectionTopValues];
+      const uniqueTopValues = [...new Set(allTopValues)];
+      setUniqueTopValues(uniqueTopValues);
+      console.log("Unique Top Values:", uniqueTopValues);
+    }
+  }, [positions]);
+
+  useEffect(() => {
+    if (uniqueTopValues.length > 0) {
+      const lastTopValue = uniqueTopValues[uniqueTopValues.length - 1];
+
+      const elementsInLastRow = {
+        sections: positions.sectionPositions.filter(
+          (pos) => pos.top === lastTopValue,
+        ),
+        subSections: positions.subSectionPositions.filter(
+          (pos) => pos.top === lastTopValue,
+        ),
+      };
+
+      // Debugging logs
+      console.log("Elements in the last row:", elementsInLastRow);
+
+      const sectionLefts = elementsInLastRow.sections.map((pos) => pos.left);
+      const subSectionRights = elementsInLastRow.subSections.map(
+        (pos) => pos.right,
+      );
+
+      // Check if the arrays are not empty
+      if (sectionLefts.length === 0 || subSectionRights.length === 0) {
+        console.error("Error: One of the arrays is empty.");
+        setBottomWidth(0); // Or handle this case as needed
+      } else {
+        // Calculate minLeft and maxRight
+        const minLeft = Math.min(...sectionLefts);
+        const maxRight = Math.max(...subSectionRights);
+
+        console.log("Smallest left value in sections:", minLeft);
+        console.log("Right value of last subsection:", maxRight);
+
+        // Calculate and set bottom width
+        const newBottomWidth = maxRight - minLeft;
+        console.log("Calculated bottomWidth:", newBottomWidth);
+        setBottomWidth(newBottomWidth);
+      }
+    }
+  }, [uniqueTopValues, positions, noOfRows]); // Ensure positions is also a dependency if it's not static
+
   return (
     <div style={{ position: "relative" }}>
       <div className="py-2 w-100">
@@ -344,7 +448,7 @@ const InnerTimelineStep = ({ data }) => {
         <div
           ref={containerRef}
           id="timeline-container"
-          className="d-flex flex-row justify-content-between flex-wrap ms-2"
+          className="timeline-container-div ms-2"
           style={{
             position: "relative",
             zIndex: "2",
@@ -365,20 +469,26 @@ const InnerTimelineStep = ({ data }) => {
               section?.status === "REJECTED"
                 ? section?.status
                 : lastItem?.data?.status
-                ? lastItem?.data?.status
-                : JOB_STAGE_STATUS.IN_PROGRESS;
+                  ? lastItem?.data?.status
+                  : JOB_STAGE_STATUS.IN_PROGRESS;
+
             return (
-              <div key={index}>
+              <div
+                key={index}
+                ref={(el) => {
+                  sectionRefs.current[index] = el;
+                }}
+              >
                 <div className="d-flex flex-row justify-content-between">
                   <div
                     id="module-timeline"
                     className={`d-flex flex-column pb-4 align-items-start justify-content-center`}
                     style={{ width: elementSizing }}
                   >
-                    <div className="d-flex flex-column align-items-start">
+                    <div className="d-flex flex-column align-items-start ">
                       <div
                         className={`rounded-circle d-flex justify-content-center mb-2 ${getBulletBgColor(
-                          status
+                          status,
                         )}`}
                         style={{
                           width: "22px",
@@ -402,7 +512,7 @@ const InnerTimelineStep = ({ data }) => {
                   </div>
 
                   <div
-                    className={`cursor-pointer d-flex align-items-top justify-content-start`}
+                    className={`cursor-pointer d-flex align-items-top ${expandedSections[section.name] || (!expandedSections[sections.name] && index != 4) ? "justify-content-start" : "justify-content-end"}`}
                     onClick={() => toggleSection(section.name)}
                     style={{ width: elementSizing }}
                   >
@@ -425,6 +535,9 @@ const InnerTimelineStep = ({ data }) => {
                           ? "#FFFFFF"
                           : "#000000",
                       }}
+                      ref={(el) => {
+                        stepperRefs.current[index] = el;
+                      }}
                     >
                       {expandedSections[section.name] ? (
                         <i className="bx bx-collapse-horizontal"></i>
@@ -435,15 +548,25 @@ const InnerTimelineStep = ({ data }) => {
                   </div>
 
                   {expandedSections[section.name] && (
-                    <div className="d-flex flex-row align-items-top justify-content-center gap-3">
+                    <div className="d-flex flex-row align-items-top justify-content-center gap-5 me-3">
                       {section.subitems.map((subitem, subindex) => {
                         const renderSubitemStyle = renderSectionStyle(
-                          subitemsData[subindex]?.data?.status
+                          subitemsData[subindex]?.data?.status,
                         );
+                        const subitemString = subitem.split(" ");
+                        const subItemStringCut = subitemString
+                          .slice(0, 2)
+                          .join(" ");
+                        const subItemStringCont = subitemString
+                          .slice(2)
+                          .join(" ");
                         return (
                           <div
                             key={subindex}
-                            className="d-flex flex-column align-items-center"
+                            ref={(el) => {
+                              subSectionRefs.current[subindex] = el;
+                            }}
+                            className="d-flex flex-column align-items-center gap-5"
                             style={{
                               width: elementSizing,
                             }}
@@ -459,6 +582,9 @@ const InnerTimelineStep = ({ data }) => {
                                   backgroundColor: renderSubitemStyle.bgColor,
                                   color: renderSubitemStyle.color,
                                 }}
+                                ref={(el) => {
+                                  stepperRefs.current[subindex] = el;
+                                }}
                               >
                                 {renderSubitemStyle.icon ? (
                                   <i className={renderSubitemStyle.icon}></i>
@@ -471,12 +597,21 @@ const InnerTimelineStep = ({ data }) => {
                               </span>
                               <span
                                 key={subindex}
-                                className="fw-semibold text-dark no-wrap"
+                                className="fw-semibold text-dark"
                                 style={{
                                   fontSize: "13px",
+                                  whiteSpace:
+                                    subitem.length >= 2 ? "normal" : "nowrap",
                                 }}
                               >
-                                {subitem}
+                                <span style={{ whiteSpace: "nowrap" }}>
+                                  {subItemStringCut}
+                                </span>
+                                {subItemStringCont && (
+                                  <span style={{ whiteSpace: "normal" }}>
+                                    {" " + subItemStringCont}
+                                  </span>
+                                )}
                               </span>
                             </div>
                           </div>
