@@ -65,7 +65,7 @@ const ConditionalOfferRelease = forwardRef(
     useEffect(() => {
       if (
         jobTimeLineData?.timeline?.["Conditional Offer Sent"]?.status ===
-        "COMPLETED"
+        "DRAFT"
       ) {
         // setEditContentLoading(true);
         getJobCandidateStage({

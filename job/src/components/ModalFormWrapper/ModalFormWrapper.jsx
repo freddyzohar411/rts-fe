@@ -208,16 +208,19 @@ const ModalFormWrapper = ({
       const fileNames = getStringNameCommaSeperated(filesData);
       const updatedValues = { ...newValues, files: fileNames };
       // Transform file (key = "files" because in dynamic form key is "files" for file upload)
-      const newFilesData = filesData.map((fileData) => {
-        if (fileData instanceof File) {
-          return {
-            file: fileData,
-            fileKey: "files",
-          };
-        } else {
-          return null;
-        }
-      });
+      let newFilesData = [];
+      if (filesData) {
+        newFilesData = filesData.map((fileData) => {
+          if (fileData instanceof File) {
+            return {
+              file: fileData,
+              fileKey: "files",
+            };
+          } else {
+            return null;
+          }
+        });
+      }
       const payload = {
         jobId: jobTimeLineData?.job?.id,
         jobStageId: JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL,
