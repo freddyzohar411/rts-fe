@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Breadcrumb, BreadcrumbItem, Row, Col } from "reactstrap";
-import { StringHelper } from "@workspace/common";
-import { Link } from "react-router-dom";
+import { Container } from "reactstrap";
 import { useSelector } from "react-redux";
 import LoadingOverlay from "react-loading-overlay";
 import JobCreation from "../../components/JobCreation/JobCreation";
@@ -17,7 +15,6 @@ import {
   TabPane,
 } from "reactstrap";
 import classnames from "classnames";
-import JobOverviewOld from "../../components/JobOverview/JobOverviewOld";
 
 const JobManage = () => {
   const { jobId, slug } = useParams();
@@ -54,21 +51,6 @@ const JobManage = () => {
                 }}
               >
                 <span>Overview</span>
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                className={classnames(
-                  {
-                    active: ugTab === "6",
-                  },
-                  "cursor-pointer"
-                )}
-                onClick={() => {
-                  toggleUg("6");
-                }}
-              >
-                <span>Overview Old</span>
               </NavLink>
             </NavItem>
             <NavItem>
@@ -165,13 +147,6 @@ const JobManage = () => {
             <TabPane tabId="5" id="manageSnapshot">
               <Card>
                 <CardBody>TBA</CardBody>
-              </Card>
-            </TabPane>
-            <TabPane tabId="6" id="manageSnapshot">
-              <Card>
-                <CardBody>
-                  <JobOverviewOld />
-                </CardBody>
               </Card>
             </TabPane>
           </TabContent>

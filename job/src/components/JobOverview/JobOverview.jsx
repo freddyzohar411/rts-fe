@@ -42,12 +42,8 @@ import SubmitToSales from "../SubmitToSales/SubmitToSales";
 import SubmitToClient from "../SubmitToClient/SubmitToClient";
 import ProfileFeedbackPending from "../ProfileFeedbackPending/ProfileFeedbackPending";
 import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
-import FirstInterviewFeedbackPending from "../FirstInterviewFeedback/FirstInterviewFeedback";
-import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterviewFeedback";
-import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
 import ConditionalOffer from "../ConditionalOffer/ConditionalOffer";
 import ConditionalOfferRelease from "../ConditionalOfferRelease/ConditionalOfferRelease.jsx";
-import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
 
 import {
@@ -129,7 +125,6 @@ const JobOverview = () => {
   const [originalOrder, setOriginalOrder] = useState();
 
   // Next Step Dropdown States
-  const [legendTooltip, setLegendTooltip] = useState(false);
   const [headerTooltip, setHeaderTooltip] = useState(false);
   const [sortDirection, setSortDirection] = useState("asc");
   const [timelineTab, setTimelineTab] = useState("1");
@@ -1140,20 +1135,6 @@ const JobOverview = () => {
                   style={{ color: "#0A56AE" }}
                 ></i>
               </div>
-              <i
-                id="legendInfo"
-                className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
-                onClick={() => setLegendTooltip(!legendTooltip)}
-              ></i>
-              <Tooltip
-                target="legendInfo"
-                placement="bottom"
-                isOpen={legendTooltip}
-                toggle={() => setLegendTooltip(!legendTooltip)}
-                className="legend-tooltip"
-              >
-                {renderLegend()}
-              </Tooltip>
             </div>
             <div className="d-flex flex-row gap-2 ">
               <ButtonGroup>
