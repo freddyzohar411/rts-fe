@@ -25,7 +25,7 @@ const InnerTimelineStep = ({ data }) => {
 
   useEffect(() => {
     sectionRefs.current = sections.map(
-      (_, i) => sectionRefs.current[i] ?? createRef(),
+      (_, i) => sectionRefs.current[i] ?? createRef()
     );
   }, [sections]);
 
@@ -123,7 +123,7 @@ const InnerTimelineStep = ({ data }) => {
                 borderRight: "none",
                 borderTop: "none",
               }}
-            ></div>,
+            ></div>
           );
         } else {
           // If the row is even, add a dashed line with border radius on the right
@@ -140,7 +140,7 @@ const InnerTimelineStep = ({ data }) => {
                 position: "absolute",
                 borderLeft: "none",
               }}
-            ></div>,
+            ></div>
           );
         }
       }
@@ -156,7 +156,7 @@ const InnerTimelineStep = ({ data }) => {
             left: "60px",
             width: "89%",
           }}
-        ></div>,
+        ></div>
       );
     }
     return divs;
@@ -375,7 +375,6 @@ const InnerTimelineStep = ({ data }) => {
       .filter((pos) => pos !== null);
 
     setPositions({ sectionPositions, subSectionPositions, stepperPositions });
-
   }, [containerRef, sectionRefs, subSectionRefs, stepperRefs, noOfRows]);
 
   useEffect(() => {
@@ -384,7 +383,7 @@ const InnerTimelineStep = ({ data }) => {
     } else {
       const sectionTopValues = positions.sectionPositions.map((pos) => pos.top);
       const subSectionTopValues = positions.subSectionPositions.map(
-        (pos) => pos.top,
+        (pos) => pos.top
       );
 
       const allTopValues = [...sectionTopValues, ...subSectionTopValues];
@@ -399,16 +398,16 @@ const InnerTimelineStep = ({ data }) => {
 
       const elementsInLastRow = {
         sections: positions.sectionPositions.filter(
-          (pos) => pos.top === lastTopValue,
+          (pos) => pos.top === lastTopValue
         ),
         subSections: positions.subSectionPositions.filter(
-          (pos) => pos.top === lastTopValue,
+          (pos) => pos.top === lastTopValue
         ),
       };
 
       const sectionLefts = elementsInLastRow.sections.map((pos) => pos.left);
       const subSectionRights = elementsInLastRow.subSections.map(
-        (pos) => pos.right,
+        (pos) => pos.right
       );
 
       // Check if the arrays are not empty
@@ -457,8 +456,8 @@ const InnerTimelineStep = ({ data }) => {
               section?.status === "REJECTED"
                 ? section?.status
                 : lastItem?.data?.status
-                  ? lastItem?.data?.status
-                  : JOB_STAGE_STATUS.IN_PROGRESS;
+                ? lastItem?.data?.status
+                : JOB_STAGE_STATUS.IN_PROGRESS;
 
             return (
               <div
@@ -476,7 +475,7 @@ const InnerTimelineStep = ({ data }) => {
                     <div className="d-flex flex-column align-items-start ">
                       <div
                         className={`rounded-circle d-flex justify-content-center mb-2 ${getBulletBgColor(
-                          status,
+                          status
                         )}`}
                         style={{
                           width: "22px",
@@ -500,7 +499,12 @@ const InnerTimelineStep = ({ data }) => {
                   </div>
 
                   <div
-                    className={`cursor-pointer d-flex align-items-top ${expandedSections[section.name] || (!expandedSections[sections.name] && index != 4) ? "justify-content-start" : "justify-content-end"}`}
+                    className={`cursor-pointer d-flex align-items-top ${
+                      expandedSections[section.name] ||
+                      (!expandedSections[sections.name] && index != 4)
+                        ? "justify-content-start"
+                        : "justify-content-end"
+                    }`}
                     onClick={() => toggleSection(section.name)}
                     style={{ width: elementSizing }}
                   >
@@ -539,7 +543,7 @@ const InnerTimelineStep = ({ data }) => {
                     <div className="d-flex flex-row align-items-top justify-content-center gap-5 me-3">
                       {section.subitems.map((subitem, subindex) => {
                         const renderSubitemStyle = renderSectionStyle(
-                          subitemsData[subindex]?.data?.status,
+                          subitemsData[subindex]?.data?.status
                         );
                         const subitemString = subitem.split(" ");
                         const subItemStringCut = subitemString
