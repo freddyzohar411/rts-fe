@@ -89,7 +89,7 @@ const ModalFormWrapper = ({
     } else if (activeStep === REJECTED_FORM_INDEX) {
       dispatch(fetchJobForm("conditional_offer_rejected"));
     }
-  }, [activeStep]);
+  }, [activeStep, modalFormName]);
 
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {

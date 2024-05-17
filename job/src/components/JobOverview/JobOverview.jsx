@@ -618,7 +618,7 @@ const JobOverview = () => {
             candidateId={candidateId}
             jobId={jobId}
             ref={formikRef}
-            jobTimeLineData={jobTimelineData?.[timelineRowIndex]}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
 
@@ -631,6 +631,7 @@ const JobOverview = () => {
             activeStep={step}
             ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            edit={true}
           />
         );
       case APPROVE_TOS_FORM_INDEX:
@@ -643,6 +644,7 @@ const JobOverview = () => {
             jobId={parseInt(jobId)}
             ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            edit={true}
           />
         );
       default:
