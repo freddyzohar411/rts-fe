@@ -250,6 +250,7 @@ export const jobTimelineType = {
   ASSOCIATE: "associate_candidate",
   SUBMIT_TO_SALES: "submit_to_sales",
   SUBMIT_TO_CLIENT: "submit_to_client",
+  PROFILE_WITHDRAWN: "profile_withdrawn",
   //Odin
   SKILLS_ASSESSMENT: "skills_assessment",
   //Interview

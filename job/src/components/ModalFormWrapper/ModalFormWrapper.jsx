@@ -96,8 +96,22 @@ const ModalFormWrapper = ({
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {
     // Job Stage Id and Type for Interview module -- Start
-    let stageId = JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED;
-    if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
+    let stageId;
+    //Profile
+    if (originalOrder === JOB_STAGE_IDS.TAG) {
+      stageId = JOB_STAGE_IDS.TAG;
+    } else if (originalOrder === JOB_STAGE_IDS.ASSOCIATE) {
+      stageId = JOB_STAGE_IDS.ASSOCIATE;
+    } else if (originalOrder === JOB_STAGE_IDS.SUBMIT_TO_SALES) {
+      stageId = JOB_STAGE_IDS.SUBMIT_TO_SALES;
+    } else if (originalOrder === JOB_STAGE_IDS.SUBMIT_TO_CLIENT) {
+      stageId = JOB_STAGE_IDS.SUBMIT_TO_CLIENT;
+    } else if (originalOrder === JOB_STAGE_IDS.PROFILE_FEEDBACK_PENDING) {
+      stageId = JOB_STAGE_IDS.PROFILE_FEEDBACK_PENDING;
+    } else if (originalOrder === JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED) {
+      //Interviews
+      stageId = JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED;
+    } else if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
       stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
     } else if (originalOrder === JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED) {
       stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
@@ -115,12 +129,12 @@ const ModalFormWrapper = ({
       // Profile withdrawn
       const payload = {
         jobId: jobTimeLineData?.job?.id,
-        jobStageId: JOB_STAGE_IDS?.ASSOCIATE,
+        jobStageId: stageId,
         status: JOB_STAGE_STATUS?.WITHDRAWN,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
-        jobType: jobTimelineType.ASSOCIATE,
+        jobType: jobTimelineType.PROFILE_WITHDRAWN,
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
