@@ -128,7 +128,7 @@ const JobOverview = () => {
 
   // Next Step Dropdown States
   const [headerTooltip, setHeaderTooltip] = useState(false);
-  const [sortDirection, setSortDirection] = useState("asc");
+  const [sortDirection, setSortDirection] = useState("desc");
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
   const [stepperState, setStepperState] = useState("");
@@ -186,7 +186,7 @@ const JobOverview = () => {
     {
       page: 0,
       pageSize: 20,
-      sortBy: "candidate.first_name",
+      sortBy: "job_timeline.updated_at",
       sortDirection: sortDirection,
       searchTerm: null,
       searchFields: [
@@ -415,6 +415,7 @@ const JobOverview = () => {
       dispatch(
         fetchJobTimelineList({
           ...DynamicTableHelper.cleanPageRequest(pageRequest),
+          sortBy: "candidate.first_name",
           jobId: parseInt(jobId),
           sortDirection: direction,
         })
