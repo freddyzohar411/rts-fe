@@ -255,7 +255,12 @@ const JobOverview = () => {
         } else if (maxOrder >= 5 && maxOrder <= 8) {
           maxOrder = 2;
         } else if (maxOrder >= 9 && maxOrder <= 12) {
-          maxOrder = 3;
+          const status = getStatus(data, maxOrder);
+          if (status === JOB_STAGE_STATUS.COMPLETED) {
+            maxOrder = 3;
+          } else {
+            maxOrder = 2;
+          }
         } else if (maxOrder >= 13 && maxOrder <= 14) {
           maxOrder = 4;
         } else if (maxOrder >= 15 && maxOrder <= 17) {
@@ -749,7 +754,12 @@ const JobOverview = () => {
             } else if (maxOrder >= 5 && maxOrder <= 8) {
               maxOrder = 2;
             } else if (maxOrder >= 9 && maxOrder <= 12) {
-              maxOrder = 3;
+              const odinStatus = getStatus(data, maxOrder);
+              if (odinStatus === JOB_STAGE_STATUS.COMPLETED) {
+                maxOrder = 3;
+              } else {
+                maxOrder = 2;
+              }
             } else if (maxOrder >= 13 && maxOrder <= 14) {
               maxOrder = 4;
             } else if (maxOrder >= 15 && maxOrder <= 17) {
