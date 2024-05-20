@@ -41,6 +41,16 @@ const PrepareTOS = forwardRef(
 
     const [formSubmissionData, setFormSubmissionData] = useState(null);
 
+    const [prePrepopulateData, setPrePopulateData] = useState(null)
+    // Pre Populate Data
+    useEffect(() => {
+      if (!edit){
+        setPrePopulateData({
+          clientName: jobTimeLineData?.job?.jobSubmissionData?.clientName || "",
+        })
+      }
+    },[])
+
     useEffect(() => {
       if (form && tosId && formTemplate) {
         const newFormTemplate = setEntityInfo({ ...formTemplate }); // Ensures a new object is created
@@ -206,7 +216,7 @@ const PrepareTOS = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={formSubmissionData}
+                  editData={edit ? formSubmissionData : prePrepopulateData}
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}

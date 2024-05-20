@@ -64,6 +64,8 @@ const ModalFormWrapper = ({
     return filesData.map((fileData) => fileData?.name).join(",");
   };
 
+  console.log("activeStep", activeStep);
+
   useEffect(() => {
     if (activeStep === UNTAG_FORM_INDEX) {
       dispatch(fetchJobForm("job_untag"));
