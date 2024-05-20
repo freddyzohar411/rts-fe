@@ -19,6 +19,7 @@ import {
   populateInitialValues,
 } from "../../helpers/formik_helper";
 import { Col, Row, Alert, Container } from "reactstrap";
+import "./Form.scss";
 
 const Form = forwardRef(
   (
