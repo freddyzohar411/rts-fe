@@ -42,12 +42,8 @@ import SubmitToSales from "../SubmitToSales/SubmitToSales";
 import SubmitToClient from "../SubmitToClient/SubmitToClient";
 import ProfileFeedbackPending from "../ProfileFeedbackPending/ProfileFeedbackPending";
 import ScheduleInterview from "../ScheduleInterview/ScheduleInterview";
-import FirstInterviewFeedbackPending from "../FirstInterviewFeedback/FirstInterviewFeedback";
-import ThirdInterviewFeedbackPending from "../ThirdInterviewFeedback/ThirdInterviewFeedback";
-import SecondInterviewFeedbackPending from "../SecondInterviewFeedback/SecondInterviewFeedback";
 import ConditionalOffer from "../ConditionalOffer/ConditionalOffer";
 import ConditionalOfferRelease from "../ConditionalOfferRelease/ConditionalOfferRelease.jsx";
-import { ConditionalOfferStatus } from "../ConditionalOfferStatus";
 import { TimelineHeader } from "../TimelineHeader";
 
 import {
@@ -82,6 +78,8 @@ import {
   EDIT_TOS_FORM_INDEX,
   PREPARE_FORM_INDEX,
   EDIT_FORM_INDEX,
+  SELECTED_FORM_INDEX,
+  PROFILE_FEEDBACK_PENDING_INDEX,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -129,7 +127,6 @@ const JobOverview = () => {
   const [originalOrder, setOriginalOrder] = useState();
 
   // Next Step Dropdown States
-  const [legendTooltip, setLegendTooltip] = useState(false);
   const [headerTooltip, setHeaderTooltip] = useState(false);
   const [sortDirection, setSortDirection] = useState("asc");
   const [timelineTab, setTimelineTab] = useState("1");
@@ -354,6 +351,12 @@ const JobOverview = () => {
       case CANCL_BY_CLIENT_FORM_INDEX:
         setModalFormName({ header: "Interview Cancelled by Client" });
         break;
+      case SELECTED_FORM_INDEX:
+        setModalFormName({ header: "Candidate Select" });
+        break;
+      case PROFILE_FEEDBACK_PENDING_INDEX:
+        setStepperState("Profile Status");
+        break;
       // TOS
       case PREPARE_TOS_FORM_INDEX:
         setStepperState("Prepare TOS");
@@ -437,6 +440,7 @@ const JobOverview = () => {
       //Interview
       case SCHEDULE_FORM_INDEX:
       case RESCHEDULED_FORM_INDEX:
+      case PROFILE_FEEDBACK_PENDING_INDEX:
       //TOS
       case PREPARE_TOS_FORM_INDEX:
       case EDIT_TOS_FORM_INDEX:
@@ -458,6 +462,7 @@ const JobOverview = () => {
       case BACKOUT_CANDIE_FORM_INDEX:
       case REJECTED_INTRW_FORM_INDEX:
       case CANCL_BY_CLIENT_FORM_INDEX:
+      case SELECTED_FORM_INDEX:
         setIsFormModalOpen(true);
         break;
       default:
@@ -500,13 +505,14 @@ const JobOverview = () => {
             ref={formikRef}
           />
         );
-      case 4:
+      case PROFILE_FEEDBACK_PENDING_INDEX:
         return (
           <ProfileFeedbackPending
             closeOffcanvas={closeOffcanvas}
             jobId={jobId}
             candidateId={candidateId}
-            handleIconClick={handleIconClick}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            ref={formikRef}
           />
         );
       //Odin
@@ -904,6 +910,9 @@ const JobOverview = () => {
       case RELEASE_FORM_INDEX:
         submitLabel = "Send";
         break;
+      case PROFILE_FEEDBACK_PENDING_INDEX:
+        submitLabel = "Update";
+        break;
       case PRE_SKILLS_ASSESSMENT_FORM_INDEX:
         submitLabel = "Invite Candidate";
         break;
@@ -1140,20 +1149,6 @@ const JobOverview = () => {
                   style={{ color: "#0A56AE" }}
                 ></i>
               </div>
-              <i
-                id="legendInfo"
-                className="ri-information-fill text-custom-primary fs-4 me-2 cursor-pointer"
-                onClick={() => setLegendTooltip(!legendTooltip)}
-              ></i>
-              <Tooltip
-                target="legendInfo"
-                placement="bottom"
-                isOpen={legendTooltip}
-                toggle={() => setLegendTooltip(!legendTooltip)}
-                className="legend-tooltip"
-              >
-                {renderLegend()}
-              </Tooltip>
             </div>
             <div className="d-flex flex-row gap-2 ">
               <ButtonGroup>

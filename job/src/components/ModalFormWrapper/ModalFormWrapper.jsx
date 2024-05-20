@@ -33,6 +33,7 @@ import {
   BACKOUT_CANDIE_FORM_INDEX,
   REJECTED_INTRW_FORM_INDEX,
   CANCL_BY_CLIENT_FORM_INDEX,
+  SELECTED_FORM_INDEX,
 } from "../JobOverview/JobOverviewConstants";
 
 const ModalFormWrapper = ({
@@ -77,7 +78,8 @@ const ModalFormWrapper = ({
     } else if (
       activeStep === PRF_REJ_SALES_FORM_INDEX ||
       activeStep === REJECTED_INTRW_FORM_INDEX ||
-      activeStep === CANCL_BY_CLIENT_FORM_INDEX
+      activeStep === CANCL_BY_CLIENT_FORM_INDEX ||
+      activeStep === SELECTED_FORM_INDEX
     ) {
       dispatch(fetchJobForm("submit_to_sales_rejection"));
     } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
@@ -96,8 +98,22 @@ const ModalFormWrapper = ({
   // Handle form submit
   const handleFormSubmit = async (event, values, newValues) => {
     // Job Stage Id and Type for Interview module -- Start
-    let stageId = JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED;
-    if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
+    let stageId;
+    //Profile
+    if (originalOrder === JOB_STAGE_IDS.TAG) {
+      stageId = JOB_STAGE_IDS.TAG;
+    } else if (originalOrder === JOB_STAGE_IDS.ASSOCIATE) {
+      stageId = JOB_STAGE_IDS.ASSOCIATE;
+    } else if (originalOrder === JOB_STAGE_IDS.SUBMIT_TO_SALES) {
+      stageId = JOB_STAGE_IDS.SUBMIT_TO_SALES;
+    } else if (originalOrder === JOB_STAGE_IDS.SUBMIT_TO_CLIENT) {
+      stageId = JOB_STAGE_IDS.SUBMIT_TO_CLIENT;
+    } else if (originalOrder === JOB_STAGE_IDS.PROFILE_FEEDBACK_PENDING) {
+      stageId = JOB_STAGE_IDS.PROFILE_FEEDBACK_PENDING;
+    } else if (originalOrder === JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED) {
+      //Interviews
+      stageId = JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED;
+    } else if (originalOrder === JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED) {
       stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
     } else if (originalOrder === JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED) {
       stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
@@ -115,12 +131,12 @@ const ModalFormWrapper = ({
       // Profile withdrawn
       const payload = {
         jobId: jobTimeLineData?.job?.id,
-        jobStageId: JOB_STAGE_IDS?.ASSOCIATE,
+        jobStageId: stageId,
         status: JOB_STAGE_STATUS?.WITHDRAWN,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
-        jobType: jobTimelineType.ASSOCIATE,
+        jobType: jobTimelineType.PROFILE_WITHDRAWN,
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
@@ -172,6 +188,18 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.INTERVIEW_REJECTED,
+      };
+      dispatch(tagJob({ payload, navigate }));
+    } else if (activeStep === SELECTED_FORM_INDEX) {
+      // Interview selected
+      const payload = {
+        jobId: jobTimeLineData?.job?.id,
+        jobStageId: JOB_STAGE_IDS?.INTERVIEW_FEEDBACK_PENDING,
+        status: JOB_STAGE_STATUS?.COMPLETED,
+        candidateId: jobTimeLineData?.candidate?.id,
+        formData: JSON.stringify(newValues),
+        formId: parseInt(form?.formId),
+        jobType: "interview_feedbak",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (
