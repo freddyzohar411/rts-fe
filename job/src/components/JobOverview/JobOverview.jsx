@@ -250,15 +250,15 @@ const JobOverview = () => {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
-        if (maxOrder >= 1 && maxOrder <= 5) {
+        if (maxOrder >= 1 && maxOrder <= 4) {
           maxOrder = 1;
-        } else if (maxOrder >= 6 && maxOrder <= 9) {
+        } else if (maxOrder >= 5 && maxOrder <= 8) {
           maxOrder = 2;
-        } else if (maxOrder >= 10 && maxOrder <= 13) {
+        } else if (maxOrder >= 9 && maxOrder <= 12) {
           maxOrder = 3;
-        } else if (maxOrder >= 14 && maxOrder <= 15) {
+        } else if (maxOrder >= 13 && maxOrder <= 14) {
           maxOrder = 4;
-        } else if (maxOrder >= 16 && maxOrder <= 17) {
+        } else if (maxOrder >= 15 && maxOrder <= 17) {
           maxOrder = 5;
         }
         jsonObject[data?.id] = maxOrder;
@@ -743,15 +743,15 @@ const JobOverview = () => {
               status === JOB_STAGE_STATUS.REJECTED ||
               status === JOB_STAGE_STATUS.WITHDRAWN;
 
-            if (maxOrder >= 1 && maxOrder <= 5) {
+            if (maxOrder >= 1 && maxOrder <= 4) {
               maxOrder = 1;
-            } else if (maxOrder >= 6 && maxOrder <= 9) {
+            } else if (maxOrder >= 5 && maxOrder <= 8) {
               maxOrder = 2;
-            } else if (maxOrder >= 10 && maxOrder <= 13) {
+            } else if (maxOrder >= 9 && maxOrder <= 12) {
               maxOrder = 3;
-            } else if (maxOrder >= 14 && maxOrder <= 15) {
+            } else if (maxOrder >= 13 && maxOrder <= 14) {
               maxOrder = 4;
-            } else if (maxOrder >= 16 && maxOrder <= 17) {
+            } else if (maxOrder >= 15 && maxOrder <= 17) {
               maxOrder = 5;
             }
             const mainStage = getMainStage(maxOrder);
