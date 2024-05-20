@@ -135,7 +135,7 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggablePrefix: "element",
       draggableId: "dragdropfiles",
       type: "field",
-    }
+    },
   ];
 
   // Custom Element List
@@ -282,30 +282,9 @@ const FormElementSidebar = ({ unusedFields }) => {
     },
     {
       draggableLabelIcon: "ri-file-text-line",
-      draggableLabel: "Candidate Status Select",
-      draggablePrefix: "element",
-      draggableId: "selectcandidatestatus",
-      type: "field",
-    },
-    {
-      draggableLabelIcon: "ri-file-text-line",
       draggableLabel: "Profile Feedback Status Select",
       draggablePrefix: "element",
       draggableId: "selectprofilefeedbackstatus",
-      type: "field",
-    },
-    {
-      draggableLabelIcon: "ri-file-text-line",
-      draggableLabel: "First Interview Feedback Status Select",
-      draggablePrefix: "element",
-      draggableId: "selectfirstintrvfdbkstatus",
-      type: "field",
-    },
-    {
-      draggableLabelIcon: "ri-file-text-line",
-      draggableLabel: "Second Interview Feedback Status Select",
-      draggablePrefix: "element",
-      draggableId: "selectsecondintrvfdbkstatus",
       type: "field",
     },
     {

@@ -1,5 +1,5 @@
 import React from "react";
-import { PROFILE_FEEDBACK_OPTIONS, fieldLocation, fieldSize } from "./constant";
+import { candidateStatus, fieldLocation, fieldSize } from "./constant";
 
 const ProfileFeedbackStatusSelectElement = ({
   formik,
@@ -34,7 +34,7 @@ const ProfileFeedbackStatusSelectElement = ({
           tabIndex={tabIndexData?.[field?.fieldId]}
         >
           <option value="">{field.placeholder}</option>
-          {PROFILE_FEEDBACK_OPTIONS?.map((option, index) => (
+          {candidateStatus?.map((option, index) => (
             <option key={index} value={option.value}>
               {option.label}
             </option>

@@ -155,6 +155,8 @@ export const EDIT_FORM_INDEX = 23;
 export const RELEASE_FORM_INDEX = 24;
 export const ACCEPTED_FORM_INDEX = 25;
 export const REJECTED_FORM_INDEX = 26;
+//Profile Feedback - Profile
+export const PROFILE_FEEDBACK_PENDING_INDEX = 27;
 
 export const timelineSkipModule = {
   Profile: 1,
@@ -173,6 +175,7 @@ export const timelineSkipSubModule = {
     { id: PRF_REJ_SALES_FORM_INDEX, form: "Profile Rejected - Sales" },
     { id: SUB_TO_CLIENT_FORM_INDEX, form: "Submit To Client" },
     { id: PRF_REJ_CLIENT_FORM_INDEX, form: "Profile Rejected - Client" },
+    { id: PROFILE_FEEDBACK_PENDING_INDEX, form: "Profile Status" },
   ],
   2: [
     { id: PRE_SKILLS_ASSESSMENT_FORM_INDEX, form: "Pre Skills Assessment" },
@@ -247,6 +250,7 @@ export const jobTimelineType = {
   ASSOCIATE: "associate_candidate",
   SUBMIT_TO_SALES: "submit_to_sales",
   SUBMIT_TO_CLIENT: "submit_to_client",
+  PROFILE_WITHDRAWN: "profile_withdrawn",
   //Odin
   SKILLS_ASSESSMENT: "skills_assessment",
   //Interview

@@ -30,10 +30,7 @@ import AccountContactSelectElement from "./AccountContactSelectElement";
 import AccountOwnerElement from "./AccountOwnerElement";
 import FormTemplateSelectElement from "./FormTemplateSelectElement";
 import MultiInputElement from "./MultiInputElement";
-import CandidateStatusSelectElement from "./CandidateStatusSelectElement";
 import ProfileFeedbackStatusSelectElement from "./ProfileFeedbackStatusSelectElement";
-import FirstInterviewFeedbackStatus from "./FirstInterviewFeedbackStatus";
-import SecondInterviewFeedbackStatus from "./SecondInterviewFeedbackStatus";
 import AccountOwnerSelectElement from "./AccountOwnerSelectElement";
 import AccountTypeElement from "./AccountTypeElement";
 import DragDropFilesElement from "./DragDropFilesElement";
@@ -170,42 +167,9 @@ const generateFormField = (
     );
   }
 
-  if (type === "selectcandidatestatus") {
-    return (
-      <CandidateStatusSelectElement
-        formik={formik}
-        field={field}
-        formStateHook={formStateHook}
-        tabIndexData={tabIndexData}
-      />
-    );
-  }
-
   if (type === "selectprofilefeedbackstatus") {
     return (
       <ProfileFeedbackStatusSelectElement
-        formik={formik}
-        field={field}
-        formStateHook={formStateHook}
-        tabIndexData={tabIndexData}
-      />
-    );
-  }
-
-  if (type === "selectfirstintrvfdbkstatus") {
-    return (
-      <FirstInterviewFeedbackStatus
-        formik={formik}
-        field={field}
-        formStateHook={formStateHook}
-        tabIndexData={tabIndexData}
-      />
-    );
-  }
-
-  if (type === "selectsecondintrvfdbkstatus") {
-    return (
-      <SecondInterviewFeedbackStatus
         formik={formik}
         field={field}
         formStateHook={formStateHook}
