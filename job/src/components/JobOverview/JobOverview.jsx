@@ -742,6 +742,7 @@ const JobOverview = () => {
             const isRejected =
               status === JOB_STAGE_STATUS.REJECTED ||
               status === JOB_STAGE_STATUS.WITHDRAWN;
+            const isAllStepsCompleted = originalOrder === 17;
 
             if (maxOrder >= 1 && maxOrder <= 4) {
               maxOrder = 1;
@@ -799,7 +800,7 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         value={skipSteps?.[data?.id]}
-                        disabled={isRejected}
+                        disabled={isRejected || isAllStepsCompleted}
                         onChange={(e) =>
                           handleStepsSelection(
                             data?.id,
@@ -826,7 +827,7 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         value={selectedSubSteps?.[candidateData?.id]}
-                        disabled={isRejected}
+                        disabled={isRejected || isAllStepsCompleted}
                         onChange={(e) =>
                           handleSubStepsSelection(
                             candidateData?.id,
@@ -859,7 +860,9 @@ const JobOverview = () => {
                         setTimelineRowIndex(timelineIndex);
                       }}
                       disabled={
-                        isRejected || !selectedSubSteps?.[candidateData?.id]
+                        isRejected ||
+                        !selectedSubSteps?.[candidateData?.id] ||
+                        isAllStepsCompleted
                       }
                     >
                       <i
