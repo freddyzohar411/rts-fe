@@ -74,12 +74,38 @@ export const getStatus = (data, orderNo) => {
 };
 
 export const getLastSubmittedStage = (data, maxOrder) => {
+  console.log("DATA", data);
   const keys = Object.keys(data?.timeline);
   let lastSubmittedStage = "N/A";
   if (keys) {
     lastSubmittedStage = keys.find(
       (key) => data?.timeline?.[key]?.order === maxOrder
     );
+  }
+
+  // Added to show accepted or delined
+  if (lastSubmittedStage === "TOS Accepted/Declined") {
+    if (data?.timeline?.["TOS Accepted/Declined"]?.status === "COMPLETED") {
+      lastSubmittedStage = "TOS Accepted";
+    } else {
+      lastSubmittedStage = "TOS Declined";
+    }
+  } else if (lastSubmittedStage === "Conditional Offer Sent") {
+    if (data?.timeline?.["Conditional Offer Sent"]?.status === "DRAFT") {
+      lastSubmittedStage = "Conditional Offer Edit";
+    }
+    if (data?.timeline?.["Conditional Offer Sent"]?.status === "COMPLETED") {
+      lastSubmittedStage = "Conditional Offer Sent";
+    }
+  } else if (lastSubmittedStage === "Conditional Offer Accepted/Declined") {
+    if (
+      data?.timeline?.["Conditional Offer Accepted/Declined"]?.status ===
+      "COMPLETED"
+    ) {
+      lastSubmittedStage = "Conditional Offer Accepted";
+    } else {
+      lastSubmittedStage = "Conditional Offer Declined";
+    }
   }
   return lastSubmittedStage;
 };
