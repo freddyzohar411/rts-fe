@@ -58,30 +58,36 @@ const DynamicTable = ({
                 }}
               >
                 <div
-                  className={`d-flex gap-2 ${
+                  className={`d-flex gap-2 cursor-pointer ${
                     option?.center && "justify-content-center"
                   }`}
+                  onClick={() =>
+                    pageRequestSet.setSortAndDirection(option)
+                  }
+                  
                 >
                   <span> {option.header}</span>
-                  <div>
-                    <i
-                      className={`mdi mdi-sort-ascending align-self-end cursor-pointer ${
-                        pageRequest.sortBy === option.sortValue &&
-                        pageRequest.sortDirection == "asc"
-                          ? ""
-                          : "text-muted"
-                      }`}
-                      onClick={() => pageRequestSet.setSortAndDirection(option)}
-                    ></i>
-                    <i
-                      className={`mdi mdi-sort-descending align-self-end cursor-pointer ${
-                        pageRequest.sortBy === option.sortValue &&
-                        pageRequest.sortDirection == "desc"
-                          ? ""
-                          : "text-muted"
-                      }`}
-                      onClick={() => pageRequestSet.setSortAndDirection(option)}
-                    ></i>
+                  <div className="d-flex flex-column">
+                    {pageRequest?.sortBy === option.sortValue &&
+                      pageRequest?.sortDirection == "asc" && (
+                        <i
+                          className={`ri-sort-asc cursor-pointer 
+                      
+                      `}
+                          onClick={() =>
+                            pageRequestSet.setSortAndDirection(option)
+                          }
+                        ></i>
+                      )}
+                    {pageRequest?.sortBy === option.sortValue &&
+                      pageRequest?.sortDirection == "desc" && (
+                        <i
+                          className={`ri-sort-desc cursor-pointer `}
+                          onClick={() =>
+                            pageRequestSet.setSortAndDirection(option)
+                          }
+                        ></i>
+                      )}
                   </div>
                 </div>
               </th>
