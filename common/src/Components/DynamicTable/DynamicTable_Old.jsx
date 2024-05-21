@@ -60,7 +60,7 @@ const DynamicTable = ({
           const combinedStyle = {
             ...(option?.expand === true
               ? { overflow: "visible", maxWidth: "100%" }
-              : { maxWidth: "120px", minWidth: "100px" }),
+              : { maxWidth: "320px", minWidth: "100px" }),
           };
           if (option.sort === true) {
             return (
@@ -172,7 +172,7 @@ const DynamicTable = ({
         const combinedStyle = {
           ...(option?.expand === true
             ? { overflow: "visible", maxWidth: "100%" }
-            : { maxWidth: "120px", minWidth: "100px" }),
+            : { maxWidth: "320px", minWidth: "100px" }),
         };
         return (
           <td
