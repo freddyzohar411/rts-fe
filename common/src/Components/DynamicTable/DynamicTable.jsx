@@ -209,8 +209,10 @@ const DynamicTable = ({
     <>
       {/* Table */}
       <div
-        className="table-responsive table-hover table-card mt-3 mb-1 table-custom flex-grow-1"
-        // style={{ maxHeight: tableHeight }}
+        className="table-responsive table-hover table-card mt-3 mb-1 table-custom"
+        style={{
+          maxHeight: tableHeight,
+        }}
       >
         <Table
           className="m-0 align-middle dynamic-table-main"

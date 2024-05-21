@@ -565,6 +565,7 @@ const DynamicTableWrapper = ({
                   activeRow={activeRow}
                   setTableConfig={setTableConfig}
                   pageRequest={pageRequest}
+                  tableHeight="100%"
                 />
               </div>
             </Col>

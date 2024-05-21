@@ -173,9 +173,12 @@ const DynamicTableWrapper = ({
         <Container fluid>
           <Row>
             <Col lg={12}>
-              <div className="listjs-table  d-flex flex-column" style={{
-                height: "calc(100vh - 160px)"
-              }}>
+              <div
+                className="listjs-table d-flex flex-column"
+                style={{
+                  height: "calc(100vh - 160px)",
+                }}
+              >
                 <Row className="d-flex mb-3">
                   <Col className="d-flex align-items-center gap-3">
                     <span className="fw-semibold fs-3">
@@ -352,6 +355,7 @@ const DynamicTableWrapper = ({
                   activeRow={activeRow}
                   setTableConfig={setTableConfig}
                   pageRequest={pageRequest}
+                  tableHeight="100%"
                 />
               </div>
             </Col>
