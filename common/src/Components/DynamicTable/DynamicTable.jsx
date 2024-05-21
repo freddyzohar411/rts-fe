@@ -17,6 +17,7 @@ const DynamicTable = ({
   setTableConfig,
   tableHeight = "565px",
   pageRequest = null,
+  headerCenter = false,
 }) => {
   const page = pageInfo?.currentPage;
   const totalElements = pageInfo?.totalElements;
@@ -59,7 +60,7 @@ const DynamicTable = ({
         <th
           key={option.name}
           scope="col"
-          className={`sticky-head-border`}
+          className={`sticky-head-border `}
           onDoubleClick={() => {
             toggleColumnExpand(configIndex);
           }}
@@ -68,7 +69,7 @@ const DynamicTable = ({
           <div
             className={`d-flex gap-2 cursor-pointer ${
               option?.center && "justify-content-center"
-            }`}
+            } ${headerCenter && "justify-content-center"}`}
             onClick={() => pageRequestSet.setSortAndDirection(option)}
           >
             <span
