@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Table } from "reactstrap";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./DynamicTable.scss";
+import useEllipsisTooltip from "./EllipsisToolTip";
 
 const DynamicTable = ({
   data,
@@ -21,8 +22,6 @@ const DynamicTable = ({
   const totalPages = pageInfo?.totalPages;
   const pageSize = pageInfo?.pageSize;
   const endPage = (page + 1) * pageSize;
-
-  console.log("pageRequest", pageRequest);
 
   const toggleColumnExpand = (configIndex) => {
     setTableConfig((prev) => {
@@ -46,7 +45,14 @@ const DynamicTable = ({
     return (
       <>
         {config?.map((option, configIndex) => {
-          console.log("option", option);
+          const { textRef, isEllipsisActive } = useEllipsisTooltip(
+            option.header
+          );
+          const combinedStyle = {
+            ...(option?.expand === true
+              ? { overflow: "visible", maxWidth: "100%" }
+              : { maxWidth: "120px", minWidth: "100px" }),
+          };
           if (option.sort === true) {
             return (
               <th
@@ -56,17 +62,26 @@ const DynamicTable = ({
                 onDoubleClick={() => {
                   toggleColumnExpand(configIndex);
                 }}
+                style={combinedStyle}
               >
                 <div
                   className={`d-flex gap-2 cursor-pointer ${
                     option?.center && "justify-content-center"
                   }`}
-                  onClick={() =>
-                    pageRequestSet.setSortAndDirection(option)
-                  }
-                  
+                  onClick={() => pageRequestSet.setSortAndDirection(option)}
                 >
-                  <span> {option.header}</span>
+                  <span
+                   ref={textRef}
+                    style={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                    title={isEllipsisActive ? option.header : ""}
+                  >
+                    {" "}
+                    {option.header}
+                  </span>
                   <div className="d-flex flex-column">
                     {pageRequest?.sortBy === option.sortValue &&
                       pageRequest?.sortDirection == "asc" && (
@@ -141,7 +156,7 @@ const DynamicTable = ({
         const combinedStyle = {
           ...(option?.expand === true
             ? { overflow: "visible", maxWidth: "100%" }
-            : { maxWidth: "100px" }),
+            : { maxWidth: "120px", minWidth: "100px" }),
         };
         return (
           <td

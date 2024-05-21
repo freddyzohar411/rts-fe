@@ -349,6 +349,7 @@ const DynamicTableWrapper = ({
                   freezeHeader={true}
                   activeRow={activeRow}
                   setTableConfig={setTableConfig}
+                  pageRequest={pageRequest}
                 />
               </div>
             </Col>
