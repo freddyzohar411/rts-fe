@@ -1,4 +1,3 @@
-// DynamicTable.js
 import React, { useRef, useEffect } from "react";
 import { Table } from "reactstrap";
 import Skeleton from "react-loading-skeleton";
@@ -24,6 +23,8 @@ const DynamicTable = ({
   const pageSize = pageInfo?.pageSize;
   const endPage = (page + 1) * pageSize;
 
+  console.log("pageRequest", pageRequest);
+
   const toggleColumnExpand = (configIndex) => {
     setTableConfig((prev) => {
       return prev.map((item, prevIndex) => {
@@ -40,116 +41,116 @@ const DynamicTable = ({
     });
   };
 
-  const HeaderCell = ({
-    option,
-    configIndex,
-    pageRequest,
-    pageRequestSet,
-    toggleColumnExpand,
-  }) => {
-    const { textRef, isEllipsisActive } = useEllipsisTooltip(option.header);
-    const combinedStyle = {
-      ...(option?.expand === true
-        ? { overflow: "visible", maxWidth: "100%" }
-        : { maxWidth: "120px", minWidth: "100px" }),
-    };
-
-    if (option.sort === true) {
-      return (
-        <th
-          key={option.name}
-          scope="col"
-          className={`sticky-head-border`}
-          onDoubleClick={() => {
-            toggleColumnExpand(configIndex);
-          }}
-          style={combinedStyle}
-        >
-          <div
-            className={`d-flex gap-2 cursor-pointer ${
-              option?.center && "justify-content-center"
-            }`}
-            onClick={() => pageRequestSet.setSortAndDirection(option)}
-          >
-            <span
-              ref={textRef}
-              style={{
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-              title={isEllipsisActive ? option.header : ""}
-            >
-              {" "}
-              {option.header}
-            </span>
-            <div className="d-flex flex-column">
-              {pageRequest?.sortBy === option.sortValue &&
-                pageRequest?.sortDirection === "asc" && (
-                  <i
-                    className={`ri-sort-asc cursor-pointer`}
-                    onClick={() => pageRequestSet.setSortAndDirection(option)}
-                  ></i>
-                )}
-              {pageRequest?.sortBy === option.sortValue &&
-                pageRequest?.sortDirection === "desc" && (
-                  <i
-                    className={`ri-sort-desc cursor-pointer`}
-                    onClick={() => pageRequestSet.setSortAndDirection(option)}
-                  ></i>
-                )}
-            </div>
-          </div>
-        </th>
-      );
-    } else {
-      return (
-        <th
-          key={option.name}
-          scope="col"
-          className={`${
-            (option?.sticky === "left" && "sticky-left") ||
-            (option?.sticky === "right" && "sticky-right") ||
-            ""
-          } sticky-color sticky-head-border`}
-          onDoubleClick={() => {
-            toggleColumnExpand(configIndex);
-          }}
-          style={{
-            border: "2px solid black !important",
-            ...combinedStyle,
-          }}
-        >
-          <div
-            className={`d-flex gap-2 ${
-              option?.center && "justify-content-center"
-            }`}
-          >
-            <span ref={textRef} title={isEllipsisActive ? option.header : ""}>
-              {" "}
-              {option.header}
-            </span>
-          </div>
-        </th>
-      );
-    }
-  };
-
   // ========================================= Table Configuration ===========================
   // Generate Header
   const generateHeaderJSX = (config) => {
+    // Call the useEllipsisTooltip hook for each header element in advance
+    const ellipsisTooltipData = config.map((option) =>
+      useEllipsisTooltip(option.header)
+    );
+
     return (
       <>
-        {config?.map((option, configIndex) => (
-          <HeaderCell
-            key={option.name}
-            option={option}
-            configIndex={configIndex}
-            pageRequest={pageRequest}
-            pageRequestSet={pageRequestSet}
-            toggleColumnExpand={toggleColumnExpand}
-          />
-        ))}
+        {config?.map((option, configIndex) => {
+          // const { textRef, isEllipsisActive } = useEllipsisTooltip(
+          //   option.header
+          // );
+          const { textRef, isEllipsisActive } =
+            ellipsisTooltipData[configIndex];
+          const combinedStyle = {
+            ...(option?.expand === true
+              ? { overflow: "visible", maxWidth: "100%" }
+              : { maxWidth: "120px", minWidth: "100px" }),
+          };
+          if (option.sort === true) {
+            return (
+              <th
+                key={option.name}
+                scope="col"
+                className={`sticky-head-border`}
+                onDoubleClick={() => {
+                  toggleColumnExpand(configIndex);
+                }}
+                style={combinedStyle}
+              >
+                <div
+                  className={`d-flex gap-2 cursor-pointer ${
+                    option?.center && "justify-content-center"
+                  }`}
+                  onClick={() => pageRequestSet.setSortAndDirection(option)}
+                >
+                  <span
+                    ref={textRef}
+                    style={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                    title={isEllipsisActive ? option.header : ""}
+                  >
+                    {" "}
+                    {option.header}
+                  </span>
+                  <div className="d-flex flex-column">
+                    {pageRequest?.sortBy === option.sortValue &&
+                      pageRequest?.sortDirection == "asc" && (
+                        <i
+                          className={`ri-sort-asc cursor-pointer 
+                      
+                      `}
+                          onClick={() =>
+                            pageRequestSet.setSortAndDirection(option)
+                          }
+                        ></i>
+                      )}
+                    {pageRequest?.sortBy === option.sortValue &&
+                      pageRequest?.sortDirection == "desc" && (
+                        <i
+                          className={`ri-sort-desc cursor-pointer `}
+                          onClick={() =>
+                            pageRequestSet.setSortAndDirection(option)
+                          }
+                        ></i>
+                      )}
+                  </div>
+                </div>
+              </th>
+            );
+          } else {
+            return (
+              <th
+                key={option.name}
+                scope="col"
+                className={`${
+                  (option?.sticky === "left" && "sticky-left") ||
+                  (option?.sticky === "right" && "sticky-right") ||
+                  ""
+                } sticky-color sticky-head-border`}
+                onDoubleClick={() => {
+                  toggleColumnExpand(configIndex);
+                }}
+                style={{
+                  border: "2px solid black !important",
+                  ...combinedStyle,
+                }}
+              >
+                <div
+                  className={`d-flex gap-2 ${
+                    option?.center && "justify-content-center"
+                  }`}
+                >
+                  <span
+                    ref={textRef}
+                    title={isEllipsisActive ? option.header : ""}
+                  >
+                    {" "}
+                    {option.header}
+                  </span>
+                </div>
+              </th>
+            );
+          }
+        })}
       </>
     );
   };
