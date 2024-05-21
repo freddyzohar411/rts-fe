@@ -21,10 +21,14 @@ function TimelineHeader({ data }) {
     (state) => state.JobStageReducer.jobTimelineCount
   );
 
+  console.log("JobTimeline Count", jobTimelineCount);
+
   const [candidatesExist, setCandidatesExist] = useState(false);
   const [counts, setCounts] = useState({});
   // default to 1 to avoid division by zero
   const [maxCount, setMaxCount] = useState(1);
+
+  console.log("Counts", counts);
 
   useEffect(() => {
     let data = {};
@@ -32,7 +36,7 @@ function TimelineHeader({ data }) {
       jobTimelineCount.forEach((item) => {
         data[item.name] = item.count;
       });
-      setCounts(data);
+      setCounts(transformCountDataKey(data));
       const max = Math.max(...jobTimelineCount.map((item) => item.count));
       setMaxCount(max);
     }
@@ -42,6 +46,32 @@ function TimelineHeader({ data }) {
       setCandidatesExist(false);
     }
   }, [jobTimelineCount]);
+
+  // Transform the data key
+  const transformCountDataKey = (data) => {
+    const transformedData = {};
+    // Data is a object
+    Object.keys(data).forEach((key) => {
+      switch (key) {
+        case "Interview Scheduled":
+          transformedData["Scheduled"] = data[key];
+          break;
+        case "Interview Happened":
+          transformedData["Completed"] = data[key];
+          break;
+        case "Interview Cancelled/Backout":
+          transformedData["Cancelled/Backout"] = data[key];
+          break;
+        case "Interview Pending Feedback":
+          transformedData["Pending Feedback"] = data[key];
+          break;
+        default:
+          transformedData[key] = data[key];
+          break;
+      }
+    });
+    return transformedData;
+  };
 
   const filteredData = data
     .filter((item) => item !== "Profile Feedback Pending")
