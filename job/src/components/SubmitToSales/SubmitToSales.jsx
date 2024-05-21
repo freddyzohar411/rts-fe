@@ -30,6 +30,9 @@ import {
 } from "../JobListing/JobListingConstants";
 import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
 
+// Icons
+// import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+
 const SubmitToSales = forwardRef(
   (
     {
@@ -270,7 +273,8 @@ const SubmitToSales = forwardRef(
           <Col>
             <EmailTo
               formik={formik}
-              ToIcon={<i className="ri-mail-fill fs-5"></i>}
+              ToIcon={<EmailRoundedIcon />}
+              // ToIcon={<i className="ri-mail-fill fs-5"></i>}
             />
             <hr className="mt-2" />
           </Col>
