@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Table,
-} from "reactstrap";
+import { Table } from "reactstrap";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./DynamicTable.scss";
@@ -16,12 +14,15 @@ const DynamicTable = ({
   activeRow,
   setTableConfig,
   tableHeight = "565px",
+  pageRequest = null,
 }) => {
   const page = pageInfo?.currentPage;
   const totalElements = pageInfo?.totalElements;
   const totalPages = pageInfo?.totalPages;
   const pageSize = pageInfo?.pageSize;
   const endPage = (page + 1) * pageSize;
+
+  console.log("pageRequest", pageRequest);
 
   const toggleColumnExpand = (configIndex) => {
     setTableConfig((prev) => {
@@ -45,6 +46,7 @@ const DynamicTable = ({
     return (
       <>
         {config?.map((option, configIndex) => {
+          console.log("option", option);
           if (option.sort === true) {
             return (
               <th
@@ -61,10 +63,26 @@ const DynamicTable = ({
                   }`}
                 >
                   <span> {option.header}</span>
-                  <i
-                    className="mdi mdi-sort-descending align-self-end cursor-pointer"
-                    onClick={() => pageRequestSet.setSortAndDirection(option)}
-                  ></i>
+                  <div>
+                    <i
+                      className={`mdi mdi-sort-ascending align-self-end cursor-pointer ${
+                        pageRequest.sortBy === option.sortValue &&
+                        pageRequest.sortDirection == "asc"
+                          ? ""
+                          : "text-muted"
+                      }`}
+                      onClick={() => pageRequestSet.setSortAndDirection(option)}
+                    ></i>
+                    <i
+                      className={`mdi mdi-sort-descending align-self-end cursor-pointer ${
+                        pageRequest.sortBy === option.sortValue &&
+                        pageRequest.sortDirection == "desc"
+                          ? ""
+                          : "text-muted"
+                      }`}
+                      onClick={() => pageRequestSet.setSortAndDirection(option)}
+                    ></i>
+                  </div>
                 </div>
               </th>
             );
