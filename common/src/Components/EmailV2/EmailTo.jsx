@@ -20,7 +20,7 @@ const EmailTo = ({
           }}
         >
           <Button
-            className="px-1 py-0"
+            className="d-flex justify-content-center align-items-center"
             style={{
               height: "28px",
               width: "28px",
