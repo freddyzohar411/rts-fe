@@ -1080,6 +1080,7 @@ const JobOverview = () => {
               deliveryTeam,
               mobile
             );
+            const shouldShowTooltip = values?.[header]?.value?.length > 20;
             return (
               <Col key={index}>
                 <div
@@ -1095,14 +1096,16 @@ const JobOverview = () => {
                     {values?.[header]?.trimValue}
                   </span>
                 </div>
-                <Tooltip
-                  isOpen={isToolTipOpen(`btn-${index}`)}
-                  placement="bottom-start"
-                  target={`btn-${index}`}
-                  toggle={() => toggle(`btn-${index}`)}
-                >
-                  {values?.[header]?.value}
-                </Tooltip>
+                {shouldShowTooltip && (
+                  <Tooltip
+                    isOpen={isToolTipOpen(`btn-${index}`)}
+                    placement="bottom-start"
+                    target={`btn-${index}`}
+                    toggle={() => toggle(`btn-${index}`)}
+                  >
+                    {values?.[header]?.value}
+                  </Tooltip>
+                )}
               </Col>
             );
           })}
