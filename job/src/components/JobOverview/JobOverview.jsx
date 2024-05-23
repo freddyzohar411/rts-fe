@@ -145,6 +145,7 @@ const JobOverview = () => {
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [modalFormName, setModalFormName] = useState({});
+  const [readOnly, setReadOnly] = useState(false);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -481,6 +482,7 @@ const JobOverview = () => {
             candidateId={candidateId}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             ref={formikRef}
+            readOnly={readOnly}
           />
         );
       case SUB_TO_SALES_FORM_INDEX:
@@ -1062,32 +1064,66 @@ const JobOverview = () => {
     );
   };
 
-  // ReadOnly Action Trigger
-  // const readOnlyActionTrigger = () => {
-  //   return {
-  //     Associate: () => {
-  //       setActiveStep(ASSOCIATE_FORM_INDEX);
-  //       setOffcanvasForm(true);
-  //     },
-  //     "Prepare TOS": () => {
-  //       setActiveStep(APPROVE_TOS_FORM_INDEX);
-  //       setOffcanvasForm(true);
-  //       // Set
-  //     },
-  //   };
-  // };
-
   const readOnlyActionTrigger = {
     Associate: () => {
-      setActiveStep(ASSOCIATE_FORM_INDEX);
-      setOffcanvasForm(true);
+      // Check if associate form is already submitted
+      if (jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Associate"]) {
+        setActiveStep(ASSOCIATE_FORM_INDEX);
+        setOffcanvasForm(true);
+        setReadOnly(true);
+      }
+    },
+    "Submit to Sales": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Submit to Sales"
+        ] &&
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Submit to Sales"]
+          ?.status === "REJECTED"
+      ) {
+        setActiveStep(PRF_REJ_SALES_FORM_INDEX);
+        setIsFormModalOpen(true);
+      }
+    },
+    "Submit to Client": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Submit to Client"
+        ] &&
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Submit to Client"
+        ]?.status === "REJECTED"
+      ) {
+        setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
+        setIsFormModalOpen(true);
+      }
     },
     "Prepare TOS": () => {
       setActiveStep(APPROVE_TOS_FORM_INDEX);
       setOffcanvasForm(true);
       // Set
     },
+
+    // Modal and Forms
+    Tag: () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Tag"] &&
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Tag"]?.status ===
+          "WITHDRAWN"
+      ) {
+        setActiveStep(PRF_WTDWN_FORM_INDEX);
+        setIsFormModalOpen(true);
+      }
+    },
   };
+
+  //Handle Canvas Close and Modal Close
+  useEffect(() => {
+    // If canvas is close set readOnly to false
+    if (!offcanvasForm) {
+      setReadOnly(false);
+    }
+  }, [offcanvasForm]);
 
   return (
     <React.Fragment>

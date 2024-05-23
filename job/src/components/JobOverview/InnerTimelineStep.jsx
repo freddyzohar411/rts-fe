@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, createRef } from "react";
-import { sections, subStationActions } from "./InnerTimelineStepConstants";
+import { sections } from "./InnerTimelineStepConstants";
 import {
   JOB_STAGE_STATUS,
   JOB_STAGE_STATUS_LABELS,
@@ -26,6 +26,14 @@ const InnerTimelineStep = ({
   const [elementSizing, setElementSizing] = useState("");
   const [uniqueTopValues, setUniqueTopValues] = useState([]);
   const [bottomWidth, setBottomWidth] = useState(0);
+  const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] = useState(null);
+
+  useEffect(() => {
+    if (actionTriggeredWithSubitem){
+       readOnlyActionTrigger[actionTriggeredWithSubitem]?.();
+    }
+    setActionTriggeredWithSubitem(null);
+  }, [actionTriggeredWithSubitem]);
 
   useEffect(() => {
     sectionRefs.current = sections.map(
@@ -569,7 +577,8 @@ const InnerTimelineStep = ({
                             }}
                             onClick={() => {
                               setTimelineRowIndex();
-                              readOnlyActionTrigger[subitem]?.();
+                              setActionTriggeredWithSubitem(subitem);
+                              // readOnlyActionTrigger[subitem]?.();
                             }}
                           >
                             <div className="d-flex flex-column align-items-start">
