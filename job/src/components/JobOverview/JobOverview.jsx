@@ -51,7 +51,6 @@ import {
   jobHeaders,
   timelineSkipModule,
   timelineSkipSubModule,
-  timelineLegend,
   newHeaders,
   ASSOCIATE_FORM_INDEX,
   SUB_TO_SALES_FORM_INDEX,
@@ -662,33 +661,6 @@ const JobOverview = () => {
       default:
         return null;
     }
-  };
-
-  const renderLegend = () => {
-    return (
-      <div className="d-flex flex-wrap">
-        {timelineLegend.map((item, index) => (
-          <div
-            key={index}
-            className="d-flex flex-row gap-2 justify-content-start align-items-center me-2"
-            style={{ width: "calc(50% - 8px)" }}
-          >
-            <div
-              className={`bg-${item.color} rounded-circle`}
-              style={{
-                width: "9px",
-                height: "9px",
-                backgroundColor: `${item.color}`,
-                border: `1px solid ${item.color}`,
-              }}
-            ></div>
-            <div>
-              <span>{item.legend}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
   };
 
   /**

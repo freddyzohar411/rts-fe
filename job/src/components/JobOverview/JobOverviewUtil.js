@@ -15,6 +15,7 @@ export const trimValue = (value, isMobile) => {
 };
 
 export const overviewValues = (data, deliveryTeam, isMobile) => {
+  const owner = data?.accountOwner?.split("(")?.[0]?.trim();
   const output = {
     Account: {
       value: data?.accountName,
@@ -33,8 +34,8 @@ export const overviewValues = (data, deliveryTeam, isMobile) => {
       trimValue: trimValue("N/A", isMobile),
     },
     Sales: {
-      value: data?.accountOwner,
-      trimValue: trimValue(data?.accountOwner, isMobile),
+      value: owner,
+      trimValue: trimValue(owner, isMobile),
     },
     Recruiter: {
       value: deliveryTeam?.join(", ") ?? "N/A",
