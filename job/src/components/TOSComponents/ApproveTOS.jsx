@@ -39,6 +39,8 @@ const ApproveTOS = forwardRef(
     const [formSubmissionData, setFormSubmissionData] = useState(null);
     const [tosId, setTosId] = useState(null);
 
+    console.log("jobTimeLineData", jobTimeLineData);
+
     useEffect(() => {
       if (form && tosId && formTemplate) {
         const newFormTemplate = setEntityInfo({ ...formTemplate });

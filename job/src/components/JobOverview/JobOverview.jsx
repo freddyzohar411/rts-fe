@@ -734,6 +734,7 @@ const JobOverview = () => {
       <React.Fragment>
         {jobTimelineData?.jobs && jobTimelineData?.jobs?.length > 0 ? (
           jobTimelineData?.jobs?.map((data, timelineIndex) => {
+            // console.log("data", data)
             const candidateData = data?.candidate;
             let maxOrder = getMaxOrder(data);
             const originalOrder = maxOrder;
@@ -869,11 +870,16 @@ const JobOverview = () => {
                     </button>
                   </td>
                 </tr>
-
                 {openJobIndex === data.id && (
                   <tr>
                     <td colSpan={10} className="px-3">
-                      <InnerTimelineStep data={data.timeline} />
+                      <InnerTimelineStep
+                        data={data.timeline}
+                        readOnlyActionTrigger={readOnlyActionTrigger}
+                        setTimelineRowIndex={() => {
+                          setTimelineRowIndex(timelineIndex);
+                        }}
+                      />
                     </td>
                   </tr>
                 )}
@@ -1054,6 +1060,33 @@ const JobOverview = () => {
         )}
       </div>
     );
+  };
+
+  // ReadOnly Action Trigger
+  // const readOnlyActionTrigger = () => {
+  //   return {
+  //     Associate: () => {
+  //       setActiveStep(ASSOCIATE_FORM_INDEX);
+  //       setOffcanvasForm(true);
+  //     },
+  //     "Prepare TOS": () => {
+  //       setActiveStep(APPROVE_TOS_FORM_INDEX);
+  //       setOffcanvasForm(true);
+  //       // Set
+  //     },
+  //   };
+  // };
+
+  const readOnlyActionTrigger = {
+    Associate: () => {
+      setActiveStep(ASSOCIATE_FORM_INDEX);
+      setOffcanvasForm(true);
+    },
+    "Prepare TOS": () => {
+      setActiveStep(APPROVE_TOS_FORM_INDEX);
+      setOffcanvasForm(true);
+      // Set
+    },
   };
 
   return (

@@ -1,12 +1,16 @@
 import React, { useState, useRef, useEffect, createRef } from "react";
-import { sections } from "./InnerTimelineStepConstants";
+import { sections, subStationActions } from "./InnerTimelineStepConstants";
 import {
   JOB_STAGE_STATUS,
   JOB_STAGE_STATUS_LABELS,
 } from "../JobListing/JobListingConstants";
 import "./InnerTimelineStep.scss";
 
-const InnerTimelineStep = ({ data }) => {
+const InnerTimelineStep = ({
+  data,
+  readOnlyActionTrigger,
+  setTimelineRowIndex,
+}) => {
   const containerRef = useRef(null);
   const timelineRef = useRef(null);
   const sectionRefs = useRef([]);
@@ -542,6 +546,7 @@ const InnerTimelineStep = ({ data }) => {
                   {expandedSections[section.name] && (
                     <div className="d-flex flex-row align-items-top justify-content-center gap-5 me-3">
                       {section.subitems.map((subitem, subindex) => {
+                        console.log("subitem", subitem);
                         const renderSubitemStyle = renderSectionStyle(
                           subitemsData[subindex]?.data?.status
                         );
@@ -561,6 +566,10 @@ const InnerTimelineStep = ({ data }) => {
                             className="d-flex flex-column align-items-center gap-5"
                             style={{
                               width: elementSizing,
+                            }}
+                            onClick={() => {
+                              setTimelineRowIndex();
+                              readOnlyActionTrigger[subitem]?.();
                             }}
                           >
                             <div className="d-flex flex-column align-items-start">

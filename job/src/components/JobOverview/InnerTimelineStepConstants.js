@@ -1,3 +1,6 @@
+import { 
+  ASSOCIATE_FORM_INDEX
+} from "./JobOverviewConstants";
 export const sections = [
   {
     name: "Profile",
@@ -44,3 +47,4 @@ export const sections = [
     ],
   },
 ];
+
