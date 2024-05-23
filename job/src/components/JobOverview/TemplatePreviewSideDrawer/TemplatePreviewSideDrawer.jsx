@@ -193,6 +193,7 @@ const TemplatePreviewSideDrawer = ({
           <>{previewJsx}</>
         </Container>
       </div>
+
       {templatePreviewAction?.action && (
         <div
           className="d-flex justify-content-center align-items-center"

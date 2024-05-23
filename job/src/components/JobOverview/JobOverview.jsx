@@ -987,13 +987,14 @@ const JobOverview = () => {
               }}
               style={{
                 borderRadius: "8px",
+                whiteSpace: "nowrap",
               }}
             >
               {jobTagMeta?.isLoading &&
               jobTagMeta?.jobType === "conditional_offer_prepare" ? (
                 <Spinner size="sm" color="light" />
               ) : (
-                "Safe As Draft"
+                "Save As Draft"
               )}
             </Button>
             <Button
@@ -1259,7 +1260,8 @@ const JobOverview = () => {
             setTemplatePreviewInfo(null);
           }}
           direction="end"
-          style={{ width: isMobile ? "100vw" : "55vw" }}
+          // Previously 55vw
+          style={{ width: isMobile ? "100vw" : "60vw" }}
         >
           <OffCanvasHeaderComponent
             stepperState={stepperState}

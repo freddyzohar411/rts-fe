@@ -5,7 +5,6 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ButtonGroup, Button, Container, Spinner } from "reactstrap";
@@ -390,6 +389,7 @@ const ConditionalOffer = forwardRef(({ jobId, jobTimeLineData, edit }, ref) => {
               boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
               overflow: "auto",
               height: "95%",
+              backgroundColor: "white",
             }}
           >
             {editContentLoading ? (
