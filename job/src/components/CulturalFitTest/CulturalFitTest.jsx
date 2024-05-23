@@ -15,9 +15,16 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import {
+  fetchJobTimelineFormSubmission,
+  fetchJobTimelineFormSubmissionReset,
+} from "../../store/jobStage/action";
 
 const CulturalFitTest = forwardRef(
-  ({ closeOffcanvas, jobId, candidateId }, parentRef) => {
+  (
+    { closeOffcanvas, jobId, candidateId, readOnly = false, jobTimeLineData },
+    parentRef
+  ) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -25,18 +32,38 @@ const CulturalFitTest = forwardRef(
 
     const form = useSelector((state) => state.JobFormReducer.form);
     const [formTemplate, setFormTemplate] = useState(null);
-
-    const linkState = location.state;
     const { getAllUserGroups } = useUserAuth();
-    const [view, setView] = useState(
-      linkState?.view !== null && linkState?.view !== undefined
-        ? linkState?.view
-        : false
-    );
+    // const formSubmissionData = useSelector(
+    //   (state) => state.JobStageReducer.jobTimelineFormSubmission
+    // );
+    const [formSubmissionData, setFormSubmissionData] = useState(null);
 
     useEffect(() => {
       dispatch(fetchJobForm("cultural_fit_test"));
     }, []);
+
+    useEffect(() => {
+      if (jobTimeLineData && jobTimeLineData?.timeline?.["Cultural Fit Test"]) {
+        if (
+          jobTimeLineData?.timeline?.["Cultural Fit Test"]?.status ===
+          "REJECTED"
+        ) {
+          setFormSubmissionData({
+            culturalFitTestResults: false,
+          });
+        } else if (
+          jobTimeLineData?.timeline?.["Cultural Fit Test"]?.status ===
+          "COMPLETED"
+        ) {
+          setFormSubmissionData({
+            culturalFitTestResults: true,
+          });
+        }
+      }
+      return () => {
+        dispatch(fetchJobTimelineFormSubmissionReset());
+      };
+    }, [jobTimeLineData]);
 
     useEffect(() => {
       if (form) {
@@ -92,11 +119,11 @@ const CulturalFitTest = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={null}
+                  editData={formSubmissionData ? formSubmissionData : null}
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}
-                  view={view}
+                  view={readOnly}
                   ref={formikRef}
                 />
               </div>

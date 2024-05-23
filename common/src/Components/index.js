@@ -67,7 +67,7 @@ import FormBuilder from "./DynamicForm/components/formbuilder/FormBuilder";
 import Form from "./DynamicForm/components/formdisplay/Form";
 
 //Import Dynamic Table
-import DynamicTable from "./DynamicTable/DynamicTable";
+import DynamicTable from "./DynamicTable/DynamicTable_Old";
 import useTableHook from "./DynamicTable/useTableHook";
 
 // Import Delete Modal

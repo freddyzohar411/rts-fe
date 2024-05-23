@@ -16,9 +16,16 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 import { OdinURLs } from "../JobOverview/JobOverviewConstants";
+import {
+  fetchJobTimelineFormSubmission,
+  fetchJobTimelineFormSubmissionReset,
+} from "../../store/jobStage/action";
 
 const TechnicalInterview = forwardRef(
-  ({ closeOffcanvas, jobId, candidateId }, parentRef) => {
+  (
+    { closeOffcanvas, jobId, candidateId, readOnly = false, jobTimeLineData },
+    parentRef
+  ) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -26,19 +33,46 @@ const TechnicalInterview = forwardRef(
 
     const form = useSelector((state) => state.JobFormReducer.form);
     const [formTemplate, setFormTemplate] = useState(null);
-
-    const linkState = location.state;
-    const { getAllUserGroups } = useUserAuth();
-
-    const [view, setView] = useState(
-      linkState?.view !== null && linkState?.view !== undefined
-        ? linkState?.view
-        : false
+    const formSubmissionData = useSelector(
+      (state) => state.JobStageReducer.jobTimelineFormSubmission
     );
+    const { getAllUserGroups } = useUserAuth();
 
     useEffect(() => {
       dispatch(fetchJobForm("technical_interview"));
     }, []);
+
+    useEffect(() => {
+      if (jobTimeLineData && jobTimeLineData?.timeline?.["Technical Interview"]) {
+        if (
+          jobTimeLineData?.timeline?.["Technical Interview"]?.status ===
+          "REJECTED"
+        ) {
+          dispatch(
+            fetchJobTimelineFormSubmission({
+              jobId: jobTimeLineData?.job?.id,
+              jobStageId: JOB_STAGE_IDS?.TECHNICAL_INTERVIEW,
+              candidateId: jobTimeLineData?.candidate?.id,
+            })
+          );
+        }
+        if (
+          jobTimeLineData?.timeline?.["Technical Interview"]?.status ===
+          "COMPLETED"
+        ) {
+          dispatch(
+            fetchJobTimelineFormSubmission({
+              jobId: jobTimeLineData?.job?.id,
+              jobStageId: JOB_STAGE_IDS?.CULTURAL_FIT_TEST,
+              candidateId: jobTimeLineData?.candidate?.id,
+            })
+          );
+        }
+      }
+      return () => {
+        dispatch(fetchJobTimelineFormSubmissionReset());
+      };
+    }, [jobTimeLineData]);
 
     useEffect(() => {
       if (form) {
@@ -60,6 +94,8 @@ const TechnicalInterview = forwardRef(
           jobStageId: JOB_STAGE_IDS?.TECHNICAL_INTERVIEW,
           status: JOB_STAGE_STATUS?.REJECTED,
           candidateId,
+          formData: JSON.stringify(values),
+          formId: parseInt(form.formId),
           jobType: "technical_interview",
         };
         dispatch(tagJob({ payload, navigate }));
@@ -100,11 +136,11 @@ const TechnicalInterview = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={null}
+                  editData={formSubmissionData ? formSubmissionData : null}
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}
-                  view={view}
+                  view={readOnly}
                   ref={formikRef}
                 />
               </div>

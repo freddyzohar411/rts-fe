@@ -275,7 +275,6 @@ const SubmitToSales = forwardRef(
             <EmailTo
               formik={formik}
               ToIcon={<EmailOutlinedIcon className="fs-3"/>}
-              // ToIcon={<i className="ri-mail-fill fs-5"></i>}
             />
             <hr className="mt-2" />
           </Col>

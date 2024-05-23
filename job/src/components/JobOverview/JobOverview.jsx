@@ -525,6 +525,7 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case SKILLS_ASSESSMENT_FORM_INDEX:
@@ -534,6 +535,8 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            readOnly={readOnly}
           />
         );
       case CODING_TEST_FORM_INDEX:
@@ -543,6 +546,8 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            readOnly={readOnly}
           />
         );
       case TEC_INTRW_FORM_INDEX:
@@ -552,6 +557,8 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            readOnly={readOnly}
           />
         );
       case CULTURAL_FIT_TEST_FORM_INDEX:
@@ -562,6 +569,8 @@ const JobOverview = () => {
             candidateId={candidateId}
             activeStep={step}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            readOnly={readOnly}
           />
         );
       //Interview
@@ -1096,6 +1105,48 @@ const JobOverview = () => {
       ) {
         setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
         setIsFormModalOpen(true);
+      }
+    },
+    "Skills Assessment": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Skills Assessment"
+        ]
+      ) {
+        setActiveStep(SKILLS_ASSESSMENT_FORM_INDEX);
+        setOffcanvasForm(true);
+        setReadOnly(true);
+      }
+    },
+    "Coding Test": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Coding Test"]
+      ) {
+        setActiveStep(CODING_TEST_FORM_INDEX);
+        setOffcanvasForm(true);
+        setReadOnly(true);
+      }
+    },
+    "Technical Interview": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Technical Interview"
+        ]
+      ) {
+        setActiveStep(TEC_INTRW_FORM_INDEX);
+        setOffcanvasForm(true);
+        setReadOnly(true);
+      }
+    },
+    "Cultural Fit Test": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Cultural Fit Test"
+        ]
+      ) {
+        setActiveStep(CULTURAL_FIT_TEST_FORM_INDEX);
+        setOffcanvasForm(true);
+        setReadOnly(true);
       }
     },
     "Prepare TOS": () => {

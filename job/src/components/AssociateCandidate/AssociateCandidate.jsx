@@ -25,7 +25,6 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
-import { getJobCandidateStage } from "../../helpers/backend_helper";
 import {
   fetchJobTimelineFormSubmission,
   fetchJobTimelineFormSubmissionReset,
