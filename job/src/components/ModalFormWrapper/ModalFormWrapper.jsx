@@ -36,6 +36,10 @@ import {
   SELECTED_FORM_INDEX,
 } from "../JobOverview/JobOverviewConstants";
 import { getJobCandidateStage } from "../../helpers/backend_helper";
+import {
+  fetchJobTimelineFormSubmission,
+  fetchJobTimelineFormSubmissionReset,
+} from "../../store/jobStage/action";
 
 const ModalFormWrapper = ({
   originalOrder,
@@ -54,49 +58,35 @@ const ModalFormWrapper = ({
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
-  const [formSubmissionData, setFormSubmissionData] = useState(null);
+  const formSubmissionData = useSelector(
+    (state) => state.JobStageReducer.jobTimelineFormSubmission
+  );
   console.log("Job TimeLine Data Modal Wrapper", jobTimeLineData);
   // Get Submission Data
   useEffect(() => {
+    let stageId;
+    // Get stage id
+    if (activeStep === PRF_WTDWN_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.TAG;
+    } else if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.SUBMIT_TO_SALES;
+    } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.SUBMIT_TO_CLIENT;
+    }
+
     // Get TOS SUbmission data
     if (jobTimeLineData && isFormModalOpen == true) {
-      if (activeStep === PRF_WTDWN_FORM_INDEX) {
-        getJobCandidateStage({
+      dispatch(
+        fetchJobTimelineFormSubmission({
           jobId: jobTimeLineData?.job?.id,
+          jobStageId: stageId,
           candidateId: jobTimeLineData?.candidate?.id,
-          jobStageId: JOB_STAGE_IDS.TAG,
-        }).then((response) => {
-          if (response?.data?.submissionData) {
-            setFormSubmissionData(response?.data?.submissionData);
-          }
-        });
-      }
-      if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
-        getJobCandidateStage({
-          jobId: jobTimeLineData?.job?.id,
-          candidateId: jobTimeLineData?.candidate?.id,
-          jobStageId: JOB_STAGE_IDS.SUBMIT_TO_SALES,
-        }).then((response) => {
-          if (response?.data?.submissionData) {
-            setFormSubmissionData(response?.data?.submissionData);
-          }
-        });
-      }
-      if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
-        getJobCandidateStage({
-          jobId: jobTimeLineData?.job?.id,
-          candidateId: jobTimeLineData?.candidate?.id,
-          jobStageId: JOB_STAGE_IDS.SUBMIT_TO_CLIENT,
-        }).then((response) => {
-          if (response?.data?.submissionData) {
-            setFormSubmissionData(response?.data?.submissionData);
-          }
-        });
-      }
+        })
+      );
     }
 
     return () => {
-      setFormSubmissionData(null);
+      dispatch(fetchJobTimelineFormSubmissionReset());
     };
   }, [jobTimeLineData, isFormModalOpen]);
 
@@ -110,8 +100,6 @@ const ModalFormWrapper = ({
     if (!filesData || filesData?.length == 0) return "";
     return filesData.map((fileData) => fileData?.name).join(",");
   };
-
-  console.log("activeStep", activeStep);
 
   useEffect(() => {
     if (activeStep === UNTAG_FORM_INDEX) {

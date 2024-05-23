@@ -26,9 +26,16 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 import { getJobCandidateStage } from "../../helpers/backend_helper";
+import {
+  fetchJobTimelineFormSubmission,
+  fetchJobTimelineFormSubmissionReset,
+} from "../../store/jobStage/action";
 
 const AssociateCandidate = forwardRef(
-  ({ closeOffcanvas, jobId, candidateId, jobTimeLineData, readOnly=false}, parentRef) => {
+  (
+    { closeOffcanvas, jobId, candidateId, jobTimeLineData, readOnly = false },
+    parentRef
+  ) => {
     const formikRef = useRef(null);
 
     const navigate = useNavigate();
@@ -41,7 +48,9 @@ const AssociateCandidate = forwardRef(
     const [formTemplate, setFormTemplate] = useState(null);
     const [activeTab, setActiveTab] = useState("1");
     const [editData, setEditData] = useState({});
-    const [formType, setFormType] = useState(null);
+    const formSubmissionData = useSelector(
+      (state) => state.JobStageReducer.jobTimelineFormSubmission
+    );
 
     const toggle = (tab) => {
       if (activeTab !== tab) {
@@ -61,26 +70,14 @@ const AssociateCandidate = forwardRef(
 
     // Set candidate salaries on associate page
     useEffect(() => {
-      // if (jobTimeLineData) {
-      //   setEditData({
-      //     candidateCurrentSalary:
-      //       jobTimeLineData?.candidate?.candidateSubmissionData
-      //         ?.candidateCurrentSalary,
-      //     candidateExpectedSalary:
-      //       jobTimeLineData?.candidate?.candidateSubmissionData
-      //         ?.candidateExpectedSalary,
-      //   });
-      // }
       if (jobTimeLineData && jobTimeLineData?.timeline?.["Associate"]) {
-        getJobCandidateStage({
-          jobId: jobTimeLineData?.job?.id,
-          candidateId: jobTimeLineData?.candidate?.id,
-          jobStageId: JOB_STAGE_IDS?.ASSOCIATE,
-        }).then((response) => {
-          if (response?.data?.submissionData) {
-            setEditData(response?.data?.submissionData);
-          }
-        });
+        dispatch(
+          fetchJobTimelineFormSubmission({
+            jobId: jobTimeLineData?.job?.id,
+            jobStageId: JOB_STAGE_IDS?.ASSOCIATE,
+            candidateId: jobTimeLineData?.candidate?.id,
+          })
+        );
       } else if (jobTimeLineData) {
         setEditData({
           candidateCurrentSalary:
@@ -91,6 +88,9 @@ const AssociateCandidate = forwardRef(
               ?.candidateExpectedSalary,
         });
       }
+      return () => {
+        dispatch(fetchJobTimelineFormSubmissionReset());
+      };
     }, [jobTimeLineData]);
 
     // Handle form submit
@@ -152,7 +152,9 @@ const AssociateCandidate = forwardRef(
                     template={formTemplate}
                     userDetails={getAllUserGroups()}
                     country={null}
-                    editData={editData}
+                    editData={
+                      formSubmissionData ? formSubmissionData : editData
+                    }
                     onSubmit={handleFormSubmit}
                     onFormFieldsChange={null}
                     errorMessage={null}

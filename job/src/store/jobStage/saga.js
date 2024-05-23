@@ -8,6 +8,7 @@ import {
   TAG_JOB_ALL,
   TAG_JOB_ATTACHMENT,
   UNTAG_JOB,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION
 } from "./actionTypes";
 import {
   tagJobSuccess,
@@ -24,6 +25,8 @@ import {
   tagJobAttachmentFailure,
   untagJobSuccess,
   untagJobFailure,
+  fetchJobTimelineFormSubmissionSuccess,
+  fetchJobTimelineFormSubmissionFailure
 } from "./action";
 import {
   getJobTimeline,
@@ -33,6 +36,7 @@ import {
   tagJobWithAttachments,
   tagJobWithFiles,
   untagJob,
+  getJobCandidateStage
 } from "../../helpers/backend_helper";
 import { JOB_STAGE_STATUS } from "../../components/JobListing/JobListingConstants";
 
@@ -154,6 +158,17 @@ function* workTagJobFiles(action) {
   }
 }
 
+// Fetch job timeline form submission
+function* workFetchJobTimelineFormSubmission(action) {
+  // const { jobId, jobStageId, candidateId } = action.payload;
+  try {
+    const response = yield call(getJobCandidateStage, action.payload);
+    yield put(fetchJobTimelineFormSubmissionSuccess(response.data?.submissionData));
+  } catch (error) {
+    yield put(fetchJobTimelineFormSubmissionFailure(error));
+  }
+}
+
 export default function* watchTagJobSaga() {
   yield takeEvery(TAG_JOB, workTagJob);
   yield takeEvery(TAG_JOB_ALL, workTagAllJob);
@@ -162,4 +177,5 @@ export default function* watchTagJobSaga() {
   yield takeEvery(JOB_TIMELINE_COUNT, workFetchJobTimelineCount);
   yield takeEvery(TAG_JOB_ATTACHMENT, workTagJobAttachment);
   yield takeEvery(TAG_JOB_FILES, workTagJobFiles);
+  yield takeEvery(FETCH_JOB_TIMELINE_FORM_SUBMISSION, workFetchJobTimelineFormSubmission);
 }
