@@ -22,8 +22,8 @@ const EmailTo = ({
           <Button
             className="d-flex justify-content-center align-items-center"
             style={{
-              height: "28px",
-              width: "28px",
+              height: "30px",
+              width: "30px",
               backgroundColor: "#F5F5F5",
               border: "1px solid #A8A8A8",
               color: "#7A7A7A",
