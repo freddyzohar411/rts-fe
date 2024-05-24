@@ -80,12 +80,14 @@ import {
   SELECTED_FORM_INDEX,
   PROFILE_FEEDBACK_PENDING_INDEX,
 } from "./JobOverviewConstants";
+import * as JobOverviewConstants from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import * as JobListingConstant from "../JobListing/JobListingConstants";
 import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
 import { SkillAssessment } from "../SkillAssessment";
@@ -1333,11 +1335,15 @@ const JobOverview = () => {
     let onFlag = false;
     const readOnlyActionTriggerObj = {
       Associate: () => {
-        // Check if associate form is already submitted
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.ASSOCIATE
+          ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Associate"
-          ]
+            JobOverviewConstants.ASSOCIATE
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED
         ) {
           if (flag) {
             onFlag = true;
@@ -1349,10 +1355,14 @@ const JobOverview = () => {
         }
       },
       "Profile Feedback Pending": () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.PROFILE_FEEDBACK_PENDING
+          ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Profile Feedback Pending"
-          ]
+            JobOverviewConstants.PROFILE_FEEDBACK_PENDING
+          ] && status !== JOB_STAGE_STATUS.SKIPPED
         ) {
           if (flag) {
             onFlag = true;
@@ -1366,14 +1376,14 @@ const JobOverview = () => {
       "Skills Assessment": () => {
         const status =
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Skills Assessment"
+            JobOverviewConstants.SKILLS_ASSESSMENT
           ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Skills Assessment"
+            JobOverviewConstants.SKILLS_ASSESSMENT
           ] &&
-          status !== "SKIPPED" &&
-          status !== "IN_PROGRESS"
+          status !== JOB_STAGE_STATUS.SKIPPED &&
+          status !== JOB_STAGE_STATUS.IN_PROGRESS
         ) {
           if (flag) {
             onFlag = true;
@@ -1387,14 +1397,14 @@ const JobOverview = () => {
       "Coding Test": () => {
         const status =
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Coding Test"
+            JobOverviewConstants.CODING_TEST
           ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Coding Test"
+            JobOverviewConstants.CODING_TEST
           ] &&
-          status !== "SKIPPED" &&
-          status !== "IN_PROGRESS"
+          status !== JOB_STAGE_STATUS.SKIPPED &&
+          status !== JOB_STAGE_STATUS.IN_PROGRESS
         ) {
           if (flag) {
             onFlag = true;
@@ -1408,14 +1418,14 @@ const JobOverview = () => {
       "Technical Interview": () => {
         const status =
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Technical Interview"
+            JobOverviewConstants.TECHNICAL_INTERVIEW
           ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Technical Interview"
+            JobOverviewConstants.TECHNICAL_INTERVIEW
           ] &&
-          status !== "SKIPPED" &&
-          status !== "IN_PROGRESS"
+          status !== JOB_STAGE_STATUS.SKIPPED &&
+          status !== JOB_STAGE_STATUS.IN_PROGRESS
         ) {
           if (flag) {
             onFlag = true;
@@ -1429,14 +1439,14 @@ const JobOverview = () => {
       "Cultural Fit Test": () => {
         const status =
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Cultural Fit Test"
+            JobOverviewConstants.CULTURAL_FIT_TEST
           ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Cultural Fit Test"
+            JobOverviewConstants.CULTURAL_FIT_TEST
           ] &&
-          status !== "SKIPPED" &&
-          status !== "IN_PROGRESS"
+          status !== JOB_STAGE_STATUS.SKIPPED &&
+          status !== JOB_STAGE_STATUS.IN_PROGRESS
         ) {
           if (flag) {
             onFlag = true;
@@ -1448,10 +1458,13 @@ const JobOverview = () => {
         }
       },
       "Prepare TOS": () => {
+        const status = jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+          JobOverviewConstants.PREPARE_TOS
+        ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Prepare TOS"
-          ]
+            JobOverviewConstants.PREPARE_TOS
+          ] && status !== JOB_STAGE_STATUS.SKIPPED
         ) {
           if (flag) {
             onFlag = true;
@@ -1465,11 +1478,11 @@ const JobOverview = () => {
       "Conditional Offer Sent": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Conditional Offer Sent"
+            JobOverviewConstants.CONDITIONAL_OFFER_SENT
           ] &&
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Conditional Offer Sent"
-          ]?.status === "COMPLETED"
+            JobOverviewConstants.CONDITIONAL_OFFER_SENT
+          ]?.status === JOB_STAGE_STATUS.COMPLETED
         ) {
           if (flag) {
             onFlag = true;
@@ -1485,10 +1498,10 @@ const JobOverview = () => {
       Tag: () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Tag"
+            JobOverviewConstants.TAG
           ] &&
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.["Tag"]
-            ?.status === "WITHDRAWN"
+            ?.status === JOB_STAGE_STATUS.WITHDRAWN
         ) {
           if (flag) {
             onFlag = true;
@@ -1501,11 +1514,11 @@ const JobOverview = () => {
       "Submit to Sales": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Submit to Sales"
+            JobOverviewConstants.SUBMIT_TO_SALES
           ] &&
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Submit to Sales"
-          ]?.status === "REJECTED"
+            JobOverviewConstants.SUBMIT_TO_SALES
+          ]?.status === JOB_STAGE_STATUS.REJECTED
         ) {
           if (flag) {
             onFlag = true;
@@ -1518,11 +1531,11 @@ const JobOverview = () => {
       "Submit to Client": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Submit to Client"
+            JobOverviewConstants.SUBMIT_TO_CLIENT
           ] &&
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Submit to Client"
-          ]?.status === "REJECTED"
+            JobOverviewConstants.SUBMIT_TO_CLIENT
+          ]?.status === JOB_STAGE_STATUS.REJECTED
         ) {
           if (flag) {
             onFlag = true;
@@ -1535,13 +1548,13 @@ const JobOverview = () => {
       "TOS Accepted/Declined": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "TOS Accepted/Declined"
+            JobOverviewConstants.TOS_ACCEPTED_DECLINED
           ]
         ) {
           if (
             jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-              "TOS Accepted/Declined"
-            ]?.status === "COMPLETED"
+              JobOverviewConstants.TOS_ACCEPTED_DECLINED
+            ]?.status === JOB_STAGE_STATUS.COMPLETED
           ) {
             if (flag) {
               onFlag = true;
@@ -1553,8 +1566,8 @@ const JobOverview = () => {
           }
           if (
             jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-              "TOS Accepted/Declined"
-            ]?.status === "REJECTED"
+              JobOverviewConstants.TOS_ACCEPTED_DECLINED
+            ]?.status === JOB_STAGE_STATUS.REJECTED
           ) {
             if (flag) {
               onFlag = true;
@@ -1572,14 +1585,14 @@ const JobOverview = () => {
       "Conditional Offer Accepted/Declined": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Conditional Offer Accepted/Declined"
+            JobOverviewConstants.CONDITIONAL_OFFER_ACCEPTED_DECLINED
           ]
         ) {
           const conditionalOfferStatus =
             jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-              "Conditional Offer Accepted/Declined"
+              JobOverviewConstants.CONDITIONAL_OFFER_ACCEPTED_DECLINED
             ]?.status;
-          if (conditionalOfferStatus === "COMPLETED") {
+          if (conditionalOfferStatus === JOB_STAGE_STATUS.COMPLETED) {
             if (flag) {
               onFlag = true;
               return;
@@ -1591,7 +1604,7 @@ const JobOverview = () => {
             });
             setIsFormModalOpen(true);
           }
-          if (conditionalOfferStatus === "REJECTED") {
+          if (conditionalOfferStatus === JOB_STAGE_STATUS.REJECTED) {
             if (flag) {
               onFlag = true;
               return;
@@ -1608,14 +1621,14 @@ const JobOverview = () => {
       "First Interview Scheduled": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "First Interview Scheduled"
+            JobOverviewConstants.FIRST_INTERVIEW_SCHEDULED
           ]
         ) {
           const status =
             jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-              "First Interview Scheduled"
+              JobOverviewConstants.FIRST_INTERVIEW_SCHEDULED
             ]?.status;
-          if (status === "REJECTED") {
+          if (status === JOB_STAGE_STATUS.REJECTED) {
             if (flag) {
               onFlag = true;
               return;
@@ -1623,7 +1636,7 @@ const JobOverview = () => {
             setActiveStep(REJECTED_INTRW_FORM_INDEX);
             setIsFormModalOpen(true);
             setReadOnlyInterviewNo(1);
-          } else if (status === "WITHDRAWN") {
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
             if (flag) {
               onFlag = true;
               return;
@@ -1637,14 +1650,14 @@ const JobOverview = () => {
       "Second Interview Scheduled": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Second Interview Scheduled"
+            JobOverviewConstants.SECOND_INTERVIEW_SCHEDULED
           ]
         ) {
           const status =
             jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-              "Second Interview Scheduled"
+              JobOverviewConstants.SECOND_INTERVIEW_SCHEDULED
             ]?.status;
-          if (status === "REJECTED") {
+          if (status === JOB_STAGE_STATUS.REJECTED) {
             if (flag) {
               onFlag = true;
               return;
@@ -1652,7 +1665,7 @@ const JobOverview = () => {
             setActiveStep(REJECTED_INTRW_FORM_INDEX);
             setIsFormModalOpen(true);
             setReadOnlyInterviewNo(2);
-          } else if (status === "WITHDRAWN") {
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
             if (flag) {
               onFlag = true;
               return;
@@ -1666,14 +1679,14 @@ const JobOverview = () => {
       "Third Interview Scheduled": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Third Interview Scheduled"
+            JobOverviewConstants.THIRD_INTERVIEW_SCHEDULED
           ]
         ) {
           const status =
             jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-              "Third Interview Scheduled"
+              JobOverviewConstants.THIRD_INTERVIEW_SCHEDULED
             ]?.status;
-          if (status === "REJECTED") {
+          if (status === JOB_STAGE_STATUS.REJECTED) {
             if (flag) {
               onFlag = true;
               return;
@@ -1681,7 +1694,7 @@ const JobOverview = () => {
             setActiveStep(REJECTED_INTRW_FORM_INDEX);
             setIsFormModalOpen(true);
             setReadOnlyInterviewNo(3);
-          } else if (status === "WITHDRAWN") {
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
             if (flag) {
               onFlag = true;
               return;
@@ -1695,11 +1708,11 @@ const JobOverview = () => {
       "Interview Feedback Pending": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Interview Feedback Pending"
+            JobOverviewConstants.INTERVIEW_FEEDBACK_PENDING
           ] &&
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Interview Feedback Pending"
-          ]?.status === "COMPLETED"
+            JobOverviewConstants.INTERVIEW_FEEDBACK_PENDING
+          ]?.status === JOB_STAGE_STATUS.COMPLETED
         ) {
           if (flag) {
             onFlag = true;

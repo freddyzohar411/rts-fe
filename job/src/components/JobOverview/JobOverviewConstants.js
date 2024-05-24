@@ -31,6 +31,8 @@ export const CONDITIONAL_OFFER_ACCEPTED_DECLINED =
   "Conditional Offer Accepted/Declined";
 export const INTERVIEWS = "Interviews";
 export const ODIN_PROTOCOL = "Odin Protocol";
+export const PREPARE_TOS = "Prepare TOS";
+export const TOS_ACCEPTED_DECLINED = "TOS Accepted/Declined";
 
 export const steps = {
   Tag: "Tag",

@@ -64,13 +64,12 @@ const ModalFormWrapper = ({
     (state) => state.JobStageReducer.jobTimelineFormSubmission
   );
   const [customHeader, setCustomHeader] = useState(null);
-  console.log("Job TimeLine Data Modal Wrapper", jobTimeLineData);
-  // Get Submission Data
+
+  // Get Submission Data for Form
   useEffect(() => {
     setCustomHeader(null);
     let stageId;
     let status;
-    console.log("Active Step", activeStep);
     // Get stage id
     if (activeStep === PRF_WTDWN_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.TAG;
@@ -82,10 +81,10 @@ const ModalFormWrapper = ({
       stageId = JOB_STAGE_IDS.TOS_APPROVAL;
     } else if (activeStep === ACCEPTED_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.CONDITIONAL_OFFER_APPROVAL;
-      status = "ACCEPTED";
+      status = JOB_STAGE_STATUS.ACCEPTED;
     } else if (activeStep === REJECTED_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.CONDITIONAL_OFFER_APPROVAL;
-      status = "REJECTED";
+      status = JOB_STAGE_STATUS.REJECTED;
     } else if (
       activeStep === REJECTED_INTRW_FORM_INDEX ||
       activeStep === CANCL_BY_CLIENT_FORM_INDEX
@@ -119,9 +118,6 @@ const ModalFormWrapper = ({
     } else if (activeStep === SELECTED_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.INTERVIEW_FEEDBACK_PENDING;
     }
-
-    console.log("Stage Id", stageId, "Status", status);
-
     if (jobTimeLineData && isFormModalOpen == true) {
       dispatch(
         fetchJobTimelineFormSubmission({
@@ -383,8 +379,6 @@ const ModalFormWrapper = ({
     }
     closeModal();
   };
-
-  console.log("Custom Header", customHeader);
 
   useEffect(() => {
     if (form) {
