@@ -893,6 +893,7 @@ const JobOverview = () => {
                         setTimelineRowIndex={() => {
                           setTimelineRowIndex(timelineIndex);
                         }}
+                        dataIndex={timelineIndex}
                       />
                     </td>
                   </tr>
@@ -1076,249 +1077,607 @@ const JobOverview = () => {
     );
   };
 
-  const readOnlyActionTrigger = {
-    Associate: () => {
-      // Check if associate form is already submitted
-      if (jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Associate"]) {
-        setActiveStep(ASSOCIATE_FORM_INDEX);
-        setOffcanvasForm(true);
-        setReadOnly(true);
-      }
-    },
-    "Submit to Sales": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Submit to Sales"
-        ] &&
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Submit to Sales"]
-          ?.status === "REJECTED"
-      ) {
-        setActiveStep(PRF_REJ_SALES_FORM_INDEX);
-        setIsFormModalOpen(true);
-      }
-    },
-    "Submit to Client": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Submit to Client"
-        ] &&
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Submit to Client"
-        ]?.status === "REJECTED"
-      ) {
-        setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
-        setIsFormModalOpen(true);
-      }
-    },
-    "Skills Assessment": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Skills Assessment"
-        ]
-      ) {
-        setActiveStep(SKILLS_ASSESSMENT_FORM_INDEX);
-        setOffcanvasForm(true);
-        setReadOnly(true);
-      }
-    },
-    "Coding Test": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Coding Test"]
-      ) {
-        setActiveStep(CODING_TEST_FORM_INDEX);
-        setOffcanvasForm(true);
-        setReadOnly(true);
-      }
-    },
-    "Technical Interview": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Technical Interview"
-        ]
-      ) {
-        setActiveStep(TEC_INTRW_FORM_INDEX);
-        setOffcanvasForm(true);
-        setReadOnly(true);
-      }
-    },
-    "Cultural Fit Test": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Cultural Fit Test"
-        ]
-      ) {
-        setActiveStep(CULTURAL_FIT_TEST_FORM_INDEX);
-        setOffcanvasForm(true);
-        setReadOnly(true);
-      }
-    },
-    "Prepare TOS": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Prepare TOS"]
-      ) {
-        setActiveStep(EDIT_TOS_FORM_INDEX);
-        setOffcanvasForm(true);
-        setReadOnly(true);
-      }
-    },
-    "Conditional Offer Sent": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Conditional Offer Sent"
-        ] &&
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Conditional Offer Sent"
-        ]?.status === "COMPLETED"
-      ) {
-        setActiveStep(EDIT_FORM_INDEX);
-        setOffcanvasForm(true);
-        setReadOnly(true);
-      }
-    },
+  // const readOnlyActionTrigger = {
+  //   Associate: () => {
+  //     // Check if associate form is already submitted
+  //     if (jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Associate"]) {
+  //       setActiveStep(ASSOCIATE_FORM_INDEX);
+  //       setOffcanvasForm(true);
+  //       setReadOnly(true);
+  //     }
+  //   },
+  //   "Submit to Sales": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Submit to Sales"
+  //       ] &&
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Submit to Sales"]
+  //         ?.status === "REJECTED"
+  //     ) {
+  //       setActiveStep(PRF_REJ_SALES_FORM_INDEX);
+  //       setIsFormModalOpen(true);
+  //     }
+  //   },
+  //   "Submit to Client": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Submit to Client"
+  //       ] &&
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Submit to Client"
+  //       ]?.status === "REJECTED"
+  //     ) {
+  //       setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
+  //       setIsFormModalOpen(true);
+  //     }
+  //   },
+  //   "Skills Assessment": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Skills Assessment"
+  //       ]
+  //     ) {
+  //       setActiveStep(SKILLS_ASSESSMENT_FORM_INDEX);
+  //       setOffcanvasForm(true);
+  //       setReadOnly(true);
+  //     }
+  //   },
+  //   "Coding Test": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Coding Test"]
+  //     ) {
+  //       setActiveStep(CODING_TEST_FORM_INDEX);
+  //       setOffcanvasForm(true);
+  //       setReadOnly(true);
+  //     }
+  //   },
+  //   "Technical Interview": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Technical Interview"
+  //       ]
+  //     ) {
+  //       setActiveStep(TEC_INTRW_FORM_INDEX);
+  //       setOffcanvasForm(true);
+  //       setReadOnly(true);
+  //     }
+  //   },
+  //   "Cultural Fit Test": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Cultural Fit Test"
+  //       ]
+  //     ) {
+  //       setActiveStep(CULTURAL_FIT_TEST_FORM_INDEX);
+  //       setOffcanvasForm(true);
+  //       setReadOnly(true);
+  //     }
+  //   },
+  //   "Prepare TOS": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Prepare TOS"]
+  //     ) {
+  //       setActiveStep(EDIT_TOS_FORM_INDEX);
+  //       setOffcanvasForm(true);
+  //       setReadOnly(true);
+  //     }
+  //   },
+  //   "Conditional Offer Sent": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Conditional Offer Sent"
+  //       ] &&
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Conditional Offer Sent"
+  //       ]?.status === "COMPLETED"
+  //     ) {
+  //       setActiveStep(EDIT_FORM_INDEX);
+  //       setOffcanvasForm(true);
+  //       setReadOnly(true);
+  //     }
+  //   },
 
-    // Modal and Forms
-    Tag: () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Tag"] &&
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Tag"]?.status ===
-          "WITHDRAWN"
-      ) {
-        setActiveStep(PRF_WTDWN_FORM_INDEX);
-        setIsFormModalOpen(true);
-      }
-    },
-    "TOS Accepted/Declined": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "TOS Accepted/Declined"
-        ]
-      ) {
+  //   // Modal and Forms
+  //   Tag: () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Tag"] &&
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Tag"]?.status ===
+  //         "WITHDRAWN"
+  //     ) {
+  //       setActiveStep(PRF_WTDWN_FORM_INDEX);
+  //       setIsFormModalOpen(true);
+  //     }
+  //   },
+  //   "TOS Accepted/Declined": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "TOS Accepted/Declined"
+  //       ]
+  //     ) {
+  //       if (
+  //         jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //           "TOS Accepted/Declined"
+  //         ]?.status === "COMPLETED"
+  //       ) {
+  //         setActiveStep(EDIT_TOS_FORM_INDEX);
+  //         setOffcanvasForm(true);
+  //         setReadOnly(true);
+  //       }
+  //       if (
+  //         jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //           "TOS Accepted/Declined"
+  //         ]?.status === "REJECTED"
+  //       ) {
+  //         setActiveStep(APPROVE_TOS_FORM_INDEX);
+  //         setModalFormName({
+  //           header: "TOS Rejected",
+  //           formName: "rejected_tos",
+  //         });
+  //         setIsFormModalOpen(true);
+  //       }
+  //     }
+  //   },
+  //   "Conditional Offer Accepted/Declined": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Conditional Offer Accepted/Declined"
+  //       ]
+  //     ) {
+  //       const conditionalOfferStatus =
+  //         jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //           "Conditional Offer Accepted/Declined"
+  //         ]?.status;
+  //       if (conditionalOfferStatus === "COMPLETED") {
+  //         setActiveStep(ACCEPTED_FORM_INDEX);
+  //         setModalFormName({
+  //           header: "Conditional Offer Accepted",
+  //           formName: "conditional_offer_accepted",
+  //         });
+  //         setIsFormModalOpen(true);
+  //       }
+  //       if (conditionalOfferStatus === "REJECTED") {
+  //         setActiveStep(REJECTED_FORM_INDEX);
+  //         setModalFormName({
+  //           header: "Conditional Offer Rejected",
+  //           formName: "conditional_offer_rejected",
+  //         });
+  //         setIsFormModalOpen(true);
+  //       }
+  //     }
+  //   },
+  //   "First Interview Scheduled": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "First Interview Scheduled"
+  //       ]
+  //     ) {
+  //       const status =
+  //         jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //           "First Interview Scheduled"
+  //         ]?.status;
+  //       if (status === "REJECTED") {
+  //         setActiveStep(REJECTED_INTRW_FORM_INDEX);
+  //         setIsFormModalOpen(true);
+  //         setReadOnlyInterviewNo(1);
+  //       } else if (status === "WITHDRAWN") {
+  //         setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+  //         setIsFormModalOpen(true);
+  //         setReadOnlyInterviewNo(1);
+  //       }
+  //     }
+  //   },
+  //   "Second Interview Scheduled": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Second Interview Scheduled"
+  //       ]
+  //     ) {
+  //       const status =
+  //         jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //           "Second Interview Scheduled"
+  //         ]?.status;
+  //       if (status === "REJECTED") {
+  //         setActiveStep(REJECTED_INTRW_FORM_INDEX);
+  //         setIsFormModalOpen(true);
+  //         setReadOnlyInterviewNo(2);
+  //       } else if (status === "WITHDRAWN") {
+  //         setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+  //         setIsFormModalOpen(true);
+  //         setReadOnlyInterviewNo(2);
+  //       }
+  //     }
+  //   },
+  //   "Third Interview Scheduled": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Third Interview Scheduled"
+  //       ]
+  //     ) {
+  //       const status =
+  //         jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //           "Third Interview Scheduled"
+  //         ]?.status;
+  //       if (status === "REJECTED") {
+  //         setActiveStep(REJECTED_INTRW_FORM_INDEX);
+  //         setIsFormModalOpen(true);
+  //         setReadOnlyInterviewNo(3);
+  //       } else if (status === "WITHDRAWN") {
+  //         setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+  //         setIsFormModalOpen(true);
+  //         setReadOnlyInterviewNo(3);
+  //       }
+  //     }
+  //   },
+  //   "Interview Feedback Pending": () => {
+  //     if (
+  //       jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Interview Feedback Pending"
+  //       ] && jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+  //         "Interview Feedback Pending"
+  //       ]?.status === "COMPLETED"
+  //     ) {
+  //       setActiveStep(SELECTED_FORM_INDEX);
+  //       setIsFormModalOpen(true);
+  //     }
+  //   }
+  // };
+
+  const readOnlyActionTrigger = (subitem, flag = false, index) => {
+    let onFlag = false;
+    const readOnlyActionTriggerObj = {
+      Associate: () => {
+        // Check if associate form is already submitted
         if (
-          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-            "TOS Accepted/Declined"
-          ]?.status === "COMPLETED"
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Associate"
+          ]
         ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(ASSOCIATE_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      "Submit to Sales": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Submit to Sales"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Submit to Sales"
+          ]?.status === "REJECTED"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(PRF_REJ_SALES_FORM_INDEX);
+          setIsFormModalOpen(true);
+        }
+      },
+      "Submit to Client": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Submit to Client"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Submit to Client"
+          ]?.status === "REJECTED"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
+          setIsFormModalOpen(true);
+        }
+      },
+      "Skills Assessment": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Skills Assessment"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Skills Assessment"
+          ]?.status !== "SKIPPED"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(SKILLS_ASSESSMENT_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      "Coding Test": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Coding Test"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Coding Test"
+          ]?.status !== "SKIPPED"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(CODING_TEST_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      "Technical Interview": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Technical Interview"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Technical Interview"
+          ]?.status !== "SKIPPED"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(TEC_INTRW_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      "Cultural Fit Test": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Cultural Fit Test"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Cultural Fit Test"
+          ]?.status !== "SKIPPED"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(CULTURAL_FIT_TEST_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      "Prepare TOS": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Prepare TOS"
+          ]
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
           setActiveStep(EDIT_TOS_FORM_INDEX);
           setOffcanvasForm(true);
           setReadOnly(true);
         }
+      },
+      "Conditional Offer Sent": () => {
         if (
-          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-            "TOS Accepted/Declined"
-          ]?.status === "REJECTED"
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Conditional Offer Sent"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Conditional Offer Sent"
+          ]?.status === "COMPLETED"
         ) {
-          setActiveStep(APPROVE_TOS_FORM_INDEX);
-          setModalFormName({
-            header: "TOS Rejected",
-            formName: "rejected_tos",
-          });
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(EDIT_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+
+      // Modal and Forms
+      Tag: () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Tag"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.["Tag"]
+            ?.status === "WITHDRAWN"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(PRF_WTDWN_FORM_INDEX);
           setIsFormModalOpen(true);
         }
-      }
-    },
-    "Conditional Offer Accepted/Declined": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Conditional Offer Accepted/Declined"
-        ]
-      ) {
-        const conditionalOfferStatus =
-          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+      },
+      "TOS Accepted/Declined": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "TOS Accepted/Declined"
+          ]
+        ) {
+          if (
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              "TOS Accepted/Declined"
+            ]?.status === "COMPLETED"
+          ) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(EDIT_TOS_FORM_INDEX);
+            setOffcanvasForm(true);
+            setReadOnly(true);
+          }
+          if (
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              "TOS Accepted/Declined"
+            ]?.status === "REJECTED"
+          ) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(APPROVE_TOS_FORM_INDEX);
+            setModalFormName({
+              header: "TOS Rejected",
+              formName: "rejected_tos",
+            });
+            setIsFormModalOpen(true);
+          }
+        }
+      },
+      "Conditional Offer Accepted/Declined": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             "Conditional Offer Accepted/Declined"
-          ]?.status;
-        if (conditionalOfferStatus === "COMPLETED") {
-          setActiveStep(ACCEPTED_FORM_INDEX);
-          setModalFormName({
-            header: "Conditional Offer Accepted",
-            formName: "conditional_offer_accepted",
-          });
-          setIsFormModalOpen(true);
+          ]
+        ) {
+          const conditionalOfferStatus =
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              "Conditional Offer Accepted/Declined"
+            ]?.status;
+          if (conditionalOfferStatus === "COMPLETED") {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(ACCEPTED_FORM_INDEX);
+            setModalFormName({
+              header: "Conditional Offer Accepted",
+              formName: "conditional_offer_accepted",
+            });
+            setIsFormModalOpen(true);
+          }
+          if (conditionalOfferStatus === "REJECTED") {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(REJECTED_FORM_INDEX);
+            setModalFormName({
+              header: "Conditional Offer Rejected",
+              formName: "conditional_offer_rejected",
+            });
+            setIsFormModalOpen(true);
+          }
         }
-        if (conditionalOfferStatus === "REJECTED") {
-          setActiveStep(REJECTED_FORM_INDEX);
-          setModalFormName({
-            header: "Conditional Offer Rejected",
-            formName: "conditional_offer_rejected",
-          });
-          setIsFormModalOpen(true);
-        }
-      }
-    },
-    "First Interview Scheduled": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "First Interview Scheduled"
-        ]
-      ) {
-        const status =
-          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+      },
+      "First Interview Scheduled": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             "First Interview Scheduled"
-          ]?.status;
-        if (status === "REJECTED") {
-          setActiveStep(REJECTED_INTRW_FORM_INDEX);
-          setIsFormModalOpen(true);
-          setReadOnlyInterviewNo(1);
-        } else if (status === "WITHDRAWN") {
-          setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
-          setIsFormModalOpen(true);
-          setReadOnlyInterviewNo(1);
+          ]
+        ) {
+          const status =
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              "First Interview Scheduled"
+            ]?.status;
+          if (status === "REJECTED") {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(REJECTED_INTRW_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(1);
+          } else if (status === "WITHDRAWN") {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(1);
+          }
         }
-      }
-    },
-    "Second Interview Scheduled": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Second Interview Scheduled"
-        ]
-      ) {
-        const status =
-          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+      },
+      "Second Interview Scheduled": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             "Second Interview Scheduled"
-          ]?.status;
-        if (status === "REJECTED") {
-          setActiveStep(REJECTED_INTRW_FORM_INDEX);
-          setIsFormModalOpen(true);
-          setReadOnlyInterviewNo(2);
-        } else if (status === "WITHDRAWN") {
-          setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
-          setIsFormModalOpen(true);
-          setReadOnlyInterviewNo(2);
+          ]
+        ) {
+          const status =
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              "Second Interview Scheduled"
+            ]?.status;
+          if (status === "REJECTED") {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(REJECTED_INTRW_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(2);
+          } else if (status === "WITHDRAWN") {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(2);
+          }
         }
-      }
-    },
-    "Third Interview Scheduled": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Third Interview Scheduled"
-        ]
-      ) {
-        const status =
-          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+      },
+      "Third Interview Scheduled": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             "Third Interview Scheduled"
-          ]?.status;
-        if (status === "REJECTED") {
-          setActiveStep(REJECTED_INTRW_FORM_INDEX);
-          setIsFormModalOpen(true);
-          setReadOnlyInterviewNo(3);
-        } else if (status === "WITHDRAWN") {
-          setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
-          setIsFormModalOpen(true);
-          setReadOnlyInterviewNo(3);
+          ]
+        ) {
+          const status =
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              "Third Interview Scheduled"
+            ]?.status;
+          if (status === "REJECTED") {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(REJECTED_INTRW_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(3);
+          } else if (status === "WITHDRAWN") {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(3);
+          }
         }
-      }
-    },
-    "Interview Feedback Pending": () => {
-      if (
-        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Interview Feedback Pending"
-        ] && jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
-          "Interview Feedback Pending"
-        ]?.status === "COMPLETED"
-      ) {
-        setActiveStep(SELECTED_FORM_INDEX);
-        setIsFormModalOpen(true);
-      }
-    }
+      },
+      "Interview Feedback Pending": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Interview Feedback Pending"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Interview Feedback Pending"
+          ]?.status === "COMPLETED"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(SELECTED_FORM_INDEX);
+          setIsFormModalOpen(true);
+        }
+      },
+    };
+    readOnlyActionTriggerObj[subitem]?.();
+    return onFlag;
   };
 
   //Handle Canvas Close and Modal Close

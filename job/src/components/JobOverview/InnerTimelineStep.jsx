@@ -10,6 +10,7 @@ const InnerTimelineStep = ({
   data,
   readOnlyActionTrigger,
   setTimelineRowIndex,
+  dataIndex,
 }) => {
   const containerRef = useRef(null);
   const timelineRef = useRef(null);
@@ -26,11 +27,15 @@ const InnerTimelineStep = ({
   const [elementSizing, setElementSizing] = useState("");
   const [uniqueTopValues, setUniqueTopValues] = useState([]);
   const [bottomWidth, setBottomWidth] = useState(0);
-  const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] = useState(null);
+  const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] =
+    useState(null);
+
+  console.log("dataIndex", dataIndex);
 
   useEffect(() => {
-    if (actionTriggeredWithSubitem){
-       readOnlyActionTrigger[actionTriggeredWithSubitem]?.();
+    if (actionTriggeredWithSubitem) {
+      //  readOnlyActionTrigger[actionTriggeredWithSubitem]?.();
+      readOnlyActionTrigger(actionTriggeredWithSubitem);
     }
     setActionTriggeredWithSubitem(null);
   }, [actionTriggeredWithSubitem]);
@@ -554,7 +559,12 @@ const InnerTimelineStep = ({
                   {expandedSections[section.name] && (
                     <div className="d-flex flex-row align-items-top justify-content-center gap-5 me-3">
                       {section.subitems.map((subitem, subindex) => {
+                        console.log("Job data Index", dataIndex);
                         console.log("subitem", subitem);
+                        console.log(
+                          "subitem",
+                          readOnlyActionTrigger(subitem, true, dataIndex)
+                        );
                         const renderSubitemStyle = renderSectionStyle(
                           subitemsData[subindex]?.data?.status
                         );
@@ -578,7 +588,6 @@ const InnerTimelineStep = ({
                             onClick={() => {
                               setTimelineRowIndex();
                               setActionTriggeredWithSubitem(subitem);
-                              // readOnlyActionTrigger[subitem]?.();
                             }}
                           >
                             <div className="d-flex flex-column align-items-start">
@@ -607,18 +616,62 @@ const InnerTimelineStep = ({
                               </span>
                               <span
                                 key={subindex}
-                                className="fw-semibold text-dark"
+                                className={`fw-semibold text-dark ${
+                                  readOnlyActionTrigger(
+                                    subitem,
+                                    true,
+                                    dataIndex
+                                  )
+                                    ? "cursor-pointer"
+                                    : ""
+                                }`}
                                 style={{
                                   fontSize: "13px",
                                   whiteSpace:
                                     subitem.length >= 2 ? "normal" : "nowrap",
                                 }}
                               >
-                                <span style={{ whiteSpace: "nowrap" }}>
+                                <span
+                                  style={{
+                                    whiteSpace: "nowrap",
+                                    textDecoration: readOnlyActionTrigger(
+                                      subitem,
+                                      true,
+                                      dataIndex
+                                    )
+                                      ? "underline"
+                                      : "none",
+                                    color: readOnlyActionTrigger(
+                                      subitem,
+                                      true,
+                                      dataIndex
+                                    )
+                                      ? "#8A9AD0"
+                                      : "",
+                                  }}
+                                >
                                   {subItemStringCut}
                                 </span>
                                 {subItemStringCont && (
-                                  <span style={{ whiteSpace: "normal" }}>
+                                  <span
+                                    style={{
+                                      whiteSpace: "normal",
+                                      textDecoration: readOnlyActionTrigger(
+                                        subitem,
+                                        true,
+                                        dataIndex
+                                      )
+                                        ? "underline"
+                                        : "none",
+                                      color: readOnlyActionTrigger(
+                                        subitem,
+                                        true,
+                                        dataIndex
+                                      )
+                                        ? "#8A9AD0"
+                                        : "",
+                                    }}
+                                  >
                                     {" " + subItemStringCont}
                                   </span>
                                 )}
@@ -633,7 +686,7 @@ const InnerTimelineStep = ({
               </div>
             );
           })}
-        </div>
+        </div>{" "}
       </div>
     </div>
   );
