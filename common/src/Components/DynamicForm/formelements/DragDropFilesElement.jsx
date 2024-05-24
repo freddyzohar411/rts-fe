@@ -25,9 +25,7 @@ const DragDropFilesElement = ({
   console.log("Field", field);
   const splitCommaSeparatedText = (text) => {
     if (!text) return [];
-    // If no comma is found, return the text as the only item in the array
     if (text.indexOf(",") === -1) return [text];
-    // Split the text by commas and remove any whitespace
     return text.split(",").map((item) => item.trim());
   };
 
@@ -142,9 +140,6 @@ const DragDropFilesElement = ({
                     <span>{truncate(file, 30)}</span>
                   </div>
                 </div>
-                {/* <div className="cursor-pointer">
-                <span className="mdi mdi-close"></span>
-              </div> */}
               </div>
             </div>
           ))}

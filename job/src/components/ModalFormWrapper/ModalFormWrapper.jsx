@@ -50,6 +50,7 @@ const ModalFormWrapper = ({
   jobTimeLineData,
   modalFormName,
   isLoading,
+  readOnlyInterviewNo,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -66,6 +67,7 @@ const ModalFormWrapper = ({
   useEffect(() => {
     let stageId;
     let status;
+    console.log("Active Step", activeStep);
     // Get stage id
     if (activeStep === PRF_WTDWN_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.TAG;
@@ -73,7 +75,7 @@ const ModalFormWrapper = ({
       stageId = JOB_STAGE_IDS.SUBMIT_TO_SALES;
     } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.SUBMIT_TO_CLIENT;
-    } else if (activeStep === APPROVE_TOS_FORM_INDEX){
+    } else if (activeStep === APPROVE_TOS_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.TOS_APPROVAL;
     } else if (activeStep === ACCEPTED_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.CONDITIONAL_OFFER_APPROVAL;
@@ -81,7 +83,40 @@ const ModalFormWrapper = ({
     } else if (activeStep === REJECTED_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.CONDITIONAL_OFFER_APPROVAL;
       status = "REJECTED";
-    } 
+    } else if (
+      activeStep === REJECTED_INTRW_FORM_INDEX ||
+      activeStep === CANCL_BY_CLIENT_FORM_INDEX
+    ) {
+      switch (readOnlyInterviewNo) {
+        case 1:
+          stageId = JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED;
+          break;
+        case 2:
+          stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
+          break;
+        case 3:
+          stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
+          break;
+        default:
+      }
+    } else if (activeStep === BACKOUT_CANDIE_FORM_INDEX) {
+      switch (readOnlyInterviewNo) {
+        case 1:
+          stageId = JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED;
+          break;
+        case 2:
+          stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
+          break;
+        case 3:
+          stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
+          break;
+        default:
+      }
+    } else if (activeStep === SELECTED_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.INTERVIEW_FEEDBACK_PENDING;
+    }
+
+    console.log("Stage Id", stageId, "Status", status);
 
     if (jobTimeLineData && isFormModalOpen == true) {
       dispatch(

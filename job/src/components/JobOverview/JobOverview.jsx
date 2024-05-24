@@ -146,6 +146,7 @@ const JobOverview = () => {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [modalFormName, setModalFormName] = useState({});
   const [readOnly, setReadOnly] = useState(false);
+  const [readOnlyInterviewNo, setReadOnlyInterviewNo] = useState(0);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -1243,6 +1244,81 @@ const JobOverview = () => {
         }
       }
     },
+    "First Interview Scheduled": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "First Interview Scheduled"
+        ]
+      ) {
+        const status =
+          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+            "First Interview Scheduled"
+          ]?.status;
+        if (status === "REJECTED") {
+          setActiveStep(REJECTED_INTRW_FORM_INDEX);
+          setIsFormModalOpen(true);
+          setReadOnlyInterviewNo(1);
+        } else if (status === "WITHDRAWN") {
+          setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+          setIsFormModalOpen(true);
+          setReadOnlyInterviewNo(1);
+        }
+      }
+    },
+    "Second Interview Scheduled": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Second Interview Scheduled"
+        ]
+      ) {
+        const status =
+          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+            "Second Interview Scheduled"
+          ]?.status;
+        if (status === "REJECTED") {
+          setActiveStep(REJECTED_INTRW_FORM_INDEX);
+          setIsFormModalOpen(true);
+          setReadOnlyInterviewNo(2);
+        } else if (status === "WITHDRAWN") {
+          setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+          setIsFormModalOpen(true);
+          setReadOnlyInterviewNo(2);
+        }
+      }
+    },
+    "Third Interview Scheduled": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Third Interview Scheduled"
+        ]
+      ) {
+        const status =
+          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+            "Third Interview Scheduled"
+          ]?.status;
+        if (status === "REJECTED") {
+          setActiveStep(REJECTED_INTRW_FORM_INDEX);
+          setIsFormModalOpen(true);
+          setReadOnlyInterviewNo(3);
+        } else if (status === "WITHDRAWN") {
+          setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+          setIsFormModalOpen(true);
+          setReadOnlyInterviewNo(3);
+        }
+      }
+    },
+    "Interview Feedback Pending": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Interview Feedback Pending"
+        ] && jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Interview Feedback Pending"
+        ]?.status === "COMPLETED"
+      ) {
+        setActiveStep(SELECTED_FORM_INDEX);
+        setIsFormModalOpen(true);
+      }
+    }
   };
 
   //Handle Canvas Close and Modal Close
@@ -1250,8 +1326,16 @@ const JobOverview = () => {
     // If canvas is close set readOnly to false
     if (!offcanvasForm) {
       setReadOnly(false);
+      setReadOnlyInterviewNo(0);
     }
   }, [offcanvasForm]);
+
+  useEffect(() => {
+    if (!isFormModalOpen) {
+      setReadOnly(false);
+      setReadOnlyInterviewNo(0);
+    }
+  }, [isFormModalOpen]);
 
   return (
     <React.Fragment>
@@ -1493,6 +1577,7 @@ const JobOverview = () => {
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           modalFormName={modalFormName}
           isLoading={jobTagMeta?.isLoading}
+          readOnlyInterviewNo={readOnlyInterviewNo}
         />
       </div>
     </React.Fragment>
