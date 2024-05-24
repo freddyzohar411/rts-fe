@@ -39,6 +39,7 @@ const CodingTest = forwardRef(
     const formSubmissionData = useSelector(
       (state) => state.JobStageReducer.jobTimelineFormSubmission
     );
+    const [rejectedData, setRejectedData] = useState(null);
 
     useEffect(() => {
       dispatch(fetchJobForm("coding_test"));
@@ -47,13 +48,9 @@ const CodingTest = forwardRef(
     useEffect(() => {
       if (jobTimeLineData && jobTimeLineData?.timeline?.["Coding Test"]) {
         if (jobTimeLineData?.timeline?.["Coding Test"]?.status === "REJECTED") {
-          dispatch(
-            fetchJobTimelineFormSubmission({
-              jobId: jobTimeLineData?.job?.id,
-              jobStageId: JOB_STAGE_IDS?.CODING_TEST,
-              candidateId: jobTimeLineData?.candidate?.id,
-            })
-          );
+          setRejectedData({
+            codingTestResults: false
+          })
         }
         if (
           jobTimeLineData?.timeline?.["Coding Test"]?.status === "COMPLETED"
@@ -134,7 +131,7 @@ const CodingTest = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={formSubmissionData ? formSubmissionData : null}
+                  editData={formSubmissionData ? formSubmissionData : rejectedData}
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}

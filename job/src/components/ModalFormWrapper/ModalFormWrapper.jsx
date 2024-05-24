@@ -51,6 +51,7 @@ const ModalFormWrapper = ({
   modalFormName,
   isLoading,
   readOnlyInterviewNo,
+  setModalFormName,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -62,9 +63,11 @@ const ModalFormWrapper = ({
   const formSubmissionData = useSelector(
     (state) => state.JobStageReducer.jobTimelineFormSubmission
   );
+  const [customHeader, setCustomHeader] = useState(null);
   console.log("Job TimeLine Data Modal Wrapper", jobTimeLineData);
   // Get Submission Data
   useEffect(() => {
+    setCustomHeader(null);
     let stageId;
     let status;
     console.log("Active Step", activeStep);
@@ -99,6 +102,7 @@ const ModalFormWrapper = ({
           break;
         default:
       }
+      setCustomHeader("Candidate Rejected / Cancelled by Client");
     } else if (activeStep === BACKOUT_CANDIE_FORM_INDEX) {
       switch (readOnlyInterviewNo) {
         case 1:
@@ -380,6 +384,8 @@ const ModalFormWrapper = ({
     closeModal();
   };
 
+  console.log("Custom Header", customHeader);
+
   useEffect(() => {
     if (form) {
       setFormTemplate(form);
@@ -400,7 +406,10 @@ const ModalFormWrapper = ({
           paddingBottom: "0px",
         }}
       >
-        <h5>{modalFormName ? modalFormName?.header : header || "Header"}</h5>
+        <h5>
+          {customHeader ||
+            (modalFormName ? modalFormName?.header : header || "Header")}
+        </h5>
       </ModalHeader>
       <ModalBody>
         <Form

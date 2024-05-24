@@ -36,6 +36,8 @@ const TechnicalInterview = forwardRef(
     const formSubmissionData = useSelector(
       (state) => state.JobStageReducer.jobTimelineFormSubmission
     );
+    const [rejectedData, setRejectedData] = useState(null);
+
     const { getAllUserGroups } = useUserAuth();
 
     useEffect(() => {
@@ -43,18 +45,17 @@ const TechnicalInterview = forwardRef(
     }, []);
 
     useEffect(() => {
-      if (jobTimeLineData && jobTimeLineData?.timeline?.["Technical Interview"]) {
+      if (
+        jobTimeLineData &&
+        jobTimeLineData?.timeline?.["Technical Interview"]
+      ) {
         if (
           jobTimeLineData?.timeline?.["Technical Interview"]?.status ===
           "REJECTED"
         ) {
-          dispatch(
-            fetchJobTimelineFormSubmission({
-              jobId: jobTimeLineData?.job?.id,
-              jobStageId: JOB_STAGE_IDS?.TECHNICAL_INTERVIEW,
-              candidateId: jobTimeLineData?.candidate?.id,
-            })
-          );
+          setRejectedData({
+            technicalInterviewResults: false,
+          });
         }
         if (
           jobTimeLineData?.timeline?.["Technical Interview"]?.status ===
@@ -136,7 +137,9 @@ const TechnicalInterview = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={formSubmissionData ? formSubmissionData : null}
+                  editData={
+                    formSubmissionData ? formSubmissionData : rejectedData
+                  }
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}

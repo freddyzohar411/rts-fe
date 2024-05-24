@@ -36,6 +36,7 @@ const SkillAssessment = forwardRef(
     const formSubmissionData = useSelector(
       (state) => state.JobStageReducer.jobTimelineFormSubmission
     );
+    const [rejectedData, setRejectedData] = useState(null);
 
     const { getAllUserGroups } = useUserAuth();
 
@@ -138,7 +139,9 @@ const SkillAssessment = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={formSubmissionData ? formSubmissionData : null}
+                  editData={
+                    formSubmissionData ? formSubmissionData : rejectedData
+                  }
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}

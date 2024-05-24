@@ -905,6 +905,25 @@ const JobOverview = () => {
     let showSubmit = true;
     let cancelLabel = "Cancel";
     let submitLabel = "Update";
+
+    // If read only return cancel
+    if (readOnly) {
+      return (
+        <Button
+          className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+          style={{
+            borderRadius: "8px",
+          }}
+          onClick={() => {
+            setOffcanvasForm(false);
+            setIsViewTemplate(false);
+          }}
+        >
+          Cancel
+        </Button>
+      );
+    }
+
     switch (step) {
       case ASSOCIATE_FORM_INDEX:
       case PREPARE_TOS_FORM_INDEX:
@@ -1026,6 +1045,7 @@ const JobOverview = () => {
       default:
         break;
     }
+
     return (
       <div className="d-flex align-items-center gap-2">
         {showCancel && (
@@ -1328,40 +1348,6 @@ const JobOverview = () => {
           setReadOnly(true);
         }
       },
-      "Submit to Sales": () => {
-        if (
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Submit to Sales"
-          ] &&
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Submit to Sales"
-          ]?.status === "REJECTED"
-        ) {
-          if (flag) {
-            onFlag = true;
-            return;
-          }
-          setActiveStep(PRF_REJ_SALES_FORM_INDEX);
-          setIsFormModalOpen(true);
-        }
-      },
-      "Submit to Client": () => {
-        if (
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Submit to Client"
-          ] &&
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Submit to Client"
-          ]?.status === "REJECTED"
-        ) {
-          if (flag) {
-            onFlag = true;
-            return;
-          }
-          setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
-          setIsFormModalOpen(true);
-        }
-      },
       "Profile Feedback Pending": () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
@@ -1509,6 +1495,40 @@ const JobOverview = () => {
             return;
           }
           setActiveStep(PRF_WTDWN_FORM_INDEX);
+          setIsFormModalOpen(true);
+        }
+      },
+      "Submit to Sales": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Submit to Sales"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Submit to Sales"
+          ]?.status === "REJECTED"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(PRF_REJ_SALES_FORM_INDEX);
+          setIsFormModalOpen(true);
+        }
+      },
+      "Submit to Client": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Submit to Client"
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Submit to Client"
+          ]?.status === "REJECTED"
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
           setIsFormModalOpen(true);
         }
       },
@@ -1954,6 +1974,7 @@ const JobOverview = () => {
           modalFormName={modalFormName}
           isLoading={jobTagMeta?.isLoading}
           readOnlyInterviewNo={readOnlyInterviewNo}
+          setModalFormName={setModalFormName}
         />
       </div>
     </React.Fragment>
