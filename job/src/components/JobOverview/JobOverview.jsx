@@ -51,7 +51,6 @@ import {
   jobHeaders,
   timelineSkipModule,
   timelineSkipSubModule,
-  timelineLegend,
   newHeaders,
   ASSOCIATE_FORM_INDEX,
   SUB_TO_SALES_FORM_INDEX,
@@ -128,7 +127,7 @@ const JobOverview = () => {
 
   // Next Step Dropdown States
   const [headerTooltip, setHeaderTooltip] = useState(false);
-  const [sortDirection, setSortDirection] = useState("asc");
+  const [sortDirection, setSortDirection] = useState("desc");
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
   const [stepperState, setStepperState] = useState("");
@@ -188,7 +187,7 @@ const JobOverview = () => {
     {
       page: 0,
       pageSize: 20,
-      sortBy: "candidate.first_name",
+      sortBy: "job_timeline.updated_at",
       sortDirection: sortDirection,
       searchTerm: null,
       searchFields: [
@@ -252,15 +251,20 @@ const JobOverview = () => {
       let jsonObject = {};
       jobTimelineData?.jobs?.map((data) => {
         let maxOrder = getMaxOrder(data);
-        if (maxOrder >= 1 && maxOrder <= 5) {
+        if (maxOrder >= 1 && maxOrder <= 4) {
           maxOrder = 1;
-        } else if (maxOrder >= 6 && maxOrder <= 9) {
+        } else if (maxOrder >= 5 && maxOrder <= 8) {
           maxOrder = 2;
-        } else if (maxOrder >= 10 && maxOrder <= 13) {
-          maxOrder = 3;
-        } else if (maxOrder >= 14 && maxOrder <= 15) {
+        } else if (maxOrder >= 9 && maxOrder <= 12) {
+          const status = getStatus(data, maxOrder);
+          if (status === JOB_STAGE_STATUS.COMPLETED) {
+            maxOrder = 3;
+          } else {
+            maxOrder = 2;
+          }
+        } else if (maxOrder >= 13 && maxOrder <= 14) {
           maxOrder = 4;
-        } else if (maxOrder >= 16 && maxOrder <= 17) {
+        } else if (maxOrder >= 15 && maxOrder <= 17) {
           maxOrder = 5;
         }
         jsonObject[data?.id] = maxOrder;
@@ -412,6 +416,7 @@ const JobOverview = () => {
       dispatch(
         fetchJobTimelineList({
           ...DynamicTableHelper.cleanPageRequest(pageRequest),
+          sortBy: "candidate.first_name",
           jobId: parseInt(jobId),
           sortDirection: direction,
         })
@@ -672,33 +677,6 @@ const JobOverview = () => {
     }
   };
 
-  const renderLegend = () => {
-    return (
-      <div className="d-flex flex-wrap">
-        {timelineLegend.map((item, index) => (
-          <div
-            key={index}
-            className="d-flex flex-row gap-2 justify-content-start align-items-center me-2"
-            style={{ width: "calc(50% - 8px)" }}
-          >
-            <div
-              className={`bg-${item.color} rounded-circle`}
-              style={{
-                width: "9px",
-                height: "9px",
-                backgroundColor: `${item.color}`,
-                border: `1px solid ${item.color}`,
-              }}
-            ></div>
-            <div>
-              <span>{item.legend}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   /**
    * @author Rahul Sahu
    * @param {*} targetName
@@ -757,16 +735,22 @@ const JobOverview = () => {
             const isRejected =
               status === JOB_STAGE_STATUS.REJECTED ||
               status === JOB_STAGE_STATUS.WITHDRAWN;
+            const isAllStepsCompleted = originalOrder === 17;
 
-            if (maxOrder >= 1 && maxOrder <= 5) {
+            if (maxOrder >= 1 && maxOrder <= 4) {
               maxOrder = 1;
-            } else if (maxOrder >= 6 && maxOrder <= 9) {
+            } else if (maxOrder >= 5 && maxOrder <= 8) {
               maxOrder = 2;
-            } else if (maxOrder >= 10 && maxOrder <= 13) {
-              maxOrder = 3;
-            } else if (maxOrder >= 14 && maxOrder <= 15) {
+            } else if (maxOrder >= 9 && maxOrder <= 12) {
+              const odinStatus = getStatus(data, maxOrder);
+              if (odinStatus === JOB_STAGE_STATUS.COMPLETED) {
+                maxOrder = 3;
+              } else {
+                maxOrder = 2;
+              }
+            } else if (maxOrder >= 13 && maxOrder <= 14) {
               maxOrder = 4;
-            } else if (maxOrder >= 16 && maxOrder <= 17) {
+            } else if (maxOrder >= 15 && maxOrder <= 17) {
               maxOrder = 5;
             }
             const mainStage = getMainStage(maxOrder);
@@ -814,7 +798,7 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         value={skipSteps?.[data?.id]}
-                        disabled={isRejected}
+                        disabled={isRejected || isAllStepsCompleted}
                         onChange={(e) =>
                           handleStepsSelection(
                             data?.id,
@@ -841,7 +825,7 @@ const JobOverview = () => {
                         type="select"
                         className="form-select border-0"
                         value={selectedSubSteps?.[candidateData?.id]}
-                        disabled={isRejected}
+                        disabled={isRejected || isAllStepsCompleted}
                         onChange={(e) =>
                           handleSubStepsSelection(
                             candidateData?.id,
@@ -874,7 +858,9 @@ const JobOverview = () => {
                         setTimelineRowIndex(timelineIndex);
                       }}
                       disabled={
-                        isRejected || !selectedSubSteps?.[candidateData?.id]
+                        isRejected ||
+                        !selectedSubSteps?.[candidateData?.id] ||
+                        isAllStepsCompleted
                       }
                     >
                       <i
@@ -1707,6 +1693,7 @@ const JobOverview = () => {
               deliveryTeam,
               mobile
             );
+            const shouldShowTooltip = values?.[header]?.value?.length > 20;
             return (
               <Col key={index}>
                 <div
@@ -1722,14 +1709,16 @@ const JobOverview = () => {
                     {values?.[header]?.trimValue}
                   </span>
                 </div>
-                <Tooltip
-                  isOpen={isToolTipOpen(`btn-${index}`)}
-                  placement="bottom-start"
-                  target={`btn-${index}`}
-                  toggle={() => toggle(`btn-${index}`)}
-                >
-                  {values?.[header]?.value}
-                </Tooltip>
+                {shouldShowTooltip && (
+                  <Tooltip
+                    isOpen={isToolTipOpen(`btn-${index}`)}
+                    placement="bottom-start"
+                    target={`btn-${index}`}
+                    toggle={() => toggle(`btn-${index}`)}
+                  >
+                    {values?.[header]?.value}
+                  </Tooltip>
+                )}
               </Col>
             );
           })}

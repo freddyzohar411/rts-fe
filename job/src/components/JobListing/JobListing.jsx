@@ -3,18 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingOverlay from "react-loading-overlay";
-import {
-  Badge,
-  Button,
-  Input,
-  Dropdown,
-  DropdownMenu,
-  DropdownToggle,
-  Row,
-  Col,
-  Label,
-  DropdownItem,
-} from "reactstrap";
+import { Badge, Input, DropdownItem } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import "./JobListing.scss";
 import { DateHelper, useTableHook } from "@workspace/common";
@@ -39,9 +28,7 @@ import { cloneJob } from "../../store/job/action";
 import { useUserAuth } from "@workspace/login";
 import { RECRUITER_GROUP } from "../../helpers/constant";
 import JobTagCanvas from "./JobTagCanvas";
-import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
-import { truncate } from "@workspace/common/src/helpers/string_helper";
 import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
 
 const JobListing = () => {
@@ -112,6 +99,15 @@ const JobListing = () => {
             <span>{data?.jobSubmissionData?.jobTitle}</span>
           </Link>
         );
+      },
+    },
+    {
+      names: ["jobSubmissionData.accountOwner"],
+      render: (data) => {
+        const owner = data?.jobSubmissionData?.accountOwner
+          ?.split("(")?.[0]
+          ?.trim();
+        return <span>{owner}</span>;
       },
     },
   ];
@@ -339,16 +335,6 @@ const JobListing = () => {
           );
         },
       },
-      // {
-      //   name: "badges",
-      //   sort: false,
-      //   sortValue: "badges",
-      //   render: () => (
-      //     <div className="d-flex column-gap-2">
-      //       <Badge color="dark">10</Badge>
-      //     </div>
-      //   ),
-      // },
       ...customConfig,
       {
         header: "Action",
@@ -571,7 +557,6 @@ const JobListing = () => {
       setTableConfig(generateJobListConfig(customConfig));
     }
   }, [customConfig, pageInfo, activeRow, tableData]);
-
 
   return (
     <LoadingOverlay
