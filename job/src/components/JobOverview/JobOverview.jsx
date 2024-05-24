@@ -521,6 +521,7 @@ const JobOverview = () => {
             candidateId={candidateId}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             ref={formikRef}
+            readOnly={readOnly}
           />
         );
       //Odin
@@ -1361,14 +1362,32 @@ const JobOverview = () => {
           setIsFormModalOpen(true);
         }
       },
+      "Profile Feedback Pending": () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Profile Feedback Pending"
+          ]
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(PROFILE_FEEDBACK_PENDING_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
       "Skills Assessment": () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Skills Assessment"
+          ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             "Skills Assessment"
           ] &&
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Skills Assessment"
-          ]?.status !== "SKIPPED"
+          status !== "SKIPPED" &&
+          status !== "IN_PROGRESS"
         ) {
           if (flag) {
             onFlag = true;
@@ -1380,13 +1399,16 @@ const JobOverview = () => {
         }
       },
       "Coding Test": () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Coding Test"
+          ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             "Coding Test"
           ] &&
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Coding Test"
-          ]?.status !== "SKIPPED"
+          status !== "SKIPPED" &&
+          status !== "IN_PROGRESS"
         ) {
           if (flag) {
             onFlag = true;
@@ -1398,13 +1420,16 @@ const JobOverview = () => {
         }
       },
       "Technical Interview": () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Technical Interview"
+          ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             "Technical Interview"
           ] &&
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Technical Interview"
-          ]?.status !== "SKIPPED"
+          status !== "SKIPPED" &&
+          status !== "IN_PROGRESS"
         ) {
           if (flag) {
             onFlag = true;
@@ -1416,13 +1441,16 @@ const JobOverview = () => {
         }
       },
       "Cultural Fit Test": () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            "Cultural Fit Test"
+          ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             "Cultural Fit Test"
           ] &&
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            "Cultural Fit Test"
-          ]?.status !== "SKIPPED"
+          status !== "SKIPPED" &&
+          status !== "IN_PROGRESS"
         ) {
           if (flag) {
             onFlag = true;

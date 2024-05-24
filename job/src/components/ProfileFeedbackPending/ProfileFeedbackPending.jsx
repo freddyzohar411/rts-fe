@@ -15,21 +15,32 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import {
+  fetchJobTimelineFormSubmission,
+  fetchJobTimelineFormSubmissionReset,
+} from "../../store/jobStage/action";
 
 const ProfileFeedbackPending = forwardRef(
-  ({ closeOffcanvas, jobId, candidateId, handleIconClick }, ref) => {
+  (
+    {
+      closeOffcanvas,
+      jobId,
+      candidateId,
+      handleIconClick,
+      jobTimeLineData,
+      readOnly = false,
+    },
+    ref
+  ) => {
     const formikRef = useRef(null);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
-    const linkState = location.state;
     const { getAllUserGroups } = useUserAuth();
 
-    const [view] = useState(
-      linkState?.view !== null && linkState?.view !== undefined
-        ? linkState?.view
-        : false
+    const formSubmissionData = useSelector(
+      (state) => state.JobStageReducer.jobTimelineFormSubmission
     );
 
     const form = useSelector((state) => state.JobFormReducer.form);
@@ -38,6 +49,25 @@ const ProfileFeedbackPending = forwardRef(
     useEffect(() => {
       dispatch(fetchJobForm(PROFILE_FEEDBACK_PENDING));
     }, []);
+
+    // Set candidate salaries on associate page
+    useEffect(() => {
+      if (
+        jobTimeLineData &&
+        jobTimeLineData?.timeline?.["Profile Feedback Pending"]
+      ) {
+        dispatch(
+          fetchJobTimelineFormSubmission({
+            jobId: jobTimeLineData?.job?.id,
+            jobStageId: JOB_STAGE_IDS?.PROFILE_FEEDBACK_PENDING,
+            candidateId: jobTimeLineData?.candidate?.id,
+          })
+        );
+      }
+      return () => {
+        dispatch(fetchJobTimelineFormSubmissionReset());
+      };
+    }, [jobTimeLineData]);
 
     useEffect(() => {
       if (form) {
@@ -80,10 +110,10 @@ const ProfileFeedbackPending = forwardRef(
             template={formTemplate}
             userDetails={getAllUserGroups()}
             country={null}
-            editData={null}
+            editData={formSubmissionData || null}
             onSubmit={handleFormSubmit}
             errorMessage={null}
-            view={view}
+            view={readOnly}
             ref={formikRef}
           />
         </div>
