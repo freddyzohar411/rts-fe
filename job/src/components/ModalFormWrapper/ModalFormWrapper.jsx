@@ -72,9 +72,10 @@ const ModalFormWrapper = ({
       stageId = JOB_STAGE_IDS.SUBMIT_TO_SALES;
     } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.SUBMIT_TO_CLIENT;
+    } else if (activeStep === APPROVE_TOS_FORM_INDEX){
+      stageId = JOB_STAGE_IDS.TOS_APPROVAL;
     }
 
-    // Get TOS SUbmission data
     if (jobTimeLineData && isFormModalOpen == true) {
       dispatch(
         fetchJobTimelineFormSubmission({
@@ -84,6 +85,10 @@ const ModalFormWrapper = ({
         })
       );
     }
+
+
+
+
 
     return () => {
       dispatch(fetchJobTimelineFormSubmissionReset());

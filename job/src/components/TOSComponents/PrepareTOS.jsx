@@ -19,7 +19,14 @@ import { getTOSByJobIdAndCandidateIdAndStatus } from "../../helpers/backend_help
 
 const PrepareTOS = forwardRef(
   (
-    { jobId, candidateId, setOffcanvasForm, jobTimeLineData, edit = false },
+    {
+      jobId,
+      candidateId,
+      setOffcanvasForm,
+      jobTimeLineData,
+      edit = false,
+      readOnly = false,
+    },
     parentRef
   ) => {
     const dispatch = useDispatch();
@@ -41,15 +48,15 @@ const PrepareTOS = forwardRef(
 
     const [formSubmissionData, setFormSubmissionData] = useState(null);
 
-    const [prePrepopulateData, setPrePopulateData] = useState(null)
+    const [prePrepopulateData, setPrePopulateData] = useState(null);
     // Pre Populate Data
     useEffect(() => {
-      if (!edit){
+      if (!edit) {
         setPrePopulateData({
           clientName: jobTimeLineData?.job?.jobSubmissionData?.clientName || "",
-        })
+        });
       }
-    },[])
+    }, []);
 
     useEffect(() => {
       if (form && tosId && formTemplate) {
@@ -220,7 +227,7 @@ const PrepareTOS = forwardRef(
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}
-                  view={view}
+                  view={readOnly}
                   ref={formikRef}
                 />
               </div>

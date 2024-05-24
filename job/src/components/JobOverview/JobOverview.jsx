@@ -611,6 +611,7 @@ const JobOverview = () => {
             ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             edit={true}
+            readOnly={readOnly}
           />
         );
       case RELEASE_FORM_INDEX:
@@ -649,6 +650,7 @@ const JobOverview = () => {
             ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             edit={true}
+            readOnly={readOnly}
           />
         );
       case APPROVE_TOS_FORM_INDEX:
@@ -1150,9 +1152,13 @@ const JobOverview = () => {
       }
     },
     "Prepare TOS": () => {
-      setActiveStep(APPROVE_TOS_FORM_INDEX);
-      setOffcanvasForm(true);
-      // Set
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.["Prepare TOS"]
+      ) {
+        setActiveStep(EDIT_TOS_FORM_INDEX);
+        setOffcanvasForm(true);
+        setReadOnly(true);
+      }
     },
 
     // Modal and Forms
@@ -1164,6 +1170,35 @@ const JobOverview = () => {
       ) {
         setActiveStep(PRF_WTDWN_FORM_INDEX);
         setIsFormModalOpen(true);
+      }
+    },
+    "TOS Accepted/Declined": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "TOS Accepted/Declined"
+        ]
+      ) {
+        if (
+          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+            "TOS Accepted/Declined"
+          ]?.status === "COMPLETED"
+        ) {
+          setActiveStep(EDIT_TOS_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+        if (
+          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+            "TOS Accepted/Declined"
+          ]?.status === "REJECTED"
+        ) {
+          setActiveStep(APPROVE_TOS_FORM_INDEX);
+          setModalFormName({
+            header: "TOS Rejected",
+            formName: "rejected_tos",
+          });
+          setIsFormModalOpen(true);
+        }
       }
     },
   };
