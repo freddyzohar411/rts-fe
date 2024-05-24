@@ -20,6 +20,22 @@ const DragDropFilesElement = ({
   const [files, setFiles] = useState([]);
   const [filesData, setFilesData] = useState([]);
   const fileInputRef = useRef();
+  const [existingFiles, setExistingFiles] = useState([]);
+
+  console.log("Field", field);
+  const splitCommaSeparatedText = (text) => {
+    if (!text) return [];
+    // If no comma is found, return the text as the only item in the array
+    if (text.indexOf(",") === -1) return [text];
+    // Split the text by commas and remove any whitespace
+    return text.split(",").map((item) => item.trim());
+  };
+
+  useEffect(() => {
+    if (formik?.values?.[field.name]) {
+      setExistingFiles(splitCommaSeparatedText(formik?.values?.[field.name]));
+    }
+  }, [formik?.values?.[field.name]]);
 
   useEffect(() => {
     const fieldValue = formik?.values?.[field.name];
@@ -53,41 +69,43 @@ const DragDropFilesElement = ({
 
   return (
     <>
-      <div className="mb-3">
-        <div
-          {...getRootProps()}
-          className="dropzone dropzone-custom"
-          id={field.name}
-          name={field.name}
-          style={{ height: "200px" }}
-        >
-          {isDragActive ? (
-            <div className="d-flex flex-column align-items-center justify-content-center">
-              <div className="upload-div">
-                <span className="mdi mdi-cloud-upload-outline upload-icon fs-4"></span>
-              </div>
+      {!formState === "view" && (
+        <div className="mb-3">
+          <div
+            {...getRootProps()}
+            className="dropzone dropzone-custom"
+            id={field.name}
+            name={field.name}
+            style={{ height: "200px" }}
+          >
+            {isDragActive ? (
+              <div className="d-flex flex-column align-items-center justify-content-center">
+                <div className="upload-div">
+                  <span className="mdi mdi-cloud-upload-outline upload-icon fs-4"></span>
+                </div>
 
-              <span>
-                <span className="upload-span">Drag and drop</span> into this
-                area to upload files.
-              </span>
-            </div>
-          ) : (
-            <div className="d-flex flex-column align-items-center justify-content-center">
-              <div className="upload-div">
-                <span className="mdi mdi-cloud-upload-outline upload-icon fs-4"></span>
+                <span>
+                  <span className="upload-span">Drag and drop</span> into this
+                  area to upload files.
+                </span>
               </div>
-              <div>
-                <span className="upload-span">Click to upload</span> or drag and
-                drop.
+            ) : (
+              <div className="d-flex flex-column align-items-center justify-content-center">
+                <div className="upload-div">
+                  <span className="mdi mdi-cloud-upload-outline upload-icon fs-4"></span>
+                </div>
+                <div>
+                  <span className="upload-span">Click to upload</span> or drag
+                  and drop.
+                </div>
+                <div>
+                  <span className="form-text">PDF, DOC or DOCx files.</span>
+                </div>
               </div>
-              <div>
-                <span className="form-text">PDF, DOC or DOCx files.</span>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <div>
         {files &&
           files.map((file, index) => (
@@ -109,6 +127,24 @@ const DragDropFilesElement = ({
                 >
                   <span className="mdi mdi-close"></span>
                 </div>
+              </div>
+            </div>
+          ))}
+        {existingFiles.length > 0 &&
+          existingFiles.map((file, index) => (
+            <div className="uploaded-files-div">
+              <div className="d-flex flex-row justify-content-between align-items-top w-100">
+                <div className="d-flex flex-row gap-2 align-items-center">
+                  <div>
+                    <span className="mdi mdi-file-pdf-box fs-3"></span>
+                  </div>
+                  <div className="d-flex flex-column">
+                    <span>{truncate(file, 30)}</span>
+                  </div>
+                </div>
+                {/* <div className="cursor-pointer">
+                <span className="mdi mdi-close"></span>
+              </div> */}
               </div>
             </div>
           ))}
