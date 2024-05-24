@@ -37,23 +37,13 @@ import {
   tagJobWithFiles,
   untagJob,
   getJobCandidateStage,
-  getTOSByJobIdAndCandidateIdAndStatus
+  getTOSByJobIdAndCandidateIdAndStatus,
+  getConditionalOfferByJobIdAndCandidateIdAndStatus,
 } from "../../helpers/backend_helper";
-import { JOB_STAGE_STATUS } from "../../components/JobListing/JobListingConstants";
 import {
-  APPROVE_TOS_FORM_INDEX,
-  PRF_REJ_CLIENT_FORM_INDEX,
-  PRF_REJ_SALES_FORM_INDEX,
-  PRF_WTDWN_FORM_INDEX,
-  UNTAG_FORM_INDEX,
-  ACCEPTED_FORM_INDEX,
-  REJECTED_FORM_INDEX,
-  jobTimelineType,
-  BACKOUT_CANDIE_FORM_INDEX,
-  REJECTED_INTRW_FORM_INDEX,
-  CANCL_BY_CLIENT_FORM_INDEX,
-  SELECTED_FORM_INDEX,
-} from "../../components/JobOverview/JobOverviewConstants";
+  JOB_STAGE_STATUS,
+  JOB_STAGE_IDS,
+} from "../../components/JobListing/JobListingConstants";
 
 function* workTagJob(action) {
   const { payload, navigate } = action.payload;
@@ -175,17 +165,31 @@ function* workTagJobFiles(action) {
 
 // Fetch job timeline form submission
 function* workFetchJobTimelineFormSubmission(action) {
-  const { jobId, jobStageId, candidateId } = action.payload;
+  const { jobId, jobStageId, candidateId, status } = action.payload;
   try {
     let response = null;
-    if (jobStageId === APPROVE_TOS_FORM_INDEX) {
-      response = yield call(getTOSByJobIdAndCandidateIdAndStatus, {
+    if (jobStageId === JOB_STAGE_IDS?.TOS_APPROVAL) {
+      response = yield call(
+        getTOSByJobIdAndCandidateIdAndStatus,
         jobId,
         candidateId,
-        status: "REJECTED",
-      });
+        "REJECTED"
+      );
       yield put(
         fetchJobTimelineFormSubmissionSuccess(response.data?.tosSubmissionData)
+      );
+    } else if (jobStageId === JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL) {
+      console.log("jobStageId", jobStageId, "status", status);
+      response = yield call(
+        getConditionalOfferByJobIdAndCandidateIdAndStatus,
+        jobId,
+        candidateId,
+        status
+      );
+      yield put(
+        fetchJobTimelineFormSubmissionSuccess(
+          response.data?.conditionalOfferSubmissionData
+        )
       );
     } else {
       response = yield call(getJobCandidateStage, action.payload);
@@ -193,7 +197,6 @@ function* workFetchJobTimelineFormSubmission(action) {
         fetchJobTimelineFormSubmissionSuccess(response.data?.submissionData)
       );
     }
-   
   } catch (error) {
     yield put(fetchJobTimelineFormSubmissionFailure(error));
   }

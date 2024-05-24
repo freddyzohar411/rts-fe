@@ -24,3 +24,6 @@ export const BASE_USER = "/api/user";
 
 // TOS
 export const BASE_TOS = "/api/tos";
+
+// Conditional Offer
+export const BASE_CONDITIONAL_OFFER = "/api/conditional-offer";

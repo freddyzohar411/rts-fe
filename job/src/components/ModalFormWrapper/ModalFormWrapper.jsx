@@ -65,6 +65,7 @@ const ModalFormWrapper = ({
   // Get Submission Data
   useEffect(() => {
     let stageId;
+    let status;
     // Get stage id
     if (activeStep === PRF_WTDWN_FORM_INDEX) {
       stageId = JOB_STAGE_IDS.TAG;
@@ -74,7 +75,13 @@ const ModalFormWrapper = ({
       stageId = JOB_STAGE_IDS.SUBMIT_TO_CLIENT;
     } else if (activeStep === APPROVE_TOS_FORM_INDEX){
       stageId = JOB_STAGE_IDS.TOS_APPROVAL;
-    }
+    } else if (activeStep === ACCEPTED_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.CONDITIONAL_OFFER_APPROVAL;
+      status = "ACCEPTED";
+    } else if (activeStep === REJECTED_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.CONDITIONAL_OFFER_APPROVAL;
+      status = "REJECTED";
+    } 
 
     if (jobTimeLineData && isFormModalOpen == true) {
       dispatch(
@@ -82,13 +89,10 @@ const ModalFormWrapper = ({
           jobId: jobTimeLineData?.job?.id,
           jobStageId: stageId,
           candidateId: jobTimeLineData?.candidate?.id,
+          status: status || null,
         })
       );
     }
-
-
-
-
 
     return () => {
       dispatch(fetchJobTimelineFormSubmissionReset());

@@ -1160,6 +1160,20 @@ const JobOverview = () => {
         setReadOnly(true);
       }
     },
+    "Conditional Offer Sent": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Conditional Offer Sent"
+        ] &&
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Conditional Offer Sent"
+        ]?.status === "COMPLETED"
+      ) {
+        setActiveStep(EDIT_FORM_INDEX);
+        setOffcanvasForm(true);
+        setReadOnly(true);
+      }
+    },
 
     // Modal and Forms
     Tag: () => {
@@ -1196,6 +1210,34 @@ const JobOverview = () => {
           setModalFormName({
             header: "TOS Rejected",
             formName: "rejected_tos",
+          });
+          setIsFormModalOpen(true);
+        }
+      }
+    },
+    "Conditional Offer Accepted/Declined": () => {
+      if (
+        jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+          "Conditional Offer Accepted/Declined"
+        ]
+      ) {
+        const conditionalOfferStatus =
+          jobTimelineData?.jobs?.[timelineRowIndex]?.timeline?.[
+            "Conditional Offer Accepted/Declined"
+          ]?.status;
+        if (conditionalOfferStatus === "COMPLETED") {
+          setActiveStep(ACCEPTED_FORM_INDEX);
+          setModalFormName({
+            header: "Conditional Offer Accepted",
+            formName: "conditional_offer_accepted",
+          });
+          setIsFormModalOpen(true);
+        }
+        if (conditionalOfferStatus === "REJECTED") {
+          setActiveStep(REJECTED_FORM_INDEX);
+          setModalFormName({
+            header: "Conditional Offer Rejected",
+            formName: "conditional_offer_rejected",
           });
           setIsFormModalOpen(true);
         }
