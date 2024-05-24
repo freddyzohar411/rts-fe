@@ -22,7 +22,6 @@ const DragDropFilesElement = ({
   const fileInputRef = useRef();
   const [existingFiles, setExistingFiles] = useState([]);
 
-  console.log("Field", field);
   const splitCommaSeparatedText = (text) => {
     if (!text) return [];
     if (text.indexOf(",") === -1) return [text];

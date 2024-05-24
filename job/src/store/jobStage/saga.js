@@ -179,7 +179,6 @@ function* workFetchJobTimelineFormSubmission(action) {
         fetchJobTimelineFormSubmissionSuccess(response.data?.tosSubmissionData)
       );
     } else if (jobStageId === JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL) {
-      console.log("jobStageId", jobStageId, "status", status);
       response = yield call(
         getConditionalOfferByJobIdAndCandidateIdAndStatus,
         jobId,

@@ -30,8 +30,6 @@ const InnerTimelineStep = ({
   const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] =
     useState(null);
 
-  console.log("dataIndex", dataIndex);
-
   useEffect(() => {
     if (actionTriggeredWithSubitem) {
       //  readOnlyActionTrigger[actionTriggeredWithSubitem]?.();
@@ -559,12 +557,6 @@ const InnerTimelineStep = ({
                   {expandedSections[section.name] && (
                     <div className="d-flex flex-row align-items-top justify-content-center gap-5 me-3">
                       {section.subitems.map((subitem, subindex) => {
-                        console.log("Job data Index", dataIndex);
-                        console.log("subitem", subitem);
-                        console.log(
-                          "subitem",
-                          readOnlyActionTrigger(subitem, true, dataIndex)
-                        );
                         const renderSubitemStyle = renderSectionStyle(
                           subitemsData[subindex]?.data?.status
                         );

@@ -60,8 +60,6 @@ function TimelineHeader({ data }) {
       }
     });
 
-  console.log("Filtered Data", filteredData);
-
   return (
     <div
       className={`d-flex p-0 justify-content-around ${

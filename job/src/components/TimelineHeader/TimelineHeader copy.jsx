@@ -21,14 +21,10 @@ function TimelineHeader({ data }) {
     (state) => state.JobStageReducer.jobTimelineCount
   );
 
-  console.log("JobTimeline Count", jobTimelineCount);
-
   const [candidatesExist, setCandidatesExist] = useState(false);
   const [counts, setCounts] = useState({});
   // default to 1 to avoid division by zero
   const [maxCount, setMaxCount] = useState(1);
-
-  console.log("Counts", counts);
 
   useEffect(() => {
     let data = {};
@@ -89,8 +85,6 @@ function TimelineHeader({ data }) {
           return item;
       }
     });
-
-  console.log("Filtered Data", filteredData);
 
   return (
     <div

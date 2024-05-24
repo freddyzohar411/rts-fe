@@ -729,7 +729,6 @@ const JobOverview = () => {
       <React.Fragment>
         {jobTimelineData?.jobs && jobTimelineData?.jobs?.length > 0 ? (
           jobTimelineData?.jobs?.map((data, timelineIndex) => {
-            // console.log("data", data)
             const candidateData = data?.candidate;
             let maxOrder = getMaxOrder(data);
             const originalOrder = maxOrder;
@@ -1362,7 +1361,8 @@ const JobOverview = () => {
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             JobOverviewConstants.PROFILE_FEEDBACK_PENDING
-          ] && status !== JOB_STAGE_STATUS.SKIPPED
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED
         ) {
           if (flag) {
             onFlag = true;
@@ -1458,13 +1458,15 @@ const JobOverview = () => {
         }
       },
       "Prepare TOS": () => {
-        const status = jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-          JobOverviewConstants.PREPARE_TOS
-        ]?.status;
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.PREPARE_TOS
+          ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             JobOverviewConstants.PREPARE_TOS
-          ] && status !== JOB_STAGE_STATUS.SKIPPED
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED
         ) {
           if (flag) {
             onFlag = true;
