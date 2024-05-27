@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { tagJobAttachment } from "../../store/actions";
 import { useFormik } from "formik";
-
 import {
   Row,
   Col,
@@ -33,7 +32,12 @@ import {
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
 } from "@workspace/common";
-import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
+import {
+  TemplateHelper,
+  ExportHelper,
+  ObjectHelper,
+  EmailVariableSelect,
+} from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
 import { Actions } from "@workspace/common";
 import EmailDateTime from "@workspace/common/src/Components/EmailV2/EmailDateTime";
@@ -46,6 +50,7 @@ import {
   SCHEDULE_FORM_INDEX,
   jobTimelineType,
 } from "../JobOverview/JobOverviewConstants";
+import { fixedVariables } from "../../../../template/src/components/TemplateBuilder/constants";
 
 const ScheduleInterview = forwardRef(
   (
@@ -68,6 +73,7 @@ const ScheduleInterview = forwardRef(
     console.log("emailTemplateData", emailTemplateData);
     const [tableTemplateData, setTableTemplateData] = useState(null);
     const [CVTemplateData, setCVTemplateData] = useState(null);
+    const [selectedVariable, setSelectedVariable] = useState(null);
 
     const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
       candidateId: jobTimeLineData?.candidate?.id,
@@ -341,6 +347,19 @@ const ScheduleInterview = forwardRef(
         }
       }
     };
+
+    useEffect(() => {
+      if (selectedVariable) {
+        const editor = editorRef?.current;
+        const placeHolderVariable = `$[[${selectedVariable?.value}]]`;
+        if (editor?.selection && selectedVariable?.value) {
+          editor.selection.setContent(placeHolderVariable);
+        } else {
+          editor?.setContent(editor.getContent() + placeHolderVariable);
+        }
+      }
+      setSelectedVariable(null);
+    }, [selectedVariable]);
 
     return (
       <React.Fragment>
@@ -677,8 +696,21 @@ const ScheduleInterview = forwardRef(
               <hr className="mt-2" />
             </Col>
           </Row>
-          <Row className="mb-2">
-            <Col className="d-flex justify-content-end">
+          <Row>
+            <Col
+              style={{
+                maxWidth: "50%",
+              }}
+            >
+              <EmailVariableSelect
+                icon={<i className=" ri-file-list-2-line fs-5"></i>}
+                options={fixedVariables["Interview"]}
+                setSelectedOption={setSelectedVariable}
+                value={selectedVariable}
+              />
+              <hr className="mt-2" />
+            </Col>
+            <Col className="text-end mt-2">
               <Button
                 className="btn btn-secondary"
                 onClick={handleReplaceInterviewDataButtonClick}
