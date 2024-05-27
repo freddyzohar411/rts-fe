@@ -51,7 +51,8 @@ import {
   jobTimelineType,
 } from "../JobOverview/JobOverviewConstants";
 import { fixedVariables } from "../../../../template/src/components/TemplateBuilder/constants";
-
+import { generateInterviewTemplateMap } from "./constants";
+import { interviewTemplateMapping } from "./scheduleInterviewUtil";
 const ScheduleInterview = forwardRef(
   (
     {
@@ -274,52 +275,6 @@ const ScheduleInterview = forwardRef(
       }
     };
 
-    const interviewTemplateMap = {
-      "$[[INTERVIEW_START_DATE]]": () => {
-        return formik?.values?.fromDate;
-      },
-      "$[[INTERVIEW_END_DATE]]": () => {
-        return formik?.values?.toDate;
-      },
-      "$[[INTERVIEW_START_TIME]]": () => {
-        return formik?.values?.fromTime;
-      },
-      "$[[INTERVIEW_END_TIME]]": () => {
-        return formik?.values?.toTime;
-      },
-      "$[[INTERVIEW_LOCATION]]": () => {
-        return formik?.values?.location;
-      },
-    };
-
-    const interviewTemplateMapping = (content, map) => {
-      Object.keys(interviewTemplateMap).forEach((key) => {
-        const regex = new RegExp(
-          key.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"),
-          "g"
-        );
-        if (interviewTemplateMap[key]?.()) {
-          content = content.replace(regex, interviewTemplateMap[key]?.());
-        }
-      });
-
-      return content;
-
-      // const parser = new DOMParser();
-      // const doc = parser.parseFromString(content, "text/html");
-
-      // Object.keys(mapping).forEach((key) => {
-      //   const elements = doc.querySelectorAll(`[data-variable="${key}"]`);
-      //   elements.forEach((element) => {
-      //     if (mapping[key]) {
-      //       element.innerHTML = mapping[key];
-      //     }
-      //   });
-      // });
-
-      // return doc.body.innerHTML;
-    };
-
     const handleReplaceInterviewDataButtonClick = () => {
       const editor = editorRef?.current;
       if (editor) {
@@ -331,7 +286,7 @@ const ScheduleInterview = forwardRef(
         const content = editor.getContent();
         const replacedContent = interviewTemplateMapping(
           content,
-          interviewTemplateMap
+          generateInterviewTemplateMap(formik)
         );
         if (content !== replacedContent) {
           editor.setContent(replacedContent);
@@ -722,10 +677,6 @@ const ScheduleInterview = forwardRef(
           <Row>
             <Col>
               <TemplateDisplayV4
-                replaceMap={interviewTemplateMap}
-                replaceFunction={(content) =>
-                  interviewTemplateMapping(content, interviewTemplateMap)
-                }
                 injectData={tableTemplateData?.content ?? null}
                 isAllLoading={false}
                 content={emailTemplateData?.content ?? null}
