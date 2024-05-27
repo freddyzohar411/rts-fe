@@ -102,6 +102,8 @@ const ConditionalOfferRelease = forwardRef(
         formData: JSON.stringify(newValues),
         formId: null,
         jobType: jobTimelineType.CONDITIONAL_OFFER_RELEASE,
+        stepName: "Conditional Offer",
+        subStepName: "Release",
         emailRequest: {
           ...newValues,
         },

@@ -22,6 +22,8 @@ const PreSkillAssessment = forwardRef(
           status: JOB_STAGE_STATUS?.IN_PROGRESS,
           candidateId,
           jobType: jobTimelineType.SKILLS_ASSESSMENT,
+          stepName: "Odin",
+          subStepName: "Pre Skills Assessment",
         };
         dispatch(tagJob({ payload, navigate }));
         closeOffcanvas();
