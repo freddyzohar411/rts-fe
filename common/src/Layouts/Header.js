@@ -12,27 +12,17 @@ import {
 import { routeData, moduleRouteData } from "../common/routeData";
 
 //import images
-import logoSm from "../assets/images/logo-sm.png";
-import logoDark from "../assets/images/logo-dark.png";
-import logoLight from "../assets/images/logo-light.png";
 import logoPulse from "../assets/images/logo-pulse.png";
 
 //import Components
 import SearchOption from "../Components/Common/SearchOption";
-import LanguageDropdown from "../Components/Common/LanguageDropdown";
-import WebAppsDropdown from "../Components/Common/WebAppsDropdown";
-import MyCartDropdown from "../Components/Common/MyCartDropdown";
-import FullScreenDropdown from "../Components/Common/FullScreenDropdown";
-import NotificationDropdown from "../Components/Common/NotificationDropdown";
 import ProfileDropdown from "../Components/Common/ProfileDropdown";
-import LightDark from "../Components/Common/LightDark";
 
 import { changeSidebarVisibility } from "../store/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
-import { useMemo } from "react";
 
-const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
+const Header = ({ headerClass }) => {
   const [search, setSearch] = useState(false);
   const toogleSearch = () => {
     setSearch(!search);
