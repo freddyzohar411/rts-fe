@@ -11,14 +11,14 @@ export const injectionVariables = [
 
 export const fixedVariables = {
   Login: [
-    { label: "Login OTP Token", value: "LOGIN_OTP_TOKEN" },
-    { label: "Reset Password Link", value: "RESET_PASSWORD_LINK" },
+    { label: "Login OTP Token", value: "LOGIN_OTP_TOKEN", type: 1 },
+    { label: "Reset Password Link", value: "RESET_PASSWORD_LINK", type: 1 },
   ],
   Interview: [
-    { label: "Interview Start Date", value: "INTERVIEW_START_DATE" },
-    { label: "Interview End Date", value: "INTERVIEW_END_DATE" },
-    { label: "Interview Start Time", value: "INTERVIEW_START_TIME" },
-    { label: "Interview End Time", value: "INTERVIEW_END_TIME" },
-    { label: "Interview Location", value: "INTERVIEW_LOCATION" },
+    { label: "Interview Start Date", value: "INTERVIEW_START_DATE", type: 2 },
+    { label: "Interview End Date", value: "INTERVIEW_END_DATE", type: 2 },
+    { label: "Interview Start Time", value: "INTERVIEW_START_TIME", type: 2 },
+    { label: "Interview End Time", value: "INTERVIEW_END_TIME", type: 2 },
+    { label: "Interview Location", value: "INTERVIEW_LOCATION", type: 2 },
   ],
 };

@@ -17,11 +17,7 @@ import {
   Container,
 } from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
-import {
-  moduleConstants,
-  injectionVariables,
-  fixedVariables,
-} from "./constants";
+import { moduleConstants, fixedVariables } from "./constants";
 import { TemplateDisplayV3, TemplateHelper } from "@workspace/common";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
@@ -466,9 +462,15 @@ const TemplateBuilder = forwardRef(
                   className="self-end"
                   disabled={selectedVariable === null}
                   onClick={() => {
-                    setInjectVariable(
-                      "${{" + `${selectedVariable.value}` + "}}"
-                    );
+                    if (selectedVariable?.type === 1) {
+                      setInjectVariable(
+                        "${{" + `${selectedVariable.value}` + "}}"
+                      );
+                    } else if (selectedVariable?.type === 2) {
+                      setInjectVariable(
+                        "$[[" + `${selectedVariable.value}` + "]]"
+                      );
+                    }
                     setSelectedVariable("");
                   }}
                 >

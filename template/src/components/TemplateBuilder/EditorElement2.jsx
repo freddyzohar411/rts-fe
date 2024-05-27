@@ -70,6 +70,9 @@ const EditorElement2 = ({
     if (editor?.selection) {
       // Insert the variableString at the selection's end position
       editor.selection.setContent(injectVariable);
+      // Also add a data attribute to the inserted element for tracking use the injected variable name
+      const insertedElement = editor.selection.getNode();
+      insertedElement.setAttribute(`data-variable`, injectVariable);
     } else {
       // If no selection, insert the variableString at the end of the document
       editor?.setContent(editor.getContent() + injectVariable);

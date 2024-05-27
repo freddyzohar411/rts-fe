@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   forwardRef,
+  useRef,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -61,8 +62,10 @@ const ScheduleInterview = forwardRef(
   ) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const editorRef = useRef(null);
 
     const [emailTemplateData, setEmailTemplateData] = useState(null);
+    console.log("emailTemplateData", emailTemplateData);
     const [tableTemplateData, setTableTemplateData] = useState(null);
     const [CVTemplateData, setCVTemplateData] = useState(null);
 
@@ -262,6 +265,80 @@ const ScheduleInterview = forwardRef(
       } catch (error) {
       } finally {
         setAttachmentLoading(false);
+      }
+    };
+
+    const interviewTemplateMap = {
+      "$[[INTERVIEW_START_DATE]]": () => {
+        return formik?.values?.fromDate;
+      },
+      "$[[INTERVIEW_END_DATE]]": () => {
+        return formik?.values?.toDate;
+      },
+      "$[[INTERVIEW_START_TIME]]": () => {
+        return formik?.values?.fromTime;
+      },
+      "$[[INTERVIEW_END_TIME]]": () => {
+        return formik?.values?.toTime;
+      },
+      "$[[INTERVIEW_LOCATION]]": () => {
+        return formik?.values?.location;
+      },
+    };
+
+    const interviewTemplateMapping = (content, map) => {
+      Object.keys(interviewTemplateMap).forEach((key) => {
+        const regex = new RegExp(
+          key.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"),
+          "g"
+        );
+        if (interviewTemplateMap[key]?.()) {
+          content = content.replace(regex, interviewTemplateMap[key]?.());
+        }
+      });
+
+      return content;
+
+      // const parser = new DOMParser();
+      // const doc = parser.parseFromString(content, "text/html");
+
+      // Object.keys(mapping).forEach((key) => {
+      //   const elements = doc.querySelectorAll(`[data-variable="${key}"]`);
+      //   elements.forEach((element) => {
+      //     if (mapping[key]) {
+      //       element.innerHTML = mapping[key];
+      //     }
+      //   });
+      // });
+
+      // return doc.body.innerHTML;
+    };
+
+    const handleReplaceInterviewDataButtonClick = () => {
+      const editor = editorRef?.current;
+      if (editor) {
+        const selection = window.getSelection();
+        const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+        const startContainer = range ? range.startContainer : null;
+        const startOffset = range ? range.startOffset : null;
+
+        const content = editor.getContent();
+        const replacedContent = interviewTemplateMapping(
+          content,
+          interviewTemplateMap
+        );
+        if (content !== replacedContent) {
+          editor.setContent(replacedContent);
+
+          // Restore the cursor position
+          if (range) {
+            const newRange = document.createRange();
+            newRange.setStart(startContainer, startOffset);
+            newRange.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+          }
+        }
       }
     };
 
@@ -600,9 +677,23 @@ const ScheduleInterview = forwardRef(
               <hr className="mt-2" />
             </Col>
           </Row>
+          <Row className="mb-2">
+            <Col className="d-flex justify-content-end">
+              <Button
+                className="btn btn-secondary"
+                onClick={handleReplaceInterviewDataButtonClick}
+              >
+                Set Interview Data
+              </Button>
+            </Col>
+          </Row>
           <Row>
             <Col>
               <TemplateDisplayV4
+                replaceMap={interviewTemplateMap}
+                replaceFunction={(content) =>
+                  interviewTemplateMapping(content, interviewTemplateMap)
+                }
                 injectData={tableTemplateData?.content ?? null}
                 isAllLoading={false}
                 content={emailTemplateData?.content ?? null}
@@ -615,6 +706,7 @@ const ScheduleInterview = forwardRef(
                 }}
                 value={formik?.values?.["content"]}
                 showLoading={false}
+                editorOutRef={editorRef}
               />
             </Col>
           </Row>
