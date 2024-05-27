@@ -17,7 +17,11 @@ import {
   Container,
 } from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
-import { moduleConstants, injectionVariables } from "./constants";
+import {
+  moduleConstants,
+  injectionVariables,
+  fixedVariables,
+} from "./constants";
 import { TemplateDisplayV3, TemplateHelper } from "@workspace/common";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
@@ -55,6 +59,8 @@ const TemplateBuilder = forwardRef(
     const templateCategories = useSelector(
       (state) => state.TemplateReducer.templateCategories
     );
+    const [fixedVariableCategorySelected, setFixedVariableCategorySelected] =
+      useState("");
 
     const templatesByCategory = useSelector(
       (state) => state.TemplateReducer.templatesByCategory
@@ -430,9 +436,25 @@ const TemplateBuilder = forwardRef(
             </Row>
             <Row className="align-items-end mb-3">
               <Col>
-                <Label>Variables</Label>
+                <Label>Fixed Variables Category</Label>
                 <SelectElement
-                  optionsData={injectionVariables}
+                  optionsData={Object.keys(fixedVariables).map((key) => {
+                    return {
+                      label: key,
+                      value: key,
+                    };
+                  })}
+                  setSelectedOptionData={setFixedVariableCategorySelected}
+                  placeholder="Select a variable"
+                  value={fixedVariableCategorySelected}
+                />
+              </Col>
+              <Col>
+                <Label>Fixed Variables</Label>
+                <SelectElement
+                  optionsData={
+                    fixedVariables?.[fixedVariableCategorySelected?.value] || []
+                  }
                   setSelectedOptionData={setSelectedVariable}
                   placeholder="Select a variable"
                   value={selectedVariable}
