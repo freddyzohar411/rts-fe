@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import * as BackendHelper from "../../../helpers/backend_helper";
 import * as FileHelper from "../../../helpers/file_helper";
 import { toast } from "react-toastify";
-import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap";
+import { Modal, ModalBody, ModalHeader, Spinner, Tooltip } from "reactstrap";
 import FilePreview from "../../FilePreview/FilePreview";
 
 const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
@@ -13,11 +13,9 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [downloadLoading, setDownloadLoading] = useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const truncateString = (str, num) => {
-    console.log("Str: ", str)
-    console.log("Num: ", num)
-    console.log("Str Length: ", str?.length)
     if (!str) {
       return str;
     }
@@ -270,11 +268,42 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
             backgroundColor: formState === "view" ? "#EFF2F7" : "",
           }}
           ref={inputRef}
+          id={`file-input-${field.name}`}
         >
           {formik?.values?.[field.name]?.name
-            ? truncateString(formik?.values?.[field.name]?.name, truncationLength)
+            ? truncateString(
+                formik?.values?.[field.name]?.name,
+                truncationLength
+              )
             : formik?.values?.[field.name] &&
               truncateString(formik?.values?.[field.name], truncationLength)}
+          {formik?.values?.[field.name] &&
+            typeof formik?.values?.[field.name] === "string" &&
+            truncateString(formik?.values?.[field.name], truncationLength) !==
+              formik?.values?.[field.name] && (
+              <Tooltip
+                placement="top"
+                isOpen={tooltipOpen}
+                target={`file-input-${field.name}`}
+                toggle={() => setTooltipOpen(!tooltipOpen)}
+              >
+                {formik?.values?.[field.name]}
+              </Tooltip>
+            )}
+          {formik?.values?.[field.name]?.name &&
+            truncateString(
+              formik?.values?.[field.name]?.name,
+              truncationLength
+            ) !== formik?.values?.[field.name]?.name && (
+              <Tooltip
+                placement="top"
+                isOpen={tooltipOpen}
+                target={`file-input-${field.name}`}
+                toggle={() => setTooltipOpen(!tooltipOpen)}
+              >
+                {formik?.values?.[field.name]?.name}
+              </Tooltip>
+            )}
           {!formik?.values?.[field.name] &&
             !formik?.values?.[field.name]?.name &&
             "No file chosen"}
