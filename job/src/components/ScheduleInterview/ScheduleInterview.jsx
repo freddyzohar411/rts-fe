@@ -31,6 +31,7 @@ import {
   EmailTemplateSelect,
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
+  EmailAttachments,
 } from "@workspace/common";
 import {
   TemplateHelper,
@@ -55,7 +56,7 @@ import { generateInterviewTemplateMap } from "./constants";
 import { interviewTemplateMapping } from "./scheduleInterviewUtil";
 
 // Material Icon
-import AbcOutlinedIcon from '@mui/icons-material/AbcOutlined';
+import AbcOutlinedIcon from "@mui/icons-material/AbcOutlined";
 
 const ScheduleInterview = forwardRef(
   (
@@ -614,6 +615,7 @@ const ScheduleInterview = forwardRef(
             </Col>
             <Col>
               <EmailTemplateSelect
+                isLoading={attachmentLoading}
                 icon={<i className=" ri-file-list-2-line fs-5"></i>}
                 value={CVTemplateData}
                 setTemplateData={setCVTemplateData}
@@ -662,10 +664,11 @@ const ScheduleInterview = forwardRef(
               }}
             >
               <EmailVariableSelect
-                icon={<AbcOutlinedIcon className="fs-4"/>}
+                icon={<AbcOutlinedIcon className="fs-4" />}
                 options={fixedVariables["Interview"]}
                 setSelectedOption={setSelectedVariable}
                 value={selectedVariable}
+                placeholder={"Select Variable"}
               />
               <hr className="mt-2" />
             </Col>
@@ -700,6 +703,13 @@ const ScheduleInterview = forwardRef(
               />
             </Col>
           </Row>
+          <div className="mt-2">
+            <EmailAttachments
+              attachments={attachments}
+              setAttachments={setAttachments}
+              num={4}
+            />
+          </div>
         </div>
       </React.Fragment>
     );
