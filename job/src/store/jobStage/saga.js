@@ -192,9 +192,14 @@ function* workFetchJobTimelineFormSubmission(action) {
       );
     } else {
       response = yield call(getJobCandidateStage, action.payload);
-      yield put(
-        fetchJobTimelineFormSubmissionSuccess(response.data?.submissionData)
-      );
+      let data = response.data?.submissionData;
+      if (
+        status === JOB_STAGE_STATUS?.WITHDRAWN &&
+        response.data?.actionSubmissionData
+      ) {
+        data = response.data?.actionSubmissionData;
+      }
+      yield put(fetchJobTimelineFormSubmissionSuccess(data));
     }
   } catch (error) {
     yield put(fetchJobTimelineFormSubmissionFailure(error));

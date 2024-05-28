@@ -473,7 +473,7 @@ const InnerTimelineStep = ({
                 : lastItem?.data?.status
                 ? lastItem?.data?.status
                 : JOB_STAGE_STATUS.IN_PROGRESS;
-
+            // SETT
             return (
               <div
                 key={index}
@@ -486,6 +486,10 @@ const InnerTimelineStep = ({
                     id="module-timeline"
                     className={`d-flex flex-column pb-4 align-items-start justify-content-center`}
                     style={{ width: elementSizing }}
+                    onClick={() => {
+                      setTimelineRowIndex();
+                      setActionTriggeredWithSubitem(section?.name);
+                    }}
                   >
                     <div className="d-flex flex-column align-items-start ">
                       <div

@@ -1123,13 +1123,22 @@ const JobOverview = () => {
           ] &&
           status !== JOB_STAGE_STATUS.SKIPPED
         ) {
-          if (flag) {
-            onFlag = true;
-            return;
+          if (status === JOB_STAGE_STATUS.WITHDRAWN) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_WTDWN_FORM_INDEX);
+            setIsFormModalOpen(true);
+          } else {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(ASSOCIATE_FORM_INDEX);
+            setOffcanvasForm(true);
+            setReadOnly(true);
           }
-          setActiveStep(ASSOCIATE_FORM_INDEX);
-          setOffcanvasForm(true);
-          setReadOnly(true);
         }
       },
       "Profile Feedback Pending": () => {
@@ -1293,37 +1302,57 @@ const JobOverview = () => {
         }
       },
       "Submit to Sales": () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.SUBMIT_TO_SALES
+          ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             JobOverviewConstants.SUBMIT_TO_SALES
-          ] &&
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            JobOverviewConstants.SUBMIT_TO_SALES
-          ]?.status === JOB_STAGE_STATUS.REJECTED
+          ]
         ) {
-          if (flag) {
-            onFlag = true;
-            return;
+          if (status === JOB_STAGE_STATUS.REJECTED) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_REJ_SALES_FORM_INDEX);
+            setIsFormModalOpen(true);
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_WTDWN_FORM_INDEX);
+            setIsFormModalOpen(true);
           }
-          setActiveStep(PRF_REJ_SALES_FORM_INDEX);
-          setIsFormModalOpen(true);
         }
       },
       "Submit to Client": () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.SUBMIT_TO_CLIENT
+          ]?.status;
         if (
           jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
             JobOverviewConstants.SUBMIT_TO_CLIENT
-          ] &&
-          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
-            JobOverviewConstants.SUBMIT_TO_CLIENT
-          ]?.status === JOB_STAGE_STATUS.REJECTED
+          ]
         ) {
-          if (flag) {
-            onFlag = true;
-            return;
+          if (status === JOB_STAGE_STATUS.REJECTED) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
+            setIsFormModalOpen(true);
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_WTDWN_FORM_INDEX);
+            setIsFormModalOpen(true);
           }
-          setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
-          setIsFormModalOpen(true);
         }
       },
       "TOS Accepted/Declined": () => {
@@ -1503,6 +1532,27 @@ const JobOverview = () => {
           setIsFormModalOpen(true);
         }
       },
+      // Profile: () => {
+      //   // Find which stage has withdrawn
+      //   const timeline =
+      //     jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline;
+      //   const stage = Object.keys(timeline).find(
+      //     (key) => timeline[key].status === JOB_STAGE_STATUS.WITHDRAWN
+      //   );
+      //   if (stage ) {
+
+      //   if (
+      //     jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.subStepName ===
+      //     "Profile Withdrawn"
+      //   ) {
+      //     if (flag) {
+      //       onFlag = true;
+      //       return;
+      //     }
+      //     setActiveStep(PRF_WTDWN_FORM_INDEX);
+      //     setIsFormModalOpen(true);
+      //   }
+      // },
     };
     readOnlyActionTriggerObj[subitem]?.();
     return onFlag;
@@ -1523,6 +1573,8 @@ const JobOverview = () => {
       setReadOnlyInterviewNo(0);
     }
   }, [isFormModalOpen]);
+
+  console.log("Job TimeLine Data", jobTimelineData);
 
   return (
     <React.Fragment>
