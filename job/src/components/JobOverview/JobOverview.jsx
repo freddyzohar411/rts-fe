@@ -734,7 +734,7 @@ const JobOverview = () => {
             } else if (maxOrder >= 15 && maxOrder <= 17) {
               maxOrder = 5;
             }
-            const billRate = formSubmissionData["billRate*"] || 0;
+            const billRate = formSubmissionData?.["billRate*"] ?? 0;
             return (
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
