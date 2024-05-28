@@ -84,6 +84,8 @@ export const rtsStatusHeaders = [
 
 export const newHeaders = [
   { name: "Candidate & Recruiter", icon: "mdi mdi-sort-descending" },
+  { name: "Bill Rate", icon: "" },
+  { name: "Salary", icon: "" },
   { name: "Progress", icon: "" },
   { name: "Current Status", icon: "" },
   { name: "Next Step", icon: "" },
