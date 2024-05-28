@@ -61,6 +61,8 @@ const TechnicalInterview = forwardRef(
           status: JOB_STAGE_STATUS?.REJECTED,
           candidateId,
           jobType: "technical_interview",
+          stepName: "Interview",
+          subStepName: "Technical Interview",
         };
         dispatch(tagJob({ payload, navigate }));
       } else if (values?.technicalInterviewResults === "true") {
@@ -72,6 +74,8 @@ const TechnicalInterview = forwardRef(
           formData: JSON.stringify(values),
           formId: parseInt(form.formId),
           jobType: "cultural_fit_test",
+          stepName: "Odin",
+          subStepName: "Technical Interview",
         };
         dispatch(tagJob({ payload, navigate }));
         if (values?.scheduleForCulturalFitTest === "true") {

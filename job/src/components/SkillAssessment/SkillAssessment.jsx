@@ -60,6 +60,8 @@ const SkillAssessment = forwardRef(
           status: JOB_STAGE_STATUS?.REJECTED,
           candidateId,
           jobType: "skills_assessment",
+          stepName: "Odin",
+          subStepName: "Skills Assessment",
         };
         dispatch(tagJob({ payload, navigate }));
       } else if (values?.skillAssessmentResults === "true") {
@@ -71,6 +73,8 @@ const SkillAssessment = forwardRef(
           formData: JSON.stringify(values),
           formId: parseInt(form.formId),
           jobType: "coding_test",
+          stepName: "Odin",
+          subStepName: "Skills Assessment",
         };
         dispatch(tagJob({ payload, navigate }));
 
