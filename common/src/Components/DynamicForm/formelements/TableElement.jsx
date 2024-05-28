@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Label,
-  Col,
-  Row,
-  Input,
   Button,
   Table,
-  FormFeedback,
-  Alert,
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Spinner,
 } from "reactstrap";
 import FilePreview from "../../FilePreview/FilePreview";
@@ -23,7 +16,6 @@ import * as BackendHelper from "../../../helpers/backend_helper";
 const TableElement = ({
   formik,
   field,
-  deleteTableData,
   setFormState,
   formFieldsHook,
   formStateHook,
@@ -37,8 +29,6 @@ const TableElement = ({
     field?.tableSettings ? field.tableSettings : {}
   );
   const [table, setTable] = useState(field.tableData || []);
-  const [filePreview, setFilePreview] = useState(null);
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   useEffect(() => {
     setFormFieldTableData(table);
@@ -135,7 +125,6 @@ const TableElement = ({
       }
     });
 
-
     // Check for file and set entity info
     newFormFields.forEach((field) => {
       if (field.type === "file") {
@@ -173,17 +162,8 @@ const TableElement = ({
     }
   };
 
-  function downloadBase64File(base64Data, fileName) {
-    const link = document.createElement("a");
-    link.href = `data:application/octet-stream;base64,${base64Data}`;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
   return (
-    <div className="table-responsive mb-3" style={{ maxHeight: "200px" }}>
+    <div className="table-responsive mb-3">
       <Table className="table-bordered align-middle table-nowrap mb-0">
         <thead className="table-secondary">
           <tr>
