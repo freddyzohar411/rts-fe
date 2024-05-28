@@ -125,7 +125,7 @@ const CodingTest = forwardRef(
     return (
       <React.Fragment>
         <div
-          className="d-flex flex-column justiy-content-between h-100"
+          className="d-flex flex-column justiy-content-between h-100 p-2"
           style={{ height: "500px" }}
         >
           <Row>

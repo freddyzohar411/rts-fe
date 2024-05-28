@@ -29,7 +29,8 @@ const DragDropFilesElement = ({
   };
 
   useEffect(() => {
-    if (formik?.values?.[field.name]) {
+    // Check if it is a string
+    if (formik?.values?.[field.name] && typeof formik?.values?.[field.name] === "string") {
       setExistingFiles(splitCommaSeparatedText(formik?.values?.[field.name]));
     }
   }, [formik?.values?.[field.name]]);
@@ -45,10 +46,10 @@ const DragDropFilesElement = ({
 
   const handleFileUpload = (e) => {
     formik.setFieldTouched(field.name, "");
-    if (e.length > 0) {
+    if (e?.length > 0) {
       setFiles([...files, ...e]);
     }
-    formik.setFieldValue(field.name, [...files, ...e]);
+    formik.setFieldValue(field?.name, [...files, ...e]);
   };
 
   const handleDeleteFile = (index) => {
@@ -66,7 +67,7 @@ const DragDropFilesElement = ({
 
   return (
     <>
-      {!formState === "view" && (
+      {formState != "view" && (
         <div className="mb-3">
           <div
             {...getRootProps()}
@@ -127,8 +128,8 @@ const DragDropFilesElement = ({
               </div>
             </div>
           ))}
-        {existingFiles.length > 0 &&
-          existingFiles.map((file, index) => (
+        {existingFiles?.length > 0 &&
+          existingFiles?.map((file, index) => (
             <div className="uploaded-files-div">
               <div className="d-flex flex-row justify-content-between align-items-top w-100">
                 <div className="d-flex flex-row gap-2 align-items-center">
