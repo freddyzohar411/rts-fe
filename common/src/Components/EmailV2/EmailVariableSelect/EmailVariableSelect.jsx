@@ -10,7 +10,7 @@ const EmailVariableSelect = ({
   selectRender,
   isLoading = false,
   placeholder,
-  options
+  options,
 }) => {
   return (
     <div className="d-flex gap-2 align-items-center">

@@ -671,7 +671,10 @@ const ScheduleInterview = forwardRef(
             </Col>
             <Col className="text-end mt-2">
               <Button
-                className="btn btn-secondary"
+                className="btn btn-custom-primary"
+                style={{
+                  backgroundColor: "#0A65CC",
+                }}
                 onClick={handleReplaceInterviewDataButtonClick}
               >
                 Set Interview Data
