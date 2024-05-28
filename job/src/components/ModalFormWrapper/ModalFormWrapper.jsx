@@ -63,7 +63,6 @@ const ModalFormWrapper = ({
     (state) => state.JobStageReducer.jobTimelineFormSubmission
   );
   const [customHeader, setCustomHeader] = useState(null);
-
   // Get Submission Data for Form
   useEffect(() => {
     setCustomHeader(null);

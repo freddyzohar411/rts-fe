@@ -296,6 +296,7 @@ const JobOverview = () => {
         setModalFormName({ header: "Confirmation" });
         break;
       case PRF_WTDWN_FORM_INDEX:
+        setStepperState("Profile Withdrawn Confirmation");
         setModalFormName({ header: "Profile Withdrawn Confirmation" });
         break;
       case ASSOCIATE_FORM_INDEX:
@@ -305,12 +306,14 @@ const JobOverview = () => {
         setStepperState("Submit to Sales");
         break;
       case PRF_REJ_SALES_FORM_INDEX:
+        setStepperState("Profile Rejected - Sales");
         setModalFormName({ header: "Profile Rejected - Sales" });
         break;
       case SUB_TO_CLIENT_FORM_INDEX:
         setStepperState("Submit to Client");
         break;
       case PRF_REJ_CLIENT_FORM_INDEX:
+        setStepperState("Profile Rejected - Client");
         setModalFormName({ header: "Profile Rejected - Client" });
         break;
       // Odin
