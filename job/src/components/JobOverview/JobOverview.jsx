@@ -763,9 +763,11 @@ const JobOverview = () => {
                   {/* Current Status */}
                   <td style={{ width: "5rem" }}>
                     <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
-                      <span>{data?.stepName}</span>
+                      <span>{data?.stepName ?? "N/A"}</span>
                       <i className="ri-arrow-right-s-line"></i>
-                      <span className="fw-semibold">{data?.subStepName}</span>
+                      <span className="fw-semibold">
+                        {data?.subStepName ?? "N/A"}
+                      </span>
                     </div>
                   </td>
                   {/* Next Step */}
