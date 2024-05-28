@@ -90,6 +90,8 @@ const CulturalFitTest = forwardRef(
         formData: JSON.stringify(values),
         formId: parseInt(form.formId),
         jobType: "cultural_fit_test",
+        stepName: "Odin",
+        subStepName: "Cultural Fit Test",
       };
       dispatch(tagJob({ payload, navigate }));
       closeOffcanvas();

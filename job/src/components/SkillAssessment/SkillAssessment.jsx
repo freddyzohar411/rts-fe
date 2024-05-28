@@ -99,6 +99,8 @@ const SkillAssessment = forwardRef(
           formData: JSON.stringify(values),
           formId: parseInt(form.formId),
           jobType: "skills_assessment",
+          stepName: "Odin",
+          subStepName: "Skills Assessment",
         };
         dispatch(tagJob({ payload, navigate }));
       } else if (values?.skillAssessmentResults === "true") {
@@ -110,6 +112,8 @@ const SkillAssessment = forwardRef(
           formData: JSON.stringify(values),
           formId: parseInt(form.formId),
           jobType: "coding_test",
+          stepName: "Odin",
+          subStepName: "Skills Assessment",
         };
         dispatch(tagJob({ payload, navigate }));
 

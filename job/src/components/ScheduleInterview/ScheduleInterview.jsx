@@ -157,6 +157,9 @@ const ScheduleInterview = forwardRef(
         formData: null,
         formId: null,
         jobType: jobType,
+        stepName: "Interview",
+        subStepName:
+          activeStep === SCHEDULE_FORM_INDEX ? "Schedule" : "Rescheduled",
         emailRequest: {
           ...newValues,
         },

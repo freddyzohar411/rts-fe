@@ -77,6 +77,8 @@ const SubmitToClient = forwardRef(
         formData: null,
         formId: null,
         jobType: jobTimelineType.SUBMIT_TO_CLIENT,
+        stepName: "Profile",
+        subStepName: "Submit To Client",
         emailRequest: {
           ...newValues,
         },

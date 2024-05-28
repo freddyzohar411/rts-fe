@@ -43,23 +43,6 @@ function TimelineHeader({ data }) {
     }
   }, [jobTimelineCount]);
 
-  const filteredData = data
-    .filter((item) => item !== "Profile Feedback Pending")
-    .map((item) => {
-      switch (item) {
-        case "Interview Scheduled":
-          return "Scheduled";
-        case "Interview Happened":
-          return "Completed";
-        case "Interview Cancelled/Backout":
-          return "Cancelled/Backout";
-        case "Interview Pending Feedback":
-          return "Pending Feedback";
-        default:
-          return item;
-      }
-    });
-
   return (
     <div
       className={`d-flex p-0 justify-content-around ${
@@ -68,7 +51,7 @@ function TimelineHeader({ data }) {
           : "flex-nowrap align-items-start"
       }`}
     >
-      {filteredData.map((item, index) => (
+      {data?.map((item, index) => (
         <div
           key={index}
           className="d-flex flex-column align-items-center justify-content-end"

@@ -92,6 +92,8 @@ const CodingTest = forwardRef(
           formData: JSON.stringify(values),
           formId: parseInt(form.formId),
           jobType: "coding_test",
+          stepName: "Odin",
+          subStepName: "Coding Test",
         };
         dispatch(tagJob({ payload, navigate }));
       } else if (values?.codingTestResults === "true") {
@@ -103,6 +105,8 @@ const CodingTest = forwardRef(
           formData: JSON.stringify(values),
           formId: parseInt(form.formId),
           jobType: "technical_interview",
+          stepName: "Odin",
+          subStepName: "Coding Test",
         };
         dispatch(tagJob({ payload, navigate }));
         if (values?.scheduleForTechnicalInterview === "true") {

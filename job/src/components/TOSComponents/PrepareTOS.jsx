@@ -165,6 +165,8 @@ const PrepareTOS = forwardRef(
         formData: JSON.stringify(newValues),
         formId: parseInt(form.formId),
         jobType: "prepare_tos",
+        stepName: "TOS",
+        subStepName: edit === false ? "Prepare TOS" : "Edit TOS",
       };
 
       const formData = new FormData();
