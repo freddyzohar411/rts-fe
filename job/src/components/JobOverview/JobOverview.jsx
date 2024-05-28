@@ -794,9 +794,8 @@ const JobOverview = () => {
                   </td>
                   {/* Current Status */}
                   <td style={{ width: "5rem" }}>
-                    <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
-                      <span>{data?.stepName}</span>
-                      <i className="ri-arrow-right-s-line"></i>
+                    <div className="d-flex flex-column">
+                      <span className="form-text">{data?.stepName}</span>
                       <span className="fw-semibold">{data?.subStepName}</span>
                     </div>
                   </td>
