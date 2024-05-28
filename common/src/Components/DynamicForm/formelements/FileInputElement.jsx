@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import * as BackendHelper from "../../../helpers/backend_helper";
 import * as FileHelper from "../../../helpers/file_helper";
 import { toast } from "react-toastify";
@@ -15,7 +15,10 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const [downloadLoading, setDownloadLoading] = useState(false);
 
   const truncateString = (str, num) => {
-    if (str) {
+    console.log("Str: ", str)
+    console.log("Num: ", num)
+    console.log("Str Length: ", str?.length)
+    if (!str) {
       return str;
     }
     if (str?.length <= num) {
@@ -163,6 +166,33 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
     }
   };
 
+  const useElementWidth = () => {
+    const [width, setWidth] = useState(0);
+    const ref = useRef(null);
+
+    useEffect(() => {
+      const handleResize = () => {
+        if (ref.current) {
+          setWidth(ref.current.offsetWidth);
+        }
+      };
+
+      handleResize();
+
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+
+    return [ref, width];
+  };
+
+  const [inputRef, width] = useElementWidth();
+
+  // Adjust the truncation length based on the width of the input box
+  const truncationLength = Math.floor(width / 15) || 1;
+
   return (
     <>
       <Modal
@@ -239,11 +269,12 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
             overflow: "hidden",
             backgroundColor: formState === "view" ? "#EFF2F7" : "",
           }}
+          ref={inputRef}
         >
           {formik?.values?.[field.name]?.name
-            ? truncateString(formik?.values?.[field.name]?.name, 15)
+            ? truncateString(formik?.values?.[field.name]?.name, truncationLength)
             : formik?.values?.[field.name] &&
-              truncateString(formik?.values?.[field.name], 15)}
+              truncateString(formik?.values?.[field.name], truncationLength)}
           {!formik?.values?.[field.name] &&
             !formik?.values?.[field.name]?.name &&
             "No file chosen"}
