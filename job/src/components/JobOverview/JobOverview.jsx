@@ -402,10 +402,6 @@ const JobOverview = () => {
     setIsBrsModalOpen(!isBrsModalOpen);
   };
 
-  const getBrsData = (billRate, salary) => {
-    return { billRate, salary };
-  };
-
   const handleStepsSelection = (jobId, value) => {
     const newOb = { ...skipSteps };
     newOb[jobId] = value;
@@ -765,12 +761,6 @@ const JobOverview = () => {
                         className="billrate-button"
                         onClick={() => {
                           toggleBrsModal(true);
-                          getBrsData({
-                            billRate: billRate,
-                            salary:
-                              candidateData?.candidateSubmissionData
-                                .expectedSalary,
-                          });
                         }}
                       >
                         <span className="mdi mdi-pencil"></span>
