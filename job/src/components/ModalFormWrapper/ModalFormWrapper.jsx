@@ -64,8 +64,6 @@ const ModalFormWrapper = ({
   );
   const [customHeader, setCustomHeader] = useState(null);
 
-  // console.log("JobTImelineData MODAL", jobTimeLineData);
-
   // Get Submission Data for Form
   useEffect(() => {
     setCustomHeader(null);
@@ -75,9 +73,8 @@ const ModalFormWrapper = ({
     if (activeStep === PRF_WTDWN_FORM_INDEX) {
       // Find out the stage id for profile withdrawn
       const timelineData = jobTimeLineData?.timeline;
-      // Find out the WITHDRAWN stage id
       const stage = Object.keys(timelineData).find(
-        (key) => timelineData[key]?.status === "WITHDRAWN"
+        (key) => timelineData[key]?.status === JOB_STAGE_STATUS.WITHDRAWN
       );
       const stageData = timelineData[stage];
       stageId = stageData?.order;

@@ -1532,27 +1532,6 @@ const JobOverview = () => {
           setIsFormModalOpen(true);
         }
       },
-      // Profile: () => {
-      //   // Find which stage has withdrawn
-      //   const timeline =
-      //     jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline;
-      //   const stage = Object.keys(timeline).find(
-      //     (key) => timeline[key].status === JOB_STAGE_STATUS.WITHDRAWN
-      //   );
-      //   if (stage ) {
-
-      //   if (
-      //     jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.subStepName ===
-      //     "Profile Withdrawn"
-      //   ) {
-      //     if (flag) {
-      //       onFlag = true;
-      //       return;
-      //     }
-      //     setActiveStep(PRF_WTDWN_FORM_INDEX);
-      //     setIsFormModalOpen(true);
-      //   }
-      // },
     };
     readOnlyActionTriggerObj[subitem]?.();
     return onFlag;
@@ -1573,8 +1552,6 @@ const JobOverview = () => {
       setReadOnlyInterviewNo(0);
     }
   }, [isFormModalOpen]);
-
-  console.log("Job TimeLine Data", jobTimelineData);
 
   return (
     <React.Fragment>

@@ -31,8 +31,8 @@ import {
 import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
 
 // Icons
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 
 const SubmitToSales = forwardRef(
   (
@@ -75,7 +75,15 @@ const SubmitToSales = forwardRef(
         jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
-        formData: null,
+        formData: JSON.stringify({
+          // remove attachments from form data
+          ...Object.keys(newValues).reduce((acc, key) => {
+            if (key !== "attachments") {
+              acc[key] = newValues[key];
+            }
+            return acc;
+          }, {}),
+        }),
         formId: null,
         jobType: jobTimelineType.SUBMIT_TO_SALES,
         stepName: "Profile",
@@ -276,7 +284,7 @@ const SubmitToSales = forwardRef(
           <Col>
             <EmailTo
               formik={formik}
-              ToIcon={<EmailOutlinedIcon className="fs-3"/>}
+              ToIcon={<EmailOutlinedIcon className="fs-3" />}
             />
             <hr className="mt-2" />
           </Col>
@@ -284,7 +292,11 @@ const SubmitToSales = forwardRef(
 
         <Row>
           <Col>
-            <EmailCCBCC formik={formik} CCicon={<span className="fw-semibold">Cc</span>} BCC />
+            <EmailCCBCC
+              formik={formik}
+              CCicon={<span className="fw-semibold">Cc</span>}
+              BCC
+            />
             <hr className="mt-2" />
           </Col>
         </Row>
@@ -304,7 +316,7 @@ const SubmitToSales = forwardRef(
           <Col>
             {/* Main Template Select */}
             <EmailTemplateSelect
-            icon={<ArticleOutlinedIcon className="fs-3"/>}
+              icon={<ArticleOutlinedIcon className="fs-3" />}
               category="Email Templates"
               placeholder="Select Email Template"
               setTemplateData={setEmailTemplateData}
@@ -415,7 +427,7 @@ const SubmitToSales = forwardRef(
             <EmailTemplateSelect
               isLoading={attachmentLoading}
               placeholder="Attach CV Template"
-              icon={<ArticleOutlinedIcon className="fs-3"/>}
+              icon={<ArticleOutlinedIcon className="fs-3" />}
               value={CVTemplateData}
               setTemplateData={setCVTemplateData}
               category="CV"

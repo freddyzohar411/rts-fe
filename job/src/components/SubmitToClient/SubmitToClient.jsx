@@ -74,7 +74,15 @@ const SubmitToClient = forwardRef(
         jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_CLIENT,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
-        formData: null,
+        formData: JSON.stringify({
+          // remove attachments from form data
+          ...Object.keys(newValues).reduce((acc, key) => {
+            if (key !== "attachments") {
+              acc[key] = newValues[key];
+            }
+            return acc;
+          }, {}),
+        }),
         formId: null,
         jobType: jobTimelineType.SUBMIT_TO_CLIENT,
         stepName: "Profile",
