@@ -53,6 +53,10 @@ import {
 import { fixedVariables } from "../../../../template/src/components/TemplateBuilder/constants";
 import { generateInterviewTemplateMap } from "./constants";
 import { interviewTemplateMapping } from "./scheduleInterviewUtil";
+
+// Material Icon
+import AbcOutlinedIcon from '@mui/icons-material/AbcOutlined';
+
 const ScheduleInterview = forwardRef(
   (
     {
@@ -658,7 +662,7 @@ const ScheduleInterview = forwardRef(
               }}
             >
               <EmailVariableSelect
-                icon={<i className=" ri-file-list-2-line fs-5"></i>}
+                icon={<AbcOutlinedIcon className="fs-4"/>}
                 options={fixedVariables["Interview"]}
                 setSelectedOption={setSelectedVariable}
                 value={selectedVariable}
