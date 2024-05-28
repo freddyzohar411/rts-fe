@@ -46,3 +46,21 @@
     border-width: 1px;
     border-color: lightgray;
 }
+
+.billrate-container {
+    display: flex;
+    align-items: top;
+    justify-content: space-around;
+}
+
+.billrate-container:hover > .billrate-button {
+    visibility: visible;
+}
+
+.billrate-button {
+    visibility: hidden;
+    border-radius: 0;
+    color: #000000;
+    background-color: #E7EEF7;
+    height: 100%;
+}
