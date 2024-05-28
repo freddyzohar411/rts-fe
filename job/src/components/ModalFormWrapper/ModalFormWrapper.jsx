@@ -332,6 +332,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: "tos_approval",
+        stepName: "TOS",
+        subStepName: "Reject TOS",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (activeStep === ACCEPTED_FORM_INDEX) {
