@@ -76,7 +76,6 @@ const ScheduleInterview = forwardRef(
     const editorRef = useRef(null);
 
     const [emailTemplateData, setEmailTemplateData] = useState(null);
-    console.log("emailTemplateData", emailTemplateData);
     const [tableTemplateData, setTableTemplateData] = useState(null);
     const [CVTemplateData, setCVTemplateData] = useState(null);
     const [selectedVariable, setSelectedVariable] = useState(null);
