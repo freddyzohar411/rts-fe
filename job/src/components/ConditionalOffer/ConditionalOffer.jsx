@@ -83,6 +83,8 @@ const ConditionalOffer = forwardRef(({ jobId, jobTimeLineData, edit }, ref) => {
         formData: JSON.stringify(newValues),
         formId: null,
         jobType: jobTimelineType.CONDITIONAL_OFFER_PREPARE,
+        stepName: "Conditional Offer",
+        subStepName: edit === false ? "Prepare" : "Edit",
       };
       dispatch(
         tagJob({
