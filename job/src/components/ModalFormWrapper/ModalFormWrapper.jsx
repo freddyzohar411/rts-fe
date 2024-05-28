@@ -135,6 +135,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.PROFILE_WITHDRAWN,
+        stepName: "Profile",
+        subStepName: "Profile Withdrawn",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
@@ -147,6 +149,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.SUBMIT_TO_SALES,
+        stepName: "Profile",
+        subStepName: "Profile Rejected - Sales",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
@@ -159,6 +163,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.SUBMIT_TO_CLIENT,
+        stepName: "Profile",
+        subStepName: "Profile Rejected - Client",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (activeStep === BACKOUT_CANDIE_FORM_INDEX) {
@@ -171,6 +177,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.INTERVIEW_BACKOUT,
+        stepName: "Interview",
+        subStepName: "Backout-Candidate",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (
@@ -186,6 +194,11 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.INTERVIEW_REJECTED,
+        stepName: "Interview",
+        subStepName:
+          activeStep === REJECTED_INTRW_FORM_INDEX
+            ? "Rejected"
+            : "Cancelled by Client",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (activeStep === SELECTED_FORM_INDEX) {
@@ -198,6 +211,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: "interview_feedbak",
+        stepName: "Interview",
+        subStepName: "Selected",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (
@@ -213,6 +228,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: "tos_approval",
+        stepName: "TOS",
+        subStepName: "Approve TOS",
       };
       dispatch(tagJob({ payload, navigate }));
     } else if (
@@ -258,6 +275,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(updatedValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.CONDITIONAL_OFFER_APPROVAL,
+        stepName: "Conditional Offer",
+        subStepName: "Accepted",
       };
       const formData = new FormData();
       for (const key in payload) {
@@ -294,6 +313,8 @@ const ModalFormWrapper = ({
         formData: JSON.stringify(newValues),
         formId: parseInt(form?.formId),
         jobType: jobTimelineType.CONDITIONAL_OFFER_REJECTED,
+        stepName: "Conditional Offer",
+        subStepName: "Rejected",
       };
       dispatch(tagJob({ payload, navigate }));
     }

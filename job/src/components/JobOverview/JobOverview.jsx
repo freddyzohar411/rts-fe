@@ -702,20 +702,6 @@ const JobOverview = () => {
       : false;
   };
 
-  const getMainStage = (maxOrder) => {
-    let stage = "Profile";
-    if (maxOrder === 2) {
-      stage = "Odin";
-    } else if (maxOrder === 3) {
-      stage = "Interview";
-    } else if (maxOrder === 4) {
-      stage = "TOS";
-    } else if (maxOrder === 5) {
-      stage = "Conditional Offer";
-    }
-    return stage;
-  };
-
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
     return (
@@ -748,7 +734,6 @@ const JobOverview = () => {
             } else if (maxOrder >= 15 && maxOrder <= 17) {
               maxOrder = 5;
             }
-            const mainStage = getMainStage(maxOrder);
             const billRate = formSubmissionData["billRate*"] || 0;
             return (
               <>
@@ -808,10 +793,11 @@ const JobOverview = () => {
                     <OverviewStepComponent data={data} />
                   </td>
                   {/* Current Status */}
-                  <td style={{ width: "10rem" }}>
-                    <div className="d-flex flex-column align-items-start">
-                      <span className="form-text">{mainStage}</span>
-                      <span>{lastSubmittedStage}</span>
+                  <td style={{ width: "5rem" }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
+                      <span>{data?.stepName}</span>
+                      <i className="ri-arrow-right-s-line"></i>
+                      <span className="fw-semibold">{data?.subStepName}</span>
                     </div>
                   </td>
                   {/* Next Step */}

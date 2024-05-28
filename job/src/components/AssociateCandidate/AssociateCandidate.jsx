@@ -93,6 +93,8 @@ const AssociateCandidate = forwardRef(
         formData: JSON.stringify(values),
         formId: parseInt(form.formId),
         jobType: "associate_candidate",
+        stepName: "Profile",
+        subStepName: "Associate",
       };
       dispatch(tagJob({ payload, navigate }));
       closeOffcanvas();

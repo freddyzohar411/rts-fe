@@ -162,6 +162,8 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       jobStageId: JOB_STAGE_IDS?.TAG,
       status: JOB_STAGE_STATUS?.COMPLETED,
       candidateId,
+      stepName: "Profile",
+      subStepName: "Tag",
     };
     dispatch(tagJob({ payload, navigate }));
   };
@@ -175,6 +177,8 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
           jobStageId: JOB_STAGE_IDS?.TAG,
           status: JOB_STAGE_STATUS?.COMPLETED,
           candidateId: itemId,
+          stepName: "Profile",
+          subStepName: "Tag",
         });
       });
       dispatch(tagJobAll({ payload, navigate }));

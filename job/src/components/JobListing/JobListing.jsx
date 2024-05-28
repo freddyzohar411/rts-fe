@@ -484,18 +484,6 @@ const JobListing = () => {
                   </div>
                 </span>
               </DropdownItem>
-              {/* <DropdownItem>
-              <Link
-                to={`/jobs/${data.id}/snapshot`}
-                style={{ color: "black" }}
-                state={{ view: true }}
-              >
-                <div className="d-flex  align-items-center gap-2">
-                  <i className="ri-eye-line"></i>
-                  <span>View</span>
-                </div>
-              </Link>
-            </DropdownItem> */}
               {checkAllPermission([Permission.JOB_EDIT]) && (
                 <DropdownItem>
                   <Link
