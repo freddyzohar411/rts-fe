@@ -4,12 +4,12 @@ import React, {
   useEffect,
   useImperativeHandle,
   forwardRef,
+  useRef,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { tagJobAttachment } from "../../store/actions";
 import { useFormik } from "formik";
-
 import {
   Row,
   Col,
@@ -31,8 +31,14 @@ import {
   EmailTemplateSelect,
   TemplateDisplayV4,
   UseTemplateModuleDataHook,
+  EmailAttachments,
 } from "@workspace/common";
-import { TemplateHelper, ExportHelper, ObjectHelper } from "@workspace/common";
+import {
+  TemplateHelper,
+  ExportHelper,
+  ObjectHelper,
+  EmailVariableSelect,
+} from "@workspace/common";
 import { initialValues, schema } from "./formikConfig";
 import { Actions } from "@workspace/common";
 import EmailDateTime from "@workspace/common/src/Components/EmailV2/EmailDateTime";
@@ -45,6 +51,12 @@ import {
   SCHEDULE_FORM_INDEX,
   jobTimelineType,
 } from "../JobOverview/JobOverviewConstants";
+import { fixedVariables } from "../../../../template/src/components/TemplateBuilder/constants";
+import { generateInterviewTemplateMap } from "./constants";
+import { interviewTemplateMapping } from "./scheduleInterviewUtil";
+
+// Material Icon
+import AbcOutlinedIcon from "@mui/icons-material/AbcOutlined";
 
 const ScheduleInterview = forwardRef(
   (
@@ -61,10 +73,12 @@ const ScheduleInterview = forwardRef(
   ) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const editorRef = useRef(null);
 
     const [emailTemplateData, setEmailTemplateData] = useState(null);
     const [tableTemplateData, setTableTemplateData] = useState(null);
     const [CVTemplateData, setCVTemplateData] = useState(null);
+    const [selectedVariable, setSelectedVariable] = useState(null);
 
     const { allModuleData } = UseTemplateModuleDataHook.useTemplateModuleData({
       candidateId: jobTimeLineData?.candidate?.id,
@@ -267,6 +281,47 @@ const ScheduleInterview = forwardRef(
         setAttachmentLoading(false);
       }
     };
+
+    const handleReplaceInterviewDataButtonClick = () => {
+      const editor = editorRef?.current;
+      if (editor) {
+        const selection = window.getSelection();
+        const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+        const startContainer = range ? range.startContainer : null;
+        const startOffset = range ? range.startOffset : null;
+
+        const content = editor.getContent();
+        const replacedContent = interviewTemplateMapping(
+          content,
+          generateInterviewTemplateMap(formik)
+        );
+        if (content !== replacedContent) {
+          editor.setContent(replacedContent);
+
+          // Restore the cursor position
+          if (range) {
+            const newRange = document.createRange();
+            newRange.setStart(startContainer, startOffset);
+            newRange.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+          }
+        }
+      }
+    };
+
+    useEffect(() => {
+      if (selectedVariable) {
+        const editor = editorRef?.current;
+        const placeHolderVariable = `$[[${selectedVariable?.value}]]`;
+        if (editor?.selection && selectedVariable?.value) {
+          editor.selection.setContent(placeHolderVariable);
+        } else {
+          editor?.setContent(editor.getContent() + placeHolderVariable);
+        }
+      }
+      setSelectedVariable(null);
+    }, [selectedVariable]);
 
     return (
       <React.Fragment>
@@ -562,6 +617,7 @@ const ScheduleInterview = forwardRef(
             </Col>
             <Col>
               <EmailTemplateSelect
+                isLoading={attachmentLoading}
                 icon={<i className=" ri-file-list-2-line fs-5"></i>}
                 value={CVTemplateData}
                 setTemplateData={setCVTemplateData}
@@ -604,6 +660,33 @@ const ScheduleInterview = forwardRef(
             </Col>
           </Row>
           <Row>
+            <Col
+              style={{
+                maxWidth: "50%",
+              }}
+            >
+              <EmailVariableSelect
+                icon={<AbcOutlinedIcon className="fs-4" />}
+                options={fixedVariables["Interview"]}
+                setSelectedOption={setSelectedVariable}
+                value={selectedVariable}
+                placeholder={"Select Variable"}
+              />
+              <hr className="mt-2" />
+            </Col>
+            <Col className="text-end mt-2">
+              <Button
+                className="btn btn-custom-primary"
+                style={{
+                  backgroundColor: "#0A65CC",
+                }}
+                onClick={handleReplaceInterviewDataButtonClick}
+              >
+                Set Interview Data
+              </Button>
+            </Col>
+          </Row>
+          <Row>
             <Col>
               <TemplateDisplayV4
                 injectData={tableTemplateData?.content ?? null}
@@ -618,9 +701,17 @@ const ScheduleInterview = forwardRef(
                 }}
                 value={formik?.values?.["content"]}
                 showLoading={false}
+                editorOutRef={editorRef}
               />
             </Col>
           </Row>
+          <div className="mt-2">
+            <EmailAttachments
+              attachments={attachments}
+              setAttachments={setAttachments}
+              num={4}
+            />
+          </div>
         </div>
       </React.Fragment>
     );

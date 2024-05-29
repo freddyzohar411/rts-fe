@@ -16,9 +16,16 @@ import {
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
 import { OdinURLs } from "../JobOverview/JobOverviewConstants";
+import {
+  fetchJobTimelineFormSubmission,
+  fetchJobTimelineFormSubmissionReset,
+} from "../../store/jobStage/action";
 
 const CodingTest = forwardRef(
-  ({ closeOffcanvas, jobId, candidateId }, parentRef) => {
+  (
+    { closeOffcanvas, jobId, candidateId, readOnly = false, jobTimeLineData },
+    parentRef
+  ) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -29,15 +36,38 @@ const CodingTest = forwardRef(
 
     const linkState = location.state;
     const { getAllUserGroups } = useUserAuth();
-    const [view, setView] = useState(
-      linkState?.view !== null && linkState?.view !== undefined
-        ? linkState?.view
-        : false
+    const formSubmissionData = useSelector(
+      (state) => state.JobStageReducer.jobTimelineFormSubmission
     );
+    const [rejectedData, setRejectedData] = useState(null);
 
     useEffect(() => {
       dispatch(fetchJobForm("coding_test"));
     }, []);
+
+    useEffect(() => {
+      if (jobTimeLineData && jobTimeLineData?.timeline?.["Coding Test"]) {
+        if (jobTimeLineData?.timeline?.["Coding Test"]?.status === "REJECTED") {
+          setRejectedData({
+            codingTestResults: false
+          })
+        }
+        if (
+          jobTimeLineData?.timeline?.["Coding Test"]?.status === "COMPLETED"
+        ) {
+          dispatch(
+            fetchJobTimelineFormSubmission({
+              jobId: jobTimeLineData?.job?.id,
+              jobStageId: JOB_STAGE_IDS?.TECHNICAL_INTERVIEW,
+              candidateId: jobTimeLineData?.candidate?.id,
+            })
+          );
+        }
+      }
+      return () => {
+        dispatch(fetchJobTimelineFormSubmissionReset());
+      };
+    }, [jobTimeLineData]);
 
     useEffect(() => {
       if (form) {
@@ -59,6 +89,8 @@ const CodingTest = forwardRef(
           jobStageId: JOB_STAGE_IDS?.CODING_TEST,
           status: JOB_STAGE_STATUS?.REJECTED,
           candidateId,
+          formData: JSON.stringify(values),
+          formId: parseInt(form.formId),
           jobType: "coding_test",
           stepName: "Odin",
           subStepName: "Coding Test",
@@ -93,7 +125,7 @@ const CodingTest = forwardRef(
     return (
       <React.Fragment>
         <div
-          className="d-flex flex-column justiy-content-between h-100"
+          className="d-flex flex-column justiy-content-between h-100 p-2"
           style={{ height: "500px" }}
         >
           <Row>
@@ -103,11 +135,11 @@ const CodingTest = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={null}
+                  editData={formSubmissionData ? formSubmissionData : rejectedData}
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}
-                  view={view}
+                  view={readOnly}
                   ref={formikRef}
                 />
               </div>

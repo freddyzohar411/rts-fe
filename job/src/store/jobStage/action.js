@@ -24,6 +24,10 @@ import {
   UNTAG_JOB_SUCCESS,
   UNTAG_JOB_FAILURE,
   UNTAG_JOB_RESET,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION_SUCCESS,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION_FAILURE,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION_RESET
 } from "./actionTypes";
 
 // tag a job
@@ -159,3 +163,30 @@ export const tagJobFilesReset = () => {
     type: TAG_JOB_FILES_RESET,
   };
 };
+
+export const fetchJobTimelineFormSubmission = (params) => {
+  return {
+    type: FETCH_JOB_TIMELINE_FORM_SUBMISSION,
+    payload: params,
+  };
+}
+
+export const fetchJobTimelineFormSubmissionSuccess = (data) => {
+  return {
+    type: FETCH_JOB_TIMELINE_FORM_SUBMISSION_SUCCESS,
+    payload: data,
+  };
+}
+
+export const fetchJobTimelineFormSubmissionFailure = (error) => {
+  return {
+    type: FETCH_JOB_TIMELINE_FORM_SUBMISSION_FAILURE,
+    payload: error,
+  };
+}
+
+export const fetchJobTimelineFormSubmissionReset = () => {
+  return {
+    type: FETCH_JOB_TIMELINE_FORM_SUBMISSION_RESET,
+  };
+}

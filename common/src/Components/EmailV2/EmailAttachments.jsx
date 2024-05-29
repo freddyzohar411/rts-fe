@@ -147,7 +147,7 @@ const EmailAttachments = ({ attachments, setAttachments, num = 3 }) => {
                   style={{
                     padding: "2px 5px",
                     borderRadius: "10px",
-                    width: "170px",
+                    width: "190px",
                   }}
                 >
                   <div
@@ -160,7 +160,7 @@ const EmailAttachments = ({ attachments, setAttachments, num = 3 }) => {
                     <i className="ri-attachment-line"></i>
                     <span className="cursor-pointer">
                       <strong>
-                        {`${truncateFilenameMiddle(attachment.name, 16)}`}
+                        {`${truncateFilenameMiddle(attachment.name, 17)}`}
                       </strong>
                     </span>
                   </div>

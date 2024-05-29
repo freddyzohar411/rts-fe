@@ -26,6 +26,7 @@ const DynamicTableWrapper = ({
   setCustomQuery,
   fodODTableShowType,
   setSelected,
+  pageRequest,
 }) => {
   const isRecommendationLoading = useSelector(
     (state) => state.CandidateReducer.candidateRecommendationLoading
@@ -97,7 +98,9 @@ const DynamicTableWrapper = ({
       <div>
         <Row>
           <Col lg={12}>
-            <div className="listjs-table">
+            <div className="listjs-table" style={{
+              height: "calc(100vh - 225px)"
+            }}>
               <Row>
                 <div>
                   <div
@@ -201,7 +204,8 @@ const DynamicTableWrapper = ({
                 pageInfo={pageInfo}
                 isLoading={isRecommendationLoading}
                 freezeHeader={true}
-                tableHeight="500px"
+                tableHeight="100%"
+                pageRequest={pageRequest}
               />
             </div>
           </Col>

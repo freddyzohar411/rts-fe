@@ -81,12 +81,14 @@ import {
   PROFILE_FEEDBACK_PENDING_INDEX,
   BillRateZeroLabels,
 } from "./JobOverviewConstants";
+import * as JobOverviewConstants from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import * as JobListingConstant from "../JobListing/JobListingConstants";
 import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
 import { SkillAssessment } from "../SkillAssessment";
@@ -109,7 +111,6 @@ import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
 import PrepareTOS from "../TOSComponents/PrepareTOS.jsx";
 import ApproveTOS from "../TOSComponents/ApproveTOS.jsx";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment.jsx";
-
 import BillRateSalaryEditModal from "../BillRateSalaryEditModal/BillRateSalaryEditModal.jsx";
 import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
 
@@ -148,6 +149,8 @@ const JobOverview = () => {
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [modalFormName, setModalFormName] = useState({});
+  const [readOnly, setReadOnly] = useState(false);
+  const [readOnlyInterviewNo, setReadOnlyInterviewNo] = useState(0);
   const [billRateModalOpen, setBillRateModalOpen] = useState(false);
 
   const jobTimelineMeta = useSelector(
@@ -296,6 +299,7 @@ const JobOverview = () => {
         setModalFormName({ header: "Confirmation" });
         break;
       case PRF_WTDWN_FORM_INDEX:
+        setStepperState("Profile Withdrawn Confirmation");
         setModalFormName({ header: "Profile Withdrawn Confirmation" });
         break;
       case ASSOCIATE_FORM_INDEX:
@@ -305,12 +309,14 @@ const JobOverview = () => {
         setStepperState("Submit to Sales");
         break;
       case PRF_REJ_SALES_FORM_INDEX:
+        setStepperState("Profile Rejected - Sales");
         setModalFormName({ header: "Profile Rejected - Sales" });
         break;
       case SUB_TO_CLIENT_FORM_INDEX:
         setStepperState("Submit to Client");
         break;
       case PRF_REJ_CLIENT_FORM_INDEX:
+        setStepperState("Profile Rejected - Client");
         setModalFormName({ header: "Profile Rejected - Client" });
         break;
       // Odin
@@ -500,6 +506,7 @@ const JobOverview = () => {
             candidateId={candidateId}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             ref={formikRef}
+            readOnly={readOnly}
           />
         );
       case SUB_TO_SALES_FORM_INDEX:
@@ -532,6 +539,7 @@ const JobOverview = () => {
             candidateId={candidateId}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             ref={formikRef}
+            readOnly={readOnly}
           />
         );
       //Odin
@@ -542,6 +550,7 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           />
         );
       case SKILLS_ASSESSMENT_FORM_INDEX:
@@ -551,6 +560,8 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            readOnly={readOnly}
           />
         );
       case CODING_TEST_FORM_INDEX:
@@ -560,6 +571,8 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            readOnly={readOnly}
           />
         );
       case TEC_INTRW_FORM_INDEX:
@@ -569,6 +582,8 @@ const JobOverview = () => {
             jobId={jobId}
             candidateId={candidateId}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            readOnly={readOnly}
           />
         );
       case CULTURAL_FIT_TEST_FORM_INDEX:
@@ -579,6 +594,8 @@ const JobOverview = () => {
             candidateId={candidateId}
             activeStep={step}
             ref={formikRef}
+            jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            readOnly={readOnly}
           />
         );
       //Interview
@@ -619,6 +636,7 @@ const JobOverview = () => {
             ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             edit={true}
+            readOnly={readOnly}
           />
         );
       case RELEASE_FORM_INDEX:
@@ -657,6 +675,7 @@ const JobOverview = () => {
             ref={formikRef}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
             edit={true}
+            readOnly={readOnly}
           />
         );
       case APPROVE_TOS_FORM_INDEX:
@@ -884,11 +903,17 @@ const JobOverview = () => {
                     </button>
                   </td>
                 </tr>
-
                 {openJobIndex === data.id && (
                   <tr>
                     <td colSpan={10} className="px-3">
-                      <InnerTimelineStep data={data.timeline} />
+                      <InnerTimelineStep
+                        data={data.timeline}
+                        readOnlyActionTrigger={readOnlyActionTrigger}
+                        setTimelineRowIndex={() => {
+                          setTimelineRowIndex(timelineIndex);
+                        }}
+                        dataIndex={timelineIndex}
+                      />
                     </td>
                   </tr>
                 )}
@@ -912,6 +937,25 @@ const JobOverview = () => {
     let showSubmit = true;
     let cancelLabel = "Cancel";
     let submitLabel = "Update";
+
+    // If read only return cancel
+    if (readOnly) {
+      return (
+        <Button
+          className="btn btn-white bg-gradient border-2 border-light-grey fw-semibold"
+          style={{
+            borderRadius: "8px",
+          }}
+          onClick={() => {
+            setOffcanvasForm(false);
+            setIsViewTemplate(false);
+          }}
+        >
+          Cancel
+        </Button>
+      );
+    }
+
     switch (step) {
       case ASSOCIATE_FORM_INDEX:
       case PREPARE_TOS_FORM_INDEX:
@@ -1002,13 +1046,14 @@ const JobOverview = () => {
               }}
               style={{
                 borderRadius: "8px",
+                whiteSpace: "nowrap",
               }}
             >
               {jobTagMeta?.isLoading &&
               jobTagMeta?.jobType === "conditional_offer_prepare" ? (
                 <Spinner size="sm" color="light" />
               ) : (
-                "Safe As Draft"
+                "Save As Draft"
               )}
             </Button>
             <Button
@@ -1032,6 +1077,7 @@ const JobOverview = () => {
       default:
         break;
     }
+
     return (
       <div className="d-flex align-items-center gap-2">
         {showCancel && (
@@ -1069,6 +1115,450 @@ const JobOverview = () => {
       </div>
     );
   };
+
+  const readOnlyActionTrigger = (subitem, flag = false, index) => {
+    let onFlag = false;
+    const readOnlyActionTriggerObj = {
+      [JobOverviewConstants.ASSOCIATE]: () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.ASSOCIATE
+          ]?.status;
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.ASSOCIATE
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED
+        ) {
+          if (status === JOB_STAGE_STATUS.WITHDRAWN) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_WTDWN_FORM_INDEX);
+            setIsFormModalOpen(true);
+          } else {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(ASSOCIATE_FORM_INDEX);
+            setOffcanvasForm(true);
+            setReadOnly(true);
+          }
+        }
+      },
+      [JobOverviewConstants.PROFILE_FEEDBACK_PENDING]: () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.PROFILE_FEEDBACK_PENDING
+          ]?.status;
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.PROFILE_FEEDBACK_PENDING
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(PROFILE_FEEDBACK_PENDING_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      [JobOverviewConstants.SKILLS_ASSESSMENT]: () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.SKILLS_ASSESSMENT
+          ]?.status;
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.SKILLS_ASSESSMENT
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED &&
+          status !== JOB_STAGE_STATUS.IN_PROGRESS
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(SKILLS_ASSESSMENT_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      [JobOverviewConstants.CODING_TEST]: () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.CODING_TEST
+          ]?.status;
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.CODING_TEST
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED &&
+          status !== JOB_STAGE_STATUS.IN_PROGRESS
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(CODING_TEST_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      [JobOverviewConstants.TECHNICAL_INTERVIEW]: () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.TECHNICAL_INTERVIEW
+          ]?.status;
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.TECHNICAL_INTERVIEW
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED &&
+          status !== JOB_STAGE_STATUS.IN_PROGRESS
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(TEC_INTRW_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      [JobOverviewConstants.CULTURAL_FIT_TEST]: () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.CULTURAL_FIT_TEST
+          ]?.status;
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.CULTURAL_FIT_TEST
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED &&
+          status !== JOB_STAGE_STATUS.IN_PROGRESS
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(CULTURAL_FIT_TEST_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      [JobOverviewConstants.PREPARE_TOS]: () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.PREPARE_TOS
+          ]?.status;
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.PREPARE_TOS
+          ] &&
+          status !== JOB_STAGE_STATUS.SKIPPED
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(EDIT_TOS_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+      [JobOverviewConstants.CONDITIONAL_OFFER_SENT]: () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.CONDITIONAL_OFFER_SENT
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.CONDITIONAL_OFFER_SENT
+          ]?.status === JOB_STAGE_STATUS.COMPLETED
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(EDIT_FORM_INDEX);
+          setOffcanvasForm(true);
+          setReadOnly(true);
+        }
+      },
+
+      // Modal and Forms
+      [JobOverviewConstants.TAG]: () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.TAG
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.["Tag"]
+            ?.status === JOB_STAGE_STATUS.WITHDRAWN
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(PRF_WTDWN_FORM_INDEX);
+          setIsFormModalOpen(true);
+        }
+      },
+      [JobOverviewConstants.SUBMIT_TO_SALES]: () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.SUBMIT_TO_SALES
+          ]?.status;
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.SUBMIT_TO_SALES
+          ]
+        ) {
+          if (status === JOB_STAGE_STATUS.REJECTED) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_REJ_SALES_FORM_INDEX);
+            setIsFormModalOpen(true);
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_WTDWN_FORM_INDEX);
+            setIsFormModalOpen(true);
+          }
+        }
+      },
+      [JobOverviewConstants.SUBMIT_TO_CLIENT]: () => {
+        const status =
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.SUBMIT_TO_CLIENT
+          ]?.status;
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.SUBMIT_TO_CLIENT
+          ]
+        ) {
+          if (status === JOB_STAGE_STATUS.REJECTED) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_REJ_CLIENT_FORM_INDEX);
+            setIsFormModalOpen(true);
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(PRF_WTDWN_FORM_INDEX);
+            setIsFormModalOpen(true);
+          }
+        }
+      },
+      [JobOverviewConstants.TOS_ACCEPTED_DECLINED]: () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.TOS_ACCEPTED_DECLINED
+          ]
+        ) {
+          if (
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              JobOverviewConstants.TOS_ACCEPTED_DECLINED
+            ]?.status === JOB_STAGE_STATUS.COMPLETED
+          ) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(EDIT_TOS_FORM_INDEX);
+            setOffcanvasForm(true);
+            setReadOnly(true);
+          }
+          if (
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              JobOverviewConstants.TOS_ACCEPTED_DECLINED
+            ]?.status === JOB_STAGE_STATUS.REJECTED
+          ) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(APPROVE_TOS_FORM_INDEX);
+            setModalFormName({
+              header: "TOS Rejected",
+              formName: "rejected_tos",
+            });
+            setIsFormModalOpen(true);
+          }
+        }
+      },
+      [JobOverviewConstants.CONDITIONAL_OFFER_ACCEPTED_DECLINED]: () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.CONDITIONAL_OFFER_ACCEPTED_DECLINED
+          ]
+        ) {
+          const conditionalOfferStatus =
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              JobOverviewConstants.CONDITIONAL_OFFER_ACCEPTED_DECLINED
+            ]?.status;
+          if (conditionalOfferStatus === JOB_STAGE_STATUS.COMPLETED) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(ACCEPTED_FORM_INDEX);
+            setModalFormName({
+              header: "Conditional Offer Accepted",
+              formName: "conditional_offer_accepted",
+            });
+            setIsFormModalOpen(true);
+          }
+          if (conditionalOfferStatus === JOB_STAGE_STATUS.REJECTED) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(REJECTED_FORM_INDEX);
+            setModalFormName({
+              header: "Conditional Offer Rejected",
+              formName: "conditional_offer_rejected",
+            });
+            setIsFormModalOpen(true);
+          }
+        }
+      },
+      [JobOverviewConstants.FIRST_INTERVIEW_SCHEDULED]: () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.FIRST_INTERVIEW_SCHEDULED
+          ]
+        ) {
+          const status =
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              JobOverviewConstants.FIRST_INTERVIEW_SCHEDULED
+            ]?.status;
+          if (status === JOB_STAGE_STATUS.REJECTED) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(REJECTED_INTRW_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(1);
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(1);
+          }
+        }
+      },
+      [JobOverviewConstants.SECOND_INTERVIEW_SCHEDULED]: () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.SECOND_INTERVIEW_SCHEDULED
+          ]
+        ) {
+          const status =
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              JobOverviewConstants.SECOND_INTERVIEW_SCHEDULED
+            ]?.status;
+          if (status === JOB_STAGE_STATUS.REJECTED) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(REJECTED_INTRW_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(2);
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(2);
+          }
+        }
+      },
+      [JobOverviewConstants.THIRD_INTERVIEW_SCHEDULED]: () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.THIRD_INTERVIEW_SCHEDULED
+          ]
+        ) {
+          const status =
+            jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+              JobOverviewConstants.THIRD_INTERVIEW_SCHEDULED
+            ]?.status;
+          if (status === JOB_STAGE_STATUS.REJECTED) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(REJECTED_INTRW_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(3);
+          } else if (status === JOB_STAGE_STATUS.WITHDRAWN) {
+            if (flag) {
+              onFlag = true;
+              return;
+            }
+            setActiveStep(BACKOUT_CANDIE_FORM_INDEX);
+            setIsFormModalOpen(true);
+            setReadOnlyInterviewNo(3);
+          }
+        }
+      },
+      [JobOverviewConstants.INTERVIEW_FEEDBACK_PENDING]: () => {
+        if (
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.INTERVIEW_FEEDBACK_PENDING
+          ] &&
+          jobTimelineData?.jobs?.[index ?? timelineRowIndex]?.timeline?.[
+            JobOverviewConstants.INTERVIEW_FEEDBACK_PENDING
+          ]?.status === JOB_STAGE_STATUS.COMPLETED
+        ) {
+          if (flag) {
+            onFlag = true;
+            return;
+          }
+          setActiveStep(SELECTED_FORM_INDEX);
+          setIsFormModalOpen(true);
+        }
+      },
+    };
+    readOnlyActionTriggerObj[subitem]?.();
+    return onFlag;
+  };
+
+  //Handle Canvas Close and Modal Close
+  useEffect(() => {
+    // If canvas is close set readOnly to false
+    if (!offcanvasForm) {
+      setReadOnly(false);
+      setReadOnlyInterviewNo(0);
+    }
+  }, [offcanvasForm]);
+
+  useEffect(() => {
+    if (!isFormModalOpen) {
+      setReadOnly(false);
+      setReadOnlyInterviewNo(0);
+    }
+  }, [isFormModalOpen]);
 
   return (
     <React.Fragment>
@@ -1277,7 +1767,8 @@ const JobOverview = () => {
             setTemplatePreviewInfo(null);
           }}
           direction="end"
-          style={{ width: isMobile ? "100vw" : "55vw" }}
+          // Previously 55vw
+          style={{ width: isMobile ? "100vw" : "60vw" }}
         >
           <OffCanvasHeaderComponent
             stepperState={stepperState}
@@ -1312,11 +1803,16 @@ const JobOverview = () => {
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           modalFormName={modalFormName}
           isLoading={jobTagMeta?.isLoading}
+          readOnlyInterviewNo={readOnlyInterviewNo}
+          setModalFormName={setModalFormName}
         />
+
         <BillRateSalaryEditModal
           data={jobTimelineData}
           isOpen={isBrsModalOpen}
           closeModal={() => setIsBrsModalOpen(false)}
+        />
+
         <BillRateZeroModal
           isOpen={billRateModalOpen}
           closeModal={() => setBillRateModalOpen(false)}

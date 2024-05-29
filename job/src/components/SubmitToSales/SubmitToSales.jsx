@@ -30,6 +30,10 @@ import {
 } from "../JobListing/JobListingConstants";
 import { jobTimelineType } from "../JobOverview/JobOverviewConstants";
 
+// Icons
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+
 const SubmitToSales = forwardRef(
   (
     {
@@ -71,7 +75,15 @@ const SubmitToSales = forwardRef(
         jobStageId: JOB_STAGE_IDS?.SUBMIT_TO_SALES,
         status: JOB_STAGE_STATUS?.COMPLETED,
         candidateId: jobTimeLineData?.candidate?.id,
-        formData: null,
+        formData: JSON.stringify({
+          // remove attachments from form data
+          ...Object.keys(newValues).reduce((acc, key) => {
+            if (key !== "attachments") {
+              acc[key] = newValues[key];
+            }
+            return acc;
+          }, {}),
+        }),
         formId: null,
         jobType: jobTimelineType.SUBMIT_TO_SALES,
         stepName: "Profile",
@@ -272,7 +284,7 @@ const SubmitToSales = forwardRef(
           <Col>
             <EmailTo
               formik={formik}
-              ToIcon={<i className="ri-mail-fill fs-5"></i>}
+              ToIcon={<EmailOutlinedIcon className="fs-3" />}
             />
             <hr className="mt-2" />
           </Col>
@@ -280,7 +292,11 @@ const SubmitToSales = forwardRef(
 
         <Row>
           <Col>
-            <EmailCCBCC formik={formik} CCicon={<span>Cc</span>} BCC />
+            <EmailCCBCC
+              formik={formik}
+              CCicon={<span className="fw-semibold">Cc</span>}
+              BCC
+            />
             <hr className="mt-2" />
           </Col>
         </Row>
@@ -290,7 +306,7 @@ const SubmitToSales = forwardRef(
             <EmailSubject
               formik={formik}
               name="subject"
-              icon={<i className="ri-text fs-5"></i>}
+              icon={<i className="ri-text fs-5 fw-semibold"></i>}
             />
             <hr className="mt-2" />
           </Col>
@@ -300,7 +316,7 @@ const SubmitToSales = forwardRef(
           <Col>
             {/* Main Template Select */}
             <EmailTemplateSelect
-              icon={<i className=" ri-file-list-2-line fs-5"></i>}
+              icon={<ArticleOutlinedIcon className="fs-3" />}
               category="Email Templates"
               placeholder="Select Email Template"
               setTemplateData={setEmailTemplateData}
@@ -351,7 +367,7 @@ const SubmitToSales = forwardRef(
           </Col>
           <Col>
             <EmailTemplateSelect
-              icon={<i className=" ri-table-2 fs-5"></i>}
+              icon={<i className=" ri-table-2 fs-3"></i>}
               setTemplateData={setTableDataWithEffect}
               value={tableTemplateData}
               category="Table Templates"
@@ -411,7 +427,7 @@ const SubmitToSales = forwardRef(
             <EmailTemplateSelect
               isLoading={attachmentLoading}
               placeholder="Attach CV Template"
-              icon={<i className=" ri-file-list-2-line fs-5"></i>}
+              icon={<ArticleOutlinedIcon className="fs-3" />}
               value={CVTemplateData}
               setTemplateData={setCVTemplateData}
               category="CV"

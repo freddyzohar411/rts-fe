@@ -108,6 +108,7 @@ import EmailCCBCC from "./EmailV2/EmailCCBCC";
 import EmailSubject from "./EmailV2/EmailSubject";
 import EmailTemplateSelect from "./EmailV2/EmailTemplateSelect/EmailTemplateSelect";
 import EmailAttachments from "./EmailV2/EmailAttachments";
+import EmailVariableSelect from "./EmailV2/EmailVariableSelect/EmailVariableSelect";
 
 // Import Side drawer
 import SideDrawer from "./PreviewTemplateDrawer/SideDrawer";
@@ -215,9 +216,8 @@ export {
   EmailSubject,
   EmailTemplateSelect,
   EmailAttachments,
+  EmailVariableSelect,
 
   // Side Drawer
   SideDrawer,
 };
-
-
