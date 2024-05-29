@@ -79,6 +79,7 @@ import {
   EDIT_FORM_INDEX,
   SELECTED_FORM_INDEX,
   PROFILE_FEEDBACK_PENDING_INDEX,
+  BillRateZeroLabels,
 } from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import "./JobOverview.scss";
@@ -108,6 +109,9 @@ import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
 import PrepareTOS from "../TOSComponents/PrepareTOS.jsx";
 import ApproveTOS from "../TOSComponents/ApproveTOS.jsx";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment.jsx";
+
+import BillRateSalaryEditModal from "../BillRateSalaryEditModal/BillRateSalaryEditModal.jsx";
+import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -144,6 +148,7 @@ const JobOverview = () => {
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [modalFormName, setModalFormName] = useState({});
+  const [billRateModalOpen, setBillRateModalOpen] = useState(false);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -396,6 +401,11 @@ const JobOverview = () => {
     setOpenJobIndex(openJobIndex === index ? null : index);
   };
 
+  const [isBrsModalOpen, setIsBrsModalOpen] = useState(false);
+  const toggleBrsModal = () => {
+    setIsBrsModalOpen(!isBrsModalOpen);
+  };
+
   const handleStepsSelection = (jobId, value) => {
     const newOb = { ...skipSteps };
     newOb[jobId] = value;
@@ -423,11 +433,15 @@ const JobOverview = () => {
     }
   };
 
-  const handleIconClick = (candidateId, actStep, originalOrder) => {
-    setActiveStep(actStep);
-    actionButtonTrigger(actStep);
-    setCandidateId(candidateId);
-    setOriginalOrder(originalOrder);
+  const handleIconClick = (candidateId, actStep, originalOrder, data) => {
+    if (data?.job?.jobSubmissionData?.billRate === 0 && actStep === 6) {
+      setBillRateModalOpen(true);
+    } else {
+      setActiveStep(actStep);
+      actionButtonTrigger(actStep);
+      setCandidateId(candidateId);
+      setOriginalOrder(originalOrder);
+    }
   };
 
   const actionButtonTrigger = (step) => {
@@ -724,11 +738,12 @@ const JobOverview = () => {
             } else if (maxOrder >= 15 && maxOrder <= 17) {
               maxOrder = 5;
             }
+            const billRate = formSubmissionData?.["billRate*"] ?? 0;
             return (
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
                   {/* Candidate */}
-                  <td style={{ width: "160px" }}>
+                  <td style={{ width: "150px" }}>
                     <div className="d-flex flex-column align-items-start">
                       <Link
                         to={`/candidates/${candidateData.id}/snapshot`}
@@ -746,6 +761,32 @@ const JobOverview = () => {
                       </div>
                     </div>
                   </td>
+                  {/* Bill Rate */}
+                  <td style={{ width: "90px" }}>
+                    <div className="billrate-container">
+                      <span className="billrate-amt">${billRate}</span>
+                      <Button
+                        className="billrate-button"
+                        onClick={() => {
+                          toggleBrsModal(true);
+                        }}
+                      >
+                        <span className="mdi mdi-pencil"></span>
+                      </Button>
+                    </div>
+                  </td>
+                  {/* Salary */}
+                  <td style={{ width: "90px" }}>
+                    <div className="d-flex flex-row justify-content-start align-items-center">
+                      <span>
+                        $
+                        {
+                          data?.candidate?.candidateSubmissionData
+                            ?.expectedSalary
+                        }
+                      </span>
+                    </div>
+                  </td>
                   {/* Progress Bar */}
                   <td
                     style={{ width: "300px" }}
@@ -756,9 +797,11 @@ const JobOverview = () => {
                   {/* Current Status */}
                   <td style={{ width: "5rem" }}>
                     <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
-                      <span>{data?.stepName}</span>
+                      <span>{data?.stepName ?? "N/A"}</span>
                       <i className="ri-arrow-right-s-line"></i>
-                      <span className="fw-semibold">{data?.subStepName}</span>
+                      <span className="fw-semibold">
+                        {data?.subStepName ?? "N/A"}
+                      </span>
                     </div>
                   </td>
                   {/* Next Step */}
@@ -823,7 +866,8 @@ const JobOverview = () => {
                         handleIconClick(
                           candidateData?.id,
                           selectedSubSteps?.[candidateData?.id],
-                          originalOrder
+                          originalOrder,
+                          data
                         );
                         setTimelineRowIndex(timelineIndex);
                       }}
@@ -1268,6 +1312,16 @@ const JobOverview = () => {
           jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
           modalFormName={modalFormName}
           isLoading={jobTagMeta?.isLoading}
+        />
+        <BillRateSalaryEditModal
+          data={jobTimelineData}
+          isOpen={isBrsModalOpen}
+          closeModal={() => setIsBrsModalOpen(false)}
+        <BillRateZeroModal
+          isOpen={billRateModalOpen}
+          closeModal={() => setBillRateModalOpen(false)}
+          header={BillRateZeroLabels.header}
+          body={BillRateZeroLabels.body}
         />
       </div>
     </React.Fragment>

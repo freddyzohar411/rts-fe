@@ -57,6 +57,8 @@ export const jobHeaders = [
 
 export const newHeaders = [
   { name: "Candidate & Recruiter", icon: "mdi mdi-sort-descending" },
+  { name: "Bill Rate", icon: "" },
+  { name: "Salary", icon: "" },
   { name: "Progress", icon: "" },
   { name: "Current Status", icon: "" },
   { name: "Next Step", icon: "" },
@@ -245,4 +247,9 @@ export const OdinURLs = {
   CODING_TEST_ASSESSMENT: "https://app.hackerearth.com/recruiter/",
   TECHNICAL_INTERVIEW_ASSESSMENT: "https://app.hackerearth.com/recruiter/",
   CULTURAL_FIT_TEST: "https://app.hackerearth.com/recruiter/interview/",
+};
+
+export const BillRateZeroLabels = {
+  header: "Alert",
+  body: "The bill rate is 0, Please fill the value to proceed further.",
 };
