@@ -398,7 +398,11 @@ const EditorElement2 = ({
 
     // If currently non-editable, wrap the selected text with a span and apply a class
     editor.selection.setContent(
-      `<span style="border: 2px solid #D6CE0B; background-color: 	rgb(214, 206, 11, 0.2);" data-type="data-attribute" data-section="${editorAttributesData?.section}" data-label="${editorAttributesData?.label}" data-key="${uuid()}">${selectedText}</span>`
+      `<span style="border: 2px solid #D6CE0B; background-color: 	rgb(214, 206, 11, 0.2);" data-type="data-attribute" data-section="${
+        editorAttributesData?.section
+      }" data-label="${
+        editorAttributesData?.label
+      }" data-key="${uuid()}">${selectedText}</span>`
     );
 
     // Move the cursor to the end of the inserted content
@@ -430,6 +434,17 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
+            editor.on('OpenWindow', (e) => {
+              const dialog = editor.windowManager.getWindows()[0];
+              if (dialog && dialog.title() === 'Cell properties') {
+                setTimeout(() => {
+                  const borderWidthInput = dialog.getEl().querySelector('input[name="border-width"]');
+                  if (borderWidthInput && !borderWidthInput.value) {
+                    borderWidthInput.value = '1px';
+                  }
+                }, 100);
+              }
+            });
             editor.on("focusin", () => addHeaderStyle(editor));
             editor.on("focusout", () => removeHeaderStyle(editor));
             // On Init setup
