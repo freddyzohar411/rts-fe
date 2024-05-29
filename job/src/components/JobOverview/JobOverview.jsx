@@ -1317,6 +1317,7 @@ const JobOverview = () => {
           data={jobTimelineData}
           isOpen={isBrsModalOpen}
           closeModal={() => setIsBrsModalOpen(false)}
+        />
         <BillRateZeroModal
           isOpen={billRateModalOpen}
           closeModal={() => setBillRateModalOpen(false)}
