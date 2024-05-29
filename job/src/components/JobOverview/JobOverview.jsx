@@ -858,7 +858,7 @@ const JobOverview = () => {
 
                 {openJobIndex === data.id && (
                   <tr>
-                    <td colSpan={10} className="px-3">
+                    <td colSpan={10} className="px-1">
                       <InnerTimelineStep data={data.timeline} />
                     </td>
                   </tr>
