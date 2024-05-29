@@ -8,7 +8,7 @@ const useTableHook = (
   initialPageRequest = {},
   mandatoryConfig = [],
   initialConfig = [],
-  customConfigList = [],
+  customConfigList = []
 ) => {
   // Set state for page request
   const [pageRequest, setPageRequest] = useState({
@@ -31,7 +31,7 @@ const useTableHook = (
   const [activeRow, setActiveRow] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [customConfig, setCustomConfig] = useState(
-    generateConfig([...mandatoryConfig,...initialConfig], customConfigList)
+    generateConfig([...mandatoryConfig, ...initialConfig], customConfigList)
   );
 
   const [tableConfig, setTableConfig] = useState();
@@ -89,7 +89,6 @@ const useTableHook = (
     }));
   };
 
-
   const setPageInfoData = (data) => {
     setPageInfo((prev) => ({
       currentPage: data.page,
@@ -117,7 +116,7 @@ const useTableHook = (
   };
 
   // Set sort direction for page request
-  const setSortAndDirection = (option) => {
+  const setSortAndDirection2 = (option) => {
     let sortDir = "asc";
     if (pageRequest.sortBy === option.sortValue) {
       sortDir = pageRequest.sortDirection === "asc" ? "desc" : "asc";
@@ -127,6 +126,37 @@ const useTableHook = (
       sortBy: option.sortValue,
       sortDirection: sortDir,
     }));
+  };
+
+  // Set sort direction for page request
+  const setSortAndDirection = (option) => {
+    let sortDir = null;
+    if (pageRequest.sortBy == null || pageRequest.sortBy !== option.sortValue) {
+      sortDir = "asc";
+      setPageRequest((prev) => ({
+        ...prev,
+        sortBy: option.sortValue,
+        sortDirection: sortDir,
+      }));
+      return;
+    }
+    if (pageRequest.sortBy === option.sortValue) {
+      if (pageRequest.sortDirection === "asc") {
+        sortDir = "desc";
+        setPageRequest((prev) => ({
+          ...prev,
+          sortBy: option.sortValue,
+          sortDirection: sortDir,
+        }));
+      } else {
+        sortDir = "asc";
+        setPageRequest((prev) => ({
+          ...prev,
+          sortBy: null,
+          sortDirection: sortDir,
+        }));
+      }
+    }
   };
 
   // Handle Search

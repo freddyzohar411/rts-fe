@@ -7,4 +7,18 @@ export const moduleConstants = [
 export const injectionVariables = [
   { label: "Reset Password Link", value: "RESET_PASSWORD_LINK" },
   { label: "Login OTP Token", value: "LOGIN_OTP_TOKEN" },
-]
+];
+
+export const fixedVariables = {
+  Login: [
+    { label: "Login OTP Token", value: "LOGIN_OTP_TOKEN", type: 1 },
+    { label: "Reset Password Link", value: "RESET_PASSWORD_LINK", type: 1 },
+  ],
+  Interview: [
+    { label: "Interview Start Date", value: "INTERVIEW_START_DATE", type: 2 },
+    { label: "Interview End Date", value: "INTERVIEW_END_DATE", type: 2 },
+    { label: "Interview Start Time", value: "INTERVIEW_START_TIME", type: 2 },
+    { label: "Interview End Time", value: "INTERVIEW_END_TIME", type: 2 },
+    { label: "Interview Location", value: "INTERVIEW_LOCATION", type: 2 },
+  ],
+};

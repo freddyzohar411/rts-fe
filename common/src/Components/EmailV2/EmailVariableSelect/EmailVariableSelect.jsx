@@ -1,16 +1,16 @@
 import React from "react";
 import { Button, Spinner } from "reactstrap";
-import SelectTemplateNoBorder from "./SelectTemplateNoBorder";
+import SelectNoBorder from "./SelectNoBorder";
 
-const EmailTemplateSelect = ({
+const EmailVariableSelect = ({
+  setSelectedOption,
   icon,
-  setTemplateData,
-  category,
   value,
   addMoreOptions,
   selectRender,
   isLoading = false,
   placeholder,
+  options,
 }) => {
   return (
     <div className="d-flex gap-2 align-items-center">
@@ -32,11 +32,11 @@ const EmailTemplateSelect = ({
           <Spinner size="sm" />
         </div>
       ) : (
-        <SelectTemplateNoBorder
+        <SelectNoBorder
           onChange={(value) => {
-            setTemplateData(value);
+            setSelectedOption(value);
           }}
-          categoryName={category}
+          options={options}
           width="100%"
           flexGrow={true}
           value={value}
@@ -52,4 +52,4 @@ const EmailTemplateSelect = ({
   );
 };
 
-export default EmailTemplateSelect;
+export default EmailVariableSelect;

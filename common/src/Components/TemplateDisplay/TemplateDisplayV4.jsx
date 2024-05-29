@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Spinner } from "reactstrap";
+import { Spinner, Button } from "reactstrap";
 import { Editor } from "@tinymce/tinymce-react";
 import useMutationObserver from "./useMutationObserverHook";
 import ReactHtmlParser from "react-html-parser";
@@ -27,6 +27,7 @@ const TemplateDisplayV4 = ({
   initialValues,
   isAllLoading,
   showLoading = true,
+  editorOutRef,
 }) => {
   const editorRef = useRef(null);
   const [mappedVariableData, setMappedVariableData] = useState(allData || null);
@@ -216,22 +217,22 @@ const TemplateDisplayV4 = ({
     plugins = [...plugins, "autoresize"];
   }
 
-    // Inject variable when it changes
-    useEffect(() => {
-      if (!injectData) return;
-      // Get the current editor instance
-      const editor = editorRef?.current;
-      // const editor = window?.tinymce?.activeEditor;
-  
-      // Check if there is a selection
-      if (editor?.selection) {
-        // Insert the variableString at the selection's end position
-        editor.selection.setContent(injectData);
-      } else {
-        // If no selection, insert the variableString at the end of the document
-        editor?.setContent(editor.getContent() + injectData);
-      }
-    }, [injectData]);
+  // Inject variable when it changes
+  useEffect(() => {
+    if (!injectData) return;
+    // Get the current editor instance
+    const editor = editorRef?.current;
+    // const editor = window?.tinymce?.activeEditor;
+
+    // Check if there is a selection
+    if (editor?.selection) {
+      // Insert the variableString at the selection's end position
+      editor.selection.setContent(injectData);
+    } else {
+      // If no selection, insert the variableString at the end of the document
+      editor?.setContent(editor.getContent() + injectData);
+    }
+  }, [injectData]);
 
   return (
     <>
@@ -263,7 +264,12 @@ const TemplateDisplayV4 = ({
             }
             initialValue={initialValues && parsedContent}
             value={value}
-            onInit={(evt, editor) => (editorRef.current = editor)}
+            onInit={(evt, editor) => {
+              editorRef.current = editor;
+              if (editorOutRef) {
+                editorOutRef.current = editor;
+              }
+            }}
             init={{
               setup: (editor) => {
                 // Register Icons

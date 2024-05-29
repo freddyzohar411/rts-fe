@@ -29,6 +29,10 @@ import {
   UNTAG_JOB_SUCCESS,
   UNTAG_JOB_FAILURE,
   UNTAG_JOB_RESET,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION_SUCCESS,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION_FAILURE,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION_RESET,
 } from "./actionTypes";
 
 const initialState = {
@@ -41,6 +45,7 @@ const initialState = {
   jobTimelineMeta: {},
   jobTimelineCount: {},
   jobTimelineCountMeta: {},
+  jobTimelineFormSubmission: null,
 };
 
 const JobStageReducer = (state = initialState, action) => {
@@ -186,6 +191,27 @@ const JobStageReducer = (state = initialState, action) => {
       return {
         ...state,
         jobTagMeta: {},
+      };
+    // Fetch job timeline form submission
+    case FETCH_JOB_TIMELINE_FORM_SUBMISSION:
+      return {
+        ...state,
+        jobTimelineFormSubmission: null,
+      };
+    case FETCH_JOB_TIMELINE_FORM_SUBMISSION_SUCCESS:
+      return {
+        ...state,
+        jobTimelineFormSubmission: action.payload || null,
+      };
+    case FETCH_JOB_TIMELINE_FORM_SUBMISSION_FAILURE:
+      return {
+        ...state,
+        jobTimelineFormSubmission: null,
+      };
+    case FETCH_JOB_TIMELINE_FORM_SUBMISSION_RESET:
+      return {
+        ...state,
+        jobTimelineFormSubmission: null,
       };
     default:
       return state;

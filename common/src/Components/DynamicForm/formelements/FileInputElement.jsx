@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import * as BackendHelper from "../../../helpers/backend_helper";
 import * as FileHelper from "../../../helpers/file_helper";
 import { toast } from "react-toastify";
-import { Modal, ModalBody, ModalHeader, Spinner } from "reactstrap";
+import { Modal, ModalBody, ModalHeader, Spinner, Tooltip } from "reactstrap";
 import FilePreview from "../../FilePreview/FilePreview";
 
 const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
@@ -13,9 +13,10 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [downloadLoading, setDownloadLoading] = useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const truncateString = (str, num) => {
-    if (str) {
+    if (!str) {
       return str;
     }
     if (str?.length <= num) {
@@ -163,6 +164,33 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
     }
   };
 
+  const useElementWidth = () => {
+    const [width, setWidth] = useState(0);
+    const ref = useRef(null);
+
+    useEffect(() => {
+      const handleResize = () => {
+        if (ref.current) {
+          setWidth(ref.current.offsetWidth);
+        }
+      };
+
+      handleResize();
+
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+
+    return [ref, width];
+  };
+
+  const [inputRef, width] = useElementWidth();
+
+  // Adjust the truncation length based on the width of the input box
+  const truncationLength = Math.floor(width / 15) || 1;
+
   return (
     <>
       <Modal
@@ -239,11 +267,43 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
             overflow: "hidden",
             backgroundColor: formState === "view" ? "#EFF2F7" : "",
           }}
+          ref={inputRef}
+          id={`file-input-${field.name}`}
         >
           {formik?.values?.[field.name]?.name
-            ? truncateString(formik?.values?.[field.name]?.name, 15)
+            ? truncateString(
+                formik?.values?.[field.name]?.name,
+                truncationLength
+              )
             : formik?.values?.[field.name] &&
-              truncateString(formik?.values?.[field.name], 15)}
+              truncateString(formik?.values?.[field.name], truncationLength)}
+          {formik?.values?.[field.name] &&
+            typeof formik?.values?.[field.name] === "string" &&
+            truncateString(formik?.values?.[field.name], truncationLength) !==
+              formik?.values?.[field.name] && (
+              <Tooltip
+                placement="top"
+                isOpen={tooltipOpen}
+                target={`file-input-${field.name}`}
+                toggle={() => setTooltipOpen(!tooltipOpen)}
+              >
+                {formik?.values?.[field.name]}
+              </Tooltip>
+            )}
+          {formik?.values?.[field.name]?.name &&
+            truncateString(
+              formik?.values?.[field.name]?.name,
+              truncationLength
+            ) !== formik?.values?.[field.name]?.name && (
+              <Tooltip
+                placement="top"
+                isOpen={tooltipOpen}
+                target={`file-input-${field.name}`}
+                toggle={() => setTooltipOpen(!tooltipOpen)}
+              >
+                {formik?.values?.[field.name]?.name}
+              </Tooltip>
+            )}
           {!formik?.values?.[field.name] &&
             !formik?.values?.[field.name]?.name &&
             "No file chosen"}
