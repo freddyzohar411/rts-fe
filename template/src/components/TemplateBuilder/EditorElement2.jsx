@@ -434,17 +434,17 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
-            editor.on('OpenWindow', (e) => {
-              const dialog = editor.windowManager.getWindows()[0];
-              if (dialog && dialog.title() === 'Cell properties') {
-                setTimeout(() => {
-                  const borderWidthInput = dialog.getEl().querySelector('input[name="border-width"]');
-                  if (borderWidthInput && !borderWidthInput.value) {
-                    borderWidthInput.value = '1px';
-                  }
-                }, 100);
-              }
-            });
+            // editor.on('OpenWindow', (e) => {
+            //   const dialog = editor.windowManager.getWindows()[0];
+            //   if (dialog && dialog.title() === 'Cell properties') {
+            //     setTimeout(() => {
+            //       const borderWidthInput = dialog.getEl().querySelector('input[name="border-width"]');
+            //       if (borderWidthInput && !borderWidthInput.value) {
+            //         borderWidthInput.value = '1px';
+            //       }
+            //     }, 100);
+            //   }
+            // });
             editor.on("focusin", () => addHeaderStyle(editor));
             editor.on("focusout", () => removeHeaderStyle(editor));
             // On Init setup
