@@ -413,6 +413,54 @@ const EditorElement2 = ({
     setEditorAtrributeModalOpen(false);
   };
 
+  const createMarginDropdown = (editor) => {
+    editor.ui.registry.addMenuButton("marginDropdown", {
+      text: "Margins",
+      fetch: function (callback) {
+        const items = [
+          {
+            type: "nestedmenuitem",
+            text: "Set Margin",
+            getSubmenuItems: () => [
+              {
+                type: "menuitem",
+                text: "No Margin",
+                onAction: () => setMargins(editor, "0px"),
+              },
+              {
+                type: "menuitem",
+                text: "10px",
+                onAction: () => setMargins(editor, "10px"),
+              },
+              {
+                type: "menuitem",
+                text: "20px",
+                onAction: () => setMargins(editor, "20px"),
+              },
+              {
+                type: "menuitem",
+                text: "30px",
+                onAction: () => setMargins(editor, "30px"),
+              },
+            ],
+          },
+        ];
+        callback(items);
+      },
+    });
+  };
+
+  const setMargins = (editor, value) => {
+    const content = editor.selection.getContent({ format: "html" });
+    let wrappedContent;
+    if (value === "0px") {
+      wrappedContent = `<div>${content}</div>`;
+    } else {
+      wrappedContent = `<div style="margin: ${value};">${content}</div>`;
+    }
+    editor.execCommand("mceInsertContent", false, wrappedContent);
+  };
+
   return (
     <>
       <EditorDataAttributeModal
@@ -434,6 +482,9 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
+            createMarginDropdown(editor);
+
+            // Add a 1px to borderwidth if empty
             editor.on("OpenWindow", () => {
               const setBorderWidth = () => {
                 const formGroups =
@@ -889,7 +940,7 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "myAddAttributeButton myRemoveAttributeButton | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
+            "marginDropdown | myAddAttributeButton myRemoveAttributeButton | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak | insertLogo insertHeader exitHeader removeHeader |" +
             "removeformat | searchreplace |" +
