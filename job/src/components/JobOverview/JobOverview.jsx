@@ -109,6 +109,8 @@ import OffCanvasHeaderComponent from "./OffCanvasHeaderComponent";
 import PrepareTOS from "../TOSComponents/PrepareTOS.jsx";
 import ApproveTOS from "../TOSComponents/ApproveTOS.jsx";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment.jsx";
+
+import BillRateSalaryEditModal from "../BillRateSalaryEditModal/BillRateSalaryEditModal.jsx";
 import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
 
 const JobOverview = () => {
@@ -397,6 +399,11 @@ const JobOverview = () => {
 
   const toggleJobOpen = (index) => {
     setOpenJobIndex(openJobIndex === index ? null : index);
+  };
+
+  const [isBrsModalOpen, setIsBrsModalOpen] = useState(false);
+  const toggleBrsModal = () => {
+    setIsBrsModalOpen(!isBrsModalOpen);
   };
 
   const handleStepsSelection = (jobId, value) => {
@@ -731,11 +738,12 @@ const JobOverview = () => {
             } else if (maxOrder >= 15 && maxOrder <= 17) {
               maxOrder = 5;
             }
+            const billRate = formSubmissionData?.["billRate*"] ?? 0;
             return (
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
                   {/* Candidate */}
-                  <td style={{ width: "160px" }}>
+                  <td style={{ width: "150px" }}>
                     <div className="d-flex flex-column align-items-start">
                       <Link
                         to={`/candidates/${candidateData.id}/snapshot`}
@@ -751,6 +759,32 @@ const JobOverview = () => {
                         <i className="ri-account-circle-line ri-lg mt-1 "></i>{" "}
                         <span className="form-text">{data?.createdByName}</span>
                       </div>
+                    </div>
+                  </td>
+                  {/* Bill Rate */}
+                  <td style={{ width: "90px" }}>
+                    <div className="billrate-container">
+                      <span className="billrate-amt">${billRate}</span>
+                      <Button
+                        className="billrate-button"
+                        onClick={() => {
+                          toggleBrsModal(true);
+                        }}
+                      >
+                        <span className="mdi mdi-pencil"></span>
+                      </Button>
+                    </div>
+                  </td>
+                  {/* Salary */}
+                  <td style={{ width: "90px" }}>
+                    <div className="d-flex flex-row justify-content-start align-items-center">
+                      <span>
+                        $
+                        {
+                          data?.candidate?.candidateSubmissionData
+                            ?.expectedSalary
+                        }
+                      </span>
                     </div>
                   </td>
                   {/* Progress Bar */}
@@ -1279,7 +1313,10 @@ const JobOverview = () => {
           modalFormName={modalFormName}
           isLoading={jobTagMeta?.isLoading}
         />
-
+        <BillRateSalaryEditModal
+          data={jobTimelineData}
+          isOpen={isBrsModalOpen}
+          closeModal={() => setIsBrsModalOpen(false)}
         <BillRateZeroModal
           isOpen={billRateModalOpen}
           closeModal={() => setBillRateModalOpen(false)}
