@@ -88,7 +88,6 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
-import * as JobListingConstant from "../JobListing/JobListingConstants";
 import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
 import { SkillAssessment } from "../SkillAssessment";
@@ -96,7 +95,6 @@ import { CodingTest } from "../CodingTest";
 import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import {
-  getLastSubmittedStage,
   getMaxOrder,
   getStatus,
   overviewHeaders,
@@ -734,7 +732,6 @@ const JobOverview = () => {
             const candidateData = data?.candidate;
             let maxOrder = getMaxOrder(data);
             const originalOrder = maxOrder;
-            const lastSubmittedStage = getLastSubmittedStage(data, maxOrder);
             const status = getStatus(data, maxOrder);
             const isRejected =
               status === JOB_STAGE_STATUS.REJECTED ||
