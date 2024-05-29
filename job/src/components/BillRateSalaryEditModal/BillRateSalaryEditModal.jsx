@@ -31,7 +31,7 @@ function BillRateSalaryEditModal({ isOpen, closeModal }) {
 
   useEffect(() => {
     dispatch(fetchJobForm("billrate_salary"));
-  }, [form]);
+  }, []);
 
   useEffect(() => {
     if (form) {

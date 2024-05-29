@@ -5,7 +5,7 @@ export const overviewHeaders = [
   "Job Title",
   "Job Id",
   "Ageing",
-  "Sales",
+  "Account Owner",
   "Recruiter",
   "Man Days",
 ];
@@ -33,7 +33,7 @@ export const overviewValues = (data, deliveryTeam, isMobile) => {
       value: "N/A",
       trimValue: trimValue("N/A", isMobile),
     },
-    Sales: {
+    "Account Owner": {
       value: owner,
       trimValue: trimValue(owner, isMobile),
     },
