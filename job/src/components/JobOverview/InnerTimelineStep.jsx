@@ -32,11 +32,14 @@ const InnerTimelineStep = ({
   const [bottomWidth, setBottomWidth] = useState(0);
   const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] =
     useState(null);
-
+  console.log("Test 0");
+  console.log("Test 0.1", actionTriggeredWithSubitem);
   useEffect(() => {
+    console.log("Test 1");
     if (actionTriggeredWithSubitem) {
       //  readOnlyActionTrigger[actionTriggeredWithSubitem]?.();
       readOnlyActionTrigger(actionTriggeredWithSubitem);
+      console.log("Test 2");
     }
     setActionTriggeredWithSubitem(null);
   }, [actionTriggeredWithSubitem]);
@@ -283,7 +286,6 @@ const InnerTimelineStep = ({
 
   const getOverallStatus = (data) => {
     const statuses = data.map((item) => item.data.status);
-    console.log("Statuses", statuses)
 
     if (statuses.length === 0) {
       return "NOTSTARTED";
@@ -293,10 +295,16 @@ const InnerTimelineStep = ({
     const hasWithdrawn = statuses.includes("WITHDRAWN");
     const hasRejected = statuses.includes("REJECTED");
     const hasSkipped = statuses.includes("SKIPPED");
-    const hasUndefinedOrNull = statuses.includes(undefined) || statuses.includes(null);
+    const hasUndefinedOrNull =
+      statuses.includes(undefined) || statuses.includes(null);
 
-
-    if (hasCompleted && !hasWithdrawn && !hasRejected && !hasSkipped && !hasUndefinedOrNull) {
+    if (
+      hasCompleted &&
+      !hasWithdrawn &&
+      !hasRejected &&
+      !hasSkipped &&
+      !hasUndefinedOrNull
+    ) {
       return "COMPLETED";
     }
 
@@ -355,9 +363,6 @@ const InnerTimelineStep = ({
     const status = getOverallStatus(section);
     return { ...section, status };
   });
-
-  console.log("Steps with status", stepsWithStatus);
-  console.log("Separated Data", separatedData);
 
   // For !isExpanded view > Single Row
   const [itemCount, setItemCount] = useState(0);
@@ -555,13 +560,37 @@ const InnerTimelineStep = ({
                         ? new Date(stepData.date).toLocaleDateString()
                         : "Not Started"}
                     </span>
-                    <span className="step-title">{stepName}</span>
+                    <span
+                      className={`step-title ${
+                        readOnlyActionTrigger(stepName, true, dataIndex)
+                          ? "cursor-pointer"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        setActionTriggeredWithSubitem(stepName);
+                        setTimelineRowIndex();
+                      }}
+                      style={{
+                        textDecoration: readOnlyActionTrigger(
+                          stepName,
+                          true,
+                          dataIndex
+                        )
+                          ? "underline"
+                          : "none",
+                        color: readOnlyActionTrigger(stepName, true, dataIndex)
+                          ? "#8A9AD0"
+                          : "",
+                      }}
+                    >
+                      {stepName}
+                    </span>
                   </div>
                 </div>
               </div>
             );
           })}
-        </div>{" "}
+        </div>
       </div>
     </div>
   );
