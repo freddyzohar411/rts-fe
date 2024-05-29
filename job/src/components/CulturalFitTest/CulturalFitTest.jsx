@@ -5,9 +5,9 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { Form } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -15,28 +15,48 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
+import { fetchJobTimelineFormSubmissionReset } from "../../store/jobStage/action";
 
 const CulturalFitTest = forwardRef(
-  ({ closeOffcanvas, jobId, candidateId }, parentRef) => {
+  (
+    { closeOffcanvas, jobId, candidateId, readOnly = false, jobTimeLineData },
+    parentRef
+  ) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
     const formikRef = useRef(null);
 
     const form = useSelector((state) => state.JobFormReducer.form);
     const [formTemplate, setFormTemplate] = useState(null);
-
-    const linkState = location.state;
     const { getAllUserGroups } = useUserAuth();
-    const [view, setView] = useState(
-      linkState?.view !== null && linkState?.view !== undefined
-        ? linkState?.view
-        : false
-    );
+    const [formSubmissionData, setFormSubmissionData] = useState(null);
 
     useEffect(() => {
       dispatch(fetchJobForm("cultural_fit_test"));
     }, []);
+
+    useEffect(() => {
+      if (jobTimeLineData && jobTimeLineData?.timeline?.["Cultural Fit Test"]) {
+        if (
+          jobTimeLineData?.timeline?.["Cultural Fit Test"]?.status ===
+          "REJECTED"
+        ) {
+          setFormSubmissionData({
+            culturalFitTestResults: false,
+          });
+        } else if (
+          jobTimeLineData?.timeline?.["Cultural Fit Test"]?.status ===
+          "COMPLETED"
+        ) {
+          setFormSubmissionData({
+            culturalFitTestResults: true,
+          });
+        }
+      }
+      return () => {
+        dispatch(fetchJobTimelineFormSubmissionReset());
+      };
+    }, [jobTimeLineData]);
 
     useEffect(() => {
       if (form) {
@@ -84,7 +104,7 @@ const CulturalFitTest = forwardRef(
     return (
       <React.Fragment>
         <div
-          className="d-flex flex-column justiy-content-between h-100"
+          className="d-flex flex-column justiy-content-between h-100 p-2"
           style={{ height: "500px" }}
         >
           <Row>
@@ -94,11 +114,11 @@ const CulturalFitTest = forwardRef(
                   template={formTemplate}
                   userDetails={getAllUserGroups()}
                   country={null}
-                  editData={null}
+                  editData={formSubmissionData ? formSubmissionData : null}
                   onSubmit={handleFormSubmit}
                   onFormFieldsChange={null}
                   errorMessage={null}
-                  view={view}
+                  view={readOnly}
                   ref={formikRef}
                 />
               </div>

@@ -12,7 +12,12 @@ import {
 } from "../JobListing/JobListingConstants";
 import "./InnerTimelineStep.scss";
 
-const InnerTimelineStep = ({ data }) => {
+const InnerTimelineStep = ({
+  data,
+  readOnlyActionTrigger,
+  setTimelineRowIndex,
+  dataIndex,
+}) => {
   const containerRef = useRef(null);
   const containerNewRef = useRef(null);
   const timelineRef = useRef(null);
@@ -25,6 +30,16 @@ const InnerTimelineStep = ({ data }) => {
   const [elementSizing, setElementSizing] = useState("");
   const [uniqueTopValues, setUniqueTopValues] = useState([]);
   const [bottomWidth, setBottomWidth] = useState(0);
+  const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] =
+    useState(null);
+
+  useEffect(() => {
+    if (actionTriggeredWithSubitem) {
+      //  readOnlyActionTrigger[actionTriggeredWithSubitem]?.();
+      readOnlyActionTrigger(actionTriggeredWithSubitem);
+    }
+    setActionTriggeredWithSubitem(null);
+  }, [actionTriggeredWithSubitem]);
 
   useEffect(() => {
     sectionRefs.current = sections.map(
@@ -546,7 +561,7 @@ const InnerTimelineStep = ({ data }) => {
               </div>
             );
           })}
-        </div>
+        </div>{" "}
       </div>
     </div>
   );

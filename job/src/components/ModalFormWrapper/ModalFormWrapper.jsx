@@ -35,6 +35,11 @@ import {
   CANCL_BY_CLIENT_FORM_INDEX,
   SELECTED_FORM_INDEX,
 } from "../JobOverview/JobOverviewConstants";
+import { getJobCandidateStage } from "../../helpers/backend_helper";
+import {
+  fetchJobTimelineFormSubmission,
+  fetchJobTimelineFormSubmissionReset,
+} from "../../store/jobStage/action";
 
 const ModalFormWrapper = ({
   originalOrder,
@@ -45,6 +50,7 @@ const ModalFormWrapper = ({
   jobTimeLineData,
   modalFormName,
   isLoading,
+  readOnlyInterviewNo,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -53,6 +59,86 @@ const ModalFormWrapper = ({
   const formikRef = useRef(null);
   const form = useSelector((state) => state.JobFormReducer.form);
   const [formTemplate, setFormTemplate] = useState(null);
+  const formSubmissionData = useSelector(
+    (state) => state.JobStageReducer.jobTimelineFormSubmission
+  );
+  const [customHeader, setCustomHeader] = useState(null);
+  // Get Submission Data for Form
+  useEffect(() => {
+    setCustomHeader(null);
+    let stageId;
+    let status;
+    // Get stage id
+    if (activeStep === PRF_WTDWN_FORM_INDEX) {
+      // Find out the stage id for profile withdrawn
+      const timelineData = jobTimeLineData?.timeline;
+      const stage = Object.keys(timelineData).find(
+        (key) => timelineData[key]?.status === JOB_STAGE_STATUS.WITHDRAWN
+      );
+      const stageData = timelineData[stage];
+      stageId = stageData?.order;
+      status = JOB_STAGE_STATUS.WITHDRAWN;
+      // stageId = JOB_STAGE_IDS.TAG;
+    } else if (activeStep === PRF_REJ_SALES_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.SUBMIT_TO_SALES;
+    } else if (activeStep === PRF_REJ_CLIENT_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.SUBMIT_TO_CLIENT;
+    } else if (activeStep === APPROVE_TOS_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.TOS_APPROVAL;
+    } else if (activeStep === ACCEPTED_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.CONDITIONAL_OFFER_APPROVAL;
+      status = JOB_STAGE_STATUS.ACCEPTED;
+    } else if (activeStep === REJECTED_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.CONDITIONAL_OFFER_APPROVAL;
+      status = JOB_STAGE_STATUS.REJECTED;
+    } else if (
+      activeStep === REJECTED_INTRW_FORM_INDEX ||
+      activeStep === CANCL_BY_CLIENT_FORM_INDEX
+    ) {
+      switch (readOnlyInterviewNo) {
+        case 1:
+          stageId = JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED;
+          break;
+        case 2:
+          stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
+          break;
+        case 3:
+          stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
+          break;
+        default:
+      }
+      setCustomHeader("Candidate Rejected / Cancelled by Client");
+    } else if (activeStep === BACKOUT_CANDIE_FORM_INDEX) {
+      switch (readOnlyInterviewNo) {
+        case 1:
+          stageId = JOB_STAGE_IDS.FIRST_INTERVIEW_SCHEDULED;
+          break;
+        case 2:
+          stageId = JOB_STAGE_IDS.SECOND_INTERVIEW_SCHEDULED;
+          break;
+        case 3:
+          stageId = JOB_STAGE_IDS.THIRD_INTERVIEW_SCHEDULED;
+          break;
+        default:
+      }
+    } else if (activeStep === SELECTED_FORM_INDEX) {
+      stageId = JOB_STAGE_IDS.INTERVIEW_FEEDBACK_PENDING;
+    }
+    if (jobTimeLineData && isFormModalOpen == true) {
+      dispatch(
+        fetchJobTimelineFormSubmission({
+          jobId: jobTimeLineData?.job?.id,
+          jobStageId: stageId,
+          candidateId: jobTimeLineData?.candidate?.id,
+          status: status || null,
+        })
+      );
+    }
+
+    return () => {
+      dispatch(fetchJobTimelineFormSubmissionReset());
+    };
+  }, [jobTimeLineData, isFormModalOpen]);
 
   useEffect(() => {
     if (form) {
@@ -343,18 +429,21 @@ const ModalFormWrapper = ({
           paddingBottom: "0px",
         }}
       >
-        <h5>{modalFormName ? modalFormName?.header : header || "Header"}</h5>
+        <h5>
+          {customHeader ||
+            (modalFormName ? modalFormName?.header : header || "Header")}
+        </h5>
       </ModalHeader>
       <ModalBody>
         <Form
           template={formTemplate}
           userDetails={getAllUserGroups()}
           country={null}
-          editData={null}
+          editData={formSubmissionData}
           onSubmit={handleFormSubmit}
           onFormFieldsChange={null}
           errorMessage={null}
-          view={false}
+          view={formSubmissionData ? true : false}
           ref={formikRef}
         />
       </ModalBody>
@@ -367,15 +456,17 @@ const ModalFormWrapper = ({
           >
             Cancel
           </Button>
-          <Button
-            className="btn-danger fw-semibold"
-            style={{ borderRadius: "8px" }}
-            onClick={() => {
-              formikRef.current.formik?.submitForm();
-            }}
-          >
-            {isLoading ? <Spinner size="sm" /> : "Confirm"}
-          </Button>
+          {formSubmissionData ? null : (
+            <Button
+              className="btn-danger fw-semibold"
+              style={{ borderRadius: "8px" }}
+              onClick={() => {
+                formikRef.current.formik?.submitForm();
+              }}
+            >
+              {isLoading ? <Spinner size="sm" /> : "Confirm"}
+            </Button>
+          )}
         </div>
       </ModalFooter>
     </Modal>

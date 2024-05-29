@@ -43,8 +43,17 @@ const FormSectionList = ({
             return (
               <div key={field.fieldId} className="draggable-item">
                 <div className="mb-1">
-                  <div className="d-flex gap-2">
-                    <label htmlFor={field.name} className="form-label">
+                  <div className="d-flex gap-2" 
+                  style={{
+                    height: "25px",
+                  }}
+                  >
+                    <label htmlFor={field.name} className="form-label" 
+                    style={{
+                      // Align at the bottom
+                      alignSelf: "flex-end",
+                    }}
+                    >
                       {field.label}
                     </label>
                     {field.information && <FieldToolTip field={field} />}

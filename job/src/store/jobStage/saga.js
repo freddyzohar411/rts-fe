@@ -8,6 +8,7 @@ import {
   TAG_JOB_ALL,
   TAG_JOB_ATTACHMENT,
   UNTAG_JOB,
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION,
 } from "./actionTypes";
 import {
   tagJobSuccess,
@@ -24,6 +25,8 @@ import {
   tagJobAttachmentFailure,
   untagJobSuccess,
   untagJobFailure,
+  fetchJobTimelineFormSubmissionSuccess,
+  fetchJobTimelineFormSubmissionFailure,
 } from "./action";
 import {
   getJobTimeline,
@@ -33,8 +36,14 @@ import {
   tagJobWithAttachments,
   tagJobWithFiles,
   untagJob,
+  getJobCandidateStage,
+  getTOSByJobIdAndCandidateIdAndStatus,
+  getConditionalOfferByJobIdAndCandidateIdAndStatus,
 } from "../../helpers/backend_helper";
-import { JOB_STAGE_STATUS } from "../../components/JobListing/JobListingConstants";
+import {
+  JOB_STAGE_STATUS,
+  JOB_STAGE_IDS,
+} from "../../components/JobListing/JobListingConstants";
 
 function* workTagJob(action) {
   const { payload, navigate } = action.payload;
@@ -154,6 +163,49 @@ function* workTagJobFiles(action) {
   }
 }
 
+// Fetch job timeline form submission
+function* workFetchJobTimelineFormSubmission(action) {
+  const { jobId, jobStageId, candidateId, status } = action.payload;
+  try {
+    let response = null;
+    if (jobStageId === JOB_STAGE_IDS?.TOS_APPROVAL) {
+      response = yield call(
+        getTOSByJobIdAndCandidateIdAndStatus,
+        jobId,
+        candidateId,
+        "REJECTED"
+      );
+      yield put(
+        fetchJobTimelineFormSubmissionSuccess(response.data?.tosSubmissionData)
+      );
+    } else if (jobStageId === JOB_STAGE_IDS?.CONDITIONAL_OFFER_APPROVAL) {
+      response = yield call(
+        getConditionalOfferByJobIdAndCandidateIdAndStatus,
+        jobId,
+        candidateId,
+        status
+      );
+      yield put(
+        fetchJobTimelineFormSubmissionSuccess(
+          response.data?.conditionalOfferSubmissionData
+        )
+      );
+    } else {
+      response = yield call(getJobCandidateStage, action.payload);
+      let data = response.data?.submissionData;
+      if (
+        status === JOB_STAGE_STATUS?.WITHDRAWN &&
+        response.data?.actionSubmissionData
+      ) {
+        data = response.data?.actionSubmissionData;
+      }
+      yield put(fetchJobTimelineFormSubmissionSuccess(data));
+    }
+  } catch (error) {
+    yield put(fetchJobTimelineFormSubmissionFailure(error));
+  }
+}
+
 export default function* watchTagJobSaga() {
   yield takeEvery(TAG_JOB, workTagJob);
   yield takeEvery(TAG_JOB_ALL, workTagAllJob);
@@ -162,4 +214,8 @@ export default function* watchTagJobSaga() {
   yield takeEvery(JOB_TIMELINE_COUNT, workFetchJobTimelineCount);
   yield takeEvery(TAG_JOB_ATTACHMENT, workTagJobAttachment);
   yield takeEvery(TAG_JOB_FILES, workTagJobFiles);
+  yield takeEvery(
+    FETCH_JOB_TIMELINE_FORM_SUBMISSION,
+    workFetchJobTimelineFormSubmission
+  );
 }
