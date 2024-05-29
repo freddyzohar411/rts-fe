@@ -43,22 +43,10 @@ function TimelineHeader({ data }) {
     }
   }, [jobTimelineCount]);
 
-  const filteredData = data
-    .filter((item) => item !== "Profile Feedback Pending")
-    .map((item) => {
-      switch (item) {
-        case "Interview Scheduled":
-          return "Scheduled";
-        case "Interview Happened":
-          return "Completed";
-        case "Interview Cancelled/Backout":
-          return "Cancelled/Backout";
-        case "Interview Pending Feedback":
-          return "Pending Feedback";
-        default:
-          return item;
-      }
-    });
+  const handleBarChartClick = (module, count) => {
+    if (count && count > 0) {
+    }
+  };
 
   return (
     <div
@@ -68,18 +56,22 @@ function TimelineHeader({ data }) {
           : "flex-nowrap align-items-start"
       }`}
     >
-      {filteredData.map((item, index) => (
+      {data?.map((item, index) => (
         <div
           key={index}
           className="d-flex flex-column align-items-center justify-content-end"
-          style={{ height: "120px" }}
+          style={{
+            height: "120px",
+            cursor: counts?.[item] > 0 ? "pointer" : "auto",
+          }}
+          onClick={() => handleBarChartClick(item, counts?.[item])}
         >
           <div
             className="d-flex justify-content-center align-items-end mb-1"
             style={{
               width: "130px",
               height:
-                (counts[item] === 0 || !candidatesExist)
+                counts[item] === 0 || !candidatesExist
                   ? "7.5%"
                   : `${(counts[item] / maxCount) * 60}%`,
               transition: "height 0.3s ease",

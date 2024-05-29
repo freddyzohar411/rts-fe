@@ -68,6 +68,8 @@ const ProfileFeedbackPending = forwardRef(
         formData: JSON.stringify(values),
         formId: parseInt(form.formId),
         jobType: "profile_feedback_pending",
+        stepName: "Profile",
+        subStepName: "Profile Status",
       };
       dispatch(tagJob({ payload, navigate }));
       closeOffcanvas();

@@ -44,46 +44,21 @@ export const steps = {
   "Conditional Offer Accepted/Declined": "Conditional Offer Accepted/Declined",
 };
 
-export const stepOrders = {
-  Tag: 0,
-  Associate: 1,
-  "Submit to Sales": 2,
-  "Submit to Client": 3,
-  "Profile Feedback Pending": 4,
-  "Odin Protocol": 5,
-  Interviews: 9,
-  "Conditional Offer Sent": 13,
-  "Conditional Offer Accepted/Declined": 14,
-};
-
 export const jobHeaders = [
   "Tag",
   "Associate",
   "Submit to Sales",
   "Submit to Client",
-  "Profile Feedback Pending",
-  "Interview Scheduled",
-  "Interview Happened",
-  "Interview Cancelled/Backout",
-  "Interview Pending Feedback",
-];
-
-export const rtsStatusHeaders = [
-  "Candidate",
-  "Recruiter",
-  "Tag",
-  "Associate",
-  "Submit to Sales",
-  "Submit to Client",
-  "Profile Feedback Pending",
-  "Odin Protocol",
-  "Interviews",
-  "Conditional Offer Sent",
-  "Conditional Offer Accepted/Declined",
+  "Scheduled",
+  "Completed",
+  "Cancelled/Backout",
+  "Pending Feedback",
 ];
 
 export const newHeaders = [
   { name: "Candidate & Recruiter", icon: "mdi mdi-sort-descending" },
+  { name: "Bill Rate", icon: "" },
+  { name: "Salary", icon: "" },
   { name: "Progress", icon: "" },
   { name: "Current Status", icon: "" },
   { name: "Next Step", icon: "" },
@@ -272,4 +247,9 @@ export const OdinURLs = {
   CODING_TEST_ASSESSMENT: "https://app.hackerearth.com/recruiter/",
   TECHNICAL_INTERVIEW_ASSESSMENT: "https://app.hackerearth.com/recruiter/",
   CULTURAL_FIT_TEST: "https://app.hackerearth.com/recruiter/interview/",
+};
+
+export const BillRateZeroLabels = {
+  header: "Alert",
+  body: "The bill rate is 0, Please fill the value to proceed further.",
 };
