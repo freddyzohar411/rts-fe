@@ -771,7 +771,11 @@ const JobOverview = () => {
                   <td style={{ width: "90px" }}>
                     <div className="d-flex flex-row justify-content-start align-items-center">
                       <span>
-                        ${data.candidate.candidateSubmissionData.expectedSalary}
+                        $
+                        {
+                          data?.candidate?.candidateSubmissionData
+                            ?.expectedSalary
+                        }
                       </span>
                     </div>
                   </td>
