@@ -5,9 +5,9 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { Form } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -15,10 +15,7 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
-import {
-  fetchJobTimelineFormSubmission,
-  fetchJobTimelineFormSubmissionReset,
-} from "../../store/jobStage/action";
+import { fetchJobTimelineFormSubmissionReset } from "../../store/jobStage/action";
 
 const CulturalFitTest = forwardRef(
   (
@@ -27,15 +24,11 @@ const CulturalFitTest = forwardRef(
   ) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
     const formikRef = useRef(null);
 
     const form = useSelector((state) => state.JobFormReducer.form);
     const [formTemplate, setFormTemplate] = useState(null);
     const { getAllUserGroups } = useUserAuth();
-    // const formSubmissionData = useSelector(
-    //   (state) => state.JobStageReducer.jobTimelineFormSubmission
-    // );
     const [formSubmissionData, setFormSubmissionData] = useState(null);
 
     useEffect(() => {
