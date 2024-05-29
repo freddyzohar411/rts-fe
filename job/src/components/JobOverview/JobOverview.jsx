@@ -1806,11 +1806,13 @@ const JobOverview = () => {
           readOnlyInterviewNo={readOnlyInterviewNo}
           setModalFormName={setModalFormName}
         />
+
         <BillRateSalaryEditModal
           data={jobTimelineData}
           isOpen={isBrsModalOpen}
           closeModal={() => setIsBrsModalOpen(false)}
         />
+
         <BillRateZeroModal
           isOpen={billRateModalOpen}
           closeModal={() => setBillRateModalOpen(false)}
