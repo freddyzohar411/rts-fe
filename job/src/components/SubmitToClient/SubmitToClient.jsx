@@ -31,8 +31,8 @@ import {
 } from "../JobListing/JobListingConstants";
 
 // Icons
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 
 const SubmitToClient = forwardRef(
   (
@@ -281,7 +281,7 @@ const SubmitToClient = forwardRef(
           <Col>
             <EmailTo
               formik={formik}
-              ToIcon={<EmailOutlinedIcon className="fs-3"/>}
+              ToIcon={<EmailOutlinedIcon className="fs-3" />}
             />
             <hr className="mt-2" />
           </Col>
@@ -289,7 +289,11 @@ const SubmitToClient = forwardRef(
 
         <Row>
           <Col>
-            <EmailCCBCC formik={formik} CCicon={<span className="fw-semibold">Cc</span>} BCC />
+            <EmailCCBCC
+              formik={formik}
+              CCicon={<span className="fw-semibold">Cc</span>}
+              BCC
+            />
             <hr className="mt-2" />
           </Col>
         </Row>
@@ -309,8 +313,8 @@ const SubmitToClient = forwardRef(
           <Col>
             {/* Main Template Select */}
             <EmailTemplateSelect
-            icon={<ArticleOutlinedIcon className="fs-3"/>}
-            category="Email Templates"
+              icon={<ArticleOutlinedIcon className="fs-3" />}
+              category="Email - Submit to Client"
               setTemplateData={setEmailTemplateData}
               addMoreOptions={{
                 addMore: true,
@@ -417,7 +421,7 @@ const SubmitToClient = forwardRef(
           >
             <EmailTemplateSelect
               isLoading={attachmentLoading}
-              icon={<ArticleOutlinedIcon className="fs-3"/>}
+              icon={<ArticleOutlinedIcon className="fs-3" />}
               value={CVTemplateData}
               setTemplateData={setCVTemplateData}
               category="CV"

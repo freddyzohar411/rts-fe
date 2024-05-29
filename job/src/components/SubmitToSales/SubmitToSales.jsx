@@ -163,18 +163,14 @@ const SubmitToSales = forwardRef(
         const userData = response?.data;
         if (userData) {
           const cc = userData.filter((item) => item.id === data.recruiterId);
-          const to = [
-            {
-              email: extractEmailsUsingRegex(
-                jobTimeLineData?.job?.jobSubmissionData?.accountOwner
-              ),
-            },
-          ];
-          if (to && to.length > 0) {
+          const accountOwner =
+            jobTimeLineData?.job?.jobSubmissionData?.accountOwner;
+          if (extractEmailsUsingRegex(accountOwner)) {
+            const accountOwnerEmail = extractEmailsUsingRegex(accountOwner);
             formik.setFieldValue("to", [
               {
-                value: to[0]?.email,
-                label: to[0]?.email,
+                value: accountOwnerEmail,
+                label: accountOwnerEmail,
               },
             ]);
           }
@@ -329,7 +325,7 @@ const SubmitToSales = forwardRef(
             {/* Main Template Select */}
             <EmailTemplateSelect
               icon={<ArticleOutlinedIcon className="fs-3" />}
-              category="Email Templates"
+              category="Email - Submit to Sales"
               placeholder="Select Email Template"
               setTemplateData={setEmailTemplateData}
               addMoreOptions={{
