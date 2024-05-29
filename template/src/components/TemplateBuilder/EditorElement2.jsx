@@ -429,8 +429,18 @@ const EditorElement2 = ({
               },
               {
                 type: "menuitem",
+                text: "5px",
+                onAction: () => setMargins(editor, "5px"),
+              },
+              {
+                type: "menuitem",
                 text: "10px",
                 onAction: () => setMargins(editor, "10px"),
+              },
+              {
+                type: "menuitem",
+                text: "15px",
+                onAction: () => setMargins(editor, "15px"),
               },
               {
                 type: "menuitem",
@@ -451,14 +461,43 @@ const EditorElement2 = ({
   };
 
   const setMargins = (editor, value) => {
-    const content = editor.selection.getContent({ format: "html" });
-    let wrappedContent;
-    if (value === "0px") {
-      wrappedContent = `<div>${content}</div>`;
+    const identifier = "custom-margin-div";
+    let content = editor.getContent({ format: "html" });
+
+    // Parse the content using DOMParser
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, "text/html");
+    let existingDiv = doc.body.querySelector(`div[data-id="${identifier}"]`);
+
+    if (existingDiv) {
+      if (value === "0px") {
+        // Remove the existing div and keep its inner content
+        doc.body.innerHTML = existingDiv.innerHTML;
+      } else {
+        // Update the existing div's margin
+        existingDiv.style.margin = value;
+      }
     } else {
-      wrappedContent = `<div style="margin: ${value};">${content}</div>`;
+      if (value !== "0px") {
+        const newDiv = document.createElement("div");
+        newDiv.style.margin = value;
+        newDiv.setAttribute("data-id", identifier);
+        newDiv.innerHTML = doc.body.innerHTML;
+        doc.body.innerHTML = "";
+        doc.body.appendChild(newDiv);
+      }
     }
-    editor.execCommand("mceInsertContent", false, wrappedContent);
+
+    // Serialize the document back to HTML
+    const updatedContent = doc.body.innerHTML;
+    editor.setContent(updatedContent);
+  };
+
+  const setInitialMargin = (editor, value) => {
+    if (value === "0" || value === "0px") return;
+    const identifier = "custom-margin-div";
+    const initialContent = `<div style="margin: ${value};" data-id="${identifier}">${editor.getContent()}</div>`;
+    editor.setContent(initialContent);
   };
 
   return (
@@ -482,6 +521,12 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
+            // Set Initial Margin when editor load
+            editor.on("init", () => {
+              setInitialMargin(editor, "0px"); // Set the initial margin to 10px or any desired value
+            });
+
+            // Add a margin dropdown
             createMarginDropdown(editor);
 
             // Add a 1px to borderwidth if empty
