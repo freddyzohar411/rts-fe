@@ -114,7 +114,6 @@ import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment.jsx";
 import BillRateSalaryEditModal from "../BillRateSalaryEditModal/BillRateSalaryEditModal.jsx";
 import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
 
-
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
 
@@ -153,7 +152,6 @@ const JobOverview = () => {
   const [readOnly, setReadOnly] = useState(false);
   const [readOnlyInterviewNo, setReadOnlyInterviewNo] = useState(0);
   const [billRateModalOpen, setBillRateModalOpen] = useState(false);
-
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -412,10 +410,6 @@ const JobOverview = () => {
   const [isBrsModalOpen, setIsBrsModalOpen] = useState(false);
   const toggleBrsModal = () => {
     setIsBrsModalOpen(!isBrsModalOpen);
-  };
-
-  const getBrsData = (billRate, salary) => {
-    return { billRate, salary };
   };
 
   const handleStepsSelection = (jobId, value) => {
@@ -794,12 +788,6 @@ const JobOverview = () => {
                         className="billrate-button"
                         onClick={() => {
                           toggleBrsModal(true);
-                          getBrsData({
-                            billRate: billRate,
-                            salary:
-                              candidateData?.candidateSubmissionData
-                                .expectedSalary,
-                          });
                         }}
                       >
                         <span className="mdi mdi-pencil"></span>
@@ -810,7 +798,11 @@ const JobOverview = () => {
                   <td style={{ width: "90px" }}>
                     <div className="d-flex flex-row justify-content-start align-items-center">
                       <span>
-                        ${data.candidate.candidateSubmissionData.expectedSalary}
+                        $
+                        {
+                          data?.candidate?.candidateSubmissionData
+                            ?.expectedSalary
+                        }
                       </span>
                     </div>
                   </td>
@@ -1814,6 +1806,7 @@ const JobOverview = () => {
           readOnlyInterviewNo={readOnlyInterviewNo}
           setModalFormName={setModalFormName}
         />
+
         <BillRateSalaryEditModal
           data={jobTimelineData}
           isOpen={isBrsModalOpen}

@@ -13,7 +13,7 @@ import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Form } from "@workspace/common";
 
-function BillRateSalaryEditModal({ data, isOpen, closeModal }) {
+function BillRateSalaryEditModal({ isOpen, closeModal }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const formikRef = useRef(null);
@@ -31,7 +31,7 @@ function BillRateSalaryEditModal({ data, isOpen, closeModal }) {
 
   useEffect(() => {
     dispatch(fetchJobForm("billrate_salary"));
-  }, [dispatch]);
+  }, [form]);
 
   useEffect(() => {
     if (form) {
@@ -51,7 +51,7 @@ function BillRateSalaryEditModal({ data, isOpen, closeModal }) {
   return (
     <Modal isOpen={isOpen} centered toggle={handleModal}>
       <ModalHeader toggle={handleModal}>
-        <span className="h6">Candidate Bill Rate & Salary</span>
+        <span className="fw-semibold fs-5">Candidate Bill Rate & Salary</span>
       </ModalHeader>
       <ModalBody>
         <Row>
@@ -77,7 +77,11 @@ function BillRateSalaryEditModal({ data, isOpen, closeModal }) {
               className="w-50 fw-semibold"
               type="button"
               onClick={handleModal}
-              style={{ borderRadius: "8px", backgroundColor: "white" }}
+              style={{
+                borderRadius: "8px",
+                border: "1px solid #DFE2E6",
+                backgroundColor: "white",
+              }}
             >
               Cancel
             </Button>
