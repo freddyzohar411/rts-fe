@@ -434,17 +434,32 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
-            // editor.on('OpenWindow', (e) => {
-            //   const dialog = editor.windowManager.getWindows()[0];
-            //   if (dialog && dialog.title() === 'Cell properties') {
-            //     setTimeout(() => {
-            //       const borderWidthInput = dialog.getEl().querySelector('input[name="border-width"]');
-            //       if (borderWidthInput && !borderWidthInput.value) {
-            //         borderWidthInput.value = '1px';
-            //       }
-            //     }, 100);
-            //   }
-            // });
+            editor.on("OpenWindow", () => {
+              const setBorderWidth = () => {
+                const formGroups =
+                  document.querySelectorAll(".tox-form__group");
+                formGroups.forEach((group) => {
+                  const label = group.querySelector("label");
+                  if (label && label.textContent === "Border width") {
+                    const borderWidthInput = group.querySelector("input");
+                    if (borderWidthInput && !borderWidthInput.value) {
+                      borderWidthInput.value = "1px";
+                    }
+                  }
+                });
+              };
+
+              // Listen for tab changes
+              const tabButtons = document.querySelectorAll(".tox-tab");
+              tabButtons.forEach((tab) => {
+                tab.addEventListener("click", () => {
+                  setTimeout(setBorderWidth, 100); // Adjust timeout as needed
+                });
+              });
+
+              // Set default value if the second tab is already active
+              setTimeout(setBorderWidth, 100);
+            });
             editor.on("focusin", () => addHeaderStyle(editor));
             editor.on("focusout", () => removeHeaderStyle(editor));
             // On Init setup
