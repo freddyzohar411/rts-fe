@@ -48,8 +48,6 @@ const SubmitToSales = forwardRef(
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    console.log("JobTimelineData", jobTimeLineData);
-
     const [emailTemplateData, setEmailTemplateData] = useState(null);
     const [tableTemplateData, setTableTemplateData] = useState(null);
     const [CVTemplateData, setCVTemplateData] = useState(null);
