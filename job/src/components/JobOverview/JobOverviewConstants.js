@@ -250,3 +250,8 @@ export const OdinURLs = {
   TECHNICAL_INTERVIEW_ASSESSMENT: "https://app.hackerearth.com/recruiter/",
   CULTURAL_FIT_TEST: "https://app.hackerearth.com/recruiter/interview/",
 };
+
+export const BillRateZeroLabels = {
+  header: "Alert",
+  body: "The bill rate is 0, Please fill the value to proceed further.",
+};

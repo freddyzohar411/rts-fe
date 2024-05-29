@@ -79,6 +79,7 @@ import {
   EDIT_FORM_INDEX,
   SELECTED_FORM_INDEX,
   PROFILE_FEEDBACK_PENDING_INDEX,
+  BillRateZeroLabels,
 } from "./JobOverviewConstants";
 import * as JobOverviewConstants from "./JobOverviewConstants";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
@@ -111,6 +112,7 @@ import PrepareTOS from "../TOSComponents/PrepareTOS.jsx";
 import ApproveTOS from "../TOSComponents/ApproveTOS.jsx";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment.jsx";
 import BillRateSalaryEditModal from "../BillRateSalaryEditModal/BillRateSalaryEditModal.jsx";
+import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -149,6 +151,7 @@ const JobOverview = () => {
   const [modalFormName, setModalFormName] = useState({});
   const [readOnly, setReadOnly] = useState(false);
   const [readOnlyInterviewNo, setReadOnlyInterviewNo] = useState(0);
+  const [billRateModalOpen, setBillRateModalOpen] = useState(false);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -409,10 +412,6 @@ const JobOverview = () => {
     setIsBrsModalOpen(!isBrsModalOpen);
   };
 
-  const getBrsData = (billRate, salary) => {
-    return { billRate, salary };
-  };
-
   const handleStepsSelection = (jobId, value) => {
     const newOb = { ...skipSteps };
     newOb[jobId] = value;
@@ -440,11 +439,15 @@ const JobOverview = () => {
     }
   };
 
-  const handleIconClick = (candidateId, actStep, originalOrder) => {
-    setActiveStep(actStep);
-    actionButtonTrigger(actStep);
-    setCandidateId(candidateId);
-    setOriginalOrder(originalOrder);
+  const handleIconClick = (candidateId, actStep, originalOrder, data) => {
+    if (data?.job?.jobSubmissionData?.billRate === 0 && actStep === 6) {
+      setBillRateModalOpen(true);
+    } else {
+      setActiveStep(actStep);
+      actionButtonTrigger(actStep);
+      setCandidateId(candidateId);
+      setOriginalOrder(originalOrder);
+    }
   };
 
   const actionButtonTrigger = (step) => {
@@ -785,12 +788,6 @@ const JobOverview = () => {
                         className="billrate-button"
                         onClick={() => {
                           toggleBrsModal(true);
-                          getBrsData({
-                            billRate: billRate,
-                            salary:
-                              candidateData?.candidateSubmissionData
-                                .expectedSalary,
-                          });
                         }}
                       >
                         <span className="mdi mdi-pencil"></span>
@@ -801,7 +798,11 @@ const JobOverview = () => {
                   <td style={{ width: "90px" }}>
                     <div className="d-flex flex-row justify-content-start align-items-center">
                       <span>
-                        ${data.candidate.candidateSubmissionData.expectedSalary}
+                        $
+                        {
+                          data?.candidate?.candidateSubmissionData
+                            ?.expectedSalary
+                        }
                       </span>
                     </div>
                   </td>
@@ -815,9 +816,11 @@ const JobOverview = () => {
                   {/* Current Status */}
                   <td style={{ width: "5rem" }}>
                     <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
-                      <span>{data?.stepName}</span>
+                      <span>{data?.stepName ?? "N/A"}</span>
                       <i className="ri-arrow-right-s-line"></i>
-                      <span className="fw-semibold">{data?.subStepName}</span>
+                      <span className="fw-semibold">
+                        {data?.subStepName ?? "N/A"}
+                      </span>
                     </div>
                   </td>
                   {/* Next Step */}
@@ -882,7 +885,8 @@ const JobOverview = () => {
                         handleIconClick(
                           candidateData?.id,
                           selectedSubSteps?.[candidateData?.id],
-                          originalOrder
+                          originalOrder,
+                          data
                         );
                         setTimelineRowIndex(timelineIndex);
                       }}
@@ -1806,6 +1810,12 @@ const JobOverview = () => {
           data={jobTimelineData}
           isOpen={isBrsModalOpen}
           closeModal={() => setIsBrsModalOpen(false)}
+        />
+        <BillRateZeroModal
+          isOpen={billRateModalOpen}
+          closeModal={() => setBillRateModalOpen(false)}
+          header={BillRateZeroLabels.header}
+          body={BillRateZeroLabels.body}
         />
       </div>
     </React.Fragment>

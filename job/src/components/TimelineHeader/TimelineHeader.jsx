@@ -43,6 +43,11 @@ function TimelineHeader({ data }) {
     }
   }, [jobTimelineCount]);
 
+  const handleBarChartClick = (module, count) => {
+    if (count && count > 0) {
+    }
+  };
+
   return (
     <div
       className={`d-flex p-0 justify-content-around ${
@@ -55,7 +60,11 @@ function TimelineHeader({ data }) {
         <div
           key={index}
           className="d-flex flex-column align-items-center justify-content-end"
-          style={{ height: "120px" }}
+          style={{
+            height: "120px",
+            cursor: counts?.[item] > 0 ? "pointer" : "auto",
+          }}
+          onClick={() => handleBarChartClick(item, counts?.[item])}
         >
           <div
             className="d-flex justify-content-center align-items-end mb-1"
