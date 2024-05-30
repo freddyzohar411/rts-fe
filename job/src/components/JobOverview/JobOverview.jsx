@@ -754,7 +754,7 @@ const JobOverview = () => {
             } else if (maxOrder >= 15 && maxOrder <= 17) {
               maxOrder = 5;
             }
-            const billRate = formSubmissionData?.["billRate*"] ?? 0;
+            const billRate = data?.job?.jobSubmissionData?.billRate ?? 0;
             return (
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
@@ -796,10 +796,8 @@ const JobOverview = () => {
                     <div className="d-flex flex-row justify-content-start align-items-center">
                       <span>
                         $
-                        {
-                          data?.candidate?.candidateSubmissionData
-                            ?.expectedSalary
-                        }
+                        {data?.candidate?.candidateSubmissionData
+                          ?.candidateExpectedSalary ?? 0}
                       </span>
                     </div>
                   </td>
