@@ -345,9 +345,9 @@ const InnerTimelineStep = ({
     const ranges = [
       { start: 0, end: 4 },
       { start: 5, end: 8 },
-      { start: 9, end: 11 },
-      { start: 12, end: 13 },
-      { start: 14, end: 15 },
+      { start: 9, end: 12 },
+      { start: 13, end: 14 },
+      { start: 15, end: 16 },
     ];
 
     return ranges.map((range) => stepsData.slice(range.start, range.end + 1));
@@ -512,23 +512,16 @@ const InnerTimelineStep = ({
               );
             }
 
-            const isUnderCollapsedSection = Object.keys(expandedView).some(
-              (key) => {
-                const [start, end] = expandedRange[key] || [];
-                return (
-                  start <= index && index <= end && expandedView[key] === false
-                );
-              }
-            );
-
-            const isUnderCurrentExpandedSection = Object.keys(
-              expandedView
-            ).some((key) => {
+            const isUnderCollapsedSection = Object.keys(expandedView).some((key) => {
               const [start, end] = expandedRange[key] || [];
-              return (
-                start <= index && index <= end && expandedView[key] === true
-              );
+              return start <= index && index <= end && expandedView[key] === false;
             });
+            
+            const isUnderCurrentExpandedSection = Object.keys(expandedView).some((key) => {
+              const [start, end] = expandedRange[key] || [];
+              return start <= index && index <= end && expandedView[key] === true;
+            });
+            
 
             if (isUnderCollapsedSection && !isUnderCurrentExpandedSection) {
               return null;
