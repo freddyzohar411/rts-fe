@@ -338,8 +338,6 @@ const TemplateBuilder = forwardRef(
       editorRef.current.setContent(content);
     };
 
-    console.log("Form formik: ", formik.values);
-
     return (
       <div className="d-flex flex-column gap-2">
         <Row className="mb-3">
