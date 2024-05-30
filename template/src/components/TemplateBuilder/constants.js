@@ -22,3 +22,30 @@ export const fixedVariables = {
     { label: "Interview Location", value: "INTERVIEW_LOCATION", type: 2 },
   ],
 };
+
+export const templateCategoryList = [
+  {
+    label: "Email - Submit to Sales",
+    value: "Email - Submit to Sales",
+  },
+  {
+    label: "Email - Submit to Client",
+    value: "Email - Submit to Client",
+  },
+  {
+    label: "Email - Interview Schedule",
+    value: "Email - Interview Schedule",
+  },
+  {
+    label: "Email - Conditional Offer Release",
+    value: "Email - Conditional Offer Release",
+  },
+  {
+    label: "CV",
+    value: "CV",
+  },
+  {
+    label: "Table Templates",
+    value: "Table Templates",
+  },
+];

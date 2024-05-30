@@ -418,7 +418,7 @@ function FOD() {
                             <div className="d-flex gap-4 align-items-center">
                               <span className="fs-6 fw-semibold">
                                 Job ID -{" "}
-                                {selectedRowData.jobSubmissionData.clientJobId}
+                                {selectedRowData.jobSubmissionData.jobId}
                               </span>
                               <span className="fs-6 fw-semibold">|</span>
                               <span className="fs-6 fw-semibold">

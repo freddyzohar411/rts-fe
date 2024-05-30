@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Label, FormFeedback } from "reactstrap";
-import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 
 const CreateSelectElement = ({

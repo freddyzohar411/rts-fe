@@ -26,8 +26,8 @@ export const overviewValues = (data, deliveryTeam, isMobile) => {
       trimValue: trimValue(data?.jobTitle, isMobile),
     },
     "Job Id": {
-      value: data?.clientJobId,
-      trimValue: trimValue(data?.clientJobId, isMobile),
+      value: data?.jobId,
+      trimValue: trimValue(data?.jobId, isMobile),
     },
     Ageing: {
       value: "N/A",
@@ -72,15 +72,4 @@ export const getStatus = (data, orderNo) => {
     }
   }
   return status;
-};
-
-export const getLastSubmittedStage = (data, maxOrder) => {
-  const keys = Object.keys(data?.timeline);
-  let lastSubmittedStage = "N/A";
-  if (keys) {
-    lastSubmittedStage = keys.find(
-      (key) => data?.timeline?.[key]?.order === maxOrder
-    );
-  }
-  return lastSubmittedStage;
 };
