@@ -13,6 +13,8 @@ export const JOB_TIMELINE_INITIAL_OPTIONS = [
   },
 ];
 
+export const PROFILE = "Profile";
+
 export const TAG = "Tag";
 export const ASSOCIATE = "Associate";
 export const SUBMIT_TO_SALES = "Submit to Sales";

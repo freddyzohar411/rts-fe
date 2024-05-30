@@ -457,9 +457,32 @@ const InnerTimelineStep = ({
                         stepNumber
                       )}
                     </div>
-                    <div className="general-alignment">
+                    <div
+                      className="general-alignment"
+                      onClick={() => setActionTriggeredWithSubitem(stepName)}
+                    >
                       <span className="form-text">{statusDate}</span>
-                      <span className="step-title">{stepName}</span>
+                      <span
+                        className="step-title"
+                        style={{
+                          textDecoration: readOnlyActionTrigger(
+                            stepName,
+                            true,
+                            dataIndex
+                          )
+                            ? "underline"
+                            : "none",
+                          color: readOnlyActionTrigger(
+                            stepName,
+                            true,
+                            dataIndex
+                          )
+                            ? "#8A9AD0"
+                            : "",
+                        }}
+                      >
+                        {stepName}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -512,16 +535,23 @@ const InnerTimelineStep = ({
               );
             }
 
-            const isUnderCollapsedSection = Object.keys(expandedView).some((key) => {
+            const isUnderCollapsedSection = Object.keys(expandedView).some(
+              (key) => {
+                const [start, end] = expandedRange[key] || [];
+                return (
+                  start <= index && index <= end && expandedView[key] === false
+                );
+              }
+            );
+
+            const isUnderCurrentExpandedSection = Object.keys(
+              expandedView
+            ).some((key) => {
               const [start, end] = expandedRange[key] || [];
-              return start <= index && index <= end && expandedView[key] === false;
+              return (
+                start <= index && index <= end && expandedView[key] === true
+              );
             });
-            
-            const isUnderCurrentExpandedSection = Object.keys(expandedView).some((key) => {
-              const [start, end] = expandedRange[key] || [];
-              return start <= index && index <= end && expandedView[key] === true;
-            });
-            
 
             if (isUnderCollapsedSection && !isUnderCurrentExpandedSection) {
               return null;

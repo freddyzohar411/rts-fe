@@ -63,6 +63,9 @@ const JobCreation = () => {
     }
   }, []);
 
+  // Show the formik values
+  console.log("Formik Values", formikValues?.values);
+
   /**
    * Fetch form template based on step
    * Can make changes to form template here before loading to form
