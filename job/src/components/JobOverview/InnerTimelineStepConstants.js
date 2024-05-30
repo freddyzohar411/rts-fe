@@ -38,10 +38,64 @@ export const sections = [
   {
     name: "Conditional Offer",
     expandCollapseButton: "ConditionalOfferExpandCollapseButton",
-    subitems: [
-      "Conditional Offer Sent",
-      "Conditional Offer Accepted/Declined",
-    ],
+    subitems: ["Conditional Offer Sent", "Conditional Offer Accepted/Declined"],
   },
 ];
 
+export const innerTimelineSteps = [
+  { 1: "Profile" },
+  { i: "Expand" },
+  { ii: "Tag" },
+  { iii: "Associate" },
+  { iv: "Submit to Sales" },
+  { v: "Submit to Client" },
+  { vi: "Profile Feedback Pending" },
+
+  { 2: "Odin Protocol" },
+  { i: "Expand" },
+  { ii: "Skills Assessment" },
+  { iii: "Coding Test" },
+  { iv: "Technical Interview" },
+  { v: "Cultural Fit Test" },
+
+  { 3: "Interviews" },
+  { i: "Expand" },
+  { ii: "First Interview Scheduled" },
+  { iii: "Second Interview Scheduled" },
+  { iv: "Third Interview Scheduled" },
+
+  { 4: "TOS" },
+  { i: "Expand" },
+  { ii: "Prepare TOS" },
+  { iii: "TOS Accepted/Declined" },
+
+  { 5: "Conditional Offer" },
+  { i: "Expand" },
+  { ii: "Conditional Offer Sent" },
+  { iii: "Conditional Offer Accepted/Declined" },
+];
+
+export const stepsToIgnore = [
+  "Profile",
+  "Odin Protocol",
+  "Interviews",
+  "TOS",
+  "Conditional Offer",
+  "Expand",
+];
+
+export const innerTimelineOuterSteps = [
+  "Profile",
+  "Odin Protocol",
+  "Interviews",
+  "TOS",
+  "Conditional Offer",
+];
+
+export const expandedRange = {
+  1: [1, 6],
+  8: [9, 12],
+  14: [15, 17],
+  19: [20, 21],
+  23: [24, 25],
+};
