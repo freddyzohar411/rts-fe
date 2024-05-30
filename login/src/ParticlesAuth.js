@@ -4,7 +4,7 @@ import { withRouter } from "@workspace/common";
 const ParticlesAuth = ({ children }) => {
   return (
     <React.Fragment>
-      <div className="auth-page-wrapper pt-5">
+      <div className="auth-page-wrapper pt-4">
         <div className="auth-one-bg-position auth-one-bg" id="auth-particles">
           <div className="bg-overlay"></div>
 
@@ -23,7 +23,7 @@ const ParticlesAuth = ({ children }) => {
         {/* pass the children */}
         {children}
 
-        <footer className="footer">
+        <footer className="footer d-flex align-items-center justify-content-center">
           <div className="container">
             <div className="row">
               <div className="col-lg-12">
