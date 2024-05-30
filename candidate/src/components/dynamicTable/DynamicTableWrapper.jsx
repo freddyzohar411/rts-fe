@@ -123,6 +123,10 @@ const DynamicTableWrapper = ({
     }
   }, [allCandidateCustomViews, optGroup]);
 
+  const enableDefaultView = () => {
+    setCustomConfigData(CANDIDATE_INITIAL_OPTIONS);
+  };
+
   const handleEportExcel = () => {
     let exportData = null;
     if (!activeRow) {
@@ -239,6 +243,9 @@ const DynamicTableWrapper = ({
                               <Link to="/candidates/custom-view">
                                 <DropdownItem>Create Custom View</DropdownItem>
                               </Link>
+                              <DropdownItem onClick={() => enableDefaultView()}>
+                                Enable Default View
+                              </DropdownItem>
                               <DropdownItem divider />
                               <DropdownItem header>
                                 My Custom Views
