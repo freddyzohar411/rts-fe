@@ -69,7 +69,12 @@
 @media (min-width: 1024px) {
   .item {
     width: 90px;
-    margin-right: 5px;
+  }
+}
+
+@media (min-width: 1366px) {
+  .item {
+    width: 115px;
   }
 }
 
@@ -90,7 +95,13 @@
 // Laptop
 @media (min-width: 1024px) {
   .single-line {
-    width: 970px;
+    width: 880px;
+  }
+}
+
+@media (min-width: 1366px) {
+  .single-line {
+    width: 1035px;
   }
 }
 
