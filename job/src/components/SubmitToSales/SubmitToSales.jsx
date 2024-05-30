@@ -148,21 +148,29 @@ const SubmitToSales = forwardRef(
       },
     }));
 
+    const extractEmailsUsingRegex = (content) => {
+      // Example "pranay (prany@gmail)" There is only 1 email
+      const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g;
+      return content.match(emailRegex);
+    };
+
     // PrePopulate Emails
     useEffect(() => {
       const prePopulateEmails = async (data) => {
         const response = await getUsersByIds({
-          userIds: [data?.salesId, data?.recruiterId],
+          userIds: [data?.recruiterId],
         });
         const userData = response?.data;
         if (userData) {
-          const to = userData.filter((item) => item.id === data.salesId);
           const cc = userData.filter((item) => item.id === data.recruiterId);
-          if (to && to.length > 0) {
+          const accountOwner =
+            jobTimeLineData?.job?.jobSubmissionData?.accountOwner;
+          if (extractEmailsUsingRegex(accountOwner)) {
+            const accountOwnerEmail = extractEmailsUsingRegex(accountOwner);
             formik.setFieldValue("to", [
               {
-                value: to[0]?.email,
-                label: to[0]?.email,
+                value: accountOwnerEmail,
+                label: accountOwnerEmail,
               },
             ]);
           }
@@ -317,7 +325,7 @@ const SubmitToSales = forwardRef(
             {/* Main Template Select */}
             <EmailTemplateSelect
               icon={<ArticleOutlinedIcon className="fs-3" />}
-              category="Email Templates"
+              category="Email - Submit to Sales"
               placeholder="Select Email Template"
               setTemplateData={setEmailTemplateData}
               addMoreOptions={{

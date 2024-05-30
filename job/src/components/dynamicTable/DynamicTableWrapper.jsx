@@ -142,6 +142,10 @@ const DynamicTableWrapper = ({
     }
   }, [allJobCustomView, optGroup]);
 
+  const enableDefaultView = () => {
+    setCustomConfigData(JOB_INITIAL_OPTIONS);
+  };
+
   const handleDeleteButtonClick = (id) => {
     setDeletingCustomViewId(id);
     setDeleteModalOpen(true);
@@ -449,6 +453,9 @@ const DynamicTableWrapper = ({
                               <Link to="/jobs/custom-view">
                                 <DropdownItem>Create Custom View</DropdownItem>
                               </Link>
+                              <DropdownItem onClick={() => enableDefaultView}>
+                                Enable Default View
+                              </DropdownItem>
                               <DropdownItem divider />
                               <DropdownItem header>
                                 My Custom Views

@@ -568,7 +568,7 @@ const ScheduleInterview = forwardRef(
               {/* Main Template Select */}
               <EmailTemplateSelect
                 icon={<i className=" ri-file-list-2-line fs-5"></i>}
-                category="Email Templates"
+                category="Email - Interview Schedule"
                 setTemplateData={setEmailTemplateData}
                 addMoreOptions={{
                   addMore: true,

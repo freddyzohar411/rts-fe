@@ -17,7 +17,11 @@ import {
   Container,
 } from "reactstrap";
 import { initialValues, schema, populateForm } from "./formikConfig";
-import { moduleConstants, fixedVariables } from "./constants";
+import {
+  moduleConstants,
+  fixedVariables,
+  templateCategoryList,
+} from "./constants";
 import { TemplateDisplayV3, TemplateHelper } from "@workspace/common";
 import * as TemplateActions from "../../store/template/action";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,7 +33,8 @@ import SelectElement from "./SelectElement";
 import FileInputElement from "./FileInputElement";
 import EditorElement2 from "./EditorElement2";
 import juice from "juice";
-import { CommonBackendHelper } from "@workspace/common";
+import { CommonBackendHelper, CreateSelectElement } from "@workspace/common";
+import { valid } from "node-html-parser";
 
 const TemplateBuilder = forwardRef(
   ({ type, templateEditData, onSubmit, ...props }, ref) => {
@@ -364,14 +369,18 @@ const TemplateBuilder = forwardRef(
               </Col>
               <Col>
                 <Label htmlFor="category">Category</Label>
-                <Input
-                  type="text"
-                  name="category"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik?.values?.["category"]}
-                  placeholder="Enter a category"
+                <CreateSelectElement
+                  optionsData={templateCategoryList}
+                  setSelectedOptionData={(selectedOptions) =>
+                    formik.setFieldValue("category", selectedOptions?.value)
+                  }
+                  value={
+                    formik?.values?.["category"] && {
+                      label: formik?.values?.["category"],
+                      value: formik?.values?.["category"],
+                    }
+                  }
+                  placeholder="Select a category"
                 />
                 <div style={{ minHeight: "25px" }}>
                   {formik.errors["category"] && formik.touched["category"] ? (
