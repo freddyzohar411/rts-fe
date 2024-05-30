@@ -12,6 +12,8 @@
   display: grid;
   grid-auto-flow: dense;
   padding: 0;
+  padding-left: 3rem;
+  padding-right: 1.5rem;
 }
 
 .single-row {
@@ -66,7 +68,8 @@
 // Laptop
 @media (min-width: 1024px) {
   .item {
-    width: 115px
+    width: 90px;
+    margin-right: 5px;
   }
 }
 
@@ -78,17 +81,16 @@
 }
 
 .single-line {
-  border: 1px dashed lightgray;
+  border-top: 1px dashed lightgray;
   position: absolute;
   top: 0;
   left: 55px;
-  width: 990px;
 }
 
 // Laptop
 @media (min-width: 1024px) {
   .single-line {
-    width: 1035px
+    width: 970px;
   }
 }
 

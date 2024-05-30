@@ -364,7 +364,7 @@ const InnerTimelineStep = ({
         <div
           id="container-new"
           ref={containerNewRef}
-          class={`container ps-5 pe-4 ${itemCount <= 10 ? "single-row" : ""}`}
+          class={`container ${itemCount <= 10 ? "single-row" : ""}`}
         >
           {innerTimelineSteps.map((step, index) => {
             const stepNumber = Object.keys(step)[0];
@@ -568,7 +568,7 @@ const InnerTimelineStep = ({
                           : "",
                       }}
                     >
-                      {stepName}
+                      {stepName.split("/").join(" ")}
                     </span>
                   </div>
                 </div>
