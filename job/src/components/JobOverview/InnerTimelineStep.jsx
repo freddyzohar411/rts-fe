@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect, createRef } from "react";
-import { sections } from "./InnerTimelineStepConstants";
+import {
+  sections,
+  innerTimelineSteps,
+  innerTimelineOuterSteps,
+  stepsToIgnore,
+  expandedRange,
+} from "./InnerTimelineStepConstants";
 import {
   JOB_STAGE_STATUS,
   JOB_STAGE_STATUS_LABELS,
@@ -13,12 +19,9 @@ const InnerTimelineStep = ({
   dataIndex,
 }) => {
   const containerRef = useRef(null);
+  const containerNewRef = useRef(null);
   const timelineRef = useRef(null);
   const sectionRefs = useRef([]);
-  const subSectionRefs = useRef([]);
-  const stepperRefs = useRef([]);
-  const [positions, setPositions] = useState({});
-  const [sectionRowIndexes, setSectionRowIndexes] = useState([]);
   const [noOfRows, setNoOfRows] = useState(0);
   const [rowDivs, setRowDivs] = useState(null);
   const [expandedSections, setExpandedSections] = useState({});
@@ -29,11 +32,14 @@ const InnerTimelineStep = ({
   const [bottomWidth, setBottomWidth] = useState(0);
   const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] =
     useState(null);
-
+  console.log("Test 0");
+  console.log("Test 0.1", actionTriggeredWithSubitem);
   useEffect(() => {
+    console.log("Test 1");
     if (actionTriggeredWithSubitem) {
       //  readOnlyActionTrigger[actionTriggeredWithSubitem]?.();
       readOnlyActionTrigger(actionTriggeredWithSubitem);
+      console.log("Test 2");
     }
     setActionTriggeredWithSubitem(null);
   }, [actionTriggeredWithSubitem]);
@@ -46,58 +52,12 @@ const InnerTimelineStep = ({
 
   const timelineElement = document.getElementById("timeline-container");
 
-  const getStatus = (subitems) => {
-    const statuses = subitems
-      .map((subitem) => data[subitem]?.status)
-      .filter((status) => status);
-
-    if (statuses.length === 0) {
-      return "NOTSTARTED";
-    }
-
-    const hasCompleted = statuses.includes("COMPLETED");
-    const hasWithdrawn = statuses.includes("WITHDRAWN");
-    const hasRejected = statuses.includes("REJECTED");
-    const hasSkipped = statuses.includes("SKIPPED");
-
-    if (hasCompleted && !hasWithdrawn && !hasRejected && !hasSkipped) {
-      return "COMPLETED";
-    }
-
-    if (hasWithdrawn) {
-      return "WITHDRAWN";
-    }
-
-    if (hasRejected) {
-      return "REJECTED";
-    }
-
-    if (hasSkipped) {
-      return "SKIPPED";
-    }
-
-    // If none of the above conditions match, return "In Progress"
-    return "INPROGRESS";
-  };
-
-  const sectionsWithStatus = sections.map((section) => {
-    const status = getStatus(section.subitems);
-    return { ...section, status };
-  });
-
-  const toggleSection = (sectionName) => {
-    setExpandedSections((prevState) => ({
-      ...prevState,
-      [sectionName]: !prevState[sectionName],
-    }));
-  };
-
   function calculateNoOfRows() {
-    if (containerRef.current) {
+    if (containerNewRef.current) {
       // get height of container
-      const containerHeight = containerRef.current.clientHeight;
+      const containerHeight = containerNewRef.current.clientHeight;
       // get height of each row
-      const timelineModule = document.getElementById("module-timeline");
+      const timelineModule = document.getElementById("item-timeline");
       const rowHeight = timelineModule.offsetHeight;
       // divide container height by row height to get number of rows
       const calculatedRows = Math.ceil(containerHeight / rowHeight);
@@ -110,8 +70,8 @@ const InnerTimelineStep = ({
     const resizeObserver = new ResizeObserver(() => {
       calculateNoOfRows();
     });
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
+    if (containerNewRef.current) {
+      resizeObserver.observe(containerNewRef.current);
     }
     return () => {
       resizeObserver.disconnect();
@@ -129,11 +89,11 @@ const InnerTimelineStep = ({
               className="mt-3"
               style={{
                 border: "1px dashed lightgray",
-                borderRadius: "50px 0 0 50px",
+                borderRadius: "60px 0 0 60px",
                 left: "20px",
-                height: "95px",
-                top: `${i * 95}px`,
-                width: bottomWidth ? `${bottomWidth}px` : "91%",
+                height: "103px",
+                top: `${i * 103}px`,
+                width: bottomWidth ? `${bottomWidth}px` : "93%",
                 position: "absolute",
                 borderRight: "none",
                 borderTop: "none",
@@ -147,11 +107,11 @@ const InnerTimelineStep = ({
               className="mt-3"
               style={{
                 border: "1px dashed lightgray",
-                borderRadius: "0 50px 50px 0",
+                borderRadius: "0 60px 60px 0",
                 left: "60px",
-                height: "95px",
-                top: `${i * 95}px`,
-                width: "91%",
+                height: "103px",
+                top: `${i * 103}px`,
+                width: "93%",
                 position: "absolute",
                 borderLeft: "none",
               }}
@@ -168,8 +128,8 @@ const InnerTimelineStep = ({
             border: "1px dashed lightgray",
             position: "absolute",
             top: 0,
-            left: "60px",
-            width: "89%",
+            left: "55px",
+            width: "1098px",
           }}
         ></div>
       );
@@ -223,33 +183,6 @@ const InnerTimelineStep = ({
         return renderStyle.NOTSTARTED;
     }
   };
-
-  function toRoman(num) {
-    const roman = [
-      "m",
-      "cm",
-      "d",
-      "cd",
-      "c",
-      "xc",
-      "l",
-      "xl",
-      "x",
-      "ix",
-      "v",
-      "iv",
-      "i",
-    ];
-    const decimal = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
-    let romanNum = "";
-    for (let i = 0; i <= decimal.length; i++) {
-      while (num % decimal[i] < num) {
-        romanNum += roman[i];
-        num -= decimal[i];
-      }
-    }
-    return romanNum;
-  }
 
   useEffect(() => {
     const expandedTimeline = Object.values(expandedSections).includes(true);
@@ -340,106 +273,102 @@ const InnerTimelineStep = ({
     }
   };
 
-  useEffect(() => {
-    const sectionPositions = sectionRefs.current
-      .map((ref, index) => {
-        if (ref) {
-          const rect = ref.getBoundingClientRect();
-          return {
-            index,
-            top: rect.top,
-            left: rect.left,
-            bottom: rect.bottom,
-            right: rect.right,
-          };
-        }
-        return null;
-      })
-      .filter((pos) => pos !== null);
+  const [expandedView, setexpandedView] = useState(
+    innerTimelineSteps.map(() => false)
+  );
 
-    const subSectionPositions = subSectionRefs.current
-      .map((ref, index) => {
-        if (ref) {
-          const rect = ref.getBoundingClientRect();
-          return {
-            index,
-            top: rect.top,
-            left: rect.left,
-            bottom: rect.bottom,
-            right: rect.right,
-          };
-        }
-        return null;
-      })
-      .filter((pos) => pos !== null);
+  const toggleExpansion = (index) => {
+    setexpandedView((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
 
-    const stepperPositions = stepperRefs.current
-      .map((ref, index) => {
-        if (ref) {
-          const rect = ref.getBoundingClientRect();
-          return {
-            index,
-            top: rect.top,
-            left: rect.left,
-            bottom: rect.bottom,
-            right: rect.right,
-          };
-        }
-        return null;
-      })
-      .filter((pos) => pos !== null);
+  const getOverallStatus = (data) => {
+    const statuses = data.map((item) => item.data.status);
 
-    setPositions({ sectionPositions, subSectionPositions, stepperPositions });
-  }, [containerRef, sectionRefs, subSectionRefs, stepperRefs, noOfRows]);
-
-  useEffect(() => {
-    if (subSectionRefs.current.length === 0) {
-      return;
-    } else {
-      const sectionTopValues = positions.sectionPositions.map((pos) => pos.top);
-      const subSectionTopValues = positions.subSectionPositions.map(
-        (pos) => pos.top
-      );
-
-      const allTopValues = [...sectionTopValues, ...subSectionTopValues];
-      const uniqueTopValues = [...new Set(allTopValues)];
-      setUniqueTopValues(uniqueTopValues);
+    if (statuses.length === 0) {
+      return "NOTSTARTED";
     }
-  }, [positions]);
 
-  useEffect(() => {
-    if (uniqueTopValues.length > 0) {
-      const lastTopValue = uniqueTopValues[uniqueTopValues.length - 1];
+    const hasCompleted = statuses.includes("COMPLETED");
+    const hasWithdrawn = statuses.includes("WITHDRAWN");
+    const hasRejected = statuses.includes("REJECTED");
+    const hasSkipped = statuses.includes("SKIPPED");
+    const hasUndefinedOrNull =
+      statuses.includes(undefined) || statuses.includes(null);
 
-      const elementsInLastRow = {
-        sections: positions.sectionPositions.filter(
-          (pos) => pos.top === lastTopValue
-        ),
-        subSections: positions.subSectionPositions.filter(
-          (pos) => pos.top === lastTopValue
-        ),
+    if (
+      hasCompleted &&
+      !hasWithdrawn &&
+      !hasRejected &&
+      !hasSkipped &&
+      !hasUndefinedOrNull
+    ) {
+      return "COMPLETED";
+    }
+
+    if (hasWithdrawn) {
+      return "WITHDRAWN";
+    }
+
+    if (hasRejected) {
+      return "REJECTED";
+    }
+
+    if (hasSkipped) {
+      return "SKIPPED";
+    }
+
+    // If none of the above conditions match, return "In Progress"
+    return "INPROGRESS";
+  };
+
+  const stepsData = innerTimelineSteps
+    .filter((step) => {
+      const stepName = step[Object.keys(step)[0]];
+      return !stepsToIgnore.includes(stepName);
+    })
+    .map((step) => {
+      const stepNumber = Object.keys(step)[0];
+      const stepName = step[stepNumber];
+      const stepData = data[stepName] || {};
+
+      return {
+        name: stepName,
+        data: stepData,
       };
+    });
 
-      const sectionLefts = elementsInLastRow.sections.map((pos) => pos.left);
-      const subSectionRights = elementsInLastRow.subSections.map(
-        (pos) => pos.right
-      );
+  const getStepData = (stepName) => {
+    const step = stepsData.find((item) => item.name === stepName);
+    return step ? step.data : {};
+  };
 
-      // Check if the arrays are not empty
-      if (sectionLefts.length === 0 || subSectionRights.length === 0) {
-        console.error("Error: One of the arrays is empty.");
-        setBottomWidth(0); // Or handle this case as needed
-      } else {
-        // Calculate minLeft and maxRight
-        const minLeft = Math.min(...sectionLefts);
-        const maxRight = Math.max(...subSectionRights);
+  const separateIntoRanges = (stepsData) => {
+    const ranges = [
+      { start: 0, end: 4 },
+      { start: 5, end: 8 },
+      { start: 9, end: 11 },
+      { start: 12, end: 13 },
+      { start: 14, end: 15 },
+    ];
 
-        // Calculate and set bottom width
-        const newBottomWidth = maxRight - minLeft;
-        setBottomWidth(newBottomWidth);
-      }
-    }
-  }, [uniqueTopValues, positions, noOfRows]); // Ensure positions is also a dependency if it's not static
+    return ranges.map((range) => stepsData.slice(range.start, range.end + 1));
+  };
+
+  const separatedData = separateIntoRanges(stepsData);
+
+  const stepsWithStatus = separatedData.map((section) => {
+    const status = getOverallStatus(section);
+    return { ...section, status };
+  });
+
+  // For !isExpanded view > Single Row
+  const [itemCount, setItemCount] = useState(0);
+  useEffect(() => {
+    setItemCount(innerTimelineOuterSteps.length);
+  }, []);
 
   return (
     <div style={{ position: "relative" }}>
@@ -448,241 +377,220 @@ const InnerTimelineStep = ({
           {rowDivs}
         </div>
         <div
-          ref={containerRef}
-          id="timeline-container"
-          className="timeline-container-div ms-2"
-          style={{
-            position: "relative",
-            zIndex: "2",
-            left: "50px",
-            width: divWidth,
-          }}
+          id="container-new"
+          ref={containerNewRef}
+          class={`container ps-5 pe-4 ${itemCount <= 10 ? "single-row" : ""}`}
         >
-          {sectionsWithStatus.map((section, index) => {
-            const subitemsData = section.subitems.map((subitem) => ({
-              name: subitem,
-              data: data[subitem] || {},
-            }));
-            const submittedDate = getSubmittedDate([...subitemsData]);
-            const lastItem = subitemsData?.[subitemsData?.length - 1];
-            const status =
-              section?.status === "NOTSTARTED" ||
-              section?.status === "WITHDRAWN" ||
-              section?.status === "REJECTED"
-                ? section?.status
-                : lastItem?.data?.status
-                ? lastItem?.data?.status
-                : JOB_STAGE_STATUS.IN_PROGRESS;
-            // SETT
-            return (
-              <div
-                key={index}
-                ref={(el) => {
-                  sectionRefs.current[index] = el;
-                }}
-              >
-                <div className="d-flex flex-row justify-content-between">
-                  <div
-                    id="module-timeline"
-                    className={`d-flex flex-column pb-4 align-items-start justify-content-center`}
-                    style={{ width: elementSizing }}
-                    onClick={() => {
-                      setTimelineRowIndex();
-                      setActionTriggeredWithSubitem(section?.name);
-                    }}
-                  >
-                    <div className="d-flex flex-column align-items-start ">
-                      <div
-                        className={`rounded-circle d-flex justify-content-center mb-2 ${getBulletBgColor(
-                          status
-                        )}`}
-                        style={{
-                          width: "22px",
-                          height: "22px",
-                        }}
-                      >
-                        <span className="fw-semibold">
-                          {GetLabel(index + 1, status)}
-                        </span>
-                      </div>
-                      <span className="form-text text-muted">
-                        {submittedDate}
-                      </span>
-                      <span
-                        className="fw-semibold text-dark"
-                        style={{ fontSize: "13px", whiteSpace: "nowrap" }}
-                      >
-                        {section.name}
-                      </span>
-                    </div>
-                  </div>
+          {innerTimelineSteps.map((step, index) => {
+            const stepNumber = Object.keys(step)[0];
+            const stepName = Object.values(step)[0];
+            const stepData = getStepData(stepName);
+            const renderStepStyle = renderSectionStyle(stepData?.status);
 
-                  <div
-                    className={`cursor-pointer d-flex align-items-top ${
-                      expandedSections[section.name] ||
-                      (!expandedSections[sections.name] && index != 4)
-                        ? "justify-content-start"
-                        : "justify-content-end"
-                    }`}
-                    onClick={() => toggleSection(section.name)}
-                    style={{ width: elementSizing }}
-                  >
+            const combinedStepsWithStatus = innerTimelineOuterSteps.map(
+              (stepName, index) => {
+                // Retrieving the first date of the submitted step.
+                const firstSubmitted = stepsWithStatus[index]?.[0]?.data?.date;
+                const statusDate = firstSubmitted
+                  ? new Date(firstSubmitted).toLocaleDateString()
+                  : "Not Started";
+                const status = stepsWithStatus[index]?.status;
+                return { stepName, status, statusDate };
+              }
+            );
+
+            const hasWithdrawnOrRejected = combinedStepsWithStatus.some(
+              (step) =>
+                step.status === "WITHDRAWN" || step.status === "REJECTED"
+            );
+            const isWithDrawnOrRejected = combinedStepsWithStatus.find(
+              (item) =>
+                item.status === "WITHDRAWN" || item.status === "REJECTED"
+            );
+            const isDisabled = hasWithdrawnOrRejected;
+
+            // Rendering the Main Step
+            if (innerTimelineOuterSteps.includes(stepName)) {
+              const matchingStep = combinedStepsWithStatus.find(
+                (item) => item.stepName === stepName
+              );
+
+              const status = matchingStep ? matchingStep.status : null;
+              const statusDate = matchingStep ? matchingStep.statusDate : null;
+              const renderMainStepStyle = renderSectionStyle(status);
+
+              // Check if the current step is the withdrawn or rejected step
+              const isCurrentStepWithdrawnOrRejected =
+                isWithDrawnOrRejected &&
+                isWithDrawnOrRejected.stepName === stepName;
+
+              // Check if the current step comes after the withdrawn or rejected step
+              const isStepAfterWithdrawnOrRejected =
+                isWithDrawnOrRejected &&
+                innerTimelineOuterSteps.indexOf(stepName) >
+                  innerTimelineOuterSteps.indexOf(
+                    isWithDrawnOrRejected.stepName
+                  );
+
+              return (
+                <div key={index} className="item" id="item-timeline">
+                  <div className="general-alignment">
                     <div
+                      className={`step-circle fw-semibold`}
                       style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "22px",
-                        height: "22px",
-                        border: "1px solid",
-                        borderRadius: "100%",
-                        borderColor: expandedSections[section.name]
-                          ? "#000000"
-                          : "#0A56AE",
-                        backgroundColor: expandedSections[section.name]
-                          ? "#000000"
-                          : "#E3EFFF",
-                        color: expandedSections[section.name]
-                          ? "#FFFFFF"
-                          : "#000000",
-                      }}
-                      ref={(el) => {
-                        stepperRefs.current[index] = el;
+                        backgroundColor: isCurrentStepWithdrawnOrRejected
+                          ? renderMainStepStyle.bgColor
+                          : isStepAfterWithdrawnOrRejected
+                          ? "#DADADA"
+                          : renderMainStepStyle.bgColor,
+                        color: isCurrentStepWithdrawnOrRejected
+                          ? renderMainStepStyle.color
+                          : isStepAfterWithdrawnOrRejected
+                          ? "#939393"
+                          : renderMainStepStyle.color,
+                        borderColor: isCurrentStepWithdrawnOrRejected
+                          ? renderMainStepStyle.borderColor
+                          : isStepAfterWithdrawnOrRejected
+                          ? "#B7B7B7"
+                          : renderMainStepStyle.borderColor,
                       }}
                     >
-                      {expandedSections[section.name] ? (
-                        <i className="bx bx-collapse-horizontal"></i>
+                      {renderMainStepStyle?.icon ? (
+                        <span className={renderMainStepStyle.icon}></span>
                       ) : (
-                        <i className="bx bx-expand-horizontal"></i>
+                        stepNumber
                       )}
                     </div>
-                  </div>
-
-                  {expandedSections[section.name] && (
-                    <div className="d-flex flex-row align-items-top justify-content-center gap-5 me-3">
-                      {section.subitems.map((subitem, subindex) => {
-                        const renderSubitemStyle = renderSectionStyle(
-                          subitemsData[subindex]?.data?.status
-                        );
-                        const subitemString = subitem.split(" ");
-                        const subItemStringCut = subitemString
-                          .slice(0, 2)
-                          .join(" ");
-                        const subItemStringCont = subitemString
-                          .slice(2)
-                          .join(" ");
-                        return (
-                          <div
-                            key={subindex}
-                            ref={(el) => {
-                              subSectionRefs.current[subindex] = el;
-                            }}
-                            className="d-flex flex-column align-items-center gap-5"
-                            style={{
-                              width: elementSizing,
-                            }}
-                            onClick={() => {
-                              setTimelineRowIndex();
-                              setActionTriggeredWithSubitem(subitem);
-                            }}
-                          >
-                            <div className="d-flex flex-column align-items-start">
-                              <div
-                                className="d-flex align-items-center justify-content-center mb-1"
-                                style={{
-                                  width: "22px",
-                                  height: "22px",
-                                  border: "1px solid",
-                                  borderRadius: "100%",
-                                  backgroundColor: renderSubitemStyle.bgColor,
-                                  color: renderSubitemStyle.color,
-                                }}
-                                ref={(el) => {
-                                  stepperRefs.current[subindex] = el;
-                                }}
-                              >
-                                {renderSubitemStyle.icon ? (
-                                  <i className={renderSubitemStyle.icon}></i>
-                                ) : (
-                                  <span>{toRoman(subindex + 1)}</span>
-                                )}
-                              </div>
-                              <span className="form-text text-muted">
-                                {getStatusValue(subitemsData?.[subindex]?.data)}
-                              </span>
-                              <span
-                                key={subindex}
-                                className={`fw-semibold text-dark ${
-                                  readOnlyActionTrigger(
-                                    subitem,
-                                    true,
-                                    dataIndex
-                                  )
-                                    ? "cursor-pointer"
-                                    : ""
-                                }`}
-                                style={{
-                                  fontSize: "13px",
-                                  whiteSpace:
-                                    subitem.length >= 2 ? "normal" : "nowrap",
-                                }}
-                              >
-                                <span
-                                  style={{
-                                    whiteSpace: "nowrap",
-                                    textDecoration: readOnlyActionTrigger(
-                                      subitem,
-                                      true,
-                                      dataIndex
-                                    )
-                                      ? "underline"
-                                      : "none",
-                                    color: readOnlyActionTrigger(
-                                      subitem,
-                                      true,
-                                      dataIndex
-                                    )
-                                      ? "#8A9AD0"
-                                      : "",
-                                  }}
-                                >
-                                  {subItemStringCut}
-                                </span>
-                                {subItemStringCont && (
-                                  <span
-                                    style={{
-                                      whiteSpace: "normal",
-                                      textDecoration: readOnlyActionTrigger(
-                                        subitem,
-                                        true,
-                                        dataIndex
-                                      )
-                                        ? "underline"
-                                        : "none",
-                                      color: readOnlyActionTrigger(
-                                        subitem,
-                                        true,
-                                        dataIndex
-                                      )
-                                        ? "#8A9AD0"
-                                        : "",
-                                    }}
-                                  >
-                                    {" " + subItemStringCont}
-                                  </span>
-                                )}
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      })}
+                    <div className="general-alignment">
+                      <span className="form-text">{statusDate}</span>
+                      <span className="step-title">{stepName}</span>
                     </div>
-                  )}
+                  </div>
+                </div>
+              );
+            }
+
+            // Rendering the Expand/Collapse Button
+            if (stepName === "Expand") {
+              const isExpanded = expandedView[index];
+
+              return (
+                <div
+                  key={index}
+                  className="item align-items-top"
+                  id="item-timeline"
+                >
+                  <div
+                    className="step-circle"
+                    onClick={
+                      !isDisabled ? () => toggleExpansion(index) : undefined
+                    }
+                    style={{
+                      backgroundColor: isDisabled
+                        ? "#DADADA"
+                        : isExpanded
+                        ? "#000000"
+                        : "#E3EFFF",
+                      color: isDisabled
+                        ? "#939393"
+                        : isExpanded
+                        ? "#FFFFFF"
+                        : "#000000",
+                      borderColor: isDisabled
+                        ? "#B7B7B7"
+                        : isExpanded
+                        ? "#000000"
+                        : "#0A56AE",
+                      cursor: isDisabled ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    <span
+                      className={`bx ${
+                        isExpanded
+                          ? "bx-collapse-horizontal"
+                          : "bx-expand-horizontal"
+                      }`}
+                    ></span>
+                  </div>
+                </div>
+              );
+            }
+
+            const isUnderCollapsedSection = Object.keys(expandedView).some(
+              (key) => {
+                const [start, end] = expandedRange[key] || [];
+                return (
+                  start <= index && index <= end && expandedView[key] === false
+                );
+              }
+            );
+
+            const isUnderCurrentExpandedSection = Object.keys(
+              expandedView
+            ).some((key) => {
+              const [start, end] = expandedRange[key] || [];
+              return (
+                start <= index && index <= end && expandedView[key] === true
+              );
+            });
+
+            if (isUnderCollapsedSection && !isUnderCurrentExpandedSection) {
+              return null;
+            }
+
+            return (
+              <div key={index} className="item" id="item-timeline">
+                <div className="general-alignment">
+                  <div
+                    className="step-circle"
+                    style={{
+                      backgroundColor: renderStepStyle.bgColor,
+                      color: renderStepStyle.color,
+                    }}
+                  >
+                    {renderStepStyle.icon ? (
+                      <span className={renderStepStyle.icon}></span>
+                    ) : (
+                      stepNumber
+                    )}
+                  </div>
+                  <div className="general-alignment">
+                    <span className="form-text">
+                      {stepData.date
+                        ? new Date(stepData.date).toLocaleDateString()
+                        : "Not Started"}
+                    </span>
+                    <span
+                      className={`step-title ${
+                        readOnlyActionTrigger(stepName, true, dataIndex)
+                          ? "cursor-pointer"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        setActionTriggeredWithSubitem(stepName);
+                        setTimelineRowIndex();
+                      }}
+                      style={{
+                        textDecoration: readOnlyActionTrigger(
+                          stepName,
+                          true,
+                          dataIndex
+                        )
+                          ? "underline"
+                          : "none",
+                        color: readOnlyActionTrigger(stepName, true, dataIndex)
+                          ? "#8A9AD0"
+                          : "",
+                      }}
+                    >
+                      {stepName}
+                    </span>
+                  </div>
                 </div>
               </div>
             );
           })}
-        </div>{" "}
+        </div>
       </div>
     </div>
   );
