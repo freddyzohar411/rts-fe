@@ -110,6 +110,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
       searchFields: DynamicTableHelper.generateSeachFieldArray(
         CANDIDATE_INITIAL_OPTIONS
       ),
+      allActive: true,
     },
     [],
     CANDIDATE_INITIAL_OPTIONS,

@@ -98,9 +98,12 @@ const DynamicTableWrapper = ({
       <div>
         <Row>
           <Col lg={12}>
-            <div className="listjs-table" style={{
-              height: "calc(100vh - 225px)"
-            }}>
+            <div
+              className="listjs-table"
+              style={{
+                height: "calc(100vh - 225px)",
+              }}
+            >
               <Row>
                 <div>
                   <div
@@ -131,7 +134,10 @@ const DynamicTableWrapper = ({
                         }
                       }}
                     />
-                    <label className="form-check-label" htmlFor="recommendation">
+                    <label
+                      className="form-check-label"
+                      htmlFor="recommendation"
+                    >
                       Recommend Candidates
                     </label>
                   </div>

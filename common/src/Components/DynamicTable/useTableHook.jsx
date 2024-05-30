@@ -18,6 +18,7 @@ const useTableHook = (
     sortDirection: initialPageRequest?.sortDirection || "asc",
     searchTerm: initialPageRequest?.searchTerm || null,
     searchFields: initialPageRequest?.searchFields,
+    allActive: initialPageRequest?.allActive ?? false,
   });
 
   const [pageInfo, setPageInfo] = useState({
