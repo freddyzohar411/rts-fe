@@ -234,6 +234,86 @@ const TemplateDisplayV4 = ({
     }
   }, [injectData]);
 
+  const createMarginDropdown = (editor) => {
+    editor.ui.registry.addMenuButton("marginDropdown", {
+      text: "Margins",
+      fetch: function (callback) {
+        const items = [
+          {
+            type: "nestedmenuitem",
+            text: "Set Margin",
+            getSubmenuItems: () => [
+              {
+                type: "menuitem",
+                text: "No Margin",
+                onAction: () => setMargins(editor, "0px"),
+              },
+              {
+                type: "menuitem",
+                text: "5px",
+                onAction: () => setMargins(editor, "5px"),
+              },
+              {
+                type: "menuitem",
+                text: "10px",
+                onAction: () => setMargins(editor, "10px"),
+              },
+              {
+                type: "menuitem",
+                text: "15px",
+                onAction: () => setMargins(editor, "15px"),
+              },
+              {
+                type: "menuitem",
+                text: "20px",
+                onAction: () => setMargins(editor, "20px"),
+              },
+              {
+                type: "menuitem",
+                text: "30px",
+                onAction: () => setMargins(editor, "30px"),
+              },
+            ],
+          },
+        ];
+        callback(items);
+      },
+    });
+  };
+
+  const setMargins = (editor, value) => {
+    const identifier = "custom-margin-div";
+    let content = editor.getContent({ format: "html" });
+
+    // Parse the content using DOMParser
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, "text/html");
+    let existingDiv = doc.body.querySelector(`div[data-id="${identifier}"]`);
+
+    if (existingDiv) {
+      if (value === "0px") {
+        // Remove the existing div and keep its inner content
+        doc.body.innerHTML = existingDiv.innerHTML;
+      } else {
+        // Update the existing div's margin
+        existingDiv.style.margin = value;
+      }
+    } else {
+      if (value !== "0px") {
+        const newDiv = document.createElement("div");
+        newDiv.style.margin = value;
+        newDiv.setAttribute("data-id", identifier);
+        newDiv.innerHTML = doc.body.innerHTML;
+        doc.body.innerHTML = "";
+        doc.body.appendChild(newDiv);
+      }
+    }
+
+    // Serialize the document back to HTML
+    const updatedContent = doc.body.innerHTML;
+    editor.setContent(updatedContent);
+  };
+
   return (
     <>
       {showLoading && isLoading && (
@@ -272,6 +352,26 @@ const TemplateDisplayV4 = ({
             }}
             init={{
               setup: (editor) => {
+                // Add a margin dropdown
+                createMarginDropdown(editor);
+
+                // Add a 1px to borderwidth if empty
+                editor.on("OpenWindow", () => {
+                  const setBorderWidth = () => {
+                    const formGroups =
+                      document.querySelectorAll(".tox-form__group");
+                    formGroups.forEach((group) => {
+                      const label = group.querySelector("label");
+                      if (label && label.textContent === "Border width") {
+                        const borderWidthInput = group.querySelector("input");
+                        if (borderWidthInput && !borderWidthInput.value) {
+                          borderWidthInput.value = "1px";
+                        }
+                      }
+                    });
+                  };
+                });
+                
                 // Register Icons
                 editor.ui.registry.addIcon(
                   "addEditIcon",
@@ -458,7 +558,7 @@ const TemplateDisplayV4 = ({
               menubar: false,
               plugins: plugins,
               toolbar:
-                "undo redo | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsizeinput styles | " +
+                "marginDropdown | undo redo | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsizeinput styles | " +
                 "bold italic underline forecolor backcolor | align lineheight |" +
                 "bullist numlist outdent indent | hr | insertLogo | pagebreak |" +
                 "removeformat | searchreplace |" +

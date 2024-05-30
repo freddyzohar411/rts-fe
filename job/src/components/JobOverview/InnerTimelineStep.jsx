@@ -32,9 +32,9 @@ const InnerTimelineStep = ({
   const [bottomWidth, setBottomWidth] = useState(0);
   const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] =
     useState(null);
+
   useEffect(() => {
     if (actionTriggeredWithSubitem) {
-      //  readOnlyActionTrigger[actionTriggeredWithSubitem]?.();
       readOnlyActionTrigger(actionTriggeredWithSubitem);
     }
     setActionTriggeredWithSubitem(null);

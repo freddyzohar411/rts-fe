@@ -398,7 +398,11 @@ const EditorElement2 = ({
 
     // If currently non-editable, wrap the selected text with a span and apply a class
     editor.selection.setContent(
-      `<span style="border: 2px solid #D6CE0B; background-color: 	rgb(214, 206, 11, 0.2);" data-type="data-attribute" data-section="${editorAttributesData?.section}" data-label="${editorAttributesData?.label}" data-key="${uuid()}">${selectedText}</span>`
+      `<span style="border: 2px solid #D6CE0B; background-color: 	rgb(214, 206, 11, 0.2);" data-type="data-attribute" data-section="${
+        editorAttributesData?.section
+      }" data-label="${
+        editorAttributesData?.label
+      }" data-key="${uuid()}">${selectedText}</span>`
     );
 
     // Move the cursor to the end of the inserted content
@@ -407,6 +411,93 @@ const EditorElement2 = ({
     editor.selection.setRng(range);
     setEditorAttributesData({});
     setEditorAtrributeModalOpen(false);
+  };
+
+  const createMarginDropdown = (editor) => {
+    editor.ui.registry.addMenuButton("marginDropdown", {
+      text: "Margins",
+      fetch: function (callback) {
+        const items = [
+          {
+            type: "nestedmenuitem",
+            text: "Set Margin",
+            getSubmenuItems: () => [
+              {
+                type: "menuitem",
+                text: "No Margin",
+                onAction: () => setMargins(editor, "0px"),
+              },
+              {
+                type: "menuitem",
+                text: "5px",
+                onAction: () => setMargins(editor, "5px"),
+              },
+              {
+                type: "menuitem",
+                text: "10px",
+                onAction: () => setMargins(editor, "10px"),
+              },
+              {
+                type: "menuitem",
+                text: "15px",
+                onAction: () => setMargins(editor, "15px"),
+              },
+              {
+                type: "menuitem",
+                text: "20px",
+                onAction: () => setMargins(editor, "20px"),
+              },
+              {
+                type: "menuitem",
+                text: "30px",
+                onAction: () => setMargins(editor, "30px"),
+              },
+            ],
+          },
+        ];
+        callback(items);
+      },
+    });
+  };
+
+  const setMargins = (editor, value) => {
+    const identifier = "custom-margin-div";
+    let content = editor.getContent({ format: "html" });
+
+    // Parse the content using DOMParser
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, "text/html");
+    let existingDiv = doc.body.querySelector(`div[data-id="${identifier}"]`);
+
+    if (existingDiv) {
+      if (value === "0px") {
+        // Remove the existing div and keep its inner content
+        doc.body.innerHTML = existingDiv.innerHTML;
+      } else {
+        // Update the existing div's margin
+        existingDiv.style.margin = value;
+      }
+    } else {
+      if (value !== "0px") {
+        const newDiv = document.createElement("div");
+        newDiv.style.margin = value;
+        newDiv.setAttribute("data-id", identifier);
+        newDiv.innerHTML = doc.body.innerHTML;
+        doc.body.innerHTML = "";
+        doc.body.appendChild(newDiv);
+      }
+    }
+
+    // Serialize the document back to HTML
+    const updatedContent = doc.body.innerHTML;
+    editor.setContent(updatedContent);
+  };
+
+  const setInitialMargin = (editor, value) => {
+    if (value === "0" || value === "0px") return;
+    const identifier = "custom-margin-div";
+    const initialContent = `<div style="margin: ${value};" data-id="${identifier}">${editor.getContent()}</div>`;
+    editor.setContent(initialContent);
   };
 
   return (
@@ -430,6 +521,41 @@ const EditorElement2 = ({
         value={formik?.values?.[name]}
         init={{
           setup: (editor) => {
+            // Set Initial Margin when editor load
+            editor.on("init", () => {
+              setInitialMargin(editor, "0px"); // Set the initial margin to 10px or any desired value
+            });
+
+            // Add a margin dropdown
+            createMarginDropdown(editor);
+
+            // Add a 1px to borderwidth if empty
+            editor.on("OpenWindow", () => {
+              const setBorderWidth = () => {
+                const formGroups =
+                  document.querySelectorAll(".tox-form__group");
+                formGroups.forEach((group) => {
+                  const label = group.querySelector("label");
+                  if (label && label.textContent === "Border width") {
+                    const borderWidthInput = group.querySelector("input");
+                    if (borderWidthInput && !borderWidthInput.value) {
+                      borderWidthInput.value = "1px";
+                    }
+                  }
+                });
+              };
+
+              // Listen for tab changes
+              const tabButtons = document.querySelectorAll(".tox-tab");
+              tabButtons.forEach((tab) => {
+                tab.addEventListener("click", () => {
+                  setTimeout(setBorderWidth, 100); // Adjust timeout as needed
+                });
+              });
+
+              // Set default value if the second tab is already active
+              setTimeout(setBorderWidth, 100);
+            });
             editor.on("focusin", () => addHeaderStyle(editor));
             editor.on("focusout", () => removeHeaderStyle(editor));
             // On Init setup
@@ -859,7 +985,7 @@ const EditorElement2 = ({
             "pagebreak",
           ],
           toolbar:
-            "myAddAttributeButton myRemoveAttributeButton | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
+            "marginDropdown | myAddAttributeButton myRemoveAttributeButton | undo redo | changeSize zoom | myEnableButton myDisableButton myEditableButton |  blocks fontfamily fontsize styles | " +
             "bold italic underline forecolor backcolor | align lineheight |" +
             "bullist numlist outdent indent | hr | pagebreak | insertLogo insertHeader exitHeader removeHeader |" +
             "removeformat | searchreplace |" +

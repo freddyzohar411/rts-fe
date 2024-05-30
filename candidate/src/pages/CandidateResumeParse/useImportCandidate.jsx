@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { getCandidateFormIdMap } from "../../helpers/backend_helper";
 import { getCandidateMapping as getCandidateMappingAction } from "../../store/candidateMapping/action";
 import { toast } from "react-toastify";
+import { generateId } from "@workspace/common/src/helpers/generate_id_helper";
 
 const useImportCandidate = () => {
   const navigate = useNavigate();
@@ -86,7 +87,10 @@ const useImportCandidate = () => {
     return dataOut;
   }
 
-  function convertCandidateDataToRequestArray(candidatesData, fileObjects) {
+  async function convertCandidateDataToRequestArray(
+    candidatesData,
+    fileObjects
+  ) {
     if (!candidatesData) return;
     if (candidatesData.length === 0) {
       toast.error("No candidate data found");
@@ -119,17 +123,24 @@ const useImportCandidate = () => {
 
     // Initialize the request array
     const candidateRequestArrayAll = [];
-    candidatesData.forEach((candidateData, i) => {
+    // candidatesData.forEach((candidateData, i) => {
+    for (const [i, candidateData] of candidatesData.entries()) {
       // Get candidate basic info Object
+
       const candidateBasicInfo = mapResumeDataToFormData(
         candidateData,
         candidateMappingData?.basicInfo,
         candidateMapping
       );
 
+      const candidateIdGenerated = await generateId("C", "", "candidate");
+
       const candidateBasicInfoOut = {
         ...candidateBasicInfo,
-        formData: JSON.stringify(candidateBasicInfo),
+        formData: JSON.stringify({
+          ...candidateBasicInfo,
+          candidateId: candidateIdGenerated,
+        }),
         formId: parseInt(
           formNameId[CandidateFormNameConstant.CANDIDATE_BASIC_INFO]
         ),
@@ -302,12 +313,13 @@ const useImportCandidate = () => {
         },
       ];
       candidateRequestArrayAll.push(candidateRequestArray);
-    });
+    }
+    // });
     return candidateRequestArrayAll;
   }
 
-  function importCandidate(candidatesData, fileObjects) {
-    const candidateRequestArrayAll = convertCandidateDataToRequestArray(
+  async function importCandidate(candidatesData, fileObjects) {
+    const candidateRequestArrayAll = await convertCandidateDataToRequestArray(
       candidatesData,
       fileObjects
     );
