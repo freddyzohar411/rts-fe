@@ -25,7 +25,7 @@ import {
   FETCH_CANDIDATE_CUSTOM_VIEW,
   SELECT_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW,
-  DELETE_CANDIDATES
+  DELETE_CANDIDATES,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -87,7 +87,7 @@ import {
   getCandidateCustomViews,
   selectCandidateCustomView,
   deleteCandidateCustomView,
-  deleteCandidates
+  deleteCandidates,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -199,6 +199,11 @@ function* workPutCandidate(action) {
     }
   } catch (error) {
     yield put(putCandidateFailure(error));
+    if (error?.message) {
+      if (error?.message === "Candidate already exists!") {
+        toast.error("Candidate already exists");
+      }
+    }
   }
 }
 
@@ -293,7 +298,13 @@ function* workImportCandidate(action) {
       candidateId = response?.data?.id;
     } catch (error) {
       yield put(importCandidateFailure());
-      toast.error("Error creating candidate basic info");
+      if (error?.message) {
+        if (error?.message === "Candidate already exists!") {
+          toast.error("Candidate already exists");
+        } else {
+          toast.error("Error creating candidate basic info");
+        }
+      }
     }
 
     if (!candidateId) return;
