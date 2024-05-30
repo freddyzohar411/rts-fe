@@ -459,7 +459,7 @@ const DynamicTableWrapper = ({
                               <Link to="/jobs/custom-view">
                                 <DropdownItem>Create Custom View</DropdownItem>
                               </Link>
-                              <DropdownItem onClick={() => enableDefaultView}>
+                              <DropdownItem onClick={() => enableDefaultView()}>
                                 Enable Default View
                               </DropdownItem>
                               <DropdownItem divider />
