@@ -485,7 +485,6 @@ function* workImportCandidateMulti(action) {
       if (!success) {
         hasError = true;
         yield put(importCandidateFailure());
-        // Handle the error for this specific candidate request
       }
     }
 

@@ -1534,11 +1534,6 @@ const JobOverview = () => {
           setIsFormModalOpen(true);
         }
       },
-
-      // New Profile
-      [JobOverviewConstants.PROFILE]: () => {
-        console.log("Profile Here");
-      }
     };
     readOnlyActionTriggerObj[subitem]?.();
     return onFlag;
