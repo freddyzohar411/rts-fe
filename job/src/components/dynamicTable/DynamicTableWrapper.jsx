@@ -241,15 +241,18 @@ const DynamicTableWrapper = ({
                   height: "calc(100vh - 160px)",
                 }}
               >
-                <Row className="d-flex mb-3">
+                <Row className="d-flex align-items-center mb-3">
                   <Col className="d-flex align-items-center gap-2">
-                    <span
-                      className="fw-semibold fs-3 d-flex gap-1"
-                      style={{ width: "250px", height: "40px" }}
+                    <h4
+                      style={{
+                        width: "100%",
+                        whiteSpace: "nowrap",
+                      }}
                     >
-                      <span>{JOB_LABELS[gridView] ?? "Jobs"}</span>
-                      <span> {` (${pageInfo?.totalElements || 0})`}</span>
-                    </span>
+                      <span>{`${JOB_LABELS[gridView] ?? "Jobs"} (${
+                        pageInfo?.totalElements ?? 0
+                      })`}</span>
+                    </h4>
                     {setSearch && (
                       <div className="search-box">
                         <form onSubmit={pageRequestSet.setSearchTerm}>
