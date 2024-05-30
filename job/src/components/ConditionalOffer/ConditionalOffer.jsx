@@ -385,7 +385,7 @@ const ConditionalOffer = forwardRef(
             </div>
           )}
           <div
-            className="flex-grow-1"
+            className="flex-grow-1 d-flex align-items-center justify-content-center"
             style={{
               backgroundColor: "#F7F9FC",
             }}
