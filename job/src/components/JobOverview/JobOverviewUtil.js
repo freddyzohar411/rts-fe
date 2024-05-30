@@ -26,8 +26,8 @@ export const overviewValues = (data, deliveryTeam, isMobile) => {
       trimValue: trimValue(data?.jobTitle, isMobile),
     },
     "Job Id": {
-      value: data?.clientJobId,
-      trimValue: trimValue(data?.clientJobId, isMobile),
+      value: data?.jobId,
+      trimValue: trimValue(data?.jobId, isMobile),
     },
     Ageing: {
       value: "N/A",

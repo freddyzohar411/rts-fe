@@ -6,6 +6,13 @@ const JOB_MANDATORY_OPTIONS = [
     sort: true,
     expand: true,
   },
+  {
+    sortValue: "job_submission_data.jobId",
+    label: "Pulse Job Id",
+    value: "jobSubmissionData.jobId",
+    sort: true,
+    expand: true,
+  },
 ];
 
 const JOB_INITIAL_OPTIONS = [
@@ -52,9 +59,9 @@ const JOB_INITIAL_OPTIONS = [
     sort: true,
   },
   {
-    sortValue: "job_submission_data.noOfHeadcounts",
-    label: "No Of Headcounts",
-    value: "jobSubmissionData.noOfHeadcounts",
+    sortValue: "job_submission_data.noofheadcounts",
+    label: "No. Of Headcounts",
+    value: "jobSubmissionData.noofheadcounts",
     sort: true,
   },
 ];
