@@ -103,7 +103,7 @@ const LoginOTP = (props) => {
 
   return (
     <ParticlesAuth>
-      <div className="auth-page-content">
+      <div className="auth-page-content d-flex align-items-center justify-content-center">
         <Container>
           <Row>
             <Col lg={12}>

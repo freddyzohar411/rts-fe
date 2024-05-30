@@ -73,7 +73,7 @@ const ForgetResetPassword = () => {
     >
       {({ errors, touched }) => (
         <ParticlesAuth>
-          <div className="auth-page-content">
+          <div className="auth-page-content d-flex justify-content-center align-items-center">
             <Container>
               <Row>
                 <Col lg={12}>
