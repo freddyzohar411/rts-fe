@@ -47,12 +47,6 @@ const JOB_INITIAL_OPTIONS = [
     sort: true,
   },
   {
-    sortValue: "job_submission_data.clientJobId",
-    label: "Client Job Id",
-    value: "jobSubmissionData.clientJobId",
-    sort: true,
-  },
-  {
     sortValue: "job_submission_data.workLocation",
     label: "Work Location",
     value: "jobSubmissionData.workLocation",
@@ -89,6 +83,16 @@ const JOB_FILTERS = [
     assigned_jobs: "Assigned Job Openings",
   },
 ];
+
+const JOB_LABELS = {
+  all_jobs: "All Jobs",
+  new_job: "New Job Openings",
+  active_jobs: "Active Job Openings",
+  inactive_jobs: "Inactive Job Openings",
+  closed_jobs: "Closed Job Openings",
+  fod: "Focus of the Day",
+  assigned_jobs: "Assigned Job Openings",
+};
 
 const JOB_STAGE_IDS = {
   TAG: 1,
@@ -132,6 +136,7 @@ const JOB_STAGE_STATUS_LABELS = {
 export {
   JOB_INITIAL_OPTIONS,
   JOB_FILTERS,
+  JOB_LABELS,
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
   JOB_MANDATORY_OPTIONS,

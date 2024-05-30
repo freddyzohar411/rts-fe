@@ -34,6 +34,7 @@ import { DeleteCustomModal } from "@workspace/common";
 import {
   JOB_FILTERS,
   JOB_INITIAL_OPTIONS,
+  JOB_LABELS,
 } from "../JobListing/JobListingConstants";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
@@ -57,7 +58,6 @@ const DynamicTableWrapper = ({
   gridView,
   handleTableViewChange,
   operations,
-  header,
   activeRow,
   setActiveRow,
   setTableConfig,
@@ -242,9 +242,12 @@ const DynamicTableWrapper = ({
                 }}
               >
                 <Row className="d-flex mb-3">
-                  <Col className="d-flex align-items-center gap-3">
-                    <span className="fw-semibold fs-3 d-flex gap-1">
-                      <span>{header}</span>
+                  <Col className="d-flex align-items-center gap-2">
+                    <span
+                      className="fw-semibold fs-3 d-flex gap-1"
+                      style={{ width: "250px", height: "40px" }}
+                    >
+                      <span>{JOB_LABELS[gridView] ?? "Jobs"}</span>
                       <span> {` (${pageInfo?.totalElements || 0})`}</span>
                     </span>
                     {setSearch && (
@@ -255,7 +258,7 @@ const DynamicTableWrapper = ({
                             placeholder="Search"
                             className="form-control search"
                             value={search}
-                            style={{ width: "300px", height: "40px" }}
+                            style={{ width: "250px", height: "40px" }}
                             onChange={(e) => setSearch(e.target.value)}
                           />
                         </form>

@@ -39,7 +39,7 @@ function OffCanvasHeaderComponent({
               color: "#0A56AE",
             }}
           >
-            Job ID - {formSubmissionData?.clientJobId}
+            Job ID - {formSubmissionData?.jobId}
           </span>
           <span
             style={{
