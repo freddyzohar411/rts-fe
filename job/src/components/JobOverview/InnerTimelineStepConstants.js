@@ -63,6 +63,7 @@ export const innerTimelineSteps = [
   { ii: "First Interview Scheduled" },
   { iii: "Second Interview Scheduled" },
   { iv: "Third Interview Scheduled" },
+  { v: "Interview Feedback Pending" },
 
   { 4: "TOS" },
   { i: "Expand" },
@@ -93,9 +94,9 @@ export const innerTimelineOuterSteps = [
 ];
 
 export const expandedRange = {
-  1: [1, 6],
+  1: [2, 6],
   8: [9, 12],
-  14: [15, 17],
-  19: [20, 21],
-  23: [24, 25],
+  14: [15, 18],
+  20: [21, 22],
+  24: [25, 26],
 };
