@@ -282,7 +282,6 @@ function* workImportCandidate(action) {
   try {
     const { candidateRequestArray: candidateData, navigate } = action.payload; // Array of candidate data
     let candidateId = null;
-    // Set Basic Info
     try {
       const response = yield call(
         createCandidate,
