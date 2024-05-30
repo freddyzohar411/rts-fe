@@ -109,6 +109,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabelIcon: "mdi mdi-text-shadow",
+      draggableLabel: "Editor 2",
+      draggablePrefix: "element",
+      draggableId: "editor2",
+      type: "field",
+    },
+    {
       draggableLabelIcon: "mdi mdi-format-size",
       draggableLabel: "Text",
       draggablePrefix: "element",

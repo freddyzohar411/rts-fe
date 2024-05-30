@@ -15,7 +15,7 @@ const EditorElement = ({ field, formik, formStateHook, tabIndexData }) => {
         onChange={(event, editor) => {
           const data = editor?.getData();
           // Get the data from the editor and set it to the formik field
-          // get HTML 
+          // get HTML
           console.log("SOURCE HTML: ", editor.getData());
           if (field.name != null) {
             try {

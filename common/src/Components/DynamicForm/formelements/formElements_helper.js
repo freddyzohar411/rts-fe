@@ -34,6 +34,7 @@ import ProfileFeedbackStatusSelectElement from "./ProfileFeedbackStatusSelectEle
 import AccountOwnerSelectElement from "./AccountOwnerSelectElement";
 import AccountTypeElement from "./AccountTypeElement";
 import DragDropFilesElement from "./DragDropFilesElement";
+import EditorElement2 from "./EditorElement2"
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -305,6 +306,17 @@ const generateFormField = (
   if (type === "editor") {
     return (
       <EditorElement
+        field={field}
+        formik={formik}
+        formStateHook={formStateHook}
+        tabIndexData={tabIndexData}
+      />
+    );
+  }
+
+  if (type === "editor2") {
+    return (
+      <EditorElement2
         field={field}
         formik={formik}
         formStateHook={formStateHook}

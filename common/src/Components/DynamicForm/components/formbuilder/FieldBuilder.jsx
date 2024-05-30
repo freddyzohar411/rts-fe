@@ -143,6 +143,7 @@ const FieldBuilder = ({
         "table",
         "selectdepartment",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -202,6 +203,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         "table",
         "parentcompany",
         "searchselect",
@@ -258,6 +260,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -307,6 +310,7 @@ const FieldBuilder = ({
         "accounttype",
         "accountowner",
         "editor",
+        "editor2",
         "button",
         "buttonupdate",
         "parentcompany",
@@ -360,6 +364,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         // "button",
         // "buttonupdate"
         "parentcompany",
@@ -460,6 +465,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -503,6 +509,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -699,6 +706,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -751,6 +759,7 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -807,6 +816,7 @@ const FieldBuilder = ({
         "selectstate",
         "selectdepartment",
         "editor",
+        "editor2",
         "multiselect",
         "singleselect",
         "singleselectapi",
@@ -846,6 +856,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -961,6 +972,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -1011,6 +1023,7 @@ const FieldBuilder = ({
         "table",
         "selectdepartment",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -1059,6 +1072,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -1102,6 +1116,7 @@ const FieldBuilder = ({
         "accountowner",
         "accounttype",
         "editor",
+        "editor2",
         "parentcompany",
         "searchselect",
         "multiselect",
@@ -1254,6 +1269,9 @@ const FieldBuilder = ({
       header = "Select Industry Field";
       break;
     case "editor":
+      header = "Editor Field";
+      break;
+    case "editor2":
       header = "Editor Field";
       break;
     case "parentcompany":

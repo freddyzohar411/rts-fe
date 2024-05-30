@@ -1,0 +1,8 @@
+.tinymce-disabled .tox-editor-container {
+    pointer-events: none;
+  }
+  
+  .tinymce-disabled .tox-editor-container .tox-editor {
+    opacity: 0.5;  /* Adjust the opacity to your preference */
+    background-color: #b7b7b7 !important;  /* Light grey background to indicate disabled state */
+  }
