@@ -88,7 +88,6 @@ import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
 } from "../JobListing/JobListingConstants";
-import * as JobListingConstant from "../JobListing/JobListingConstants";
 import { useMediaQuery } from "react-responsive";
 import BSGTimeline from "../BSGTimeline/BSGTimeline";
 import { SkillAssessment } from "../SkillAssessment";
@@ -96,7 +95,6 @@ import { CodingTest } from "../CodingTest";
 import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
 import {
-  getLastSubmittedStage,
   getMaxOrder,
   getStatus,
   overviewHeaders,
@@ -734,7 +732,6 @@ const JobOverview = () => {
             const candidateData = data?.candidate;
             let maxOrder = getMaxOrder(data);
             const originalOrder = maxOrder;
-            const lastSubmittedStage = getLastSubmittedStage(data, maxOrder);
             const status = getStatus(data, maxOrder);
             const isRejected =
               status === JOB_STAGE_STATUS.REJECTED ||
@@ -757,7 +754,7 @@ const JobOverview = () => {
             } else if (maxOrder >= 15 && maxOrder <= 17) {
               maxOrder = 5;
             }
-            const billRate = formSubmissionData?.["billRate*"] ?? 0;
+            const billRate = data?.job?.jobSubmissionData?.billRate ?? 0;
             return (
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
@@ -799,10 +796,8 @@ const JobOverview = () => {
                     <div className="d-flex flex-row justify-content-start align-items-center">
                       <span>
                         $
-                        {
-                          data?.candidate?.candidateSubmissionData
-                            ?.expectedSalary
-                        }
+                        {data?.candidate?.candidateSubmissionData
+                          ?.candidateExpectedSalary ?? 0}
                       </span>
                     </div>
                   </td>
