@@ -52,7 +52,7 @@ const JobTagCanvas = ({ tagOffcanvas, setTagOffcanvas, selectedRowData }) => {
                       <Col>
                         <div className="d-flex gap-4 align-items-center">
                           <span className="fs-6 fw-semibold">
-                            {`Job ID - ${selectedRowData?.jobSubmissionData?.clientJobId}`}
+                            {`Job ID - ${selectedRowData?.jobSubmissionData?.jobId}`}
                           </span>
                           <span className="fs-6 fw-semibold">|</span>
                           <span className="fs-6 fw-semibold">
@@ -76,7 +76,10 @@ const JobTagCanvas = ({ tagOffcanvas, setTagOffcanvas, selectedRowData }) => {
           </OffcanvasHeader>
           <OffcanvasBody>
             {/* Specific Data information */}
-            <FODTagTable selectedRowData={selectedRowData} tagOffcanvas={tagOffcanvas}/>
+            <FODTagTable
+              selectedRowData={selectedRowData}
+              tagOffcanvas={tagOffcanvas}
+            />
           </OffcanvasBody>
         </Offcanvas>
       </Col>
