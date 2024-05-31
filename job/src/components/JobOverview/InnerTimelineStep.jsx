@@ -18,7 +18,6 @@ const InnerTimelineStep = ({
   setTimelineRowIndex,
   dataIndex,
 }) => {
-  const containerRef = useRef(null);
   const containerNewRef = useRef(null);
   const timelineRef = useRef(null);
   const sectionRefs = useRef([]);
@@ -28,7 +27,6 @@ const InnerTimelineStep = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [divWidth, setDivWidth] = useState("");
   const [elementSizing, setElementSizing] = useState("");
-  const [uniqueTopValues, setUniqueTopValues] = useState([]);
   const [bottomWidth, setBottomWidth] = useState(0);
   const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] =
     useState(null);
@@ -87,8 +85,8 @@ const InnerTimelineStep = ({
                 border: "1px dashed lightgray",
                 borderRadius: "60px 0 0 60px",
                 left: "20px",
-                height: "103px",
-                top: `${i * 103}px`,
+                height: "118px",
+                top: `${i * 118}px`,
                 width: bottomWidth ? `${bottomWidth}px` : "93%",
                 position: "absolute",
                 borderRight: "none",
@@ -105,8 +103,8 @@ const InnerTimelineStep = ({
                 border: "1px dashed lightgray",
                 borderRadius: "0 60px 60px 0",
                 left: "60px",
-                height: "103px",
-                top: `${i * 103}px`,
+                height: "118px",
+                top: `${i * 118}px`,
                 width: "93%",
                 position: "absolute",
                 borderLeft: "none",
@@ -117,18 +115,7 @@ const InnerTimelineStep = ({
       }
     } else {
       // If only one row is there, add a single dashed line
-      divs.push(
-        <div
-          className="mt-3"
-          style={{
-            border: "1px dashed lightgray",
-            position: "absolute",
-            top: 0,
-            left: "55px",
-            width: "1098px",
-          }}
-        ></div>
-      );
+      divs.push(<div className="mt-3 single-line"></div>);
     }
     return divs;
   }
@@ -375,7 +362,7 @@ const InnerTimelineStep = ({
         <div
           id="container-new"
           ref={containerNewRef}
-          class={`container ps-5 pe-4 ${itemCount <= 10 ? "single-row" : ""}`}
+          class={`container ${itemCount <= 10 ? "single-row" : ""}`}
         >
           {innerTimelineSteps.map((step, index) => {
             const stepNumber = Object.keys(step)[0];
@@ -512,16 +499,23 @@ const InnerTimelineStep = ({
               );
             }
 
-            const isUnderCollapsedSection = Object.keys(expandedView).some((key) => {
+            const isUnderCollapsedSection = Object.keys(expandedView).some(
+              (key) => {
+                const [start, end] = expandedRange[key] || [];
+                return (
+                  start <= index && index <= end && expandedView[key] === false
+                );
+              }
+            );
+
+            const isUnderCurrentExpandedSection = Object.keys(
+              expandedView
+            ).some((key) => {
               const [start, end] = expandedRange[key] || [];
-              return start <= index && index <= end && expandedView[key] === false;
+              return (
+                start <= index && index <= end && expandedView[key] === true
+              );
             });
-            
-            const isUnderCurrentExpandedSection = Object.keys(expandedView).some((key) => {
-              const [start, end] = expandedRange[key] || [];
-              return start <= index && index <= end && expandedView[key] === true;
-            });
-            
 
             if (isUnderCollapsedSection && !isUnderCurrentExpandedSection) {
               return null;
@@ -572,7 +566,7 @@ const InnerTimelineStep = ({
                           : "",
                       }}
                     >
-                      {stepName}
+                      {stepName.split("/").join(" ")}
                     </span>
                   </div>
                 </div>

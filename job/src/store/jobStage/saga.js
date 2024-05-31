@@ -58,9 +58,17 @@ function* workTagJob(action) {
           toast.success("Profile Associated Successfully.");
         }
       } else if (payload?.jobType === "submit_to_sales") {
-        toast.success("Job has been submitted to sales.");
+        if ((payload.status = "REJECTED")) {
+          toast.success("Profile rejected by sales successfully.");
+        } else {
+          toast.success("Job has been submitted to sales.");
+        }
       } else if (payload?.jobType === "submit_to_client") {
-        toast.success("Job has been submitted to client.");
+        if (payload.status === "REJECTED") {
+          toast.success("Profile rejected by client successfully.");
+        } else {
+          toast.success("Job has been submitted to client.");
+        }
       } else {
         toast.success("Operation submitted successfully.");
       }

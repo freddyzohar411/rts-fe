@@ -16,7 +16,6 @@ const TableItemDisplay = ({ pageInfo }) => {
         </span>
         <span>of</span>
         <span className="fw-bold"> {`${totalElements || 0} `}</span>
-        <span>items</span>
       </span>
     </div>
   );
