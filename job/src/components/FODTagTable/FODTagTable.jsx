@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input } from "reactstrap";
+import { Button, Input, Spinner } from "reactstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,7 +11,7 @@ import {
 import { useTableHook, DynamicTableHelper } from "@workspace/common";
 import { CANDIDATE_INITIAL_OPTIONS } from "./FODCandidateListingConstants";
 import DynamicTableWrapper from "../CandidateDynamicTableWrapper/DynamicTableWrapper";
-import { tagJob, tagJobAll } from "../../store/jobStage/action";
+import { tagJob, tagJobAll, tagReset } from "../../store/jobStage/action";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
@@ -157,18 +157,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
     fodTableShowType,
   ]);
 
-  const handleTag = (candidateId) => {
-    const payload = {
-      jobId: selectedRowData?.id,
-      jobStageId: JOB_STAGE_IDS?.TAG,
-      status: JOB_STAGE_STATUS?.COMPLETED,
-      candidateId,
-      stepName: "Profile",
-      subStepName: "Tag",
-    };
-    dispatch(tagJob({ payload, navigate }));
-  };
-
   const handleTagAll = () => {
     const payload = [];
     if (selected?.length > 0) {
@@ -259,12 +247,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         expand: true,
         center: true,
         render: (data) => (
-          <Button
-            className="btn btn-sm btn-custom-primary px-3 py-0"
-            onClick={() => handleTag(data?.id)}
-          >
-            <span className="fs-6">Tag</span>
-          </Button>
+          <TagButton data={data} selectedRowData={selectedRowData} />
         ),
       },
     ].filter((item) => item);
@@ -310,3 +293,57 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
 };
 
 export default FODTagTable;
+
+// Create a Tag Button component to hold the loader here
+function TagButton({ data, selectedRowData }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+  const [loading, setLoading] = useState(false);
+
+  const handleTag = (candidateId) => {
+    const payload = {
+      jobId: selectedRowData?.id,
+      jobStageId: JOB_STAGE_IDS?.TAG,
+      status: JOB_STAGE_STATUS?.COMPLETED,
+      candidateId,
+      stepName: "Profile",
+      subStepName: "Tag",
+    };
+    try {
+      setLoading(true);
+      dispatch(tagJob({ payload, navigate }));
+    } catch (error) {
+      toast.error("Error tagging job.");
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (jobTagMeta?.isSuccess) {
+      dispatch(tagReset());
+      setLoading(false);
+    }
+    if (jobTagMeta?.isError) {
+      dispatch(tagReset());
+      setLoading(false);
+    }
+  }, [jobTagMeta?.isSuccess, jobTagMeta?.isError]);
+
+  return (
+    <Button
+      className="btn btn-sm btn-custom-primary px-3 py-0 d-flex align-items-center justify-content-center"
+      onClick={() => handleTag(data?.id)}
+      style={{ width: "50px" }}
+      disabled={loading}
+    >
+      <span className="fs-6">
+        {loading ? (
+          <Spinner style={{ width: "12px", height: "12px" }} />
+        ) : (
+          "Tag"
+        )}
+      </span>
+    </Button>
+  );
+}
