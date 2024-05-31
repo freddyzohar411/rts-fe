@@ -34,6 +34,7 @@ import { DeleteCustomModal } from "@workspace/common";
 import {
   JOB_FILTERS,
   JOB_INITIAL_OPTIONS,
+  JOB_LABELS,
 } from "../JobListing/JobListingConstants";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
@@ -57,7 +58,6 @@ const DynamicTableWrapper = ({
   gridView,
   handleTableViewChange,
   operations,
-  header,
   activeRow,
   setActiveRow,
   setTableConfig,
@@ -241,12 +241,18 @@ const DynamicTableWrapper = ({
                   height: "calc(100vh - 160px)",
                 }}
               >
-                <Row className="d-flex mb-3">
-                  <Col className="d-flex align-items-center gap-3">
-                    <span className="fw-semibold fs-3 d-flex gap-1">
-                      <span>{header}</span>
-                      <span> {` (${pageInfo?.totalElements || 0})`}</span>
-                    </span>
+                <Row className="d-flex align-items-center mb-3">
+                  <Col className="d-flex align-items-center gap-2">
+                    <h4
+                      style={{
+                        width: "100%",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <span>{`${JOB_LABELS[gridView] ?? "Jobs"} (${
+                        pageInfo?.totalElements ?? 0
+                      })`}</span>
+                    </h4>
                     {setSearch && (
                       <div className="search-box">
                         <form onSubmit={pageRequestSet.setSearchTerm}>
@@ -255,7 +261,7 @@ const DynamicTableWrapper = ({
                             placeholder="Search"
                             className="form-control search"
                             value={search}
-                            style={{ width: "300px", height: "40px" }}
+                            style={{ width: "250px", height: "40px" }}
                             onChange={(e) => setSearch(e.target.value)}
                           />
                         </form>
@@ -453,7 +459,7 @@ const DynamicTableWrapper = ({
                               <Link to="/jobs/custom-view">
                                 <DropdownItem>Create Custom View</DropdownItem>
                               </Link>
-                              <DropdownItem onClick={() => enableDefaultView}>
+                              <DropdownItem onClick={() => enableDefaultView()}>
                                 Enable Default View
                               </DropdownItem>
                               <DropdownItem divider />

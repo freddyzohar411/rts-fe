@@ -320,7 +320,7 @@ const JobListing = () => {
                       setTagOffcanvas(!tagOffcanvas);
                     }}
                   >
-                    <div className="d-flex  align-items-center gap-2">
+                    <div className="d-flex align-items-center gap-2">
                       <i className="ri-parent-fill"></i>
                       <span>Tag</span>
                     </div>
@@ -434,7 +434,6 @@ const JobListing = () => {
           setActiveJob: setActiveJob,
           setSelectedRecruiter: setSelectedRecruiter,
         }}
-        header="Jobs"
         activeRow={activeRow}
         setActiveRow={setActiveRow}
         setTableConfig={setTableConfig}
