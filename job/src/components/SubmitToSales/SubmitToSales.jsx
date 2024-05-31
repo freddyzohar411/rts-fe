@@ -169,8 +169,8 @@ const SubmitToSales = forwardRef(
             const accountOwnerEmail = extractEmailsUsingRegex(accountOwner);
             formik.setFieldValue("to", [
               {
-                value: accountOwnerEmail,
-                label: accountOwnerEmail,
+                value: accountOwnerEmail[0],
+                label: accountOwnerEmail[0],
               },
             ]);
           }
