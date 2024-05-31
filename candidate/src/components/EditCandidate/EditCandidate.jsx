@@ -74,8 +74,6 @@ const EditCandidate = () => {
       : true
   );
 
-  console.log("formikValues", formikRef.current?.formik?.values);
-
   /**
    * Get candidate id from url
    */
