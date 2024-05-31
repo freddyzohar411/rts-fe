@@ -2930,13 +2930,6 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.4.tgz#34b996b1688db21c5d65d806445aab2b93e95cb5"
   integrity sha512-6gH/bLQJSJEg7OEpkH4wGQdA8KXHRbzL1YkGyUO12YNAgV3jxKy4K9kvfXj4+9T0OLug5k58cnPCKSSIKzp7pg==
 
-"@pangaeatech/tinymce-paste-from-word-lib@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@pangaeatech/tinymce-paste-from-word-lib/-/tinymce-paste-from-word-lib-1.2.1.tgz#e324345adbe9652eb83eaa6f7061d8c36a6f3aeb"
-  integrity sha512-5BZrt+9HkiG0KRFLfGRokTULuF4XtNG97kdyfp0GjlNz4dNgwpV9SoyhEdJ1mJQmIU7xQbLA2Mh6PS3FmTpupQ==
-  dependencies:
-    tinymce "6.8.1"
-
 "@parcel/watcher@2.0.4":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@parcel/watcher/-/watcher-2.0.4.tgz#f300fef4cc38008ff4b8c29d92588eced3ce014b"
@@ -15595,11 +15588,6 @@ tiny-warning@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
-
-tinymce@6.8.1:
-  version "6.8.1"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.8.1.tgz#840f514b4a175f55042cbe2fce548b10fc38208b"
-  integrity sha512-WYPvMXIjBrXM/oBiqGCbT2a8ptiO3TWXm/xxPWDCl8SxRKMW7Rfp0Lk190E9fXmX6uh9lJMRCnmKHzvryz0ftA==
 
 "tinymce@^6.0.0 || ^5.5.1":
   version "6.8.3"
