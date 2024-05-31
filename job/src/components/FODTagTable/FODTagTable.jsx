@@ -157,18 +157,6 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
     fodTableShowType,
   ]);
 
-  // const handleTag = (candidateId) => {
-  //   const payload = {
-  //     jobId: selectedRowData?.id,
-  //     jobStageId: JOB_STAGE_IDS?.TAG,
-  //     status: JOB_STAGE_STATUS?.COMPLETED,
-  //     candidateId,
-  //     stepName: "Profile",
-  //     subStepName: "Tag",
-  //   };
-  //   dispatch(tagJob({ payload, navigate }));
-  // };
-
   const handleTagAll = () => {
     const payload = [];
     if (selected?.length > 0) {
