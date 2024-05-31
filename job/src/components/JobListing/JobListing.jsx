@@ -116,7 +116,7 @@ const JobListing = () => {
     const pulseJobId = data?.jobSubmissionData?.jobId;
     const pulseInitial = pulseJobId.split("-")[0].substring(1);
     const countryISO = pulseInitial.match(/^[A-Za-z]{2,3}/)?.[0] ?? "";
-    const cloneJobId = await generateId("J", countryISO, "job")
+    const cloneJobId = await generateId("J", countryISO, "job");
     const payload = {
       id: jobId,
       cloneJobId: cloneJobId,
@@ -370,8 +370,17 @@ const JobListing = () => {
                       }}
                     >
                       <div className="d-flex align-items-center gap-2">
-                        <i className="mdi mdi-delete"></i>
-                        <span>Delete</span>
+                        {isFOD ? (
+                          <>
+                            <i className="mdi mdi-minus-circle"></i>
+                            <span>Unassign</span>
+                          </>
+                        ) : (
+                          <>
+                            <i className="mdi mdi-delete"></i>
+                            <span>Delete</span>
+                          </>
+                        )}
                       </div>
                     </span>
                   </DropdownItem>
