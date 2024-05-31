@@ -18,7 +18,6 @@ const InnerTimelineStep = ({
   setTimelineRowIndex,
   dataIndex,
 }) => {
-  const containerRef = useRef(null);
   const containerNewRef = useRef(null);
   const timelineRef = useRef(null);
   const sectionRefs = useRef([]);
@@ -28,7 +27,6 @@ const InnerTimelineStep = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [divWidth, setDivWidth] = useState("");
   const [elementSizing, setElementSizing] = useState("");
-  const [uniqueTopValues, setUniqueTopValues] = useState([]);
   const [bottomWidth, setBottomWidth] = useState(0);
   const [actionTriggeredWithSubitem, setActionTriggeredWithSubitem] =
     useState(null);
