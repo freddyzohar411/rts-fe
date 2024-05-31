@@ -308,7 +308,7 @@ const DynamicTableWrapper = ({
                                 setSearchQuery("");
                               }}
                             >
-                              <TooltipWrapper tooltipText="Mass FOD">
+                              <TooltipWrapper tooltipText="Assign Recruiter">
                                 <DropdownToggle
                                   className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
                                   style={{ height: "40px" }}
