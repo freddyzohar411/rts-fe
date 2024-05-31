@@ -70,7 +70,7 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
     { category: "basicInfo", value: "currentSalary" },
     { category: "basicInfo", value: "additionalInfo" },
     { category: "basicInfo", value: "countryList" },
-    { category: "basicInfo", value: "currentEmployer" },
+    // { category: "basicInfo", value: "currentEmployer" },
     { category: "certification", value: "certificationList" },
     { category: "certification", value: "comment" },
     { category: "certification", value: "uploadCertificate" },

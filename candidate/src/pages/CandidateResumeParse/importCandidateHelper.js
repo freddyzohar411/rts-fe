@@ -1,5 +1,6 @@
 import { capitalizeFirstLetter } from "@workspace/common/src/helpers/string_helper";
 import { FileHelper } from "@workspace/common";
+import { render } from "react-dom";
 
 export const candidateBasicInfoMap = {
   firstName: {
@@ -100,6 +101,36 @@ export const candidateBasicInfoMap = {
         return parseInt(digitString);
       }
       return data;
+    },
+  },
+  currentEmployer: {
+    key: "companiesDetails",
+    map: "string",
+    render: (data) => {
+      if (data?.length > 0) {
+        // end date is in mm/yyyy format
+        // Get the latest end date
+        const latestEndDate = data.reduce((prev, current) =>
+          prev.endDate > current.endDate ? prev : current
+        );
+        return latestEndDate.name;
+      }
+      return "";
+    },
+    currentPositionTitle: {
+      key: "companiesDetails",
+      map: "string",
+      render: (data) => {
+        if (data?.length > 0) {
+          // end date is in mm/yyyy format
+          // Get the latest end date
+          const latestEndDate = data.reduce((prev, current) =>
+            prev.endDate > current.endDate ? prev : current
+          );
+          return latestEndDate.jobTitle;
+        }
+        return "";
+      },
     },
   },
 };

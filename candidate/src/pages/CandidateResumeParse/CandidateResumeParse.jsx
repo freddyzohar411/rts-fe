@@ -66,7 +66,7 @@ const CandidateResumeParse = () => {
     useSelector((state) => state.CandidateReducer);
 
   const { importCandidate, setCandidateMappingData } = useImportCandidate();
-
+  console.log("parseData", parseData);
   useEffect(() => {
     const initialCheckedItems = new Array(parseData.length).fill(false);
     setCheckedItems(initialCheckedItems);
@@ -265,6 +265,7 @@ const CandidateResumeParse = () => {
 
       const fetchParsedData = convertFlattenArray(result.data);
       setParseData(fetchParsedData);
+      
       if (isDirect) {
         importCandidate(fetchParsedData, fileObjects);
       } else {
@@ -276,6 +277,9 @@ const CandidateResumeParse = () => {
       toast.error("Error parsing resumes. Please try again.");
     }
   };
+
+  console.log("parseData", parseData)
+
 
   // Flatten the array to 1 level deep array
   const convertFlattenArray = (arr) => {
