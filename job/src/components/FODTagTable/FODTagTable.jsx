@@ -11,7 +11,7 @@ import {
 import { useTableHook, DynamicTableHelper } from "@workspace/common";
 import { CANDIDATE_INITIAL_OPTIONS } from "./FODCandidateListingConstants";
 import DynamicTableWrapper from "../CandidateDynamicTableWrapper/DynamicTableWrapper";
-import { tagJob, tagJobAll } from "../../store/jobStage/action";
+import { tagJob, tagJobAll, tagReset } from "../../store/jobStage/action";
 import {
   JOB_STAGE_IDS,
   JOB_STAGE_STATUS,
@@ -259,12 +259,13 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
         expand: true,
         center: true,
         render: (data) => (
-          <Button
-            className="btn btn-sm btn-custom-primary px-3 py-0"
-            onClick={() => handleTag(data?.id)}
-          >
-            <span className="fs-6">Tag</span>
-          </Button>
+          // <Button
+          //   className="btn btn-sm btn-custom-primary px-3 py-0"
+          //   onClick={() => handleTag(data?.id)}
+          // >
+          //   <span className="fs-6">Tag</span>
+          // </Button>
+          <TagButton data={data} />
         ),
       },
     ].filter((item) => item);
@@ -310,3 +311,44 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
 };
 
 export default FODTagTable;
+
+// Create a Tag Button component to hold the loader here
+function TagButton({ data }) {
+  const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+  console.log("JobTag Meta: ", jobTagMeta)
+  const [loading, setLoading] = useState(false);
+
+  const handleTag = (candidateId) => {
+    setLoading(true);
+    const payload = {
+      jobId: selectedRowData?.id,
+      jobStageId: JOB_STAGE_IDS?.TAG,
+      status: JOB_STAGE_STATUS?.COMPLETED,
+      candidateId,
+      stepName: "Profile",
+      subStepName: "Tag",
+    };
+    dispatch(tagJob({ payload, navigate }));
+  };
+
+  useEffect(() => {
+    if (jobTagMeta?.isSuccess) {
+      dispatch(tagReset());
+      setLoading(false);
+    }
+    if (jobTagMeta?.isError) {
+      dispatch(tagReset());
+      setLoading(false);
+    }
+  }, [jobTagMeta?.isSuccess, jobTagMeta?.isError]);
+
+  return (
+    <Button
+      className="btn btn-sm btn-custom-primary px-3 py-0"
+      onClick={() => handleTag(data?.id)}
+      disabled={loading}
+    >
+      <span className="fs-6">{loading ? "Loading..." : "Tag"}</span>
+    </Button>
+  );
+}
