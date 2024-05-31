@@ -242,52 +242,55 @@ const DynamicTableWrapper = ({
                 }}
               >
                 <Row className="d-flex align-items-center mb-3">
-                  <Col className="d-flex align-items-center gap-2">
-                    <h4
-                      style={{
-                        width: "100%",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      <span>{`${JOB_LABELS[gridView] ?? "Jobs"} (${
-                        pageInfo?.totalElements ?? 0
-                      })`}</span>
-                    </h4>
-                    {setSearch && (
-                      <div className="search-box">
-                        <form onSubmit={pageRequestSet.setSearchTerm}>
-                          <Input
-                            type="text"
-                            placeholder="Search"
-                            className="form-control search"
-                            value={search}
-                            style={{ width: "250px", height: "40px" }}
-                            onChange={(e) => setSearch(e.target.value)}
-                          />
-                        </form>
-                        <i className="ri-search-line search-icon"></i>
-                      </div>
-                    )}
-                    <div className="select-width">
-                      <Input
-                        type="select"
-                        className="form-select border-secondary"
-                        onChange={handleTableViewChange}
-                        value={gridView}
-                        style={{ height: "40px" }}
+                  <Col lg={7}>
+                    <div className="d-flex flex-row flex-wrap align-items-center gap-2">
+                      <h4
+                        style={{
+                          whiteSpace: "nowrap",
+                        }}
                       >
-                        {JOB_FILTERS?.map((ob, index) => {
-                          const key = Object.keys(ob);
-                          return (
-                            <option key={index} value={key}>
-                              {ob[key]}
-                            </option>
-                          );
-                        })}
-                      </Input>
+                        <span>{`${JOB_LABELS[gridView] ?? "Jobs"} (${
+                          pageInfo?.totalElements ?? 0
+                        })`}</span>
+                      </h4>
+                      <div className="d-flex flex-row flex-wrap align-items-center gap-2">
+                        {setSearch && (
+                          <div className="search-box">
+                            <form onSubmit={pageRequestSet.setSearchTerm}>
+                              <Input
+                                type="text"
+                                placeholder="Search"
+                                className="form-control search"
+                                value={search}
+                                style={{ width: "250px", height: "40px" }}
+                                onChange={(e) => setSearch(e.target.value)}
+                              />
+                            </form>
+                            <i className="ri-search-line search-icon"></i>
+                          </div>
+                        )}
+                        <div className="select-width">
+                          <Input
+                            type="select"
+                            className="form-select border-secondary"
+                            onChange={handleTableViewChange}
+                            value={gridView}
+                            style={{ height: "40px" }}
+                          >
+                            {JOB_FILTERS?.map((ob, index) => {
+                              const key = Object.keys(ob);
+                              return (
+                                <option key={index} value={key}>
+                                  {ob[key]}
+                                </option>
+                              );
+                            })}
+                          </Input>
+                        </div>
+                      </div>
                     </div>
                   </Col>
-                  <Col>
+                  <Col lg={5}>
                     <div className="d-flex column-gap  gap-1 justify-content-end align-items-center">
                       <TableItemDisplay pageInfo={pageInfo} />
                       <div
@@ -302,7 +305,6 @@ const DynamicTableWrapper = ({
                         pageInfo={pageInfo}
                         pageRequestSet={pageRequestSet}
                       />
-
                       <ButtonGroup>
                         {(gridView === "new_job" ||
                           gridView === "active_jobs") &&
