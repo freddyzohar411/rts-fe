@@ -103,7 +103,7 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   } = useTableHook(
     {
       page: 0,
-      pageSize: 5,
+      pageSize: 20,
       sortBy: null,
       sortDirection: null,
       searchTerm: null,
