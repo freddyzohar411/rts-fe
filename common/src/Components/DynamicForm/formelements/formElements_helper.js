@@ -57,7 +57,8 @@ const generateFormField = (
     type === "email" ||
     type === "number" ||
     type === "password" ||
-    type === "date"
+    type === "date" || 
+    type === "datemonth" 
   ) {
     return (
       <InputElement

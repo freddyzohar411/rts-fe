@@ -93,7 +93,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       draggableId: "date",
       type: "field",
     },
-
+    {
+      draggableLabelIcon: "mdi mdi-calendar-month-outline",
+      draggableLabel: "Date Month",
+      draggablePrefix: "element",
+      draggableId: "datemonth",
+      type: "field",
+    },
     {
       draggableLabelIcon: "mdi mdi-table",
       draggableLabel: "Table",

@@ -183,7 +183,7 @@ const Form = forwardRef(
         // A Fix for present date (31052024)
         if (!checkVisibleConditions(field, formik)) {
           if (field.type === "date") {
-            newValues[field.name] = "PRESENT";
+            newValues[field.name] = "present";
           }
         } else if (
           !checkVisibleConditions(field, formik) ||

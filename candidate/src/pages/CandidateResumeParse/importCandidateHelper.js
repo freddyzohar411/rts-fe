@@ -163,7 +163,7 @@ export const candidateWorkExperienceMap = {
       if (!data) {
         return "";
       }
-      // // Data is in mm/yyyy format
+      // Data is in mm/yyyy format
       // const [month, year] = data.split("/");
       // return getDateWithFormat(new Date(year, month - 1, 1));
 
@@ -172,7 +172,7 @@ export const candidateWorkExperienceMap = {
       const currentDate = todayDate.toISOString().split("T")[0];
       const [currentYear, currentMonth] = currentDate.split("-");
       if (year === currentYear && month === currentMonth) {
-        return "PRESENT";
+        return "present";
       }
       return getDateWithFormat(new Date(year, month - 1, 1));
     },
