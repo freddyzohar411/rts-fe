@@ -77,6 +77,7 @@ const CreateCandidate = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [formikValues, setFormikValues] = useState(null);
 
+
   /**
    * Fetch form template based on step
    */

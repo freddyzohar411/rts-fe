@@ -163,8 +163,17 @@ export const candidateWorkExperienceMap = {
       if (!data) {
         return "";
       }
-      // Data is in mm/yyyy format
+      // // Data is in mm/yyyy format
+      // const [month, year] = data.split("/");
+      // return getDateWithFormat(new Date(year, month - 1, 1));
+
       const [month, year] = data.split("/");
+      const todayDate = new Date();
+      const currentDate = todayDate.toISOString().split("T")[0];
+      const [currentYear, currentMonth] = currentDate.split("-");
+      if (year === currentYear && month === currentMonth) {
+        return "PRESENT";
+      }
       return getDateWithFormat(new Date(year, month - 1, 1));
     },
   },
@@ -180,6 +189,24 @@ export const candidateWorkExperienceMap = {
         return data.join(". ");
       }
       return "";
+    },
+  },
+  currentRole: {
+    key: "endDate",
+    map: "string",
+    render: (data) => {
+      // Data is in mm/yyyy format, check if mm and yyyy match todays date if yes return true
+      if (!data) {
+        return "";
+      }
+      const [month, year] = data.split("/");
+      const todayDate = new Date();
+      const currentDate = todayDate.toISOString().split("T")[0];
+      const [currentYear, currentMonth] = currentDate.split("-");
+      if (year === currentYear && month === currentMonth) {
+        return "true";
+      }
+      return "false";
     },
   },
 };

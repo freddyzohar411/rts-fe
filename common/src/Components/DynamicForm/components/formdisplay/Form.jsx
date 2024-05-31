@@ -180,7 +180,12 @@ const Form = forwardRef(
       // Remove fields that are not visible or accessible
       const newValues = { ...values };
       formFields.forEach((field) => {
-        if (
+        // A Fix for present date (31052024)
+        if (!checkVisibleConditions(field, formik)) {
+          if (field.type === "date") {
+            newValues[field.name] = "PRESENT";
+          }
+        } else if (
           !checkVisibleConditions(field, formik) ||
           !checkAccessible(field, userDetails) ||
           (field.countryOptions?.countryField === ""

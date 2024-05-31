@@ -33,6 +33,7 @@ export const candidateParseFields = [
       { label: "End Date", value: "workExperience__endDate" },
       { label: "industry", value: "workExperience__industry" },
       { label: "Description", value: "workExperience__description" },
+      { label: "Current Role", value: "workExperience__currentRole" },
     ],
   },
   {

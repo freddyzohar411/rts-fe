@@ -56,7 +56,7 @@ const CandidateMappingTable = ({ setCandidateMappingData }) => {
     { category: "workExperiences", value: "employmentType" },
     { category: "workExperiences", value: "experienceList" },
     { category: "workExperiences", value: "deletedFiles" },
-    { category: "workExperiences", value: "currentRole" },
+    // { category: "workExperiences", value: "currentRole" },
     { category: "basicInfo", value: "referrerName" },
     { category: "basicInfo", value: "candidateOwner" },
     { category: "basicInfo", value: "candidateStatus" },
