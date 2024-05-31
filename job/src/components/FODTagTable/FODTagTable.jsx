@@ -346,6 +346,7 @@ function TagButton({ data, selectedRowData }) {
     <Button
       className="btn btn-sm btn-custom-primary px-3 py-0 d-flex align-items-center justify-content-center"
       onClick={() => handleTag(data?.id)}
+      style={{ width: "50px" }}
       disabled={loading}
     >
       <span className="fs-6">
