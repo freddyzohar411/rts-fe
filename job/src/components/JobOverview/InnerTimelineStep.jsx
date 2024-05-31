@@ -444,9 +444,32 @@ const InnerTimelineStep = ({
                         stepNumber
                       )}
                     </div>
-                    <div className="general-alignment">
+                    <div
+                      className="general-alignment"
+                      onClick={() => setActionTriggeredWithSubitem(stepName)}
+                    >
                       <span className="form-text">{statusDate}</span>
-                      <span className="step-title">{stepName}</span>
+                      <span
+                        className="step-title"
+                        style={{
+                          textDecoration: readOnlyActionTrigger(
+                            stepName,
+                            true,
+                            dataIndex
+                          )
+                            ? "underline"
+                            : "none",
+                          color: readOnlyActionTrigger(
+                            stepName,
+                            true,
+                            dataIndex
+                          )
+                            ? "#8A9AD0"
+                            : "",
+                        }}
+                      >
+                        {stepName}
+                      </span>
                     </div>
                   </div>
                 </div>

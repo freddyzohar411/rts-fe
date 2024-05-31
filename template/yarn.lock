@@ -2288,6 +2288,13 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.4.tgz#34b996b1688db21c5d65d806445aab2b93e95cb5"
   integrity sha512-6gH/bLQJSJEg7OEpkH4wGQdA8KXHRbzL1YkGyUO12YNAgV3jxKy4K9kvfXj4+9T0OLug5k58cnPCKSSIKzp7pg==
 
+"@pangaeatech/tinymce-paste-from-word-lib@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@pangaeatech/tinymce-paste-from-word-lib/-/tinymce-paste-from-word-lib-1.2.1.tgz#e324345adbe9652eb83eaa6f7061d8c36a6f3aeb"
+  integrity sha512-5BZrt+9HkiG0KRFLfGRokTULuF4XtNG97kdyfp0GjlNz4dNgwpV9SoyhEdJ1mJQmIU7xQbLA2Mh6PS3FmTpupQ==
+  dependencies:
+    tinymce "6.8.1"
+
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
@@ -10723,6 +10730,11 @@ tiny-inflate@^1.0.0, tiny-inflate@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-inflate/-/tiny-inflate-1.0.3.tgz#122715494913a1805166aaf7c93467933eea26c4"
   integrity sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==
+
+tinymce@6.8.1:
+  version "6.8.1"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.8.1.tgz#840f514b4a175f55042cbe2fce548b10fc38208b"
+  integrity sha512-WYPvMXIjBrXM/oBiqGCbT2a8ptiO3TWXm/xxPWDCl8SxRKMW7Rfp0Lk190E9fXmX6uh9lJMRCnmKHzvryz0ftA==
 
 "tinymce@^6.0.0 || ^5.5.1":
   version "6.8.2"

@@ -1,5 +1,6 @@
 import { capitalizeFirstLetter } from "@workspace/common/src/helpers/string_helper";
 import { FileHelper } from "@workspace/common";
+import { render } from "react-dom";
 
 export const candidateBasicInfoMap = {
   firstName: {
@@ -102,6 +103,36 @@ export const candidateBasicInfoMap = {
       return data;
     },
   },
+  currentEmployer: {
+    key: "companiesDetails",
+    map: "string",
+    render: (data) => {
+      if (data?.length > 0) {
+        // end date is in mm/yyyy format
+        // Get the latest end date
+        const latestEndDate = data.reduce((prev, current) =>
+          prev.endDate > current.endDate ? prev : current
+        );
+        return latestEndDate.name;
+      }
+      return "";
+    },
+    currentPositionTitle: {
+      key: "companiesDetails",
+      map: "string",
+      render: (data) => {
+        if (data?.length > 0) {
+          // end date is in mm/yyyy format
+          // Get the latest end date
+          const latestEndDate = data.reduce((prev, current) =>
+            prev.endDate > current.endDate ? prev : current
+          );
+          return latestEndDate.jobTitle;
+        }
+        return "";
+      },
+    },
+  },
 };
 
 // Key [companiesDetails] is the key from the parsed data
@@ -133,7 +164,16 @@ export const candidateWorkExperienceMap = {
         return "";
       }
       // Data is in mm/yyyy format
+      // const [month, year] = data.split("/");
+      // return getDateWithFormat(new Date(year, month - 1, 1));
+
       const [month, year] = data.split("/");
+      const todayDate = new Date();
+      const currentDate = todayDate.toISOString().split("T")[0];
+      const [currentYear, currentMonth] = currentDate.split("-");
+      if (year === currentYear && month === currentMonth) {
+        return "present";
+      }
       return getDateWithFormat(new Date(year, month - 1, 1));
     },
   },
@@ -149,6 +189,24 @@ export const candidateWorkExperienceMap = {
         return data.join(". ");
       }
       return "";
+    },
+  },
+  currentRole: {
+    key: "endDate",
+    map: "string",
+    render: (data) => {
+      // Data is in mm/yyyy format, check if mm and yyyy match todays date if yes return true
+      if (!data) {
+        return "";
+      }
+      const [month, year] = data.split("/");
+      const todayDate = new Date();
+      const currentDate = todayDate.toISOString().split("T")[0];
+      const [currentYear, currentMonth] = currentDate.split("-");
+      if (year === currentYear && month === currentMonth) {
+        return "true";
+      }
+      return "false";
     },
   },
 };
@@ -181,7 +239,7 @@ const candidateEducationDetailsMap = {
       }
       // Data is in mm/yyyy format
       const [month, year] = data.split("/");
-      return getDateWithFormat(new Date(year, month - 1, 1));
+      return getDateWithFormatMonth(new Date(year, month - 1, 1));
     },
   },
   endDate: {
@@ -193,7 +251,7 @@ const candidateEducationDetailsMap = {
       }
       // Data is in mm/yyyy format
       const [month, year] = data.split("/");
-      return getDateWithFormat(new Date(year, month - 1, 1));
+      return getDateWithFormatMonth(new Date(year, month - 1, 1));
     },
   },
   grade: {
@@ -325,4 +383,10 @@ function getDateWithFormat(date) {
   const month = String(date.getMonth() + 1).padStart(2, "0"); // JavaScript months are 0-based.
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function getDateWithFormatMonth(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // JavaScript months are 0-based.
+  return `${year}-${month}`;
 }

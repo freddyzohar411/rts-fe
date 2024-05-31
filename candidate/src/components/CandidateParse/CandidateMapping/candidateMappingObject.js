@@ -21,6 +21,7 @@ export const candidateParseFields = [
       { label: "Secondary Skills", value: "basicInfo__secondarySkills" },
       { label: "Current Position Title", value: "basicInfo__jobTitle" },
       { label: "Expected Salary", value: "basicInfo__expectedSalary" },
+      { label: "Current Employer", value: "basicInfo__currentEmployer" },
     ],
   },
   {
@@ -32,6 +33,7 @@ export const candidateParseFields = [
       { label: "End Date", value: "workExperience__endDate" },
       { label: "industry", value: "workExperience__industry" },
       { label: "Description", value: "workExperience__description" },
+      { label: "Current Role", value: "workExperience__currentRole" },
     ],
   },
   {
@@ -73,7 +75,7 @@ export const candidateParseFields = [
 ];
 
 export function candidateParseFieldsFilter(includeArray = []) {
-  return candidateParseFields.filter(
-    (field) => includeArray.includes(field.label)
+  return candidateParseFields.filter((field) =>
+    includeArray.includes(field.label)
   );
 }

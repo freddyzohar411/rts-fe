@@ -25,7 +25,7 @@ import {
   FETCH_CANDIDATE_CUSTOM_VIEW,
   SELECT_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW,
-  DELETE_CANDIDATES
+  DELETE_CANDIDATES,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -87,7 +87,7 @@ import {
   getCandidateCustomViews,
   selectCandidateCustomView,
   deleteCandidateCustomView,
-  deleteCandidates
+  deleteCandidates,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -199,6 +199,11 @@ function* workPutCandidate(action) {
     }
   } catch (error) {
     yield put(putCandidateFailure(error));
+    if (error?.message) {
+      if (error?.message === "Candidate already exists!") {
+        toast.error("Candidate already exists");
+      }
+    }
   }
 }
 
@@ -292,8 +297,15 @@ function* workImportCandidate(action) {
       );
       candidateId = response?.data?.id;
     } catch (error) {
+      yield put(setParseAndImportLoading(false));
       yield put(importCandidateFailure());
-      toast.error("Error creating candidate basic info");
+      if (error?.message) {
+        if (error?.message === "Candidate already exists!") {
+          toast.error("Candidate already exists");
+        } else {
+          toast.error("Error creating candidate basic info");
+        }
+      }
     }
 
     if (!candidateId) return;
@@ -317,6 +329,7 @@ function* workImportCandidate(action) {
           candidateData[1].config
         );
       } catch (error) {
+        yield put(setParseAndImportLoading(false));
         yield put(importCandidateFailure());
         toast.error("Error creating candidate work experiences");
       }
@@ -345,6 +358,7 @@ function* workImportCandidate(action) {
             candidateData[2]?.config
           );
         } catch (error) {
+          yield put(setParseAndImportLoading(false));
           yield put(importCandidateFailure());
           toast.error("Error creating candidate languages");
         }
@@ -371,6 +385,7 @@ function* workImportCandidate(action) {
         candidateData[3].config
       );
     } catch (error) {
+      yield put(setParseAndImportLoading(false));
       yield put(importCandidateFailure());
       toast.error("Error creating candidate education details");
     }
@@ -393,6 +408,7 @@ function* workImportCandidate(action) {
             candidateData[4].config
           );
         } catch (error) {
+          yield put(setParseAndImportLoading(false));
           yield put(importCandidateFailure());
           toast.error("Error creating candidate Document");
         }
@@ -421,6 +437,7 @@ function* workImportCandidate(action) {
           candidateData[5]?.config
         );
       } catch (error) {
+        yield put(setParseAndImportLoading(false));
         yield put(importCandidateFailure());
         toast.error("Error creating candidate certificates");
       }
@@ -442,6 +459,7 @@ function* workImportCandidate(action) {
           state: { view: false },
         });
       }
+      return { success: true };
     } catch (error) {
       yield put(importCandidateFailure());
       toast.error("Error creating candidate registration");
@@ -453,28 +471,38 @@ function* workImportCandidate(action) {
   }
 }
 
-// Import Candidate multiples
 function* workImportCandidateMulti(action) {
+  const { candidateRequestArrayAll, navigate } = action.payload;
+  let hasError = false;
+
   try {
-    const { candidateRequestArrayAll, navigate } = action.payload;
     // Loop workImportCandidate
     for (const candidateRequestArray of candidateRequestArrayAll) {
-      yield call(workImportCandidate, {
-        payload: {
-          candidateRequestArray,
-        },
+      const { success } = yield call(workImportCandidate, {
+        payload: { candidateRequestArray, navigate: null },
       });
-    }
-    yield put(importCandidateMultiSuccess());
 
-    if (typeof navigate === "function") {
-      toast.success("Candidates created successfully");
-      yield put(setParseAndImportLoading(false));
-      navigate("/candidates");
+      if (!success) {
+        hasError = true;
+        yield put(importCandidateFailure());
+      }
+    }
+
+    if (!hasError) {
+      yield put(importCandidateMultiSuccess());
+      if (typeof navigate === "function") {
+        toast.success("Candidates created successfully");
+        navigate("/candidates");
+      }
+    } else {
+      yield put(importCandidateMultiFailure());
     }
   } catch (error) {
+    // Handle any unexpected errors that might occur outside the loop
     yield put(importCandidateFailure());
     yield put(importCandidateMultiFailure());
+  } finally {
+    // Ensure loading state is reset regardless of success or failure
     yield put(setParseAndImportLoading(false));
   }
 }

@@ -30,6 +30,7 @@ import { RECRUITER_GROUP } from "../../helpers/constant";
 import JobTagCanvas from "./JobTagCanvas";
 import "simplebar/dist/simplebar.min.css";
 import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
+import { generateId } from "@workspace/common/src/helpers/generate_id_helper";
 
 const JobListing = () => {
   const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
@@ -110,9 +111,15 @@ const JobListing = () => {
   ];
 
   // Clone Job Function
-  const handleCloneJob = (cloneJobId) => {
+  const handleCloneJob = async (data) => {
+    const jobId = data?.id;
+    const pulseJobId = data?.jobSubmissionData?.jobId;
+    const pulseInitial = pulseJobId.split("-")[0].substring(1);
+    const countryISO = pulseInitial.match(/^[A-Za-z]{2,3}/)?.[0] ?? "";
+    const cloneJobId = await generateId("J", countryISO, "job")
     const payload = {
-      id: cloneJobId,
+      id: jobId,
+      cloneJobId: cloneJobId,
       clone: true,
     };
     dispatch(cloneJob({ payload, navigate: navigate }));
@@ -329,7 +336,7 @@ const JobListing = () => {
               )}
               {/* Clone Button */}
               <DropdownItem>
-                <span onClick={() => handleCloneJob(data.id)}>
+                <span onClick={() => handleCloneJob(data)}>
                   <div className="d-flex  align-items-center gap-2">
                     <i className="mdi mdi-content-copy"></i>
                     <span>Clone</span>

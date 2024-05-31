@@ -189,6 +189,7 @@ function CandidateListing() {
       sortDirection: "asc",
       searchTerm: null,
       searchFields: DynamicTableHelper.generateSeachFieldArray([]),
+      allActive: true,
     },
     CANDIDATE_MANDATORY_OPTIONS,
     CANDIDATE_INITIAL_OPTIONS,

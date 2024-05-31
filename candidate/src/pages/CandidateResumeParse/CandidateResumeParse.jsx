@@ -66,7 +66,6 @@ const CandidateResumeParse = () => {
     useSelector((state) => state.CandidateReducer);
 
   const { importCandidate, setCandidateMappingData } = useImportCandidate();
-
   useEffect(() => {
     const initialCheckedItems = new Array(parseData.length).fill(false);
     setCheckedItems(initialCheckedItems);
@@ -265,6 +264,7 @@ const CandidateResumeParse = () => {
 
       const fetchParsedData = convertFlattenArray(result.data);
       setParseData(fetchParsedData);
+      
       if (isDirect) {
         importCandidate(fetchParsedData, fileObjects);
       } else {

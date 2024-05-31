@@ -14,6 +14,8 @@ const EditorElement = ({ field, formik, formStateHook, tabIndexData }) => {
         onReady={(editor) => {}}
         onChange={(event, editor) => {
           const data = editor?.getData();
+          // Get the data from the editor and set it to the formik field
+          // get HTML
           if (field.name != null) {
             try {
               formik?.setFieldValue(field?.name, data);
