@@ -115,10 +115,11 @@ const DynamicTableWrapper = ({
                       type="checkbox"
                       id="recommendation"
                       value="option"
-                      defaultChecked={
-                        fodODTableShowType?.fodTableShowType?.value ===
-                        "Recommendation"
-                      }
+                      // defaultChecked={
+                      //   fodODTableShowType?.fodTableShowType?.value ===
+                      //   "Recommendation"
+                      // }
+                      defaultChecked={false}
                       onChange={(e) => {
                         setSelected([]);
                         if (e.target.checked) {
@@ -185,7 +186,7 @@ const DynamicTableWrapper = ({
                       <TableRowsPerPageWithNav
                         pageInfo={pageInfo}
                         pageRequestSet={pageRequestSet}
-                        defaultValue={10}
+                        defaultValue={20}
                       />
                       <TooltipWrapper tooltipText="Tag Candidates">
                         <Button
