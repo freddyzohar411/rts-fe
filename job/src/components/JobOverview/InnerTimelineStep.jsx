@@ -386,11 +386,27 @@ const InnerTimelineStep = ({
               (step) =>
                 step.status === "WITHDRAWN" || step.status === "REJECTED"
             );
+
             const isWithDrawnOrRejected = combinedStepsWithStatus.find(
               (item) =>
                 item.status === "WITHDRAWN" || item.status === "REJECTED"
             );
-            const isDisabled = hasWithdrawnOrRejected;
+
+            const withdrawnOrRejectedIndex = combinedStepsWithStatus.findIndex(
+              (item) =>
+                item.status === "WITHDRAWN" || item.status === "REJECTED"
+            );
+
+            const expandedRangeKeys = Object.keys(expandedRange)
+              .map(Number)
+              .sort((a, b) => a - b);
+            let withdrawnKey = null;
+            for (let i = 0; i < expandedRangeKeys.length; i++) {
+              if (expandedRangeKeys[i] > withdrawnOrRejectedIndex) {
+                withdrawnKey = expandedRangeKeys[i];
+                break;
+              }
+            }
 
             // Rendering the Main Step
             if (innerTimelineOuterSteps.includes(stepName)) {
@@ -479,6 +495,9 @@ const InnerTimelineStep = ({
             // Rendering the Expand/Collapse Button
             if (stepName === "Expand") {
               const isExpanded = expandedView[index];
+
+              const isDisabled =
+                withdrawnKey !== -1 && index > withdrawnKey + 1;
 
               return (
                 <div
