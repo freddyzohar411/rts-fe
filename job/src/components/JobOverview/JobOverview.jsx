@@ -200,6 +200,7 @@ const JobOverview = () => {
         "users.first_name",
         "users.last_name",
       ],
+      allActive: true,
     },
     JOB_TIMELINE_INITIAL_OPTIONS,
     customRenderList
