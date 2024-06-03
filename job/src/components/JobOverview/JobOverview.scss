@@ -50,7 +50,7 @@
 .billrate-container {
     display: flex;
     align-items: top;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .billrate-container:hover > .billrate-button {
@@ -63,4 +63,19 @@
     color: #000000;
     background-color: #E7EEF7;
     height: 100%;
+    border-radius: 8px;
+}
+
+.billrate-button:hover {
+    background-color: #E7EEF7;
+}
+
+.billrate-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.payrate-text {
+    color: #898989;
 }
