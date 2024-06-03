@@ -13,7 +13,7 @@ import { fetchJobForm } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Form } from "@workspace/common";
 
-function BillRateSalaryEditModal({ isOpen, closeModal }) {
+function BillRateSalaryEditModal({ isOpen, closeModal, option }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const formikRef = useRef(null);
@@ -29,9 +29,17 @@ function BillRateSalaryEditModal({ isOpen, closeModal }) {
       : false
   );
 
+  const [header, setHeader] = useState("");
+
   useEffect(() => {
-    dispatch(fetchJobForm("billrate_salary"));
-  }, [isOpen]);
+    if (option === "billRate") {
+      dispatch(fetchJobForm("billrate_form"));
+      setHeader("Edit Job Bill Rate")
+    } else if (option === "salary") {
+      dispatch(fetchJobForm("expected_salary_form"));
+      setHeader("Edit Candidate Expected Salary")
+    }
+  }, [isOpen, option]);
 
   useEffect(() => {
     if (form) {
@@ -41,17 +49,18 @@ function BillRateSalaryEditModal({ isOpen, closeModal }) {
 
   const handleFormSubmit = async (values) => {
     // Add payload function to submit new values.
-    closeModal();
+    handleModal();
   };
 
   const handleModal = () => {
     closeModal();
+    setHeader("");
   };
 
   return (
     <Modal isOpen={isOpen} centered toggle={handleModal}>
       <ModalHeader toggle={handleModal}>
-        <span className="fw-semibold fs-5">Candidate Bill Rate & Salary</span>
+        <span className="fw-semibold fs-5">{header}</span>
       </ModalHeader>
       <ModalBody>
         <Row>

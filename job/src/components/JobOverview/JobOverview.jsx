@@ -150,6 +150,7 @@ const JobOverview = () => {
   const [readOnly, setReadOnly] = useState(false);
   const [readOnlyInterviewNo, setReadOnlyInterviewNo] = useState(0);
   const [billRateModalOpen, setBillRateModalOpen] = useState(false);
+  const [bsrOption, setBsrOption] = useState("");
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -724,6 +725,9 @@ const JobOverview = () => {
       : false;
   };
 
+  const billRate = formSubmissionData?.billRate ?? 0;
+  const payRate = formSubmissionData?.payrate ?? 0;
+
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
     return (
@@ -755,7 +759,7 @@ const JobOverview = () => {
             } else if (maxOrder >= 15 && maxOrder <= 17) {
               maxOrder = 5;
             }
-            const billRate = data?.job?.jobSubmissionData?.billRate ?? 0;
+
             return (
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
@@ -781,11 +785,18 @@ const JobOverview = () => {
                   {/* Bill Rate */}
                   <td style={{ width: "90px" }}>
                     <div className="billrate-container">
-                      <span className="billrate-amt">${billRate}</span>
+                      <div className="billrate-inner">
+                        <span className="billrate-amt">${billRate}</span>
+                        <span hidden className="billrate-amt form-text">
+                          ${billRate}
+                        </span>
+                      </div>
+
                       <Button
                         className="billrate-button"
                         onClick={() => {
                           toggleBrsModal(true);
+                          setBsrOption("billRate");
                         }}
                       >
                         <span className="mdi mdi-pencil"></span>
@@ -794,12 +805,29 @@ const JobOverview = () => {
                   </td>
                   {/* Salary */}
                   <td style={{ width: "90px" }}>
-                    <div className="d-flex flex-row justify-content-start align-items-center">
-                      <span>
-                        $
-                        {data?.candidate?.candidateSubmissionData
-                          ?.candidateExpectedSalary ?? 0}
-                      </span>
+                    <div className="billrate-container">
+                      <div className="billrate-inner">
+                        <span className="billrate-amt">
+                          $
+                          {data?.candidate?.candidateSubmissionData
+                            ?.expectedSalary ?? 0}
+                        </span>
+                        <span hidden className="billrate-amt form-text">
+                          $
+                          {data?.candidate?.candidateSubmissionData
+                            ?.expectedSalary ?? 0}
+                        </span>
+                      </div>
+
+                      <Button
+                        className="billrate-button"
+                        onClick={() => {
+                          toggleBrsModal(true);
+                          setBsrOption("salary");
+                        }}
+                      >
+                        <span className="mdi mdi-pencil"></span>
+                      </Button>
                     </div>
                   </td>
                   {/* Progress Bar */}
@@ -1597,7 +1625,30 @@ const JobOverview = () => {
             );
           })}
         </Row>
+
         <hr className="w-100"></hr>
+        <Row className="d-flex justify-content-start align-items-start mb-2 w-75 gap-4">
+          <Col lg={2} className="d-flex flex-column">
+            <span className="fw-medium text-muted">Client Bill Rate</span>
+            <span
+              className="fw-semibold gap-1 text-nowrap"
+              style={{ color: "#0A56AE" }}
+            >
+              {billRate}
+            </span>
+          </Col>
+          <Col lg={4} className="d-flex flex-column">
+            <span className="fw-medium text-muted">
+              Candidate Salary Budget
+            </span>
+            <span
+              className="fw-semibold gap-1 text-nowrap"
+              style={{ color: "#0A56AE" }}
+            >
+              {payRate}
+            </span>
+          </Col>
+        </Row>
         <Row className="mb-2">
           <Card style={{ backgroundColor: "#F3F8FF" }}>
             <CardBody>
@@ -1803,7 +1854,11 @@ const JobOverview = () => {
         <BillRateSalaryEditModal
           data={jobTimelineData}
           isOpen={isBrsModalOpen}
-          closeModal={() => setIsBrsModalOpen(false)}
+          closeModal={() => {
+            setIsBrsModalOpen(false);
+            setBsrOption("");
+          }}
+          option={bsrOption}
         />
 
         <BillRateZeroModal
