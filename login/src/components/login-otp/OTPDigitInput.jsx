@@ -55,7 +55,7 @@ const OTPDigitInput = ({ noOfOtp, setOTP }) => {
               ref={index === 0 ? firstBoxRef : null}
               type="text"
               className="form-control bg-light border-light text-center"
-              style={{ fontSize: "1.5rem" }}
+              style={{ fontSize: "1.1rem" }}
               maxLength="1"
               id={`digit${index + 1}-input`}
               onKeyDown={(e) => handleKeyDown(e, index)}
