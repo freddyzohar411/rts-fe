@@ -127,7 +127,7 @@ const JobManage = () => {
             <TabPane tabId="2" id="manageSnapshot">
               <Card>
                 <CardBody>
-                  <JobCreation />
+                  <JobCreation key={ugTab}/>
                 </CardBody>
               </Card>
             </TabPane>
