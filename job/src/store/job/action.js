@@ -36,6 +36,7 @@ import {
   DELETE_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW_SUCCESS,
   DELETE_JOB_CUSTOM_VIEW_FAILURE,
+  CREATE_JOB_RESET
 } from "./actionTypes";
 
 // Fetch Account
@@ -88,6 +89,10 @@ export const createJobSuccess = (job) => ({
 export const createJobFailure = (error) => ({
   type: CREATE_JOB_FAILURE,
   payload: error,
+});
+
+export const createJobReset = () => ({
+  type: CREATE_JOB_RESET,
 });
 
 // Clone Job

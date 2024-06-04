@@ -64,6 +64,10 @@ const JobListing = () => {
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
+  // Action Loader State
+  const [isActionLoadingId, setIsActionLoadingId] = useState(null);
+  const isCloneJobLoading = useSelector((state) => state.JobReducer.loading);
+
   const hasPageRendered = useRef(false);
 
   const isFOD = gridView === "fod";
@@ -112,6 +116,7 @@ const JobListing = () => {
 
   // Clone Job Function
   const handleCloneJob = async (data) => {
+    setIsActionLoadingId((prev) => data?.id);
     const jobId = data?.id;
     const pulseJobId = data?.jobSubmissionData?.jobId;
     const pulseInitial = pulseJobId.split("-")[0].substring(1);
@@ -316,78 +321,86 @@ const JobListing = () => {
         sticky: "right",
         expand: true,
         center: true,
-        render: (data) => (
-          <>
-            <ActionDropDown>
-              {checkAllPermission([Permission.JOB_EDIT]) && (
-                <DropdownItem>
-                  <span
-                    onClick={() => {
-                      setSelectedRowData(data);
-                      setTagOffcanvas(!tagOffcanvas);
-                    }}
-                  >
-                    <div className="d-flex align-items-center gap-2">
-                      <i className="ri-parent-fill"></i>
-                      <span>Tag</span>
-                    </div>
-                  </span>
-                </DropdownItem>
-              )}
-              {/* Clone Button */}
-              <DropdownItem>
-                <span onClick={() => handleCloneJob(data)}>
-                  <div className="d-flex  align-items-center gap-2">
-                    <i className="mdi mdi-content-copy"></i>
-                    <span>Clone</span>
-                  </div>
-                </span>
-              </DropdownItem>
-              {checkAllPermission([Permission.JOB_EDIT]) && (
-                <DropdownItem>
-                  <Link
-                    to={`/jobs/${data.id}/snapshot`}
-                    style={{ color: "black" }}
-                    state={{ view: false }}
-                  >
-                    <div className="d-flex  align-items-center gap-2">
-                      <i className="mdi mdi-pencil"></i>
-                      <span>Edit</span>
-                    </div>
-                  </Link>
-                </DropdownItem>
-              )}
-              {checkAllPermission([Permission.JOB_DELETE]) &&
-                showDelete &&
-                (userProfile?.id === data?.createdBy ||
-                  checkAnyRole([Role.ADMIN])) && (
+        render: (data) => {
+          return (
+            <>
+              <ActionDropDown
+                isLoading={
+                  isCloneJobLoading && data?.id == isActionLoadingId
+                    ? true
+                    : false
+                }
+              >
+                {checkAllPermission([Permission.JOB_EDIT]) && (
                   <DropdownItem>
                     <span
-                      type="button"
                       onClick={() => {
-                        setDeleteId(data.id);
-                        setIsDeleteModalOpen(true);
+                        setSelectedRowData(data);
+                        setTagOffcanvas(!tagOffcanvas);
                       }}
                     >
                       <div className="d-flex align-items-center gap-2">
-                        {isFOD ? (
-                          <>
-                            <i className="mdi mdi-minus-circle"></i>
-                            <span>Unassign</span>
-                          </>
-                        ) : (
-                          <>
-                            <i className="mdi mdi-delete"></i>
-                            <span>Delete</span>
-                          </>
-                        )}
+                        <i className="ri-parent-fill"></i>
+                        <span>Tag</span>
                       </div>
                     </span>
                   </DropdownItem>
                 )}
-            </ActionDropDown>
-          </>
-        ),
+                {/* Clone Button */}
+                <DropdownItem>
+                  <span onClick={() => handleCloneJob(data)}>
+                    <div className="d-flex  align-items-center gap-2">
+                      <i className="mdi mdi-content-copy"></i>
+                      <span>Clone</span>
+                    </div>
+                  </span>
+                </DropdownItem>
+                {checkAllPermission([Permission.JOB_EDIT]) && (
+                  <DropdownItem>
+                    <Link
+                      to={`/jobs/${data.id}/snapshot`}
+                      style={{ color: "black" }}
+                      state={{ view: false }}
+                    >
+                      <div className="d-flex  align-items-center gap-2">
+                        <i className="mdi mdi-pencil"></i>
+                        <span>Edit</span>
+                      </div>
+                    </Link>
+                  </DropdownItem>
+                )}
+                {checkAllPermission([Permission.JOB_DELETE]) &&
+                  showDelete &&
+                  (userProfile?.id === data?.createdBy ||
+                    checkAnyRole([Role.ADMIN])) && (
+                    <DropdownItem>
+                      <span
+                        type="button"
+                        onClick={() => {
+                          setDeleteId(data.id);
+                          setIsDeleteModalOpen(true);
+                        }}
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          {isFOD ? (
+                            <>
+                              <i className="mdi mdi-minus-circle"></i>
+                              <span>Unassign</span>
+                            </>
+                          ) : (
+                            <>
+                              <i className="mdi mdi-delete"></i>
+                              <span>Delete</span>
+                            </>
+                          )}
+                        </div>
+                      </span>
+                    </DropdownItem>
+                  )}
+              </ActionDropDown>
+            </>
+          );
+        },
       },
     ];
   };
@@ -412,7 +425,14 @@ const JobListing = () => {
     } else {
       setTableConfig(generateJobListConfig(customConfig));
     }
-  }, [customConfig, pageInfo, activeRow, tableData]);
+  }, [
+    customConfig,
+    pageInfo,
+    activeRow,
+    tableData,
+    isActionLoadingId,
+    isCloneJobLoading,
+  ]);
 
   return (
     <LoadingOverlay
