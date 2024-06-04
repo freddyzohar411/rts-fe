@@ -36,6 +36,7 @@ import {
   DELETE_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW_SUCCESS,
   DELETE_JOB_CUSTOM_VIEW_FAILURE,
+  CREATE_JOB_RESET,
 } from "./actionTypes";
 
 import {
@@ -53,6 +54,7 @@ const initialState = {
   jobsFieldsAll: [],
   errorMsg: "",
   loading: false,
+  isDraftLoading: false,
   error: false,
   jobCustomView: {},
   jobCustomViews: [],
@@ -110,15 +112,18 @@ const JobReducer = (state = initialState, action) => {
 
     // Create a job
     case CREATE_JOB:
+      const { payload } = action.payload;
       return {
         ...state,
-        loading: true,
+        loading: payload.isDraft ? false : true,
+        isDraftLoading: payload.isDraft ? true : false,
         error: false,
       };
     case CREATE_JOB_SUCCESS:
       return {
         ...state,
         loading: false,
+        isDraftLoading: false,
         job: action.payload,
       };
     case CREATE_JOB_FAILURE:
@@ -126,7 +131,15 @@ const JobReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
+        isDraftLoading: false,
         errorMsg: action.payload,
+      };
+    case CREATE_JOB_RESET:
+      return {
+        ...state,
+        loading: false,
+        isDraftLoading: false,
+        job: null,
       };
 
     // Clone a job
