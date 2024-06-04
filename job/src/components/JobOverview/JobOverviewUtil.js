@@ -8,6 +8,8 @@ export const overviewHeaders = [
   "Account Owner",
   "Recruiter",
   "Man Days",
+  "Client Bill Rate",
+  "Candidate Salary Budget",
 ];
 
 export const trimValue = (value, isMobile) => {
@@ -44,6 +46,14 @@ export const overviewValues = (data, deliveryTeam, isMobile) => {
     "Man Days": {
       value: "N/A",
       trimValue: trimValue("N/A", isMobile),
+    },
+    "Client Bill Rate": {
+      value: (data?.Currency ?? "") + " " + (data?.billRate ?? "N/A"),
+      trimValue: ((data?.Currency ?? "") + " " + (data?.billRate ?? "N/A")), isMobile,
+    },
+    "Candidate Salary Budget": {
+      value: (data?.Currency ?? "") + " " + data?.payrate,
+      trimValue: ((data?.Currency ?? "") + " " + (data?.payrate ?? "N/A")), isMobile,
     },
   };
   return output;
