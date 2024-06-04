@@ -164,47 +164,47 @@ const ConditionalOfferRelease = forwardRef(
     }));
 
     // PrePopulate Emails
-    useEffect(() => {
-      const prePopulateEmails = async (data) => {
-        const response = await getUsersByIds({
-          userIds: [data?.recruiterId],
-        });
-        const userData = response?.data;
-        if (userData) {
-          const cc = userData.filter((item) => item.id === data.recruiterId);
-          if (data?.candidateEmail) {
-            formik.setFieldValue("to", [
-              {
-                value: data?.candidateEmail,
-                label: data?.candidateEmail,
-              },
-            ]);
-          }
-          if (cc && cc.length > 0) {
-            formik.setFieldValue("cc", [
-              {
-                value: cc[0]?.email,
-                label: cc[0]?.email,
-              },
-            ]);
-          }
-        }
-      };
-      // Get Sales Email
-      if (
-        jobTimeLineData?.job?.createdBy &&
-        jobTimeLineData?.candidate &&
-        formik
-      ) {
-        const candidateEmail =
-          jobTimeLineData?.candidate?.candidateSubmissionData?.email;
-        const recruiterId = jobTimeLineData?.candidate?.createdBy;
-        prePopulateEmails({
-          candidateEmail,
-          recruiterId,
-        });
-      }
-    }, []);
+    // useEffect(() => {
+    //   const prePopulateEmails = async (data) => {
+    //     const response = await getUsersByIds({
+    //       userIds: [data?.recruiterId],
+    //     });
+    //     const userData = response?.data;
+    //     if (userData) {
+    //       const cc = userData.filter((item) => item.id === data.recruiterId);
+    //       if (data?.candidateEmail) {
+    //         formik.setFieldValue("to", [
+    //           {
+    //             value: data?.candidateEmail,
+    //             label: data?.candidateEmail,
+    //           },
+    //         ]);
+    //       }
+    //       if (cc && cc.length > 0) {
+    //         formik.setFieldValue("cc", [
+    //           {
+    //             value: cc[0]?.email,
+    //             label: cc[0]?.email,
+    //           },
+    //         ]);
+    //       }
+    //     }
+    //   };
+    //   // Get Sales Email
+    //   if (
+    //     jobTimeLineData?.job?.createdBy &&
+    //     jobTimeLineData?.candidate &&
+    //     formik
+    //   ) {
+    //     const candidateEmail =
+    //       jobTimeLineData?.candidate?.candidateSubmissionData?.email;
+    //     const recruiterId = jobTimeLineData?.candidate?.createdBy;
+    //     prePopulateEmails({
+    //       candidateEmail,
+    //       recruiterId,
+    //     });
+    //   }
+    // }, []);
 
     // Toast errors upn submit
     const toastErrors = () => {
