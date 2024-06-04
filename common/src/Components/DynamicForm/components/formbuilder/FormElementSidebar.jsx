@@ -182,6 +182,13 @@ const FormElementSidebar = ({ unusedFields }) => {
       type: "field",
     },
     {
+      draggableLabelIcon: "ri-account-box-fill",
+      draggableLabel: "Candidate Owner Select",
+      draggablePrefix: "element",
+      draggableId: "selectcandidateowner",
+      type: "field",
+    },
+    {
       draggableLabelIcon: "mdi mdi-earth",
       draggableLabel: "Country Select",
       draggablePrefix: "element",

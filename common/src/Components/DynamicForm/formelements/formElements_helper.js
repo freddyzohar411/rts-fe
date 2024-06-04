@@ -34,7 +34,8 @@ import ProfileFeedbackStatusSelectElement from "./ProfileFeedbackStatusSelectEle
 import AccountOwnerSelectElement from "./AccountOwnerSelectElement";
 import AccountTypeElement from "./AccountTypeElement";
 import DragDropFilesElement from "./DragDropFilesElement";
-import EditorElement2 from "./EditorElement2"
+import EditorElement2 from "./EditorElement2";
+import CandidateOwnerSelectElement from "./CandidateOwnerSelectElement ";
 
 /**
  * Generate Form Field based on 1 form field in HTML
@@ -57,8 +58,8 @@ const generateFormField = (
     type === "email" ||
     type === "number" ||
     type === "password" ||
-    type === "date" || 
-    type === "datemonth" 
+    type === "date" ||
+    type === "datemonth"
   ) {
     return (
       <InputElement
@@ -216,6 +217,17 @@ const generateFormField = (
   if (type === "selectaccountowner") {
     return (
       <AccountOwnerSelectElement
+        formik={formik}
+        field={field}
+        formStateHook={formStateHook}
+        tabIndexData={tabIndexData}
+      />
+    );
+  }
+
+  if (type === "selectcandidateowner") {
+    return (
+      <CandidateOwnerSelectElement
         formik={formik}
         field={field}
         formStateHook={formStateHook}
