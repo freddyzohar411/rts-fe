@@ -381,7 +381,7 @@ const InnerTimelineStep = ({
                 return { stepName, status, statusDate };
               }
             );
-
+            
             const hasWithdrawnOrRejected = combinedStepsWithStatus.some(
               (step) =>
                 step.status === "WITHDRAWN" || step.status === "REJECTED"
@@ -404,8 +404,8 @@ const InnerTimelineStep = ({
 
             if (withdrawnOrRejectedIndex > -1) {
               for (let i = 0; i < expandedRangeKeys.length; i++) {
-                if (expandedRangeKeys[i] > withdrawnOrRejectedIndex) {
-                  withdrawnKey = expandedRangeKeys[i];
+                if (expandedRangeKeys[withdrawnOrRejectedIndex] > withdrawnOrRejectedIndex) {
+                  withdrawnKey = expandedRangeKeys[withdrawnOrRejectedIndex];
                   break;
                 }
               }

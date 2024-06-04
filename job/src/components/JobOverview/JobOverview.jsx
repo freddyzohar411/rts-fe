@@ -830,10 +830,9 @@ const JobOverview = () => {
                     <OverviewStepComponent data={data} />
                   </td>
                   {/* Current Status */}
-                  <td style={{ width: "5rem" }}>
-                    <div className="d-flex flex-row align-items-start justify-content-start gap-2 pt-2">
-                      <span>{data?.stepName ?? "N/A"}</span>
-                      <i className="ri-arrow-right-s-line"></i>
+                  <td style={{ width: "7rem" }}>
+                    <div className="d-flex flex-column align-items-start justify-content-start">
+                      <span className="form-text">{data?.stepName ?? "N/A"}</span>
                       <span className="fw-semibold">
                         {data?.subStepName ?? "N/A"}
                       </span>
