@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "reactstrap";
+import { Button, Spinner } from "reactstrap";
 import { Actions, Form } from "@workspace/common";
 import { JOB_FORM_NAME } from "./constants";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
@@ -11,6 +11,7 @@ import {
   fetchJobForm,
   fetchJobFormSubmission,
   updateJobEmbeddings,
+  createJobReset,
 } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import JobDocument from "./JobDocument";
@@ -48,11 +49,27 @@ const JobCreation = () => {
   const businessCountries = useSelector(
     (state) => state.CountryCurrencyReducer.businessCountries
   );
+  const jobLoading = useSelector((state) => state.JobReducer.loading);
+  const jobSuccess = useSelector((state) => state.JobReducer.success);
+  const jobError = useSelector((state) => state.JobReducer.error);
+  const isDraftLoading = useSelector(
+    (state) => state.JobReducer.isDraftLoading
+  );
 
   const [formTemplate, setFormTemplate] = useState(null);
   const [randomId, setRandomId] = useState();
   const [deleteDraftModal, setDeleteDraftModal] = useState(false);
   const [formikValues, setFormikValues] = useState(null);
+
+  // UseEffect for job loading
+  useEffect(() => {
+    if (jobSuccess) {
+      dispatch(createJobReset());
+    }
+    if (jobError) {
+      dispatch(createJobReset());
+    }
+  }, [jobSuccess, jobError]);
 
   // Fetch all the countries and account names
   useEffect(() => {
@@ -217,7 +234,7 @@ const JobCreation = () => {
         </div>
         <div className="d-flex gap-2">
           <Button type="button" onClick={() => handleCancel()}>
-            Cancel
+            {isDraftLoading ? <Spinner size="sm" /> : "Cancel"}
           </Button>
           <Button
             className="btn btn-success"
@@ -227,7 +244,7 @@ const JobCreation = () => {
               formikRef.current.formik.submitForm();
             }}
           >
-            Submit
+            {jobLoading ? <Spinner size="sm" /> : "Submit"}
           </Button>
         </div>
       </div>
