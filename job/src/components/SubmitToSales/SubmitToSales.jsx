@@ -482,7 +482,6 @@ const SubmitToSales = forwardRef(
             <hr className="mt-2" />
           </Col>
         </Row>
-
         <Row>
           <Col>
             <TemplateDisplayV4
