@@ -401,10 +401,13 @@ const InnerTimelineStep = ({
               .map(Number)
               .sort((a, b) => a - b);
             let withdrawnKey = null;
-            for (let i = 0; i < expandedRangeKeys.length; i++) {
-              if (expandedRangeKeys[i] > withdrawnOrRejectedIndex) {
-                withdrawnKey = expandedRangeKeys[i];
-                break;
+
+            if (withdrawnOrRejectedIndex > -1) {
+              for (let i = 0; i < expandedRangeKeys.length; i++) {
+                if (expandedRangeKeys[i] > withdrawnOrRejectedIndex) {
+                  withdrawnKey = expandedRangeKeys[i];
+                  break;
+                }
               }
             }
 
@@ -497,7 +500,8 @@ const InnerTimelineStep = ({
               const isExpanded = expandedView[index];
 
               const isDisabled =
-                withdrawnKey !== -1 && index > withdrawnKey + 1;
+                (withdrawnKey !== null) &&
+                index > withdrawnKey + 1;
 
               return (
                 <div
