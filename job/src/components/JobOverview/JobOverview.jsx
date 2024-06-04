@@ -725,8 +725,8 @@ const JobOverview = () => {
       : false;
   };
 
-  const billRate = formSubmissionData?.billRate ?? 0;
-  const payRate = formSubmissionData?.payrate ?? 0;
+  const billRate = formSubmissionData?.billRate ?? "N/A";
+  const billRateCurrency = formSubmissionData?.Currency ?? "";
 
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
@@ -764,7 +764,7 @@ const JobOverview = () => {
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
                   {/* Candidate */}
-                  <td style={{ width: "150px" }}>
+                  <td style={{ width: "170px" }}>
                     <div className="d-flex flex-column align-items-start">
                       <Link
                         to={`/candidates/${candidateData.id}/snapshot`}
@@ -783,10 +783,12 @@ const JobOverview = () => {
                     </div>
                   </td>
                   {/* Bill Rate */}
-                  <td style={{ width: "90px" }}>
+                  <td style={{ width: "7rem" }}>
                     <div className="billrate-container">
                       <div className="billrate-inner">
-                        <span className="billrate-amt">${billRate}</span>
+                        <span className="billrate-amt">
+                          {billRateCurrency} {billRate}
+                        </span>
                       </div>
 
                       <Button
@@ -801,13 +803,12 @@ const JobOverview = () => {
                     </div>
                   </td>
                   {/* Salary */}
-                  <td style={{ width: "90px" }}>
+                  <td style={{ width: "7rem" }}>
                     <div className="billrate-container">
                       <div className="billrate-inner">
                         <span className="billrate-amt">
-                          $
-                          {data?.candidate?.candidateSubmissionData
-                            ?.candidateExpectedSalary ?? 0}
+                          {/* Leaving as blank, to replace with Associate Expected Candidate Salary */}
+                          N/A
                         </span>
                       </div>
 
@@ -832,7 +833,9 @@ const JobOverview = () => {
                   {/* Current Status */}
                   <td style={{ width: "7rem" }}>
                     <div className="d-flex flex-column align-items-start justify-content-start">
-                      <span className="form-text">{data?.stepName ?? "N/A"}</span>
+                      <span className="form-text">
+                        {data?.stepName ?? "N/A"}
+                      </span>
                       <span className="fw-semibold">
                         {data?.subStepName ?? "N/A"}
                       </span>
@@ -1578,7 +1581,7 @@ const JobOverview = () => {
   return (
     <React.Fragment>
       <div className="p-2">
-        <Row className="mb-2">
+        <div className="d-flex flex-wrap">
           {overviewHeaders.map((header, index) => {
             const mobile = isMobile | isTablet;
             const values = overviewValues(
@@ -1588,7 +1591,14 @@ const JobOverview = () => {
             );
             const shouldShowTooltip = values?.[header]?.value?.length > 20;
             return (
-              <Col key={index}>
+              <div
+                key={index}
+                style={{
+                  flex: "0 0 calc(100% / 7)",
+                  maxWidth: "calc(100% / 7)",
+                  paddingBottom: "10px",
+                }}
+              >
                 <div
                   className="d-flex flex-column cursor-pointer"
                   id={`btn-${index}`}
@@ -1612,34 +1622,13 @@ const JobOverview = () => {
                     {values?.[header]?.value}
                   </Tooltip>
                 )}
-              </Col>
+              </div>
             );
           })}
-        </Row>
+        </div>
 
         <hr className="w-100"></hr>
-        <Row className="d-flex justify-content-start align-items-start mb-2 w-75 gap-4">
-          <Col lg={2} className="d-flex flex-column">
-            <span className="fw-medium text-muted">Client Bill Rate</span>
-            <span
-              className="fw-semibold gap-1 text-nowrap"
-              style={{ color: "#0A56AE" }}
-            >
-              {billRate}
-            </span>
-          </Col>
-          <Col lg={4} className="d-flex flex-column">
-            <span className="fw-medium text-muted">
-              Candidate Salary Budget
-            </span>
-            <span
-              className="fw-semibold gap-1 text-nowrap"
-              style={{ color: "#0A56AE" }}
-            >
-              {payRate}
-            </span>
-          </Col>
-        </Row>
+
         <Row className="mb-2">
           <Card style={{ backgroundColor: "#F3F8FF" }}>
             <CardBody>
