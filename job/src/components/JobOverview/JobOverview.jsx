@@ -787,9 +787,6 @@ const JobOverview = () => {
                     <div className="billrate-container">
                       <div className="billrate-inner">
                         <span className="billrate-amt">${billRate}</span>
-                        <span hidden className="billrate-amt form-text">
-                          ${billRate}
-                        </span>
                       </div>
 
                       <Button
@@ -810,12 +807,7 @@ const JobOverview = () => {
                         <span className="billrate-amt">
                           $
                           {data?.candidate?.candidateSubmissionData
-                            ?.expectedSalary ?? 0}
-                        </span>
-                        <span hidden className="billrate-amt form-text">
-                          $
-                          {data?.candidate?.candidateSubmissionData
-                            ?.expectedSalary ?? 0}
+                            ?.candidateExpectedSalary ?? 0}
                         </span>
                       </div>
 
