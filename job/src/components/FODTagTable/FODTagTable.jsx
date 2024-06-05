@@ -28,8 +28,8 @@ const FODTagTable = ({ selectedRowData, tagOffcanvas }) => {
   const [abortController, setAbortController] = useState(null);
   const [customQuery, setCustomQuery] = useState(null);
   const [fodTableShowType, setFODTableShowType] = useState({
-    label: fodTableType.Recommendation,
-    value: fodTableType.Recommendation,
+    label: fodTableType.All,
+    value: fodTableType.All,
   });
   const [tableConfig, setTableConfig] = useState([]);
 
