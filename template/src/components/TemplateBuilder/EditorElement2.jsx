@@ -1063,7 +1063,7 @@ const EditorElement2 = ({
           font_size_input_default_unit: "point",
           font_size_formats:
             "6pt 8pt 9pt 10pt 11pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 34pt 36pt 38pt 40pt 42pt 44pt 46pt 48pt 50pt 55pt 60pt 65pt 70pt 75pt 80pt 85pt 90pt 95pt 100pt",
-          images_upload_handler: imageUploadHandler,
+          // images_upload_handler: imageUploadHandler,
           file_picker_types: "image, media",
           table_use_colgroups: false,
           link_assume_external_targets: true,
