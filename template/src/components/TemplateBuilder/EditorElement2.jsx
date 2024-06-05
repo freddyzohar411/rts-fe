@@ -96,7 +96,6 @@ const EditorElement2 = ({
   // Upload image handler
   const imageUploadHandler = (blobInfo, progress) =>
     new Promise((resolve, reject) => {
-      console.log("Image Upload Handler");
       const cancelBtnEl = document.querySelector('[title="Cancel"]');
       // Check if file exist
       if (!blobInfo.blob()) {
