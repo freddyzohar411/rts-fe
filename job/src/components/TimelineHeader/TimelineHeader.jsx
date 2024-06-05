@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
+import "./TimelineHeader.scss"
 
 function TimelineHeader({ data }) {
   const [itemsPerPage, setItemsPerPage] = useState(0);
@@ -61,15 +62,14 @@ function TimelineHeader({ data }) {
           key={index}
           className="d-flex flex-column align-items-center justify-content-end"
           style={{
-            height: "120px",
+            height: "130px",
             cursor: counts?.[item] > 0 ? "pointer" : "auto",
           }}
           onClick={() => handleBarChartClick(item, counts?.[item])}
         >
           <div
-            className="d-flex justify-content-center align-items-end mb-1"
+            className="header-bar-chart"
             style={{
-              width: "130px",
               height:
                 counts[item] === 0 || !candidatesExist
                   ? "7.5%"

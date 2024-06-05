@@ -12,8 +12,7 @@
   display: grid;
   grid-auto-flow: dense;
   padding: 0;
-  padding-left: 3rem;
-  padding-right: 1.5rem;
+  padding-left: 2.5rem;
 }
 
 .single-row {
@@ -93,7 +92,7 @@
 // Laptop
 @media (min-width: 1024px) {
   .single-line {
-    width: 880px;
+    width: 830px;
   }
 }
 

@@ -1606,7 +1606,7 @@ const JobOverview = () => {
                 >
                   <span className="fw-medium text-muted">{header}</span>
                   <span
-                    className="fw-semibold gap-1 text-nowrap"
+                    className="fw-semibold gap-1"
                     style={{ color: "#0A56AE" }}
                   >
                     {values?.[header]?.trimValue}

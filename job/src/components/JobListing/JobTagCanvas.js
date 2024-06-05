@@ -7,8 +7,15 @@ import {
   OffcanvasBody,
 } from "reactstrap";
 import FODTagTable from "../FODTagTable/FODTagTable";
+import "./JobTagCanvas.scss";
 
 const JobTagCanvas = ({ tagOffcanvas, setTagOffcanvas, selectedRowData }) => {
+  const charCircleText =
+    selectedRowData?.jobSubmissionData?.accountName?.charAt(0) || "N/A";
+  const jobID = selectedRowData?.jobSubmissionData?.jobId || "N/A";
+  const jobTitle = selectedRowData?.jobSubmissionData?.jobTitle || "N/A";
+  const workLocation =
+    selectedRowData?.jobSubmissionData?.workLocation || "N/A";
   return (
     <Row>
       <Col>
@@ -20,57 +27,46 @@ const JobTagCanvas = ({ tagOffcanvas, setTagOffcanvas, selectedRowData }) => {
         >
           <OffcanvasHeader
             toggle={() => setTagOffcanvas(!tagOffcanvas)}
-            className="border-start-0 border-top-0 border-end-0 border-bottom border-dashed border-primary align-items-start"
+            className="tag-border"
           >
             {selectedRowData && (
-              <div>
-                <Row className="g-5">
-                  <Col lg={2}>
-                    <span
-                      className="bg-custom-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                      style={{ width: "50px", height: "50px" }}
-                    >
-                      {selectedRowData?.jobSubmissionData?.accountName?.charAt(
-                        0
-                      ) ?? ""}
-                    </span>
-                  </Col>
-                  <Col lg={10}>
-                    <Row className="mb-1">
-                      <Col>
-                        <div className="d-flex flex-row align-items-center gap-2">
-                          <span className="fs-5 fw-bold">
-                            {selectedRowData?.jobSubmissionData?.accountName}
-                          </span>
-                          <span className="bg-custom-primary text-white rounded fs-6 fw-semibold px-2 text-center">
-                            New
-                          </span>
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row className="mb-1">
-                      <Col>
-                        <div className="d-flex gap-4 align-items-center">
-                          <span className="fs-6 fw-semibold">
-                            {`Job ID - ${selectedRowData?.jobSubmissionData?.jobId}`}
-                          </span>
-                          <span className="fs-6 fw-semibold">|</span>
-                          <span className="fs-6 fw-semibold">
-                            {`Job Title - ${selectedRowData?.jobSubmissionData?.jobTitle}`}
-                          </span>
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <span className="text-muted fs-6">
-                          {selectedRowData?.jobSubmissionData?.workLocation ??
-                            "N/A"}
-                        </span>
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
+              <div className="job-info-row align-items-center">
+                {/* Char Circle */}
+                <div className="char-circle">
+                  <span>{charCircleText}</span>
+                </div>
+                <div className="column-display">
+                  {/* First Row: Account Name */}
+                  <div className="account-name-row">
+                    <div>
+                      {selectedRowData?.jobSubmissionData?.accountName ?? "N/A"}
+                    </div>
+                    <div className="new-tag">
+                      <span>New</span>
+                    </div>
+                  </div>
+                  {/* Second Row: Job Information */}
+                  <div className="job-info-row">
+                    {/* Job ID */}
+                    <div>
+                      <span className="job-info-text">Job ID - {jobID} </span>
+                    </div>
+                    {/* Seperator */}
+                    <div>
+                      <span className="job-info-text">|</span>
+                    </div>
+                    {/* Job Title */}
+                    <div>
+                      <span className="job-info-text">
+                        Job Title - {jobTitle}
+                      </span>
+                    </div>
+                  </div>
+                  {/* Third Row: Country */}
+                  <div>
+                    <span className="work-location-text">{workLocation}</span>
+                  </div>
+                </div>
               </div>
             )}
           </OffcanvasHeader>
