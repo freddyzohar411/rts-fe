@@ -242,8 +242,8 @@ const DynamicTableWrapper = ({
                 }}
               >
                 <Row className="d-flex align-items-center mb-3">
-                  <Col lg={7}>
-                    <div className="d-flex flex-row flex-wrap align-items-center gap-2">
+                  <Col lg={6}>
+                    <div className="d-flex flex-column flex-wrap align-items-start justify-content-start gap-2">
                       <h4
                         style={{
                           whiteSpace: "nowrap",
@@ -262,7 +262,7 @@ const DynamicTableWrapper = ({
                                 placeholder="Search"
                                 className="form-control search"
                                 value={search}
-                                style={{ width: "250px", height: "40px" }}
+                                style={{ width: "210px", height: "40px" }}
                                 onChange={(e) => setSearch(e.target.value)}
                               />
                             </form>
@@ -275,7 +275,7 @@ const DynamicTableWrapper = ({
                             className="form-select border-secondary"
                             onChange={handleTableViewChange}
                             value={gridView}
-                            style={{ height: "40px" }}
+                            style={{ width: "210px", height: "40px" }}
                           >
                             {JOB_FILTERS?.map((ob, index) => {
                               const key = Object.keys(ob);
@@ -290,7 +290,7 @@ const DynamicTableWrapper = ({
                       </div>
                     </div>
                   </Col>
-                  <Col lg={5}>
+                  <Col lg={6}>
                     <div className="d-flex column-gap  gap-1 justify-content-end align-items-center">
                       <TableItemDisplay pageInfo={pageInfo} />
                       <div
