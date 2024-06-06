@@ -88,6 +88,18 @@ const TemplateBuilderPage = () => {
     setIsResetModalOpen(false);
   };
 
+  const handleSaveJSONData = () => {
+    const { id, ...ObjData } = formikRef.current.formik.values;
+    const element = document.createElement("a");
+    const file = new Blob([JSON.stringify(ObjData, null, 2)], {
+      type: "application/json",
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = `${ObjData?.name}.json`;
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -144,6 +156,13 @@ const TemplateBuilderPage = () => {
                       </Button>
                     </Link>
                     <div className="d-flex flex-row gap-2">
+                      <Button
+                        type="button"
+                        className="btn btn-custom-primary"
+                        onClick={() => handleSaveJSONData()}
+                      >
+                        Save JSON
+                      </Button>
                       <Button
                         type="button"
                         className="btn btn-custom-primary"

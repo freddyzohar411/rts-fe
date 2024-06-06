@@ -338,6 +338,18 @@ const TemplateBuilder = forwardRef(
       editorRef.current.setContent(content);
     };
 
+    const handleSaveJSONData = () => {
+      const ObjData = formik.values;
+      const element = document.createElement("a");
+      const file = new Blob([JSON.stringify(ObjData, null, 2)], {
+        type: "application/json",
+      });
+      element.href = URL.createObjectURL(file);
+      element.download = `${ObjData?.name}.json`;
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
+    };
+
     return (
       <div className="d-flex flex-column gap-2">
         <Row className="mb-3">
