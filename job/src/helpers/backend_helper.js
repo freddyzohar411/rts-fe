@@ -9,7 +9,7 @@ import {
   BASE_JOB_CUSTOM_VIEW,
   BASE_USER,
   BASE_TOS,
-  BASE_CONDITIONAL_OFFER
+  BASE_CONDITIONAL_OFFER,
 } from "./url_helper";
 import {
   JOB_URL,
@@ -166,3 +166,6 @@ export const getConditionalOfferByJobIdAndCandidateIdAndStatus = (
   api.get(
     `${JOB_URL}${BASE_CONDITIONAL_OFFER}/jobs/${jobId}/candidates/${candidateId}/status/${status}`
   );
+
+export const updateBillRate = (data, config) =>
+  api.create(`${JOB_URL}${BASE_JOB_TIMELINE}/updateBillRate`, data, config);

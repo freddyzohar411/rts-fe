@@ -29,6 +29,7 @@ import {
   fetchJobtimeineCount,
   tagReset,
   untagJobReset,
+  resetBillRate,
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
@@ -165,8 +166,13 @@ const JobOverview = () => {
   );
 
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+
   const jobUntagMeta = useSelector(
     (state) => state.JobStageReducer?.jobUntagMeta
+  );
+
+  const updateBillrateMeta = useSelector(
+    (state) => state.JobStageReducer.updateBillrateMeta
   );
 
   // Custom renders
@@ -208,7 +214,7 @@ const JobOverview = () => {
   );
 
   useEffect(() => {
-    if (jobTagMeta?.isSuccess) {
+    if (jobTagMeta?.isSuccess || updateBillrateMeta?.isSuccess) {
       setOffcanvasForm(false);
       setModalFormName(null);
       dispatch(
@@ -219,8 +225,9 @@ const JobOverview = () => {
       );
       dispatch(fetchJobtimeineCount({ jobId }));
       dispatch(tagReset());
+      dispatch(resetBillRate());
     }
-  }, [jobTagMeta]);
+  }, [jobTagMeta, updateBillrateMeta]);
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
@@ -408,6 +415,7 @@ const JobOverview = () => {
   };
 
   const [isBrsModalOpen, setIsBrsModalOpen] = useState(false);
+
   const toggleBrsModal = () => {
     setIsBrsModalOpen(!isBrsModalOpen);
   };
@@ -440,7 +448,7 @@ const JobOverview = () => {
   };
 
   const handleIconClick = (candidateId, actStep, originalOrder, data) => {
-    if (data?.job?.jobSubmissionData?.billRate === 0 && actStep === 6) {
+    if (data?.job?.billRate === 0 && actStep === 6) {
       setBillRateModalOpen(true);
     } else {
       setActiveStep(actStep);
@@ -725,15 +733,13 @@ const JobOverview = () => {
       : false;
   };
 
-  const billRate = formSubmissionData?.billRate ?? "N/A";
-  const billRateCurrency = formSubmissionData?.Currency ?? "";
-
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
     return (
       <React.Fragment>
         {jobTimelineData?.jobs && jobTimelineData?.jobs?.length > 0 ? (
           jobTimelineData?.jobs?.map((data, timelineIndex) => {
+            const billRateCurrency = formSubmissionData?.currency ?? "";
             const candidateData = data?.candidate;
             let maxOrder = getMaxOrder(data);
             const originalOrder = maxOrder;
@@ -787,14 +793,18 @@ const JobOverview = () => {
                     <div className="billrate-container">
                       <div className="billrate-inner">
                         <span className="billrate-amt">
-                          {billRateCurrency} {billRate}
+                          {`${
+                            data?.billRate && data?.billRate > 0
+                              ? `${billRateCurrency} ${data?.billRate}`
+                              : "N/A"
+                          }`}
                         </span>
                       </div>
-
                       <Button
                         className="billrate-button"
                         onClick={() => {
                           toggleBrsModal(true);
+                          setCandidateId(candidateData?.id);
                           setBsrOption("billRate");
                         }}
                       >
@@ -807,8 +817,11 @@ const JobOverview = () => {
                     <div className="billrate-container">
                       <div className="billrate-inner">
                         <span className="billrate-amt">
-                          {/* Leaving as blank, to replace with Associate Expected Candidate Salary */}
-                          N/A
+                          {`${
+                            data?.expectedSalary && data?.expectedSalary > 0
+                              ? `${billRateCurrency} ${data?.expectedSalary}`
+                              : "N/A"
+                          }`}
                         </span>
                       </div>
 
@@ -816,6 +829,7 @@ const JobOverview = () => {
                         className="billrate-button"
                         onClick={() => {
                           toggleBrsModal(true);
+                          setCandidateId(candidateData?.id);
                           setBsrOption("salary");
                         }}
                       >
@@ -1839,6 +1853,8 @@ const JobOverview = () => {
             setBsrOption("");
           }}
           option={bsrOption}
+          jobId={jobId}
+          candidateId={candidateId}
         />
 
         <BillRateZeroModal
