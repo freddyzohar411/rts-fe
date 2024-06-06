@@ -93,6 +93,7 @@ function* workCreateJob(action) {
       toast.success(jobResponse?.message);
     }
     navigate("/jobs");
+    // Embedding
     if (payload?.id) {
       yield call(updateJobEmbedding, payload?.id);
     } else {

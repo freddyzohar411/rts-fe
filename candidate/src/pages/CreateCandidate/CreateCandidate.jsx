@@ -852,9 +852,8 @@ const CreateCandidate = () => {
   };
 
   /**
-   * Handle Account Success
+   * Handle Account Success & embeddings
    */
-
   useEffect(() => {
     if (createMetaData?.isSuccess) {
       dispatch(resetMetaData());
