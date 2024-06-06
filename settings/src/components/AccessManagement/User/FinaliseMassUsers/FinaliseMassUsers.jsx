@@ -46,9 +46,9 @@ function FinaliseMassUsers({ newUsers }) {
         <Row>
           <Col>
             <div className="d-flex flex-column align-items-center justify-content-center gap-5 text-center">
-              <div className="d-flex flex-column">
+              <div className="d-flex flex-column align-items-center">
                 {isLoading ? (
-                  <Spinner color="primary" />
+                  <Spinner color="primary" className="mb-4" />
                 ) : (
                   <>
                     {error && (

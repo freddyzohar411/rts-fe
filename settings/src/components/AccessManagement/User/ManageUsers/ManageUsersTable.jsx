@@ -22,6 +22,7 @@ import { userColumns } from "./ManageUsersData";
 import { fetchGroups } from "../../../../store/group/action";
 import { fetchUsers } from "../../../../store/users/action";
 import { useDispatch, useSelector } from "react-redux";
+import { ValidationError } from "yup";
 
 function ManageUsersTable({
   extractedUserData,
@@ -37,6 +38,7 @@ function ManageUsersTable({
     populateForm(initialValues)
   );
   const [formError, setFormError] = useState(false);
+  const [validationErrorMsg, setValidationErrorMsg] = useState([]);
 
   // delete a row of user data
   const deleteUserData = (index) => {
@@ -235,12 +237,35 @@ function ManageUsersTable({
         });
       });
       const submittedUsers = await Promise.all(submissionPromises);
+      // Create new variable to hold the correct data.
+      const formattedSubmittedUsers = submittedUsers.map((users) => {
+        const userGroup = allGroups.find(
+          (group) => group.userGroupName === users.groupName
+        );
+        const userManager = allUsers.find(
+          (manager) => manager.email === users.managerEmail
+        );
+        return {
+          firstName: users.firstName,
+          lastName: users.lastName,
+          username: users.username,
+          email: users.email,
+          mobile: users.mobile,
+          employeeId: users.employeeId,
+          managerId: users.managerId ? users.managerId : (userManager ? userManager?.id : null),
+          groups: users.groups ? [users.groups] : (userGroup ? [userGroup.id] : []),
+        };
+      });
+
       setSubmittedForms((prevSubmittedForms) => [
         ...prevSubmittedForms,
-        ...submittedUsers,
+        ...formattedSubmittedUsers,
       ]);
       setFormError(false);
     } catch (error) {
+      if (error instanceof ValidationError) {
+        setValidationErrorMsg(error.errors);
+      }
       setFormError(true);
     }
   };
@@ -271,9 +296,6 @@ function ManageUsersTable({
                     ? "Switch to Reading View"
                     : "Switch to Editing View"}
                 </Button>
-                <Button className="btn btn-custom-primary btn-sm">
-                  Add User
-                </Button>
               </div>
             </div>
           </Col>
@@ -298,7 +320,6 @@ function ManageUsersTable({
               <Table className="table table-hover table-striped border-secondary align-middle table-nowrap">
                 <thead style={{ backgroundColor: "#B8DAF3", color: "#000000" }}>
                   <tr>
-                    <th></th>
                     {userColumns.map((column, index) => (
                       <th key={index} style={{ minWidth: "160px" }}>
                         {column}
@@ -325,13 +346,6 @@ function ManageUsersTable({
                       >
                         {({ errors, touched, handleSubmit, setFieldValue }) => (
                           <>
-                            <td>
-                              {Object.values(errors).some((error) => error) ? (
-                                <i className="ri-error-warning-line text-danger fs-5"></i>
-                              ) : (
-                                <i className="ri-checkbox-circle-line text-success"></i>
-                              )}
-                            </td>
                             <td>
                               <Form onSubmit={handleSubmit}>
                                 <Field
@@ -557,8 +571,13 @@ function ManageUsersTable({
           <Row>
             <Col>
               <Alert color="danger">
-                <b>Alert:</b> User data is not complete. Please fill in the
-                required fields.
+                <b>Alert:</b> User data is not complete. Following error(s)
+                found:
+                <ul className="mb-0">
+                  {validationErrorMsg.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
               </Alert>
             </Col>
           </Row>
