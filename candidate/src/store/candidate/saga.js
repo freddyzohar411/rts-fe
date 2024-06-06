@@ -449,7 +449,8 @@ function* workImportCandidate(action) {
         completeCandidateRegistration,
         parseInt(candidateId)
       );
-      yield call(updateCandidateEmbeddings, candidateId);
+      // Embedding
+      // yield call(updateCandidateEmbeddings, candidateId);
       yield put(importCandidateSuccess());
       // Check if navgate exist
       if (typeof navigate === "function") {

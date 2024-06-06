@@ -94,11 +94,11 @@ function* workCreateJob(action) {
     }
     navigate("/jobs");
     // Embedding
-    if (payload?.id) {
-      yield call(updateJobEmbedding, payload?.id);
-    } else {
-      yield call(updateJobEmbedding, jobResponse?.data?.id);
-    }
+    // if (payload?.id) {
+    //   yield call(updateJobEmbedding, payload?.id);
+    // } else {
+    //   yield call(updateJobEmbedding, jobResponse?.data?.id);
+    // }
   } catch (error) {
     toast.error(error?.message);
     yield put(createJobFailure(error));

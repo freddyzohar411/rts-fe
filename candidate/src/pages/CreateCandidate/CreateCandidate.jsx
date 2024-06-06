@@ -858,7 +858,7 @@ const CreateCandidate = () => {
     if (createMetaData?.isSuccess) {
       dispatch(resetMetaData());
       if (step === 6) {
-        dispatch(updateCandidateEmbeddings(candidateId));
+        // dispatch(updateCandidateEmbeddings(candidateId));
         navigate("/candidates");
         return;
       }
