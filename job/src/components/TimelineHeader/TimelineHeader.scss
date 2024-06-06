@@ -1,0 +1,23 @@
+.header-bar-chart {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .header-bar-chart {
+    width: 100px;
+  }
+}
+
+@media (min-width: 1366px) {
+  .header-bar-chart {
+    width: 100px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .header-bar-chart {
+    width: 150px;
+  }
+}
