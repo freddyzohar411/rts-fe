@@ -852,14 +852,13 @@ const CreateCandidate = () => {
   };
 
   /**
-   * Handle Account Success
+   * Handle Account Success & embeddings
    */
-
   useEffect(() => {
     if (createMetaData?.isSuccess) {
       dispatch(resetMetaData());
       if (step === 6) {
-        dispatch(updateCandidateEmbeddings(candidateId));
+        // dispatch(updateCandidateEmbeddings(candidateId));
         navigate("/candidates");
         return;
       }

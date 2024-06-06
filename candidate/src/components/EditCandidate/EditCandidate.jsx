@@ -80,13 +80,13 @@ const EditCandidate = () => {
   const { candidateId } = useParams();
 
   // Update embedding when dismounting (NEW)
-  useEffect(() => {
-    return () => {
-      if (candidateId) {
-        dispatch(updateCandidateEmbeddings(parseInt(candidateId)));
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     if (candidateId) {
+  //       dispatch(updateCandidateEmbeddings(parseInt(candidateId)));
+  //     }
+  //   };
+  // }, []);
 
   /**
    * Fetch form template based on step

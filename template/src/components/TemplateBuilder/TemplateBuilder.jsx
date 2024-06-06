@@ -37,7 +37,7 @@ import { CommonBackendHelper, CreateSelectElement } from "@workspace/common";
 import { valid } from "node-html-parser";
 
 const TemplateBuilder = forwardRef(
-  ({ type, templateEditData, onSubmit, ...props }, ref) => {
+  ({ loadedJSON, type, templateEditData, onSubmit, ...props }, ref) => {
     const dispatch = useDispatch();
     const [typeData, setTypeData] = useState("");
     const [fieldName, setFieldName] = useState("");
@@ -189,7 +189,10 @@ const TemplateBuilder = forwardRef(
       if (type === "edit" && templateEditData) {
         setFormInitialValues(populateForm(templateEditData));
       }
-    }, [type, templateEditData]);
+      if (loadedJSON && type == "create") {
+        setFormInitialValues(populateForm(loadedJSON));
+      }
+    }, [type, templateEditData, loadedJSON]);
 
     /**
      * Clear Form
@@ -336,6 +339,18 @@ const TemplateBuilder = forwardRef(
         content = await TemplateHelper.setOnlyTemplateInjection(content);
       } catch (err) {}
       editorRef.current.setContent(content);
+    };
+
+    const handleSaveJSONData = () => {
+      const ObjData = formik.values;
+      const element = document.createElement("a");
+      const file = new Blob([JSON.stringify(ObjData, null, 2)], {
+        type: "application/json",
+      });
+      element.href = URL.createObjectURL(file);
+      element.download = `${ObjData?.name}.json`;
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
     };
 
     return (
