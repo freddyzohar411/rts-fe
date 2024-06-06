@@ -37,7 +37,7 @@ import { CommonBackendHelper, CreateSelectElement } from "@workspace/common";
 import { valid } from "node-html-parser";
 
 const TemplateBuilder = forwardRef(
-  ({ type, templateEditData, onSubmit, ...props }, ref) => {
+  ({ loadedJSON, type, templateEditData, onSubmit, ...props }, ref) => {
     const dispatch = useDispatch();
     const [typeData, setTypeData] = useState("");
     const [fieldName, setFieldName] = useState("");
@@ -189,7 +189,10 @@ const TemplateBuilder = forwardRef(
       if (type === "edit" && templateEditData) {
         setFormInitialValues(populateForm(templateEditData));
       }
-    }, [type, templateEditData]);
+      if (loadedJSON && type == "create") {
+        setFormInitialValues(populateForm(loadedJSON));
+      }
+    }, [type, templateEditData, loadedJSON]);
 
     /**
      * Clear Form
