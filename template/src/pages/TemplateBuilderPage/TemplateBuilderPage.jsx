@@ -26,8 +26,13 @@ import { TemplateDisplayV3 } from "@workspace/common";
 import axios from "axios";
 import { deleteMediaUrls } from "../../helpers/backend_helper";
 import { DeleteCustomModal } from "@workspace/common";
+import FileInputElement from "./FileInputElement";
+import { FileHelper } from "@workspace/common";
 
 const TemplateBuilderPage = () => {
+  // ========================= Dev Settings =========================
+  const loadJSONFlag = true;
+  // ================================================================
   const { templateId } = useParams();
   const type = templateId ? "edit" : "create";
   const navigate = useNavigate();
@@ -36,6 +41,19 @@ const TemplateBuilderPage = () => {
   const [showModalSchema, setShowModalSchema] = useState(false);
   const [editorContent, setEditorContent] = useState("");
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [jsonFile, setJsonFile] = useState(null);
+  const [loadedJSON, setLoadedJSON] = useState(null);
+
+  useEffect(() => {
+    if (jsonFile) {
+      FileHelper.convertJSONFileToJSONObject(jsonFile).then((data) => {
+        setLoadedJSON(data);
+      });
+    }
+    if (jsonFile == null) {
+      setLoadedJSON(null);
+    }
+  }, [jsonFile]);
 
   const templateEditData = useSelector(
     (state) => state.TemplateReducer.template
@@ -88,6 +106,18 @@ const TemplateBuilderPage = () => {
     setIsResetModalOpen(false);
   };
 
+  const handleSaveJSONData = () => {
+    const { id, ...ObjData } = formikRef.current.formik.values;
+    const element = document.createElement("a");
+    const file = new Blob([JSON.stringify(ObjData, null, 2)], {
+      type: "application/json",
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = `${ObjData?.name}.json`;
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -117,7 +147,7 @@ const TemplateBuilderPage = () => {
           <Row>
             <Col>
               <Card>
-                <CardHeader className="bg-header">
+                <CardHeader className="bg-header d-flex justify-content-between">
                   <div className="d-flex flex-column">
                     <span className="fw-bold fs-5 text-dark">
                       Template Builder
@@ -126,9 +156,20 @@ const TemplateBuilderPage = () => {
                       Begin by creating a new template
                     </span>
                   </div>
+                  <div>
+                    {loadJSONFlag && type == "create" && (
+                      <FileInputElement
+                        width="350px"
+                        placeholder="Add JSON"
+                        setFile={setJsonFile}
+                        fileSelected={jsonFile}
+                      />
+                    )}
+                  </div>
                 </CardHeader>
                 <CardBody>
                   <TemplateBuilder
+                    loadedJSON={loadedJSON}
                     type={type}
                     templateEditData={templateEditData}
                     ref={formikRef}
@@ -144,6 +185,13 @@ const TemplateBuilderPage = () => {
                       </Button>
                     </Link>
                     <div className="d-flex flex-row gap-2">
+                      <Button
+                        type="button"
+                        className="btn btn-custom-primary"
+                        onClick={() => handleSaveJSONData()}
+                      >
+                        Save JSON
+                      </Button>
                       <Button
                         type="button"
                         className="btn btn-custom-primary"
