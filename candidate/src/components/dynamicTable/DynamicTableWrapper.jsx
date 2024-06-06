@@ -197,7 +197,7 @@ const DynamicTableWrapper = ({
                             placeholder="Search"
                             className="form-control search"
                             value={search}
-                            style={{ width: "300px", height: "40px" }}
+                            style={{ width: "250px", height: "40px" }}
                             onChange={(e) => setSearch(e.target.value)}
                           />
                         </form>

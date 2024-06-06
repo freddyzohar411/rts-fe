@@ -20,12 +20,6 @@ const CANDIDATE_INITIAL_OPTIONS = [
     sortValue: "candidate_submission_data.candidateNationality",
   },
   {
-    label: "Candidate Status",
-    value: "candidateSubmissionData.candidateStatus",
-    sort: true,
-    sortValue: "candidate_submission_data.candidateStatus",
-  },
-  {
     label: "Visa Status",
     value: "candidateSubmissionData.visaStatus",
     sort: true,
@@ -33,7 +27,7 @@ const CANDIDATE_INITIAL_OPTIONS = [
   },
   {
     label: "Phone",
-    value: "candidate_submission_data.phone",
+    value: "candidateSubmissionData.phone",
     sort: true,
     sortValue: "candidate_submission_data.phone",
   },
