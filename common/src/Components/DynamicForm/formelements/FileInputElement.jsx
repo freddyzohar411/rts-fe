@@ -40,6 +40,11 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
         );
         documentData = res.data;
       } else if (entityInfo?.entityType && entityInfo?.entityId) {
+        const res = await BackendHelper.downloadDocumentByEntityAndId(
+          entityInfo
+        );
+        documentData = res.data;
+      } else {
         const res = await BackendHelper.downloadDocumentById(
           entityInfo?.entityId
         );
@@ -86,6 +91,11 @@ const FileInputElement = ({ formik, field, formStateHook, tabIndexData }) => {
         );
         documentData = res.data;
       } else if (entityInfo?.entityType && entityInfo?.entityId) {
+        const res = await BackendHelper.downloadDocumentByEntityAndId(
+          entityInfo
+        );
+        documentData = res.data;
+      } else {
         const res = await BackendHelper.downloadDocumentById(
           entityInfo?.entityId
         );

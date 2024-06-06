@@ -91,6 +91,7 @@ const TableElement = ({
         id: data.id,
         data: JSON.parse(data.submissionData),
       };
+      console.log("data", data)
       if (data.entityType) {
         dataObj.entityType = data.entityType;
       }
