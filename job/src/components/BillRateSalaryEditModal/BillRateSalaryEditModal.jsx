@@ -6,24 +6,36 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  Spinner,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { fetchJobForm } from "../../store/actions";
+import { fetchJobForm, updateBillRate } from "../../store/actions";
 import { useUserAuth } from "@workspace/login";
 import { Form } from "@workspace/common";
 
-function BillRateSalaryEditModal({ isOpen, closeModal, option }) {
+function BillRateSalaryEditModal({
+  isOpen,
+  closeModal,
+  option,
+  jobId,
+  candidateId,
+}) {
   const dispatch = useDispatch();
   const location = useLocation();
   const formikRef = useRef(null);
 
   const form = useSelector((state) => state.JobFormReducer.form);
+
+  const updateBillrateMeta = useSelector(
+    (state) => state.JobStageReducer.updateBillrateMeta
+  );
+
   const [formTemplate, setFormTemplate] = useState(null);
 
   const linkState = location.state;
   const { getAllUserGroups } = useUserAuth();
-  const [view, setView] = useState(
+  const [view] = useState(
     linkState?.view !== null && linkState?.view !== undefined
       ? linkState?.view
       : false
@@ -34,10 +46,10 @@ function BillRateSalaryEditModal({ isOpen, closeModal, option }) {
   useEffect(() => {
     if (option === "billRate") {
       dispatch(fetchJobForm("billrate_form"));
-      setHeader("Edit Job Bill Rate")
+      setHeader("Edit Job Bill Rate");
     } else if (option === "salary") {
       dispatch(fetchJobForm("expected_salary_form"));
-      setHeader("Edit Candidate Expected Salary")
+      setHeader("Edit Candidate Expected Salary");
     }
   }, [isOpen, option]);
 
@@ -47,9 +59,27 @@ function BillRateSalaryEditModal({ isOpen, closeModal, option }) {
     }
   }, [form]);
 
-  const handleFormSubmit = async (values) => {
+  useEffect(() => {
+    if (updateBillrateMeta?.isSuccess) {
+      handleModal();
+    }
+  }, [updateBillrateMeta]);
+
+  const handleFormSubmit = async (
+    event,
+    values,
+    newValues,
+    buttonNameHook,
+    formStateHook,
+    rerenderTable
+  ) => {
     // Add payload function to submit new values.
-    handleModal();
+    const payload = {
+      jobId,
+      candidateId,
+      ...values,
+    };
+    dispatch(updateBillRate({ payload }));
   };
 
   const handleModal = () => {
@@ -97,14 +127,15 @@ function BillRateSalaryEditModal({ isOpen, closeModal, option }) {
             <Button
               className="w-50 fw-semibold"
               type="button"
-              onClick={() => handleFormSubmit()}
+              onClick={() => formikRef.current.formik.submitForm()}
               style={{
                 backgroundColor: "#10B967",
                 borderRadius: "8px",
                 color: "white",
               }}
+              disabled={updateBillrateMeta?.isLoading}
             >
-              Save
+              {updateBillrateMeta?.isLoading ? <Spinner size="sm" /> : "Save"}
             </Button>
           </div>
         </Row>

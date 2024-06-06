@@ -27,7 +27,11 @@ import {
   FETCH_JOB_TIMELINE_FORM_SUBMISSION,
   FETCH_JOB_TIMELINE_FORM_SUBMISSION_SUCCESS,
   FETCH_JOB_TIMELINE_FORM_SUBMISSION_FAILURE,
-  FETCH_JOB_TIMELINE_FORM_SUBMISSION_RESET
+  FETCH_JOB_TIMELINE_FORM_SUBMISSION_RESET,
+  UPDATE_BILL_RATE,
+  UPDATE_BILL_RATE_SUCCESS,
+  UPDATE_BILL_RATE_FAILURE,
+  UPDATE_BILL_RATE_RESET,
 } from "./actionTypes";
 
 // tag a job
@@ -169,24 +173,51 @@ export const fetchJobTimelineFormSubmission = (params) => {
     type: FETCH_JOB_TIMELINE_FORM_SUBMISSION,
     payload: params,
   };
-}
+};
 
 export const fetchJobTimelineFormSubmissionSuccess = (data) => {
   return {
     type: FETCH_JOB_TIMELINE_FORM_SUBMISSION_SUCCESS,
     payload: data,
   };
-}
+};
 
 export const fetchJobTimelineFormSubmissionFailure = (error) => {
   return {
     type: FETCH_JOB_TIMELINE_FORM_SUBMISSION_FAILURE,
     payload: error,
   };
-}
+};
 
 export const fetchJobTimelineFormSubmissionReset = () => {
   return {
     type: FETCH_JOB_TIMELINE_FORM_SUBMISSION_RESET,
   };
-}
+};
+
+export const updateBillRate = (params) => {
+  return {
+    type: UPDATE_BILL_RATE,
+    payload: params,
+  };
+};
+
+export const updateBillRateSuccess = (data) => {
+  return {
+    type: UPDATE_BILL_RATE_SUCCESS,
+    payload: data,
+  };
+};
+
+export const updateBillRateFailure = (error) => {
+  return {
+    type: UPDATE_BILL_RATE_FAILURE,
+    payload: error,
+  };
+};
+
+export const resetBillRate = () => {
+  return {
+    type: UPDATE_BILL_RATE_RESET,
+  };
+};

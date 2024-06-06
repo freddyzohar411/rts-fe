@@ -9,6 +9,7 @@ import {
   TAG_JOB_ATTACHMENT,
   UNTAG_JOB,
   FETCH_JOB_TIMELINE_FORM_SUBMISSION,
+  UPDATE_BILL_RATE,
 } from "./actionTypes";
 import {
   tagJobSuccess,
@@ -27,6 +28,8 @@ import {
   untagJobFailure,
   fetchJobTimelineFormSubmissionSuccess,
   fetchJobTimelineFormSubmissionFailure,
+  updateBillRateSuccess,
+  updateBillRateFailure,
 } from "./action";
 import {
   getJobTimeline,
@@ -39,6 +42,7 @@ import {
   getJobCandidateStage,
   getTOSByJobIdAndCandidateIdAndStatus,
   getConditionalOfferByJobIdAndCandidateIdAndStatus,
+  updateBillRate,
 } from "../../helpers/backend_helper";
 import {
   JOB_STAGE_STATUS,
@@ -214,6 +218,17 @@ function* workFetchJobTimelineFormSubmission(action) {
   }
 }
 
+function* workUpdateBillRate(action) {
+  const { payload } = action.payload;
+  try {
+    // Tag a job
+    const response = yield call(updateBillRate, payload);
+    yield put(updateBillRateSuccess(response.data));
+  } catch (error) {
+    yield put(updateBillRateFailure(error));
+  }
+}
+
 export default function* watchTagJobSaga() {
   yield takeEvery(TAG_JOB, workTagJob);
   yield takeEvery(TAG_JOB_ALL, workTagAllJob);
@@ -226,4 +241,5 @@ export default function* watchTagJobSaga() {
     FETCH_JOB_TIMELINE_FORM_SUBMISSION,
     workFetchJobTimelineFormSubmission
   );
+  yield takeEvery(UPDATE_BILL_RATE, workUpdateBillRate);
 }
