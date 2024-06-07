@@ -48,12 +48,14 @@ export const overviewValues = (data, deliveryTeam, isMobile) => {
       trimValue: trimValue("N/A", isMobile),
     },
     "Client Bill Rate": {
-      value: (data?.Currency ?? "") + " " + (data?.billRate ?? "N/A"),
-      trimValue: ((data?.Currency ?? "") + " " + (data?.billRate ?? "N/A")), isMobile,
+      value: (data?.currency ?? "") + " " + (data?.billRate ?? "N/A"),
+      trimValue: (data?.currency ?? "") + " " + (data?.billRate ?? "N/A"),
+      isMobile,
     },
     "Candidate Salary Budget": {
-      value: (data?.Currency ?? "") + " " + data?.payrate,
-      trimValue: ((data?.Currency ?? "") + " " + (data?.payrate ?? "N/A")), isMobile,
+      value: (data?.currency ?? "") + " " + data?.payrate,
+      trimValue: (data?.currency ?? "") + " " + (data?.payrate ?? "N/A"),
+      isMobile,
     },
   };
   return output;

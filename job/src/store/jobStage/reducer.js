@@ -33,6 +33,10 @@ import {
   FETCH_JOB_TIMELINE_FORM_SUBMISSION_SUCCESS,
   FETCH_JOB_TIMELINE_FORM_SUBMISSION_FAILURE,
   FETCH_JOB_TIMELINE_FORM_SUBMISSION_RESET,
+  UPDATE_BILL_RATE,
+  UPDATE_BILL_RATE_SUCCESS,
+  UPDATE_BILL_RATE_FAILURE,
+  UPDATE_BILL_RATE_RESET,
 } from "./actionTypes";
 
 const initialState = {
@@ -45,6 +49,7 @@ const initialState = {
   jobTimelineMeta: {},
   jobTimelineCount: {},
   jobTimelineCountMeta: {},
+  updateBillrateMeta: {},
   jobTimelineFormSubmission: null,
 };
 
@@ -213,6 +218,29 @@ const JobStageReducer = (state = initialState, action) => {
         ...state,
         jobTimelineFormSubmission: null,
       };
+
+    // update bull rate
+    case UPDATE_BILL_RATE:
+      return {
+        ...state,
+        updateBillrateMeta: pendingMetaData(),
+      };
+    case UPDATE_BILL_RATE_SUCCESS:
+      return {
+        ...state,
+        updateBillrateMeta: successMetaData(action.payload),
+      };
+    case UPDATE_BILL_RATE_FAILURE:
+      return {
+        ...state,
+        updateBillrateMeta: errorMetaData(action.payload),
+      };
+    case UPDATE_BILL_RATE_RESET:
+      return {
+        ...state,
+        updateBillrateMeta: {},
+      };
+
     default:
       return state;
   }

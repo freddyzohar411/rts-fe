@@ -296,7 +296,7 @@ const DynamicTableWrapper = ({
                             </DropdownMenu>
                           </Dropdown>
                         </TooltipWrapper>
-                        <TooltipWrapper tooltipText="Export Excel">
+                        {/* <TooltipWrapper tooltipText="Export Excel">
                           <Button
                             color="light"
                             className="btn-white bg-gradient border-2 border-light-grey fw-bold d-flex flex-row align-items-center"
@@ -305,7 +305,7 @@ const DynamicTableWrapper = ({
                           >
                             <i className="ri-download-fill align-bottom fs-5"></i>
                           </Button>
-                        </TooltipWrapper>
+                        </TooltipWrapper> */}
                         {checkAllPermission([Permission.CANDIDATE_DELETE]) && (
                           <TooltipWrapper tooltipText="Delete Multiple">
                             <Button
