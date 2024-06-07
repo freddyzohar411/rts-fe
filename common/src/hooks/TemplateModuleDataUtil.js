@@ -19,18 +19,18 @@ export function flattenObject(obj) {
 }
 
 export function extractNameAndEmail(input) {
-  // Define the regex to capture the name and email, allowing spaces before the parentheses
-  const regex = /^(.+?)\s*\(([^)]+)\)$/;
-  const matches = input.match(regex);
+  const parenthesisIndex = input.indexOf("(");
 
-  // Check if the input matches the regex pattern
-  if (matches) {
+  if (parenthesisIndex !== -1) {
+    const name = input.slice(0, parenthesisIndex).trim();
+    const email = input
+      .slice(parenthesisIndex + 1, input.indexOf(")", parenthesisIndex))
+      .trim();
     return {
-      name: matches[1].trim(),
-      email: matches[2].trim(),
+      name: name,
+      email: email,
     };
   } else {
-    // If no parentheses are found, return the name and an empty email
     return {
       name: input.trim(),
       email: "",
