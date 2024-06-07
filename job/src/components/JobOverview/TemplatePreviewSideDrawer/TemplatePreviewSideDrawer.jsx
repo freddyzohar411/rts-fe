@@ -176,15 +176,15 @@ const TemplatePreviewSideDrawer = ({
       }
     >
       <div
-        className="flex-grow-1"
+        className="flex-grow-1 px-3"
         style={{
           overflowY: "auto",
         }}
       >
         <Container
-          className="p-3 my-3"
+          className="p-3 my-3 mx-2"
           style={{
-            width: "90%",
+            width: "95%",
             borderRadius: "10px",
             boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
             overflow: "auto",
