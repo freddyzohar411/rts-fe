@@ -226,11 +226,11 @@ const TemplateBuilderPage = () => {
                     </Col>
                   </Row>
                   <hr />
-                  <Row className="">
+                  <Row className="d-flex align-items-center justify-content-center">
                     <Container
-                      className="border pt-3 pb-3"
+                      className="border pt-3 pb-3 px-3"
                       style={{
-                        width: "1250px",
+                        width: "95%",
                         height: "1000px",
                         borderColor: "#000000",
                         overflow: "auto",
