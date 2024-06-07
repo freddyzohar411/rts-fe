@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAccountData } from "../../../account/src/store/account/action";
 import { fetchCandidateData } from "../../../candidate/src/store/candidate/action";
 import { fetchJobData } from "../../../job/src/store/job/action";
+import { extractNameAndEmail } from "./TemplateModuleDataUtil";
 
 export const useTemplateModuleData = (dataId) => {
   const dispatch = useDispatch();
@@ -31,26 +32,6 @@ export const useTemplateModuleData = (dataId) => {
     });
   };
 
-  function flattenObject(obj) {
-    let flattened = {};
-
-    function recursiveFlatten(currentObj) {
-      for (const key in currentObj) {
-        if (currentObj.hasOwnProperty(key)) {
-          if (typeof currentObj[key] === "object" && currentObj[key] !== null) {
-            // Recursively flatten nested objects
-            recursiveFlatten(currentObj[key]);
-          } else {
-            flattened[key] = currentObj[key];
-          }
-        }
-      }
-    }
-
-    recursiveFlatten(obj);
-    return flattened;
-  }
-
   useEffect(() => {
     setAllModuleData((prevData) => {
       const obj = { ...prevData };
@@ -61,6 +42,21 @@ export const useTemplateModuleData = (dataId) => {
 
       if (candidateData) {
         obj["Candidates"] = candidateData;
+
+        // Add adition data here if needed
+        const candidateOwnerOriginal = candidateData.basicInfo?.candidateOwner;
+        if (candidateOwnerOriginal) {
+          const nameEmail = extractNameAndEmail(candidateOwnerOriginal);
+          if (
+            candidateData.basicInfo?.candidateOwner &&
+            nameEmail?.email &&
+            nameEmail?.name
+          ) {
+            obj["Candidates"]["basicInfo"]["candidateOwner"] = nameEmail.name;
+            obj["Candidates"]["basicInfo"]["candidateOwnerEmail"] =
+              nameEmail?.email;
+          }
+        }
       }
 
       if (jobData) {
