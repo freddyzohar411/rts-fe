@@ -49,14 +49,14 @@ export const steps = {
 };
 
 export const jobHeaders = [
-  "Tag",
-  "Associate",
-  "Submit to Sales",
-  "Submit to Client",
-  "Scheduled",
-  "Completed",
-  "Cancelled/Backout",
-  "Pending Feedback",
+  { name: "Tag", order: 1 },
+  { name: "Associate", order: 2 },
+  { name: "Submit to Sales", order: 3 },
+  { name: "Submit to Client", order: 4 },
+  { name: "Scheduled", order: 11 },
+  { name: "Completed", order: 11 },
+  { name: "Cancelled/Backout", order: 11 },
+  { name: "Pending Feedback", order: 13 },
 ];
 
 export const newHeaders = [

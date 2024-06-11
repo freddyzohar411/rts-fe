@@ -152,6 +152,7 @@ const JobOverview = () => {
   const [readOnlyInterviewNo, setReadOnlyInterviewNo] = useState(0);
   const [billRateModalOpen, setBillRateModalOpen] = useState(false);
   const [bsrOption, setBsrOption] = useState("");
+  const [stageType, setStageType] = useState(null);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -221,6 +222,7 @@ const JobOverview = () => {
         fetchJobTimelineList({
           ...DynamicTableHelper.cleanPageRequest(pageRequest),
           jobId: parseInt(jobId),
+          stageType,
         })
       );
       dispatch(fetchJobtimeineCount({ jobId }));
@@ -235,9 +237,10 @@ const JobOverview = () => {
       fetchJobTimelineList({
         ...DynamicTableHelper.cleanPageRequest(pageRequest),
         jobId: parseInt(jobId),
+        stageType,
       })
     );
-  }, [pageRequest]);
+  }, [pageRequest, stageType]);
 
   useEffect(() => {
     if (jobUntagMeta?.isSuccess) {
@@ -246,6 +249,7 @@ const JobOverview = () => {
         fetchJobTimelineList({
           ...DynamicTableHelper.cleanPageRequest(pageRequest),
           jobId: parseInt(jobId),
+          stageType,
         })
       );
       dispatch(untagJobReset());
@@ -441,6 +445,7 @@ const JobOverview = () => {
           sortBy: "candidate.first_name",
           jobId: parseInt(jobId),
           sortDirection: direction,
+          stageType,
         })
       );
       setSortDirection(direction);
@@ -1646,7 +1651,7 @@ const JobOverview = () => {
         <Row className="mb-2">
           <Card style={{ backgroundColor: "#F3F8FF" }}>
             <CardBody>
-              <TimelineHeader data={jobHeaders} />
+              <TimelineHeader data={jobHeaders} setStageType={setStageType} />
             </CardBody>
           </Card>
         </Row>
