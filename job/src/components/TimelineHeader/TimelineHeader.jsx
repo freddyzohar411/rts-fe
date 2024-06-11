@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import "./TimelineHeader.scss";
 
-function TimelineHeader({ data, setStageType }) {
+function TimelineHeader({ data, setStageType, pageRequestSet }) {
   const [itemsPerPage, setItemsPerPage] = useState(0);
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -47,6 +47,7 @@ function TimelineHeader({ data, setStageType }) {
   const handleBarChartClick = (order, count) => {
     if (count && count > 0) {
       setStageType(order);
+      pageRequestSet.setPage(0);
     }
   };
 
