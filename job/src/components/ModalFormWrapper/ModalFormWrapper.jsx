@@ -257,7 +257,10 @@ const ModalFormWrapper = ({
       // Profile backout by candidate
       const payload = {
         jobId: jobTimeLineData?.job?.id,
-        jobStageId: stageId,
+        jobStageId:
+          stageId < JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED
+            ? JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED
+            : stageId,
         status: JOB_STAGE_STATUS?.WITHDRAWN,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
@@ -274,7 +277,10 @@ const ModalFormWrapper = ({
       // Profile rejected or cancelled by the client
       const payload = {
         jobId: jobTimeLineData?.job?.id,
-        jobStageId: stageId,
+        jobStageId:
+          stageId < JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED
+            ? JOB_STAGE_IDS?.FIRST_INTERVIEW_SCHEDULED
+            : stageId,
         status: JOB_STAGE_STATUS?.REJECTED,
         candidateId: jobTimeLineData?.candidate?.id,
         formData: JSON.stringify(newValues),
