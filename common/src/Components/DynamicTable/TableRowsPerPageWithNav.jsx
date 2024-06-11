@@ -1,7 +1,11 @@
 import React from "react";
 import { Input } from "reactstrap";
 
-const TableRowsPerPageWithNav = ({ pageRequestSet, pageInfo, defaultValue=20 }) => {
+const TableRowsPerPageWithNav = ({
+  pageRequestSet,
+  pageInfo,
+  defaultValue = 20,
+}) => {
   const currentPage = pageInfo?.currentPage + 1;
   const totalPages = pageInfo?.totalPages;
   return (

@@ -33,6 +33,7 @@ import {
 } from "../../store/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
+import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 import { JOB_FORM_NAME } from "../JobCreation/constants";
 import "./StepComponent.scss";
 import Skeleton from "react-loading-skeleton";
@@ -112,6 +113,7 @@ import ApproveTOS from "../TOSComponents/ApproveTOS.jsx";
 import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment.jsx";
 import BillRateSalaryEditModal from "../BillRateSalaryEditModal/BillRateSalaryEditModal.jsx";
 import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
+import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav.jsx";
 
 const JobOverview = () => {
   document.title = "Job Timeline | RTS";
@@ -1651,7 +1653,11 @@ const JobOverview = () => {
         <Row className="mb-2">
           <Card style={{ backgroundColor: "#F3F8FF" }}>
             <CardBody>
-              <TimelineHeader data={jobHeaders} setStageType={setStageType} />
+              <TimelineHeader
+                data={jobHeaders}
+                setStageType={setStageType}
+                pageRequestSet={pageRequestSet}
+              />
             </CardBody>
           </Card>
         </Row>
@@ -1704,7 +1710,21 @@ const JobOverview = () => {
                 ></i>
               </div>
             </div>
-            <div className="d-flex flex-row gap-2 ">
+            <div className="d-flex flex-row align-items-center gap-2">
+              <TableItemDisplay pageInfo={pageInfo} />
+              <div
+                style={{
+                  width: "2px",
+                  height: "20px",
+                  backgroundColor: "#adb5bd",
+                  marginLeft: "12px",
+                }}
+              ></div>
+              <TableRowsPerPageWithNav
+                pageInfo={pageInfo}
+                pageRequestSet={pageRequestSet}
+                defaultValue={20}
+              />
               <ButtonGroup>
                 <Button className="bg-white main-border-style">
                   <i className="ri-filter-3-line align-bottom me-1"></i>Filter
@@ -1754,53 +1774,6 @@ const JobOverview = () => {
               </div>
             </TabPane>
           </TabContent>
-          {/* Table Pagination */}
-          <div className="d-flex flex-row justify-content-end my-3">
-            <Input
-              onChange={(e) =>
-                pageRequestSet.setPageSize(parseInt(e.target.value))
-              }
-              type="select"
-              className="form-select border-secondary"
-              style={{ height: "34px", marginRight: "10px", width: "70px" }}
-              defaultValue="20"
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-            </Input>
-            <Pagination>
-              <PaginationItem
-                disabled={pageInfo.currentPage === 0}
-                onClick={pageRequestSet.setPreviousPage}
-              >
-                <PaginationLink
-                  className={`${
-                    pageInfo.currentPage === 0
-                      ? "bg-secondary border-primary text-muted disabled"
-                      : "bg-secondary border-primary text-dark"
-                  }`}
-                >
-                  Previous
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem
-                disabled={pageInfo.currentPage === pageInfo.totalPages - 1}
-                onClick={pageRequestSet.setNextPage}
-              >
-                <PaginationLink
-                  className={`${
-                    pageInfo.currentPage === pageInfo.totalPages - 1
-                      ? "bg-secondary border-primary text-muted disabled"
-                      : "bg-secondary border-primary text-dark"
-                  }`}
-                >
-                  Next
-                </PaginationLink>
-              </PaginationItem>
-            </Pagination>
-          </div>
         </Row>
         <Offcanvas
           isOpen={offcanvasForm}
