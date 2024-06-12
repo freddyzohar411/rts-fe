@@ -16,7 +16,17 @@ export const trimValue = (value, isMobile) => {
   return isMobile ? truncate(value, 8) : truncate(value, 25);
 };
 
-export const overviewValues = (data, deliveryTeam, isMobile) => {
+export const overviewValues = (data, jobTimelineData, deliveryTeam, isMobile) => {
+  const calculateAgeing = () => {
+    if (jobTimelineData) {
+      const createdAtDate = jobTimelineData?.jobs[0]?.createdAt;
+      const currentDate = new Date();
+      const newCreatedAtDate = new Date(createdAtDate);
+      const ageingValueMS = currentDate - newCreatedAtDate;
+      const ageingValueDays = Math.floor(ageingValueMS / (1000 * 60 * 60 * 24));
+      return ageingValueDays;
+    } else return "N/A";
+  }
   const owner = data?.accountOwner?.split("(")?.[0]?.trim();
   const output = {
     Account: {
@@ -32,8 +42,8 @@ export const overviewValues = (data, deliveryTeam, isMobile) => {
       trimValue: trimValue(data?.jobId, isMobile),
     },
     Ageing: {
-      value: "N/A",
-      trimValue: trimValue("N/A", isMobile),
+      value: calculateAgeing() + " Days",
+      trimValue: trimValue(calculateAgeing() + " Days", isMobile),
     },
     "Account Owner": {
       value: owner,

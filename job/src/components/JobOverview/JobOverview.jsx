@@ -1607,6 +1607,7 @@ const JobOverview = () => {
             const mobile = isMobile | isTablet;
             const values = overviewValues(
               formSubmissionData,
+              jobTimelineData,
               deliveryTeam,
               mobile
             );
