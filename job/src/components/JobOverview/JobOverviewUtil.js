@@ -18,7 +18,7 @@ export const trimValue = (value, isMobile) => {
 
 export const overviewValues = (data, jobTimelineData, deliveryTeam, isMobile) => {
   const calculateAgeing = () => {
-    if (jobTimelineData) {
+    if (Object.keys(jobTimelineData).length !== 0) {
       const createdAtDate = jobTimelineData?.jobs[0]?.createdAt;
       const currentDate = new Date();
       const newCreatedAtDate = new Date(createdAtDate);
