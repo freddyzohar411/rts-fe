@@ -41,7 +41,6 @@ export const overviewValues = (
     } else return "N/A";
   };
 
-  console.log()
   const owner = data?.accountOwner?.split("(")?.[0]?.trim();
   const output = {
     Account: {
@@ -65,8 +64,8 @@ export const overviewValues = (
       trimValue: trimValue(owner, isMobile),
     },
     Recruiter: {
-      value: deliveryTeam?.join(", ") ?? "N/A",
-      trimValue: trimValue(deliveryTeam?.join(", "), isMobile),
+      value: data?.fodRecruiters ?? "N/A",
+      trimValue: trimValue(data?.fodRecruiters, isMobile),
     },
     "Man Days": {
       value: "N/A",
@@ -83,7 +82,7 @@ export const overviewValues = (
       isMobile,
     },
     "Created Date": {
-      value: new Date(data?.dateOpen).toLocaleDateString(),
+      value: new Date(data?.dateOpen).toLocaleDateString() ?? "N/A",
       trimValue: new Date(data?.dateOpen).toLocaleDateString() ?? "N/A",
       isMobile,
     },
