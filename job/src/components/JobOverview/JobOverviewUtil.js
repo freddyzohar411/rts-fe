@@ -10,6 +10,7 @@ export const overviewHeaders = [
   "Man Days",
   "Client Bill Rate",
   "Candidate Salary Budget",
+  "Created Date",
 ];
 
 export const trimValue = (value, isMobile) => {
@@ -79,6 +80,11 @@ export const overviewValues = (
     "Candidate Salary Budget": {
       value: (data?.currency ?? "") + " " + data?.payrate,
       trimValue: (data?.currency ?? "") + " " + (data?.payrate ?? "N/A"),
+      isMobile,
+    },
+    "Created Date": {
+      value: new Date(data?.dateOpen).toLocaleDateString(),
+      trimValue: new Date(data?.dateOpen).toLocaleDateString() ?? "N/A",
       isMobile,
     },
   };
