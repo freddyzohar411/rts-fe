@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
-import "./TimelineHeader.scss"
+import "./TimelineHeader.scss";
 
-function TimelineHeader({ data }) {
+function TimelineHeader({ data, setStageType, pageRequestSet }) {
   const [itemsPerPage, setItemsPerPage] = useState(0);
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -44,8 +44,10 @@ function TimelineHeader({ data }) {
     }
   }, [jobTimelineCount]);
 
-  const handleBarChartClick = (module, count) => {
+  const handleBarChartClick = (order, count) => {
     if (count && count > 0) {
+      setStageType(order);
+      pageRequestSet.setPage(0);
     }
   };
 
@@ -63,17 +65,17 @@ function TimelineHeader({ data }) {
           className="d-flex flex-column align-items-center justify-content-end"
           style={{
             height: "130px",
-            cursor: counts?.[item] > 0 ? "pointer" : "auto",
+            cursor: counts?.[item?.name] > 0 ? "pointer" : "auto",
           }}
-          onClick={() => handleBarChartClick(item, counts?.[item])}
+          onClick={() => handleBarChartClick(item?.order, counts?.[item?.name])}
         >
           <div
             className="header-bar-chart"
             style={{
               height:
-                counts[item] === 0 || !candidatesExist
+                counts[item?.name] === 0 || !candidatesExist
                   ? "7.5%"
-                  : `${(counts[item] / maxCount) * 60}%`,
+                  : `${(counts[item?.name] / maxCount) * 60}%`,
               transition: "height 0.3s ease",
               background:
                 "linear-gradient(to bottom, rgba(255, 255, 255, 0.5), #A5BEE3)",
@@ -83,13 +85,13 @@ function TimelineHeader({ data }) {
           ></div>
           <div className="text-center">
             <div className="form-text" style={{ alignSelf: "flex-end" }}>
-              {item}
+              {item?.name}
             </div>
             <div
               className="fw-semibold text-custom-primary"
               style={{ alignSelf: "flex-end" }}
             >
-              <span>{counts?.[item] ?? 0}</span>
+              <span>{counts?.[item?.name] ?? 0}</span>
             </div>
           </div>
         </div>
