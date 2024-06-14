@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Label, Button } from "reactstrap";
 import Filter from "./Filter";
+import { conditionObject } from "./filterConstant";
+import { validateFilters } from "./Validation";
 
 const TableFilter = ({ fields }) => {
   const [filters, setFilters] = useState([
-    {
-      field: "name",
-      condition: "contains",
-      value: "John",
-    },
-    {
-      field: "age",
-      condition: "greater than",
-      value: "30",
-      operator: "AND",
-    },
+    // {
+    //   field: "name",
+    //   condition: "contains",
+    //   value: "John",
+    // },
+    // {
+    //   field: "age",
+    //   condition: "greater than",
+    //   value: "30",
+    //   operator: "AND",
+    // },
     // {
     //   field: "status",
     //   condition: "equal",
@@ -34,11 +36,10 @@ const TableFilter = ({ fields }) => {
     //   operator: "OR",
     // },
   ]);
-
-  console.log("fields");
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    console.log("Filters String", buildFilterString(filters));
+    console.log("Filters String: ", buildFilterString(filters));
   }, [filters]);
 
   function buildFilterString(filters) {
@@ -49,7 +50,7 @@ const TableFilter = ({ fields }) => {
 
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];
-      const conditionString = `${filter.column} ${getConditionOperator(
+      const conditionString = `${filter?.field} ${getConditionOperator(
         filter.condition
       )} '${filter.value}'`;
 
@@ -65,9 +66,9 @@ const TableFilter = ({ fields }) => {
 
   function getConditionOperator(condition) {
     switch (condition) {
-      case "contains":
+      case "Contains":
         return "LIKE";
-      case "equal":
+      case "Equal":
         return "=";
       case "isEmpty":
         return "IS NULL";
@@ -104,6 +105,48 @@ const TableFilter = ({ fields }) => {
     );
   };
 
+//   const validateFilters = () => {
+//     let isValid = true;
+//     const newErrors = filters.map((filter) => {
+//       let fieldError = "";
+//       let conditionError = "";
+//       let valueError = "";
+
+//       if (!filter.condition) {
+//         isValid = false;
+//         conditionError = "Condition is required";
+
+//         if (!filter.field) {
+//           fieldError = "Field is required";
+//         }
+
+//         if (!filter.value) {
+//           valueError = "Value is required";
+//         }
+//       }
+
+//       if (filter?.condition === conditionObject.EQUAL) {
+//         if (!filter.field) {
+//           isValid = false;
+//           fieldError = "Field is required";
+//         }
+
+//         if (!filter?.value) {
+//           isValid = false;
+//           valueError = "Value is required";
+//         }
+//       }
+
+//       return {
+//         field: fieldError,
+//         condition: conditionError,
+//         value: valueError,
+//       };
+//     });
+//     setErrors(newErrors);
+//     return isValid;
+//   };
+
   console.log("filters", filters);
 
   return (
@@ -123,16 +166,7 @@ const TableFilter = ({ fields }) => {
               padding: "1px 2px",
               fontSize: "12px",
             }}
-            onClick={() =>
-              setFilters((prev) => [
-                ...prev,
-                {
-                //   field: "",
-                //   condition: "",
-                //   value: "",
-                },
-              ])
-            }
+            onClick={() => setFilters((prev) => [...prev, {}])}
           >
             Add Criteria
           </Button>
@@ -150,10 +184,19 @@ const TableFilter = ({ fields }) => {
                 filter={filter}
                 setFilters={setFilters}
                 index={index}
+                errors={errors?.[index]}
               />
             </div>
           );
         })}
+      </Row>
+      <Row>
+        <Button
+          className="btn btn-success"
+          onClick={() => validateFilters(filters, setErrors)}
+        >
+          Check
+        </Button>
       </Row>
     </div>
   );
