@@ -115,7 +115,7 @@ import BillRateSalaryEditModal from "../BillRateSalaryEditModal/BillRateSalaryEd
 import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav.jsx";
 
-const JobOverview = () => {
+const JobOverview = ({ onRetrieveHeader }) => {
   document.title = "Job Timeline | RTS";
 
   const dispatch = useDispatch();
@@ -790,7 +790,6 @@ const JobOverview = () => {
                       </Link>
 
                       <div className="d-flex gap-1 flex-row justify-content-center align-items-center text-muted text-small">
-                        <i className="ri-account-circle-line ri-lg mt-1 "></i>{" "}
                         <span className="form-text">{data?.createdByName}</span>
                       </div>
                     </div>
@@ -1599,10 +1598,28 @@ const JobOverview = () => {
     }
   }, [isFormModalOpen]);
 
+  useEffect(() => {
+    const mobile = isMobile | isTablet;
+    const values = overviewValues(
+      formSubmissionData,
+      jobTimelineData,
+      deliveryTeam,
+      mobile
+    );
+    onRetrieveHeader(values);
+  }, [
+    formSubmissionData,
+    jobTimelineData,
+    deliveryTeam,
+    isMobile,
+    isTablet,
+    headerTooltip,
+  ]);
+
   return (
     <React.Fragment>
       <div className="p-2">
-        <div className="d-flex flex-wrap">
+        {/* <div className="d-flex flex-wrap">
           {overviewHeaders.map((header, index) => {
             const mobile = isMobile | isTablet;
             const values = overviewValues(
@@ -1647,13 +1664,13 @@ const JobOverview = () => {
               </div>
             );
           })}
-        </div>
-
-        <hr className="w-100"></hr>
-
-        <Row className="mb-2">
-          <Card style={{ backgroundColor: "#F3F8FF" }}>
-            <CardBody>
+        </div> */}
+        {/* <hr className="w-100"></hr> */}
+        <Row className="mb-0">
+          <Card
+            style={{ backgroundColor: "#F3F8FF", border: "1px solid #D0DAE8" }}
+          >
+            <CardBody className="py-1 px-0">
               <TimelineHeader
                 data={jobHeaders}
                 setStageType={setStageType}
@@ -1666,20 +1683,28 @@ const JobOverview = () => {
           <Nav pills>
             <NavItem>
               <NavLink
-                className={`cursor-pointer rounded-0 ${
+                className={`cursor-pointer fw-semibold ${
                   timelineTab === "1" ? "active" : ""
                 }`}
                 onClick={() => setTimelineTab("1")}
+                style={{
+                  borderRadius: "5px 0 0 5px",
+                  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.031)",
+                }}
               >
                 RTS Status
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
-                className={`cursor-pointer rounded-0 ${
+                className={`cursor-pointer fw-semibold ${
                   timelineTab === "2" ? "active" : ""
                 }`}
                 onClick={() => setTimelineTab("2")}
+                style={{
+                  borderRadius: " 0 5px 5px 0",
+                  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.031)",
+                }}
               >
                 BSG Status
               </NavLink>
@@ -1700,7 +1725,7 @@ const JobOverview = () => {
                   <Input
                     type="text"
                     placeholder="Search"
-                    className="form-control search main-border-style"
+                    className="form-control search border-0"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
