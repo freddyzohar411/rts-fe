@@ -156,7 +156,6 @@ function AccountCustomView() {
                               <TableFilter fields={accountFields}/>
                             </Row>
                           </Col>
-
                           <Col lg={6}>
                             <Row>
                               <Col>

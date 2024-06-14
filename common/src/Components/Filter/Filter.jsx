@@ -16,11 +16,8 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  console.log("Index", index);
-
   const addANDCondition = () => {
     // Add after the index
-
     setFilters((prev) => {
       const newFilters = [...prev];
       newFilters.splice(index + 1, 0, { operator: "AND" });
@@ -85,10 +82,21 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
   const ErrorDiv = (message) => {
     if (!message) return null;
     return (
-      <div style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+      <div style={{ color: "red", fontSize: "12px" }}>
         <> {message}</>
       </div>
     );
+  };
+
+  const errorDivHeight = "20px";
+
+  const isErrorExist = (errors) => {
+    if (errors) {
+      if (errors?.field || errors?.condition || errors?.value) {
+        return true;
+      }
+    }
+    return false;
   };
 
   return (
@@ -108,13 +116,15 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
             }
           }
         />
-        <div
-          style={{
-            height: "10px",
-          }}
-        >
-          {errors?.field && ErrorDiv(errors?.field)}
-        </div>
+        {isErrorExist(errors) && (
+          <div
+            style={{
+              height: errorDivHeight,
+            }}
+          >
+            {errors?.field && ErrorDiv(errors?.field)}
+          </div>
+        )}
       </div>
       <div className="flex-grow-1">
         <SelectElement
@@ -129,23 +139,27 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
             }
           }
         />
-        <div
-          style={{
-            height: "10px",
-          }}
-        >
-          {errors?.condition && ErrorDiv(errors?.condition)}
-        </div>
+        {isErrorExist(errors) && (
+          <div
+            style={{
+              height: errorDivHeight,
+            }}
+          >
+            {errors?.condition && ErrorDiv(errors?.condition)}
+          </div>
+        )}
       </div>
       <div className="flex-grow-1">
         <Input type="text" className="form-control" onChange={setValueInput} />
-        <div
-          style={{
-            height: "10px",
-          }}
-        >
-          {errors?.value && ErrorDiv(errors?.value)}
-        </div>
+        {isErrorExist(errors) && (
+          <div
+            style={{
+              height: errorDivHeight,
+            }}
+          >
+            {errors?.value && ErrorDiv(errors?.value)}
+          </div>
+        )}
       </div>
       <Dropdown isOpen={dropdownOpen} toggle={toggle}>
         <DropdownToggle

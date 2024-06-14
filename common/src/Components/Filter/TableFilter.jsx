@@ -37,9 +37,11 @@ const TableFilter = ({ fields }) => {
     // },
   ]);
   const [errors, setErrors] = useState([]);
+  const [queryString, setQueryString] = useState("");
 
   useEffect(() => {
     console.log("Filters String: ", buildFilterString(filters));
+    setQueryString(buildFilterString(filters));
   }, [filters]);
 
   function buildFilterString(filters) {
@@ -50,7 +52,7 @@ const TableFilter = ({ fields }) => {
 
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];
-      const conditionString = `${filter?.field} ${getConditionOperator(
+      const conditionString = `${filter?.label} ${getConditionOperator(
         filter.condition
       )} '${filter.value}'`;
 
@@ -105,57 +107,52 @@ const TableFilter = ({ fields }) => {
     );
   };
 
-//   const validateFilters = () => {
-//     let isValid = true;
-//     const newErrors = filters.map((filter) => {
-//       let fieldError = "";
-//       let conditionError = "";
-//       let valueError = "";
+  //   const validateFilters = () => {
+  //     let isValid = true;
+  //     const newErrors = filters.map((filter) => {
+  //       let fieldError = "";
+  //       let conditionError = "";
+  //       let valueError = "";
 
-//       if (!filter.condition) {
-//         isValid = false;
-//         conditionError = "Condition is required";
+  //       if (!filter.condition) {
+  //         isValid = false;
+  //         conditionError = "Condition is required";
 
-//         if (!filter.field) {
-//           fieldError = "Field is required";
-//         }
+  //         if (!filter.field) {
+  //           fieldError = "Field is required";
+  //         }
 
-//         if (!filter.value) {
-//           valueError = "Value is required";
-//         }
-//       }
+  //         if (!filter.value) {
+  //           valueError = "Value is required";
+  //         }
+  //       }
 
-//       if (filter?.condition === conditionObject.EQUAL) {
-//         if (!filter.field) {
-//           isValid = false;
-//           fieldError = "Field is required";
-//         }
+  //       if (filter?.condition === conditionObject.EQUAL) {
+  //         if (!filter.field) {
+  //           isValid = false;
+  //           fieldError = "Field is required";
+  //         }
 
-//         if (!filter?.value) {
-//           isValid = false;
-//           valueError = "Value is required";
-//         }
-//       }
+  //         if (!filter?.value) {
+  //           isValid = false;
+  //           valueError = "Value is required";
+  //         }
+  //       }
 
-//       return {
-//         field: fieldError,
-//         condition: conditionError,
-//         value: valueError,
-//       };
-//     });
-//     setErrors(newErrors);
-//     return isValid;
-//   };
+  //       return {
+  //         field: fieldError,
+  //         condition: conditionError,
+  //         value: valueError,
+  //       };
+  //     });
+  //     setErrors(newErrors);
+  //     return isValid;
+  //   };
 
   console.log("filters", filters);
 
   return (
-    <div
-      style={{
-        overflowY: "auto",
-        height: "280px",
-      }}
-    >
+    <div>
       <div className="d-flex gap-2 align-items-center mb-2">
         <span className="fw-semibold">Specify Criteria</span>
         {filters?.length === 0 && (
@@ -172,8 +169,13 @@ const TableFilter = ({ fields }) => {
           </Button>
         )}
       </div>
-
-      <Row className="py-1">
+      <div
+        className="py-1"
+        style={{
+          overflowY: "auto",
+          height: "220px",
+        }}
+      >
         {filters?.map((filter, index) => {
           console.log("Filter", filter);
           return (
@@ -189,15 +191,17 @@ const TableFilter = ({ fields }) => {
             </div>
           );
         })}
-      </Row>
+      </div>
       <Row>
         <Button
-          className="btn btn-success"
+          className="btn btn-success mt-2"
           onClick={() => validateFilters(filters, setErrors)}
         >
           Check
         </Button>
       </Row>
+      <Row>{queryString}</Row>
+      {/* </div> */}
     </div>
   );
 };
