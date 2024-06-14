@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Container,
   Row,
@@ -30,14 +30,16 @@ function AccountCustomView() {
   document.title = "Create Account Custom View | RTS";
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const filterRef = useRef(null);
   const accountFields = useSelector(
     (state) => state?.AccountReducer?.accountsFields
   );
 
-  console.log("accountFields", accountFields);
+  // console.log("accountFields", accountFields);
   const [selectedOption, setSelectedOption] = useState([]);
   const [dualListBoxError, setDualListBoxError] = useState(false);
   const [options, setOptions] = useState([]);
+  const [filters, setFilters] = useState([]);
 
   const areOptionsEmpty = () => {
     return !(options && options.length > 0);
@@ -61,6 +63,13 @@ function AccountCustomView() {
   }, [accountFields]);
 
   const handleSubmit = async (values) => {
+    const flag = filterRef.current?.validate();
+    console.log("Flag", flag);
+    if (!flag) return;
+
+    console.log("Filters", filters);
+
+    return
     try {
       if (selectedOption.length === 0) {
         setDualListBoxError(true);
@@ -153,7 +162,12 @@ function AccountCustomView() {
                             </Row>
                             <Row>
                               {/* Filter Element */}
-                              <TableFilter fields={accountFields}/>
+                              <TableFilter
+                                fields={accountFields}
+                                filters={filters}
+                                setFilters={setFilters}
+                                ref={filterRef}
+                              />
                             </Row>
                           </Col>
                           <Col lg={6}>

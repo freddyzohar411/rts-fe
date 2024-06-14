@@ -1,46 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { Row, Col, Label, Button } from "reactstrap";
 import Filter from "./Filter";
 import { conditionObject } from "./filterConstant";
 import { validateFilters } from "./Validation";
 
-const TableFilter = ({ fields }) => {
-  const [filters, setFilters] = useState([
-    // {
-    //   field: "name",
-    //   condition: "contains",
-    //   value: "John",
-    // },
-    // {
-    //   field: "age",
-    //   condition: "greater than",
-    //   value: "30",
-    //   operator: "AND",
-    // },
-    // {
-    //   field: "status",
-    //   condition: "equal",
-    //   value: "active",
-    //   operator: "OR",
-    // },
-    // {
-    //   field: "department",
-    //   condition: "contains",
-    //   value: "sales",
-    //   operator: "AND",
-    // },
-    // {
-    //   field: "salary",
-    //   condition: "greater than",
-    //   value: "50000",
-    //   operator: "OR",
-    // },
-  ]);
+const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
   const [errors, setErrors] = useState([]);
   const [queryString, setQueryString] = useState("");
 
+  // console.log("Errors", errors);
+
   useEffect(() => {
-    console.log("Filters String: ", buildFilterString(filters));
     setQueryString(buildFilterString(filters));
   }, [filters]);
 
@@ -107,49 +82,13 @@ const TableFilter = ({ fields }) => {
     );
   };
 
-  //   const validateFilters = () => {
-  //     let isValid = true;
-  //     const newErrors = filters.map((filter) => {
-  //       let fieldError = "";
-  //       let conditionError = "";
-  //       let valueError = "";
-
-  //       if (!filter.condition) {
-  //         isValid = false;
-  //         conditionError = "Condition is required";
-
-  //         if (!filter.field) {
-  //           fieldError = "Field is required";
-  //         }
-
-  //         if (!filter.value) {
-  //           valueError = "Value is required";
-  //         }
-  //       }
-
-  //       if (filter?.condition === conditionObject.EQUAL) {
-  //         if (!filter.field) {
-  //           isValid = false;
-  //           fieldError = "Field is required";
-  //         }
-
-  //         if (!filter?.value) {
-  //           isValid = false;
-  //           valueError = "Value is required";
-  //         }
-  //       }
-
-  //       return {
-  //         field: fieldError,
-  //         condition: conditionError,
-  //         value: valueError,
-  //       };
-  //     });
-  //     setErrors(newErrors);
-  //     return isValid;
-  //   };
-
-  console.log("filters", filters);
+  useImperativeHandle(
+    ref,
+    () => ({
+      validate: () => validateFilters(filters, setErrors),
+    }),
+    [filters, setErrors]
+  );
 
   return (
     <div>
@@ -177,7 +116,7 @@ const TableFilter = ({ fields }) => {
         }}
       >
         {filters?.map((filter, index) => {
-          console.log("Filter", filter);
+          // console.log("Filter", filter);
           return (
             <div className="d-flex flex-column gap-2">
               {generateOperatorHr(filter, index)}
@@ -204,6 +143,6 @@ const TableFilter = ({ fields }) => {
       {/* </div> */}
     </div>
   );
-};
+});
 
 export default TableFilter;
