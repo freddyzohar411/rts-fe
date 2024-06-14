@@ -1,3 +1,8 @@
+.inner-timeline {
+  position: relative;
+  margin-top: -50px;
+  margin-bottom: 20px;
+}
 .timeline-container-div {
   display: flex;
   flex-direction: row;
@@ -17,7 +22,7 @@
 
 @media (min-width: 1024px) {
   .container {
-    padding-left: 0.5rem;
+    padding-left: 0rem;
   }
 }
 
@@ -174,7 +179,7 @@
   display: flex;
   flex-direction: column;
   padding-left: 5px;
-  gap: 3px;
+  gap: 1px;
   align-items: flex-start;
   width: 100%;
   height: 53px;
@@ -194,7 +199,10 @@
   font-size: 11px;
   padding-bottom: 0;
   color: #0a56ae;
-  overflow: hidden;
+  white-space: wrap;
+  font-weight: 500;
+  text-wrap: wrap;
+  // overflow: auto;
 }
 
 .main-step-alignment {
@@ -406,4 +414,30 @@
   .line-padding-handle-bad-case {
     padding-top: 43px;
   }
+}
+
+.curve-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.curve-wrapper-btm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.curve-inner {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 65px;
+}
+
+.curve-inner-btm {
+  display: flex;
+  width: 100%;
+  height: 95px;
 }

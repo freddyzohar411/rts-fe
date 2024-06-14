@@ -361,15 +361,31 @@ const InnerTimelineStep = ({
   };
 
   const [expandedView, setExpandedView] = useState(
-    innerTimelineSteps.map(() => false)
+    innerTimelineSteppers.map((stepper) => ({ ...stepper, expanded: false }))
   );
 
   const toggleExpansion = (index) => {
-    setExpandedView((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
+    setExpandedView((prev) =>
+      prev.map((item, idx) =>
+        idx === index ? { ...item, expanded: !item.expanded } : item
+      )
+    );
   };
+
+  // Update expandedView whenever innerTimelineSteppers changes
+  useEffect(() => {
+    setExpandedView((prev) => {
+      const newExpandedView = innerTimelineSteppers.map((stepper) => {
+        const existingItem = prev.find(
+          (item) => Object.values(item)[0] === Object.values(stepper)[0]
+        );
+        return existingItem
+          ? { ...stepper, expanded: existingItem.expanded }
+          : { ...stepper, expanded: false };
+      });
+      return newExpandedView;
+    });
+  }, [innerTimelineSteppers.length]);
 
   const getRangesAfterExpand = (timeline, outerSteps) => {
     const result = {};
@@ -408,14 +424,15 @@ const InnerTimelineStep = ({
     setIndexRanges(
       getRangesAfterExpand(innerTimelineSteppers, innerTimelineOuterSteps)
     );
-  }, [innerTimelineSteppers.length]);
+  }, [innerTimelineSteppers.length, expandedView.length]);
 
   const getIndexesUnderCurrentExpandedSection = () => {
     let indexes = [];
     Object.keys(expandedView).forEach((key) => {
       const [start, end] = indexRanges[key] || [];
       for (let i = start; i <= end; i++) {
-        if (expandedView[key] === true) {
+        // Access the `expanded` property of the object at `expandedView[key]`
+        if (expandedView[key].expanded === true) {
           indexes.push(i);
         }
       }
@@ -466,13 +483,24 @@ const InnerTimelineStep = ({
     (index) => innerTimelineSteppers[index]
   );
 
+  // Generating the Inner Timeline with additional curves
   useEffect(() => {
+    const filteredIndexesInnerTimeline = indexesInnerTimeline.filter((item) => {
+      // Convert item to an array of [key, value] pairs and check if any pair matches the specified structures
+      return !Object.entries(item).some(
+        ([key, value]) =>
+          (key === "topRightCurve" && value === "topRightCurve") ||
+          (key === "bottomRightCurve" && value === "bottomRightCurve") ||
+          (key === "topLeftCurve" && value === "topLeftCurve") ||
+          (key === "bottomLeftCurve" && value === "bottomLeftCurve")
+      );
+    });
     if (debouncedNoOfRows === 1 || expandedSectionIndexes.length === 0) {
       setInnerTimelineSteppers(defaultTimeline);
     } else if (debouncedNoOfRows === 2) {
       setInnerTimelineSteppers(defaultTimeline);
       const newTimeline = [...defaultTimeline];
-      const ninthIndex = indexesInnerTimeline[8];
+      const ninthIndex = filteredIndexesInnerTimeline[8];
       const ninthIndexSteppers = defaultTimeline.findIndex(
         (item) => item === ninthIndex
       );
@@ -483,6 +511,8 @@ const InnerTimelineStep = ({
         bottomRightCurve: "bottomRightCurve",
       });
       setInnerTimelineSteppers(newTimeline);
+
+      // If expanded section is the last 2 steps
     } else if (debouncedNoOfRows === 3) {
       setInnerTimelineSteppers(defaultTimeline);
       const newTimeline = [...defaultTimeline];
@@ -496,8 +526,7 @@ const InnerTimelineStep = ({
       newTimeline.splice(ninthIndexSteppers + 2, 0, {
         bottomRightCurve: "bottomRightCurve",
       });
-
-      const ninteenthIndex = indexesInnerTimeline[18];
+      const ninteenthIndex = filteredIndexesInnerTimeline[16];
       const ninteenthIndexSteppers = newTimeline.findIndex(
         (item) => item === ninteenthIndex
       );
@@ -521,8 +550,7 @@ const InnerTimelineStep = ({
       newTimeline.splice(ninthIndexSteppers + 2, 0, {
         bottomRightCurve: "bottomRightCurve",
       });
-
-      const ninteenthIndex = indexesInnerTimeline[18];
+      const ninteenthIndex = filteredIndexesInnerTimeline[16];
       const ninteenthIndexSteppers = newTimeline.findIndex(
         (item) => item === ninteenthIndex
       );
@@ -532,8 +560,7 @@ const InnerTimelineStep = ({
       newTimeline.splice(ninteenthIndexSteppers + 2, 0, {
         bottomLeftCurve: "bottomLeftCurve",
       });
-
-      const twentyNinthIndex = indexesInnerTimeline[28];
+      const twentyNinthIndex = filteredIndexesInnerTimeline[24];
       const twentyNinthIndexSteppers = newTimeline.findIndex(
         (item) => item === twentyNinthIndex
       );
@@ -545,7 +572,7 @@ const InnerTimelineStep = ({
       });
       setInnerTimelineSteppers(newTimeline);
     }
-  }, [debouncedNoOfRows, expandedSectionIndexes.length]);
+  }, [debouncedNoOfRows, expandedView]);
 
   const getOverallStatus = (data) => {
     const statuses = data.map((item) => item.data.status);
@@ -635,12 +662,12 @@ const InnerTimelineStep = ({
   }, []);
 
   return (
-    <div style={{ position: "relative", marginTop: "-40px" }}>
+    <div className="inner-timeline">
       <div className="py-2 w-100">
         <div
           id="container-new"
           ref={containerNewRef}
-          class={`container ${itemCount <= 10 ? "single-row" : ""}`}
+          className={`container ${itemCount <= 10 ? "single-row" : ""}`}
         >
           {innerTimelineSteppers.map((step, index) => {
             const stepNumber = Object.keys(step)[0];
@@ -842,7 +869,8 @@ const InnerTimelineStep = ({
 
             // Rendering the Expand/Collapse Button
             if (stepName.includes("Expand")) {
-              const isExpanded = expandedView[index];
+              const isExpanded =
+                expandedView[index] && expandedView[index].expanded;
 
               const isDisabled =
                 withdrawnKey !== null && index > withdrawnKey + 1;
@@ -1094,7 +1122,7 @@ const InnerTimelineStep = ({
               (key) => {
                 const [start, end] = indexRanges[key] || [];
                 return (
-                  start <= index && index <= end && expandedView[key] === false
+                  start <= index && index <= end && !expandedView[key].expanded
                 );
               }
             );
@@ -1104,7 +1132,7 @@ const InnerTimelineStep = ({
             ).some((key) => {
               const [start, end] = indexRanges[key] || [];
               return (
-                start <= index && index <= end && expandedView[key] === true
+                start <= index && index <= end && expandedView[key].expanded
               );
             });
 
