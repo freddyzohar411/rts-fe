@@ -44,6 +44,7 @@ import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTab
 import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 import { TooltipWrapper } from "@workspace/common";
 import { toast } from "react-toastify";
+import { getJobs } from "../../helpers/backend_helper";
 
 const DynamicTableWrapper = ({
   data,
@@ -165,15 +166,13 @@ const DynamicTableWrapper = ({
     });
   };
 
-  const handleEportExcel = () => {
+  const handleEportExcel = async () => {
     let exportData = null;
-    if (!activeRow) {
-      exportData = data;
-    } else if (activeRow?.length === 0) {
-      exportData = data;
-    } else {
-      exportData = data.filter((item) => activeRow.includes(item?.id));
-    }
+    try {
+      const payload = { ...pageRequest, isDownload: true };
+      const resp = await getJobs(payload);
+      exportData = resp?.data?.jobs;
+    } catch (e) {}
 
     DynamicTableHelper.handleExportExcel(
       "Jobs",
