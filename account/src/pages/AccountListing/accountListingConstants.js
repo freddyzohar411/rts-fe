@@ -1,9 +1,9 @@
 const ACCOUNT_MANDATORY_OPTIONS = [
   {
-    label: "Account Name",
-    value: "accountSubmissionData.accountName",
+    sortValue: "account_submission_data.accountId",
+    label: "Pulse Account Id",
+    value: "accountSubmissionData.accountId",
     sort: true,
-    sortValue: "account_submission_data.accountName",
     expand: true,
   },
   {
@@ -11,6 +11,13 @@ const ACCOUNT_MANDATORY_OPTIONS = [
     value: "accountNumber",
     sort: true,
     sortValue: "account_submission_data.accountNumber",
+  },
+  {
+    label: "Account Name",
+    value: "accountSubmissionData.accountName",
+    sort: true,
+    sortValue: "account_submission_data.accountName",
+    expand: true,
   },
 ];
 

@@ -10,13 +10,19 @@ export const overviewHeaders = [
   "Man Days",
   "Client Bill Rate",
   "Candidate Salary Budget",
+  "Created Date",
 ];
 
 export const trimValue = (value, isMobile) => {
   return isMobile ? truncate(value, 8) : truncate(value, 25);
 };
 
-export const overviewValues = (data, jobTimelineData, deliveryTeam, isMobile) => {
+export const overviewValues = (
+  data,
+  jobTimelineData,
+  deliveryTeam,
+  isMobile
+) => {
   const calculateAgeing = () => {
     if (Object.keys(jobTimelineData).length !== 0) {
       const createdAtDate = jobTimelineData?.jobs[0]?.createdAt;
@@ -24,9 +30,17 @@ export const overviewValues = (data, jobTimelineData, deliveryTeam, isMobile) =>
       const newCreatedAtDate = new Date(createdAtDate);
       const ageingValueMS = currentDate - newCreatedAtDate;
       const ageingValueDays = Math.floor(ageingValueMS / (1000 * 60 * 60 * 24));
-      return ageingValueDays;
+      const years = Math.floor(ageingValueDays / 365);
+      const remainingDays = ageingValueDays % 365;
+
+      if (years > 0) {
+        return `${years} Y ${remainingDays} Days`;
+      } else {
+        return `${ageingValueDays} Days`;
+      }
     } else return "N/A";
-  }
+  };
+
   const owner = data?.accountOwner?.split("(")?.[0]?.trim();
   const output = {
     Account: {
@@ -42,16 +56,16 @@ export const overviewValues = (data, jobTimelineData, deliveryTeam, isMobile) =>
       trimValue: trimValue(data?.jobId, isMobile),
     },
     Ageing: {
-      value: calculateAgeing() + " Days",
-      trimValue: trimValue(calculateAgeing() + " Days", isMobile),
+      value: calculateAgeing(),
+      trimValue: trimValue(calculateAgeing(), isMobile),
     },
     "Account Owner": {
       value: owner,
       trimValue: trimValue(owner, isMobile),
     },
     Recruiter: {
-      value: deliveryTeam?.join(", ") ?? "N/A",
-      trimValue: trimValue(deliveryTeam?.join(", "), isMobile),
+      value: data?.fodRecruiters ?? "N/A",
+      trimValue: trimValue(data?.fodRecruiters, isMobile),
     },
     "Man Days": {
       value: "N/A",
@@ -65,6 +79,11 @@ export const overviewValues = (data, jobTimelineData, deliveryTeam, isMobile) =>
     "Candidate Salary Budget": {
       value: (data?.currency ?? "") + " " + data?.payrate,
       trimValue: (data?.currency ?? "") + " " + (data?.payrate ?? "N/A"),
+      isMobile,
+    },
+    "Created Date": {
+      value: new Date(data?.dateOpen).toLocaleDateString() ?? "N/A",
+      trimValue: new Date(data?.dateOpen).toLocaleDateString() ?? "N/A",
       isMobile,
     },
   };

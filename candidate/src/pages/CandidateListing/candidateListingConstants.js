@@ -45,6 +45,13 @@ const CANDIDATE_INITIAL_OPTIONS = [
 
 const CANDIDATE_MANDATORY_OPTIONS = [
   {
+    sortValue: "candidate_submission_data.candidateId",
+    label: "Pulse Candidate Id",
+    value: "candidateSubmissionData.candidateId",
+    sort: true,
+    expand: true,
+  },
+  {
     label: "Candidate First Name",
     value: "candidateSubmissionData.firstName",
     sort: true,
