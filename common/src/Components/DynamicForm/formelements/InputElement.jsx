@@ -1,5 +1,6 @@
 import React from "react";
 import { fieldLocation, fieldSize } from "./constant";
+import { checkVisibleConditions } from "../formelements/formElements_helper";
 
 const InputElement = ({ formik, field, formStateHook, tabIndexData }) => {
   const { formState } = formStateHook;
@@ -16,6 +17,15 @@ const InputElement = ({ formik, field, formStateHook, tabIndexData }) => {
         formik?.values?.[field.name].slice(0, 7)
       );
     }
+  }
+
+  // Handle Present date "present" so as not to throw error
+  if (
+    type === "date" &&
+    checkVisibleConditions(field, formik) &&
+    formik?.values?.[field.name] === "present"
+  ) {
+    formik?.setFieldValue(field.name, "");
   }
 
   return (
