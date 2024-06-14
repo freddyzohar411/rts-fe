@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import LoadingOverlay from "react-loading-overlay";
 import JobCreation from "../../components/JobCreation/JobCreation";
 import JobOverview from "../../components/JobOverview/JobOverview";
+import { overviewHeaders } from "../../components/JobOverview/JobOverviewUtil";
 import {
   Card,
   CardBody,
@@ -15,6 +16,7 @@ import {
   TabPane,
 } from "reactstrap";
 import classnames from "classnames";
+import "./JobManage.scss";
 
 const JobManage = () => {
   const { jobId, slug } = useParams();
@@ -29,6 +31,12 @@ const JobManage = () => {
     }
   };
 
+  // Overview Header
+  const [onRetrieveHeader, setOnRetrieveHeader] = useState(null);
+  const handleOverviewHeader = (value) => {
+    setOnRetrieveHeader(value);
+  };
+
   return (
     <LoadingOverlay
       active={jobTagMeta?.isLoading ?? false}
@@ -36,8 +44,56 @@ const JobManage = () => {
       text="Please wait..."
     >
       <div className="page-content">
+        <div className="overview-header">
+          <div className="d-flex flex-wrap">
+            {overviewHeaders.map((header, index) => {
+              // const mobile = isMobile | isTablet;
+              // const values = overviewValues(
+              //   formSubmissionData,
+              //   jobTimelineData,
+              //   deliveryTeam,
+              //   mobile
+              // );
+              // const shouldShowTooltip = values?.[header]?.value?.length > 20;
+              return (
+                <div
+                  key={index}
+                  style={{
+                    flex: "0 0 calc(100% / 7)",
+                    maxWidth: "calc(100% / 7)",
+                    paddingBottom: "10px",
+                  }}
+                >
+                  <div
+                    className="d-flex flex-column cursor-pointer"
+                    id={`btn-${index}`}
+                    // onClick={() => setHeaderTooltip(!headerTooltip)}
+                  >
+                    <span className="fw-medium text-muted">{header}</span>
+                    <span
+                      className="fw-semibold gap-1"
+                      style={{ color: "#0A56AE" }}
+                    >
+                      {onRetrieveHeader?.[header]?.trimValue}
+                    </span>
+                  </div>
+                  {/* {shouldShowTooltip && (
+                    <Tooltip
+                      isOpen={isToolTipOpen(`btn-${index}`)}
+                      placement="bottom-start"
+                      target={`btn-${index}`}
+                      toggle={() => toggle(`btn-${index}`)}
+                    >
+                      {onRetrieveHeader?.[header]?.value}
+                    </Tooltip>
+                  )} */}
+                </div>
+              );
+            })}
+          </div>
+        </div>
         <Container fluid className="p-0">
-          <Nav className="nav-tabs-custom">
+          <Nav tabs>
             <NavItem>
               <NavLink
                 className={classnames(
@@ -117,9 +173,9 @@ const JobManage = () => {
           <TabContent activeTab={ugTab}>
             {/*OVERVIEW*/}
             <TabPane tabId="1" id="manageOverview">
-              <Card>
-                <CardBody>
-                  <JobOverview />
+              <Card style={{ boxShadow: "none" }}>
+                <CardBody className="p-2 bg-light" style={{ boxShadow: "none" }}>
+                  <JobOverview onRetrieveHeader={handleOverviewHeader} />
                 </CardBody>
               </Card>
             </TabPane>
@@ -127,7 +183,7 @@ const JobManage = () => {
             <TabPane tabId="2" id="manageSnapshot">
               <Card>
                 <CardBody>
-                  <JobCreation key={ugTab}/>
+                  <JobCreation key={ugTab} />
                 </CardBody>
               </Card>
             </TabPane>
