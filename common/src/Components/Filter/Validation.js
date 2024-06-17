@@ -1,7 +1,7 @@
-import {  conditionObject } from "./filterConstant";
+import { conditionObject } from "./filterConstant";
 
 export const validateFilters = (filters, setErrors) => {
-    console.log("filters VV", filters);
+  console.log("filters VV", filters);
   let isValid = true;
   const newErrors = filters.map((filter) => {
     let fieldError = "";
@@ -21,7 +21,12 @@ export const validateFilters = (filters, setErrors) => {
       }
     }
 
-    if (filter?.condition === conditionObject.EQUAL) {
+    if (
+      filter?.condition === conditionObject.EQUAL ||
+      filter?.condition === conditionObject.NOT_EQUAL ||
+      filter?.condition === conditionObject.CONTAINS ||
+      filter?.condition === conditionObject.DOES_NOT_CONTAIN
+    ) {
       if (!filter.field) {
         isValid = false;
         fieldError = "Field is required";
@@ -30,6 +35,20 @@ export const validateFilters = (filters, setErrors) => {
       if (!filter?.value) {
         isValid = false;
         valueError = "Value is required";
+      }
+    }
+
+    if (
+      filter?.condition === conditionObject.IS_EMPTY ||
+      filter?.condition === conditionObject.IS_NOT_EMPTY ||
+      filter?.condition === conditionObject.IS_TRUE ||
+      filter?.condition === conditionObject.IS_FALSE ||
+      filter?.condition === conditionObject.IS_NULL ||
+      filter?.condition === conditionObject.IS_NOT_NULL
+    ) {
+      if (!filter.field) {
+        isValid = false;
+        fieldError = "Field is required";
       }
     }
 

@@ -27,9 +27,9 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
 
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];
-      const conditionString = `${filter?.label} ${getConditionOperator(
-        filter.condition
-      )} '${filter.value}'`;
+      const conditionString = `${filter?.label || ""} ${getConditionOperator(
+        filter?.condition
+      )} ${filter?.value ? `'${filter?.value}'` : ""}`;
 
       if (i === 0) {
         currentGroup = conditionString;
@@ -43,14 +43,22 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
 
   function getConditionOperator(condition) {
     switch (condition) {
-      case "Contains":
+      case conditionObject.CONTAINS:
         return "LIKE";
-      case "Equal":
+      case conditionObject.DOES_NOT_CONTAIN:
+        return "NOT LIKE";
+      case conditionObject.EQUAL:
         return "=";
-      case "isEmpty":
+      case conditionObject.NOT_EQUAL:
+        return "!=";
+      case conditionObject.IS_EMPTY:
         return "IS NULL";
-      case "greater than":
+      case conditionObject.IS_NOT_EMPTY:
+        return "IS NOT NULL";
+      case conditionObject.GREATER_THAN:
         return ">";
+      case conditionObject.LESS_THAN:
+        return "<";
       default:
         return "";
     }
@@ -131,16 +139,18 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
           );
         })}
       </div>
-      <Row>
+      {/* <Row>
         <Button
           className="btn btn-success mt-2"
           onClick={() => validateFilters(filters, setErrors)}
         >
           Check
         </Button>
-      </Row>
-      <Row>{queryString}</Row>
-      {/* </div> */}
+      </Row> */}
+      <div>
+        <hr />
+      </div>
+      <div>{queryString}</div>
     </div>
   );
 });
