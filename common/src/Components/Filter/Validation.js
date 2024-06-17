@@ -1,7 +1,7 @@
 import { conditionObject } from "./filterConstant";
 
 export const validateFilters = (filters, setErrors) => {
-  console.log("filters VV", filters);
+  // console.log("filters VV", filters);
   let isValid = true;
   const newErrors = filters.map((filter) => {
     let fieldError = "";

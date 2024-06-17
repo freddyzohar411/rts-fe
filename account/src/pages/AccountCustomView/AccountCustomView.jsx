@@ -62,26 +62,26 @@ function AccountCustomView() {
     }
   }, [accountFields]);
 
-  const handleSubmit = async (values) => {
-    const flag = filterRef.current?.validate();
-    console.log("Flag", flag);
+  const handleSubmit = async (values, flag) => {
+    console.log("VALUES", values);
+    console.log("SUBMITTING");
     if (!flag) return;
-
-    console.log("Filters", filters);
-
-    return
+    console.log("SUBMIT DISPATCH");
     try {
       if (selectedOption.length === 0) {
         setDualListBoxError(true);
         return;
       }
       setDualListBoxError(false);
+
       const newCustomView = {
         name: values.name,
         type: "Account",
         columnName: selectedOption,
       };
 
+      console.log("NEW CUSTOM VIEW", newCustomView);
+      return;
       const response = await dispatch(
         createAccountCustomView({ payload: newCustomView, navigate: navigate })
       );
@@ -124,9 +124,19 @@ function AccountCustomView() {
                   validationSchema={schema}
                   validateOnChange={false}
                   validateOnBlur
-                  onSubmit={handleSubmit}
+                  onSubmit={(values) => {
+                    const flag = filterRef.current?.validate();
+                    handleSubmit(values, flag);
+                  }}
                 >
-                  {({ errors, touched, setFieldError }) => (
+                  {({
+                    errors,
+                    touched,
+                    setTouched,
+                    validateForm,
+                    setSubmitting,
+                    values,
+                  }) => (
                     <Form>
                       <CardBody
                         style={{
@@ -254,6 +264,12 @@ function AccountCustomView() {
                                       </p>
                                     </div>
                                   )}
+
+                                  {/* {errors.columnName && (
+                                    <p className="text-danger">
+                                      {errors.columnName}
+                                    </p>
+                                  )} */}
                                 </div>
                               </Col>
                             </Row>
@@ -271,8 +287,20 @@ function AccountCustomView() {
                           </Col>
                           <Col md="auto">
                             <Button
-                              type="submit"
+                              type="button"
                               className="btn btn-custom-primary"
+                              onClick={async () => {
+                                const formikErrors = await validateForm();
+                                setTouched({ name: true });
+                                const hasFormikErrors =
+                                  Object.keys(formikErrors).length > 0;
+                                const flag = filterRef.current?.validate();
+
+                                if (!hasFormikErrors && flag) {
+                                  handleSubmit(values, flag);
+                                }
+                                setSubmitting(false);
+                              }}
                             >
                               Create Custom View
                             </Button>

@@ -9,7 +9,7 @@ import {
 import { SelectElement } from "@Workspace/common";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import { mapConditionObjectArray } from "./filterConstant";
+import { mapConditionObjectArray, conditionObject } from "./filterConstant";
 
 const Filter = ({ fields, filter, setFilters, index, errors }) => {
   const [filtersInput, setFiltersInput] = useState({}); // [field, condition, value, operator]
@@ -99,6 +99,54 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
     return false;
   };
 
+  const generateErrorDiv = (errors) => {
+    if (!isErrorExist(errors)) return null;
+    return (
+      <div
+        style={{
+          height: errorDivHeight,
+        }}
+      >
+        {errors?.value && ErrorDiv(errors?.value)}
+      </div>
+    );
+  };
+
+  const generateValueElement = (filter) => {
+    if (!filter?.condition) return null;
+    if (
+      filter?.condition === conditionObject.EQUAL ||
+      filter?.condition === conditionObject.NOT_EQUAL ||
+      filter?.condition === conditionObject.CONTAINS ||
+      filter?.condition === conditionObject.DOES_NOT_CONTAIN
+    ) {
+      return (
+        <>
+          <Input
+            type="text"
+            className="form-control"
+            onChange={setValueInput}
+          />
+          {generateErrorDiv(errors)}
+        </>
+      );
+    } else if (
+      (filter && filter?.condition === conditionObject.GREATER_THAN) ||
+      filter?.condition === conditionObject.LESS_THAN
+    ) {
+      return (
+        <>
+          <Input
+            type="number"
+            className="form-control"
+            onChange={setValueInput}
+          />
+          {generateErrorDiv(errors)}
+        </>
+      );
+    }
+  };
+
   return (
     <div className="d-flex align-items-center gap-2 mb-2">
       <div className="flex-grow-1">
@@ -149,18 +197,7 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
           </div>
         )}
       </div>
-      <div className="flex-grow-1">
-        <Input type="text" className="form-control" onChange={setValueInput} />
-        {isErrorExist(errors) && (
-          <div
-            style={{
-              height: errorDivHeight,
-            }}
-          >
-            {errors?.value && ErrorDiv(errors?.value)}
-          </div>
-        )}
-      </div>
+      <div className="flex-grow-1">{generateValueElement(filter)}</div>
       <Dropdown isOpen={dropdownOpen} toggle={toggle}>
         <DropdownToggle
           tag="div"

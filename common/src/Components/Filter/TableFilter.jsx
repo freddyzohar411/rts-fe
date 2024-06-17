@@ -139,14 +139,6 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
           );
         })}
       </div>
-      {/* <Row>
-        <Button
-          className="btn btn-success mt-2"
-          onClick={() => validateFilters(filters, setErrors)}
-        >
-          Check
-        </Button>
-      </Row> */}
       <div>
         <hr />
       </div>
