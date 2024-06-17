@@ -14,6 +14,7 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
   const [queryString, setQueryString] = useState("");
 
   // console.log("Errors", errors);
+  console.log("Filters", filters);
 
   useEffect(() => {
     setQueryString(buildFilterString(filters));
@@ -59,6 +60,10 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
         return ">";
       case conditionObject.LESS_THAN:
         return "<";
+      case conditionObject.BEFORE:
+        return "<";
+      case conditionObject.AFTER:
+        return ">";
       default:
         return "";
     }

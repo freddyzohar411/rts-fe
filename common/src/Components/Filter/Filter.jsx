@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Input,
   Dropdown,
@@ -10,10 +10,12 @@ import { SelectElement } from "@Workspace/common";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import { mapConditionObjectArray, conditionObject } from "./filterConstant";
+import MultiDateElement from "./Elements/MultiDateElement";
 
 const Filter = ({ fields, filter, setFilters, index, errors }) => {
   const [filtersInput, setFiltersInput] = useState({}); // [field, condition, value, operator]
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   const addANDCondition = () => {
@@ -126,6 +128,7 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
             type="text"
             className="form-control"
             onChange={setValueInput}
+            value={filter?.value}
           />
           {generateErrorDiv(errors)}
         </>
@@ -140,12 +143,26 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
             type="number"
             className="form-control"
             onChange={setValueInput}
+            value={filter?.value}
           />
           {generateErrorDiv(errors)}
         </>
       );
+    } else if (
+      filter?.condition === conditionObject.BEFORE ||
+      filter?.condition === conditionObject.AFTER
+    ) {
+      return (
+        <MultiDateElement onChange={setValueInput} value={filter?.value} />
+      );
     }
   };
+
+  useEffect(() => {
+    if (filter?.condition) {
+      setValueInput({ target: { value: "" } });
+    }
+  }, [filter?.condition]);
 
   return (
     <div className="d-flex align-items-center gap-2 mb-2">
@@ -197,7 +214,11 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
           </div>
         )}
       </div>
-      <div className="flex-grow-1">{generateValueElement(filter)}</div>
+      <div className="flex-grow-1">
+        {/* {valueElement}
+         */}
+        {generateValueElement(filter)}
+      </div>
       <Dropdown isOpen={dropdownOpen} toggle={toggle}>
         <DropdownToggle
           tag="div"

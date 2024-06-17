@@ -78,6 +78,7 @@ function AccountCustomView() {
         name: values.name,
         type: "Account",
         columnName: selectedOption,
+        filters: filters,
       };
 
       console.log("NEW CUSTOM VIEW", newCustomView);
