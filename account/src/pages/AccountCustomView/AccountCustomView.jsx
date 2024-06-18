@@ -13,7 +13,7 @@ import {
   FormFeedback,
   Button,
 } from "reactstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -86,6 +86,17 @@ function AccountCustomView() {
     } catch (error) {}
   };
 
+  const formik = useFormik({
+    initialValues,
+    validationSchema: schema,
+    validateOnChange: false,
+    validateOnBlur: true,
+    onSubmit: async (values) => {
+      const flag = filterRef.current?.validate();
+      handleSubmit(values, flag);
+    },
+  });
+
   console.log("Filters", filters);
 
   return (
@@ -113,197 +124,174 @@ function AccountCustomView() {
                     </span>
                   </div>
                 </CardHeader>
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={schema}
-                  validateOnChange={false}
-                  validateOnBlur
-                  onSubmit={(values) => {
-                    const flag = filterRef.current?.validate();
-                    handleSubmit(values, flag);
-                  }}
-                >
-                  {({
-                    errors,
-                    touched,
-                    setTouched,
-                    validateForm,
-                    setSubmitting,
-                    values,
-                  }) => (
-                    <Form>
-                      <CardBody
-                        style={{
-                          height: "53.5vh",
-                        }}
-                      >
-                        <Row>
-                          <Col lg={6}>
-                            <Row className="mb-3">
-                              <div className="px-2"></div>
-                              <Col lg={4}>
-                                <div>
-                                  <Label className="fw-semibold">
-                                    Custom View Name*
-                                  </Label>
-                                  <Field
-                                    name="name"
-                                    type="text"
-                                    placeholder="Enter Custom View Name"
-                                    className={`form-control ${
-                                      errors.name &&
-                                      touched.name &&
-                                      "is-invalid"
-                                    }`}
-                                  />
-                                  {errors.name && touched.name && (
-                                    <FormFeedback typeof="invalid">
-                                      {errors.name}
-                                    </FormFeedback>
-                                  )}
-                                </div>
-                              </Col>
-                            </Row>
-                            <Row>
-                              {/* Filter Element */}
-                              <TableFilter
-                                fields={accountFields}
-                                filters={filters}
-                                setFilters={setFilters}
-                                ref={filterRef}
+                <form onSubmit={formik.handleSubmit}>
+                  <CardBody
+                    style={{
+                      height: "53.5vh",
+                    }}
+                  >
+                    <Row>
+                      <Col lg={6}>
+                        <Row className="mb-3">
+                          <div className="px-2"></div>
+                          <Col lg={4}>
+                            <div>
+                              <Label className="fw-semibold">
+                                Custom View Name*
+                              </Label>
+                              <input
+                                name="name"
+                                type="text"
+                                placeholder="Enter Custom View Name"
+                                className={`form-control ${
+                                  formik.errors.name &&
+                                  formik.touched.name &&
+                                  "is-invalid"
+                                }`}
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                               />
-                            </Row>
+                             {formik.errors.name && formik.touched.name && (
+                                <FormFeedback typeof="invalid">
+                                  {formik.errors.name}
+                                </FormFeedback>
+                              )}
+                            </div>
                           </Col>
-                          <Col lg={6}>
-                            <Row>
-                              <Col>
-                                <div className="mb-3">
-                                  <div className="d-flex flex-column mb-3">
-                                    <Label className="fw-semibold">
-                                      Custom View Columns
-                                    </Label>
-                                    <span>
-                                      Please select the columns you would like
-                                      to see in the Account Listing table.
-                                    </span>
-                                  </div>
+                        </Row>
+                        <Row>
+                          {/* Filter Element */}
+                          <TableFilter
+                            fields={accountFields}
+                            filters={filters}
+                            setFilters={setFilters}
+                            ref={filterRef}
+                          />
+                        </Row>
+                      </Col>
+                      <Col lg={6}>
+                        <Row>
+                          <Col>
+                            <div className="mb-3">
+                              <div className="d-flex flex-column mb-3">
+                                <Label className="fw-semibold">
+                                  Custom View Columns
+                                </Label>
+                                <span>
+                                  Please select the columns you would like to
+                                  see in the Account Listing table.
+                                </span>
+                              </div>
 
-                                  <DualListBox
-                                    options={options ?? []}
-                                    selected={selectedOption}
-                                    onChange={(newValue) =>
-                                      setSelectedOption(newValue)
-                                    }
-                                    showOrderButtons
-                                    preserveSelectOrder
-                                    icons={{
-                                      moveLeft: [
-                                        <span
-                                          className={`mdi mdi-chevron-left ${
-                                            areOptionsEmpty()
-                                              ? "disabled-icon"
-                                              : ""
-                                          }`}
-                                          key="key"
-                                        />,
-                                      ],
-                                      moveAllLeft: [
-                                        <span
-                                          className={`mdi mdi-chevron-double-left ${
-                                            areOptionsEmpty()
-                                              ? "disabled-icon"
-                                              : ""
-                                          }`}
-                                          key="key"
-                                        />,
-                                      ],
-                                      moveRight: (
-                                        <span
-                                          className={`mdi mdi-chevron-right ${
-                                            areOptionsEmpty()
-                                              ? "disabled-icon"
-                                              : ""
-                                          }`}
-                                          key="key"
-                                        />
-                                      ),
-                                      moveAllRight: [
-                                        <span
-                                          className={`mdi mdi-chevron-double-right ${
-                                            areOptionsEmpty()
-                                              ? "disabled-icon cursor-none"
-                                              : ""
-                                          }`}
-                                          key="key"
-                                        />,
-                                      ],
-                                      moveDown: (
-                                        <span className="mdi mdi-chevron-down" />
-                                      ),
-                                      moveUp: (
-                                        <span className="mdi mdi-chevron-up" />
-                                      ),
-                                      moveTop: (
-                                        <span className="mdi mdi-chevron-double-up" />
-                                      ),
-                                      moveBottom: (
-                                        <span className="mdi mdi-chevron-double-down" />
-                                      ),
-                                    }}
-                                  />
-                                  {dualListBoxError && (
-                                    <div className="mt-2">
-                                      <p className="text-danger">
-                                        Please select at least one column name.
-                                      </p>
-                                    </div>
-                                  )}
+                              <DualListBox
+                                options={options ?? []}
+                                selected={selectedOption}
+                                onChange={(newValue) =>
+                                  setSelectedOption(newValue)
+                                }
+                                showOrderButtons
+                                preserveSelectOrder
+                                icons={{
+                                  moveLeft: [
+                                    <span
+                                      className={`mdi mdi-chevron-left ${
+                                        areOptionsEmpty() ? "disabled-icon" : ""
+                                      }`}
+                                      key="key"
+                                    />,
+                                  ],
+                                  moveAllLeft: [
+                                    <span
+                                      className={`mdi mdi-chevron-double-left ${
+                                        areOptionsEmpty() ? "disabled-icon" : ""
+                                      }`}
+                                      key="key"
+                                    />,
+                                  ],
+                                  moveRight: (
+                                    <span
+                                      className={`mdi mdi-chevron-right ${
+                                        areOptionsEmpty() ? "disabled-icon" : ""
+                                      }`}
+                                      key="key"
+                                    />
+                                  ),
+                                  moveAllRight: [
+                                    <span
+                                      className={`mdi mdi-chevron-double-right ${
+                                        areOptionsEmpty()
+                                          ? "disabled-icon cursor-none"
+                                          : ""
+                                      }`}
+                                      key="key"
+                                    />,
+                                  ],
+                                  moveDown: (
+                                    <span className="mdi mdi-chevron-down" />
+                                  ),
+                                  moveUp: (
+                                    <span className="mdi mdi-chevron-up" />
+                                  ),
+                                  moveTop: (
+                                    <span className="mdi mdi-chevron-double-up" />
+                                  ),
+                                  moveBottom: (
+                                    <span className="mdi mdi-chevron-double-down" />
+                                  ),
+                                }}
+                              />
+                              {dualListBoxError && (
+                                <div className="mt-2">
+                                  <p className="text-danger">
+                                    Please select at least one column name.
+                                  </p>
+                                </div>
+                              )}
 
-                                  {/* {errors.columnName && (
+                              {/* {errors.columnName && (
                                     <p className="text-danger">
                                       {errors.columnName}
                                     </p>
                                   )} */}
-                                </div>
-                              </Col>
-                            </Row>
+                            </div>
                           </Col>
                         </Row>
-                      </CardBody>
-                      <CardFooter>
-                        <Row className="justify-content-between">
-                          <Col md="auto">
-                            <Link to="/accounts">
-                              <Button type="button" className="btn btn-danger">
-                                Cancel
-                              </Button>
-                            </Link>
-                          </Col>
-                          <Col md="auto">
-                            <Button
-                              type="button"
-                              className="btn btn-custom-primary"
-                              onClick={async () => {
-                                const formikErrors = await validateForm();
-                                setTouched({ name: true });
-                                const hasFormikErrors =
-                                  Object.keys(formikErrors).length > 0;
-                                const flag = filterRef.current?.validate();
+                      </Col>
+                    </Row>
+                  </CardBody>
+                  <CardFooter>
+                    <Row className="justify-content-between">
+                      <Col md="auto">
+                        <Link to="/accounts">
+                          <Button type="button" className="btn btn-danger">
+                            Cancel
+                          </Button>
+                        </Link>
+                      </Col>
+                      <Col md="auto">
+                      <Button
+                          type="button"
+                          className="btn btn-custom-primary"
+                          onClick={async () => {
+                            const formikErrors = await formik.validateForm();
+                            formik.setTouched({ name: true });
+                            const hasFormikErrors =
+                              Object.keys(formikErrors).length > 0;
+                            const flag = filterRef.current?.validate();
 
-                                if (!hasFormikErrors && flag) {
-                                  handleSubmit(values, flag);
-                                }
-                                setSubmitting(false);
-                              }}
-                            >
-                              Create Custom View
-                            </Button>
-                          </Col>
-                        </Row>
-                      </CardFooter>
-                    </Form>
-                  )}
-                </Formik>
+                            if (!hasFormikErrors && flag) {
+                              handleSubmit(formik.values, flag);
+                            }
+                            formik.setSubmitting(false);
+                          }}
+                        >
+                          Create Custom View
+                        </Button>
+                      </Col>
+                    </Row>
+                  </CardFooter>
+                </form>
               </Card>
             </Col>
           </Row>
