@@ -49,6 +49,9 @@ import {
   FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
   FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
   FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -394,6 +397,25 @@ const AccountReducer = (state = initialState, action) => {
         accountCustomView: action.payload,
       };
     case FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accountCustomView: action.payload,
+      };
+    case EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE:
       return {
         ...state,
         loading: false,

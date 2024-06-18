@@ -21,6 +21,7 @@ import {
   createAccountCustomView,
   fetchAccountCustomView,
   fetchAccountCustomViewById,
+  editAccountCustomViewById
 } from "../../store/account/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
@@ -80,43 +81,48 @@ function AccountCustomView() {
     if (!flag) return;
     console.log("SUBMIT DISPATCH");
     try {
-      // if (selectedOption.length === 0) {
-      //   setDualListBoxError(true);
-      //   return;
-      // }
-      // setDualListBoxError(false);
-
       const newCustomView = {
         name: values.name,
         type: "Account",
         columnName: values.columnName || [],
         filters: filters,
       };
-      dispatch(
-        createAccountCustomView({ payload: newCustomView, navigate: navigate })
-      );
+
+      if (editId) {
+        dispatch(editAccountCustomViewById({
+          editId,
+          payload: newCustomView,
+          navigate: navigate,
+        })); 
+      } else {
+        dispatch(
+          createAccountCustomView({
+            payload: newCustomView,
+            navigate: navigate,
+          })
+        );
+      }
     } catch (error) {}
   };
 
-  const commaSeparatedStringToArray = (str) => {
-    // Check if the string is empty
-    if (!str) return [];
-    // CHeck if comma exists
-    if (str.includes(",")) {
-      return str.split(",");
-    }
-    return [str];
-  };
+  // const commaSeparatedStringToArray = (str) => {
+  //   // Check if the string is empty
+  //   if (!str) return [];
+  //   // CHeck if comma exists
+  //   if (str.includes(",")) {
+  //     return str.split(",");
+  //   }
+  //   return [str];
+  // };
 
   useEffect(() => {
     if (accountCustomView && editId) {
+      console.log("Account Custom View", accountCustomView);
       setInitialValuesState({
         name: accountCustomView?.name,
         columnName: accountCustomView?.columnName,
       });
-      setSelectedOption(
-        commaSeparatedStringToArray(accountCustomView?.columnName)
-      );
+      setSelectedOption(accountCustomView?.columnName);
       setFilters(accountCustomView?.filters);
     }
   }, [accountCustomView]);
@@ -319,7 +325,7 @@ function AccountCustomView() {
                             formik.setSubmitting(false);
                           }}
                         >
-                          Create Custom View
+                          {editId ? "Update Custom View" : "Create Custom View"}
                         </Button>
                       </Col>
                     </Row>

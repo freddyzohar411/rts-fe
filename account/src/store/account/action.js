@@ -49,6 +49,9 @@ import {
   FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
   FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
   FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -295,3 +298,19 @@ export const fetchAccountCustomViewByIdFailure = (error) => ({
   payload: error,
 });
 
+export const editAccountCustomViewById = (
+  accountCustomViewRequest
+) => ({
+  type: EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  payload: accountCustomViewRequest,
+});
+
+export const editAccountCustomViewByIdSuccess = (accountCustomView) => ({
+  type: EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
+  payload: accountCustomView,
+});
+
+export const editAccountCustomViewByIdFailure = (error) => ({
+  type: EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
+  payload: error,
+});
