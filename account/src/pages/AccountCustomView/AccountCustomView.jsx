@@ -68,16 +68,16 @@ function AccountCustomView() {
     if (!flag) return;
     console.log("SUBMIT DISPATCH");
     try {
-      if (selectedOption.length === 0) {
-        setDualListBoxError(true);
-        return;
-      }
-      setDualListBoxError(false);
+      // if (selectedOption.length === 0) {
+      //   setDualListBoxError(true);
+      //   return;
+      // }
+      // setDualListBoxError(false);
 
       const newCustomView = {
         name: values.name,
         type: "Account",
-        columnName: selectedOption,
+        columnName: values.columnName || [],
         filters: filters,
       };
       dispatch(
@@ -97,7 +97,8 @@ function AccountCustomView() {
     },
   });
 
-  console.log("Filters", filters);
+  console.log("Values", formik.values);
+  console.log("Errors", formik.errors);
 
   return (
     <React.Fragment>
@@ -152,7 +153,7 @@ function AccountCustomView() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                               />
-                             {formik.errors.name && formik.touched.name && (
+                              {formik.errors.name && formik.touched.name && (
                                 <FormFeedback typeof="invalid">
                                   {formik.errors.name}
                                 </FormFeedback>
@@ -187,9 +188,11 @@ function AccountCustomView() {
                               <DualListBox
                                 options={options ?? []}
                                 selected={selectedOption}
-                                onChange={(newValue) =>
-                                  setSelectedOption(newValue)
-                                }
+                                onChange={(newValue) => {
+                                  console.log("NEW VALUE", newValue);
+                                  setSelectedOption(newValue);
+                                  formik.setFieldValue("columnName", newValue);
+                                }}
                                 showOrderButtons
                                 preserveSelectOrder
                                 icons={{
@@ -241,19 +244,13 @@ function AccountCustomView() {
                                   ),
                                 }}
                               />
-                              {dualListBoxError && (
-                                <div className="mt-2">
+                              {formik.errors.columnName && (
+                                <div className="mt-1">
                                   <p className="text-danger">
-                                    Please select at least one column name.
+                                    {formik.errors.columnName}
                                   </p>
                                 </div>
                               )}
-
-                              {/* {errors.columnName && (
-                                    <p className="text-danger">
-                                      {errors.columnName}
-                                    </p>
-                                  )} */}
                             </div>
                           </Col>
                         </Row>
@@ -270,7 +267,7 @@ function AccountCustomView() {
                         </Link>
                       </Col>
                       <Col md="auto">
-                      <Button
+                        <Button
                           type="button"
                           className="btn btn-custom-primary"
                           onClick={async () => {

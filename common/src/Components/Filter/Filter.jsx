@@ -170,7 +170,7 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
       <div className="flex-grow-1">
         <SelectElement
           optionsData={() => {
-            return fields.map((field) => {
+            return fields?.map((field) => {
               return {
                 label: field?.label,
                 value: field?.sortValue,
