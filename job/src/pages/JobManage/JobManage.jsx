@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Container } from "reactstrap";
+import { Container, Tooltip } from "reactstrap";
 import { useSelector } from "react-redux";
 import LoadingOverlay from "react-loading-overlay";
 import JobCreation from "../../components/JobCreation/JobCreation";
@@ -19,9 +18,13 @@ import classnames from "classnames";
 import "./JobManage.scss";
 
 const JobManage = () => {
-  const { jobId, slug } = useParams();
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
   const navState = location.state;
+
+  // Overview Header
+  const [onRetrieveHeader, setOnRetrieveHeader] = useState(null);
+  const [headerTooltip, setHeaderTooltip] = useState(false);
+  const [tooltipIndexes, setTooltipIndexes] = useState();
 
   // Tabs
   const [ugTab, setUgTab] = useState(navState?.ugTab || "1");
@@ -31,10 +34,37 @@ const JobManage = () => {
     }
   };
 
-  // Overview Header
-  const [onRetrieveHeader, setOnRetrieveHeader] = useState(null);
   const handleOverviewHeader = (value) => {
     setOnRetrieveHeader(value);
+  };
+
+  /**
+   * @author Rahul Sahu
+   * @param {*} targetName
+   * Toggle tooltip
+   */
+  const toggle = (targetName) => {
+    if (!tooltipIndexes?.[targetName]) {
+      setTooltipIndexes({
+        ...tooltipIndexes,
+        [targetName]: {
+          tooltipOpen: true,
+        },
+      });
+    } else {
+      setTooltipIndexes({
+        ...tooltipIndexes,
+        [targetName]: {
+          tooltipOpen: !tooltipIndexes?.[targetName]?.tooltipOpen,
+        },
+      });
+    }
+  };
+
+  const isToolTipOpen = (targetName) => {
+    return tooltipIndexes?.[targetName]
+      ? tooltipIndexes?.[targetName]?.tooltipOpen
+      : false;
   };
 
   return (
@@ -47,14 +77,8 @@ const JobManage = () => {
         <div className="overview-header">
           <div className="d-flex flex-wrap">
             {overviewHeaders.map((header, index) => {
-              // const mobile = isMobile | isTablet;
-              // const values = overviewValues(
-              //   formSubmissionData,
-              //   jobTimelineData,
-              //   deliveryTeam,
-              //   mobile
-              // );
-              // const shouldShowTooltip = values?.[header]?.value?.length > 20;
+              const shouldShowTooltip =
+                onRetrieveHeader?.[header]?.value?.length > 20;
               return (
                 <div
                   key={index}
@@ -67,7 +91,7 @@ const JobManage = () => {
                   <div
                     className="d-flex flex-column cursor-pointer"
                     id={`btn-${index}`}
-                    // onClick={() => setHeaderTooltip(!headerTooltip)}
+                    onClick={() => setHeaderTooltip(!headerTooltip)}
                   >
                     <span className="fw-medium text-muted">{header}</span>
                     <span
@@ -77,7 +101,7 @@ const JobManage = () => {
                       {onRetrieveHeader?.[header]?.trimValue}
                     </span>
                   </div>
-                  {/* {shouldShowTooltip && (
+                  {shouldShowTooltip && (
                     <Tooltip
                       isOpen={isToolTipOpen(`btn-${index}`)}
                       placement="bottom-start"
@@ -86,7 +110,7 @@ const JobManage = () => {
                     >
                       {onRetrieveHeader?.[header]?.value}
                     </Tooltip>
-                  )} */}
+                  )}
                 </div>
               );
             })}
@@ -174,7 +198,10 @@ const JobManage = () => {
             {/*OVERVIEW*/}
             <TabPane tabId="1" id="manageOverview">
               <Card style={{ boxShadow: "none" }}>
-                <CardBody className="p-2 bg-light" style={{ boxShadow: "none" }}>
+                <CardBody
+                  className="p-2 bg-light"
+                  style={{ boxShadow: "none" }}
+                >
                   <JobOverview onRetrieveHeader={handleOverviewHeader} />
                 </CardBody>
               </Card>
