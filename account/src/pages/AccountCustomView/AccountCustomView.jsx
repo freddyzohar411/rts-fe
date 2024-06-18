@@ -32,6 +32,7 @@ function AccountCustomView() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const filterRef = useRef(null);
+  const [initialValuesState, setInitialValuesState] = useState(initialValues);
   const accountFields = useSelector(
     (state) => state?.AccountReducer?.accountsFields
   );
@@ -47,7 +48,6 @@ function AccountCustomView() {
     }
   }, [editId]);
 
-  // console.log("accountFields", accountFields);
   const [selectedOption, setSelectedOption] = useState([]);
   const [dualListBoxError, setDualListBoxError] = useState(false);
   const [options, setOptions] = useState([]);
@@ -98,11 +98,35 @@ function AccountCustomView() {
     } catch (error) {}
   };
 
+  const commaSeparatedStringToArray = (str) => {
+    // Check if the string is empty
+    if (!str) return [];
+    // CHeck if comma exists
+    if (str.includes(",")) {
+      return str.split(",");
+    }
+    return [str];
+  };
+
+  useEffect(() => {
+    if (accountCustomView && editId) {
+      setInitialValuesState({
+        name: accountCustomView?.name,
+        columnName: accountCustomView?.columnName,
+      });
+      setSelectedOption(
+        commaSeparatedStringToArray(accountCustomView?.columnName)
+      );
+      setFilters(accountCustomView?.filters);
+    }
+  }, [accountCustomView]);
+
   const formik = useFormik({
-    initialValues,
+    initialValues: initialValuesState,
     validationSchema: schema,
     validateOnChange: false,
     validateOnBlur: true,
+    enableReinitialize: true,
     onSubmit: async (values) => {
       const flag = filterRef.current?.validate();
       handleSubmit(values, flag);
