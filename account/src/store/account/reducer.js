@@ -45,6 +45,7 @@ import {
   DELETE_ACCOUNTS_SUCCESS,
   DELETE_ACCOUNTS_FAILURE,
   DELETE_ACCOUNTS_RESET,
+  RESET_ACCOUNT_CUSTOM_VIEW
 } from "./actionTypes";
 
 import {
@@ -67,7 +68,7 @@ const initialState = {
   deleteMeta: {},
   tableMeta: {},
   accountCustomView: {},
-  accountCustomViews: [],
+  accountCustomViews: null,
   deleteAccountsMeta: {},
 };
 
@@ -304,6 +305,12 @@ const AccountReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case RESET_ACCOUNT_CUSTOM_VIEW:
+      console.log("RESET_ACCOUNT_CUSTOM_VIEW");
+      return {
+        ...state,
+        accountCustomViews: null,
       };
     // Select Account Custom View
     case SELECT_ACCOUNT_CUSTOM_VIEW:

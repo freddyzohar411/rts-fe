@@ -228,6 +228,7 @@ const AccountListing = () => {
   useEffect(() => {
     if (pageRequest?.searchFields?.length > 0) {
       setActiveRow([]);
+      console.log("pageRequest", DynamicTableHelper.cleanPageRequest(pageRequest));
       dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
   }, [JSON.stringify(pageRequest)]);
@@ -260,6 +261,8 @@ const AccountListing = () => {
       setTableConfig(generateAccountConfig(customConfig));
     }
   }, [customConfig, pageInfo, activeRow, tableData]);
+
+  console.log("Accounts Data: ", accountsData?.accounts);
 
   return (
     <>

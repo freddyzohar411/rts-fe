@@ -28,6 +28,7 @@ import {
   fetchAccountCustomView,
   selectAccountCustomView,
   deleteAccountCustomView,
+  resetAccountCustomView
 } from "../../store/account/action";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -89,6 +90,10 @@ const DynamicTableWrapper = ({
 
   useEffect(() => {
     dispatch(fetchAccountCustomView());
+    return () => {
+      console.log("Resetting custom view")
+      dispatch(resetAccountCustomView())
+    }
   }, []);
 
   const handleSelectCustomView = (id) => {
@@ -105,8 +110,11 @@ const DynamicTableWrapper = ({
     setDeletingCustomViewId(null);
   };
 
+  console.log("Data", data);
+  console.log("allAccountCustomViews", allAccountCustomViews)
+
   useEffect(() => {
-    if (allAccountCustomViews && allAccountCustomViews.length > 0) {
+    if (allAccountCustomViews != null && allAccountCustomViews.length > 0) {
       const selectedCustomView = allAccountCustomViews?.find(
         (customView) => customView?.selected
       );
@@ -122,14 +130,19 @@ const DynamicTableWrapper = ({
         if (selectedObjects.length > 0) {
           setCustomConfigData(selectedObjects);
         }
+        pageRequestSet.setFilterData(selectedCustomView?.filters);
       }
-    } else {
-      setCustomConfigData(ACCOUNT_INITIAL_OPTIONS);
+    }
+    if (allAccountCustomViews != null && allAccountCustomViews.length === 0) {
+      enableDefaultView();
     }
   }, [allAccountCustomViews, optGroup]);
 
+  console.log("Page Request", pageRequest);
+
   const enableDefaultView = () => {
     setCustomConfigData(ACCOUNT_INITIAL_OPTIONS);
+    pageRequestSet.setFilterData(null);
   };
 
   const handleEportExcel = () => {

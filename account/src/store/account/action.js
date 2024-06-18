@@ -45,6 +45,7 @@ import {
   DELETE_ACCOUNTS_SUCCESS,
   DELETE_ACCOUNTS_FAILURE,
   DELETE_ACCOUNTS_RESET,
+  RESET_ACCOUNT_CUSTOM_VIEW,
 } from "./actionTypes";
 
 // Fetch Account
@@ -219,6 +220,10 @@ export const fetchAccountCustomViewSuccess = (accountCustomViews) => ({
 export const fetchAccountCustomViewFailure = (error) => ({
   type: FETCH_ACCOUNT_CUSTOM_VIEW_FAILURE,
   payload: error,
+});
+
+export const resetAccountCustomView = () => ({
+  type: RESET_ACCOUNT_CUSTOM_VIEW,
 });
 
 // Select Account Custom View

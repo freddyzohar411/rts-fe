@@ -80,20 +80,13 @@ function AccountCustomView() {
         columnName: selectedOption,
         filters: filters,
       };
-
-      console.log("NEW CUSTOM VIEW", newCustomView);
-      return;
-      const response = await dispatch(
+      dispatch(
         createAccountCustomView({ payload: newCustomView, navigate: navigate })
       );
-
-      if (response) {
-        setTimeout(async () => {
-          await dispatch(fetchAccountCustomView());
-        }, 1500); // Delay the fetch to allow the backend to update the data
-      }
     } catch (error) {}
   };
+
+  console.log("Filters", filters);
 
   return (
     <React.Fragment>

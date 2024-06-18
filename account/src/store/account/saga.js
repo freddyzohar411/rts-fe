@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery, delay } from "redux-saga/effects";
 import { AccountEntityConstant } from "../../constants/accountConstant";
 
 import {
@@ -220,6 +220,7 @@ function* workCreateAccountCustomView(action) {
       payload
     );
     yield put(createAccountCustomViewSuccess(accountCustomViewResponse));
+    yield delay(500);
     toast.success("Account custom view created successfully!");
     navigate("/accounts");
   } catch (error) {

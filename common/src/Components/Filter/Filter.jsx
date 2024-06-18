@@ -164,18 +164,25 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
     }
   }, [filter?.condition]);
 
+  console.log("Filter", filter)
   return (
     <div className="d-flex align-items-center gap-2 mb-2">
       <div className="flex-grow-1">
         <SelectElement
-          optionsData={fields}
+          optionsData={() => {
+            return fields.map((field) => {
+              return {
+                label: field?.label,
+                value: field?.sortValue,
+              };
+            });
+          }}
           setSelectedOptionData={(selectedOptions) => {
-            console.log("Selected Options", selectedOptions);
             setFieldInput(selectedOptions);
           }}
           value={
             filter?.field &&
-            filter?.value && {
+            filter?.label && {
               label: filter?.label,
               value: filter?.field,
             }
@@ -215,8 +222,6 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
         )}
       </div>
       <div className="flex-grow-1">
-        {/* {valueElement}
-         */}
         {generateValueElement(filter)}
       </div>
       <Dropdown isOpen={dropdownOpen} toggle={toggle}>
