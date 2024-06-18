@@ -13,13 +13,14 @@ import {
   FormFeedback,
   Button,
 } from "reactstrap";
-import { Formik, Form, Field, useFormik } from "formik";
+import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import {
   fetchAccountsFields,
   createAccountCustomView,
   fetchAccountCustomView,
+  fetchAccountCustomViewById,
 } from "../../store/account/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
@@ -34,6 +35,17 @@ function AccountCustomView() {
   const accountFields = useSelector(
     (state) => state?.AccountReducer?.accountsFields
   );
+  const accountCustomView = useSelector(
+    (state) => state?.AccountReducer?.accountCustomView
+  );
+
+  const editId = useParams().id;
+
+  useEffect(() => {
+    if (editId) {
+      dispatch(fetchAccountCustomViewById(editId));
+    }
+  }, [editId]);
 
   // console.log("accountFields", accountFields);
   const [selectedOption, setSelectedOption] = useState([]);

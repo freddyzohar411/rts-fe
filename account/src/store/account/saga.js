@@ -15,6 +15,7 @@ import {
   SELECT_ACCOUNT_CUSTOM_VIEW,
   DELETE_ACCOUNT_CUSTOM_VIEW,
   DELETE_ACCOUNTS,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
 } from "./actionTypes";
 import {
   fetchAccountSuccess,
@@ -44,6 +45,8 @@ import {
   deleteAccountCustomViewFailure,
   deleteAccountsFailure,
   deleteAccountsSuccess,
+  fetchAccountCustomViewByIdFailure,
+  fetchAccountCustomViewByIdSuccess,
 } from "./action";
 import {
   getAccounts,
@@ -59,6 +62,7 @@ import {
   selectAccountCustomView,
   deleteAccountCustomView,
   deleteAccounts,
+  getAccountCustomViewById
 } from "../../helpers/backend_helper";
 import {
   setAccountId,
@@ -273,6 +277,16 @@ function* workDeleteAccounts(action) {
   }
 }
 
+// Fetch Account Custom View By Id
+function* workFetchAccountCustomViewById(action) {
+  try {
+    const response = yield call(getAccountCustomViewById, action.payload);
+    yield put(fetchAccountCustomViewByIdSuccess(response.data));
+  } catch (error) {
+    yield put(fetchAccountCustomViewByIdFailure(error));
+  }
+}
+
 export default function* watchFetchAccountSaga() {
   yield takeEvery(POST_ACCOUNT, workPostAccount);
   yield takeEvery(PUT_ACCOUNT, workPutAccount);
@@ -287,4 +301,5 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(SELECT_ACCOUNT_CUSTOM_VIEW, workSelectAccountCustomView);
   yield takeEvery(DELETE_ACCOUNT_CUSTOM_VIEW, workDeleteAccountCustomView);
   yield takeEvery(DELETE_ACCOUNTS, workDeleteAccounts);
+  yield takeEvery(FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID, workFetchAccountCustomViewById);
 }

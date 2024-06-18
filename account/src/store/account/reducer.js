@@ -45,7 +45,10 @@ import {
   DELETE_ACCOUNTS_SUCCESS,
   DELETE_ACCOUNTS_FAILURE,
   DELETE_ACCOUNTS_RESET,
-  RESET_ACCOUNT_CUSTOM_VIEW
+  RESET_ACCOUNT_CUSTOM_VIEW,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
 } from "./actionTypes";
 
 import {
@@ -377,6 +380,25 @@ const AccountReducer = (state = initialState, action) => {
       return {
         ...state,
         deleteAccountsMeta: resetAllMetaData(),
+      };
+    case FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accountCustomView: action.payload,
+      };
+    case FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;

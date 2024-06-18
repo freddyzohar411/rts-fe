@@ -103,3 +103,8 @@ export const deleteAccountCustomView = (id) =>
 // Delete an accounts List
 export const deleteAccounts = (accountIds) =>
   api.create(`${ACCOUNT_URL}${BASE_ACCOUNTS}/listing/delete`, accountIds);
+
+
+// Get Custom View by id
+export const getAccountCustomViewById = (id) =>
+  api.get(`${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/customView/${id}`);

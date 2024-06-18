@@ -46,6 +46,9 @@ import {
   DELETE_ACCOUNTS_FAILURE,
   DELETE_ACCOUNTS_RESET,
   RESET_ACCOUNT_CUSTOM_VIEW,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
 } from "./actionTypes";
 
 // Fetch Account
@@ -277,4 +280,18 @@ export const deleteAccountsReset = () => ({
   type: DELETE_ACCOUNTS_RESET,
 });
 
+export const fetchAccountCustomViewById = (accountCustomViewId) => ({
+  type: FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  payload: accountCustomViewId,
+});
+
+export const fetchAccountCustomViewByIdSuccess = (accountCustomView) => ({
+  type: FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
+  payload: accountCustomView,
+});
+
+export const fetchAccountCustomViewByIdFailure = (error) => ({
+  type: FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
+  payload: error,
+});
 

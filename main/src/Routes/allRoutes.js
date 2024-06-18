@@ -131,6 +131,11 @@ const authProtectedRoutes = [
     component: <AccountCustomView />,
     requiredPermissions: [Permission.ACCOUNT_READ],
   },
+  {
+    path: "/accounts/custom-view/:id",
+    component: <AccountCustomView />,
+    requiredPermissions: [Permission.ACCOUNT_READ],
+  },
 
   // Job
   {

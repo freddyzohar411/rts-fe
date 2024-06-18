@@ -28,7 +28,7 @@ import {
   fetchAccountCustomView,
   selectAccountCustomView,
   deleteAccountCustomView,
-  resetAccountCustomView
+  resetAccountCustomView,
 } from "../../store/account/action";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -91,9 +91,9 @@ const DynamicTableWrapper = ({
   useEffect(() => {
     dispatch(fetchAccountCustomView());
     return () => {
-      console.log("Resetting custom view")
-      dispatch(resetAccountCustomView())
-    }
+      console.log("Resetting custom view");
+      dispatch(resetAccountCustomView());
+    };
   }, []);
 
   const handleSelectCustomView = (id) => {
@@ -111,7 +111,7 @@ const DynamicTableWrapper = ({
   };
 
   console.log("Data", data);
-  console.log("allAccountCustomViews", allAccountCustomViews)
+  console.log("allAccountCustomViews", allAccountCustomViews);
 
   useEffect(() => {
     if (allAccountCustomViews != null && allAccountCustomViews.length > 0) {
@@ -298,6 +298,17 @@ const DynamicTableWrapper = ({
                                           )}
                                         </div>
                                       </DropdownItem>
+                                      <Link
+                                        to={`/accounts/custom-view/${customView?.id}`}
+                                      >
+                                        <Button
+                                          className="btn btn-sm btn-secondary"
+                                          style={{ height: "29px" }}
+                                        >
+                                          <i className="ri-pencil-line"></i>
+                                        </Button>
+                                      </Link>
+
                                       <Button
                                         className="btn btn-sm btn-danger"
                                         style={{ height: "29px" }}
