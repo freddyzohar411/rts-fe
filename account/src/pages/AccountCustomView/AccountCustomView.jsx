@@ -76,10 +76,7 @@ function AccountCustomView() {
   }, [accountFields]);
 
   const handleSubmit = async (values, flag) => {
-    console.log("VALUES", values);
-    console.log("SUBMITTING");
     if (!flag) return;
-    console.log("SUBMIT DISPATCH");
     try {
       const newCustomView = {
         name: values.name,
