@@ -4,6 +4,7 @@ import {
   takeEvery,
   takeLatest,
   cancelled,
+  delay,
 } from "redux-saga/effects";
 import { CandidateEntityConstant } from "../../constants/candidateConstant";
 
@@ -94,6 +95,8 @@ import {
   selectCandidateCustomView,
   deleteCandidateCustomView,
   deleteCandidates,
+  getCandidateCustomViewById,
+  editCandidateCustomViewById,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -610,6 +613,31 @@ function* workDeleteCandidates(action) {
   }
 }
 
+// Fetch Custom View by id
+function* workFetchCandidateCustomViewById(action) {
+  try {
+    const response = yield call(getCandidateCustomViewById, action.payload);
+    yield put(fetchCandidateCustomViewByIdSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCandidateCustomViewByIdFailure(error));
+  }
+}
+
+// Edit Custom View by id
+function* workEditCandidateCustomViewById(action) {
+  const { editId, payload, navigate } = action.payload;
+  try {
+    const response = yield call(editCandidateCustomViewById, editId, payload);
+    yield put(editCandidateCustomViewByIdSuccess(response.data));
+    yield delay(500);
+    toast.success("Candidate custom view updated successfully!");
+    navigate("/candidates");
+  } catch (error) {
+    yield put(editCandidateCustomViewByIdFailure(error));
+    toast.error("Error updating candidate custom view!");
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -632,4 +660,12 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(SELECT_CANDIDATE_CUSTOM_VIEW, workSelectCandidateCustomView);
   yield takeEvery(DELETE_CANDIDATE_CUSTOM_VIEW, workDeleteCandidateCustomView);
   yield takeEvery(DELETE_CANDIDATES, workDeleteCandidates);
+  yield takeEvery(
+    FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID,
+    workFetchCandidateCustomViewById
+  );
+  yield takeEvery(
+    EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
+    workEditCandidateCustomViewById
+  );
 }

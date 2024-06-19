@@ -16,18 +16,11 @@ import {
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link, useParams } from "react-router-dom";
-// import {
-//   fetchAccountsFields,
-//   createAccountCustomView,
-//   fetchAccountCustomView,
-//   fetchAccountCustomViewById,
-//   editAccountCustomViewById
-// } from "../../store/account/action";
 import {
   fetchCandidatesFields,
   createCandidateCustomView,
   fetchCandidateCustomViewById,
-  editCandidateCustomViewById
+  editCandidateCustomViewById,
 } from "../../store/actions";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
@@ -92,11 +85,13 @@ function CandidateCustomView() {
       };
 
       if (editId) {
-        dispatch(editAccountCustomViewById({
-          editId,
-          payload: newCustomView,
-          navigate: navigate,
-        })); 
+        dispatch(
+          editCandidateCustomViewById({
+            editId,
+            payload: newCustomView,
+            navigate: navigate,
+          })
+        );
       } else {
         dispatch(
           createCandidateCustomView({
@@ -146,7 +141,7 @@ function CandidateCustomView() {
       }
       return 0;
     });
-  }
+  };
 
   // Sort the account fields by label
   sortArrayObj(candidateFields, "label");
