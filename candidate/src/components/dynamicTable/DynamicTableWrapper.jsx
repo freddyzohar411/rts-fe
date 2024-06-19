@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
-  Card,
-  CardBody,
   Col,
   Container,
   Input,
@@ -33,6 +31,7 @@ import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTab
 import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 import { TooltipWrapper } from "@workspace/common";
 import { toast } from "react-toastify";
+import { getCandidates } from "../../helpers/backend_helper";
 
 const DynamicTableWrapper = ({
   data,
@@ -127,15 +126,13 @@ const DynamicTableWrapper = ({
     setCustomConfigData(CANDIDATE_INITIAL_OPTIONS);
   };
 
-  const handleEportExcel = () => {
+  const handleEportExcel = async () => {
     let exportData = null;
-    if (!activeRow) {
-      exportData = data;
-    } else if (activeRow?.length === 0) {
-      exportData = data;
-    } else {
-      exportData = data.filter((item) => activeRow.includes(item?.id));
-    }
+    try {
+      const payload = { ...pageRequest, isDownload: true };
+      const resp = await getCandidates(payload);
+      exportData = resp?.data?.candidates;
+    } catch (e) {}
 
     DynamicTableHelper.handleExportExcel(
       "Candidates",
