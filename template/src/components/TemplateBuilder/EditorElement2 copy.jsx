@@ -992,7 +992,7 @@ const EditorElement2 = ({
             "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPreviewButton | help",
           // newline_behavior: "invert",
           content_style:
-            "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; } ul{ margin:0;} p { margin: 0px 0px 0.01mm; } table td, table th { vertical-align: top; }",
+            "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; } ul{ margin:0;} p { margin: 0px 0px 0.01mm; } ",
           style_formats: [
             {
               title: "Styles",
@@ -1067,7 +1067,6 @@ const EditorElement2 = ({
           file_picker_types: "image, media",
           table_use_colgroups: false,
           link_assume_external_targets: true,
-          table_appearance_options: false,
         }}
         onEditorChange={(value) => {
           formik.setFieldValue(name, value);
