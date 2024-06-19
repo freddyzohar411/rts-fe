@@ -26,6 +26,8 @@ import {
   SELECT_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATES,
+  FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID,
+  EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -69,6 +71,10 @@ import {
   deleteCandidateCustomViewFailure,
   deleteCandidatesSuccess,
   deleteCandidatesFailure,
+  fetchCandidateCustomViewByIdFailure,
+  fetchCandidateCustomViewByIdSuccess,
+  editCandidateCustomViewByIdSuccess,
+  editCandidateCustomViewByIdFailure,
 } from "./action";
 import {
   getCandidates,

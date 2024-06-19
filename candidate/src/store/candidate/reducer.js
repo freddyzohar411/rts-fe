@@ -60,6 +60,13 @@ import {
   DELETE_CANDIDATES_SUCCESS,
   DELETE_CANDIDATES_FAILURE,
   DELETE_CANDIDATES_RESET,
+  RESET_CANDIDATE_CUSTOM_VIEW,
+  FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID,
+  FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE,
+  FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS,
+  EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
+  EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE,
+  EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS,
 } from "./actionTypes";
 
 import {
@@ -87,7 +94,7 @@ const initialState = {
   candidatesRecommendation: [],
   candidateRecommendationLoading: false,
   candidateCustomView: {},
-  candidateCustomViews: [],
+  candidateCustomViews: null,
   deleteCandidatesMeta: {},
 };
 
@@ -477,6 +484,49 @@ const CandidateReducer = (state = initialState, action) => {
       return {
         ...state,
         deleteCandidatesMeta: resetAllMetaData(),
+      };
+    case RESET_CANDIDATE_CUSTOM_VIEW:
+      return {
+        ...state,
+        candidateCustomViews: null,
+      };
+    case FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidateCustomView: action.payload,
+      };
+    case FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidateCustomView: action.payload,
+      };
+    case EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;

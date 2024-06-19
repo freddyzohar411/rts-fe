@@ -274,9 +274,19 @@ const DynamicTableWrapper = ({
                                           )}
                                         </div>
                                       </DropdownItem>
-
+                                      <Link
+                                        to={`/candidates/custom-view/${customView?.id}`}
+                                      >
+                                        <Button
+                                          className="btn btn-sm btn-secondary"
+                                          style={{ height: "29px" }}
+                                        >
+                                          <i className="ri-pencil-line"></i>
+                                        </Button>
+                                      </Link>
                                       <Button
                                         className="btn btn-sm btn-danger"
+                                        style={{ height: "29px" }}
                                         onClick={() =>
                                           handleDeleteButtonClick(
                                             customView?.id

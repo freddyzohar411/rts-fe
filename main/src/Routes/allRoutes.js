@@ -109,6 +109,7 @@ const authProtectedRoutes = [
     requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
   { path: "/candidates/custom-view", component: <CandidateCustomView /> },
+  { path: "/candidates/custom-view/:id", component: <CandidateCustomView /> },
 
   // Account
   {

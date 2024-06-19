@@ -1,9 +1,10 @@
 import { conditionObject } from "./filterConstant";
 
 export const validateFilters = (filters, setErrors) => {
-  // console.log("filters VV", filters);
+  if (!filters) return true;
+  if (filters?.length === 0) return true;
   let isValid = true;
-  const newErrors = filters.map((filter) => {
+  const newErrors = filters?.map((filter) => {
     let fieldError = "";
     let conditionError = "";
     let valueError = "";
