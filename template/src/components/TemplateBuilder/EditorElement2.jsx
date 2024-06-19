@@ -500,6 +500,58 @@ const EditorElement2 = ({
     editor.setContent(initialContent);
   };
 
+  // New 
+  function removeUnwantedStylesFromContent(content) {
+    // Function to remove specific styles from a style string
+    function cleanStyle(style) {
+      return style
+        .replace(/-webkit-user-drag: none;/g, "")
+        .replace(/-webkit-tap-highlight-color: transparent;/g, "");
+    }
+
+    // Create a temporary container to parse the content
+    const container = document.createElement("div");
+    container.innerHTML = content;
+
+    // Find all elements with inline styles
+    const elementsWithStyles = container.querySelectorAll("[style]");
+
+    elementsWithStyles.forEach((element) => {
+      const cleanedStyle = cleanStyle(element.getAttribute("style"));
+      element.setAttribute("style", cleanedStyle.trim());
+    });
+
+    return container.innerHTML;
+  }
+
+  function removeLiDisplayBlock(content) {
+    var div = document.createElement("div");
+    div.innerHTML = content;
+
+    // Find all <li> elements
+    var liElements = div.getElementsByTagName("li");
+
+    for (var i = 0; i < liElements.length; i++) {
+      var li = liElements[i];
+      var style = li.getAttribute("style");
+
+      // If there is a style attribute and it contains 'display: block'
+      if (style && style.includes("display: block")) {
+        // Remove 'display: block' from the style attribute
+        style = style.replace(/display:\s*block;?/gi, "").trim();
+
+        // If the style attribute is empty after removal, remove the attribute
+        if (style) {
+          li.setAttribute("style", style);
+        } else {
+          li.removeAttribute("style");
+        }
+      }
+    }
+
+    return div.innerHTML;
+  }
+
   return (
     <>
       <EditorDataAttributeModal
@@ -1067,7 +1119,19 @@ const EditorElement2 = ({
           file_picker_types: "image, media",
           table_use_colgroups: false,
           link_assume_external_targets: true,
+          // New 19062024
           table_appearance_options: false,
+          paste_enable_default_filters: false,
+          paste_webkit_styles: "all", // This is rendering the pasted content with the same styles as the original content
+          paste_preprocess: function (plugin, args) {
+            // Remove unwanted styles from the pasted content
+            args.content = removeUnwantedStylesFromContent(args.content);
+          },
+
+          // Remove display Block to show the list properly
+          paste_preprocess: function (plugin, args) {
+            args.content = removeLiDisplayBlock(args.content);
+          },
         }}
         onEditorChange={(value) => {
           formik.setFieldValue(name, value);
