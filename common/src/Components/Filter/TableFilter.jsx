@@ -81,6 +81,7 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
             padding: "1px 3px",
             borderRadius: "5px",
             backgroundColor: "lightgray",
+            marginRight: "3px",
           }}
         >
           {filter?.operator}
@@ -102,6 +103,8 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
     }),
     [filters, setErrors]
   );
+
+  console.log("filters", filters)
 
   return (
     <div>
@@ -125,7 +128,7 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
         className="py-1"
         style={{
           overflowY: "auto",
-          height: "220px",
+          height: "230px",
         }}
       >
         {filters?.map((filter, index) => {

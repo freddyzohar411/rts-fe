@@ -105,16 +105,6 @@ function AccountCustomView() {
     } catch (error) {}
   };
 
-  // const commaSeparatedStringToArray = (str) => {
-  //   // Check if the string is empty
-  //   if (!str) return [];
-  //   // CHeck if comma exists
-  //   if (str.includes(",")) {
-  //     return str.split(",");
-  //   }
-  //   return [str];
-  // };
-
   useEffect(() => {
     if (accountCustomView && editId) {
       console.log("Account Custom View", accountCustomView);
@@ -142,6 +132,22 @@ function AccountCustomView() {
   console.log("Values", formik.values);
   console.log("Errors", formik.errors);
 
+  // Sort array of object by key
+  const sortArrayObj = (arr, key) => {
+    return arr?.sort((a, b) => {
+      if (a[key] < b[key]) {
+        return -1;
+      }
+      if (a[key] > b[key]) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  // Sort the account fields by label
+  sortArrayObj(accountFields, "label");
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -162,15 +168,15 @@ function AccountCustomView() {
                 <CardHeader>
                   <div className="d-flex flex-column ">
                     <h6 className="fw-bold">Custom View</h6>
-                    <span className="fw-medium">
+                    {/* <span className="fw-medium">
                       Personalise your own custom view of your tables here.
-                    </span>
+                    </span> */}
                   </div>
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
                   <CardBody
                     style={{
-                      height: "53.5vh",
+                      height: "56.5vh",
                     }}
                   >
                     <Row>
@@ -231,7 +237,6 @@ function AccountCustomView() {
                                 options={options ?? []}
                                 selected={selectedOption}
                                 onChange={(newValue) => {
-                                  console.log("NEW VALUE", newValue);
                                   setSelectedOption(newValue);
                                   formik.setFieldValue("columnName", newValue);
                                 }}

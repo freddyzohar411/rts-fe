@@ -15,6 +15,8 @@ export const conditionObject = {
   "IS_NOT_NULL": "Is Not Null",
   "BEFORE": "Before",
   "AFTER": "After",
+  "IN": "In",
+  "NOT_IN": "Not In",
 }
 
 export const mapConditionObjectArray = () => {

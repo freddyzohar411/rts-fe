@@ -120,7 +120,9 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
       filter?.condition === conditionObject.EQUAL ||
       filter?.condition === conditionObject.NOT_EQUAL ||
       filter?.condition === conditionObject.CONTAINS ||
-      filter?.condition === conditionObject.DOES_NOT_CONTAIN
+      filter?.condition === conditionObject.DOES_NOT_CONTAIN ||
+      filter?.condition === conditionObject.IN ||
+      filter?.condition === conditionObject.NOT_IN
     ) {
       return (
         <>
@@ -158,97 +160,120 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
     }
   };
 
-  useEffect(() => {
-    if (filter?.condition) {
-      setFilters((prev) => {
-        const newFiltersInput = JSON.parse(JSON.stringify(prev));
-        newFiltersInput[index] = {
-          ...newFiltersInput[index],
-          value: undefined,
-        };
-        return newFiltersInput;
-      });
-    }
-  }, [filter?.condition]);
-
   return (
     <div className="d-flex align-items-center gap-2 mb-2">
-      <div className="flex-grow-1">
-        <SelectElement
-          optionsData={() => {
-            return fields?.map((field) => {
-              return {
-                label: field?.label,
-                value: field?.sortValue,
-              };
-            });
-          }}
-          setSelectedOptionData={(selectedOptions) => {
-            setFieldInput(selectedOptions);
-          }}
-          value={
-            filter?.field &&
-            filter?.label && {
-              label: filter?.label,
-              value: filter?.field,
-            }
-          }
-        />
-        {isErrorExist(errors) && (
-          <div
-            style={{
-              height: errorDivHeight,
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          gap: "10px",
+        }}
+      >
+        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <SelectElement
+            optionsData={() => {
+              return fields?.map((field) => {
+                return {
+                  label: field?.label,
+                  value: field?.sortValue,
+                };
+              });
             }}
-          >
-            {errors?.field && ErrorDiv(errors?.field)}
-          </div>
-        )}
-      </div>
-      <div className="flex-grow-1">
-        <SelectElement
-          optionsData={mapConditionObjectArray()}
-          setSelectedOptionData={(selectedOptions) => {
-            setConditionInput(selectedOptions);
-          }}
-          value={
-            filter?.condition && {
-              label: filter?.condition,
-              value: filter?.condition,
-            }
-          }
-        />
-        {isErrorExist(errors) && (
-          <div
-            style={{
-              height: errorDivHeight,
+            setSelectedOptionData={(selectedOptions) => {
+              setFieldInput(selectedOptions);
             }}
-          >
-            {errors?.condition && ErrorDiv(errors?.condition)}
-          </div>
-        )}
-      </div>
-      <div className="flex-grow-1">{generateValueElement(filter)}</div>
-      <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-        <DropdownToggle
-          tag="div"
-          data-toggle="dropdown"
-          aria-expanded={dropdownOpen}
-          onClick={toggle}
-        >
-          <AddCircleOutlineOutlinedIcon
-            className="cursor-pointer"
-            onClick={toggle}
+            value={
+              filter?.field &&
+              filter?.label && {
+                label: filter?.label,
+                value: filter?.field,
+              }
+            }
           />
-        </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem onClick={addANDCondition}>AND</DropdownItem>
-          <DropdownItem onClick={addORCondition}>OR</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-      <RemoveCircleOutlineOutlinedIcon
-        className="cursor-pointer"
-        onClick={removeCondition}
-      />
+          {isErrorExist(errors) && (
+            <div
+              style={{
+                height: errorDivHeight,
+              }}
+            >
+              {errors?.field && ErrorDiv(errors?.field)}
+            </div>
+          )}
+        </div>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <SelectElement
+            optionsData={mapConditionObjectArray()}
+            setSelectedOptionData={(selectedOptions) => {
+              setFilters((prev) => {
+                const newFiltersInput = JSON.parse(JSON.stringify(prev));
+                newFiltersInput[index] = {
+                  ...newFiltersInput[index],
+                  value: "",
+                };
+                return newFiltersInput;
+              });
+              setConditionInput(selectedOptions);
+            }}
+            value={
+              filter?.condition && {
+                label: filter?.condition,
+                value: filter?.condition,
+              }
+            }
+          />
+          {isErrorExist(errors) && (
+            <div
+              style={{
+                height: errorDivHeight,
+              }}
+            >
+              {errors?.condition && ErrorDiv(errors?.condition)}
+            </div>
+          )}
+        </div>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          {generateValueElement(filter)}
+        </div>
+      </div>
+      <div>
+        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+          <DropdownToggle
+            tag="div"
+            data-toggle="dropdown"
+            aria-expanded={dropdownOpen}
+            onClick={toggle}
+          >
+            <AddCircleOutlineOutlinedIcon
+              className="cursor-pointer"
+              onClick={toggle}
+            />
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem onClick={addANDCondition}>AND</DropdownItem>
+            <DropdownItem onClick={addORCondition}>OR</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+        {isErrorExist(errors) && (
+          <div
+            style={{
+              height: errorDivHeight,
+            }}
+          ></div>
+        )}
+      </div>
+      <div>
+        <RemoveCircleOutlineOutlinedIcon
+          className="cursor-pointer"
+          onClick={removeCondition}
+        />
+        {isErrorExist(errors) && (
+          <div
+            style={{
+              height: errorDivHeight,
+            }}
+          ></div>
+        )}
+      </div>
     </div>
   );
 };

@@ -41,6 +41,21 @@ export const validateFilters = (filters, setErrors) => {
     }
 
     if (
+      filter?.condition === conditionObject.IN ||
+      filter?.condition === conditionObject.NOT_IN
+    ) {
+      if (!filter.field) {
+        isValid = false;
+        fieldError = "Field is required";
+      }
+
+      if (!filter?.value) {
+        isValid = false;
+        valueError = "Value/comma separated values is required";
+      }
+    }
+
+    if (
       filter?.condition === conditionObject.IS_EMPTY ||
       filter?.condition === conditionObject.IS_NOT_EMPTY ||
       filter?.condition === conditionObject.IS_TRUE ||
