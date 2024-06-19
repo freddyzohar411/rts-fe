@@ -160,11 +160,17 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
 
   useEffect(() => {
     if (filter?.condition) {
-      setValueInput({ target: { value: "" } });
+      setFilters((prev) => {
+        const newFiltersInput = JSON.parse(JSON.stringify(prev));
+        newFiltersInput[index] = {
+          ...newFiltersInput[index],
+          value: undefined,
+        };
+        return newFiltersInput;
+      });
     }
   }, [filter?.condition]);
 
-  console.log("Filter", filter)
   return (
     <div className="d-flex align-items-center gap-2 mb-2">
       <div className="flex-grow-1">
@@ -221,9 +227,7 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
           </div>
         )}
       </div>
-      <div className="flex-grow-1">
-        {generateValueElement(filter)}
-      </div>
+      <div className="flex-grow-1">{generateValueElement(filter)}</div>
       <Dropdown isOpen={dropdownOpen} toggle={toggle}>
         <DropdownToggle
           tag="div"

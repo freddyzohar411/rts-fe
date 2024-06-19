@@ -25,7 +25,9 @@ export const validateFilters = (filters, setErrors) => {
       filter?.condition === conditionObject.EQUAL ||
       filter?.condition === conditionObject.NOT_EQUAL ||
       filter?.condition === conditionObject.CONTAINS ||
-      filter?.condition === conditionObject.DOES_NOT_CONTAIN
+      filter?.condition === conditionObject.DOES_NOT_CONTAIN ||
+      filter?.condition === conditionObject.GREATER_THAN ||
+      filter?.condition === conditionObject.LESS_THAN
     ) {
       if (!filter.field) {
         isValid = false;
