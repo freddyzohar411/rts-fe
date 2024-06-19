@@ -122,7 +122,9 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
       filter?.condition === conditionObject.CONTAINS ||
       filter?.condition === conditionObject.DOES_NOT_CONTAIN ||
       filter?.condition === conditionObject.IN ||
-      filter?.condition === conditionObject.NOT_IN
+      filter?.condition === conditionObject.NOT_IN || 
+      filter?.condition === conditionObject.STARTS_WITH ||
+      filter?.condition === conditionObject.ENDS_WITH
     ) {
       return (
         <>

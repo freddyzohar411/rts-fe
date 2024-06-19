@@ -8,66 +8,10 @@ import { Row, Col, Label, Button } from "reactstrap";
 import Filter from "./Filter";
 import { conditionObject } from "./filterConstant";
 import { validateFilters } from "./Validation";
+import FilterQuery from "./FilterQuery";
 
 const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
   const [errors, setErrors] = useState([]);
-  const [queryString, setQueryString] = useState("");
-
-  // console.log("Errors", errors);
-  console.log("Filters", filters);
-
-  useEffect(() => {
-    setQueryString(buildFilterString(filters));
-  }, [filters]);
-
-  function buildFilterString(filters) {
-    if (!filters || filters.length === 0) return "";
-
-    let filterString = "";
-    let currentGroup = "";
-
-    for (let i = 0; i < filters.length; i++) {
-      const filter = filters[i];
-      const conditionString = `${filter?.label || ""} ${getConditionOperator(
-        filter?.condition
-      )} ${filter?.value ? `'${filter?.value}'` : ""}`;
-
-      if (i === 0) {
-        currentGroup = conditionString;
-      } else {
-        currentGroup = `(${currentGroup} ${filters[i].operator} ${conditionString})`;
-      }
-    }
-
-    return currentGroup;
-  }
-
-  function getConditionOperator(condition) {
-    switch (condition) {
-      case conditionObject.CONTAINS:
-        return "LIKE";
-      case conditionObject.DOES_NOT_CONTAIN:
-        return "NOT LIKE";
-      case conditionObject.EQUAL:
-        return "=";
-      case conditionObject.NOT_EQUAL:
-        return "!=";
-      case conditionObject.IS_EMPTY:
-        return "IS NULL";
-      case conditionObject.IS_NOT_EMPTY:
-        return "IS NOT NULL";
-      case conditionObject.GREATER_THAN:
-        return ">";
-      case conditionObject.LESS_THAN:
-        return "<";
-      case conditionObject.BEFORE:
-        return "<";
-      case conditionObject.AFTER:
-        return ">";
-      default:
-        return "";
-    }
-  }
 
   const generateOperatorHr = (filter, index) => {
     if (index === 0 || !filter.operator) {
@@ -104,7 +48,7 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
     [filters, setErrors]
   );
 
-  console.log("filters", filters)
+  console.log("filters", filters);
 
   return (
     <div>
@@ -128,11 +72,10 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
         className="py-1"
         style={{
           overflowY: "auto",
-          height: "230px",
+          height: "235px",
         }}
       >
         {filters?.map((filter, index) => {
-          // console.log("Filter", filter);
           return (
             <div className="d-flex flex-column gap-2">
               {generateOperatorHr(filter, index)}
@@ -148,9 +91,21 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
         })}
       </div>
       <div>
-        <hr />
+        <hr
+          style={{
+            marginTop: "2px",
+            marginBottom: "4px",
+          }}
+        />
       </div>
-      <div>{queryString}</div>
+      <div
+        style={{
+          overflowY: "auto",
+          height: "75px",
+        }}
+      >
+        <FilterQuery filters={filters} />
+      </div>
     </div>
   );
 });
