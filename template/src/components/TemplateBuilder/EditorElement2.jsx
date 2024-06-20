@@ -500,7 +500,7 @@ const EditorElement2 = ({
     editor.setContent(initialContent);
   };
 
-  // New 
+  // New
   function removeUnwantedStylesFromContent(content) {
     // Function to remove specific styles from a style string
     function cleanStyle(style) {
@@ -551,6 +551,21 @@ const EditorElement2 = ({
 
     return div.innerHTML;
   }
+
+  // Clean up content to remove invisible space characters.
+  function cleanUpContent(content) {
+    // Replace invisible space characters with a regular space
+    return content.replace(/[\u00A0\u200B\u200C\u200D\u202F\uFEFF]/g, " ");
+  }
+
+  // Code to identify the character codes of the content (For debugging purposes)
+  // function logCharacterCodes(content) {
+  //   let codes = [];
+  //   for (let i = 0; i < content.length; i++) {
+  //     codes.push(content.charCodeAt(i));
+  //   }
+  //   console.log("Character Codes: ", codes);
+  // }
 
   return (
     <>
@@ -1010,6 +1025,16 @@ const EditorElement2 = ({
             //     '<p style="margin-bottom: 0in;">'
             //   );
             // });
+
+            // Event listener to clean up content before saving or submitting
+            editor.on("SaveContent", function (e) {
+              e.content = cleanUpContent(e.content);
+            });
+
+            // Event listener to clean up content before getting content
+            editor.on("GetContent", function (e) {
+              e.content = cleanUpContent(e.content);
+            });
           },
           height: 500,
           menubar: false,
@@ -1134,8 +1159,9 @@ const EditorElement2 = ({
           },
         }}
         onEditorChange={(value) => {
-          formik.setFieldValue(name, value);
-          if (setEditorContent) setEditorContent(value);
+          // logCharacterCodes(value);
+          formik.setFieldValue(name, cleanUpContent(value));
+          if (setEditorContent) setEditorContent(cleanUpContent(value));
         }}
         onBlur={(event, editor) => {
           formik.handleBlur({ target: { name } });
