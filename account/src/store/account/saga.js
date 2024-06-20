@@ -233,7 +233,7 @@ function* workCreateAccountCustomView(action) {
     navigate("/accounts");
   } catch (error) {
     yield put(createAccountCustomViewFailure(error));
-    if (error.response && error.response.status === 409) {
+    if (error?.code === 409) {
       toast.error("Account custom view name already exists.");
     } else {
       toast.error("Error creating account custom view!");
@@ -302,7 +302,8 @@ function* workEditAccountCustomViewById(action) {
     navigate("/accounts");
   } catch (error) {
     yield put(editAccountCustomViewByIdFailure(error));
-    if (error.response && error.response.status === 409) {
+    console.log(error)
+    if (error?.code === 409) {
       toast.error("Account custom view name already exists.");
     } else {
       toast.error("Error updating account custom view!");

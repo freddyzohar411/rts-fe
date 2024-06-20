@@ -564,7 +564,8 @@ function* workCreateCandidateCustomView(action) {
     navigate("/candidates");
   } catch (error) {
     yield put(createCandidateCustomViewFailure(error));
-    if (error.response && error.response.status === 409) {
+    console.log("error", error)
+    if (error?.code === 409) {
       toast.error("Candidate custom view name already exists.");
     } else {
       toast.error("Error creating candidate custom view!");
@@ -634,7 +635,11 @@ function* workEditCandidateCustomViewById(action) {
     navigate("/candidates");
   } catch (error) {
     yield put(editCandidateCustomViewByIdFailure(error));
-    toast.error("Error updating candidate custom view!");
+    if (error?.code === 409) {
+      toast.error("Candidate custom view name already exists.");
+    } else {
+      toast.error("Error updating candidate custom view!");
+    }
   }
 }
 

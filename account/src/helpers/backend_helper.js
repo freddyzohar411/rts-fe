@@ -80,12 +80,12 @@ export const getAccountsFieldsAll = () =>
   api.get(`${ACCOUNT_URL}${BASE_ACCOUNTS}/fields/all`);
 
 // Create Account Custom View
-export const createAccountCustomView = (data) => {
+export const createAccountCustomView = (data) =>
   api.create(
     `${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/save/customfields`,
     data
   );
-};
+
 // Get All Account Custom View
 export const getAllAccountCustomView = () =>
   api.get(`${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/customView/all`);
@@ -110,4 +110,7 @@ export const getAccountCustomViewById = (id) =>
 
 // Edit Custom View By id
 export const editAccountCustomViewById = (id, data) =>
-  api.create(`${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/customView/edit/${id}`, data);
+  api.create(
+    `${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/customView/edit/${id}`,
+    data
+  );

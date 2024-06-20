@@ -106,7 +106,6 @@ function AccountCustomView() {
 
   useEffect(() => {
     if (accountCustomView && editId) {
-      console.log("Account Custom View", accountCustomView);
       setInitialValuesState({
         name: accountCustomView?.name,
         columnName: accountCustomView?.columnName,
