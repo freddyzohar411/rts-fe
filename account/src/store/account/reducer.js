@@ -52,6 +52,7 @@ import {
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
+  RESET_ACCOUNTS
 } from "./actionTypes";
 
 import {
@@ -64,7 +65,7 @@ import {
 const initialState = {
   account: {},
   accountData: null,
-  accounts: [],
+  accounts: null,
   accountsMeta: {},
   accountsFields: [],
   accountsFieldsAll: [],
@@ -313,7 +314,6 @@ const AccountReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
     case RESET_ACCOUNT_CUSTOM_VIEW:
-      console.log("RESET_ACCOUNT_CUSTOM_VIEW");
       return {
         ...state,
         accountCustomViews: null,
@@ -421,6 +421,12 @@ const AccountReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case RESET_ACCOUNTS:
+      return {
+        ...state,
+        accounts: [],
+        accountsMeta: {},
       };
     default:
       return state;

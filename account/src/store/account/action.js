@@ -52,6 +52,7 @@ import {
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
+  RESET_ACCOUNTS
 } from "./actionTypes";
 
 // Fetch Account
@@ -313,4 +314,8 @@ export const editAccountCustomViewByIdSuccess = (accountCustomView) => ({
 export const editAccountCustomViewByIdFailure = (error) => ({
   type: EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
   payload: error,
+});
+
+export const resetAccounts = () => ({
+  type: RESET_ACCOUNTS,
 });

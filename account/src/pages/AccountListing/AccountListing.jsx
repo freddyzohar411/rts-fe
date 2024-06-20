@@ -31,7 +31,7 @@ const AccountListing = () => {
   const accountsFields = useSelector(
     (state) => state.AccountReducer.accountsFields
   );
-
+  console.log("accountsData", accountsData);
   // Table state
   const [tableConfig, setTableConfig] = useState([]);
 
@@ -261,8 +261,6 @@ const AccountListing = () => {
       setTableConfig(generateAccountConfig(customConfig));
     }
   }, [customConfig, pageInfo, activeRow, tableData]);
-
-  console.log("Accounts Data: ", accountsData?.accounts);
 
   return (
     <>

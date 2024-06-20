@@ -289,7 +289,7 @@ function CandidateCustomView() {
                   <CardFooter>
                     <Row className="justify-content-between">
                       <Col md="auto">
-                        <Link to="/accounts">
+                        <Link to="/candidates">
                           <Button type="button" className="btn btn-danger">
                             Cancel
                           </Button>

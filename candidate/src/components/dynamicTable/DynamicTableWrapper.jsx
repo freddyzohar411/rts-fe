@@ -27,6 +27,7 @@ import {
   deleteCandidates,
   deleteCandidatesReset,
   fetchCandidates,
+  resetCandidateCustomView,
 } from "../../store/candidate/action";
 import { DeleteCustomModal } from "@workspace/common";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
@@ -74,8 +75,6 @@ const DynamicTableWrapper = ({
     (state) => state?.CandidateReducer?.candidateCustomViews
   );
 
-  console.log("allCandidateCustomViews", allCandidateCustomViews)
-
   const deleteCandidatesMeta = useSelector(
     (state) => state.CandidateReducer?.deleteCandidatesMeta
   );
@@ -85,6 +84,9 @@ const DynamicTableWrapper = ({
 
   useEffect(() => {
     dispatch(fetchCandidateCustomView());
+    return () => {
+      dispatch(resetCandidateCustomView());
+    }
   }, []);
 
   const handleSelectCustomView = (id) => {

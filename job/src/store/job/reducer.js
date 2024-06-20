@@ -37,6 +37,13 @@ import {
   DELETE_JOB_CUSTOM_VIEW_SUCCESS,
   DELETE_JOB_CUSTOM_VIEW_FAILURE,
   CREATE_JOB_RESET,
+  RESET_JOB_CUSTOM_VIEW,
+  FETCH_JOB_CUSTOM_VIEW_BY_ID,
+  FETCH_JOB_CUSTOM_VIEW_BY_ID_SUCCESS,
+  FETCH_JOB_CUSTOM_VIEW_BY_ID_FAILURE,
+  EDIT_JOB_CUSTOM_VIEW_BY_ID,
+  EDIT_JOB_CUSTOM_VIEW_BY_ID_SUCCESS,
+  EDIT_JOB_CUSTOM_VIEW_BY_ID_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -57,7 +64,7 @@ const initialState = {
   isDraftLoading: false,
   error: false,
   jobCustomView: {},
-  jobCustomViews: [],
+  jobCustomViews: null,
 };
 
 const JobReducer = (state = initialState, action) => {
@@ -317,6 +324,50 @@ const JobReducer = (state = initialState, action) => {
         jobCustomView: action.payload,
       };
     case DELETE_JOB_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case RESET_JOB_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: false,
+        jobCustomViews: null,
+      };
+    case FETCH_JOB_CUSTOM_VIEW_BY_ID:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_JOB_CUSTOM_VIEW_BY_ID_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        jobCustomView: action.payload,
+      };
+    case FETCH_JOB_CUSTOM_VIEW_BY_ID_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case EDIT_JOB_CUSTOM_VIEW_BY_ID:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case EDIT_JOB_CUSTOM_VIEW_BY_ID_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        jobCustomView: action.payload,
+      };
+    case EDIT_JOB_CUSTOM_VIEW_BY_ID_FAILURE:
       return {
         ...state,
         loading: false,

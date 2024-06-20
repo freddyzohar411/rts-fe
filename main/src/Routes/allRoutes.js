@@ -145,6 +145,7 @@ const authProtectedRoutes = [
     requiredPermissions: [Permission.JOB_WRITE],
   },
   { path: "/jobs/custom-view", component: <JobCustomView /> },
+  { path: "/jobs/custom-view/:id", component: <JobCustomView /> },
   {
     path: "/jobs",
     component: <JobListing />,

@@ -16,17 +16,11 @@ import {
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link, useParams } from "react-router-dom";
-// import {
-//   fetchAccountsFields,
-//   createAccountCustomView,
-//   fetchAccountCustomView,
-//   fetchAccountCustomViewById,
-//   editAccountCustomViewById,
-// } from "../../store/account/action";
 import {
   fetchJobListsFields,
-  // fetchJobCustomViewById,
-  // editJobCustomViewById,
+  fetchJobCustomViewById,
+  editJobCustomViewById,
+  createJobCustomView,
 } from "../../store/actions";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
@@ -42,8 +36,10 @@ function JobCustomView() {
   const jobFields = useSelector((state) => state?.JobListReducer?.jobsFields);
 
   const jobCustomView = useSelector(
-    (state) => state?.JobListReducer?.jobCustomView
+    (state) => state?.JobReducer?.jobCustomView
   );
+
+  console.log("jobCustomView", jobCustomView);
 
   const editId = useParams().id;
 
@@ -99,7 +95,7 @@ function JobCustomView() {
         );
       } else {
         dispatch(
-          createAccountCustomView({
+          createJobCustomView({
             payload: newCustomView,
             navigate: navigate,
           })
@@ -294,7 +290,7 @@ function JobCustomView() {
                   <CardFooter>
                     <Row className="justify-content-between">
                       <Col md="auto">
-                        <Link to="/accounts">
+                        <Link to="/jobs">
                           <Button type="button" className="btn btn-danger">
                             Cancel
                           </Button>

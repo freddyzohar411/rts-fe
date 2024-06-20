@@ -29,6 +29,7 @@ import {
   selectAccountCustomView,
   deleteAccountCustomView,
   resetAccountCustomView,
+  resetAccounts,
 } from "../../store/account/action";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -91,7 +92,6 @@ const DynamicTableWrapper = ({
   useEffect(() => {
     dispatch(fetchAccountCustomView());
     return () => {
-      console.log("Resetting custom view");
       dispatch(resetAccountCustomView());
     };
   }, []);
@@ -109,9 +109,6 @@ const DynamicTableWrapper = ({
     setDeleteModalOpen(false);
     setDeletingCustomViewId(null);
   };
-
-  console.log("Data", data);
-  console.log("allAccountCustomViews", allAccountCustomViews);
 
   useEffect(() => {
     if (allAccountCustomViews != null && allAccountCustomViews.length > 0) {
@@ -136,9 +133,10 @@ const DynamicTableWrapper = ({
     if (allAccountCustomViews != null && allAccountCustomViews.length === 0) {
       enableDefaultView();
     }
+    return () => {
+      dispatch(resetAccounts());
+    }
   }, [allAccountCustomViews, optGroup]);
-
-  console.log("Page Request", pageRequest);
 
   const enableDefaultView = () => {
     setCustomConfigData(ACCOUNT_INITIAL_OPTIONS);
@@ -308,7 +306,6 @@ const DynamicTableWrapper = ({
                                           <i className="ri-pencil-line"></i>
                                         </Button>
                                       </Link>
-
                                       <Button
                                         className="btn btn-sm btn-danger"
                                         style={{ height: "29px" }}
@@ -394,7 +391,7 @@ const DynamicTableWrapper = ({
                   data={data}
                   pageRequestSet={pageRequestSet}
                   pageInfo={pageInfo}
-                  isLoading={accountsMeta?.isLoading}
+                  isLoading={accountsMeta?.isLoading ?? true}
                   freezeHeader={true}
                   activeRow={activeRow}
                   setTableConfig={setTableConfig}

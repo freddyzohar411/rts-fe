@@ -36,7 +36,14 @@ import {
   DELETE_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW_SUCCESS,
   DELETE_JOB_CUSTOM_VIEW_FAILURE,
-  CREATE_JOB_RESET
+  CREATE_JOB_RESET,
+  RESET_JOB_CUSTOM_VIEW,
+  FETCH_JOB_CUSTOM_VIEW_BY_ID,
+  FETCH_JOB_CUSTOM_VIEW_BY_ID_SUCCESS,
+  FETCH_JOB_CUSTOM_VIEW_BY_ID_FAILURE,
+  EDIT_JOB_CUSTOM_VIEW_BY_ID,
+  EDIT_JOB_CUSTOM_VIEW_BY_ID_SUCCESS,
+  EDIT_JOB_CUSTOM_VIEW_BY_ID_FAILURE,
 } from "./actionTypes";
 
 // Fetch Account
@@ -232,4 +239,42 @@ export const deleteJobCustomViewFailure = (error) => ({
   type: DELETE_JOB_CUSTOM_VIEW_FAILURE,
   payload: error,
 });
+
+export const resetJobCustomView = () => ({
+  type: RESET_JOB_CUSTOM_VIEW,
+});
+
+export const fetchJobCustomViewById = (jobCustomViewId) => ({
+  type: FETCH_JOB_CUSTOM_VIEW_BY_ID,
+  payload: jobCustomViewId,
+});
+
+export const fetchJobCustomViewByIdSuccess = (jobCustomView) => ({
+  type: FETCH_JOB_CUSTOM_VIEW_BY_ID_SUCCESS,
+  payload: jobCustomView,
+});
+
+export const fetchJobCustomViewByIdFailure = (error) => ({
+  type: FETCH_JOB_CUSTOM_VIEW_BY_ID_FAILURE,
+  payload: error,
+});
+
+export const editJobCustomViewById = (jobCustomViewRequest) => ({
+  type: EDIT_JOB_CUSTOM_VIEW_BY_ID,
+  payload: jobCustomViewRequest,
+});
+
+export const editJobCustomViewByIdSuccess = (jobCustomView) => ({
+  type: EDIT_JOB_CUSTOM_VIEW_BY_ID_SUCCESS,
+  payload: jobCustomView,
+});
+
+export const editJobCustomViewByIdFailure = (error) => ({
+  type: EDIT_JOB_CUSTOM_VIEW_BY_ID_FAILURE,
+  payload: error,
+});
+
+
+
+
 
