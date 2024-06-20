@@ -21,12 +21,12 @@ import {
   createAccountCustomView,
   fetchAccountCustomView,
   fetchAccountCustomViewById,
-  editAccountCustomViewById
+  editAccountCustomViewById,
 } from "../../store/account/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { ACCOUNT_MANDATORY_OPTIONS } from "../AccountListing/accountListingConstants";
-import { TableFilter } from "@workspace/common";
+import { TableFilter, ArrayHelper } from "@workspace/common";
 
 function AccountCustomView() {
   document.title = "Create Account Custom View | RTS";
@@ -86,11 +86,13 @@ function AccountCustomView() {
       };
 
       if (editId) {
-        dispatch(editAccountCustomViewById({
-          editId,
-          payload: newCustomView,
-          navigate: navigate,
-        })); 
+        dispatch(
+          editAccountCustomViewById({
+            editId,
+            payload: newCustomView,
+            navigate: navigate,
+          })
+        );
       } else {
         dispatch(
           createAccountCustomView({
@@ -126,24 +128,8 @@ function AccountCustomView() {
     },
   });
 
-  console.log("Values", formik.values);
-  console.log("Errors", formik.errors);
-
-  // Sort array of object by key
-  const sortArrayObj = (arr, key) => {
-    return arr?.sort((a, b) => {
-      if (a[key] < b[key]) {
-        return -1;
-      }
-      if (a[key] > b[key]) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-
   // Sort the account fields by label
-  sortArrayObj(accountFields, "label");
+  ArrayHelper.sortArrayObj(accountFields, "label");
 
   return (
     <React.Fragment>

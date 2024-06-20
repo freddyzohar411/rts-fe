@@ -25,7 +25,7 @@ import {
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { CANDIDATE_MANDATORY_OPTIONS } from "../CandidateListing/candidateListingConstants";
-import { TableFilter } from "@workspace/common";
+import { TableFilter, ArrayHelper } from "@workspace/common";
 
 function CandidateCustomView() {
   document.title = "Create Candidate Custom View | RTS";
@@ -39,10 +39,6 @@ function CandidateCustomView() {
   const candidateCustomView = useSelector(
     (state) => state?.CandidateReducer?.candidateCustomView
   );
-
-  console.log("candidateFields", candidateFields);
-
-  console.log("candidateCustomView", candidateCustomView);
 
   const editId = useParams().id;
 
@@ -131,24 +127,8 @@ function CandidateCustomView() {
     },
   });
 
-  console.log("Values", formik.values);
-  console.log("Errors", formik.errors);
-
-  // Sort array of object by key
-  const sortArrayObj = (arr, key) => {
-    return arr?.sort((a, b) => {
-      if (a[key] < b[key]) {
-        return -1;
-      }
-      if (a[key] > b[key]) {
-        return 1;
-      }
-      return 0;
-    });
-  };
-
   // Sort the account fields by label
-  sortArrayObj(candidateFields, "label");
+  ArrayHelper.sortArrayObj(candidateFields, "label");
 
   return (
     <React.Fragment>

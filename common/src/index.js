@@ -30,6 +30,8 @@ export * as TemplateHelper from "./Components/TemplateDisplay/templateDisplayHel
 
 export * as CommonBackendHelper from "./helpers/backend_helper";
 
+export * as ArrayHelper from "./helpers/array_helper";
+
 // Redux Store
 export * as Actions from "./store/actions";
 
