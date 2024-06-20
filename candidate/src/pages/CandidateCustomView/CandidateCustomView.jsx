@@ -138,7 +138,7 @@ function CandidateCustomView() {
             <Col>
               <Breadcrumb>
                 <BreadcrumbItem>
-                  <Link to="/accounts">All Accounts</Link>
+                  <Link to="/accounts">All Candidates</Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem active>Create Custom View</BreadcrumbItem>
               </Breadcrumb>
