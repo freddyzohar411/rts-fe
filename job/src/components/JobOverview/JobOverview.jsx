@@ -1659,10 +1659,15 @@ const JobOverview = ({ onRetrieveHeader }) => {
               />
               <ButtonGroup>
                 <Button className="bg-white main-border-style">
-                  <i className="ri-filter-3-line align-bottom me-1"></i>Filter
+                  <i className="mdi mdi-account-plus-outline align-bottom me-1"></i>
                 </Button>
                 <Button className="bg-white main-border-style">
                   <i className="ri-fullscreen-line align-bottom me-1"></i>
+                </Button>
+              </ButtonGroup>
+              <ButtonGroup>
+                <Button className="bg-white main-border-style">
+                  <i className="mdi mdi-filter-variant align-bottom me-1"></i>
                 </Button>
               </ButtonGroup>
             </div>

@@ -124,7 +124,7 @@ const JobManage = () => {
                   {
                     active: ugTab === "1",
                   },
-                  "cursor-pointer"
+                  "cursor-pointer px-4"
                 )}
                 onClick={() => {
                   toggleUg("1");
@@ -139,7 +139,7 @@ const JobManage = () => {
                   {
                     active: ugTab === "2",
                   },
-                  "cursor-pointer"
+                  "cursor-pointer px-4"
                 )}
                 onClick={() => {
                   toggleUg("2");
@@ -154,13 +154,13 @@ const JobManage = () => {
                   {
                     active: ugTab === "3",
                   },
-                  "cursor-pointer"
+                  "cursor-pointer px-4"
                 )}
                 onClick={() => {
-                  toggleUg("0");
+                  toggleUg("3");
                 }}
               >
-                <span>Email</span>
+                <span>Performance</span>
               </NavLink>
             </NavItem>
             <NavItem>
@@ -169,33 +169,18 @@ const JobManage = () => {
                   {
                     active: ugTab === "4",
                   },
-                  "cursor-pointer"
+                  "cursor-pointer px-4"
                 )}
                 onClick={() => {
-                  toggleUg("0");
+                  toggleUg("4");
                 }}
               >
-                <span>Performace</span>
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                className={classnames(
-                  {
-                    active: ugTab === "5",
-                  },
-                  "cursor-pointer"
-                )}
-                onClick={() => {
-                  toggleUg("0");
-                }}
-              >
-                <span>Task</span>
+                <span>History</span>
               </NavLink>
             </NavItem>
           </Nav>
           <TabContent activeTab={ugTab}>
-            {/*OVERVIEW*/}
+            {/*Overview*/}
             <TabPane tabId="1" id="manageOverview">
               <Card style={{ boxShadow: "none" }}>
                 <CardBody
@@ -206,7 +191,7 @@ const JobManage = () => {
                 </CardBody>
               </Card>
             </TabPane>
-            {/*SNAPSHOT*/}
+            {/*Snapshot*/}
             <TabPane tabId="2" id="manageSnapshot">
               <Card>
                 <CardBody>
@@ -214,20 +199,14 @@ const JobManage = () => {
                 </CardBody>
               </Card>
             </TabPane>
-            {/*EMAIL*/}
+            {/*Perfomrmance*/}
             <TabPane tabId="3" id="manageSnapshot">
               <Card>
                 <CardBody>TBA</CardBody>
               </Card>
             </TabPane>
-            {/*PERFORMANCE*/}
+            {/*History*/}
             <TabPane tabId="4" id="manageSnapshot">
-              <Card>
-                <CardBody>TBA</CardBody>
-              </Card>
-            </TabPane>
-            {/*TASK*/}
-            <TabPane tabId="5" id="manageSnapshot">
               <Card>
                 <CardBody>TBA</CardBody>
               </Card>

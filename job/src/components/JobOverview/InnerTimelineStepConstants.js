@@ -91,6 +91,8 @@ export const stepsToIgnore = [
   "bottomRightCurve",
   "topLeftCurve",
   "topRightCurve",
+  "topRightCurve2",
+  "bottomRightCurve2",
 ];
 
 export const innerTimelineOuterSteps = [
@@ -101,13 +103,26 @@ export const innerTimelineOuterSteps = [
   "Conditional Offer",
 ];
 
-export const expandedRange = {
-  1: [2, 6],
-  8: [9, 12],
-  14: [15, 18],
-  20: [21, 22],
-  24: [25, 26],
+export const initialExpandRanges = {
+  "Expand Profile": false,
+  "Expand Odin Protocol": false,
+  "Expand Interviews": false,
+  "Expand TOS": false,
+  "Expand Conditional Offer": false,
 };
 
-export const innerTimelineMainIndexes = [0, 7, 13, 19, 23];
-export const innerTimelineExpandCollapseIndexes = [1, 8, 14, 20, 24];
+export const curvedObjects = [
+  "bottomLeftCurve",
+  "bottomRightCurve",
+  "topLeftCurve",
+  "topRightCurve",
+  "topRightCurve2",
+  "bottomRightCurve2",
+]
+
+export const subStationGroupRange = [
+  {"Expand Profile": "Odin Protocol"}, 
+  {"Expand Odin Protocol": "Interviews"}, 
+  {"Expand Interviews": "TOS"}, 
+  {"Expand TOS": "Conditional Offer"},
+]
