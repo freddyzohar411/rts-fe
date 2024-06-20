@@ -67,6 +67,7 @@ import {
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS,
+  RESET_CANDIDATES,
 } from "./actionTypes";
 
 import {
@@ -527,6 +528,12 @@ const CandidateReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case RESET_CANDIDATES:
+      return {
+        ...state,
+        candidates: [],
+        candidateMeta: {},
       };
     default:
       return state;

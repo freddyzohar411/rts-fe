@@ -23,6 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchUserGroupByName,
   fetchJobLists,
+  resetJobList
 } from "../../store/jobList/action";
 import {
   fetchJobCustomView,
@@ -145,6 +146,10 @@ const DynamicTableWrapper = ({
     }
     if (allJobCustomViews != null && allJobCustomViews.length === 0) {
       enableDefaultView();
+    }
+
+    return () => {
+      dispatch(resetJobList());
     }
   }, [allJobCustomViews, optGroup]);
 
@@ -592,7 +597,7 @@ const DynamicTableWrapper = ({
                   data={data}
                   pageRequestSet={pageRequestSet}
                   pageInfo={pageInfo}
-                  isLoading={jobsMeta?.isLoading}
+                  isLoading={jobsMeta?.isLoading ?? true}
                   freezeHeader={true}
                   activeRow={activeRow}
                   setTableConfig={setTableConfig}

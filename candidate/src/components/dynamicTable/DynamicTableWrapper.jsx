@@ -28,6 +28,7 @@ import {
   deleteCandidatesReset,
   fetchCandidates,
   resetCandidateCustomView,
+  resetCandidates
 } from "../../store/candidate/action";
 import { DeleteCustomModal } from "@workspace/common";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
@@ -126,6 +127,10 @@ const DynamicTableWrapper = ({
     }
     if (allCandidateCustomViews != null && allCandidateCustomViews.length === 0) {
       enableDefaultView();
+    }
+
+    return () => {
+      dispatch(resetCandidates())
     }
   }, [allCandidateCustomViews, optGroup]);
 
@@ -374,7 +379,7 @@ const DynamicTableWrapper = ({
                   data={data}
                   pageRequestSet={pageRequestSet}
                   pageInfo={pageInfo}
-                  isLoading={candidateMeta?.isLoading}
+                  isLoading={candidateMeta?.isLoading ?? true}
                   freezeHeader={true}
                   activeRow={activeRow}
                   setTableConfig={setTableConfig}

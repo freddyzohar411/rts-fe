@@ -66,7 +66,8 @@ import {
   FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE,
-  EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS
+  EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS,
+  RESET_CANDIDATES
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -417,6 +418,10 @@ export const editCandidateCustomViewByIdSuccess = (candidateCustomView) => ({
 export const editCandidateCustomViewByIdFailure = (error) => ({
   type: EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE,
   payload: error,
+});
+
+export const resetCandidates = () => ({
+  type: RESET_CANDIDATES,
 });
 
 
