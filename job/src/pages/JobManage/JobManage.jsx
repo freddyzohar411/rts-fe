@@ -44,7 +44,7 @@ const JobManage = () => {
       text="Please wait..."
     >
       <div className="page-content">
-        <div className="overview-header">
+        <div className="overview-header sticky-header">
           <div className="d-flex flex-wrap">
             {overviewHeaders.map((header, index) => {
               // const mobile = isMobile | isTablet;
