@@ -177,6 +177,39 @@ const OverviewStepComponent = ({ data }) => {
     return customCSS;
   };
 
+  const getBorderColor = (stepName) => {
+    let customCSS;
+    const status = progressStatus?.[stepName];
+    switch (status) {
+      case undefined:
+        customCSS = "overview-disabled-line";
+        break;
+      case JOB_STAGE_STATUS_LABELS.IN_PROGRESS:
+      case JOB_STAGE_STATUS.IN_PROGRESS:
+        customCSS = "overview-inprogress-line";
+        break;
+      case JOB_STAGE_STATUS.COMPLETED:
+      case JOB_STAGE_STATUS_LABELS.COMPLETED:
+        customCSS = "overview-completed-line";
+        break;
+      case JOB_STAGE_STATUS.WITHDRAWN:
+      case JOB_STAGE_STATUS.WITHDRAWN:
+        customCSS = "overview-withdrawn-line";
+        break;
+      case JOB_STAGE_STATUS.REJECTED:
+      case JOB_STAGE_STATUS.REJECTED:
+        customCSS = "overview-rejected-line";
+        break;
+      case JOB_STAGE_STATUS.SKIPPED:
+      case JOB_STAGE_STATUS.SKIPPED:
+        customCSS = "overview-skipped-line";
+        break;
+      default:
+        break;
+    }
+    return customCSS;
+  };
+
   const GetLabel = (step, status) => {
     switch (status) {
       case JOB_STAGE_STATUS.COMPLETED:
@@ -253,7 +286,7 @@ const OverviewStepComponent = ({ data }) => {
 
   return (
     <div style={{ position: "relative" }} aria-disabled>
-      <div
+      {/* <div
         className="mt-3"
         style={{
           position: "absolute",
@@ -263,9 +296,9 @@ const OverviewStepComponent = ({ data }) => {
           borderWidth: "1px",
           borderColor: "lightgray",
         }}
-      ></div>
+      ></div> */}
       <div
-        className="d-flex flex-row justify-content-between align-items-center"
+        className="overview-container"
         style={{ position: "relative", zIndex: "2" }}
       >
         {Object.values(progressSteps).map((step, index) => {
@@ -273,16 +306,26 @@ const OverviewStepComponent = ({ data }) => {
           return (
             <div
               key={index}
-              className="d-flex align-items-center justify-content-center flex-column gap-2"
+              className="overview-container"
               id={`step-btn-${data?.candidate?.id}-${index}`}
             >
-              <div
-                className={`rounded-circle d-flex justify-content-center align-items-center circles-width ${getBulletBgColor(
-                  step?.name
-                )}`}
-              >
-                {GetLabel(step, status)}
+              <div className="overview-step-container">
+                <div
+                  className={`rounded-circle d-flex justify-content-center align-items-center circles-width ${getBulletBgColor(
+                    step?.name
+                  )}`}
+                >
+                  {GetLabel(step, status)}
+                </div>
+                {index === progressSteps.length - 1 || (
+                  <div
+                    className={`overview-progress-line ${getBorderColor(
+                      step?.name
+                    )}`}
+                  ></div>
+                )}
               </div>
+
               <Tooltip
                 isOpen={isStepToolTipOpen(
                   `step-btn-${data?.candidate?.id}-${index}`
