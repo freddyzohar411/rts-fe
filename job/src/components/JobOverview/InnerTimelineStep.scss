@@ -20,18 +20,6 @@
   padding-left: 1rem;
 }
 
-@media (min-width: 1024px) {
-  .container {
-    padding-left: 0rem;
-  }
-}
-
-@media (min-width: 1366px) {
-  .item {
-    padding-left: 1rem;
-  }
-}
-
 .single-row {
   grid-template-columns: repeat(10, 1fr);
 }
@@ -236,6 +224,7 @@
   flex: 0 0 26px;
   box-sizing: border-box;
   z-index: 1;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.182);
 }
 
 .inner-main-circle {
@@ -302,13 +291,16 @@
 
   .container {
     margin-left: 0px;
+    padding-left: 0px;
   }
 }
 
+// Larger Laptop Screen
 @media (min-width: 1366px) {
   .item {
     width: 116px;
     height: 140px;
+    padding-left: 1rem;
   }
 
   .main-step-text {
