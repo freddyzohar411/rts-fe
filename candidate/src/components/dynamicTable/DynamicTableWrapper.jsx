@@ -74,6 +74,8 @@ const DynamicTableWrapper = ({
     (state) => state?.CandidateReducer?.candidateCustomViews
   );
 
+  console.log("allCandidateCustomViews", allCandidateCustomViews)
+
   const deleteCandidatesMeta = useSelector(
     (state) => state.CandidateReducer?.deleteCandidatesMeta
   );
@@ -101,7 +103,7 @@ const DynamicTableWrapper = ({
   };
 
   useEffect(() => {
-    if (allCandidateCustomViews && allCandidateCustomViews.length > 0) {
+    if (allCandidateCustomViews != null && allCandidateCustomViews.length > 0) {
       const selectedCustomView = allCandidateCustomViews?.find(
         (customView) => customView?.selected
       );
@@ -117,14 +119,17 @@ const DynamicTableWrapper = ({
         if (selectedObjects.length > 0) {
           setCustomConfigData(selectedObjects);
         }
+        pageRequestSet.setFilterData(selectedCustomView?.filters);
       }
-    } else {
-      setCustomConfigData(CANDIDATE_INITIAL_OPTIONS);
+    }
+    if (allCandidateCustomViews != null && allCandidateCustomViews.length === 0) {
+      enableDefaultView();
     }
   }, [allCandidateCustomViews, optGroup]);
 
   const enableDefaultView = () => {
     setCustomConfigData(CANDIDATE_INITIAL_OPTIONS);
+    pageRequestSet.setFilterData(null);
   };
 
   const handleEportExcel = () => {

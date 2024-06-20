@@ -54,7 +54,7 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
     <div>
       <div className="d-flex gap-2 align-items-center mb-2">
         <span className="fw-semibold">Specify Criteria</span>
-        {filters?.length === 0 && (
+        {(filters?.length === 0 || filters == null) && (
           <Button
             type="button"
             className="btn btn-custom-primary"
@@ -62,7 +62,15 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
               padding: "1px 2px",
               fontSize: "12px",
             }}
-            onClick={() => setFilters((prev) => [...prev, {}])}
+            onClick={() =>
+              setFilters((prev) => {
+                if (!prev) {
+                  return [{}];
+                } else {
+                  return [...prev, {}];
+                }
+              })
+            }
           >
             Add Criteria
           </Button>

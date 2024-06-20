@@ -40,6 +40,10 @@ function CandidateCustomView() {
     (state) => state?.CandidateReducer?.candidateCustomView
   );
 
+  console.log("candidateFields", candidateFields);
+
+  console.log("candidateCustomView", candidateCustomView);
+
   const editId = useParams().id;
 
   useEffect(() => {
