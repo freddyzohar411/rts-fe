@@ -133,6 +133,9 @@ const DynamicTableWrapper = ({
       const payload = { ...pageRequest, isDownload: true };
       const resp = await getAccounts(payload);
       exportData = resp?.data?.accounts;
+      if (activeRow?.length > 0) {
+        exportData = exportData.filter((item) => activeRow.includes(item?.id));
+      }
     } catch (e) {}
 
     DynamicTableHelper.handleExportExcel(
