@@ -347,7 +347,7 @@ const InnerTimelineStep = ({
     } else {
       const newTimeline = updateTimeline(
         defaultTimeline,
-        filteredExpandedTimeline,
+        filtered,
         expandedTimeline,
         noOfRows
       );
@@ -358,7 +358,7 @@ const InnerTimelineStep = ({
     setExpandedTimeline(indexesInnerTimeline);
     setAllExpandedIndexes([...expandedIndexes]);
     setIndexRanges(rangeOfIndex);
-  }, [expandedSectionRange, noOfRows, innerTimelineSteppers, filteredExpandedTimeline]);
+  }, [expandedSectionRange, noOfRows, JSON.stringify(innerTimelineSteppers), JSON.stringify(expandedTimeline)]);
 
   const getExpandedIndexes = (indexRanges, expandRanges, timeline) => {
     const result = [];
