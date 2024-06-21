@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Container } from "reactstrap";
+import { Container, Tooltip } from "reactstrap";
 import { useSelector } from "react-redux";
 import LoadingOverlay from "react-loading-overlay";
 import JobCreation from "../../components/JobCreation/JobCreation";
@@ -20,14 +19,16 @@ import classnames from "classnames";
 import "./JobManage.scss";
 
 const JobManage = () => {
-  const { jobId, slug } = useParams();
-  const [headerTooltip, setHeaderTooltip] = useState(false);
-  const [tooltipIndexes, setTooltipIndexes] = useState();
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
   const jobAllTagMeta = useSelector(
     (state) => state.JobStageReducer.jobAllTagMeta
   );
   const navState = location.state;
+
+  // Overview Header
+  const [onRetrieveHeader, setOnRetrieveHeader] = useState(null);
+  const [headerTooltip, setHeaderTooltip] = useState(false);
+  const [tooltipIndexes, setTooltipIndexes] = useState();
 
   // Tabs
   const [ugTab, setUgTab] = useState(navState?.ugTab || "1");
@@ -37,8 +38,6 @@ const JobManage = () => {
     }
   };
 
-  // Overview Header
-  const [onRetrieveHeader, setOnRetrieveHeader] = useState(null);
   const handleOverviewHeader = (value) => {
     setOnRetrieveHeader(value);
   };

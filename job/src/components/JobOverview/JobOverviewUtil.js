@@ -23,6 +23,24 @@ export const overviewValues = (
   deliveryTeam,
   isMobile
 ) => {
+  let recruiters = [];
+  const recs = data?.fodRecruiters?.split(",") ?? [];
+
+  if (deliveryTeam?.length > 0) {
+    deliveryTeam?.forEach((rs) => {
+      recruiters?.push(rs?.trim());
+    });
+  }
+
+  if (recs?.length > 0) {
+    recs?.forEach((rs) => {
+      recruiters?.push(rs?.trim());
+    });
+  }
+
+  recruiters =
+    recruiters?.filter((val, ind) => ind === recruiters?.indexOf(val)) ?? null;
+
   const calculateAgeing = () => {
     if (Object.keys(jobTimelineData).length !== 0) {
       const createdAtDate = jobTimelineData?.jobs[0]?.createdAt;
@@ -64,8 +82,8 @@ export const overviewValues = (
       trimValue: trimValue(owner, isMobile),
     },
     Recruiter: {
-      value: data?.fodRecruiters ?? "N/A",
-      trimValue: trimValue(data?.fodRecruiters, isMobile),
+      value: recruiters?.join(", ") ?? "N/A",
+      trimValue: trimValue(recruiters?.join(", "), isMobile),
     },
     "Man Days": {
       value: "N/A",

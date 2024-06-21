@@ -12,10 +12,6 @@ import {
   Table,
   Offcanvas,
   OffcanvasBody,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Tooltip,
   ButtonGroup,
   Spinner,
   Card,
@@ -96,12 +92,7 @@ import { SkillAssessment } from "../SkillAssessment";
 import { CodingTest } from "../CodingTest";
 import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
-import {
-  getMaxOrder,
-  getStatus,
-  overviewHeaders,
-  overviewValues,
-} from "./JobOverviewUtil";
+import { getMaxOrder, getStatus, overviewValues } from "./JobOverviewUtil";
 import "./ViewTemplateSection.scss";
 import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePreviewSideDrawer";
 import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
@@ -133,7 +124,6 @@ const JobOverview = ({ onRetrieveHeader }) => {
   const [originalOrder, setOriginalOrder] = useState();
 
   // Next Step Dropdown States
-  const [headerTooltip, setHeaderTooltip] = useState(false);
   const [sortDirection, setSortDirection] = useState("desc");
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
@@ -145,7 +135,6 @@ const JobOverview = ({ onRetrieveHeader }) => {
 
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
-  const [tooltipIndexes, setTooltipIndexes] = useState();
   const [isViewTemplate, setIsViewTemplate] = useState(false);
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
@@ -719,35 +708,6 @@ const JobOverview = ({ onRetrieveHeader }) => {
       default:
         return null;
     }
-  };
-
-  /**
-   * @author Rahul Sahu
-   * @param {*} targetName
-   * Toggle tooltip
-   */
-  const toggle = (targetName) => {
-    if (!tooltipIndexes?.[targetName]) {
-      setTooltipIndexes({
-        ...tooltipIndexes,
-        [targetName]: {
-          tooltipOpen: true,
-        },
-      });
-    } else {
-      setTooltipIndexes({
-        ...tooltipIndexes,
-        [targetName]: {
-          tooltipOpen: !tooltipIndexes?.[targetName]?.tooltipOpen,
-        },
-      });
-    }
-  };
-
-  const isToolTipOpen = (targetName) => {
-    return tooltipIndexes?.[targetName]
-      ? tooltipIndexes?.[targetName]?.tooltipOpen
-      : false;
   };
 
   // Retrieve individual candidate data - job timeline
@@ -1643,14 +1603,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
       mobile
     );
     onRetrieveHeader(values);
-  }, [
-    formSubmissionData,
-    jobTimelineData,
-    deliveryTeam,
-    isMobile,
-    isTablet,
-    headerTooltip,
-  ]);
+  }, [formSubmissionData, jobTimelineData, deliveryTeam, isMobile, isTablet]);
 
   return (
     <React.Fragment>

@@ -1,6 +1,6 @@
 import React from "react";
 import CountUp from "react-countup";
-import { Row, Badge, Card, CardBody, Col, Button } from "reactstrap";
+import { Row, Badge, Card, CardBody, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import { recruiterDashboard, salesDashboard } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -19,7 +19,6 @@ const Widgets = () => {
   const allJobs = useSelector((state) => state.JobsCount.allJobs);
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const getCount = (itemKey) => {
     let jobCount = 0;
@@ -34,7 +33,13 @@ const Widgets = () => {
         jobCount = inactiveJobs ?? 0;
         break;
       case "closed_jobs":
-        jobCount = closedJobs ?? 0;
+        jobCount = closedJobs?.total ?? 0;
+        break;
+      case "closed_win":
+        jobCount = closedJobs?.closedWin ?? 0;
+        break;
+      case "closed_lost":
+        jobCount = closedJobs?.closedLost ?? 0;
         break;
       case "fod":
         jobCount = fodJobs ?? 0;
@@ -59,7 +64,7 @@ const Widgets = () => {
 
     return (
       <div className={`${isTablet && "mt-2"}`}>
-        {statusArray.map(({ status, count }, index) => (
+        {statusArray.map(({ key, status, count }, index) => (
           <div
             key={index}
             className="d-flex flex-row justify-content-between mt-0 mb-1 gap-3 fs-6"
@@ -71,7 +76,7 @@ const Widgets = () => {
                 width: "40px",
               }}
             >
-              {count}
+              {getCount(key) ?? count}
             </Badge>
           </div>
         ))}

@@ -235,6 +235,10 @@ const salesDashboard = [
     cardColor: "primary",
     label: "Closed Job",
     subLabel: "Openings",
+    statusArray: [
+      { key: "closed_win", status: "Win", count: 0 },
+      { key: "closed_lost", status: "Lost", count: 0 },
+    ],
     badge: "",
     badgeClass: "",
     percentage: "",

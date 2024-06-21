@@ -13,6 +13,13 @@ const JOB_MANDATORY_OPTIONS = [
     sort: true,
     expand: true,
   },
+  {
+    sortValue: "recruiterName",
+    label: "Recruiter(s)",
+    value: "recruiterName",
+    sort: false,
+    expand: true,
+  },
 ];
 
 const JOB_INITIAL_OPTIONS = [
