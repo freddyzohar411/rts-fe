@@ -28,7 +28,16 @@ export const validateFilters = (filters, setErrors) => {
       filter?.condition === conditionObject.CONTAINS ||
       filter?.condition === conditionObject.DOES_NOT_CONTAIN ||
       filter?.condition === conditionObject.GREATER_THAN ||
-      filter?.condition === conditionObject.LESS_THAN
+      filter?.condition === conditionObject.LESS_THAN || 
+      filter?.condition === conditionObject.GREATER_THAN_OR_EQUAL ||
+      filter?.condition === conditionObject.LESS_THAN_OR_EQUAL || 
+      filter?.condition === conditionObject.STARTS_WITH ||
+      filter?.condition === conditionObject.ENDS_WITH ||
+      filter?.condition === conditionObject.ON ||
+      filter?.condition === conditionObject.BEFORE ||
+      filter?.condition === conditionObject.BEFORE_OR_EQUAL ||
+      filter?.condition === conditionObject.AFTER ||
+      filter?.condition === conditionObject.AFTER_OR_EQUAL
     ) {
       if (!filter.field) {
         isValid = false;

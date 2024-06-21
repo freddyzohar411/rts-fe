@@ -131,41 +131,50 @@ const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
     if (!schema) return null;
     if (schema?.type === "select") {
       return (
-        <SelectElement
-          optionsData={schema?.options}
-          setSelectedOptionData={(selectedOptions) => {
-            setFilters((prev) => {
-              const newFiltersInput = JSON.parse(JSON.stringify(prev));
-              newFiltersInput[index] = {
-                ...newFiltersInput[index],
-                value: selectedOptions?.value,
-              };
-              return newFiltersInput;
-            });
-          }}
-          value={schema?.options?.find(
-            (option) => option?.value === filter?.value
-          )}
-        />
+        <>
+          <SelectElement
+            optionsData={schema?.options}
+            setSelectedOptionData={(selectedOptions) => {
+              setFilters((prev) => {
+                const newFiltersInput = JSON.parse(JSON.stringify(prev));
+                newFiltersInput[index] = {
+                  ...newFiltersInput[index],
+                  value: selectedOptions?.value,
+                };
+                return newFiltersInput;
+              });
+            }}
+            value={schema?.options?.find(
+              (option) => option?.value === filter?.value
+            )}
+          />
+          {generateErrorDiv(errors)}
+        </>
       );
     }
     if (schema?.type === "date") {
       return (
-        <MultiDateElement
-          onChange={setValueInput}
-          value={filter?.value}
-          schema={schema}
-        />
+        <>
+          <MultiDateElement
+            onChange={setValueInput}
+            value={filter?.value}
+            schema={schema}
+          />
+          {generateErrorDiv(errors)}
+        </>
       );
     }
     if (schema?.type === "datemonth") {
       return (
-        <MultiDateElement
-          onChange={setValueInput}
-          value={filter?.value}
-          schema={schema}
-          type="dateMonth"
-        />
+        <>
+          <MultiDateElement
+            onChange={setValueInput}
+            value={filter?.value}
+            schema={schema}
+            type="dateMonth"
+          />
+          {generateErrorDiv(errors)}
+        </>
       );
     }
   };
@@ -199,7 +208,9 @@ const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
       );
     } else if (
       (filter && filter?.condition === conditionObject.GREATER_THAN) ||
-      filter?.condition === conditionObject.LESS_THAN
+      filter?.condition === conditionObject.LESS_THAN ||
+      filter?.condition === conditionObject.GREATER_THAN_OR_EQUAL ||
+      filter?.condition === conditionObject.LESS_THAN_OR_EQUAL
     ) {
       return (
         <>
@@ -213,18 +224,24 @@ const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
         </>
       );
     } else if (
+      filter?.condition === conditionObject.ON ||
       filter?.condition === conditionObject.BEFORE ||
-      filter?.condition === conditionObject.AFTER
+      filter?.condition === conditionObject.AFTER ||
+      filter?.condition === conditionObject.BEFORE_OR_EQUAL ||
+      filter?.condition === conditionObject.AFTER_OR_EQUAL
     ) {
       return (
-        <MultiDateElement onChange={setValueInput} value={filter?.value} />
+        <>
+          <MultiDateElement onChange={setValueInput} value={filter?.value} />
+          {generateErrorDiv(errors)}
+        </>
       );
     }
   };
 
   useEffect(() => {
     setFormElement(generateValueElement(filter));
-  }, [formSchema, filter]);
+  }, [formSchema, filter, errors]);
 
   return (
     <div className="d-flex align-items-center gap-2 mb-2">
