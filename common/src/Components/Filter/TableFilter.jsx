@@ -10,7 +10,7 @@ import { conditionObject } from "./filterConstant";
 import { validateFilters } from "./Validation";
 import FilterQuery from "./FilterQuery";
 
-const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
+const TableFilter = forwardRef(({ fields, filters, setFilters, formSchema }, ref) => {
   const [errors, setErrors] = useState([]);
 
   const generateOperatorHr = (filter, index) => {
@@ -47,8 +47,6 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
     }),
     [filters, setErrors]
   );
-
-  console.log("filters", filters);
 
   return (
     <div>
@@ -94,6 +92,7 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
                 setFilters={setFilters}
                 index={index}
                 errors={errors?.[index]}
+                formSchema={formSchema}
               />
             </div>
           );

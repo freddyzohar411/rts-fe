@@ -24,6 +24,7 @@ import {
   fetchAccountCustomViewById,
   editAccountCustomViewById,
 } from "../../store/account/action";
+import  { fetchAccountForm } from "../../store/accountForm/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { ACCOUNT_MANDATORY_OPTIONS } from "../AccountListing/accountListingConstants";
@@ -46,7 +47,11 @@ function AccountCustomView() {
     (state) => state?.AccountReducer?.accountCustomViewMeta
   );
 
-  console.log("accountCustomViewMeta", accountCustomViewMeta);
+  // Dispatch and get account_account form
+  const form = useSelector((state) => state.AccountFormReducer.form);
+  useEffect(() => {
+    dispatch(fetchAccountForm("Account_account"));
+  }, []);
 
   const editId = useParams().id;
 
@@ -157,9 +162,6 @@ function AccountCustomView() {
                 <CardHeader>
                   <div className="d-flex flex-column ">
                     <h6 className="fw-bold">Custom View</h6>
-                    {/* <span className="fw-medium">
-                      Personalise your own custom view of your tables here.
-                    </span> */}
                   </div>
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
@@ -205,6 +207,7 @@ function AccountCustomView() {
                             filters={filters}
                             setFilters={setFilters}
                             ref={filterRef}
+                            formSchema={form?.formSchema}
                           />
                         </Row>
                       </Col>

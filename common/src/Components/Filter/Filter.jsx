@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Input,
   Dropdown,
@@ -12,9 +12,11 @@ import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOut
 import { mapConditionObjectArray, conditionObject } from "./filterConstant";
 import MultiDateElement from "./Elements/MultiDateElement";
 
-const Filter = ({ fields, filter, setFilters, index, errors }) => {
+const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
+  console.log("formSchema", formSchema);
   const [filtersInput, setFiltersInput] = useState({}); // [field, condition, value, operator]
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [formElement, setFormElement] = useState(null);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
@@ -114,7 +116,65 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
     );
   };
 
+  const generateElementFromFormSchema = (formSchema, filter) => {
+    if (!formSchema) return null;
+    let filterField = filter?.field;
+    console.log("filterField", filterField);
+    // If filterField constains . then split it
+    if (filterField?.includes(".")) {
+      filterField = filterField.split(".")[1];
+    }
+    console.log("filterField SPLIT", filterField);
+    const schema = formSchema?.find((schema) => {
+      return schema?.name === filterField;
+    });
+    if (!schema) return null;
+    if (schema?.type === "select") {
+      return (
+        <SelectElement
+          optionsData={schema?.options}
+          setSelectedOptionData={(selectedOptions) => {
+            setFilters((prev) => {
+              const newFiltersInput = JSON.parse(JSON.stringify(prev));
+              newFiltersInput[index] = {
+                ...newFiltersInput[index],
+                value: selectedOptions?.value,
+              };
+              return newFiltersInput;
+            });
+          }}
+          value={schema?.options?.find(
+            (option) => option?.value === filter?.value
+          )}
+        />
+      );
+    }
+    if (schema?.type === "date") {
+      return (
+        <MultiDateElement
+          onChange={setValueInput}
+          value={filter?.value}
+          schema={schema}
+        />
+      );
+    }
+    if (schema?.type === "datemonth") {
+      return (
+        <MultiDateElement
+          onChange={setValueInput}
+          value={filter?.value}
+          schema={schema}
+          type="dateMonth"
+        />
+      );
+    }
+  };
+
   const generateValueElement = (filter) => {
+    // Set a function that take in formSchema and return the element
+    const element = generateElementFromFormSchema(formSchema, filter);
+    if (element) return element;
+
     if (!filter?.condition) return null;
     if (
       filter?.condition === conditionObject.EQUAL ||
@@ -122,7 +182,7 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
       filter?.condition === conditionObject.CONTAINS ||
       filter?.condition === conditionObject.DOES_NOT_CONTAIN ||
       filter?.condition === conditionObject.IN ||
-      filter?.condition === conditionObject.NOT_IN || 
+      filter?.condition === conditionObject.NOT_IN ||
       filter?.condition === conditionObject.STARTS_WITH ||
       filter?.condition === conditionObject.ENDS_WITH
     ) {
@@ -162,6 +222,10 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
     }
   };
 
+  useEffect(() => {
+    setFormElement(generateValueElement(filter));
+  }, [formSchema, filter]);
+
   return (
     <div className="d-flex align-items-center gap-2 mb-2">
       <div
@@ -173,7 +237,7 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
       >
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <SelectElement
-          enableTooltip={true}
+            enableTooltip={true}
             optionsData={() => {
               return fields?.map((field) => {
                 return {
@@ -235,7 +299,7 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
           )}
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-          {generateValueElement(filter)}
+          {formElement}
         </div>
       </div>
       <div>
