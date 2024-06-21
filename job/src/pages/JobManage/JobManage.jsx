@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Container, Tooltip } from "reactstrap";
 import { useSelector } from "react-redux";
 import LoadingOverlay from "react-loading-overlay";
 import JobCreation from "../../components/JobCreation/JobCreation";
 import JobOverview from "../../components/JobOverview/JobOverview";
 import { overviewHeaders } from "../../components/JobOverview/JobOverviewUtil";
 import {
+  Container,
   Card,
   CardBody,
   Nav,
@@ -13,12 +13,16 @@ import {
   NavLink,
   TabContent,
   TabPane,
+  Tooltip,
 } from "reactstrap";
 import classnames from "classnames";
 import "./JobManage.scss";
 
 const JobManage = () => {
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+  const jobAllTagMeta = useSelector(
+    (state) => state.JobStageReducer.jobAllTagMeta
+  );
   const navState = location.state;
 
   // Overview Header
@@ -69,16 +73,16 @@ const JobManage = () => {
 
   return (
     <LoadingOverlay
-      active={jobTagMeta?.isLoading ?? false}
+      active={(jobTagMeta?.isLoading || jobAllTagMeta?.isLoading) ?? false}
       spinner
       text="Please wait..."
     >
       <div className="page-content">
-        <div className="overview-header">
+        <div className="overview-header sticky-header">
           <div className="d-flex flex-wrap">
             {overviewHeaders.map((header, index) => {
               const shouldShowTooltip =
-                onRetrieveHeader?.[header]?.value?.length > 20;
+                onRetrieveHeader?.[header]?.trimValue.length > 20;
               return (
                 <div
                   key={index}
@@ -93,11 +97,8 @@ const JobManage = () => {
                     id={`btn-${index}`}
                     onClick={() => setHeaderTooltip(!headerTooltip)}
                   >
-                    <span className="fw-medium text-muted">{header}</span>
-                    <span
-                      className="fw-semibold gap-1"
-                      style={{ color: "#0A56AE" }}
-                    >
+                    <span className="header-title">{header}</span>
+                    <span className="header-subtitle">
                       {onRetrieveHeader?.[header]?.trimValue}
                     </span>
                   </div>

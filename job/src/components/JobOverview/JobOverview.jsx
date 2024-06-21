@@ -105,6 +105,7 @@ import PreSkillAssessment from "../PreSkillAssessment/PreSkillAssessment.jsx";
 import BillRateSalaryEditModal from "../BillRateSalaryEditModal/BillRateSalaryEditModal.jsx";
 import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav.jsx";
+import JobOverviewTag from "./JobOverviewTag/JobOverviewTag.jsx";
 
 const JobOverview = ({ onRetrieveHeader }) => {
   document.title = "Job Timeline | RTS";
@@ -158,6 +159,9 @@ const JobOverview = ({ onRetrieveHeader }) => {
   );
 
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+  const jobAllTagMeta = useSelector(
+    (state) => state.JobStageReducer.jobAllTagMeta
+  );
 
   const jobUntagMeta = useSelector(
     (state) => state.JobStageReducer?.jobUntagMeta
@@ -206,7 +210,11 @@ const JobOverview = ({ onRetrieveHeader }) => {
   );
 
   useEffect(() => {
-    if (jobTagMeta?.isSuccess || updateBillrateMeta?.isSuccess) {
+    if (
+      jobTagMeta?.isSuccess ||
+      updateBillrateMeta?.isSuccess 
+      || jobAllTagMeta?.isSuccess
+    ) {
       setOffcanvasForm(false);
       setModalFormName(null);
       dispatch(
@@ -220,7 +228,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
       dispatch(tagReset());
       dispatch(resetBillRate());
     }
-  }, [jobTagMeta, updateBillrateMeta]);
+  }, [jobTagMeta, updateBillrateMeta, jobAllTagMeta]);
 
   // Fetch the job when the pageRequest changes
   useEffect(() => {
@@ -414,6 +422,8 @@ const JobOverview = ({ onRetrieveHeader }) => {
   const toggleBrsModal = () => {
     setIsBrsModalOpen(!isBrsModalOpen);
   };
+
+  const [isJobOverviewTagOpen, setIsJobOverviewTagOpen] = useState(false);
 
   const handleStepsSelection = (jobId, value) => {
     const newOb = { ...skipSteps };
@@ -740,7 +750,11 @@ const JobOverview = ({ onRetrieveHeader }) => {
               <>
                 <tr className="cursor-pointer" key={timelineIndex}>
                   {/* Candidate */}
-                  <td style={{ width: "170px" }}>
+                  <td
+                    style={{
+                      width: "170px",
+                    }}
+                  >
                     <div className="d-flex flex-column align-items-start">
                       <Link
                         to={`/candidates/${candidateData.id}/snapshot`}
@@ -758,7 +772,11 @@ const JobOverview = ({ onRetrieveHeader }) => {
                     </div>
                   </td>
                   {/* Bill Rate */}
-                  <td style={{ width: "7rem" }}>
+                  <td
+                    style={{
+                      width: "7rem"
+                    }}
+                  >
                     <div className="billrate-container">
                       <div className="billrate-inner">
                         <span className="billrate-amt">
@@ -782,7 +800,11 @@ const JobOverview = ({ onRetrieveHeader }) => {
                     </div>
                   </td>
                   {/* Salary */}
-                  <td style={{ width: "7rem" }}>
+                  <td
+                    style={{
+                      width: "7rem",
+                    }}
+                  >
                     <div className="billrate-container">
                       <div className="billrate-inner">
                         <span className="billrate-amt">
@@ -808,24 +830,34 @@ const JobOverview = ({ onRetrieveHeader }) => {
                   </td>
                   {/* Progress Bar */}
                   <td
-                    style={{ width: "300px" }}
+                    style={{
+                      width: "300px"
+                    }}
                     onClick={() => toggleJobOpen(data.id)}
                   >
                     <OverviewStepComponent data={data} />
                   </td>
                   {/* Current Status */}
-                  <td style={{ width: "7rem" }}>
+                  <td
+                    style={{
+                      width: "7rem"
+                    }}
+                  >
                     <div className="d-flex flex-column align-items-start justify-content-start">
-                      <span className="form-text">
+                      <span className="form-text station-title">
                         {data?.stepName ?? "N/A"}
                       </span>
-                      <span className="fw-semibold">
+                      <span className="fw-semibold substation-title">
                         {data?.subStepName ?? "N/A"}
                       </span>
                     </div>
                   </td>
                   {/* Next Step */}
-                  <td style={{ width: "15rem" }}>
+                  <td
+                    style={{
+                      width: "15rem"
+                    }}
+                  >
                     <div className="d-flex flex-row gap-1">
                       <Input
                         type="select"
@@ -878,7 +910,11 @@ const JobOverview = ({ onRetrieveHeader }) => {
                     </div>
                   </td>
                   {/* Save Button */}
-                  <td style={{ width: "50px" }}>
+                  <td
+                    style={{
+                      width: "50px"
+                    }}
+                  >
                     <button
                       className="bg-light main-border-style rounded-circle d-flex align-items-center justify-content-center"
                       style={{ width: "30px", height: "30px" }}
@@ -906,7 +942,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
                 </tr>
                 {openJobIndex === data.id && (
                   <tr>
-                    <td colSpan={10} className="px-1">
+                    <td colSpan={10} className="px-1 custom-border-bottom">
                       <InnerTimelineStep
                         data={data.timeline}
                         readOnlyActionTrigger={readOnlyActionTrigger}
@@ -1662,6 +1698,14 @@ const JobOverview = ({ onRetrieveHeader }) => {
               />
               <ButtonGroup>
                 <Button className="bg-white main-border-style">
+                  <i className="mdi mdi-download-outline align-bottom me-1"></i>
+                </Button>
+                <Button
+                  className="bg-white main-border-style"
+                  onClick={() => {
+                    setIsJobOverviewTagOpen(true);
+                  }}
+                >
                   <i className="mdi mdi-account-plus-outline align-bottom me-1"></i>
                 </Button>
                 <Button className="bg-white main-border-style">
@@ -1686,7 +1730,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
                       {newHeaders.map((header, index) => (
                         <td
                           key={index}
-                          className="main-border-style cursor-pointer"
+                          className="main-border-style cursor-pointer main-table-header-text"
                           onClick={() => handleSort(index)}
                         >
                           {header.name} <i className={header.icon}></i>
@@ -1780,6 +1824,14 @@ const JobOverview = ({ onRetrieveHeader }) => {
           closeModal={() => setBillRateModalOpen(false)}
           header={BillRateZeroLabels.header}
           body={BillRateZeroLabels.body}
+        />
+
+        <JobOverviewTag
+          isJobOverviewTagOpen={isJobOverviewTagOpen}
+          isOpen={isJobOverviewTagOpen}
+          closeTag={() => setIsJobOverviewTagOpen(!isJobOverviewTagOpen)}
+          jobId={jobId}
+          data={formSubmissionData}
         />
       </div>
     </React.Fragment>

@@ -1,0 +1,63 @@
+.oc-tag-header {
+  border-bottom: 1px solid rgb(235, 235, 235);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+}
+.tag-candidate-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0a56ae;
+  border-radius: 3px;
+  color: #fff;
+  height: 60%;
+  font-size: 9px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.job-tagging-header-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.job-tagging-header-info,
+.job-tagging-header-info-2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 10px;
+  color: #0a56ae;
+}
+
+.job-tagging-header-info-2 {
+  column-gap: 5px;
+  font-size: 10px;
+}
+
+.job-name-header {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+@media (min-width: 1366px) {
+  .job-name-header {
+    font-size: 17px;
+  }
+
+  .tag-candidate-badge {
+    font-size: 12px;
+  }
+
+  .job-tagging-header-info-2 {
+    font-size: 13px;
+  }
+}
