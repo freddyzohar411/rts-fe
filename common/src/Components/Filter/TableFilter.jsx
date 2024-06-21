@@ -80,7 +80,8 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
         className="py-1"
         style={{
           overflowY: "auto",
-          height: "235px",
+          // height: "235px",
+          height: "250px",
         }}
       >
         {filters?.map((filter, index) => {
@@ -98,18 +99,21 @@ const TableFilter = forwardRef(({ fields, filters, setFilters }, ref) => {
           );
         })}
       </div>
-      <div>
-        <hr
-          style={{
-            marginTop: "2px",
-            marginBottom: "4px",
-          }}
-        />
-      </div>
+      {filters?.length > 0 && (
+        <div>
+          <hr
+            style={{
+              marginTop: "5px",
+              marginBottom: "5px",
+            }}
+          />
+        </div>
+      )}
       <div
         style={{
           overflowY: "auto",
-          height: "75px",
+          maxHeight: "75px",
+          marginBottom: "6px",
         }}
       >
         <FilterQuery filters={filters} />

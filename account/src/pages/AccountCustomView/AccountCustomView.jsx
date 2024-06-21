@@ -157,9 +157,9 @@ function AccountCustomView() {
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
                   <CardBody
-                    style={{
-                      height: "56.5vh",
-                    }}
+                    // style={{
+                    //   height: "56.5vh",
+                    // }}
                   >
                     <Row>
                       <Col lg={6}>
