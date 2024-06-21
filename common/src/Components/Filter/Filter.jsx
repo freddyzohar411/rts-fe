@@ -269,6 +269,7 @@ const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <SelectElement
+            enableTooltip={true}
             optionsData={mapConditionObjectArray()}
             setSelectedOptionData={(selectedOptions) => {
               setFilters((prev) => {
