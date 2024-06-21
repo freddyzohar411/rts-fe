@@ -16,7 +16,7 @@
 }
 
 .text-notstarted {
-  color: #0A56AE;
+  color: #0a56ae;
 }
 
 .bg-disabled {
@@ -28,19 +28,19 @@
 }
 
 .bg-in-progress {
-  background-color: #0A56AE;
+  background-color: #0a56ae;
 }
 
 .border-in-progress {
-  border: 1px solid #0A56AE;
+  border: 1px solid #0a56ae;
 }
 
 .bg-completed {
-  background-color: #10B967;
+  background-color: #10b967;
 }
 
 .border-completed {
-  border: 1px solid #10B967;
+  border: 1px solid #10b967;
 }
 
 .bg-withdrawn {
@@ -52,11 +52,11 @@
 }
 
 .bg-rejected {
-  background-color: #D90909;
+  background-color: #d90909;
 }
 
 .border-rejected {
-  border: 1px solid #D90909;
+  border: 1px solid #d90909;
 }
 
 .bg-skipped {
@@ -72,5 +72,53 @@
 }
 
 .border-notstarted {
-  border: 1px solid #0A56AE;
+  border: 1px solid #0a56ae;
 }
+
+.overview-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.overview-step-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.overview-progress-line {
+  border: 1px solid;
+  width: 24px;
+}
+
+.overview-disabled-line {
+  border: 1px dashed #b6cde7;
+}
+
+.overview-not-started-line {
+  border: 1px dashed #0a56ae;
+}
+
+.overview-inprogress-line {
+  border: 1px solid #0a56ae;
+}
+
+.overview-completed-line {
+  border: 1px solid #10b967;
+}
+
+.overview-rejected-line {
+  border: 1px solid #d90909;
+}
+
+.overview-withdrawn-line {
+  border: 1px solid #992ef2;
+}
+
+.overview-skipped-line {
+  border: 1px solid #868384;
+}
+
+

@@ -143,6 +143,48 @@ const OverviewStepComponent = ({ data }) => {
     return response;
   };
 
+  const getStyles = (stepName) => {
+    const status = progressStatus?.[stepName];
+    let bulletStyles = "";
+    let borderStyles = "";
+
+    switch (status) {
+      case undefined:
+        bulletStyles = "text-disabled bg-disabled border-disabled";
+        borderStyles = "overview-disabled-line";
+        break;
+      case JOB_STAGE_STATUS_LABELS.IN_PROGRESS:
+      case JOB_STAGE_STATUS.IN_PROGRESS:
+        bulletStyles = "text-white bg-in-progress border-in-progress";
+        borderStyles = "overview-inprogress-line";
+        break;
+      case JOB_STAGE_STATUS.COMPLETED:
+      case JOB_STAGE_STATUS_LABELS.COMPLETED:
+        bulletStyles = "text-white bg-completed border-completed";
+        borderStyles = "overview-completed-line";
+        break;
+      case JOB_STAGE_STATUS.WITHDRAWN:
+      case JOB_STAGE_STATUS_LABELS.WITHDRAWN:
+        bulletStyles = "text-white bg-withdrawn border-withdrawn";
+        borderStyles = "overview-withdrawn-line";
+        break;
+      case JOB_STAGE_STATUS.REJECTED:
+      case JOB_STAGE_STATUS_LABELS.REJECTED:
+        bulletStyles = "text-white bg-rejected border-rejected";
+        borderStyles = "overview-rejected-line";
+        break;
+      case JOB_STAGE_STATUS.SKIPPED:
+      case JOB_STAGE_STATUS_LABELS.SKIPPED:
+        bulletStyles = "text-white bg-skipped border-skipped";
+        borderStyles = "overview-skipped-line";
+        break;
+      default:
+        break;
+    }
+
+    return { bulletStyles, borderStyles };
+  };
+
   // Get bollets border, text and background color
   const getBulletBgColor = (stepName) => {
     let customCSS;
@@ -254,35 +296,32 @@ const OverviewStepComponent = ({ data }) => {
   return (
     <div style={{ position: "relative" }} aria-disabled>
       <div
-        className="mt-3"
-        style={{
-          position: "absolute",
-          width: "100%",
-          zIndex: "1",
-          borderStyle: "dashed",
-          borderWidth: "1px",
-          borderColor: "lightgray",
-        }}
-      ></div>
-      <div
-        className="d-flex flex-row justify-content-between align-items-center"
+        className="overview-container"
         style={{ position: "relative", zIndex: "2" }}
       >
         {Object.values(progressSteps).map((step, index) => {
           const status = getStatusValue(progressStatus?.[step?.name]);
+          const { bulletStyles, borderStyles } = getStyles(step?.name);
+
           return (
             <div
               key={index}
-              className="d-flex align-items-center justify-content-center flex-column gap-2"
+              className="overview-container"
               id={`step-btn-${data?.candidate?.id}-${index}`}
             >
-              <div
-                className={`rounded-circle d-flex justify-content-center align-items-center circles-width ${getBulletBgColor(
-                  step?.name
-                )}`}
-              >
-                {GetLabel(step, status)}
+              <div className="overview-step-container">
+                <div
+                  className={`rounded-circle d-flex justify-content-center align-items-center circles-width ${bulletStyles}`}
+                >
+                  {GetLabel(step, status)}
+                </div>
+                {index === progressSteps.length - 1 || (
+                  <div
+                    className={`overview-progress-line ${borderStyles}`}
+                  ></div>
+                )}
               </div>
+
               <Tooltip
                 isOpen={isStepToolTipOpen(
                   `step-btn-${data?.candidate?.id}-${index}`
