@@ -12,6 +12,7 @@ import {
   Label,
   FormFeedback,
   Button,
+  Spinner,
 } from "reactstrap";
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
@@ -40,6 +41,12 @@ function AccountCustomView() {
   const accountCustomView = useSelector(
     (state) => state?.AccountReducer?.accountCustomView
   );
+
+  const accountCustomViewMeta = useSelector(
+    (state) => state?.AccountReducer?.accountCustomViewMeta
+  );
+
+  console.log("accountCustomViewMeta", accountCustomViewMeta);
 
   const editId = useParams().id;
 
@@ -157,9 +164,9 @@ function AccountCustomView() {
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
                   <CardBody
-                    // style={{
-                    //   height: "56.5vh",
-                    // }}
+                  // style={{
+                  //   height: "56.5vh",
+                  // }}
                   >
                     <Row>
                       <Col lg={6}>
@@ -312,7 +319,13 @@ function AccountCustomView() {
                             formik.setSubmitting(false);
                           }}
                         >
-                          {editId ? "Update Custom View" : "Create Custom View"}
+                          {accountCustomViewMeta?.isLoading ? (
+                            <Spinner size="sm" color="light" />
+                          ) : editId ? (
+                            "Update Custom View"
+                          ) : (
+                            "Create Custom View"
+                          )}
                         </Button>
                       </Col>
                     </Row>

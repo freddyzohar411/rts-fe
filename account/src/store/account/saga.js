@@ -227,8 +227,8 @@ function* workCreateAccountCustomView(action) {
       createAccountCustomView,
       payload
     );
-    yield put(createAccountCustomViewSuccess(accountCustomViewResponse));
     yield delay(500);
+    yield put(createAccountCustomViewSuccess(accountCustomViewResponse));
     toast.success("Account custom view created successfully!");
     navigate("/accounts");
   } catch (error) {
@@ -296,8 +296,8 @@ function* workEditAccountCustomViewById(action) {
   const { editId, payload, navigate } = action.payload;
   try {
     const response = yield call(editAccountCustomViewById, editId, payload);
-    yield put(editAccountCustomViewByIdSuccess(response.data));
     yield delay(500);
+    yield put(editAccountCustomViewByIdSuccess(response.data));
     toast.success("Account custom view updated successfully!");
     navigate("/accounts");
   } catch (error) {

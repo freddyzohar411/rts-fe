@@ -52,7 +52,7 @@ import {
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
-  RESET_ACCOUNTS
+  RESET_ACCOUNTS,
 } from "./actionTypes";
 
 import {
@@ -75,6 +75,7 @@ const initialState = {
   deleteMeta: {},
   tableMeta: {},
   accountCustomView: {},
+  accountCustomViewMeta: {},
   accountCustomViews: null,
   deleteAccountsMeta: {},
 };
@@ -276,22 +277,20 @@ const AccountReducer = (state = initialState, action) => {
     case CREATE_ACCOUNT_CUSTOM_VIEW:
       return {
         ...state,
-        loading: true,
-        error: false,
+        accountCustomViewMeta: pendingMetaData(),
       };
 
     case CREATE_ACCOUNT_CUSTOM_VIEW_SUCCESS:
       return {
-        loading: false,
         accountCustomView: action.payload,
+        accountCustomViewMeta: successMetaData(action.payload),
       };
 
     case CREATE_ACCOUNT_CUSTOM_VIEW_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
         errorMsg: action.payload,
+        accountCustomViewMeta: errorMetaData(action.payload),
       };
     // Fetch Account Custom Views
     case FETCH_ACCOUNT_CUSTOM_VIEW:
@@ -406,21 +405,19 @@ const AccountReducer = (state = initialState, action) => {
     case EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID:
       return {
         ...state,
-        loading: true,
-        error: false,
+        accountCustomViewMeta: pendingMetaData(),
       };
     case EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS:
       return {
         ...state,
-        loading: false,
         accountCustomView: action.payload,
+        accountCustomViewMeta: successMetaData(action.payload),
       };
     case EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
         errorMsg: action.payload,
+        accountCustomViewMeta: errorMetaData(action.payload),
       };
     case RESET_ACCOUNTS:
       return {
