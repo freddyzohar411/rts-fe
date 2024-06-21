@@ -14,13 +14,19 @@ import {
   NavLink,
   TabContent,
   TabPane,
+  Tooltip,
 } from "reactstrap";
 import classnames from "classnames";
 import "./JobManage.scss";
 
 const JobManage = () => {
   const { jobId, slug } = useParams();
+  const [headerTooltip, setHeaderTooltip] = useState(false);
+  const [tooltipIndexes, setTooltipIndexes] = useState();
   const jobTagMeta = useSelector((state) => state.JobStageReducer.jobTagMeta);
+  const jobAllTagMeta = useSelector(
+    (state) => state.JobStageReducer.jobAllTagMeta
+  );
   const navState = location.state;
 
   // Tabs
@@ -37,9 +43,38 @@ const JobManage = () => {
     setOnRetrieveHeader(value);
   };
 
+  /**
+   * @author Rahul Sahu
+   * @param {*} targetName
+   * Toggle tooltip
+   */
+  const toggle = (targetName) => {
+    if (!tooltipIndexes?.[targetName]) {
+      setTooltipIndexes({
+        ...tooltipIndexes,
+        [targetName]: {
+          tooltipOpen: true,
+        },
+      });
+    } else {
+      setTooltipIndexes({
+        ...tooltipIndexes,
+        [targetName]: {
+          tooltipOpen: !tooltipIndexes?.[targetName]?.tooltipOpen,
+        },
+      });
+    }
+  };
+
+  const isToolTipOpen = (targetName) => {
+    return tooltipIndexes?.[targetName]
+      ? tooltipIndexes?.[targetName]?.tooltipOpen
+      : false;
+  };
+
   return (
     <LoadingOverlay
-      active={jobTagMeta?.isLoading ?? false}
+      active={(jobTagMeta?.isLoading || jobAllTagMeta?.isLoading) ?? false}
       spinner
       text="Please wait..."
     >
@@ -47,14 +82,8 @@ const JobManage = () => {
         <div className="overview-header sticky-header">
           <div className="d-flex flex-wrap">
             {overviewHeaders.map((header, index) => {
-              // const mobile = isMobile | isTablet;
-              // const values = overviewValues(
-              //   formSubmissionData,
-              //   jobTimelineData,
-              //   deliveryTeam,
-              //   mobile
-              // );
-              // const shouldShowTooltip = values?.[header]?.value?.length > 20;
+              const shouldShowTooltip =
+                onRetrieveHeader?.[header]?.trimValue.length > 20;
               return (
                 <div
                   key={index}
@@ -67,17 +96,14 @@ const JobManage = () => {
                   <div
                     className="d-flex flex-column cursor-pointer"
                     id={`btn-${index}`}
-                    // onClick={() => setHeaderTooltip(!headerTooltip)}
+                    onClick={() => setHeaderTooltip(!headerTooltip)}
                   >
-                    <span className="fw-medium text-muted">{header}</span>
-                    <span
-                      className="fw-semibold gap-1"
-                      style={{ color: "#0A56AE" }}
-                    >
+                    <span className="header-title">{header}</span>
+                    <span className="header-subtitle">
                       {onRetrieveHeader?.[header]?.trimValue}
                     </span>
                   </div>
-                  {/* {shouldShowTooltip && (
+                  {shouldShowTooltip && (
                     <Tooltip
                       isOpen={isToolTipOpen(`btn-${index}`)}
                       placement="bottom-start"
@@ -86,7 +112,7 @@ const JobManage = () => {
                     >
                       {onRetrieveHeader?.[header]?.value}
                     </Tooltip>
-                  )} */}
+                  )}
                 </div>
               );
             })}

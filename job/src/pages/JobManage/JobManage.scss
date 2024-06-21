@@ -14,3 +14,25 @@
   top: 4.3rem;
   z-index: 1000;
 }
+
+.header-title {
+  font-weight: 400;
+  color: gray;
+}
+
+.header-subtitle {
+  color: #0A56AE;
+  font-weight: 500;
+}
+
+@media (min-width: 1024px) {
+  .header-title, .header-subtitle {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 1366px) {
+  .header-title, .header-subtitle {
+    font-size: 14px;
+  }
+}
