@@ -13,6 +13,7 @@ export const conditionObject = {
   "IS_NOT_NULL": "Is Not Null",
   "IS_TRUE": "Is True",
   "IS_FALSE": "Is False",
+  "ON": "On",
   "BEFORE": "Before",
   "AFTER": "After",
   "IN": "In",
