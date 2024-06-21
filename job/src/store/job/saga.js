@@ -196,7 +196,11 @@ function* workCreateJobCustomView(action) {
     navigate("/jobs");
   } catch (error) {
     yield put(createJobCustomViewFailure(error));
-    toast.error(error?.message);
+    if (error?.code === 409) {
+      toast.error("Job custom view name already exists.");
+    } else {
+      toast.error("Error updating job custom view!");
+    }
   }
 }
 
@@ -249,7 +253,11 @@ function* workEditJobCustomViewById(action) {
     navigate("/jobs");
   } catch (error) {
     yield put(editJobCustomViewByIdFailure(error));
-    toast.error("Error updating job custom view!");
+    if (error?.code === 409) {
+      toast.error("Job custom view name already exists.");
+    } else {
+      toast.error("Error updating job custom view!");
+    }
   }
 }
 
