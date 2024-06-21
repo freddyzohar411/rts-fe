@@ -62,7 +62,6 @@ function AccountCustomView() {
   }, [editId]);
 
   const [selectedOption, setSelectedOption] = useState([]);
-  const [dualListBoxError, setDualListBoxError] = useState(false);
   const [options, setOptions] = useState([]);
   const [filters, setFilters] = useState([]);
 

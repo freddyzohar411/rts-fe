@@ -23,6 +23,9 @@ import {
   editJobCustomViewById,
   createJobCustomView,
 } from "../../store/actions";
+import {
+  fetchJobForm
+} from "../../store/jobForm/action"
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { JOB_MANDATORY_OPTIONS } from "../../components/JobListing/JobListingConstants";
@@ -43,6 +46,12 @@ function JobCustomView() {
   const jobCustomViewMeta = useSelector(
     (state) => state?.JobReducer?.jobCustomViewMeta
   );
+
+    // Dispatch and get account_account form
+    const form = useSelector((state) => state.JobFormReducer.form);
+    useEffect(() => {
+      dispatch(fetchJobForm("job_form"));
+    }, []);
 
   const editId = useParams().id;
 
@@ -161,9 +170,9 @@ function JobCustomView() {
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
                   <CardBody
-                    style={{
-                      height: "56.5vh",
-                    }}
+                    // style={{
+                    //   height: "56.5vh",
+                    // }}
                   >
                     <Row>
                       <Col lg={6}>
@@ -202,6 +211,7 @@ function JobCustomView() {
                             filters={filters}
                             setFilters={setFilters}
                             ref={filterRef}
+                            formSchema={form?.formSchema}
                           />
                         </Row>
                       </Col>

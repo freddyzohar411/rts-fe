@@ -23,6 +23,9 @@ import {
   fetchCandidateCustomViewById,
   editCandidateCustomViewById,
 } from "../../store/actions";
+import {
+  fetchCandidateForm
+} from "../../store/candidateForm/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { CANDIDATE_MANDATORY_OPTIONS } from "../CandidateListing/candidateListingConstants";
@@ -44,6 +47,12 @@ function CandidateCustomView() {
   const candidateCustomViewMeta = useSelector(
     (state) => state?.CandidateReducer?.candidateCustomViewMeta
   );
+
+    // Dispatch and get account_account form
+    const form = useSelector((state) => state.CandidateFormReducer.form);
+    useEffect(() => {
+      dispatch(fetchCandidateForm("Candidate_basic_info"));
+    }, []);
 
   const editId = useParams().id;
 
@@ -162,9 +171,9 @@ function CandidateCustomView() {
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
                   <CardBody
-                    style={{
-                      height: "56.5vh",
-                    }}
+                    // style={{
+                    //   height: "56.5vh",
+                    // }}
                   >
                     <Row>
                       <Col lg={6}>
@@ -203,6 +212,7 @@ function CandidateCustomView() {
                             filters={filters}
                             setFilters={setFilters}
                             ref={filterRef}
+                            formSchema={form?.formSchema}
                           />
                         </Row>
                       </Col>
@@ -219,7 +229,6 @@ function CandidateCustomView() {
                                   see in the Account Listing table.
                                 </span>
                               </div>
-
                               <DualListBox
                                 options={options ?? []}
                                 selected={selectedOption}
