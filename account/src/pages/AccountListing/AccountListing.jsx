@@ -31,7 +31,6 @@ const AccountListing = () => {
   const accountsFields = useSelector(
     (state) => state.AccountReducer.accountsFields
   );
-  console.log("accountsData", accountsData);
   // Table state
   const [tableConfig, setTableConfig] = useState([]);
 
@@ -228,7 +227,6 @@ const AccountListing = () => {
   useEffect(() => {
     if (pageRequest?.searchFields?.length > 0) {
       setActiveRow([]);
-      console.log("pageRequest", DynamicTableHelper.cleanPageRequest(pageRequest));
       dispatch(fetchAccounts(DynamicTableHelper.cleanPageRequest(pageRequest)));
     }
   }, [JSON.stringify(pageRequest)]);

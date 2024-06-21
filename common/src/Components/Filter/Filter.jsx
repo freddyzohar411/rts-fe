@@ -13,7 +13,6 @@ import { mapConditionObjectArray, conditionObject } from "./filterConstant";
 import MultiDateElement from "./Elements/MultiDateElement";
 
 const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
-  console.log("formSchema", formSchema);
   const [filtersInput, setFiltersInput] = useState({}); // [field, condition, value, operator]
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [formElement, setFormElement] = useState(null);
@@ -51,7 +50,6 @@ const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
     // Set at the the right index
     setFilters((prev) => {
       const newFiltersInput = JSON.parse(JSON.stringify(prev));
-      console.log("Prev", prev);
       newFiltersInput[index] = {
         ...newFiltersInput[index],
         label: selectedOptions?.label || undefined,
@@ -119,12 +117,10 @@ const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
   const generateElementFromFormSchema = (formSchema, filter) => {
     if (!formSchema) return null;
     let filterField = filter?.field;
-    console.log("filterField", filterField);
     // If filterField constains . then split it
     if (filterField?.includes(".")) {
       filterField = filterField.split(".")[1];
     }
-    console.log("filterField SPLIT", filterField);
     const schema = formSchema?.find((schema) => {
       return schema?.name === filterField;
     });

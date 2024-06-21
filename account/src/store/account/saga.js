@@ -302,7 +302,6 @@ function* workEditAccountCustomViewById(action) {
     navigate("/accounts");
   } catch (error) {
     yield put(editAccountCustomViewByIdFailure(error));
-    console.log(error)
     if (error?.code === 409) {
       toast.error("Account custom view name already exists.");
     } else {

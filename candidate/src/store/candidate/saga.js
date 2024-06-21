@@ -564,7 +564,6 @@ function* workCreateCandidateCustomView(action) {
     navigate("/candidates");
   } catch (error) {
     yield put(createCandidateCustomViewFailure(error));
-    console.log("error", error);
     if (error?.code === 409) {
       toast.error("Candidate custom view name already exists.");
     } else {

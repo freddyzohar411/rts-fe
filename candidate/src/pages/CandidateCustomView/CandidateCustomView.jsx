@@ -118,7 +118,6 @@ function CandidateCustomView() {
 
   useEffect(() => {
     if (candidateCustomView && editId) {
-      console.log("Candidate Custom View", candidateCustomView);
       setInitialValuesState({
         name: candidateCustomView?.name,
         columnName: candidateCustomView?.columnName,

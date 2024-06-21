@@ -8,7 +8,6 @@ import {
 } from "reactstrap";
 
 const MultiDateElement = ({ onChange, value, type = "date" }) => {
-  console.log("ValueDate :", value);
   const [dateType, setDateType] = useState(type);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);

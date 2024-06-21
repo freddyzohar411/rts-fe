@@ -141,8 +141,6 @@ function JobCustomView() {
   // Sort the account fields by label
   ArrayHelper.sortArrayObj(jobFields, "label");
 
-  console.log("jobFields", jobFields);
-
   return (
     <React.Fragment>
       <div className="page-content">
