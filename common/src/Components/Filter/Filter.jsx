@@ -173,6 +173,7 @@ const Filter = ({ fields, filter, setFilters, index, errors }) => {
       >
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <SelectElement
+          enableTooltip={true}
             optionsData={() => {
               return fields?.map((field) => {
                 return {

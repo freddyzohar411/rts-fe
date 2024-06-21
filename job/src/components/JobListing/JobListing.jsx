@@ -436,7 +436,6 @@ const JobListing = () => {
     isCloneJobLoading,
   ]);
 
-  console.log("jobsData", jobsData)
   return (
     <LoadingOverlay
       active={(jobFODMeta?.isLoading || deleteFODMeta?.isLoading) ?? false}
