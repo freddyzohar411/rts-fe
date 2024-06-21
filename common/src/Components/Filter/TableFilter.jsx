@@ -79,6 +79,7 @@ const TableFilter = forwardRef(
             overflowY: "auto",
             // height: "235px",
             height: "250px",
+            paddingLeft:"1px",
           }}
         >
           {filters?.map((filter, index) => {

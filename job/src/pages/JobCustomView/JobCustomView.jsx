@@ -12,7 +12,7 @@ import {
   Label,
   FormFeedback,
   Button,
-  Spinner
+  Spinner,
 } from "reactstrap";
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,13 +23,12 @@ import {
   editJobCustomViewById,
   createJobCustomView,
 } from "../../store/actions";
-import {
-  fetchJobForm
-} from "../../store/jobForm/action"
+import { fetchJobForm } from "../../store/jobForm/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { JOB_MANDATORY_OPTIONS } from "../../components/JobListing/JobListingConstants";
 import { TableFilter, ArrayHelper } from "@workspace/common";
+import "./JobCustomView.scss"
 
 function JobCustomView() {
   document.title = "Create Job Custom View | RTS";
@@ -47,11 +46,11 @@ function JobCustomView() {
     (state) => state?.JobReducer?.jobCustomViewMeta
   );
 
-    // Dispatch and get account_account form
-    const form = useSelector((state) => state.JobFormReducer.form);
-    useEffect(() => {
-      dispatch(fetchJobForm("job_form"));
-    }, []);
+  // Dispatch and get account_account form
+  const form = useSelector((state) => state.JobFormReducer.form);
+  useEffect(() => {
+    dispatch(fetchJobForm("job_form"));
+  }, []);
 
   const editId = useParams().id;
 
@@ -118,7 +117,6 @@ function JobCustomView() {
 
   useEffect(() => {
     if (jobCustomView && editId) {
-      console.log("Job Custom View", jobCustomView);
       setInitialValuesState({
         name: jobCustomView?.name,
         columnName: jobCustomView?.columnName,
@@ -142,6 +140,8 @@ function JobCustomView() {
 
   // Sort the account fields by label
   ArrayHelper.sortArrayObj(jobFields, "label");
+
+  console.log("jobFields", jobFields);
 
   return (
     <React.Fragment>
@@ -170,9 +170,9 @@ function JobCustomView() {
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
                   <CardBody
-                    // style={{
-                    //   height: "56.5vh",
-                    // }}
+                  // style={{
+                  //   height: "56.5vh",
+                  // }}
                   >
                     <Row>
                       <Col lg={6}>
@@ -207,7 +207,9 @@ function JobCustomView() {
                         <Row>
                           {/* Filter Element */}
                           <TableFilter
-                            fields={jobFields}
+                            fields={jobFields?.filter(
+                              (field) => field?.sortValue != null
+                            )}
                             filters={filters}
                             setFilters={setFilters}
                             ref={filterRef}
@@ -218,7 +220,7 @@ function JobCustomView() {
                       <Col lg={6}>
                         <Row>
                           <Col>
-                            <div className="mb-3">
+                            <div className="mb-3 custom-dual-box">
                               <div className="d-flex flex-column mb-3">
                                 <Label className="fw-semibold">
                                   Custom View Columns

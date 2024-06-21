@@ -24,11 +24,12 @@ import {
   fetchAccountCustomViewById,
   editAccountCustomViewById,
 } from "../../store/account/action";
-import  { fetchAccountForm } from "../../store/accountForm/action";
+import { fetchAccountForm } from "../../store/accountForm/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { ACCOUNT_MANDATORY_OPTIONS } from "../AccountListing/accountListingConstants";
 import { TableFilter, ArrayHelper } from "@workspace/common";
+import "./AccountCustomView.scss"
 
 function AccountCustomView() {
   document.title = "Create Account Custom View | RTS";
@@ -202,7 +203,9 @@ function AccountCustomView() {
                         <Row>
                           {/* Filter Element */}
                           <TableFilter
-                            fields={accountFields}
+                            fields={accountFields?.filter(
+                              (field) => field?.sortValue != null
+                            )}
                             filters={filters}
                             setFilters={setFilters}
                             ref={filterRef}
@@ -213,7 +216,7 @@ function AccountCustomView() {
                       <Col lg={6}>
                         <Row>
                           <Col>
-                            <div className="mb-3">
+                            <div className="mb-3 custom-dual-box">
                               <div className="d-flex flex-column mb-3">
                                 <Label className="fw-semibold">
                                   Custom View Columns
@@ -223,7 +226,6 @@ function AccountCustomView() {
                                   see in the Account Listing table.
                                 </span>
                               </div>
-
                               <DualListBox
                                 options={options ?? []}
                                 selected={selectedOption}

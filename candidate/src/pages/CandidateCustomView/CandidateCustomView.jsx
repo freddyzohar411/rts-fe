@@ -23,13 +23,12 @@ import {
   fetchCandidateCustomViewById,
   editCandidateCustomViewById,
 } from "../../store/actions";
-import {
-  fetchCandidateForm
-} from "../../store/candidateForm/action";
+import { fetchCandidateForm } from "../../store/candidateForm/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { CANDIDATE_MANDATORY_OPTIONS } from "../CandidateListing/candidateListingConstants";
 import { TableFilter, ArrayHelper } from "@workspace/common";
+import "./CandidateCustomView.scss"
 
 function CandidateCustomView() {
   document.title = "Create Candidate Custom View | RTS";
@@ -48,11 +47,11 @@ function CandidateCustomView() {
     (state) => state?.CandidateReducer?.candidateCustomViewMeta
   );
 
-    // Dispatch and get account_account form
-    const form = useSelector((state) => state.CandidateFormReducer.form);
-    useEffect(() => {
-      dispatch(fetchCandidateForm("Candidate_basic_info"));
-    }, []);
+  // Dispatch and get account_account form
+  const form = useSelector((state) => state.CandidateFormReducer.form);
+  useEffect(() => {
+    dispatch(fetchCandidateForm("Candidate_basic_info"));
+  }, []);
 
   const editId = useParams().id;
 
@@ -171,9 +170,9 @@ function CandidateCustomView() {
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
                   <CardBody
-                    // style={{
-                    //   height: "56.5vh",
-                    // }}
+                  // style={{
+                  //   height: "56.5vh",
+                  // }}
                   >
                     <Row>
                       <Col lg={6}>
@@ -208,7 +207,9 @@ function CandidateCustomView() {
                         <Row>
                           {/* Filter Element */}
                           <TableFilter
-                            fields={candidateFields}
+                            fields={candidateFields?.filter(
+                              (field) => field?.sortValue != null
+                            )}
                             filters={filters}
                             setFilters={setFilters}
                             ref={filterRef}
@@ -219,7 +220,7 @@ function CandidateCustomView() {
                       <Col lg={6}>
                         <Row>
                           <Col>
-                            <div className="mb-3">
+                            <div className="mb-3 custom-dual-box">
                               <div className="d-flex flex-column mb-3">
                                 <Label className="fw-semibold">
                                   Custom View Columns
