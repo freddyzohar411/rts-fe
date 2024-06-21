@@ -12,6 +12,7 @@ import {
   Label,
   FormFeedback,
   Button,
+  Spinner
 } from "reactstrap";
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
@@ -39,7 +40,9 @@ function JobCustomView() {
     (state) => state?.JobReducer?.jobCustomView
   );
 
-  console.log("jobCustomView", jobCustomView);
+  const jobCustomViewMeta = useSelector(
+    (state) => state?.JobReducer?.jobCustomViewMeta
+  );
 
   const editId = useParams().id;
 
@@ -313,7 +316,13 @@ function JobCustomView() {
                             formik.setSubmitting(false);
                           }}
                         >
-                          {editId ? "Update Custom View" : "Create Custom View"}
+                          {jobCustomViewMeta?.isLoading ? (
+                            <Spinner size="sm" color="light" />
+                          ) : editId ? (
+                            "Update Custom View"
+                          ) : (
+                            "Create Custom View"
+                          )}
                         </Button>
                       </Col>
                     </Row>

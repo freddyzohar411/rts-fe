@@ -190,8 +190,8 @@ function* workCreateJobCustomView(action) {
   const { payload, navigate } = action.payload;
   try {
     const jobCustomViewResponse = yield call(createJobCustomView, payload);
+    yield delay(500);
     yield put(createJobCustomViewSuccess(jobCustomViewResponse));
-    yield put(fetchJobCustomView());
     toast.success("Job custom view created successfully!");
     navigate("/jobs");
   } catch (error) {
@@ -247,8 +247,8 @@ function* workEditJobCustomViewById(action) {
   const { editId, payload, navigate } = action.payload;
   try {
     const response = yield call(editJobCustomViewById, editId, payload);
-    yield put(editJobCustomViewByIdSuccess(response.data));
     yield delay(500);
+    yield put(editJobCustomViewByIdSuccess(response.data));
     toast.success("Job custom view updated successfully!");
     navigate("/jobs");
   } catch (error) {

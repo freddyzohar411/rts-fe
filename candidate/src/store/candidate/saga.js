@@ -558,13 +558,13 @@ function* workCreateCandidateCustomView(action) {
       createCandidateCustomView,
       payload
     );
+    yield delay(500);
     yield put(createCandidateCustomViewSuccess(candidateCustomViewResponse));
-    yield put(fetchCandidateCustomView());
     toast.success("Candidate custom view created successfully!");
     navigate("/candidates");
   } catch (error) {
     yield put(createCandidateCustomViewFailure(error));
-    console.log("error", error)
+    console.log("error", error);
     if (error?.code === 409) {
       toast.error("Candidate custom view name already exists.");
     } else {
@@ -629,8 +629,8 @@ function* workEditCandidateCustomViewById(action) {
   const { editId, payload, navigate } = action.payload;
   try {
     const response = yield call(editCandidateCustomViewById, editId, payload);
-    yield put(editCandidateCustomViewByIdSuccess(response.data));
     yield delay(500);
+    yield put(editCandidateCustomViewByIdSuccess(response.data));
     toast.success("Candidate custom view updated successfully!");
     navigate("/candidates");
   } catch (error) {

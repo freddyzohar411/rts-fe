@@ -245,7 +245,7 @@ const DynamicTable = ({
               </tr>
             )}
           </tbody>
-        </Table>
+      </Table>
       </div>
     </>
   );

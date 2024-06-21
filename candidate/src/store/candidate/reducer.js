@@ -95,6 +95,7 @@ const initialState = {
   candidatesRecommendation: [],
   candidateRecommendationLoading: false,
   candidateCustomView: {},
+  candidateCustomViewMeta: {},
   candidateCustomViews: null,
   deleteCandidatesMeta: {},
 };
@@ -384,21 +385,19 @@ const CandidateReducer = (state = initialState, action) => {
     case CREATE_CANDIDATE_CUSTOM_VIEW:
       return {
         ...state,
-        loading: true,
-        error: false,
+        candidateCustomViewMeta: pendingMetaData(),
       };
     case CREATE_CANDIDATE_CUSTOM_VIEW_SUCCESS:
       return {
         ...state,
-        loading: false,
         candidateCustomView: action.payload,
+        candidateCustomViewMeta: successMetaData(action.payload),
       };
     case CREATE_CANDIDATE_CUSTOM_VIEW_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
         errorMsg: action.payload,
+        candidateCustomViewMeta: errorMetaData(action.payload),
       };
     // Fetch Custom View
     case FETCH_CANDIDATE_CUSTOM_VIEW:
@@ -513,21 +512,19 @@ const CandidateReducer = (state = initialState, action) => {
     case EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID:
       return {
         ...state,
-        loading: true,
-        error: false,
+        candidateCustomViewMeta: pendingMetaData(),
       };
     case EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS:
       return {
         ...state,
-        loading: false,
         candidateCustomView: action.payload,
+        candidateCustomViewMeta: successMetaData(action.payload),
       };
     case EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
         errorMsg: action.payload,
+        candidateCustomViewMeta: errorMetaData(action.payload),
       };
     case RESET_CANDIDATES:
       return {

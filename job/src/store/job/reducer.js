@@ -1,3 +1,4 @@
+import CandidateCustomView from "../../../../candidate/src/pages/CandidateCustomView/CandidateCustomView";
 import {
   FETCH_JOBS,
   FETCH_JOBS_SUCCESS,
@@ -65,6 +66,7 @@ const initialState = {
   error: false,
   jobCustomView: {},
   jobCustomViews: null,
+  jobCustomViewMeta: {},
 };
 
 const JobReducer = (state = initialState, action) => {
@@ -253,21 +255,19 @@ const JobReducer = (state = initialState, action) => {
     case CREATE_JOB_CUSTOM_VIEW:
       return {
         ...state,
-        loading: true,
-        error: false,
+        jobCustomViewMeta: pendingMetaData(),
       };
 
     case CREATE_JOB_CUSTOM_VIEW_SUCCESS:
       return {
-        loading: false,
         jobCustomView: action.payload,
+        jobCustomViewMeta: successMetaData(action.payload),
       };
     case CREATE_JOB_CUSTOM_VIEW_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
         errorMsg: action.payload,
+        jobCustomViewMeta: errorMetaData(action.payload),
       };
 
     // Fetch Job Custom View
@@ -358,21 +358,19 @@ const JobReducer = (state = initialState, action) => {
     case EDIT_JOB_CUSTOM_VIEW_BY_ID:
       return {
         ...state,
-        loading: true,
-        error: false,
+        jobCustomViewMeta: pendingMetaData(),
       };
     case EDIT_JOB_CUSTOM_VIEW_BY_ID_SUCCESS:
       return {
         ...state,
-        loading: false,
         jobCustomView: action.payload,
+        jobCustomViewMeta: successMetaData(action.payload),
       };
     case EDIT_JOB_CUSTOM_VIEW_BY_ID_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
         errorMsg: action.payload,
+        jobCustomViewMeta: errorMetaData(action.payload),
       };
     default:
       return state;

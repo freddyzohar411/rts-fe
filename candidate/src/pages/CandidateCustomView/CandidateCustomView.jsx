@@ -12,6 +12,7 @@ import {
   Label,
   FormFeedback,
   Button,
+  Spinner,
 } from "reactstrap";
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
@@ -38,6 +39,10 @@ function CandidateCustomView() {
   );
   const candidateCustomView = useSelector(
     (state) => state?.CandidateReducer?.candidateCustomView
+  );
+
+  const candidateCustomViewMeta = useSelector(
+    (state) => state?.CandidateReducer?.candidateCustomViewMeta
   );
 
   const editId = useParams().id;
@@ -312,7 +317,13 @@ function CandidateCustomView() {
                             formik.setSubmitting(false);
                           }}
                         >
-                          {editId ? "Update Custom View" : "Create Custom View"}
+                          {candidateCustomViewMeta?.isLoading ? (
+                            <Spinner size="sm" color="light" />
+                          ) : editId ? (
+                            "Update Custom View"
+                          ) : (
+                            "Create Custom View"
+                          )}
                         </Button>
                       </Col>
                     </Row>
