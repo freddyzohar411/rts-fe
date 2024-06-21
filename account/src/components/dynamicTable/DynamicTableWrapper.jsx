@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
-  Card,
-  CardBody,
   Col,
   Container,
   Input,
   Row,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
@@ -41,6 +35,7 @@ import {
   deleteAccountsReset,
 } from "../../store/account/action";
 import { TooltipWrapper } from "@workspace/common";
+import { getAccounts } from "../../helpers/backend_helper";
 
 const DynamicTableWrapper = ({
   data,
@@ -143,15 +138,16 @@ const DynamicTableWrapper = ({
     pageRequestSet.setFilterData(null);
   };
 
-  const handleEportExcel = () => {
+  const handleEportExcel = async () => {
     let exportData = null;
-    if (!activeRow) {
-      exportData = data;
-    } else if (activeRow?.length === 0) {
-      exportData = data;
-    } else {
-      exportData = data.filter((item) => activeRow.includes(item?.id));
-    }
+    try {
+      const payload = { ...pageRequest, isDownload: true };
+      const resp = await getAccounts(payload);
+      exportData = resp?.data?.accounts;
+      if (activeRow?.length > 0) {
+        exportData = exportData.filter((item) => activeRow.includes(item?.id));
+      }
+    } catch (e) {}
 
     DynamicTableHelper.handleExportExcel(
       "Accounts",

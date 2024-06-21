@@ -12,10 +12,6 @@ import {
   Table,
   Offcanvas,
   OffcanvasBody,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Tooltip,
   ButtonGroup,
   Spinner,
   Card,
@@ -96,12 +92,7 @@ import { SkillAssessment } from "../SkillAssessment";
 import { CodingTest } from "../CodingTest";
 import { CulturalFitTest } from "../CulturalFitTest";
 import { TechnicalInterview } from "../TechnicalInterview";
-import {
-  getMaxOrder,
-  getStatus,
-  overviewHeaders,
-  overviewValues,
-} from "./JobOverviewUtil";
+import { getMaxOrder, getStatus, overviewValues } from "./JobOverviewUtil";
 import "./ViewTemplateSection.scss";
 import TemplatePreviewSideDrawer from "./TemplatePreviewSideDrawer/TemplatePreviewSideDrawer";
 import ModalFormWrapper from "../ModalFormWrapper/ModalFormWrapper";
@@ -115,7 +106,7 @@ import BillRateSalaryEditModal from "../BillRateSalaryEditModal/BillRateSalaryEd
 import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav.jsx";
 
-const JobOverview = () => {
+const JobOverview = ({ onRetrieveHeader }) => {
   document.title = "Job Timeline | RTS";
 
   const dispatch = useDispatch();
@@ -132,7 +123,6 @@ const JobOverview = () => {
   const [originalOrder, setOriginalOrder] = useState();
 
   // Next Step Dropdown States
-  const [headerTooltip, setHeaderTooltip] = useState(false);
   const [sortDirection, setSortDirection] = useState("desc");
   const [timelineTab, setTimelineTab] = useState("1");
   const [offcanvasForm, setOffcanvasForm] = useState(false);
@@ -144,7 +134,6 @@ const JobOverview = () => {
 
   const [deliveryTeam, setDeliveryTeam] = useState();
   const [timelineRowIndex, setTimelineRowIndex] = useState();
-  const [tooltipIndexes, setTooltipIndexes] = useState();
   const [isViewTemplate, setIsViewTemplate] = useState(false);
   const [templatePreviewInfo, setTemplatePreviewInfo] = useState(null);
   const [templatePreviewAction, setTemplatePreviewAction] = useState(null);
@@ -711,35 +700,6 @@ const JobOverview = () => {
     }
   };
 
-  /**
-   * @author Rahul Sahu
-   * @param {*} targetName
-   * Toggle tooltip
-   */
-  const toggle = (targetName) => {
-    if (!tooltipIndexes?.[targetName]) {
-      setTooltipIndexes({
-        ...tooltipIndexes,
-        [targetName]: {
-          tooltipOpen: true,
-        },
-      });
-    } else {
-      setTooltipIndexes({
-        ...tooltipIndexes,
-        [targetName]: {
-          tooltipOpen: !tooltipIndexes?.[targetName]?.tooltipOpen,
-        },
-      });
-    }
-  };
-
-  const isToolTipOpen = (targetName) => {
-    return tooltipIndexes?.[targetName]
-      ? tooltipIndexes?.[targetName]?.tooltipOpen
-      : false;
-  };
-
   // Retrieve individual candidate data - job timeline
   const generateBodyJsx = (jobTimelineMeta, jobTimelineData) => {
     return (
@@ -790,7 +750,6 @@ const JobOverview = () => {
                       </Link>
 
                       <div className="d-flex gap-1 flex-row justify-content-center align-items-center text-muted text-small">
-                        <i className="ri-account-circle-line ri-lg mt-1 "></i>{" "}
                         <span className="form-text">{data?.createdByName}</span>
                       </div>
                     </div>
@@ -1599,60 +1558,25 @@ const JobOverview = () => {
     }
   }, [isFormModalOpen]);
 
+  useEffect(() => {
+    const mobile = isMobile | isTablet;
+    const values = overviewValues(
+      formSubmissionData,
+      jobTimelineData,
+      deliveryTeam,
+      mobile
+    );
+    onRetrieveHeader(values);
+  }, [formSubmissionData, jobTimelineData, deliveryTeam, isMobile, isTablet]);
+
   return (
     <React.Fragment>
       <div className="p-2">
-        <div className="d-flex flex-wrap">
-          {overviewHeaders.map((header, index) => {
-            const mobile = isMobile | isTablet;
-            const values = overviewValues(
-              formSubmissionData,
-              deliveryTeam,
-              mobile
-            );
-            const shouldShowTooltip = values?.[header]?.value?.length > 20;
-            return (
-              <div
-                key={index}
-                style={{
-                  flex: "0 0 calc(100% / 7)",
-                  maxWidth: "calc(100% / 7)",
-                  paddingBottom: "10px",
-                }}
-              >
-                <div
-                  className="d-flex flex-column cursor-pointer"
-                  id={`btn-${index}`}
-                  onClick={() => setHeaderTooltip(!headerTooltip)}
-                >
-                  <span className="fw-medium text-muted">{header}</span>
-                  <span
-                    className="fw-semibold gap-1"
-                    style={{ color: "#0A56AE" }}
-                  >
-                    {values?.[header]?.trimValue}
-                  </span>
-                </div>
-                {shouldShowTooltip && (
-                  <Tooltip
-                    isOpen={isToolTipOpen(`btn-${index}`)}
-                    placement="bottom-start"
-                    target={`btn-${index}`}
-                    toggle={() => toggle(`btn-${index}`)}
-                  >
-                    {values?.[header]?.value}
-                  </Tooltip>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        <hr className="w-100"></hr>
-
-        <Row className="mb-2">
-          <Card style={{ backgroundColor: "#F3F8FF" }}>
-            <CardBody>
+        <Row className="mb-0">
+          <Card
+            style={{ backgroundColor: "#F3F8FF", border: "1px solid #D0DAE8" }}
+          >
+            <CardBody className="py-1 px-0">
               <TimelineHeader
                 data={jobHeaders}
                 setStageType={setStageType}
@@ -1665,20 +1589,28 @@ const JobOverview = () => {
           <Nav pills>
             <NavItem>
               <NavLink
-                className={`cursor-pointer rounded-0 ${
+                className={`cursor-pointer fw-semibold ${
                   timelineTab === "1" ? "active" : ""
                 }`}
                 onClick={() => setTimelineTab("1")}
+                style={{
+                  borderRadius: "5px 0 0 5px",
+                  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.031)",
+                }}
               >
                 RTS Status
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
-                className={`cursor-pointer rounded-0 ${
+                className={`cursor-pointer fw-semibold ${
                   timelineTab === "2" ? "active" : ""
                 }`}
                 onClick={() => setTimelineTab("2")}
+                style={{
+                  borderRadius: " 0 5px 5px 0",
+                  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.031)",
+                }}
               >
                 BSG Status
               </NavLink>
@@ -1699,7 +1631,7 @@ const JobOverview = () => {
                   <Input
                     type="text"
                     placeholder="Search"
-                    className="form-control search main-border-style"
+                    className="form-control search border-0"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
@@ -1727,10 +1659,15 @@ const JobOverview = () => {
               />
               <ButtonGroup>
                 <Button className="bg-white main-border-style">
-                  <i className="ri-filter-3-line align-bottom me-1"></i>Filter
+                  <i className="mdi mdi-account-plus-outline align-bottom me-1"></i>
                 </Button>
                 <Button className="bg-white main-border-style">
                   <i className="ri-fullscreen-line align-bottom me-1"></i>
+                </Button>
+              </ButtonGroup>
+              <ButtonGroup>
+                <Button className="bg-white main-border-style">
+                  <i className="mdi mdi-filter-variant align-bottom me-1"></i>
                 </Button>
               </ButtonGroup>
             </div>

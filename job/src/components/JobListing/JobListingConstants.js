@@ -1,5 +1,12 @@
 const JOB_MANDATORY_OPTIONS = [
   {
+    sortValue: "job_submission_data.jobId",
+    label: "Pulse Job Id",
+    value: "jobSubmissionData.jobId",
+    sort: true,
+    expand: true,
+  },
+  {
     sortValue: "job_submission_data.jobTitle",
     label: "Job Title",
     value: "jobSubmissionData.jobTitle",
@@ -7,10 +14,10 @@ const JOB_MANDATORY_OPTIONS = [
     expand: true,
   },
   {
-    sortValue: "job_submission_data.jobId",
-    label: "Pulse Job Id",
-    value: "jobSubmissionData.jobId",
-    sort: true,
+    sortValue: "recruiterName",
+    label: "Recruiter(s)",
+    value: "recruiterName",
+    sort: false,
     expand: true,
   },
 ];

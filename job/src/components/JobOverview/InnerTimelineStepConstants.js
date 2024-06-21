@@ -44,36 +44,36 @@ export const sections = [
 
 export const innerTimelineSteps = [
   { 1: "Profile" },
-  { i: "Expand" },
-  { ii: "Tag" },
-  { iii: "Associate" },
-  { iv: "Submit to Sales" },
-  { v: "Submit to Client" },
-  { vi: "Profile Feedback Pending" },
+  { "Expand Profile": "Expand Profile" },
+  { i: "Tag" },
+  { ii: "Associate" },
+  { iii: "Submit to Sales" },
+  { iv: "Submit to Client" },
+  { v: "Profile Feedback Pending" },
 
   { 2: "Odin Protocol" },
-  { i: "Expand" },
-  { ii: "Skills Assessment" },
-  { iii: "Coding Test" },
-  { iv: "Technical Interview" },
-  { v: "Cultural Fit Test" },
+  { "Expand Odin Protocol": "Expand Odin Protocol" },
+  { i: "Skills Assessment" },
+  { ii: "Coding Test" },
+  { iii: "Technical Interview" },
+  { iv: "Cultural Fit Test" },
 
   { 3: "Interviews" },
-  { i: "Expand" },
-  { ii: "First Interview Scheduled" },
-  { iii: "Second Interview Scheduled" },
-  { iv: "Third Interview Scheduled" },
-  { v: "Interview Feedback Pending" },
+  { "Expand Interviews": "Expand Interviews" },
+  { i: "First Interview Scheduled" },
+  { ii: "Second Interview Scheduled" },
+  { iii: "Third Interview Scheduled" },
+  { iv: "Interview Feedback Pending" },
 
   { 4: "TOS" },
-  { i: "Expand" },
-  { ii: "Prepare TOS" },
-  { iii: "TOS Accepted/Declined" },
+  { "Expand TOS": "Expand TOS" },
+  { i: "Prepare TOS" },
+  { ii: "TOS Accepted/Declined" },
 
   { 5: "Conditional Offer" },
-  { i: "Expand" },
-  { ii: "Conditional Offer Sent" },
-  { iii: "Conditional Offer Accepted/Declined" },
+  { "Expand Conditional Offer": "Expand Conditional Offer" },
+  { i: "Conditional Offer Sent" },
+  { ii: "Conditional Offer Accepted/Declined" },
 ];
 
 export const stepsToIgnore = [
@@ -82,7 +82,17 @@ export const stepsToIgnore = [
   "Interviews",
   "TOS",
   "Conditional Offer",
-  "Expand",
+  "Expand Profile",
+  "Expand Odin Protocol",
+  "Expand Interviews",
+  "Expand TOS",
+  "Expand Conditional Offer",
+  "bottomLeftCurve",
+  "bottomRightCurve",
+  "topLeftCurve",
+  "topRightCurve",
+  "topRightCurve2",
+  "bottomRightCurve2",
 ];
 
 export const innerTimelineOuterSteps = [
@@ -93,10 +103,26 @@ export const innerTimelineOuterSteps = [
   "Conditional Offer",
 ];
 
-export const expandedRange = {
-  1: [2, 6],
-  8: [9, 12],
-  14: [15, 18],
-  20: [21, 22],
-  24: [25, 26],
+export const initialExpandRanges = {
+  "Expand Profile": false,
+  "Expand Odin Protocol": false,
+  "Expand Interviews": false,
+  "Expand TOS": false,
+  "Expand Conditional Offer": false,
 };
+
+export const curvedObjects = [
+  "bottomLeftCurve",
+  "bottomRightCurve",
+  "topLeftCurve",
+  "topRightCurve",
+  "topRightCurve2",
+  "bottomRightCurve2",
+]
+
+export const subStationGroupRange = [
+  {"Expand Profile": "Odin Protocol"}, 
+  {"Expand Odin Protocol": "Interviews"}, 
+  {"Expand Interviews": "TOS"}, 
+  {"Expand TOS": "Conditional Offer"},
+]

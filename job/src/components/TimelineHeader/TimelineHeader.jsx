@@ -88,8 +88,8 @@ function TimelineHeader({ data, setStageType, pageRequestSet }) {
               {item?.name}
             </div>
             <div
-              className="fw-semibold text-custom-primary"
-              style={{ alignSelf: "flex-end" }}
+              className="fw-semibold "
+              style={{ alignSelf: "flex-end", color: "#0A56AE", fontSize: "16px" }}
             >
               <span>{counts?.[item?.name] ?? 0}</span>
             </div>

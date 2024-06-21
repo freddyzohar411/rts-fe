@@ -347,14 +347,16 @@ const JobListing = () => {
                   </DropdownItem>
                 )}
                 {/* Clone Button */}
-                <DropdownItem>
-                  <span onClick={() => handleCloneJob(data)}>
-                    <div className="d-flex  align-items-center gap-2">
-                      <i className="mdi mdi-content-copy"></i>
-                      <span>Clone</span>
-                    </div>
-                  </span>
-                </DropdownItem>
+                {checkAnyRole([Role.ADMIN]) && (
+                  <DropdownItem>
+                    <span onClick={() => handleCloneJob(data)}>
+                      <div className="d-flex  align-items-center gap-2">
+                        <i className="mdi mdi-content-copy"></i>
+                        <span>Clone</span>
+                      </div>
+                    </span>
+                  </DropdownItem>
+                )}
                 {checkAllPermission([Permission.JOB_EDIT]) && (
                   <DropdownItem>
                     <Link
