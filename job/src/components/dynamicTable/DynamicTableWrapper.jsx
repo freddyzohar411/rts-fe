@@ -21,9 +21,7 @@ import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  fetchUserGroupByName,
   fetchJobLists,
-  resetJobList
 } from "../../store/jobList/action";
 import {
   fetchJobCustomView,
@@ -117,8 +115,8 @@ const DynamicTableWrapper = ({
   useEffect(() => {
     dispatch(fetchJobCustomView());
     return () => {
-      dispatch(resetJobCustomView())
-    }
+      dispatch(resetJobCustomView());
+    };
   }, []);
 
   const handleSelectCustomView = (id) => {
@@ -143,14 +141,12 @@ const DynamicTableWrapper = ({
           setCustomConfigData(selectedObjects);
         }
         pageRequestSet.setFilterData(selectedCustomView?.filters);
+      } else {
+        enableDefaultView();
       }
     }
     if (allJobCustomViews != null && allJobCustomViews.length === 0) {
       enableDefaultView();
-    }
-
-    return () => {
-      dispatch(resetJobList());
     }
   }, [allJobCustomViews, optGroup]);
 
@@ -505,15 +501,15 @@ const DynamicTableWrapper = ({
                                       </div>
                                     </DropdownItem>
                                     <Link
-                                        to={`/jobs/custom-view/${customView?.id}`}
+                                      to={`/jobs/custom-view/${customView?.id}`}
+                                    >
+                                      <Button
+                                        className="btn btn-sm btn-secondary"
+                                        style={{ height: "29px" }}
                                       >
-                                        <Button
-                                          className="btn btn-sm btn-secondary"
-                                          style={{ height: "29px" }}
-                                        >
-                                          <i className="ri-pencil-line"></i>
-                                        </Button>
-                                      </Link>
+                                        <i className="ri-pencil-line"></i>
+                                      </Button>
+                                    </Link>
                                     <Button
                                       className="btn btn-sm btn-danger"
                                       style={{ height: "29px" }}

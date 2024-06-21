@@ -19,6 +19,7 @@ import {
   fetchAccountsFields,
   fetchAccountCustomView,
   deleteAccount,
+  resetAccounts
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -81,6 +82,9 @@ const AccountListing = () => {
 
   useEffect(() => {
     dispatch(fetchAccountsFields());
+    return () => {
+      dispatch(resetAccounts());
+    };
   }, []);
 
   // Table Hooks

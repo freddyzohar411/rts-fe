@@ -122,14 +122,12 @@ const DynamicTableWrapper = ({
           setCustomConfigData(selectedObjects);
         }
         pageRequestSet.setFilterData(selectedCustomView?.filters);
+      } else {
+        enableDefaultView();
       }
     }
     if (allCandidateCustomViews != null && allCandidateCustomViews.length === 0) {
       enableDefaultView();
-    }
-
-    return () => {
-      dispatch(resetCandidates())
     }
   }, [allCandidateCustomViews, optGroup]);
 

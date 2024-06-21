@@ -105,11 +105,14 @@ const DynamicTableWrapper = ({
     setDeletingCustomViewId(null);
   };
 
+  console.log("allAccountCustomViews", allAccountCustomViews);
+
   useEffect(() => {
     if (allAccountCustomViews != null && allAccountCustomViews.length > 0) {
       const selectedCustomView = allAccountCustomViews?.find(
         (customView) => customView?.selected
       );
+      console.log("selectedCustomView", selectedCustomView);
       if (
         selectedCustomView &&
         Array.isArray(optGroup) &&
@@ -123,13 +126,12 @@ const DynamicTableWrapper = ({
           setCustomConfigData(selectedObjects);
         }
         pageRequestSet.setFilterData(selectedCustomView?.filters);
+      } else {
+        enableDefaultView();
       }
     }
     if (allAccountCustomViews != null && allAccountCustomViews.length === 0) {
       enableDefaultView();
-    }
-    return () => {
-      dispatch(resetAccounts());
     }
   }, [allAccountCustomViews, optGroup]);
 
