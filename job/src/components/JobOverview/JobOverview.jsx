@@ -519,6 +519,9 @@ const JobOverview = ({ onRetrieveHeader }) => {
             jobId={jobId}
             candidateId={candidateId}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            setIsViewTemplate={setIsViewTemplate}
+            setTemplatePreviewInfo={setTemplatePreviewInfo}
+            setTemplatePreviewAction={setTemplatePreviewAction}
             ref={formikRef}
             readOnly={readOnly}
           />
