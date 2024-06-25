@@ -128,6 +128,8 @@ const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
       return (
         <>
           <SelectElement
+            enableTooltip={true}
+            allowMenuOverflow={true}
             optionsData={schema?.options}
             setSelectedOptionData={(selectedOptions) => {
               setFilters((prev) => {
