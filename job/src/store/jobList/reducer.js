@@ -43,6 +43,7 @@ import {
   DELETE_JOBS_SUCCESS,
   DELETE_JOBS_FAILURE,
   DELETE_JOBS_RESET,
+  RESET_JOB_LIST
 } from "./actionTypes";
 
 const initialState = {
@@ -309,6 +310,12 @@ const JobListReducer = (state = initialState, action) => {
       return {
         ...state,
         deleteJobsMeta: resetAllMetaData(),
+      };
+    case RESET_JOB_LIST:
+      return {
+        ...state,
+        jobs: [],
+        jobsMeta: {},
       };
     default:
       return state;

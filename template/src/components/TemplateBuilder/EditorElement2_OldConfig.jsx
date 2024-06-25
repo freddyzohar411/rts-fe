@@ -500,73 +500,6 @@ const EditorElement2 = ({
     editor.setContent(initialContent);
   };
 
-  // New
-  function removeUnwantedStylesFromContent(content) {
-    // Function to remove specific styles from a style string
-    function cleanStyle(style) {
-      return style
-        .replace(/-webkit-user-drag: none;/g, "")
-        .replace(/-webkit-tap-highlight-color: transparent;/g, "");
-    }
-
-    // Create a temporary container to parse the content
-    const container = document.createElement("div");
-    container.innerHTML = content;
-
-    // Find all elements with inline styles
-    const elementsWithStyles = container.querySelectorAll("[style]");
-
-    elementsWithStyles.forEach((element) => {
-      const cleanedStyle = cleanStyle(element.getAttribute("style"));
-      element.setAttribute("style", cleanedStyle.trim());
-    });
-
-    return container.innerHTML;
-  }
-
-  function removeLiDisplayBlock(content) {
-    var div = document.createElement("div");
-    div.innerHTML = content;
-
-    // Find all <li> elements
-    var liElements = div.getElementsByTagName("li");
-
-    for (var i = 0; i < liElements.length; i++) {
-      var li = liElements[i];
-      var style = li.getAttribute("style");
-
-      // If there is a style attribute and it contains 'display: block'
-      if (style && style.includes("display: block")) {
-        // Remove 'display: block' from the style attribute
-        style = style.replace(/display:\s*block;?/gi, "").trim();
-
-        // If the style attribute is empty after removal, remove the attribute
-        if (style) {
-          li.setAttribute("style", style);
-        } else {
-          li.removeAttribute("style");
-        }
-      }
-    }
-
-    return div.innerHTML;
-  }
-
-  // Clean up content to remove invisible space characters.
-  function cleanUpContent(content) {
-    // Replace invisible space characters with a regular space
-    return content.replace(/[\u00A0\u200B\u200C\u200D\u202F\uFEFF]/g, " ");
-  }
-
-  // Code to identify the character codes of the content (For debugging purposes)
-  // function logCharacterCodes(content) {
-  //   let codes = [];
-  //   for (let i = 0; i < content.length; i++) {
-  //     codes.push(content.charCodeAt(i));
-  //   }
-  //   console.log("Character Codes: ", codes);
-  // }
-
   return (
     <>
       <EditorDataAttributeModal
@@ -1025,16 +958,6 @@ const EditorElement2 = ({
             //     '<p style="margin-bottom: 0in;">'
             //   );
             // });
-
-            // Event listener to clean up content before saving or submitting
-            editor.on("SaveContent", function (e) {
-              e.content = cleanUpContent(e.content);
-            });
-
-            // Event listener to clean up content before getting content
-            editor.on("GetContent", function (e) {
-              e.content = cleanUpContent(e.content);
-            });
           },
           height: 500,
           menubar: false,
@@ -1069,7 +992,7 @@ const EditorElement2 = ({
             "table | code codesample | emoticons charmap image media | fullscreen | preview | exportPreviewButton | help",
           // newline_behavior: "invert",
           content_style:
-            "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; } ul{ margin:0;} p { margin: 0px 0px 0.01mm; } table td, table th { vertical-align: top; }",
+            "body { font-family:Arial,sans-serif; padding: 0; margin: 0;box-sizing: border-box; font-size: 12pt; } ul{ margin:0;} p { margin: 0px 0px 0.01mm; } ",
           style_formats: [
             {
               title: "Styles",
@@ -1144,24 +1067,10 @@ const EditorElement2 = ({
           file_picker_types: "image, media",
           table_use_colgroups: false,
           link_assume_external_targets: true,
-          // New 19062024
-          table_appearance_options: false,
-          paste_enable_default_filters: false,
-          paste_webkit_styles: "all", // This is rendering the pasted content with the same styles as the original content
-          paste_preprocess: function (plugin, args) {
-            // Remove unwanted styles from the pasted content
-            args.content = removeUnwantedStylesFromContent(args.content);
-          },
-
-          // Remove display Block to show the list properly
-          paste_preprocess: function (plugin, args) {
-            args.content = removeLiDisplayBlock(args.content);
-          },
         }}
         onEditorChange={(value) => {
-          // logCharacterCodes(value);
-          formik.setFieldValue(name, cleanUpContent(value));
-          if (setEditorContent) setEditorContent(cleanUpContent(value));
+          formik.setFieldValue(name, value);
+          if (setEditorContent) setEditorContent(value);
         }}
         onBlur={(event, editor) => {
           formik.handleBlur({ target: { name } });

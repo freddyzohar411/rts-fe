@@ -169,3 +169,11 @@ export const getConditionalOfferByJobIdAndCandidateIdAndStatus = (
 
 export const updateBillRate = (data, config) =>
   api.create(`${JOB_URL}${BASE_JOB_TIMELINE}/updateBillRate`, data, config);
+
+// Get Custom View by id
+export const getJobCustomViewById = (id) =>
+  api.get(`${JOB_URL}${BASE_JOBS}/customView/${id}`);
+
+// Edit Custom View By id
+export const editJobCustomViewById = (id, data) =>
+  api.create(`${JOB_URL}${BASE_JOBS}/customView/edit/${id}`, data);

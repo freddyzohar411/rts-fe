@@ -45,6 +45,14 @@ import {
   DELETE_ACCOUNTS_SUCCESS,
   DELETE_ACCOUNTS_FAILURE,
   DELETE_ACCOUNTS_RESET,
+  RESET_ACCOUNT_CUSTOM_VIEW,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
+  RESET_ACCOUNTS,
 } from "./actionTypes";
 
 import {
@@ -57,7 +65,7 @@ import {
 const initialState = {
   account: {},
   accountData: null,
-  accounts: [],
+  accounts: null,
   accountsMeta: {},
   accountsFields: [],
   accountsFieldsAll: [],
@@ -67,7 +75,8 @@ const initialState = {
   deleteMeta: {},
   tableMeta: {},
   accountCustomView: {},
-  accountCustomViews: [],
+  accountCustomViewMeta: {},
+  accountCustomViews: null,
   deleteAccountsMeta: {},
 };
 
@@ -268,22 +277,20 @@ const AccountReducer = (state = initialState, action) => {
     case CREATE_ACCOUNT_CUSTOM_VIEW:
       return {
         ...state,
-        loading: true,
-        error: false,
+        accountCustomViewMeta: pendingMetaData(),
       };
 
     case CREATE_ACCOUNT_CUSTOM_VIEW_SUCCESS:
       return {
-        loading: false,
         accountCustomView: action.payload,
+        accountCustomViewMeta: successMetaData(action.payload),
       };
 
     case CREATE_ACCOUNT_CUSTOM_VIEW_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
         errorMsg: action.payload,
+        accountCustomViewMeta: errorMetaData(action.payload),
       };
     // Fetch Account Custom Views
     case FETCH_ACCOUNT_CUSTOM_VIEW:
@@ -304,6 +311,11 @@ const AccountReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMsg: action.payload,
+      };
+    case RESET_ACCOUNT_CUSTOM_VIEW:
+      return {
+        ...state,
+        accountCustomViews: null,
       };
     // Select Account Custom View
     case SELECT_ACCOUNT_CUSTOM_VIEW:
@@ -370,6 +382,48 @@ const AccountReducer = (state = initialState, action) => {
       return {
         ...state,
         deleteAccountsMeta: resetAllMetaData(),
+      };
+    case FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accountCustomView: action.payload,
+      };
+    case FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID:
+      return {
+        ...state,
+        accountCustomViewMeta: pendingMetaData(),
+      };
+    case EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS:
+      return {
+        ...state,
+        accountCustomView: action.payload,
+        accountCustomViewMeta: successMetaData(action.payload),
+      };
+    case EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE:
+      return {
+        ...state,
+        errorMsg: action.payload,
+        accountCustomViewMeta: errorMetaData(action.payload),
+      };
+    case RESET_ACCOUNTS:
+      return {
+        ...state,
+        accounts: [],
+        accountsMeta: {},
       };
     default:
       return state;

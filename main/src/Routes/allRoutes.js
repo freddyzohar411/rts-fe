@@ -109,6 +109,7 @@ const authProtectedRoutes = [
     requiredPermissions: [Permission.CANDIDATE_WRITE],
   },
   { path: "/candidates/custom-view", component: <CandidateCustomView /> },
+  { path: "/candidates/custom-view/:id", component: <CandidateCustomView /> },
 
   // Account
   {
@@ -131,6 +132,11 @@ const authProtectedRoutes = [
     component: <AccountCustomView />,
     requiredPermissions: [Permission.ACCOUNT_READ],
   },
+  {
+    path: "/accounts/custom-view/:id",
+    component: <AccountCustomView />,
+    requiredPermissions: [Permission.ACCOUNT_READ],
+  },
 
   // Job
   {
@@ -139,6 +145,7 @@ const authProtectedRoutes = [
     requiredPermissions: [Permission.JOB_WRITE],
   },
   { path: "/jobs/custom-view", component: <JobCustomView /> },
+  { path: "/jobs/custom-view/:id", component: <JobCustomView /> },
   {
     path: "/jobs",
     component: <JobListing />,
