@@ -52,7 +52,7 @@ const TableFilter = forwardRef(
               type="button"
               className="btn btn-custom-primary"
               style={{
-                padding: "1px 2px",
+                padding: "1px 3px",
                 fontSize: "12px",
               }}
               onClick={() =>
@@ -65,7 +65,7 @@ const TableFilter = forwardRef(
                 })
               }
             >
-              Add Criteria
+              + Add Criteria
             </Button>
           )}
         </div>
