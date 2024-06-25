@@ -32,6 +32,7 @@ const JobManage = () => {
 
   // Tabs
   const [ugTab, setUgTab] = useState(navState?.ugTab || "1");
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const toggleUg = (tab) => {
     if (ugTab !== tab) {
       setUgTab(tab);
@@ -40,6 +41,10 @@ const JobManage = () => {
 
   const handleOverviewHeader = (value) => {
     setOnRetrieveHeader(value);
+  };
+
+  const handleFullScreen = (value) => {
+    setIsFullscreen(value);
   };
 
   /**
@@ -118,7 +123,7 @@ const JobManage = () => {
           </div>
         </div>
         <Container fluid className="p-0">
-          <Nav tabs>
+          <Nav tabs hidden={isFullscreen}>
             <NavItem>
               <NavLink
                 className={classnames(
@@ -188,7 +193,7 @@ const JobManage = () => {
                   className="p-2 bg-light"
                   style={{ boxShadow: "none" }}
                 >
-                  <JobOverview onRetrieveHeader={handleOverviewHeader} />
+                  <JobOverview onRetrieveHeader={handleOverviewHeader} onTimelineFullScreen={handleFullScreen}/>
                 </CardBody>
               </Card>
             </TabPane>
