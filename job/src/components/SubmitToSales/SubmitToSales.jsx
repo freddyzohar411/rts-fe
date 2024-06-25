@@ -148,58 +148,6 @@ const SubmitToSales = forwardRef(
       },
     }));
 
-    const extractEmailsUsingRegex = (content) => {
-      // Example "pranay (prany@gmail)" There is only 1 email
-      const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g;
-      return content.match(emailRegex);
-    };
-
-    // PrePopulate Emails
-    // useEffect(() => {
-    //   const prePopulateEmails = async (data) => {
-    //     const response = await getUsersByIds({
-    //       userIds: [data?.recruiterId],
-    //     });
-    //     const userData = response?.data;
-    //     if (userData) {
-    //       const cc = userData.filter((item) => item.id === data.recruiterId);
-    //       const accountOwner =
-    //         jobTimeLineData?.job?.jobSubmissionData?.accountOwner;
-    //       if (extractEmailsUsingRegex(accountOwner)) {
-    //         const accountOwnerEmail = extractEmailsUsingRegex(accountOwner);
-    //         formik.setFieldValue("to", [
-    //           {
-    //             value: accountOwnerEmail[0],
-    //             label: accountOwnerEmail[0],
-    //           },
-    //         ]);
-    //       }
-    //       if (cc && cc.length > 0) {
-    //         formik.setFieldValue("cc", [
-    //           {
-    //             value: cc[0]?.email,
-    //             label: cc[0]?.email,
-    //           },
-    //         ]);
-    //       }
-    //     }
-    //   };
-
-    //   // Get Sales Email
-    //   if (
-    //     jobTimeLineData?.job?.createdBy &&
-    //     jobTimeLineData?.candidate?.createdBy &&
-    //     formik
-    //   ) {
-    //     const salesId = jobTimeLineData?.job?.createdBy;
-    //     const recruiterId = jobTimeLineData?.candidate?.createdBy;
-    //     prePopulateEmails({
-    //       salesId,
-    //       recruiterId,
-    //     });
-    //   }
-    // }, []);
-
     // Toast errors upn submit
     const toastErrors = () => {
       if (formik.errors) {

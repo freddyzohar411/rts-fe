@@ -14,12 +14,13 @@ import {
   NavItem,
   Container,
 } from "reactstrap";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchJobForm, tagJob } from "../../store/actions";
 import { ASSOCIATE_CANDIDATE } from "./constants";
 import { useUserAuth } from "@workspace/login";
 import TechnicalScreening from "./TechnicalScreening";
+import * as TemplateActions from "@workspace/template/src/store/template/action";
 import classnames from "classnames";
 import {
   JOB_STAGE_IDS,
@@ -32,15 +33,22 @@ import {
 
 const AssociateCandidate = forwardRef(
   (
-    { closeOffcanvas, jobId, candidateId, jobTimeLineData, readOnly = false },
+    {
+      closeOffcanvas,
+      jobId,
+      candidateId,
+      jobTimeLineData,
+      readOnly = false,
+      setIsViewTemplate,
+      setTemplatePreviewInfo,
+      setTemplatePreviewAction,
+    },
     parentRef
   ) => {
     const formikRef = useRef(null);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const location = useLocation();
-    const linkState = location.state;
     const { getAllUserGroups } = useUserAuth();
 
     const form = useSelector((state) => state.JobFormReducer.form);
@@ -49,6 +57,9 @@ const AssociateCandidate = forwardRef(
     const [editData, setEditData] = useState({});
     const formSubmissionData = useSelector(
       (state) => state.JobStageReducer.jobTimelineFormSubmission
+    );
+    const templatesByCategory = useSelector(
+      (state) => state.TemplateReducer.templatesByCategory
     );
 
     const toggle = (tab) => {
@@ -59,7 +70,21 @@ const AssociateCandidate = forwardRef(
 
     useEffect(() => {
       dispatch(fetchJobForm(ASSOCIATE_CANDIDATE));
+      dispatch(TemplateActions.fetchTemplateByCategory("Email Templates"));
     }, []);
+
+    useEffect(() => {
+      if (templatesByCategory) {
+        setIsViewTemplate(true);
+        setTemplatePreviewAction({
+          type: "VIEW",
+        });
+        const associateTemplate = templatesByCategory?.find(
+          (it) => it?.name === "Associate"
+        );
+        setTemplatePreviewInfo(associateTemplate);
+      }
+    }, [templatesByCategory]);
 
     useEffect(() => {
       if (form) {
