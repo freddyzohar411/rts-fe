@@ -14,7 +14,6 @@ const MultiDateElement = ({ onChange, value, type = "date" }) => {
 
   return (
     <>
-      {/* Create a similar file input to replace the actual file input */}
       <div className="d-flex align-items-center w-100 h-100">
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle

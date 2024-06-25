@@ -28,7 +28,7 @@ import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { CANDIDATE_MANDATORY_OPTIONS } from "../CandidateListing/candidateListingConstants";
 import { TableFilter, ArrayHelper } from "@workspace/common";
-import "./CandidateCustomView.scss"
+import "./CandidateCustomView.scss";
 
 function CandidateCustomView() {
   document.title = "Create Candidate Custom View | RTS";
@@ -62,7 +62,6 @@ function CandidateCustomView() {
   }, [editId]);
 
   const [selectedOption, setSelectedOption] = useState([]);
-  const [dualListBoxError, setDualListBoxError] = useState(false);
   const [options, setOptions] = useState([]);
   const [filters, setFilters] = useState([]);
 
@@ -162,17 +161,10 @@ function CandidateCustomView() {
                 <CardHeader>
                   <div className="d-flex flex-column ">
                     <h6 className="fw-bold">Custom View</h6>
-                    {/* <span className="fw-medium">
-                      Personalise your own custom view of your tables here.
-                    </span> */}
                   </div>
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
-                  <CardBody
-                  // style={{
-                  //   height: "56.5vh",
-                  // }}
-                  >
+                  <CardBody>
                     <Row>
                       <Col lg={6}>
                         <Row className="mb-3">

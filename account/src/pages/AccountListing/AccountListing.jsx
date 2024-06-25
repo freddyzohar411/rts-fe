@@ -19,7 +19,7 @@ import {
   fetchAccountsFields,
   fetchAccountCustomView,
   deleteAccount,
-  resetAccounts
+  resetAccounts,
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";

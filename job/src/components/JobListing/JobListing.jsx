@@ -23,7 +23,7 @@ import {
   deleteFOD,
   deleteFODReset,
   createJobFODReset,
-  resetJobList
+  resetJobList,
 } from "../../store/jobList/action";
 import { cloneJob } from "../../store/job/action";
 import { useUserAuth } from "@workspace/login";

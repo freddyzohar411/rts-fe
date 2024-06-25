@@ -20,7 +20,6 @@ import { useNavigate, Link, useParams } from "react-router-dom";
 import {
   fetchAccountsFields,
   createAccountCustomView,
-  fetchAccountCustomView,
   fetchAccountCustomViewById,
   editAccountCustomViewById,
 } from "../../store/account/action";
@@ -29,7 +28,7 @@ import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { ACCOUNT_MANDATORY_OPTIONS } from "../AccountListing/accountListingConstants";
 import { TableFilter, ArrayHelper } from "@workspace/common";
-import "./AccountCustomView.scss"
+import "./AccountCustomView.scss";
 
 function AccountCustomView() {
   document.title = "Create Account Custom View | RTS";
@@ -165,11 +164,7 @@ function AccountCustomView() {
                   </div>
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
-                  <CardBody
-                  // style={{
-                  //   height: "56.5vh",
-                  // }}
-                  >
+                  <CardBody>
                     <Row>
                       <Col lg={6}>
                         <Row className="mb-3">

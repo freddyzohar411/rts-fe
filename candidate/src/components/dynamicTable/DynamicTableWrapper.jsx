@@ -26,7 +26,7 @@ import {
   deleteCandidatesReset,
   fetchCandidates,
   resetCandidateCustomView,
-  resetCandidates
+  resetCandidates,
 } from "../../store/candidate/action";
 import { DeleteCustomModal } from "@workspace/common";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
@@ -86,7 +86,7 @@ const DynamicTableWrapper = ({
     dispatch(fetchCandidateCustomView());
     return () => {
       dispatch(resetCandidateCustomView());
-    }
+    };
   }, []);
 
   const handleSelectCustomView = (id) => {
@@ -99,9 +99,13 @@ const DynamicTableWrapper = ({
   };
 
   const handleDeleteCustomView = (id) => {
+    const customView = allCandidateCustomViews.find((view) => view?.id === id);
     dispatch(deleteCandidateCustomView({ id: id }));
     setDeleteModalOpen(false);
     setDeletingCustomViewId(null);
+    if (customView?.selected) {
+      enableDefaultView();
+    }
   };
 
   useEffect(() => {
@@ -122,11 +126,12 @@ const DynamicTableWrapper = ({
           setCustomConfigData(selectedObjects);
         }
         pageRequestSet.setFilterData(selectedCustomView?.filters);
-      } else {
-        enableDefaultView();
       }
     }
-    if (allCandidateCustomViews != null && allCandidateCustomViews.length === 0) {
+    if (
+      allCandidateCustomViews != null &&
+      allCandidateCustomViews.length === 0
+    ) {
       enableDefaultView();
     }
   }, [allCandidateCustomViews, optGroup]);

@@ -28,7 +28,7 @@ import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { JOB_MANDATORY_OPTIONS } from "../../components/JobListing/JobListingConstants";
 import { TableFilter, ArrayHelper } from "@workspace/common";
-import "./JobCustomView.scss"
+import "./JobCustomView.scss";
 
 function JobCustomView() {
   document.title = "Create Job Custom View | RTS";
@@ -61,7 +61,6 @@ function JobCustomView() {
   }, [editId]);
 
   const [selectedOption, setSelectedOption] = useState([]);
-  const [dualListBoxError, setDualListBoxError] = useState(false);
   const [options, setOptions] = useState([]);
   const [filters, setFilters] = useState([]);
 
@@ -161,17 +160,10 @@ function JobCustomView() {
                 <CardHeader>
                   <div className="d-flex flex-column ">
                     <h6 className="fw-bold">Custom View</h6>
-                    {/* <span className="fw-medium">
-                      Personalise your own custom view of your tables here.
-                    </span> */}
                   </div>
                 </CardHeader>
                 <form onSubmit={formik.handleSubmit}>
-                  <CardBody
-                  // style={{
-                  //   height: "56.5vh",
-                  // }}
-                  >
+                  <CardBody>
                     <Row>
                       <Col lg={6}>
                         <Row className="mb-3">

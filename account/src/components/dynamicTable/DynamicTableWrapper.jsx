@@ -100,9 +100,15 @@ const DynamicTableWrapper = ({
     setDeletingCustomViewId(id);
   };
   const handleDeleteCustomView = (id) => {
+    const customView = allAccountCustomViews.find(
+      (view) => view?.id === id
+    );
     dispatch(deleteAccountCustomView({ id: id }));
     setDeleteModalOpen(false);
     setDeletingCustomViewId(null);
+    if (customView?.selected) {
+      enableDefaultView();
+    }
   };
 
   useEffect(() => {

@@ -20,9 +20,7 @@ import { DynamicTable } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchJobLists,
-} from "../../store/jobList/action";
+import { fetchJobLists } from "../../store/jobList/action";
 import {
   fetchJobCustomView,
   selectJobCustomView,
@@ -141,9 +139,10 @@ const DynamicTableWrapper = ({
           setCustomConfigData(selectedObjects);
         }
         pageRequestSet.setFilterData(selectedCustomView?.filters);
-      } else {
-        enableDefaultView();
       }
+      //  else {
+      //   enableDefaultView();
+      // }
     }
     if (allJobCustomViews != null && allJobCustomViews.length === 0) {
       enableDefaultView();
@@ -161,9 +160,13 @@ const DynamicTableWrapper = ({
   };
 
   const handleDeleteCustomView = (id) => {
+    const customView = allJobCustomViews?.find((view) => view?.id === id);
     dispatch(deleteJobCustomView({ id: id }));
     setDeleteModalOpen(false);
     setDeletingCustomViewId(null);
+    if (customView?.selected) {
+      enableDefaultView();
+    }
   };
 
   const toggleNested = (index) => {
@@ -513,9 +516,9 @@ const DynamicTableWrapper = ({
                                     <Button
                                       className="btn btn-sm btn-danger"
                                       style={{ height: "29px" }}
-                                      onClick={() =>
-                                        handleDeleteButtonClick(customView?.id)
-                                      }
+                                      onClick={() => {
+                                        handleDeleteButtonClick(customView?.id);
+                                      }}
                                     >
                                       <i className="mdi mdi-delete"></i>
                                     </Button>
