@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { Button } from "reactstrap";
 import Filter from "./Filter";
 import { validateFilters } from "./Validation";
@@ -77,9 +73,8 @@ const TableFilter = forwardRef(
           className="py-1"
           style={{
             overflowY: "auto",
-            // height: "235px",
             height: "250px",
-            paddingLeft:"1px",
+            paddingLeft: "1px",
           }}
         >
           {filters?.map((filter, index) => {
@@ -110,7 +105,6 @@ const TableFilter = forwardRef(
         )}
         <div
           style={{
-            overflowY: "auto",
             maxHeight: "75px",
             marginBottom: "6px",
           }}

@@ -13,7 +13,6 @@ import { mapConditionObjectArray, conditionObject } from "./filterConstant";
 import MultiDateElement from "./Elements/MultiDateElement";
 
 const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
-  const [filtersInput, setFiltersInput] = useState({}); // [field, condition, value, operator]
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [formElement, setFormElement] = useState(null);
 
@@ -251,6 +250,7 @@ const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <SelectElement
             enableTooltip={true}
+            allowMenuOverflow={true}
             optionsData={() => {
               return fields?.map((field) => {
                 return {
@@ -283,6 +283,7 @@ const Filter = ({ fields, filter, setFilters, index, errors, formSchema }) => {
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <SelectElement
             enableTooltip={true}
+            allowMenuOverflow={true}
             optionsData={mapConditionObjectArray()}
             setSelectedOptionData={(selectedOptions) => {
               setFilters((prev) => {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Label, FormFeedback, Tooltip } from "reactstrap";
 import Select from "react-select";
-import CustomSingleValue from "./CustomSingleValue"; // Import the custom single value component
 
 const SingleSelectElement = ({
   optionsData,
@@ -11,6 +10,7 @@ const SingleSelectElement = ({
   editorRef,
   clearable = true,
   enableTooltip = false,
+  allowMenuOverflow = false,
   ...props
 }) => {
   const [search, setSearch] = useState("");
@@ -65,7 +65,7 @@ const SingleSelectElement = ({
   const customStyles = {
     menu: (provided) => ({
       ...provided,
-      zIndex: 9999,
+      zIndex: 99999,
     }),
     control: (base, state) => ({
       ...base,
@@ -84,6 +84,10 @@ const SingleSelectElement = ({
     options: (provided) => ({
       ...provided,
       zIndex: 999999999,
+    }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 99999,
     }),
   };
 
@@ -113,7 +117,7 @@ const SingleSelectElement = ({
         onMouseLeave={handleMouseLeave}
       >
         <Select
-          styles={customStyles}
+          // styles={customStyles}
           value={value}
           onChange={handleChange}
           onInputChange={handleInputChange}
@@ -125,10 +129,16 @@ const SingleSelectElement = ({
           options={options}
           noOptionsMessage={noOptionsMessage}
           onMenuOpen={() => {
-              setMenuIsOpen(true);
-              setTooltipOpen(false);
+            setMenuIsOpen(true);
+            setTooltipOpen(false);
           }}
           onMenuClose={() => setMenuIsOpen(false)}
+          {...(allowMenuOverflow && { menuPortalTarget: document.body })}
+          styles={
+            allowMenuOverflow
+              ? customStyles
+              : { ...customStyles, menuPortal: undefined }
+          }
           // onMenuOpen={() =>  editorRef?.current.editor.editing.view.focus()}
           // onMenuClose={() =>  editorRef?.current.editor.editing.view.focus()}
           // isDisabled={formState === "view" ? true : false}

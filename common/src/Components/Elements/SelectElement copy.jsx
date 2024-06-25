@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Label, FormFeedback } from "reactstrap";
+import React, { useEffect, useState, useRef } from "react";
+import { Label, FormFeedback, Tooltip } from "reactstrap";
 import Select from "react-select";
-import CustomSingleValue from './CustomSingleValue'; // Import the custom single value component
 
 const SingleSelectElement = ({
   optionsData,
@@ -10,11 +9,40 @@ const SingleSelectElement = ({
   placeholder,
   editorRef,
   clearable = true,
+  enableTooltip = false,
   ...props
 }) => {
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState(optionsData);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [menuIsOpen, setMenuIsOpen] = useState(false); // State to track if menu is open
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const singleValueRef = useRef(null);
+
+  const uniqueId = useRef(
+    `select-${Math.random().toString(36).substring(2, 10)}`
+  ).current;
+
+  const toggleTooltip = () => setTooltipOpen(!tooltipOpen);
+
+  const checkTruncation = () => {
+    if (singleValueRef.current) {
+      const singleValueDiv = singleValueRef.current.querySelector(
+        ".react-select__single-value"
+      );
+      if (singleValueDiv) {
+        const isTruncated =
+          singleValueDiv.scrollWidth > singleValueDiv.clientWidth;
+        setTooltipOpen(isTruncated);
+      } else {
+        setTooltipOpen(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkTruncation();
+  }, [value, menuIsOpen]);
 
   useEffect(() => {
     if (optionsData) {
@@ -60,6 +88,16 @@ const SingleSelectElement = ({
 
   const noOptionsMessage = () => null; // Return null to prevent the message from showing
 
+  const handleMouseEnter = () => {
+    if (!menuIsOpen) {
+      checkTruncation();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setTooltipOpen(false);
+  };
+
   return (
     <div>
       {props?.label && (
@@ -67,22 +105,45 @@ const SingleSelectElement = ({
           {props?.label}
         </Label>
       )}
-      <Select
-        styles={customStyles}
-        value={value}
-        onChange={handleChange}
-        onInputChange={handleInputChange}
-        inputValue={search}
-        menuShouldScrollIntoView={false}
-        isClearable={clearable}
-        isSearchable
-        placeholder={placeholder}
-        options={options}
-        noOptionsMessage={noOptionsMessage}
-        // onMenuOpen={() =>  editorRef?.current.editor.editing.view.focus()}
-        // onMenuClose={() =>  editorRef?.current.editor.editing.view.focus()}
-        // isDisabled={formState === "view" ? true : false}
-      />
+      <div
+        id={uniqueId}
+        ref={singleValueRef}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <Select
+          styles={customStyles}
+          value={value}
+          onChange={handleChange}
+          onInputChange={handleInputChange}
+          inputValue={search}
+          menuShouldScrollIntoView={false}
+          isClearable={clearable}
+          isSearchable
+          placeholder={placeholder}
+          options={options}
+          noOptionsMessage={noOptionsMessage}
+          onMenuOpen={() => {
+              setMenuIsOpen(true);
+              setTooltipOpen(false);
+          }}
+          onMenuClose={() => setMenuIsOpen(false)}
+          // onMenuOpen={() =>  editorRef?.current.editor.editing.view.focus()}
+          // onMenuClose={() =>  editorRef?.current.editor.editing.view.focus()}
+          // isDisabled={formState === "view" ? true : false}
+        />
+        {enableTooltip && value?.label && !menuIsOpen && (
+          // Conditionally render the tooltip
+          <Tooltip
+            placement="top"
+            isOpen={tooltipOpen}
+            target={uniqueId}
+            toggle={toggleTooltip}
+          >
+            {value?.label}
+          </Tooltip>
+        )}
+      </div>
       {props?.error && (
         <FormFeedback type="invalid">{props?.error}</FormFeedback>
       )}
