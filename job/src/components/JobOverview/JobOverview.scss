@@ -80,3 +80,19 @@
     font-size: 12px;
     white-space: nowrap;
 }
+
+@media (min-width: 1024px) {
+    .station-title {
+        font-size: 10px;
+    }
+
+    .substation-title {
+        font-weight: 500;
+        font-size: 12px;
+    }
+
+    .main-table-header-text {
+        font-size: 12px;
+        vertical-align: top;
+    }
+}

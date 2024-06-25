@@ -76,6 +76,7 @@ const JobStageReducer = (state = initialState, action) => {
       return {
         ...state,
         jobTagMeta: {},
+        jobAllTagMeta: {}
       };
 
     // tag all job

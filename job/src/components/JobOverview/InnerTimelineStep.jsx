@@ -347,7 +347,7 @@ const InnerTimelineStep = ({
     } else {
       const newTimeline = updateTimeline(
         defaultTimeline,
-        filteredExpandedTimeline,
+        filtered,
         expandedTimeline,
         noOfRows
       );
@@ -358,7 +358,12 @@ const InnerTimelineStep = ({
     setExpandedTimeline(indexesInnerTimeline);
     setAllExpandedIndexes([...expandedIndexes]);
     setIndexRanges(rangeOfIndex);
-  }, [expandedSectionRange, noOfRows, innerTimelineSteppers, filteredExpandedTimeline]);
+  }, [
+    expandedSectionRange,
+    noOfRows,
+    JSON.stringify(innerTimelineSteppers),
+    JSON.stringify(expandedTimeline),
+  ]);
 
   const getExpandedIndexes = (indexRanges, expandRanges, timeline) => {
     const result = [];
@@ -721,11 +726,12 @@ const InnerTimelineStep = ({
                   <div
                     className="progress-line"
                     style={{
-                      backgroundColor: isCurrentStepWithdrawnOrRejected
+                      borderColor: isCurrentStepWithdrawnOrRejected
                         ? renderMainStepStyle.bgColor
                         : isStepAfterWithdrawnOrRejected
                         ? "#DADADA"
                         : renderMainStepStyle.bgColor,
+                      backgroundColor: "transparent",
                       width: index === 0 ? "50%" : "100%",
                       left: index === 0 ? "50%" : "0",
                     }}
@@ -816,11 +822,12 @@ const InnerTimelineStep = ({
                         : "progress-line"
                     }`}
                     style={{
-                      backgroundColor: isDisabled
+                      borderColor: isDisabled
                         ? "#DADADA"
                         : renderingStyle !== null
                         ? renderingStyle.borderColor
                         : "#DADADA",
+                      backgroundColor: "transparent",
                     }}
                   ></div>
                   <div
@@ -1070,7 +1077,8 @@ const InnerTimelineStep = ({
                   <div
                     className="progress-line"
                     style={{
-                      backgroundColor: renderBadCaseStyle.bgColor,
+                      borderColor: renderBadCaseStyle.bgColor,
+                      backgroundColor: "transparent",
                     }}
                   >
                     <div
@@ -1124,7 +1132,7 @@ const InnerTimelineStep = ({
               <div key={index} className="item" id="item-timeline">
                 <div
                   className="progress-line"
-                  style={{ backgroundColor: renderStepStyle.borderColor }}
+                  style={{ borderColor: renderStepStyle.borderColor }}
                 >
                   <div
                     className="expanded-vertical-line"
