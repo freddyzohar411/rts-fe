@@ -45,12 +45,22 @@ const FilterQuery = ({ filters }) => {
         return "IS NOT NULL";
       case conditionObject.GREATER_THAN:
         return ">";
+      case conditionObject.GREATER_THAN_OR_EQUAL:
+        return ">=";
       case conditionObject.LESS_THAN:
         return "<";
+      case conditionObject.LESS_THAN_OR_EQUAL:
+        return "<=";
+      case conditionObject.ON:
+        return "=";
       case conditionObject.BEFORE:
         return "<";
+      case conditionObject.BEFORE_OR_EQUAL:
+        return "<=";
       case conditionObject.AFTER:
         return ">";
+      case conditionObject.AFTER_OR_EQUAL:
+        return ">=";
       case conditionObject.IN:
         return "IN";
       case conditionObject.NOT_IN:
