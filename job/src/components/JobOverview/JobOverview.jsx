@@ -107,7 +107,7 @@ import BillRateZeroModal from "../BillRateZeroModal/BillRateZeroModal.jsx";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav.jsx";
 import JobOverviewTag from "./JobOverviewTag/JobOverviewTag.jsx";
 
-const JobOverview = ({ onRetrieveHeader }) => {
+const JobOverview = ({ onRetrieveHeader, onTimelineFullScreen }) => {
   document.title = "Job Timeline | RTS";
 
   const dispatch = useDispatch();
@@ -145,6 +145,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
   const [billRateModalOpen, setBillRateModalOpen] = useState(false);
   const [bsrOption, setBsrOption] = useState("");
   const [stageType, setStageType] = useState(null);
+  const [isTimelineFullscreen, setIsTimelineFullscreen] = useState(false);
 
   const jobTimelineMeta = useSelector(
     (state) => state.JobStageReducer.jobTimelineMeta
@@ -209,11 +210,16 @@ const JobOverview = ({ onRetrieveHeader }) => {
     customRenderList
   );
 
+  const toggleTimelineFullscreen = () => {
+    setIsTimelineFullscreen(!isTimelineFullscreen);
+    onTimelineFullScreen(!isTimelineFullscreen);
+  };
+
   useEffect(() => {
     if (
       jobTagMeta?.isSuccess ||
-      updateBillrateMeta?.isSuccess 
-      || jobAllTagMeta?.isSuccess
+      updateBillrateMeta?.isSuccess ||
+      jobAllTagMeta?.isSuccess
     ) {
       setOffcanvasForm(false);
       setModalFormName(null);
@@ -774,7 +780,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
                   {/* Bill Rate */}
                   <td
                     style={{
-                      width: "7rem"
+                      width: "7rem",
                     }}
                   >
                     <div className="billrate-container">
@@ -831,7 +837,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
                   {/* Progress Bar */}
                   <td
                     style={{
-                      width: "300px"
+                      width: "300px",
                     }}
                     onClick={() => toggleJobOpen(data.id)}
                   >
@@ -840,7 +846,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
                   {/* Current Status */}
                   <td
                     style={{
-                      width: "7rem"
+                      width: "7rem",
                     }}
                   >
                     <div className="d-flex flex-column align-items-start justify-content-start">
@@ -855,7 +861,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
                   {/* Next Step */}
                   <td
                     style={{
-                      width: "15rem"
+                      width: "15rem",
                     }}
                   >
                     <div className="d-flex flex-row gap-1">
@@ -912,7 +918,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
                   {/* Save Button */}
                   <td
                     style={{
-                      width: "50px"
+                      width: "50px",
                     }}
                   >
                     <button
@@ -1611,7 +1617,7 @@ const JobOverview = ({ onRetrieveHeader }) => {
   return (
     <React.Fragment>
       <div className="p-2">
-        <Row className="mb-0">
+        <Row className="mb-0" hidden={isTimelineFullscreen}>
           <Card
             style={{ backgroundColor: "#F3F8FF", border: "1px solid #D0DAE8" }}
           >
@@ -1708,7 +1714,10 @@ const JobOverview = ({ onRetrieveHeader }) => {
                 >
                   <i className="mdi mdi-account-plus-outline align-bottom me-1"></i>
                 </Button>
-                <Button className="bg-white main-border-style">
+                <Button
+                  className="bg-white main-border-style"
+                  onClick={() => toggleTimelineFullscreen()}
+                >
                   <i className="ri-fullscreen-line align-bottom me-1"></i>
                 </Button>
               </ButtonGroup>
