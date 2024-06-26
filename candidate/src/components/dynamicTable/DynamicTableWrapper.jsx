@@ -25,6 +25,8 @@ import {
   deleteCandidates,
   deleteCandidatesReset,
   fetchCandidates,
+  resetCandidateCustomView,
+  resetCandidates,
 } from "../../store/candidate/action";
 import { DeleteCustomModal } from "@workspace/common";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
@@ -82,6 +84,9 @@ const DynamicTableWrapper = ({
 
   useEffect(() => {
     dispatch(fetchCandidateCustomView());
+    return () => {
+      dispatch(resetCandidateCustomView());
+    };
   }, []);
 
   const handleSelectCustomView = (id) => {
@@ -94,13 +99,17 @@ const DynamicTableWrapper = ({
   };
 
   const handleDeleteCustomView = (id) => {
+    const customView = allCandidateCustomViews.find((view) => view?.id === id);
     dispatch(deleteCandidateCustomView({ id: id }));
     setDeleteModalOpen(false);
     setDeletingCustomViewId(null);
+    if (customView?.selected) {
+      enableDefaultView();
+    }
   };
 
   useEffect(() => {
-    if (allCandidateCustomViews && allCandidateCustomViews.length > 0) {
+    if (allCandidateCustomViews != null && allCandidateCustomViews.length > 0) {
       const selectedCustomView = allCandidateCustomViews?.find(
         (customView) => customView?.selected
       );
@@ -116,14 +125,20 @@ const DynamicTableWrapper = ({
         if (selectedObjects.length > 0) {
           setCustomConfigData(selectedObjects);
         }
+        pageRequestSet.setFilterData(selectedCustomView?.filters);
       }
-    } else {
-      setCustomConfigData(CANDIDATE_INITIAL_OPTIONS);
+    }
+    if (
+      allCandidateCustomViews != null &&
+      allCandidateCustomViews.length === 0
+    ) {
+      enableDefaultView();
     }
   }, [allCandidateCustomViews, optGroup]);
 
   const enableDefaultView = () => {
     setCustomConfigData(CANDIDATE_INITIAL_OPTIONS);
+    pageRequestSet.setFilterData(null);
   };
 
   const handleEportExcel = async () => {
@@ -274,9 +289,19 @@ const DynamicTableWrapper = ({
                                           )}
                                         </div>
                                       </DropdownItem>
-
+                                      <Link
+                                        to={`/candidates/custom-view/${customView?.id}`}
+                                      >
+                                        <Button
+                                          className="btn btn-sm btn-secondary"
+                                          style={{ height: "29px" }}
+                                        >
+                                          <i className="ri-pencil-line"></i>
+                                        </Button>
+                                      </Link>
                                       <Button
                                         className="btn btn-sm btn-danger"
+                                        style={{ height: "29px" }}
                                         onClick={() =>
                                           handleDeleteButtonClick(
                                             customView?.id
@@ -357,7 +382,7 @@ const DynamicTableWrapper = ({
                   data={data}
                   pageRequestSet={pageRequestSet}
                   pageInfo={pageInfo}
-                  isLoading={candidateMeta?.isLoading}
+                  isLoading={candidateMeta?.isLoading ?? true}
                   freezeHeader={true}
                   activeRow={activeRow}
                   setTableConfig={setTableConfig}

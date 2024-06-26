@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest, delay } from "redux-saga/effects";
 import { toast } from "react-toastify";
 
 import {
@@ -14,6 +14,8 @@ import {
   FETCH_JOB_CUSTOM_VIEW,
   SELECT_JOB_CUSTOM_VIEW,
   DELETE_JOB_CUSTOM_VIEW,
+  FETCH_JOB_CUSTOM_VIEW_BY_ID,
+  EDIT_JOB_CUSTOM_VIEW_BY_ID,
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -41,6 +43,10 @@ import {
   fetchJobCustomView,
   deleteJobCustomViewSuccess,
   deleteJobCustomViewFailure,
+  fetchJobCustomViewByIdFailure,
+  fetchJobCustomViewByIdSuccess,
+  editJobCustomViewByIdSuccess,
+  editJobCustomViewByIdFailure,
 } from "./action";
 import {
   getJobs,
@@ -57,6 +63,8 @@ import {
   getJobCustomViews,
   selectJobCustomView,
   deleteJobCustomView,
+  getJobCustomViewById,
+  editJobCustomViewById,
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
@@ -182,13 +190,17 @@ function* workCreateJobCustomView(action) {
   const { payload, navigate } = action.payload;
   try {
     const jobCustomViewResponse = yield call(createJobCustomView, payload);
+    yield delay(500);
     yield put(createJobCustomViewSuccess(jobCustomViewResponse));
-    yield put(fetchJobCustomView());
     toast.success("Job custom view created successfully!");
     navigate("/jobs");
   } catch (error) {
     yield put(createJobCustomViewFailure(error));
-    toast.error(error?.message);
+    if (error?.code === 409) {
+      toast.error("Job custom view name already exists.");
+    } else {
+      toast.error("Error updating job custom view!");
+    }
   }
 }
 
@@ -222,6 +234,33 @@ function* workDeleteJobCustomView(action) {
   }
 }
 
+function* workFetchJobCustomViewById(action) {
+  try {
+    const response = yield call(getJobCustomViewById, action.payload);
+    yield put(fetchJobCustomViewByIdSuccess(response.data));
+  } catch (error) {
+    yield put(fetchJobCustomViewByIdFailure(error));
+  }
+}
+
+function* workEditJobCustomViewById(action) {
+  const { editId, payload, navigate } = action.payload;
+  try {
+    const response = yield call(editJobCustomViewById, editId, payload);
+    yield delay(500);
+    yield put(editJobCustomViewByIdSuccess(response.data));
+    toast.success("Job custom view updated successfully!");
+    navigate("/jobs");
+  } catch (error) {
+    yield put(editJobCustomViewByIdFailure(error));
+    if (error?.code === 409) {
+      toast.error("Job custom view name already exists.");
+    } else {
+      toast.error("Error updating job custom view!");
+    }
+  }
+}
+
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
@@ -235,4 +274,6 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB_CUSTOM_VIEW, workFetchJobCustomViews);
   yield takeEvery(SELECT_JOB_CUSTOM_VIEW, workSelectJobCustomView);
   yield takeEvery(DELETE_JOB_CUSTOM_VIEW, workDeleteJobCustomView);
+  yield takeEvery(FETCH_JOB_CUSTOM_VIEW_BY_ID, workFetchJobCustomViewById);
+  yield takeEvery(EDIT_JOB_CUSTOM_VIEW_BY_ID, workEditJobCustomViewById);
 }

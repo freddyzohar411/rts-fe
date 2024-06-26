@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Container,
   Row,
@@ -12,29 +12,58 @@ import {
   Label,
   FormFeedback,
   Button,
+  Spinner,
 } from "reactstrap";
-import { Formik, Form, Field } from "formik";
+import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import {
   fetchAccountsFields,
   createAccountCustomView,
-  fetchAccountCustomView,
+  fetchAccountCustomViewById,
+  editAccountCustomViewById,
 } from "../../store/account/action";
+import { fetchAccountForm } from "../../store/accountForm/action";
 import DualListBox from "react-dual-listbox";
 import { initialValues, schema } from "./constants";
 import { ACCOUNT_MANDATORY_OPTIONS } from "../AccountListing/accountListingConstants";
+import { TableFilter, ArrayHelper } from "@workspace/common";
+import "./AccountCustomView.scss";
 
 function AccountCustomView() {
   document.title = "Create Account Custom View | RTS";
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const filterRef = useRef(null);
+  const [initialValuesState, setInitialValuesState] = useState(initialValues);
   const accountFields = useSelector(
     (state) => state?.AccountReducer?.accountsFields
   );
+  const accountCustomView = useSelector(
+    (state) => state?.AccountReducer?.accountCustomView
+  );
+
+  const accountCustomViewMeta = useSelector(
+    (state) => state?.AccountReducer?.accountCustomViewMeta
+  );
+
+  // Dispatch and get account_account form
+  const form = useSelector((state) => state.AccountFormReducer.form);
+  useEffect(() => {
+    dispatch(fetchAccountForm("Account_account"));
+  }, []);
+
+  const editId = useParams().id;
+
+  useEffect(() => {
+    if (editId) {
+      dispatch(fetchAccountCustomViewById(editId));
+    }
+  }, [editId]);
+
   const [selectedOption, setSelectedOption] = useState([]);
-  const [dualListBoxError, setDualListBoxError] = useState(false);
   const [options, setOptions] = useState([]);
+  const [filters, setFilters] = useState([]);
 
   const areOptionsEmpty = () => {
     return !(options && options.length > 0);
@@ -57,30 +86,60 @@ function AccountCustomView() {
     }
   }, [accountFields]);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, flag) => {
+    if (!flag) return;
     try {
-      if (selectedOption.length === 0) {
-        setDualListBoxError(true);
-        return;
-      }
-      setDualListBoxError(false);
       const newCustomView = {
         name: values.name,
         type: "Account",
-        columnName: selectedOption,
+        columnName: values.columnName || [],
+        filters: filters,
       };
 
-      const response = await dispatch(
-        createAccountCustomView({ payload: newCustomView, navigate: navigate })
-      );
-
-      if (response) {
-        setTimeout(async () => {
-          await dispatch(fetchAccountCustomView());
-        }, 1500); // Delay the fetch to allow the backend to update the data
+      if (editId) {
+        dispatch(
+          editAccountCustomViewById({
+            editId,
+            payload: newCustomView,
+            navigate: navigate,
+          })
+        );
+      } else {
+        dispatch(
+          createAccountCustomView({
+            payload: newCustomView,
+            navigate: navigate,
+          })
+        );
       }
     } catch (error) {}
   };
+
+  useEffect(() => {
+    if (accountCustomView && editId) {
+      setInitialValuesState({
+        name: accountCustomView?.name,
+        columnName: accountCustomView?.columnName,
+      });
+      setSelectedOption(accountCustomView?.columnName);
+      setFilters(accountCustomView?.filters);
+    }
+  }, [accountCustomView]);
+
+  const formik = useFormik({
+    initialValues: initialValuesState,
+    validationSchema: schema,
+    validateOnChange: false,
+    validateOnBlur: true,
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      const flag = filterRef.current?.validate();
+      handleSubmit(values, flag);
+    },
+  });
+
+  // Sort the account fields by label
+  ArrayHelper.sortArrayObj(accountFields, "label");
 
   return (
     <React.Fragment>
@@ -102,51 +161,57 @@ function AccountCustomView() {
                 <CardHeader>
                   <div className="d-flex flex-column ">
                     <h6 className="fw-bold">Custom View</h6>
-                    <span className="fw-medium">
-                      Personalise your own custom view of your tables here.
-                    </span>
                   </div>
                 </CardHeader>
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={schema}
-                  validateOnChange={false}
-                  validateOnBlur
-                  onSubmit={handleSubmit}
-                >
-                  {({ errors, touched, setFieldError }) => (
-                    <Form>
-                      <CardBody>
-                        <Row>
-                          <Col>
-                            <h6 className="fw-bold">General Information</h6>
-                          </Col>
-                        </Row>
+                <form onSubmit={formik.handleSubmit}>
+                  <CardBody>
+                    <Row>
+                      <Col lg={6}>
                         <Row className="mb-3">
+                          <div className="px-2"></div>
                           <Col lg={4}>
                             <div>
                               <Label className="fw-semibold">
-                                Custom View Name
+                                Custom View Name*
                               </Label>
-                              <Field
+                              <input
                                 name="name"
                                 type="text"
                                 placeholder="Enter Custom View Name"
                                 className={`form-control ${
-                                  errors.name && touched.name && "is-invalid"
+                                  formik.errors.name &&
+                                  formik.touched.name &&
+                                  "is-invalid"
                                 }`}
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                               />
-                              {errors.name && touched.name && (
+                              {formik.errors.name && formik.touched.name && (
                                 <FormFeedback typeof="invalid">
-                                  {errors.name}
+                                  {formik.errors.name}
                                 </FormFeedback>
                               )}
                             </div>
                           </Col>
                         </Row>
                         <Row>
+                          {/* Filter Element */}
+                          <TableFilter
+                            fields={accountFields?.filter(
+                              (field) => field?.sortValue != null
+                            )}
+                            filters={filters}
+                            setFilters={setFilters}
+                            ref={filterRef}
+                            formSchema={form?.formSchema}
+                          />
+                        </Row>
+                      </Col>
+                      <Col lg={6}>
+                        <Row>
                           <Col>
-                            <div className="mb-3">
+                            <div className="mb-3 custom-dual-box">
                               <div className="d-flex flex-column mb-3">
                                 <Label className="fw-semibold">
                                   Custom View Columns
@@ -156,13 +221,13 @@ function AccountCustomView() {
                                   see in the Account Listing table.
                                 </span>
                               </div>
-
                               <DualListBox
                                 options={options ?? []}
                                 selected={selectedOption}
-                                onChange={(newValue) =>
-                                  setSelectedOption(newValue)
-                                }
+                                onChange={(newValue) => {
+                                  setSelectedOption(newValue);
+                                  formik.setFieldValue("columnName", newValue);
+                                }}
                                 showOrderButtons
                                 preserveSelectOrder
                                 icons={{
@@ -214,39 +279,57 @@ function AccountCustomView() {
                                   ),
                                 }}
                               />
-                              {dualListBoxError && (
-                                <div className="mt-2">
+                              {formik.errors.columnName && (
+                                <div className="mt-1">
                                   <p className="text-danger">
-                                    Please select at least one column name.
+                                    {formik.errors.columnName}
                                   </p>
                                 </div>
                               )}
                             </div>
                           </Col>
                         </Row>
-                      </CardBody>
-                      <CardFooter>
-                        <Row className="justify-content-between">
-                          <Col md="auto">
-                            <Link to="/accounts">
-                              <Button type="button" className="btn btn-danger">
-                                Cancel
-                              </Button>
-                            </Link>
-                          </Col>
-                          <Col md="auto">
-                            <Button
-                              type="submit"
-                              className="btn btn-custom-primary"
-                            >
-                              Create Custom View
-                            </Button>
-                          </Col>
-                        </Row>
-                      </CardFooter>
-                    </Form>
-                  )}
-                </Formik>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                  <CardFooter>
+                    <Row className="justify-content-between">
+                      <Col md="auto">
+                        <Link to="/accounts">
+                          <Button type="button" className="btn btn-danger">
+                            Cancel
+                          </Button>
+                        </Link>
+                      </Col>
+                      <Col md="auto">
+                        <Button
+                          type="button"
+                          className="btn btn-custom-primary"
+                          onClick={async () => {
+                            const formikErrors = await formik.validateForm();
+                            formik.setTouched({ name: true });
+                            const hasFormikErrors =
+                              Object.keys(formikErrors).length > 0;
+                            const flag = filterRef.current?.validate();
+
+                            if (!hasFormikErrors && flag) {
+                              handleSubmit(formik.values, flag);
+                            }
+                            formik.setSubmitting(false);
+                          }}
+                        >
+                          {accountCustomViewMeta?.isLoading ? (
+                            <Spinner size="sm" color="light" />
+                          ) : editId ? (
+                            "Update Custom View"
+                          ) : (
+                            "Create Custom View"
+                          )}
+                        </Button>
+                      </Col>
+                    </Row>
+                  </CardFooter>
+                </form>
               </Card>
             </Col>
           </Row>

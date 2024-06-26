@@ -38,6 +38,7 @@ import {
   DELETE_JOBS_SUCCESS,
   DELETE_JOBS_FAILURE,
   DELETE_JOBS_RESET,
+  RESET_JOB_LIST
 } from "./actionTypes";
 
 // Fetch User Group by name
@@ -225,4 +226,7 @@ export const deleteJobsReset = () => ({
   type: DELETE_JOBS_RESET,
 });
 
+export const resetJobList = () => ({
+  type: RESET_JOB_LIST,
+});
 

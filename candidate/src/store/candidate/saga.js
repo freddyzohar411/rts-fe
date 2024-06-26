@@ -4,6 +4,7 @@ import {
   takeEvery,
   takeLatest,
   cancelled,
+  delay,
 } from "redux-saga/effects";
 import { CandidateEntityConstant } from "../../constants/candidateConstant";
 
@@ -26,6 +27,8 @@ import {
   SELECT_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATE_CUSTOM_VIEW,
   DELETE_CANDIDATES,
+  FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID,
+  EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -69,6 +72,10 @@ import {
   deleteCandidateCustomViewFailure,
   deleteCandidatesSuccess,
   deleteCandidatesFailure,
+  fetchCandidateCustomViewByIdFailure,
+  fetchCandidateCustomViewByIdSuccess,
+  editCandidateCustomViewByIdSuccess,
+  editCandidateCustomViewByIdFailure,
 } from "./action";
 import {
   getCandidates,
@@ -88,6 +95,8 @@ import {
   selectCandidateCustomView,
   deleteCandidateCustomView,
   deleteCandidates,
+  getCandidateCustomViewById,
+  editCandidateCustomViewById,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -549,13 +558,13 @@ function* workCreateCandidateCustomView(action) {
       createCandidateCustomView,
       payload
     );
+    yield delay(500);
     yield put(createCandidateCustomViewSuccess(candidateCustomViewResponse));
-    yield put(fetchCandidateCustomView());
     toast.success("Candidate custom view created successfully!");
     navigate("/candidates");
   } catch (error) {
     yield put(createCandidateCustomViewFailure(error));
-    if (error.response && error.response.status === 409) {
+    if (error?.code === 409) {
       toast.error("Candidate custom view name already exists.");
     } else {
       toast.error("Error creating candidate custom view!");
@@ -604,6 +613,35 @@ function* workDeleteCandidates(action) {
   }
 }
 
+// Fetch Custom View by id
+function* workFetchCandidateCustomViewById(action) {
+  try {
+    const response = yield call(getCandidateCustomViewById, action.payload);
+    yield put(fetchCandidateCustomViewByIdSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCandidateCustomViewByIdFailure(error));
+  }
+}
+
+// Edit Custom View by id
+function* workEditCandidateCustomViewById(action) {
+  const { editId, payload, navigate } = action.payload;
+  try {
+    const response = yield call(editCandidateCustomViewById, editId, payload);
+    yield delay(500);
+    yield put(editCandidateCustomViewByIdSuccess(response.data));
+    toast.success("Candidate custom view updated successfully!");
+    navigate("/candidates");
+  } catch (error) {
+    yield put(editCandidateCustomViewByIdFailure(error));
+    if (error?.code === 409) {
+      toast.error("Candidate custom view name already exists.");
+    } else {
+      toast.error("Error updating candidate custom view!");
+    }
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -626,4 +664,12 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(SELECT_CANDIDATE_CUSTOM_VIEW, workSelectCandidateCustomView);
   yield takeEvery(DELETE_CANDIDATE_CUSTOM_VIEW, workDeleteCandidateCustomView);
   yield takeEvery(DELETE_CANDIDATES, workDeleteCandidates);
+  yield takeEvery(
+    FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID,
+    workFetchCandidateCustomViewById
+  );
+  yield takeEvery(
+    EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
+    workEditCandidateCustomViewById
+  );
 }

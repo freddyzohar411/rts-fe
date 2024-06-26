@@ -47,3 +47,6 @@ export const DELETE_JOBS = "DELETE_JOBS";
 export const DELETE_JOBS_SUCCESS = "DELETE_JOBS_SUCCESS";
 export const DELETE_JOBS_FAILURE = "DELETE_JOBS_FAILURE";
 export const DELETE_JOBS_RESET = "DELETE_JOBS_RESET";
+
+// Reset Job Listing
+export const RESET_JOB_LIST = "RESET_JOB_LIST";

@@ -48,4 +48,12 @@ export const templateCategoryList = [
     label: "Table Templates",
     value: "Table Templates",
   },
+  {
+    label: "Old UAT Templates",
+    value: "Old UAT Templates",
+  },
+  {
+    label: "User Admin Backend Templates",
+    value: "User Admin Backend Templates",
+  },
 ];

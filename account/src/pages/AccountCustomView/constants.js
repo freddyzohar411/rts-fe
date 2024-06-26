@@ -7,5 +7,6 @@ export const initialValues = {
 
 export const schema = yup.object().shape({
     name: yup.string().required("Custom view name is required."),
-    columnName: yup.array().required("Please select as least one column.")
+    // columnName: yup.array().required("Please select as least one column.")
+    columnName: yup.array().min(1, "Please select at least one column."),
 });
