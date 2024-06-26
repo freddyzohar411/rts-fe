@@ -807,9 +807,21 @@ const InnerTimelineStep = ({
               const stepNameBeforeExpand = Object.values(
                 innerTimelineSteppers[index - 1]
               )[0];
+              let renderingStyle = null;
 
-              const renderingStyle =
-                getRenderMainStepStyle(stepNameBeforeExpand);
+              if (
+                stepNameBeforeExpand === "bottomRightCurve" ||
+                stepNameBeforeExpand === "bottomLeftCurve"
+              ) {
+                const newStepNameBeforeExpand = Object.values(
+                  innerTimelineSteppers[index - 3]
+                )[0];
+                renderingStyle = getRenderMainStepStyle(
+                  newStepNameBeforeExpand
+                );
+              } else {
+                renderingStyle = getRenderMainStepStyle(stepNameBeforeExpand);
+              }
 
               return (
                 <div key={index} className="item" id="item-timeline">
@@ -852,7 +864,8 @@ const InnerTimelineStep = ({
                         ? "#0A56AE"
                         : "#000000",
                       cursor: isDisabled ? "not-allowed" : "pointer",
-                      border: "1px solid",
+                      borderWidth: "1px",
+                      borderStyle: "solid",
                     }}
                   >
                     <span
