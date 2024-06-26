@@ -1,39 +1,69 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
   Container,
-  Card,
   Row,
   Col,
-  CardBody,
+  Card,
   CardHeader,
+  CardBody,
   CardFooter,
+  Breadcrumb,
+  BreadcrumbItem,
+  Label,
   FormFeedback,
   Button,
-  Label,
+  Spinner,
 } from "reactstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { Formik, Form, Field } from "formik";
-import DualListBox from "react-dual-listbox";
-import { initialValues, schema } from "./constants";
+import { useFormik } from "formik";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import {
   fetchCandidatesFields,
   createCandidateCustomView,
+  fetchCandidateCustomViewById,
+  editCandidateCustomViewById,
 } from "../../store/actions";
+import { fetchCandidateForm } from "../../store/candidateForm/action";
+import DualListBox from "react-dual-listbox";
+import { initialValues, schema } from "./constants";
 import { CANDIDATE_MANDATORY_OPTIONS } from "../CandidateListing/candidateListingConstants";
+import { TableFilter, ArrayHelper } from "@workspace/common";
+import "./CandidateCustomView.scss";
 
 function CandidateCustomView() {
   document.title = "Create Candidate Custom View | RTS";
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const filterRef = useRef(null);
+  const [initialValuesState, setInitialValuesState] = useState(initialValues);
   const candidateFields = useSelector(
     (state) => state?.CandidateReducer?.candidatesFields
   );
+  const candidateCustomView = useSelector(
+    (state) => state?.CandidateReducer?.candidateCustomView
+  );
+
+  const candidateCustomViewMeta = useSelector(
+    (state) => state?.CandidateReducer?.candidateCustomViewMeta
+  );
+
+  // Dispatch and get account_account form
+  const form = useSelector((state) => state.CandidateFormReducer.form);
+  useEffect(() => {
+    dispatch(fetchCandidateForm("Candidate_basic_info"));
+  }, []);
+
+  const editId = useParams().id;
+
+  useEffect(() => {
+    if (editId) {
+      dispatch(fetchCandidateCustomViewById(editId));
+    }
+  }, [editId]);
+
   const [selectedOption, setSelectedOption] = useState([]);
-  const [dualListBoxError, setDualListBoxError] = useState(false);
   const [options, setOptions] = useState([]);
+  const [filters, setFilters] = useState([]);
 
   const areOptionsEmpty = () => {
     return !(options && options.length > 0);
@@ -45,34 +75,72 @@ function CandidateCustomView() {
 
   useEffect(() => {
     if (candidateFields?.length > 0) {
+      // Filter out the mandatory options
       const filteredOptions = candidateFields.filter(
-        (field) => !CANDIDATE_MANDATORY_OPTIONS.some(
-          (option) => field?.value.includes(option.value)
-        )
+        (field) =>
+          !CANDIDATE_MANDATORY_OPTIONS.some((option) =>
+            field?.value.includes(option.value)
+          )
       );
       setOptions(filteredOptions);
     }
   }, [candidateFields]);
 
-  const handleSubmit = async (values) => {
-    if (selectedOption.length === 0) {
-      setDualListBoxError(true);
-      return;
-    } else {
-      setDualListBoxError(false);
+  const handleSubmit = async (values, flag) => {
+    if (!flag) return;
+    try {
       const newCustomView = {
         name: values.name,
         type: "Candidate",
-        columnName: selectedOption,
+        columnName: values.columnName || [],
+        filters: filters,
       };
-      dispatch(
-        createCandidateCustomView({
-          payload: newCustomView,
-          navigate: navigate,
-        })
-      );
-    }
+
+      if (editId) {
+        dispatch(
+          editCandidateCustomViewById({
+            editId,
+            payload: newCustomView,
+            navigate: navigate,
+          })
+        );
+      } else {
+        dispatch(
+          createCandidateCustomView({
+            payload: newCustomView,
+            navigate: navigate,
+          })
+        );
+      }
+    } catch (error) {}
   };
+
+  useEffect(() => {
+    if (candidateCustomView && editId) {
+      setInitialValuesState({
+        name: candidateCustomView?.name,
+        columnName: candidateCustomView?.columnName,
+      });
+      setSelectedOption(candidateCustomView?.columnName);
+      setFilters(candidateCustomView?.filters);
+    }
+  }, [candidateCustomView]);
+
+  const formik = useFormik({
+    initialValues: initialValuesState,
+    validationSchema: schema,
+    validateOnChange: false,
+    validateOnBlur: true,
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      const flag = filterRef.current?.validate();
+      handleSubmit(values, flag);
+    },
+  });
+
+  // Sort the account fields by label
+  ArrayHelper.sortArrayObj(candidateFields, "label");
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -81,9 +149,8 @@ function CandidateCustomView() {
             <Col>
               <Breadcrumb>
                 <BreadcrumbItem>
-                  <Link to="/candidates">Candidates</Link>
+                  <Link to="/accounts">All Candidates</Link>
                 </BreadcrumbItem>
-
                 <BreadcrumbItem active>Create Custom View</BreadcrumbItem>
               </Breadcrumb>
             </Col>
@@ -94,66 +161,73 @@ function CandidateCustomView() {
                 <CardHeader>
                   <div className="d-flex flex-column ">
                     <h6 className="fw-bold">Custom View</h6>
-                    <span className="fw-medium">
-                      Personalise your own custom view of your tables here.
-                    </span>
                   </div>
                 </CardHeader>
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={schema}
-                  validateOnChange={false}
-                  validateOnBlur
-                  onSubmit={handleSubmit}
-                >
-                  {({ errors, touched }) => (
-                    <Form>
-                      <CardBody>
-                        <Row>
-                          <Col>
-                            <h6 className="fw-bold">General Information</h6>
-                          </Col>
-                        </Row>
-                        <Row>
+                <form onSubmit={formik.handleSubmit}>
+                  <CardBody>
+                    <Row>
+                      <Col lg={6}>
+                        <Row className="mb-3">
+                          <div className="px-2"></div>
                           <Col lg={4}>
-                            <div className="mb-3">
+                            <div>
                               <Label className="fw-semibold">
-                                Custom View Name
+                                Custom View Name*
                               </Label>
-                              <Field
+                              <input
                                 name="name"
                                 type="text"
                                 placeholder="Enter Custom View Name"
                                 className={`form-control ${
-                                  errors.name && touched.name && "is-invalid"
+                                  formik.errors.name &&
+                                  formik.touched.name &&
+                                  "is-invalid"
                                 }`}
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                               />
-                              {errors.name && touched.name && (
+                              {formik.errors.name && formik.touched.name && (
                                 <FormFeedback typeof="invalid">
-                                  {errors.name}
+                                  {formik.errors.name}
                                 </FormFeedback>
                               )}
                             </div>
                           </Col>
                         </Row>
                         <Row>
+                          {/* Filter Element */}
+                          <TableFilter
+                            fields={candidateFields?.filter(
+                              (field) => field?.sortValue != null
+                            )}
+                            filters={filters}
+                            setFilters={setFilters}
+                            ref={filterRef}
+                            formSchema={form?.formSchema}
+                          />
+                        </Row>
+                      </Col>
+                      <Col lg={6}>
+                        <Row>
                           <Col>
-                            <div className="mb-3">
+                            <div className="mb-3 custom-dual-box">
                               <div className="d-flex flex-column mb-3">
                                 <Label className="fw-semibold">
                                   Custom View Columns
                                 </Label>
                                 <span>
                                   Please select the columns you would like to
-                                  see in the Candidate Listing table.
+                                  see in the Account Listing table.
                                 </span>
                               </div>
                               <DualListBox
                                 options={options ?? []}
                                 selected={selectedOption}
-                                onChange={(newValue) =>
-                                  setSelectedOption(newValue)
-                                }
+                                onChange={(newValue) => {
+                                  setSelectedOption(newValue);
+                                  formik.setFieldValue("columnName", newValue);
+                                }}
                                 showOrderButtons
                                 preserveSelectOrder
                                 icons={{
@@ -205,39 +279,57 @@ function CandidateCustomView() {
                                   ),
                                 }}
                               />
-                              {dualListBoxError && (
-                                <div className="mt-2">
+                              {formik.errors.columnName && (
+                                <div className="mt-1">
                                   <p className="text-danger">
-                                    Please select at least one column name.
+                                    {formik.errors.columnName}
                                   </p>
                                 </div>
                               )}
                             </div>
                           </Col>
                         </Row>
-                      </CardBody>
-                      <CardFooter>
-                        <Row className="justify-content-between">
-                          <Col md="auto">
-                            <Link to="/candidates">
-                              <Button type="button" className="btn btn-danger">
-                                Cancel
-                              </Button>
-                            </Link>
-                          </Col>
-                          <Col md="auto">
-                            <Button
-                              type="submit"
-                              className="btn btn-custom-primary"
-                            >
-                              Create Custom View
-                            </Button>
-                          </Col>
-                        </Row>
-                      </CardFooter>
-                    </Form>
-                  )}
-                </Formik>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                  <CardFooter>
+                    <Row className="justify-content-between">
+                      <Col md="auto">
+                        <Link to="/candidates">
+                          <Button type="button" className="btn btn-danger">
+                            Cancel
+                          </Button>
+                        </Link>
+                      </Col>
+                      <Col md="auto">
+                        <Button
+                          type="button"
+                          className="btn btn-custom-primary"
+                          onClick={async () => {
+                            const formikErrors = await formik.validateForm();
+                            formik.setTouched({ name: true });
+                            const hasFormikErrors =
+                              Object.keys(formikErrors).length > 0;
+                            const flag = filterRef.current?.validate();
+
+                            if (!hasFormikErrors && flag) {
+                              handleSubmit(formik.values, flag);
+                            }
+                            formik.setSubmitting(false);
+                          }}
+                        >
+                          {candidateCustomViewMeta?.isLoading ? (
+                            <Spinner size="sm" color="light" />
+                          ) : editId ? (
+                            "Update Custom View"
+                          ) : (
+                            "Create Custom View"
+                          )}
+                        </Button>
+                      </Col>
+                    </Row>
+                  </CardFooter>
+                </form>
               </Card>
             </Col>
           </Row>

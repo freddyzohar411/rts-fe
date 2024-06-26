@@ -19,6 +19,7 @@ const useTableHook = (
     searchTerm: initialPageRequest?.searchTerm || null,
     searchFields: initialPageRequest?.searchFields,
     allActive: initialPageRequest?.allActive ?? false,
+    filters: null,
   });
 
   const [pageInfo, setPageInfo] = useState({
@@ -36,6 +37,14 @@ const useTableHook = (
   );
 
   const [tableConfig, setTableConfig] = useState();
+
+  // Set Filter data
+  const setFilterData = (filters) => {
+    setPageRequest((prev) => ({
+      ...prev,
+      filters: filters,
+    }));
+  };
 
   // Active Row Logic
   useEffect(() => {
@@ -77,7 +86,7 @@ const useTableHook = (
 
   const setCustomConfigData = (selectedOptGroup) => {
     const newFields = selectedOptGroup?.filter((item) => {
-      if (!mandatoryConfig?.find((opt) => opt.value === item.value)) {
+      if (!mandatoryConfig?.find((opt) => opt?.value === item?.value)) {
         return item;
       }
     });
@@ -211,6 +220,7 @@ const useTableHook = (
       setSortAndDirection,
       setSearchTerm,
       setSearchFields,
+      setFilterData,
     },
     pageInfo,
     setPageInfoData,

@@ -24,6 +24,7 @@ import {
   deleteFOD,
   deleteFODReset,
   createJobFODReset,
+  resetJobList,
 } from "../../store/jobList/action";
 import { cloneJob } from "../../store/job/action";
 import { useUserAuth } from "@workspace/login";
@@ -177,6 +178,9 @@ const JobListing = () => {
   useEffect(() => {
     dispatch(fetchJobListsFields());
     dispatch(fetchUserGroupByName(RECRUITER_GROUP));
+    return () => {
+      dispatch(resetJobList());
+    };
   }, []);
 
   // Fetch the job when the pageRequest changes

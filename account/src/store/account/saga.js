@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery, delay } from "redux-saga/effects";
 import { AccountEntityConstant } from "../../constants/accountConstant";
 
 import {
@@ -15,6 +15,8 @@ import {
   SELECT_ACCOUNT_CUSTOM_VIEW,
   DELETE_ACCOUNT_CUSTOM_VIEW,
   DELETE_ACCOUNTS,
+  FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
 } from "./actionTypes";
 import {
   fetchAccountSuccess,
@@ -44,6 +46,10 @@ import {
   deleteAccountCustomViewFailure,
   deleteAccountsFailure,
   deleteAccountsSuccess,
+  fetchAccountCustomViewByIdFailure,
+  fetchAccountCustomViewByIdSuccess,
+  editAccountCustomViewByIdSuccess,
+  editAccountCustomViewByIdFailure,
 } from "./action";
 import {
   getAccounts,
@@ -59,6 +65,8 @@ import {
   selectAccountCustomView,
   deleteAccountCustomView,
   deleteAccounts,
+  getAccountCustomViewById,
+  editAccountCustomViewById,
 } from "../../helpers/backend_helper";
 import {
   setAccountId,
@@ -219,12 +227,13 @@ function* workCreateAccountCustomView(action) {
       createAccountCustomView,
       payload
     );
+    yield delay(500);
     yield put(createAccountCustomViewSuccess(accountCustomViewResponse));
     toast.success("Account custom view created successfully!");
     navigate("/accounts");
   } catch (error) {
     yield put(createAccountCustomViewFailure(error));
-    if (error.response && error.response.status === 409) {
+    if (error?.code === 409) {
       toast.error("Account custom view name already exists.");
     } else {
       toast.error("Error creating account custom view!");
@@ -272,6 +281,35 @@ function* workDeleteAccounts(action) {
   }
 }
 
+// Fetch Account Custom View By Id
+function* workFetchAccountCustomViewById(action) {
+  try {
+    const response = yield call(getAccountCustomViewById, action.payload);
+    yield put(fetchAccountCustomViewByIdSuccess(response.data));
+  } catch (error) {
+    yield put(fetchAccountCustomViewByIdFailure(error));
+  }
+}
+
+// Edit Account Custom View By Id
+function* workEditAccountCustomViewById(action) {
+  const { editId, payload, navigate } = action.payload;
+  try {
+    const response = yield call(editAccountCustomViewById, editId, payload);
+    yield delay(500);
+    yield put(editAccountCustomViewByIdSuccess(response.data));
+    toast.success("Account custom view updated successfully!");
+    navigate("/accounts");
+  } catch (error) {
+    yield put(editAccountCustomViewByIdFailure(error));
+    if (error?.code === 409) {
+      toast.error("Account custom view name already exists.");
+    } else {
+      toast.error("Error updating account custom view!");
+    }
+  }
+}
+
 export default function* watchFetchAccountSaga() {
   yield takeEvery(POST_ACCOUNT, workPostAccount);
   yield takeEvery(PUT_ACCOUNT, workPutAccount);
@@ -286,4 +324,12 @@ export default function* watchFetchAccountSaga() {
   yield takeEvery(SELECT_ACCOUNT_CUSTOM_VIEW, workSelectAccountCustomView);
   yield takeEvery(DELETE_ACCOUNT_CUSTOM_VIEW, workDeleteAccountCustomView);
   yield takeEvery(DELETE_ACCOUNTS, workDeleteAccounts);
+  yield takeEvery(
+    FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
+    workFetchAccountCustomViewById
+  );
+  yield takeEvery(
+    EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
+    workEditAccountCustomViewById
+  );
 }

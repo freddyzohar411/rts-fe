@@ -19,6 +19,7 @@ import {
   fetchAccountsFields,
   fetchAccountCustomView,
   deleteAccount,
+  resetAccounts,
 } from "../../store/account/action";
 import { DateHelper } from "@workspace/common";
 import { useUserAuth } from "@workspace/login";
@@ -31,7 +32,6 @@ const AccountListing = () => {
   const accountsFields = useSelector(
     (state) => state.AccountReducer.accountsFields
   );
-
   // Table state
   const [tableConfig, setTableConfig] = useState([]);
 
@@ -82,6 +82,9 @@ const AccountListing = () => {
 
   useEffect(() => {
     dispatch(fetchAccountsFields());
+    return () => {
+      dispatch(resetAccounts());
+    };
   }, []);
 
   // Table Hooks

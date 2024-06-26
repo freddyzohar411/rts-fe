@@ -22,6 +22,8 @@ import {
   fetchAccountCustomView,
   selectAccountCustomView,
   deleteAccountCustomView,
+  resetAccountCustomView,
+  resetAccounts,
 } from "../../store/account/action";
 import { DeleteCustomModal } from "@workspace/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -84,6 +86,9 @@ const DynamicTableWrapper = ({
 
   useEffect(() => {
     dispatch(fetchAccountCustomView());
+    return () => {
+      dispatch(resetAccountCustomView());
+    };
   }, []);
 
   const handleSelectCustomView = (id) => {
@@ -95,13 +100,19 @@ const DynamicTableWrapper = ({
     setDeletingCustomViewId(id);
   };
   const handleDeleteCustomView = (id) => {
+    const customView = allAccountCustomViews.find(
+      (view) => view?.id === id
+    );
     dispatch(deleteAccountCustomView({ id: id }));
     setDeleteModalOpen(false);
     setDeletingCustomViewId(null);
+    if (customView?.selected) {
+      enableDefaultView();
+    }
   };
 
   useEffect(() => {
-    if (allAccountCustomViews && allAccountCustomViews.length > 0) {
+    if (allAccountCustomViews != null && allAccountCustomViews.length > 0) {
       const selectedCustomView = allAccountCustomViews?.find(
         (customView) => customView?.selected
       );
@@ -117,14 +128,19 @@ const DynamicTableWrapper = ({
         if (selectedObjects.length > 0) {
           setCustomConfigData(selectedObjects);
         }
+        pageRequestSet.setFilterData(selectedCustomView?.filters);
+      } else {
+        enableDefaultView();
       }
-    } else {
-      setCustomConfigData(ACCOUNT_INITIAL_OPTIONS);
+    }
+    if (allAccountCustomViews != null && allAccountCustomViews.length === 0) {
+      enableDefaultView();
     }
   }, [allAccountCustomViews, optGroup]);
 
   const enableDefaultView = () => {
     setCustomConfigData(ACCOUNT_INITIAL_OPTIONS);
+    pageRequestSet.setFilterData(null);
   };
 
   const handleEportExcel = async () => {
@@ -281,6 +297,16 @@ const DynamicTableWrapper = ({
                                           )}
                                         </div>
                                       </DropdownItem>
+                                      <Link
+                                        to={`/accounts/custom-view/${customView?.id}`}
+                                      >
+                                        <Button
+                                          className="btn btn-sm btn-secondary"
+                                          style={{ height: "29px" }}
+                                        >
+                                          <i className="ri-pencil-line"></i>
+                                        </Button>
+                                      </Link>
                                       <Button
                                         className="btn btn-sm btn-danger"
                                         style={{ height: "29px" }}
@@ -366,7 +392,7 @@ const DynamicTableWrapper = ({
                   data={data}
                   pageRequestSet={pageRequestSet}
                   pageInfo={pageInfo}
-                  isLoading={accountsMeta?.isLoading}
+                  isLoading={accountsMeta?.isLoading ?? true}
                   freezeHeader={true}
                   activeRow={activeRow}
                   setTableConfig={setTableConfig}

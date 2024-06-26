@@ -20,14 +20,12 @@ import { DynamicTable } from "@workspace/common";
 import "./DynamicTableWrapper.scss";
 import { useUserAuth } from "@workspace/login";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchUserGroupByName,
-  fetchJobLists,
-} from "../../store/jobList/action";
+import { fetchJobLists } from "../../store/jobList/action";
 import {
   fetchJobCustomView,
   selectJobCustomView,
   deleteJobCustomView,
+  resetJobCustomView,
 } from "../../store/job/action";
 import { deleteJobs, deleteJobsReset } from "../../store/jobList/action";
 import { DeleteCustomModal } from "@workspace/common";
@@ -88,7 +86,7 @@ const DynamicTableWrapper = ({
   const recruiterGroup = useSelector(
     (state) => state.JobListReducer.recruiterGroup
   );
-  const allJobCustomView = useSelector(
+  const allJobCustomViews = useSelector(
     (state) => state?.JobReducer?.jobCustomViews
   );
   const jobsMeta = useSelector((state) => state.JobListReducer.jobsMeta);
@@ -114,6 +112,9 @@ const DynamicTableWrapper = ({
 
   useEffect(() => {
     dispatch(fetchJobCustomView());
+    return () => {
+      dispatch(resetJobCustomView());
+    };
   }, []);
 
   const handleSelectCustomView = (id) => {
@@ -121,8 +122,8 @@ const DynamicTableWrapper = ({
   };
 
   useEffect(() => {
-    if (allJobCustomView && allJobCustomView.length > 0) {
-      const selectedCustomView = allJobCustomView?.find(
+    if (allJobCustomViews != null && allJobCustomViews.length > 0) {
+      const selectedCustomView = allJobCustomViews?.find(
         (customView) => customView?.selected
       );
       if (
@@ -137,14 +138,20 @@ const DynamicTableWrapper = ({
         if (selectedObjects.length > 0) {
           setCustomConfigData(selectedObjects);
         }
+        pageRequestSet.setFilterData(selectedCustomView?.filters);
       }
-    } else {
-      setCustomConfigData(JOB_INITIAL_OPTIONS);
+      //  else {
+      //   enableDefaultView();
+      // }
     }
-  }, [allJobCustomView, optGroup]);
+    if (allJobCustomViews != null && allJobCustomViews.length === 0) {
+      enableDefaultView();
+    }
+  }, [allJobCustomViews, optGroup]);
 
   const enableDefaultView = () => {
     setCustomConfigData(JOB_INITIAL_OPTIONS);
+    pageRequestSet.setFilterData(null);
   };
 
   const handleDeleteButtonClick = (id) => {
@@ -153,9 +160,13 @@ const DynamicTableWrapper = ({
   };
 
   const handleDeleteCustomView = (id) => {
+    const customView = allJobCustomViews?.find((view) => view?.id === id);
     dispatch(deleteJobCustomView({ id: id }));
     setDeleteModalOpen(false);
     setDeletingCustomViewId(null);
+    if (customView?.selected) {
+      enableDefaultView();
+    }
   };
 
   const toggleNested = (index) => {
@@ -471,9 +482,9 @@ const DynamicTableWrapper = ({
                               <DropdownItem header>
                                 My Custom Views
                               </DropdownItem>
-                              {allJobCustomView &&
-                              allJobCustomView.length > 0 ? (
-                                allJobCustomView?.map((customView, index) => (
+                              {allJobCustomViews &&
+                              allJobCustomViews.length > 0 ? (
+                                allJobCustomViews?.map((customView, index) => (
                                   <div className="d-flex flex-row gap-1 me-2">
                                     <DropdownItem
                                       onClick={() => {
@@ -492,12 +503,22 @@ const DynamicTableWrapper = ({
                                         )}
                                       </div>
                                     </DropdownItem>
+                                    <Link
+                                      to={`/jobs/custom-view/${customView?.id}`}
+                                    >
+                                      <Button
+                                        className="btn btn-sm btn-secondary"
+                                        style={{ height: "29px" }}
+                                      >
+                                        <i className="ri-pencil-line"></i>
+                                      </Button>
+                                    </Link>
                                     <Button
                                       className="btn btn-sm btn-danger"
                                       style={{ height: "29px" }}
-                                      onClick={() =>
-                                        handleDeleteButtonClick(customView?.id)
-                                      }
+                                      onClick={() => {
+                                        handleDeleteButtonClick(customView?.id);
+                                      }}
                                     >
                                       <i className="mdi mdi-delete"></i>
                                     </Button>
@@ -578,7 +599,7 @@ const DynamicTableWrapper = ({
                   data={data}
                   pageRequestSet={pageRequestSet}
                   pageInfo={pageInfo}
-                  isLoading={jobsMeta?.isLoading}
+                  isLoading={jobsMeta?.isLoading ?? true}
                   freezeHeader={true}
                   activeRow={activeRow}
                   setTableConfig={setTableConfig}

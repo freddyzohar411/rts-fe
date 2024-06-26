@@ -16,6 +16,7 @@ import {
   deleteCandidate,
   fetchCandidates,
   fetchCandidatesFields,
+  resetCandidates
 } from "../../store/candidate/action";
 import { useUserAuth } from "@workspace/login";
 import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
@@ -206,6 +207,9 @@ function CandidateListing() {
   // Get all the option groups
   useEffect(() => {
     dispatch(fetchCandidatesFields());
+    return () => {
+      dispatch(resetCandidates());
+    };
   }, []);
 
   // Fetch the candidate when the pageRequest changes

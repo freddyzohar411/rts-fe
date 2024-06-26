@@ -113,6 +113,9 @@ import EmailVariableSelect from "./EmailV2/EmailVariableSelect/EmailVariableSele
 // Import Side drawer
 import SideDrawer from "./PreviewTemplateDrawer/SideDrawer";
 
+// Import Filter
+import TableFilter from "./Filter/TableFilter";
+
 export {
   BreadCrumb,
   getChartColorsArray,
@@ -220,4 +223,7 @@ export {
 
   // Side Drawer
   SideDrawer,
+
+  // Filter
+  TableFilter,
 };

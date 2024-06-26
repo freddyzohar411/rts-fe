@@ -95,6 +95,7 @@ const JobManage = () => {
                     flex: "0 0 calc(100% / 7)",
                     maxWidth: "calc(100% / 7)",
                     paddingBottom: "10px",
+                    paddingRight: "5px"
                   }}
                 >
                   <div
