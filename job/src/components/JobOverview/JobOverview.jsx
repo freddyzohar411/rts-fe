@@ -419,9 +419,22 @@ const JobOverview = ({ onRetrieveHeader, onTimelineFullScreen }) => {
     }
   }, [activeStep, originalOrder]);
 
-  const toggleJobOpen = (index) => {
-    setOpenJobIndex(openJobIndex === index ? null : index);
+  const [prevOpenedIndex, setPrevOpenedIndex] = useState(null);
+  const toggleJobOpen = (dataIndex, index) => {
+    setOpenJobIndex(openJobIndex === dataIndex ? null : dataIndex);
+    setPrevOpenedIndex(index - 1);
   };
+
+  const [isTimelineOpen, setIsTimelineOpen] = useState(false);
+
+  useEffect(() => {
+    if (openJobIndex !== null) {
+      setIsTimelineOpen(true);
+    } else {
+      setIsTimelineOpen(false);
+      setPrevOpenedIndex(null);
+    }
+  }, [openJobIndex]);
 
   const [isBrsModalOpen, setIsBrsModalOpen] = useState(false);
 
@@ -752,9 +765,20 @@ const JobOverview = ({ onRetrieveHeader, onTimelineFullScreen }) => {
               maxOrder = 5;
             }
 
+            const isSelectedItem = openJobIndex === data.id;
+
             return (
               <>
-                <tr className="cursor-pointer" key={timelineIndex}>
+                <tr
+                  className={`cursor-pointer ${
+                    isSelectedItem
+                      ? "selected-candidate-top"
+                      : prevOpenedIndex === timelineIndex
+                      ? "selected-candidate-prev"
+                      : null
+                  }`}
+                  key={timelineIndex}
+                >
                   {/* Candidate */}
                   <td
                     style={{
@@ -839,7 +863,7 @@ const JobOverview = ({ onRetrieveHeader, onTimelineFullScreen }) => {
                     style={{
                       width: "300px",
                     }}
-                    onClick={() => toggleJobOpen(data.id)}
+                    onClick={() => toggleJobOpen(data.id, timelineIndex)}
                   >
                     <OverviewStepComponent data={data} />
                   </td>
@@ -946,8 +970,8 @@ const JobOverview = ({ onRetrieveHeader, onTimelineFullScreen }) => {
                     </button>
                   </td>
                 </tr>
-                {openJobIndex === data.id && (
-                  <tr>
+                {isSelectedItem && (
+                  <tr className="selected-candidate-bottom">
                     <td colSpan={10} className="px-1 custom-border-bottom">
                       <InnerTimelineStep
                         data={data.timeline}
@@ -1734,12 +1758,16 @@ const JobOverview = ({ onRetrieveHeader, onTimelineFullScreen }) => {
             <TabPane tabId="1">
               <div className="overflow-auto">
                 <Table>
-                  <thead className="bg-white main-border-style">
+                  <thead className="bg-white">
                     <tr>
                       {newHeaders.map((header, index) => (
                         <td
                           key={index}
-                          className="main-border-style cursor-pointer main-table-header-text"
+                          className={`main-border-style cursor-pointer main-table-header-text ${
+                            prevOpenedIndex === -1
+                              ? "selected-candidate-prev"
+                              : null
+                          }`}
                           onClick={() => handleSort(index)}
                         >
                           {header.name} <i className={header.icon}></i>
