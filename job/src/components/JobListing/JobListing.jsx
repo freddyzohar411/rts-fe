@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingOverlay from "react-loading-overlay";
+import { RiInformationFill } from "react-icons/ri";
 import { Badge, Input, DropdownItem } from "reactstrap";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import "./JobListing.scss";
@@ -31,6 +32,8 @@ import JobTagCanvas from "./JobTagCanvas";
 import "simplebar/dist/simplebar.min.css";
 import ActionDropDown from "@workspace/common/src/Components/DynamicTable/Components/ActionDropDown";
 import { generateId } from "@workspace/common/src/helpers/generate_id_helper";
+import ShowCountModal from "@workspace/common/src/Components/ShowCountModal/ShowCountModal";
+import { fetchJobtimeineCount } from "../../store/actions";
 
 const JobListing = () => {
   const { Permission, checkAllPermission, checkAnyRole, Role } = useUserAuth();
@@ -39,10 +42,6 @@ const JobListing = () => {
   const { jobType } = useParams();
   const jobsData = useSelector((state) => state.JobListReducer.jobs);
   const jobsFields = useSelector((state) => state?.JobListReducer?.jobsFields);
-
-  const recruiterGroup = useSelector(
-    (state) => state.JobListReducer.recruiterGroup
-  );
   const jobFODMeta = useSelector((state) => state.JobListReducer.jobFODMeta);
   const deleteFODMeta = useSelector(
     (state) => state.JobListReducer.deleteFODMeta
@@ -59,6 +58,7 @@ const JobListing = () => {
   // Delete modal states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [countJobId, setCountJobId] = useState(null);
 
   // Placeholder Recruiter Name List
   const [tagOffcanvas, setTagOffcanvas] = useState(false);
@@ -67,6 +67,9 @@ const JobListing = () => {
   // Action Loader State
   const [isActionLoadingId, setIsActionLoadingId] = useState(null);
   const isCloneJobLoading = useSelector((state) => state.JobReducer.loading);
+
+  // Show modal states
+  const [showCountModalOpen, setShowCountModalOpen] = useState(false);
 
   const hasPageRendered = useRef(false);
 
@@ -94,12 +97,22 @@ const JobListing = () => {
       names: ["jobSubmissionData.jobTitle"],
       render: (data) => {
         return (
-          <Link
-            to={`/jobs/${data.id}/snapshot`}
-            className="text-custom-primary text-decoration-underline"
-          >
-            <span>{data?.jobSubmissionData?.jobTitle}</span>
-          </Link>
+          <>
+            <Link
+              to={`/jobs/${data.id}/snapshot`}
+              className="text-custom-primary text-decoration-underline"
+            >
+              <span>{data?.jobSubmissionData?.jobTitle}</span>
+            </Link>
+            <span
+              className="info-icon"
+              onClick={() => {
+                handleInfoIconClick(data?.id);
+              }}
+            >
+              <RiInformationFill size={18} />
+            </span>
+          </>
         );
       },
     },
@@ -206,6 +219,12 @@ const JobListing = () => {
     }
   }, [jobFODMeta]);
 
+  useEffect(() => {
+    if (countJobId) {
+      dispatch(fetchJobtimeineCount({ jobId: countJobId }));
+    }
+  }, [countJobId]);
+
   const handleTableViewChange = (e) => {
     setGridView(e.target.value);
     setActiveJob([]);
@@ -266,6 +285,12 @@ const JobListing = () => {
       dispatch(deleteJobList({ deleteId, isDraft: false }));
       setIsDeleteModalOpen(false);
     }
+  };
+
+  // Modal ShowCount
+  const handleInfoIconClick = (jobId) => {
+    setShowCountModalOpen(true);
+    setCountJobId(jobId);
   };
 
   //========================== User Setup ============================
@@ -451,6 +476,13 @@ const JobListing = () => {
           isFOD ? "fod" : "job"
         }?`}
       />
+
+      <ShowCountModal
+        isOpen={showCountModalOpen}
+        closeModal={() => setShowCountModalOpen(false)}
+        jobData={jobsData?.jobs?.find((it) => it?.id === countJobId) ?? null}
+      />
+
       <DynamicTableWrapper
         data={jobsData?.jobs ?? []}
         config={tableConfig}
