@@ -47,7 +47,7 @@ const initialState = {
   jobUntagMeta: {},
   jobTimeline: {},
   jobTimelineMeta: {},
-  jobTimelineCount: {},
+  jobTimelineCount: [],
   jobTimelineCountMeta: {},
   updateBillrateMeta: {},
   jobTimelineFormSubmission: null,
@@ -76,7 +76,7 @@ const JobStageReducer = (state = initialState, action) => {
       return {
         ...state,
         jobTagMeta: {},
-        jobAllTagMeta: {}
+        jobAllTagMeta: {},
       };
 
     // tag all job
@@ -142,6 +142,7 @@ const JobStageReducer = (state = initialState, action) => {
     case JOB_TIMELINE_COUNT:
       return {
         ...state,
+        jobTimelineCount: [],
         jobTimelineCountMeta: pendingMetaData(),
       };
     case JOB_TIMELINE_COUNT_SUCCESS:
@@ -153,7 +154,7 @@ const JobStageReducer = (state = initialState, action) => {
     case JOB_TIMELINE_COUNT_FAILURE:
       return {
         ...state,
-        jobTimelineCount: {},
+        jobTimelineCount: [],
         jobTimelineCountMeta: errorMetaData(action.payload),
       };
     case TAG_JOB_ATTACHMENT:
