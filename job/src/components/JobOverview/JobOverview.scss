@@ -1,98 +1,113 @@
 .table-card {
-    margin: 0rem 0rem;
+  margin: 0rem 0rem;
 }
 
-.jobtimeline thead>tr>th:first-child {
-    position: sticky !important;
-    left: 0;
+.jobtimeline thead > tr > th:first-child {
+  position: sticky !important;
+  left: 0;
 }
 
-.jobtimeline thead>tr>th:nth-child(2) {
-    position: sticky !important;
-    width: 120px;
-    left: 120px;
+.jobtimeline thead > tr > th:nth-child(2) {
+  position: sticky !important;
+  width: 120px;
+  left: 120px;
 }
 
-.jobtimeline tbody>tr>td:first-child {
-    position: sticky !important;
-    left: 0;
-    background: #ffffff;
+.jobtimeline tbody > tr > td:first-child {
+  position: sticky !important;
+  left: 0;
+  background: #ffffff;
 }
 
-.jobtimeline tbody>tr>td:nth-child(2) {
-    position: sticky !important;
-    width: 120px;
-    left: 120px;
-    background: #ffffff;
+.jobtimeline tbody > tr > td:nth-child(2) {
+  position: sticky !important;
+  width: 120px;
+  left: 120px;
+  background: #ffffff;
 }
 
 .withdrawn {
-    background-color: #AA00FF;
-    border: #AA00FF;
+  background-color: #aa00ff;
+  border: #aa00ff;
 }
 
 .nav-pills .nav-link.active {
-    background-color: #0A56AE; 
-    color: #fefefe;
-    font-weight: 500;
+  background-color: #0a56ae;
+  color: #fefefe;
+  font-weight: 500;
 }
 .nav-pills .nav-link {
-    background-color: #fefefe;
-    color: #000000; 
+  background-color: #fefefe;
+  color: #000000;
 }
 
 .main-border-style {
-    border-style: solid;
-    border-width: 1px;
-    border-color: lightgray;
+  border-style: solid;
+  border-width: 1px;
+  border-color: lightgray;
 }
 
 .billrate-container {
-    display: flex;
-    align-items: top;
-    justify-content: space-between;
+  display: flex;
+  align-items: top;
+  justify-content: space-between;
 }
 
 .billrate-container:hover > .billrate-button {
-    visibility: visible;
+  visibility: visible;
 }
 
 .billrate-button {
-    visibility: hidden;
-    border-radius: 0;
-    color: #000000;
-    background-color: #E7EEF7;
-    height: 100%;
-    border-radius: 8px;
+  visibility: hidden;
+  border-radius: 0;
+  color: #000000;
+  background-color: #e7eef7;
+  height: 100%;
+  border-radius: 8px;
 }
 
 .billrate-button:hover {
-    background-color: #E7EEF7;
+  background-color: #e7eef7;
 }
 
 .billrate-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
 .billrate-amt {
-    font-size: 12px;
-    white-space: nowrap;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 @media (min-width: 1024px) {
-    .station-title {
-        font-size: 10px;
-    }
+  .station-title {
+    font-size: 10px;
+  }
 
-    .substation-title {
-        font-weight: 500;
-        font-size: 12px;
-    }
+  .substation-title {
+    font-weight: 500;
+    font-size: 12px;
+  }
 
-    .main-table-header-text {
-        font-size: 12px;
-        vertical-align: top;
-    }
+  .main-table-header-text {
+    font-size: 12px;
+    vertical-align: top;
+  }
+}
+
+.selected-candidate-bottom,
+.selected-candidate-prev {
+  border-bottom: 1px solid #0a56ae !important;
+}
+
+.selected-candidate-top {
+  border-top: 1px solid #0a56ae !important;
+}
+
+.selected-candidate-bottom,
+.selected-candidate-top {
+  border-left: 1px solid #0a56ae;
+  border-right: 1px solid #0a56ae;
 }
