@@ -558,15 +558,6 @@ const EditorElement2 = ({
     return content.replace(/[\u00A0\u200B\u200C\u200D\u202F\uFEFF]/g, " ");
   }
 
-  // Code to identify the character codes of the content (For debugging purposes)
-  // function logCharacterCodes(content) {
-  //   let codes = [];
-  //   for (let i = 0; i < content.length; i++) {
-  //     codes.push(content.charCodeAt(i));
-  //   }
-  //   console.log("Character Codes: ", codes);
-  // }
-
   return (
     <>
       <EditorDataAttributeModal

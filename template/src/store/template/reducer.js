@@ -24,6 +24,9 @@ import {
   FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY,
   FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY_SUCCESS,
   FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY_FAILURE,
+  FETCH_SINGLE_TEMPLATE_BY_CATEGORY,
+  FETCH_SINGLE_TEMPLATE_BY_CATEGORY_SUCCESS,
+  FETCH_SINGLE_TEMPLATE_BY_CATEGORY_FAILURE,
 } from "./actionTypes";
 import { JsonHelper } from "@workspace/common";
 
@@ -176,18 +179,21 @@ const TemplateReducer = (state = initialState, action) => {
         errorMsg: action.payload,
       };
     case FETCH_TEMPLATE_BY_CATEGORY:
+    case FETCH_SINGLE_TEMPLATE_BY_CATEGORY:
       return {
         ...state,
         loading: true,
         error: false,
       };
     case FETCH_TEMPLATE_BY_CATEGORY_SUCCESS:
+    case FETCH_SINGLE_TEMPLATE_BY_CATEGORY_SUCCESS:
       return {
         ...state,
         loading: false,
         templatesByCategory: action.payload,
       };
     case FETCH_TEMPLATE_BY_CATEGORY_FAILURE:
+    case FETCH_SINGLE_TEMPLATE_BY_CATEGORY_FAILURE:
       return {
         ...state,
         loading: false,

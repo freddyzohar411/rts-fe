@@ -72,7 +72,7 @@ const ForgetPasswordPage = (props) => {
   // Inside your component
   const { forgetError, forgetSuccessMsg } = useSelector(selectLayoutProperties);
 
-  document.title = "Reset Password | RTS";
+  document.title = "Forget Password | RTS";
 
   return (
     <ParticlesAuth>
