@@ -12,7 +12,7 @@ import {
   ForgetPassword,
   ResetPassword,
   ForgetResetPassword,
-  LoginOTP
+  LoginOTP,
 } from "@workspace/login";
 
 // Account
@@ -31,6 +31,7 @@ import {
   CreateCandidateOptions,
   CandidateResumeParse,
   CandidateCustomView,
+  CandidateStaticReport,
 } from "@workspace/candidate";
 
 // Job
@@ -110,6 +111,7 @@ const authProtectedRoutes = [
   },
   { path: "/candidates/custom-view", component: <CandidateCustomView /> },
   { path: "/candidates/custom-view/:id", component: <CandidateCustomView /> },
+  { path: "/candidates/job-report", component: <CandidateStaticReport /> },
 
   // Account
   {

@@ -1,0 +1,109 @@
+.candidate-static-title {
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.sticky-static-candidate-header {
+  background-color: #fff;
+  padding: 1rem 1rem 0.25rem 1rem;
+  margin-top: -1.5rem;
+  margin-right: calc(-1.5rem * 0.5);
+  margin-left: calc(-1.5rem * 0.5);
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.031);
+}
+
+.static-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.static-grid-item {
+  flex: 1 1 20%;
+  max-width: 20%; 
+  box-sizing: border-box; 
+  padding: 0.4rem;
+  padding-left: 0;
+}
+
+.static-header-count {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #0a56ae;
+}
+.static-header-title {
+  font-weight: 400;
+  color: gray;
+  font-size: 12.5px;
+}
+
+.static-table-header-item {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.candidate-static-filter-offcanvas {
+  width: 25vw;
+  border: 1px solid transparent;
+}
+
+.csf-title {
+  font-weight: 500;
+  font-size: 17px;
+}
+
+.csf-apply {
+  border: 1px solid #0a56ae;
+  background-color: #0a56ae;
+  border-radius: 0;
+  color: #FFF;
+  font-weight: 500;
+}
+.csf-clear {
+  border: 1px solid #0a56ae;
+  background-color: #FFF;
+  border-radius: 0;
+  color: #0a56ae;
+  font-weight: 500;
+}
+
+/* Responsive adjustments for smaller screens */
+// @media (max-width: 1200px) {
+//   .static-grid-item {
+//     flex: 1 1 33.33%; /* 3 columns per row for larger tablets */
+//     max-width: 33.33%;
+//   }
+// }
+
+// @media (max-width: 992px) {
+//   .static-grid-item {
+//     flex: 1 1 50%; /* 2 columns per row for smaller tablets */
+//     max-width: 50%;
+//   }
+// }
+
+// @media (max-width: 576px) {
+//   .static-grid-item {
+//     flex: 1 1 100%; /* 1 column per row for mobile devices */
+//     max-width: 100%;
+//   }
+// }
+
+@media (min-width: 1366px) {
+  .static-header-count {
+    font-size: 15px;
+  }
+
+  .static-header-title {
+    font-size: 14px;
+  }
+
+  .static-table-header-item {
+    font-size: 14px;
+  }
+
+  .candidate-static-title {
+    font-size: 18px;
+  }
+}

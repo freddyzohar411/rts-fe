@@ -29,6 +29,8 @@ import {
   DELETE_CANDIDATES,
   FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
+  FETCH_CANDIDATE_STATIC_REPORT_COUNT,
+  FETCH_CANDIDATE_STATIC_REPORT_LISTING,
   UNSELECT_CANDIDATE_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
@@ -77,6 +79,12 @@ import {
   fetchCandidateCustomViewByIdSuccess,
   editCandidateCustomViewByIdSuccess,
   editCandidateCustomViewByIdFailure,
+  fetchCandidateStaticReportCount,
+  fetchCandidateStaticReportListing,
+  fetchCandidateStaticReportCountSuccess,
+  fetchCandidateStaticReportCountFailure,
+  fetchCandidateStaticReportListingFailure,
+  fetchCandidateStaticReportListingSuccess,
   unselectCandidateCustomViewFailure,
   unselectCandidateCustomViewSuccess,
 } from "./action";
@@ -100,6 +108,8 @@ import {
   deleteCandidates,
   getCandidateCustomViewById,
   editCandidateCustomViewById,
+  getCandidateStaticReportCount,
+  getCandidateStaticReportListing,
   unSelectAllCandidateCustomView
 } from "../../helpers/backend_helper";
 import {
@@ -646,6 +656,27 @@ function* workEditCandidateCustomViewById(action) {
   }
 }
 
+function* workFetchCandidateStaticReportCount(action) {
+  try {
+    const response = yield call(getCandidateStaticReportCount, action.payload);
+    yield put(fetchCandidateStaticReportCountSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCandidateStaticReportCountFailure(error));
+  }
+}
+
+function* workFetchCandidateStaticReportListing(action) {
+  try {
+    const response = yield call(
+      getCandidateStaticReportListing,
+      action.payload
+    );
+    yield put(fetchCandidateStaticReportListingSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCandidateStaticReportListingFailure(error));
+  }
+}
+
 // Unselect Custom View
 function* workUnselectCandidateCustomView() {
   try {
@@ -687,6 +718,14 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(
     EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
     workEditCandidateCustomViewById
+  );
+  yield takeEvery(
+    FETCH_CANDIDATE_STATIC_REPORT_COUNT,
+    workFetchCandidateStaticReportCount
+  );
+  yield takeEvery(
+    FETCH_CANDIDATE_STATIC_REPORT_LISTING,
+    workFetchCandidateStaticReportListing
   );
   yield takeEvery(
     UNSELECT_CANDIDATE_CUSTOM_VIEW,
