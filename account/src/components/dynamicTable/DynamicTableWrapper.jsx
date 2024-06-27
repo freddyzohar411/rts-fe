@@ -130,7 +130,7 @@ const DynamicTableWrapper = ({
         }
         pageRequestSet.setFilterData(selectedCustomView?.filters);
         setDefaultViewEnabled(false);
-      } else {
+      } else if (!selectedCustomView) {
         enableDefaultView();
       }
     }
