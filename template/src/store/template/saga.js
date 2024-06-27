@@ -9,6 +9,7 @@ import {
   FETCH_TEMPLATE_CATEGORIES,
   FETCH_TEMPLATE_BY_CATEGORY,
   FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY,
+  FETCH_SINGLE_TEMPLATE_BY_CATEGORY,
 } from "./actionTypes";
 import {
   fetchTemplatesSuccess,
@@ -27,6 +28,8 @@ import {
   fetchTemplateByCategoryFailure,
   fetchTemplateByCategoryAndSubCategorySuccess,
   fetchTemplateByCategoryAndSubCategoryFailure,
+  fetchSingleTemplateByCategorySuccess,
+  fetchSingleTemplateByCategoryFailure,
 } from "./action";
 import {
   createTemplate,
@@ -113,6 +116,17 @@ function* workFetchTemplateByCategory(action) {
   }
 }
 
+function* workFetchSingleTemplateByCategory(action) {
+  try {
+    const { category, template } = action.payload;
+    const response = yield call(getTemplatesByCategory, category);
+    const data = response?.data?.filter((ob) => ob?.name === template) ?? [];
+    yield put(fetchSingleTemplateByCategorySuccess(data));
+  } catch (error) {
+    yield put(fetchSingleTemplateByCategoryFailure(error));
+  }
+}
+
 function* workFetchTemplateByCategorySubcategory(action) {
   try {
     const response = yield call(
@@ -134,6 +148,10 @@ export default function* watchFetchTemplatesSaga() {
   yield takeEvery(FETCH_TEMPLATE, workFetchTemplate);
   yield takeEvery(FETCH_TEMPLATE_CATEGORIES, workFetchTemplateCategories);
   yield takeEvery(FETCH_TEMPLATE_BY_CATEGORY, workFetchTemplateByCategory);
+  yield takeEvery(
+    FETCH_SINGLE_TEMPLATE_BY_CATEGORY,
+    workFetchSingleTemplateByCategory
+  );
   yield takeEvery(
     FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY,
     workFetchTemplateByCategorySubcategory

@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Button, Spinner } from "reactstrap";
 import { SideDrawer } from "@workspace/common";
 import {
   TemplateSelectByCategoryElement,
   TemplateDisplayV3,
   UseTemplateModuleDataHook,
-  ExportHelper,
   TemplateHelper,
-  FileHelper,
   PageSettingViewBackend,
 } from "@workspace/common";
 
@@ -15,10 +13,9 @@ const TemplatePreviewSideDrawer = ({
   showSideDrawer,
   setShowSideDrawer,
   templatePreviewInfo,
-  candidateId,
-  jobId,
   templatePreviewAction = null,
   jobTimeLineData,
+  fetchSingleTemplate,
 }) => {
   const { allModuleData, isAllLoading } =
     UseTemplateModuleDataHook.useTemplateModuleData({
@@ -171,6 +168,7 @@ const TemplatePreviewSideDrawer = ({
             width="250px"
             end
             value={templatePreviewInfo}
+            fetchSingleTemplate={fetchSingleTemplate}
           />
         </div>
       }

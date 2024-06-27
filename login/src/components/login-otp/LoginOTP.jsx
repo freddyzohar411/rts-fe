@@ -99,7 +99,7 @@ const LoginOTP = (props) => {
     handleTimer(30, 1000);
   };
 
-  document.title = "Reset Password | RTS";
+  document.title = "Enter OTP | RTS";
 
   return (
     <ParticlesAuth>

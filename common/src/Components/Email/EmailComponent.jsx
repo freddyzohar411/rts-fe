@@ -28,8 +28,6 @@ import { ObjectHelper } from "@workspace/common";
 import { FileHelper } from "@workspace/common";
 import { setEmailClose, resetSendEmail } from "../../store/email/action";
 import * as ExportHelper from "../../helpers/export_helper";
-import TemplatePreviewModal from "../TemplateDisplay/TemplatePreviewModal/TemplatePreviewModal";
-import { generateOptions } from "./pdfOption";
 import TemplateAdvanceExportModal from "../TemplateDisplay/TemplateAdvanceExportModal/TemplateAdvanceExportModal";
 import * as BackendHelper from "../../helpers/backend_helper";
 import "./EmailComponent.scss";
@@ -37,12 +35,9 @@ import "./EmailComponent.scss";
 function EmailComponent() {
   const dispatch = useDispatch();
   const attachmentRef = useRef(null);
-  const [modal, setModal] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [emailContent, setEmailContent] = useState("");
   const [isMinimized, setIsMinimized] = useState(false);
-  const [formInitialValues, setFormInitialValues] = useState(initialValues);
-  const [formSchema, setFormSchema] = useState(schema);
   const [templateData, setTemplateData] = useState(null);
   const [attachments, setAttachments] = useState([]);
   const [attachmentTemplateSelected, setAttachmentTemplateSelected] =
@@ -108,8 +103,8 @@ function EmailComponent() {
    */
   const formik = useFormik({
     enableReinitialize: true,
-    initialValues: formInitialValues,
-    validationSchema: formSchema,
+    initialValues: initialValues,
+    validationSchema: schema,
     validateOnBlur: true,
     onSubmit: handleFormSubmit,
   });
@@ -462,7 +457,6 @@ function EmailComponent() {
                         formik.resetForm();
                         setTemplateData(null);
                         setAttachments([]);
-                        setModal(false);
                         dispatch(setEmailClose());
                       }}
                     >
@@ -562,7 +556,6 @@ function EmailComponent() {
                             return;
                           }
                           formik.handleSubmit();
-                          setModal(false);
                         }}
                         disabled={loading}
                       >

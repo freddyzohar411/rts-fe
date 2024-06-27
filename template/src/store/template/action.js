@@ -24,6 +24,9 @@ import {
   FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY,
   FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY_SUCCESS,
   FETCH_TEMPLATE_BY_CATEGORY_SUBCATEGORY_FAILURE,
+  FETCH_SINGLE_TEMPLATE_BY_CATEGORY,
+  FETCH_SINGLE_TEMPLATE_BY_CATEGORY_SUCCESS,
+  FETCH_SINGLE_TEMPLATE_BY_CATEGORY_FAILURE,
 } from "./actionTypes";
 
 // Fetch templates
@@ -139,6 +142,22 @@ export const fetchTemplateByCategorySuccess = (templates) => ({
 
 export const fetchTemplateByCategoryFailure = (error) => ({
   type: FETCH_TEMPLATE_BY_CATEGORY_FAILURE,
+  payload: error,
+});
+
+// Fetch template by category
+export const fetchSingleTemplateByCategory = (category) => ({
+  type: FETCH_SINGLE_TEMPLATE_BY_CATEGORY,
+  payload: category,
+});
+
+export const fetchSingleTemplateByCategorySuccess = (templates) => ({
+  type: FETCH_SINGLE_TEMPLATE_BY_CATEGORY_SUCCESS,
+  payload: templates,
+});
+
+export const fetchSingleTemplateByCategoryFailure = (error) => ({
+  type: FETCH_SINGLE_TEMPLATE_BY_CATEGORY_FAILURE,
   payload: error,
 });
 
