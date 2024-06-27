@@ -23,8 +23,9 @@ function DynamicTableWrapper(
   setTableConfig
 ) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const toggleFilter = () => setIsFilterOpen(!isFilterOpen);
-  console.log("isFilterOpen", isFilterOpen)
+  const staticReportMeta = useSelector(
+    (state) => state?.CandidateReducer?.staticReportMeta
+  );
 
   return (
     <React.Fragment>
@@ -77,7 +78,7 @@ function DynamicTableWrapper(
                 data={data.data}
                 pageRequestSet={data.pageRequestSet}
                 pageInfo={data.pageInfo}
-                // isLoading={candidateMeta?.isLoading ?? true}
+                isLoading={staticReportMeta?.isLoading ?? true}
                 freezeHeader={true}
                 activeRow={data.activeRow}
                 setTableConfig={data.setTableConfig}
