@@ -53,14 +53,15 @@
   font-size: 17px;
 }
 
-.csf-apply {
+.csf-apply, .csf-clear:hover {
   border: 1px solid #0a56ae;
   background-color: #0a56ae;
   border-radius: 0;
   color: #FFF;
   font-weight: 500;
 }
-.csf-clear {
+
+.csf-clear, .csf-apply:hover {
   border: 1px solid #0a56ae;
   background-color: #FFF;
   border-radius: 0;

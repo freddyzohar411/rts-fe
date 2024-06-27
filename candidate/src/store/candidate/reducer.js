@@ -97,6 +97,7 @@ const initialState = {
   createMeta: {},
   updateMeta: {},
   deleteMeta: {},
+
   tableMeta: {},
   importLoading: false,
   importMultiLoading: false,
@@ -109,6 +110,7 @@ const initialState = {
   deleteCandidatesMeta: {},
   candidateStaticReportCount: [],
   candidateStaticReportListing: [],
+  staticReportMeta: {},
 };
 
 const CandidateReducer = (state = initialState, action) => {
@@ -565,21 +567,19 @@ const CandidateReducer = (state = initialState, action) => {
     case FETCH_CANDIDATE_STATIC_REPORT_LISTING:
       return {
         ...state,
-        loading: true,
-        error: false,
+        staticReportMeta: pendingMetaData(),
       };
     case FETCH_CANDIDATE_STATIC_REPORT_LISTING_SUCCESS:
       return {
         ...state,
-        loading: false,
+        staticReportMeta: successMetaData(action.payload),
         candidateStaticReportListing: action.payload,
       };
     case FETCH_CANDIDATE_STATIC_REPORT_LISTING_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMsg: action.payload,
+        candidateStaticReportListing: [],
+        staticReportMeta: errorMetaData(action.payload),
       };
     case UNSELECT_CANDIDATE_CUSTOM_VIEW:
       return {
