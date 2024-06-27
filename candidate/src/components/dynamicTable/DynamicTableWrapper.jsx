@@ -109,8 +109,6 @@ const DynamicTableWrapper = ({
     }
   };
 
-  // console.log("allCandidateCustomViews", allCandidateCustomViews);
-
   useEffect(() => {
     if (allCandidateCustomViews != null && allCandidateCustomViews.length > 0) {
       const selectedCustomView = allCandidateCustomViews?.find(
