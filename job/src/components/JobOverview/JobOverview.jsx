@@ -172,6 +172,8 @@ const JobOverview = ({ onRetrieveHeader, onTimelineFullScreen }) => {
     (state) => state.JobStageReducer.updateBillrateMeta
   );
 
+  console.log("jobTimelineData", jobTimelineData);
+
   // Custom renders
   const customRenderList = [
     {
