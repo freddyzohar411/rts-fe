@@ -10,6 +10,7 @@ const TemplateSelectByCategoryElement = ({
   width = "auto",
   end, // Justify content end
   value, // Use this to set a value
+  fetchSingleTemplate,
   ...props
 }) => {
   const dispatch = useDispatch();
@@ -53,7 +54,16 @@ const TemplateSelectByCategoryElement = ({
     }
     if (categoryName) {
       setTemplateSelected("");
-      dispatch(TemplateActions.fetchTemplateByCategory(categoryName));
+      if (fetchSingleTemplate?.template) {
+        dispatch(
+          TemplateActions.fetchSingleTemplateByCategory({
+            category: "Email Templates",
+            template: "Associate",
+          })
+        );
+      } else {
+        dispatch(TemplateActions.fetchTemplateByCategory(categoryName));
+      }
       return;
     }
   }, [categoryName]);

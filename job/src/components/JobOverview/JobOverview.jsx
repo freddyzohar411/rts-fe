@@ -1824,9 +1824,11 @@ const JobOverview = ({ onRetrieveHeader, onTimelineFullScreen }) => {
             setShowSideDrawer={setIsViewTemplate}
             templatePreviewInfo={templatePreviewInfo}
             templatePreviewAction={templatePreviewAction}
-            candidateId={candidateId}
-            jobId={jobId}
             jobTimeLineData={jobTimelineData?.jobs?.[timelineRowIndex]}
+            fetchSingleTemplate={{
+              category: "Email Templates",
+              template: "Associate",
+            }}
           />
         </Offcanvas>
 

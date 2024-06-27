@@ -559,15 +559,6 @@ const EditorElement2 = ({
     return content
   }
 
-  // Code to identify the character codes of the content (For debugging purposes)
-  // function logCharacterCodes(content) {
-  //   let codes = [];
-  //   for (let i = 0; i < content.length; i++) {
-  //     codes.push(content.charCodeAt(i));
-  //   }
-  //   console.log("Character Codes: ", codes);
-  // }
-
   return (
     <>
       <EditorDataAttributeModal
