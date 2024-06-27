@@ -177,3 +177,7 @@ export const getJobCustomViewById = (id) =>
 // Edit Custom View By id
 export const editJobCustomViewById = (id, data) =>
   api.create(`${JOB_URL}${BASE_JOBS}/customView/edit/${id}`, data);
+
+// Unselect all job custom View
+export const unSelectAllJobCustomView = () =>
+  api.put(`${JOB_URL}${BASE_JOBS}/customView/unselect-all`);

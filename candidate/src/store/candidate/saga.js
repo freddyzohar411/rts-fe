@@ -651,7 +651,7 @@ function* workUnselectCandidateCustomView() {
   try {
     yield call(unSelectAllCandidateCustomView);
     yield put(unselectCandidateCustomViewSuccess());
-    toast.success("Candidate custom view unselected successfully!");
+    toast.success("Candidate default custom view selected");
   } catch (error) {
     yield put(unselectCandidateCustomViewFailure(error));
     toast.error("Error unselecting candidate custom view!");

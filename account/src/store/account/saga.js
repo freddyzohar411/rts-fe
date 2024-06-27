@@ -319,7 +319,7 @@ function* workUnselectAccountCustomView() {
   try {
     yield call(unselectAllCustomView);
     yield put(unselectAccountCustomViewSuccess());
-    toast.success("Account custom view unselected successfully!");
+    toast.success("Account default custom view  selected");
   } catch (error) {
     yield put(unselectAccountCustomViewFailure(error));
     toast.error("Error unselecting account custom view!");

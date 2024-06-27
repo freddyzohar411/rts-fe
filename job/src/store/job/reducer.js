@@ -45,6 +45,9 @@ import {
   EDIT_JOB_CUSTOM_VIEW_BY_ID,
   EDIT_JOB_CUSTOM_VIEW_BY_ID_SUCCESS,
   EDIT_JOB_CUSTOM_VIEW_BY_ID_FAILURE,
+  UNSELECT_JOB_CUSTOM_VIEW,
+  UNSELECT_JOB_CUSTOM_VIEW_FAILURE,
+  UNSELECT_JOB_CUSTOM_VIEW_SUCCESS,
 } from "./actionTypes";
 
 import {
@@ -371,6 +374,31 @@ const JobReducer = (state = initialState, action) => {
         ...state,
         errorMsg: action.payload,
         jobCustomViewMeta: errorMetaData(action.payload),
+      };
+    case UNSELECT_JOB_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case UNSELECT_JOB_CUSTOM_VIEW_SUCCESS:
+      const newJobCustomViews = state.jobCustomViews.map((view) => {
+        if (view?.selected === true) {
+          view.selected = false;
+        }
+        return view;
+      });
+      return {
+        ...state,
+        loading: false,
+        jobCustomViews: newJobCustomViews,
+      };
+    case UNSELECT_JOB_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;

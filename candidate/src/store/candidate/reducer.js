@@ -535,7 +535,7 @@ const CandidateReducer = (state = initialState, action) => {
         candidates: [],
         candidateMeta: {},
       };
-      case UNSELECT_CANDIDATE_CUSTOM_VIEW:
+    case UNSELECT_CANDIDATE_CUSTOM_VIEW:
       return {
         ...state,
         loading: true,
@@ -552,6 +552,13 @@ const CandidateReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         candidateCustomViews: newCandidateCustomViews,
+      };
+    case UNSELECT_CANDIDATE_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;
