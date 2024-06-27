@@ -158,6 +158,9 @@ function CandidateStaticReport() {
       case "Rejected":
         jobCount = candidateStaticReportCount.rejectedCount ?? 0;
         break;
+      case "No Submission":
+        jobCount = candidateStaticReportCount.noSubmissionsCount ?? 0;
+        break;
       default:
         jobCount = 0;
         break;
