@@ -64,7 +64,6 @@ function CandidateStaticReport() {
         sort: true,
         sortValue: "candidate.candidate_submission_data.firstName",
         expand: true,
-        center: true,
         render: (data) => (
           <div>
             {data?.candidate?.candidateSubmissionData?.firstName}{" "}
@@ -75,10 +74,9 @@ function CandidateStaticReport() {
       {
         header: "Current Candidate Status",
         name: "data.subStepName",
-        sort: true,
+        sort: false,
         sortValue: "subStepName",
         expand: true,
-        center: true,
         render: (data) => (
           <Badge color={getBadgeColour(data?.subStepName)}>
             {data?.subStepName}
@@ -91,7 +89,6 @@ function CandidateStaticReport() {
         sort: true,
         sortValue: "created_at",
         expand: true,
-        center: true,
         render: (data) => <div>{calculateAgeing(data?.createdAt)} Days</div>,
       },
     ];
@@ -256,151 +253,6 @@ function CandidateStaticReport() {
               setActiveRow={setActiveRow}
               setTableConfig={setTableConfig}
             />
-            {/* <Row>
-              <Col>
-                <Table>
-                  <thead className="bg-white border-light">
-                    <tr>
-                      {staticTableHeader.map((item, index) => {
-                        return (
-                          <>
-                            <th
-                              key={index}
-                              className="static-table-header-item"
-                            >
-                              <span>{item}</span>{" "}
-                              <span className="mdi mdi-sort cursor-pointer"></span>
-                            </th>
-                          </>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white border-light">
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>Data Analyst</td>
-                      <td>2139212</td>
-                      <td>Fawaz Khalid</td>
-                      <td>Nitesh Yadav</td>
-                      <td>Lily Doe</td>
-                      <td>
-                        <Badge color="success">Tag: Completed</Badge>
-                      </td>
-                      <td>34 Days</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Col>
-            </Row> */}
           </div>
         </div>
       </div>

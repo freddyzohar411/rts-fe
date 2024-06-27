@@ -42,7 +42,11 @@
   z-index: 1;
 }
 
-.dynamic-table-main  .sticky-head-border:not(:first-child):not(:last-child) {
+.dynamic-table-main .sticky-head-border:not(:first-child):not(:last-child) {
+  box-shadow: 1px 0 0 0 #e0e0e0 inset !important; /* Mimicking a right border on middle headers */
+}
+
+.dynamic-table-main .non-sticky-head-border {
   box-shadow: 1px 0 0 0 #e0e0e0 inset !important; /* Mimicking a right border on middle headers */
 }
 
