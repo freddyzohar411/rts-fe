@@ -234,7 +234,7 @@ const Navdata = () => {
         checkAllPermission([Permission.CANDIDATE_READ]) && {
           id: "candidatesReport",
           label: "Overview Report",
-          link: "/candidates/static-report",
+          link: "/candidates/job-report",
           parentId: "candidates",
         },
         checkAllPermission([Permission.CANDIDATE_READ]) && {

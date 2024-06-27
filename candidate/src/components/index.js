@@ -6,4 +6,3 @@ export * from "./EmployerDetails";
 export * from "./Languages";
 export * from "./CandidateWorkExperience";
 export * from "./Stepper";
-export * from "./StaticReport";

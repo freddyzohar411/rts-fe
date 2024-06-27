@@ -33,3 +33,6 @@ export const BASE_RESUME_PARSING = "/api/resumes";
 
 // Custom View
 export const BASE_CANDIDATE_CUSTOM_VIEW = "/api/candidates";
+
+// Candidate Static Report
+export const BASE_CANDIDATE_STATIC_REPORT = "/api/jobreports";

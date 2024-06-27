@@ -20,10 +20,10 @@
 }
 
 .static-grid-item {
-  flex: 1 1 20%; /* 20% width for each column */
-  max-width: 20%; /* Ensure the max width is 20% to fit 5 columns */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  padding: 0.4rem; /* Adjust padding as needed */
+  flex: 1 1 20%;
+  max-width: 20%; 
+  box-sizing: border-box; 
+  padding: 0.4rem;
   padding-left: 0;
 }
 
@@ -43,9 +43,31 @@
   font-weight: 500;
 }
 
-.search-input::placeholder {
-  font-size: 12.5px;
+.candidate-static-filter-offcanvas {
+  width: 25vw;
+  border: 1px solid transparent;
 }
+
+.csf-title {
+  font-weight: 500;
+  font-size: 17px;
+}
+
+.csf-apply {
+  border: 1px solid #0a56ae;
+  background-color: #0a56ae;
+  border-radius: 0;
+  color: #FFF;
+  font-weight: 500;
+}
+.csf-clear {
+  border: 1px solid #0a56ae;
+  background-color: #FFF;
+  border-radius: 0;
+  color: #0a56ae;
+  font-weight: 500;
+}
+
 /* Responsive adjustments for smaller screens */
 // @media (max-width: 1200px) {
 //   .static-grid-item {
@@ -70,7 +92,7 @@
 
 @media (min-width: 1366px) {
   .static-header-count {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .static-header-title {

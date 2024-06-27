@@ -67,7 +67,13 @@ import {
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS,
-  RESET_CANDIDATES
+  RESET_CANDIDATES,
+  FETCH_CANDIDATE_STATIC_REPORT_COUNT,
+  FETCH_CANDIDATE_STATIC_REPORT_COUNT_SUCCESS,
+  FETCH_CANDIDATE_STATIC_REPORT_COUNT_FAILURE,
+  FETCH_CANDIDATE_STATIC_REPORT_LISTING,
+  FETCH_CANDIDATE_STATIC_REPORT_LISTING_SUCCESS,
+  FETCH_CANDIDATE_STATIC_REPORT_LISTING_FAILURE,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -385,7 +391,7 @@ export const deleteCandidatesReset = () => ({
 });
 
 // # filter
-export const resetCandidateCustomView = () => ({  
+export const resetCandidateCustomView = () => ({
   type: RESET_CANDIDATE_CUSTOM_VIEW,
 });
 
@@ -406,8 +412,7 @@ export const fetchCandidateCustomViewByIdFailure = (error) => ({
 
 export const editCandidateCustomViewById = (candidateCustomViewRequest) => ({
   type: EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
-  payload
-: candidateCustomViewRequest, 
+  payload: candidateCustomViewRequest,
 });
 
 export const editCandidateCustomViewByIdSuccess = (candidateCustomView) => ({
@@ -424,6 +429,33 @@ export const resetCandidates = () => ({
   type: RESET_CANDIDATES,
 });
 
+// Candidate Static Report Count
+export const fetchCandidateStaticReportCount = () => ({
+  type: FETCH_CANDIDATE_STATIC_REPORT_COUNT,
+});
 
+export const fetchCandidateStaticReportCountSuccess = (candidateStaticReportCount) => ({
+  type: FETCH_CANDIDATE_STATIC_REPORT_COUNT_SUCCESS,
+  payload: candidateStaticReportCount,
+});
 
+export const fetchCandidateStaticReportCountFailure = (error) => ({
+  type: FETCH_CANDIDATE_STATIC_REPORT_COUNT_FAILURE,
+  payload: error,
+});
 
+// Candidate Static Report Listing
+export const fetchCandidateStaticReportListing = (candidateStaticReportListingRequest) => ({
+  type: FETCH_CANDIDATE_STATIC_REPORT_LISTING,
+  payload: candidateStaticReportListingRequest
+});
+
+export const fetchCandidateStaticReportListingSuccess = (candidateStaticReportListing) => ({
+  type: FETCH_CANDIDATE_STATIC_REPORT_LISTING_SUCCESS,
+  payload: candidateStaticReportListing,
+});
+
+export const fetchCandidateStaticReportListingFailure = (error) => ({
+  type: FETCH_CANDIDATE_STATIC_REPORT_LISTING_FAILURE,
+  payload: error,
+});

@@ -29,6 +29,8 @@ import {
   DELETE_CANDIDATES,
   FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
+  FETCH_CANDIDATE_STATIC_REPORT_COUNT,
+  FETCH_CANDIDATE_STATIC_REPORT_LISTING,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -76,6 +78,12 @@ import {
   fetchCandidateCustomViewByIdSuccess,
   editCandidateCustomViewByIdSuccess,
   editCandidateCustomViewByIdFailure,
+  fetchCandidateStaticReportCount,
+  fetchCandidateStaticReportListing,
+  fetchCandidateStaticReportCountSuccess,
+  fetchCandidateStaticReportCountFailure,
+  fetchCandidateStaticReportListingFailure,
+  fetchCandidateStaticReportListingSuccess,
 } from "./action";
 import {
   getCandidates,
@@ -97,6 +105,8 @@ import {
   deleteCandidates,
   getCandidateCustomViewById,
   editCandidateCustomViewById,
+  getCandidateStaticReportCount,
+  getCandidateStaticReportListing,
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -642,6 +652,27 @@ function* workEditCandidateCustomViewById(action) {
   }
 }
 
+function* workFetchCandidateStaticReportCount(action) {
+  try {
+    const response = yield call(getCandidateStaticReportCount, action.payload);
+    yield put(fetchCandidateStaticReportCountSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCandidateStaticReportCountFailure(error));
+  }
+}
+
+function* workFetchCandidateStaticReportListing(action) {
+  try {
+    const response = yield call(
+      getCandidateStaticReportListing,
+      action.payload
+    );
+    yield put(fetchCandidateStaticReportListingSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCandidateStaticReportListingFailure(error));
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -671,5 +702,13 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(
     EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
     workEditCandidateCustomViewById
+  );
+  yield takeEvery(
+    FETCH_CANDIDATE_STATIC_REPORT_COUNT,
+    workFetchCandidateStaticReportCount
+  );
+  yield takeEvery(
+    FETCH_CANDIDATE_STATIC_REPORT_LISTING,
+    workFetchCandidateStaticReportListing
   );
 }

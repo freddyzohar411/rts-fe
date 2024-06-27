@@ -1,22 +1,223 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Row, Col, Badge } from "reactstrap";
 import {
-  Row,
-  Col,
-  Container,
-  Card,
-  CardBody,
-  Input,
-  ButtonGroup,
-  Button,
-  Table,
-  Badge,
-} from "reactstrap";
-import { staticColumns, staticTableHeader } from "./CandidateStaticConstants";
+  staticColumns,
+  CANDIDATE_STATIC_INITIAL_OPTIONS,
+  CANDIDATE_STATIC_MANDATORY_OPTIONS,
+} from "./CandidateStaticConstants";
 import "./CandidateStaticReport.scss";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
 import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
+import { useSelector, useDispatch } from "react-redux";
+import { DynamicTableHelper, useTableHook } from "@workspace/common";
+import {
+  fetchCandidateStaticReportCount,
+  fetchCandidateStaticReportListing,
+} from "../../store/candidate/action";
+import DynamicTableWrapper from "./DynamicTableWrapper";
+
 function CandidateStaticReport() {
   document.title = "Candidate Static Report | RTS";
+
+  const dispatch = useDispatch();
+  const candidateStaticReportCount = useSelector(
+    (state) => state?.CandidateReducer?.candidateStaticReportCount
+  );
+  const candidateStaticReportListing = useSelector(
+    (state) => state?.CandidateReducer?.candidateStaticReportListing
+  );
+
+  // Table State
+  const [tableConfig, setTableConfig] = useState(null);
+
+  // Custom Renders
+  const customRenderList = [];
+
+  // Calculate Ageing
+  const calculateAgeing = (createdAt) => {
+    const currentDate = new Date();
+    const createdDate = new Date(createdAt);
+    const diffTime = Math.abs(currentDate - createdDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const getBadgeColour = (status) => {
+    if (
+      status?.includes("Withdrawn") ||
+      status === "Backout-Candidate" ||
+      status?.includes("Rejected")
+    ) {
+      return "danger";
+    } else {
+      return "success";
+    }
+  };
+
+  // User Setup
+  const generateCandidateStaticReportConfig = (customConfig) => {
+    return [
+      ...customConfig,
+      {
+        header: "Candidate Name",
+        name: "candidateName",
+        sort: true,
+        sortValue: "candidate.candidate_submission_data.firstName",
+        expand: true,
+        center: true,
+        render: (data) => (
+          <div>
+            {data?.candidate?.candidateSubmissionData?.firstName}{" "}
+            {data?.candidate?.candidateSubmissionData?.lastName}
+          </div>
+        ),
+      },
+      {
+        header: "Current Candidate Status",
+        name: "data.subStepName",
+        sort: true,
+        sortValue: "subStepName",
+        expand: true,
+        center: true,
+        render: (data) => (
+          <Badge color={getBadgeColour(data?.subStepName)}>
+            {data?.subStepName}
+          </Badge>
+        ),
+      },
+      {
+        header: "Ageing",
+        name: "ageing",
+        sort: true,
+        sortValue: "created_at",
+        expand: true,
+        center: true,
+        render: (data) => <div>{calculateAgeing(data?.createdAt)} Days</div>,
+      },
+    ];
+  };
+
+  // Table Hooks
+  const {
+    pageRequest,
+    pageRequestSet,
+    pageInfo,
+    setPageInfoData,
+    search,
+    setSearch,
+    customConfig,
+    setCustomConfigData,
+    setTableData,
+    tableData,
+    activeRow,
+    setActiveRow,
+  } = useTableHook(
+    {
+      page: 0,
+      pageSize: 20,
+      sortBy: null,
+      sortDirection: "asc",
+      searchTerm: null,
+      searchFields: DynamicTableHelper.generateSeachFieldArray([]),
+    },
+    CANDIDATE_STATIC_MANDATORY_OPTIONS,
+    CANDIDATE_STATIC_INITIAL_OPTIONS,
+    customRenderList,
+    generateCandidateStaticReportConfig
+  );
+
+  // Counting: Start
+  useEffect(() => {
+    dispatch(fetchCandidateStaticReportCount());
+  }, []);
+
+  const getCount = (itemKey) => {
+    let jobCount = 0;
+    switch (itemKey) {
+      case "New Requirements":
+        jobCount = candidateStaticReportCount.newRequirementsCount ?? 0;
+        break;
+      case "Active Requirements":
+        jobCount = candidateStaticReportCount.activeRequirementsCount ?? 0;
+        break;
+      case "Associated":
+        jobCount = candidateStaticReportCount.associatedCount ?? 0;
+        break;
+      case "Submitted to Sales":
+        jobCount = candidateStaticReportCount.submitToSalesCount ?? 0;
+        break;
+      case "Submitted to Client":
+        jobCount = candidateStaticReportCount.submitToClientCount ?? 0;
+        break;
+      case "Interview Scheduled":
+        jobCount = candidateStaticReportCount.interviewScheduledCount ?? 0;
+        break;
+      case "Interview Happened":
+        jobCount = candidateStaticReportCount.interviewHappenedCount ?? 0;
+        break;
+      case "Selected":
+        jobCount = candidateStaticReportCount.selectedCount ?? 0;
+        break;
+      case "Rejected":
+        jobCount = candidateStaticReportCount.rejectedCount ?? 0;
+        break;
+      default:
+        jobCount = 0;
+        break;
+    }
+    return jobCount;
+  };
+  // Counting: End
+
+  const hasPageRendered = useRef(false);
+
+  // Get all option groups
+
+  // Fetch the job when the pageRequest changes
+  useEffect(() => {
+    dispatch(
+      fetchCandidateStaticReportListing(
+        DynamicTableHelper.cleanPageRequest(pageRequest)
+      )
+    );
+  }, [pageRequest]);
+
+  useEffect(() => {
+    if (candidateStaticReportListing) {
+      setPageInfoData(candidateStaticReportListing);
+      setTableData(candidateStaticReportListing?.jobs);
+    }
+  }, [candidateStaticReportListing]);
+
+  useEffect(() => {
+    if (tableConfig) {
+      const newConfig = generateCandidateStaticReportConfig(customConfig);
+      newConfig.forEach((item, index) => {
+        const oldConfig = tableConfig?.find(
+          (oldItem) => oldItem?.name === item?.name
+        );
+        // If cannot find then continue
+        if (!oldConfig) return;
+        if (oldConfig?.expand) {
+          newConfig[index].expand = true;
+        } else {
+          newConfig[index].expand = false;
+        }
+      });
+      setTableConfig(newConfig);
+    } else {
+      setTableConfig(generateCandidateStaticReportConfig(customConfig));
+    }
+  }, [customConfig, pageInfo, activeRow, tableData]);
+
+  // Check if page has re-rendered
+  useEffect(() => {
+    if (hasPageRendered.current) {
+      pageRequestSet.setPage(0);
+    }
+    hasPageRendered.current = true;
+  }, []);
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -28,7 +229,9 @@ function CandidateStaticReport() {
                   <div className="static-grid-item" key={index}>
                     <div className="d-flex flex-column">
                       <span className="static-header-title">{item}</span>
-                      <span className="static-header-count">20</span>
+                      <span className="static-header-count">
+                        {getCount(item)}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -37,42 +240,23 @@ function CandidateStaticReport() {
           </Row>
 
           <div className="p-2">
-            <Row className="mb-2">
-              <Col>
-                <span className="candidate-static-title">
-                  Candidate Static Report
-                </span>
-              </Col>
-            </Row>
-            {/* Search & Filter */}
-            <Row className="mb-2">
-              <Col>
-                <div className="d-flex align-items-center justify-content-between">
-                  <div className="search-box" style={{ width: "200px" }}>
-                    <form>
-                      <Input
-                        placeholder="Search.."
-                        className="border-light padding-3 search-input"
-                      />
-                    </form>
-                    <span className="ri-search-line search-icon"></span>
-                  </div>
-                  <div className="d-flex flex-row align-items-center gap-3">
-                    <div className="d-flex flex-row align-items-center gap-3">
-                      <TableItemDisplay />
-                      <TableRowsPerPageWithNav />
-                    </div>
-                    <ButtonGroup>
-                      <Button className="bg-white border-light">
-                        <i className="mdi mdi-filter-variant"></i>
-                      </Button>
-                    </ButtonGroup>
-                  </div>
-                </div>
-              </Col>
-            </Row>
             {/* Table */}
-            <Row>
+            <DynamicTableWrapper
+              data={candidateStaticReportListing.jobs ?? []}
+              config={tableConfig}
+              pageInfo={pageInfo}
+              pageRequest={pageRequest}
+              pageRequestSet={pageRequestSet}
+              search={search}
+              setSearch={setSearch}
+              // optGroup={candidatesFields}
+              setCustomConfigData={setCustomConfigData}
+              header="Candidates Static Report"
+              activeRow={activeRow}
+              setActiveRow={setActiveRow}
+              setTableConfig={setTableConfig}
+            />
+            {/* <Row>
               <Col>
                 <Table>
                   <thead className="bg-white border-light">
@@ -80,7 +264,6 @@ function CandidateStaticReport() {
                       {staticTableHeader.map((item, index) => {
                         return (
                           <>
-                            {/* <td></td> */}
                             <th
                               key={index}
                               className="static-table-header-item"
@@ -99,9 +282,11 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                     <tr>
@@ -109,9 +294,11 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                     <tr>
@@ -119,9 +306,11 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                     <tr>
@@ -129,9 +318,11 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                     <tr>
@@ -139,9 +330,11 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                     <tr>
@@ -149,9 +342,11 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                     <tr>
@@ -159,9 +354,11 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                     <tr>
@@ -169,9 +366,11 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                     <tr>
@@ -179,9 +378,11 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                     <tr>
@@ -189,15 +390,17 @@ function CandidateStaticReport() {
                       <td>Data Analyst</td>
                       <td>2139212</td>
                       <td>Fawaz Khalid</td>
-                      <td>Nitesh</td>
+                      <td>Nitesh Yadav</td>
                       <td>Lily Doe</td>
-                      <td><Badge color="success">Active</Badge></td>
+                      <td>
+                        <Badge color="success">Tag: Completed</Badge>
+                      </td>
                       <td>34 Days</td>
                     </tr>
                   </tbody>
                 </Table>
               </Col>
-            </Row>
+            </Row> */}
           </div>
         </div>
       </div>

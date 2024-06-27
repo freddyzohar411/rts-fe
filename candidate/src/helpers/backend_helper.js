@@ -11,6 +11,7 @@ import {
   BASE_EMPLOYER_DETAILS,
   BASE_RESUME_PARSING,
   BASE_CANDIDATE_CUSTOM_VIEW,
+  BASE_CANDIDATE_STATIC_REPORT
 } from "./url_helper";
 
 import {
@@ -23,6 +24,7 @@ import {
   CANDIDATE_LANGUAGES_URL,
   CANDIDATE_EMPLOYER_DETAILS_URL,
   COMMON_URL,
+  JOB_URL,
 } from "@workspace/common/src/config";
 
 import { generateCandidateModuleURL, candidateModuleURL } from "./constant";
@@ -188,7 +190,7 @@ export const deleteCandidateCustomView = (id) =>
   api.delete(
     `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/delete/${id}`
   );
-  
+
 // Delete an candidates List
 export const deleteCandidates = (candidateIds) =>
   api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/delete`, candidateIds);
@@ -200,3 +202,11 @@ export const getCandidateCustomViewById = (id) =>
 // Edit Custom View By id
 export const editCandidateCustomViewById = (id, data) =>
   api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/customView/edit/${id}`, data);
+
+// Get Candidate Static Report Count
+export const getCandidateStaticReportCount = () =>
+  api.get(`${JOB_URL}${BASE_CANDIDATE_STATIC_REPORT}/get-counts`);
+
+// Get Candidate Static Report Listing
+export const getCandidateStaticReportListing = (data) =>
+  api.create(`${JOB_URL}${BASE_CANDIDATE_STATIC_REPORT}/listing`, data);
