@@ -188,7 +188,7 @@ export const deleteCandidateCustomView = (id) =>
   api.delete(
     `${CANDIDATE_URL}${BASE_CANDIDATE_CUSTOM_VIEW}/customView/delete/${id}`
   );
-  
+
 // Delete an candidates List
 export const deleteCandidates = (candidateIds) =>
   api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/listing/delete`, candidateIds);
@@ -200,3 +200,7 @@ export const getCandidateCustomViewById = (id) =>
 // Edit Custom View By id
 export const editCandidateCustomViewById = (id, data) =>
   api.create(`${CANDIDATE_URL}${BASE_CANDIDATES}/customView/edit/${id}`, data);
+
+// Unselect all candidate custom View
+export const unSelectAllCandidateCustomView = () =>
+  api.put(`${CANDIDATE_URL}${BASE_CANDIDATES}/customView/unselect-all`);

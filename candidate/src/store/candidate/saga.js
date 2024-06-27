@@ -29,6 +29,7 @@ import {
   DELETE_CANDIDATES,
   FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -76,6 +77,8 @@ import {
   fetchCandidateCustomViewByIdSuccess,
   editCandidateCustomViewByIdSuccess,
   editCandidateCustomViewByIdFailure,
+  unselectCandidateCustomViewFailure,
+  unselectCandidateCustomViewSuccess,
 } from "./action";
 import {
   getCandidates,
@@ -97,6 +100,7 @@ import {
   deleteCandidates,
   getCandidateCustomViewById,
   editCandidateCustomViewById,
+  unSelectAllCandidateCustomView
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -642,6 +646,18 @@ function* workEditCandidateCustomViewById(action) {
   }
 }
 
+// Unselect Custom View
+function* workUnselectCandidateCustomView() {
+  try {
+    yield call(unSelectAllCandidateCustomView);
+    yield put(unselectCandidateCustomViewSuccess());
+    toast.success("Candidate custom view unselected successfully!");
+  } catch (error) {
+    yield put(unselectCandidateCustomViewFailure(error));
+    toast.error("Error unselecting candidate custom view!");
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -671,5 +687,9 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(
     EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
     workEditCandidateCustomViewById
+  );
+  yield takeEvery(
+    UNSELECT_CANDIDATE_CUSTOM_VIEW,
+    workUnselectCandidateCustomView
   );
 }

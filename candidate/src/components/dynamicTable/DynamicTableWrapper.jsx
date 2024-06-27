@@ -26,7 +26,7 @@ import {
   deleteCandidatesReset,
   fetchCandidates,
   resetCandidateCustomView,
-  resetCandidates,
+  unselectCandidateCustomView,
 } from "../../store/candidate/action";
 import { DeleteCustomModal } from "@workspace/common";
 import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
@@ -67,6 +67,7 @@ const DynamicTableWrapper = ({
   const [deletingCustomViewId, setDeletingCustomViewId] = useState(null);
   const dispatch = useDispatch();
   const [customViewDropdownOpen, setCustomViewDropdownOpen] = useState(false);
+  const [defaultViewEnabled, setDefaultViewEnabled] = useState(false);
 
   const candidateMeta = useSelector(
     (state) => state.CandidateReducer.candidateMeta
@@ -108,6 +109,8 @@ const DynamicTableWrapper = ({
     }
   };
 
+  // console.log("allCandidateCustomViews", allCandidateCustomViews);
+
   useEffect(() => {
     if (allCandidateCustomViews != null && allCandidateCustomViews.length > 0) {
       const selectedCustomView = allCandidateCustomViews?.find(
@@ -126,8 +129,12 @@ const DynamicTableWrapper = ({
           setCustomConfigData(selectedObjects);
         }
         pageRequestSet.setFilterData(selectedCustomView?.filters);
+        setDefaultViewEnabled(false);
+      } else if (!selectedCustomView) {
+        enableDefaultView();
       }
     }
+
     if (
       allCandidateCustomViews != null &&
       allCandidateCustomViews.length === 0
@@ -139,6 +146,7 @@ const DynamicTableWrapper = ({
   const enableDefaultView = () => {
     setCustomConfigData(CANDIDATE_INITIAL_OPTIONS);
     pageRequestSet.setFilterData(null);
+    setDefaultViewEnabled(true);
   };
 
   const handleEportExcel = async () => {
@@ -185,6 +193,10 @@ const DynamicTableWrapper = ({
       );
     }
   }, [deleteCandidatesMeta?.isSuccess]);
+
+  const handleDefaultViewSelection = () => {
+    dispatch(unselectCandidateCustomView());
+  };
 
   return (
     <React.Fragment>
@@ -258,8 +270,19 @@ const DynamicTableWrapper = ({
                               <Link to="/candidates/custom-view">
                                 <DropdownItem>Create Custom View</DropdownItem>
                               </Link>
-                              <DropdownItem onClick={() => enableDefaultView()}>
-                                Enable Default View
+                              <DropdownItem
+                                onClick={handleDefaultViewSelection}
+                              >
+                                <div className="d-flex flex-row align-items-center justify-content-between">
+                                  <span className="me-2">
+                                    Enable Default View
+                                  </span>
+                                  {defaultViewEnabled && (
+                                    <span>
+                                      <i className="ri-check-fill"></i>
+                                    </span>
+                                  )}
+                                </div>
                               </DropdownItem>
                               <DropdownItem divider />
                               <DropdownItem header>

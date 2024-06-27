@@ -67,7 +67,10 @@ import {
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS,
-  RESET_CANDIDATES
+  RESET_CANDIDATES,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW_SUCCESS,
 } from "./actionTypes";
 
 // Fetch Candidate
@@ -385,7 +388,7 @@ export const deleteCandidatesReset = () => ({
 });
 
 // # filter
-export const resetCandidateCustomView = () => ({  
+export const resetCandidateCustomView = () => ({
   type: RESET_CANDIDATE_CUSTOM_VIEW,
 });
 
@@ -406,8 +409,7 @@ export const fetchCandidateCustomViewByIdFailure = (error) => ({
 
 export const editCandidateCustomViewById = (candidateCustomViewRequest) => ({
   type: EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
-  payload
-: candidateCustomViewRequest, 
+  payload: candidateCustomViewRequest,
 });
 
 export const editCandidateCustomViewByIdSuccess = (candidateCustomView) => ({
@@ -424,6 +426,15 @@ export const resetCandidates = () => ({
   type: RESET_CANDIDATES,
 });
 
+export const unselectCandidateCustomView = () => ({
+  type: UNSELECT_CANDIDATE_CUSTOM_VIEW,
+});
 
+export const unselectCandidateCustomViewSuccess = () => ({
+  type: UNSELECT_CANDIDATE_CUSTOM_VIEW_SUCCESS,
+});
 
-
+export const unselectCandidateCustomViewFailure = (error) => ({
+  type: UNSELECT_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  payload: error,
+});

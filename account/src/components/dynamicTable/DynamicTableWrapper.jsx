@@ -134,7 +134,6 @@ const DynamicTableWrapper = ({
         enableDefaultView();
       }
     }
-
     if (allAccountCustomViews != null && allAccountCustomViews.length === 0) {
       enableDefaultView();
     }

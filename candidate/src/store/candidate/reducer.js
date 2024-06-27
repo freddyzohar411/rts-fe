@@ -68,6 +68,9 @@ import {
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS,
   RESET_CANDIDATES,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW_SUCCESS,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -531,6 +534,24 @@ const CandidateReducer = (state = initialState, action) => {
         ...state,
         candidates: [],
         candidateMeta: {},
+      };
+      case UNSELECT_CANDIDATE_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case UNSELECT_CANDIDATE_CUSTOM_VIEW_SUCCESS:
+      const newCandidateCustomViews = state.candidateCustomViews.map((view) => {
+        if (view?.selected === true) {
+          view.selected = false;
+        }
+        return view;
+      });
+      return {
+        ...state,
+        loading: false,
+        candidateCustomViews: newCandidateCustomViews,
       };
     default:
       return state;
