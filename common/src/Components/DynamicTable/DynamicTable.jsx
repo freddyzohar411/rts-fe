@@ -60,7 +60,13 @@ const DynamicTable = ({
         <th
           key={option.name}
           scope="col"
-          className={`sticky-head-border `}
+          className={`${
+            (option?.sticky === "left" &&
+              "sticky-left sticky-color sticky-head-border") ||
+            (option?.sticky === "right" &&
+              "sticky-right sticky-color sticky-head-border") ||
+            "non-sticky-head-border"
+          }`}
           onDoubleClick={() => {
             toggleColumnExpand(configIndex);
           }}
@@ -109,10 +115,12 @@ const DynamicTable = ({
           key={option.name}
           scope="col"
           className={`${
-            (option?.sticky === "left" && "sticky-left") ||
-            (option?.sticky === "right" && "sticky-right") ||
-            ""
-          } sticky-color sticky-head-border`}
+            (option?.sticky === "left" &&
+              "sticky-left sticky-color sticky-head-border") ||
+            (option?.sticky === "right" &&
+              "sticky-right sticky-color sticky-head-border") ||
+            "non-sticky-head-border"
+          } `}
           onDoubleClick={() => {
             toggleColumnExpand(configIndex);
           }}
@@ -245,7 +253,7 @@ const DynamicTable = ({
               </tr>
             )}
           </tbody>
-      </Table>
+        </Table>
       </div>
     </>
   );

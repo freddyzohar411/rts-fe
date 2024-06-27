@@ -24,8 +24,8 @@ import {
   CREATE_JOB_CUSTOM_VIEW,
   CREATE_JOB_CUSTOM_VIEW_SUCCESS,
   CREATE_JOB_CUSTOM_VIEW_FAILURE,
-  CLONE_JOB, 
-  CLONE_JOB_SUCCESS, 
+  CLONE_JOB,
+  CLONE_JOB_SUCCESS,
   CLONE_JOB_FAILURE,
   FETCH_JOB_CUSTOM_VIEW,
   FETCH_JOB_CUSTOM_VIEW_SUCCESS,
@@ -44,6 +44,9 @@ import {
   EDIT_JOB_CUSTOM_VIEW_BY_ID,
   EDIT_JOB_CUSTOM_VIEW_BY_ID_SUCCESS,
   EDIT_JOB_CUSTOM_VIEW_BY_ID_FAILURE,
+  UNSELECT_JOB_CUSTOM_VIEW,
+  UNSELECT_JOB_CUSTOM_VIEW_FAILURE,
+  UNSELECT_JOB_CUSTOM_VIEW_SUCCESS,
 } from "./actionTypes";
 
 // Fetch Account
@@ -164,7 +167,6 @@ export const fetchJobsFieldsAllFailure = (error) => ({
   payload: error,
 });
 
-
 export const updateJobEmbeddings = (jobId) => ({
   type: UPDATE_JOB_EMBEDDINGS,
   payload: jobId,
@@ -183,7 +185,7 @@ export const updateJobEmbeddingsFailure = (error) => ({
 export const createJobCustomView = (jobCustomViewRequest) => ({
   type: CREATE_JOB_CUSTOM_VIEW,
   payload: jobCustomViewRequest,
-})
+});
 
 export const createJobCustomViewSuccess = (jobCustomView) => ({
   type: CREATE_JOB_CUSTOM_VIEW_SUCCESS,
@@ -274,8 +276,15 @@ export const editJobCustomViewByIdFailure = (error) => ({
   payload: error,
 });
 
+export const unselectJobCustomView = () => ({
+  type: UNSELECT_JOB_CUSTOM_VIEW,
+});
 
+export const unselectJobCustomViewSuccess = () => ({
+  type: UNSELECT_JOB_CUSTOM_VIEW_SUCCESS,
+});
 
-
-
-
+export const unselectJobCustomViewFailure = (error) => ({
+  type: UNSELECT_JOB_CUSTOM_VIEW_FAILURE,
+  payload: error,
+});

@@ -68,6 +68,15 @@ import {
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_FAILURE,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID_SUCCESS,
   RESET_CANDIDATES,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW_SUCCESS,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW_FAILURE,
+  FETCH_CANDIDATE_STATIC_REPORT_COUNT,
+  FETCH_CANDIDATE_STATIC_REPORT_COUNT_SUCCESS,
+  FETCH_CANDIDATE_STATIC_REPORT_COUNT_FAILURE,
+  FETCH_CANDIDATE_STATIC_REPORT_LISTING,
+  FETCH_CANDIDATE_STATIC_REPORT_LISTING_SUCCESS,
+  FETCH_CANDIDATE_STATIC_REPORT_LISTING_FAILURE,
 } from "./actionTypes";
 
 import {
@@ -88,6 +97,7 @@ const initialState = {
   createMeta: {},
   updateMeta: {},
   deleteMeta: {},
+
   tableMeta: {},
   importLoading: false,
   importMultiLoading: false,
@@ -98,6 +108,9 @@ const initialState = {
   candidateCustomViewMeta: {},
   candidateCustomViews: null,
   deleteCandidatesMeta: {},
+  candidateStaticReportCount: [],
+  candidateStaticReportListing: [],
+  staticReportMeta: {},
 };
 
 const CandidateReducer = (state = initialState, action) => {
@@ -531,6 +544,67 @@ const CandidateReducer = (state = initialState, action) => {
         ...state,
         candidates: [],
         candidateMeta: {},
+      };
+    case FETCH_CANDIDATE_STATIC_REPORT_COUNT:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case FETCH_CANDIDATE_STATIC_REPORT_COUNT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        candidateStaticReportCount: action.payload,
+      };
+    case FETCH_CANDIDATE_STATIC_REPORT_COUNT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
+      };
+    case FETCH_CANDIDATE_STATIC_REPORT_LISTING:
+      return {
+        ...state,
+        staticReportMeta: pendingMetaData(),
+      };
+    case FETCH_CANDIDATE_STATIC_REPORT_LISTING_SUCCESS:
+      return {
+        ...state,
+        staticReportMeta: successMetaData(action.payload),
+        candidateStaticReportListing: action.payload,
+      };
+    case FETCH_CANDIDATE_STATIC_REPORT_LISTING_FAILURE:
+      return {
+        ...state,
+        candidateStaticReportListing: [],
+        staticReportMeta: errorMetaData(action.payload),
+      };
+    case UNSELECT_CANDIDATE_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case UNSELECT_CANDIDATE_CUSTOM_VIEW_SUCCESS:
+      const newCandidateCustomViews = state.candidateCustomViews.map((view) => {
+        if (view?.selected === true) {
+          view.selected = false;
+        }
+        return view;
+      });
+      return {
+        ...state,
+        loading: false,
+        candidateCustomViews: newCandidateCustomViews,
+      };
+    case UNSELECT_CANDIDATE_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;

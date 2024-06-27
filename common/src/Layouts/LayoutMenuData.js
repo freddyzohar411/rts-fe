@@ -231,6 +231,12 @@ const Navdata = () => {
       },
       stateVariables: isCandidates,
       subItems: [
+        checkAllPermission([...Permission.SETTING_ALL]) && {
+          id: "candidatesReport",
+          label: "Overview Report",
+          link: "/candidates/job-report",
+          parentId: "candidates",
+        },
         checkAllPermission([Permission.CANDIDATE_READ]) && {
           id: "allCandidates",
           label: "All Candidates",

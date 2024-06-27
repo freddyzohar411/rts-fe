@@ -16,6 +16,7 @@ import {
   DELETE_JOB_CUSTOM_VIEW,
   FETCH_JOB_CUSTOM_VIEW_BY_ID,
   EDIT_JOB_CUSTOM_VIEW_BY_ID,
+  UNSELECT_JOB_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
   fetchJobsSuccess,
@@ -47,6 +48,8 @@ import {
   fetchJobCustomViewByIdSuccess,
   editJobCustomViewByIdSuccess,
   editJobCustomViewByIdFailure,
+  unselectJobCustomViewFailure,
+  unselectJobCustomViewSuccess,
 } from "./action";
 import {
   getJobs,
@@ -65,6 +68,7 @@ import {
   deleteJobCustomView,
   getJobCustomViewById,
   editJobCustomViewById,
+  unSelectAllJobCustomView
 } from "../../helpers/backend_helper";
 
 // Fetch Accounts
@@ -227,7 +231,7 @@ function* workDeleteJobCustomView(action) {
     const response = yield call(deleteJobCustomView, id);
     yield put(deleteJobCustomViewSuccess(response.data));
     yield put(fetchJobCustomView());
-    toast.success("Job custom view deleted successfully!");
+    toast.success("Job default custom view selected");
   } catch (error) {
     yield put(deleteJobCustomViewFailure(error));
     toast.error("Error deleting job custom view!");
@@ -261,6 +265,17 @@ function* workEditJobCustomViewById(action) {
   }
 }
 
+function* workUnselectJobCustomView() {
+  try {
+    yield call(unSelectAllJobCustomView);
+    yield put(unselectJobCustomViewSuccess());
+    toast.success("Job custom view unselected successfully!");
+  } catch (error) {
+    yield put(unselectJobCustomViewFailure(error));
+    toast.error("Error unselecting job custom view!");
+  }
+}
+
 export default function* watchFetchJobSaga() {
   yield takeEvery(FETCH_JOB, workFetchJob);
   yield takeEvery(FETCH_JOBS, workFetchJobs);
@@ -276,4 +291,5 @@ export default function* watchFetchJobSaga() {
   yield takeEvery(DELETE_JOB_CUSTOM_VIEW, workDeleteJobCustomView);
   yield takeEvery(FETCH_JOB_CUSTOM_VIEW_BY_ID, workFetchJobCustomViewById);
   yield takeEvery(EDIT_JOB_CUSTOM_VIEW_BY_ID, workEditJobCustomViewById);
+  yield takeEvery(UNSELECT_JOB_CUSTOM_VIEW, workUnselectJobCustomView);
 }

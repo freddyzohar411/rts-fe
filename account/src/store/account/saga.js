@@ -17,6 +17,7 @@ import {
   DELETE_ACCOUNTS,
   FETCH_ACCOUNT_CUSTOM_VIEW_BY_ID,
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
+  UNSELECT_ACCOUNT_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
   fetchAccountSuccess,
@@ -50,6 +51,8 @@ import {
   fetchAccountCustomViewByIdSuccess,
   editAccountCustomViewByIdSuccess,
   editAccountCustomViewByIdFailure,
+  unselectAccountCustomViewFailure,
+  unselectAccountCustomViewSuccess,
 } from "./action";
 import {
   getAccounts,
@@ -67,6 +70,7 @@ import {
   deleteAccounts,
   getAccountCustomViewById,
   editAccountCustomViewById,
+  unselectAllCustomView
 } from "../../helpers/backend_helper";
 import {
   setAccountId,
@@ -310,6 +314,18 @@ function* workEditAccountCustomViewById(action) {
   }
 }
 
+// Unselect All Account Custom View
+function* workUnselectAccountCustomView() {
+  try {
+    yield call(unselectAllCustomView);
+    yield put(unselectAccountCustomViewSuccess());
+    toast.success("Account default custom view  selected");
+  } catch (error) {
+    yield put(unselectAccountCustomViewFailure(error));
+    toast.error("Error unselecting account custom view!");
+  }
+}
+
 export default function* watchFetchAccountSaga() {
   yield takeEvery(POST_ACCOUNT, workPostAccount);
   yield takeEvery(PUT_ACCOUNT, workPutAccount);
@@ -332,4 +348,5 @@ export default function* watchFetchAccountSaga() {
     EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID,
     workEditAccountCustomViewById
   );
+  yield takeEvery(UNSELECT_ACCOUNT_CUSTOM_VIEW, workUnselectAccountCustomView);
 }

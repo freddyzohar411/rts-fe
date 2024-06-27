@@ -26,6 +26,7 @@ import {
   selectJobCustomView,
   deleteJobCustomView,
   resetJobCustomView,
+  unselectJobCustomView,
 } from "../../store/job/action";
 import { deleteJobs, deleteJobsReset } from "../../store/jobList/action";
 import { DeleteCustomModal } from "@workspace/common";
@@ -81,6 +82,7 @@ const DynamicTableWrapper = ({
   const [nestedVisible, setNestedVisible] = useState([true]);
   const [customViewDropdownOpen, setCustomViewDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [defaultViewEnabled, setDefaultViewEnabled] = useState(false);
 
   const dispatch = useDispatch();
   const recruiterGroup = useSelector(
@@ -139,10 +141,10 @@ const DynamicTableWrapper = ({
           setCustomConfigData(selectedObjects);
         }
         pageRequestSet.setFilterData(selectedCustomView?.filters);
+        setDefaultViewEnabled(false);
+      } else if (!selectedCustomView) {
+        enableDefaultView();
       }
-      //  else {
-      //   enableDefaultView();
-      // }
     }
     if (allJobCustomViews != null && allJobCustomViews.length === 0) {
       enableDefaultView();
@@ -152,6 +154,7 @@ const DynamicTableWrapper = ({
   const enableDefaultView = () => {
     setCustomConfigData(JOB_INITIAL_OPTIONS);
     pageRequestSet.setFilterData(null);
+    setDefaultViewEnabled(true);
   };
 
   const handleDeleteButtonClick = (id) => {
@@ -241,6 +244,10 @@ const DynamicTableWrapper = ({
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleDefaultViewSelection = () => {
+    dispatch(unselectJobCustomView());
   };
 
   return (
@@ -475,8 +482,19 @@ const DynamicTableWrapper = ({
                               <Link to="/jobs/custom-view">
                                 <DropdownItem>Create Custom View</DropdownItem>
                               </Link>
-                              <DropdownItem onClick={() => enableDefaultView()}>
-                                Enable Default View
+                              <DropdownItem
+                                onClick={handleDefaultViewSelection}
+                              >
+                                <div className="d-flex flex-row align-items-center justify-content-between">
+                                  <span className="me-2">
+                                    Enable Default View
+                                  </span>
+                                  {defaultViewEnabled && (
+                                    <span>
+                                      <i className="ri-check-fill"></i>
+                                    </span>
+                                  )}
+                                </div>
                               </DropdownItem>
                               <DropdownItem divider />
                               <DropdownItem header>

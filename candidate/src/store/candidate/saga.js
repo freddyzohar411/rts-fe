@@ -29,6 +29,9 @@ import {
   DELETE_CANDIDATES,
   FETCH_CANDIDATE_CUSTOM_VIEW_BY_ID,
   EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
+  FETCH_CANDIDATE_STATIC_REPORT_COUNT,
+  FETCH_CANDIDATE_STATIC_REPORT_LISTING,
+  UNSELECT_CANDIDATE_CUSTOM_VIEW,
 } from "./actionTypes";
 import {
   fetchCandidateSuccess,
@@ -76,6 +79,14 @@ import {
   fetchCandidateCustomViewByIdSuccess,
   editCandidateCustomViewByIdSuccess,
   editCandidateCustomViewByIdFailure,
+  fetchCandidateStaticReportCount,
+  fetchCandidateStaticReportListing,
+  fetchCandidateStaticReportCountSuccess,
+  fetchCandidateStaticReportCountFailure,
+  fetchCandidateStaticReportListingFailure,
+  fetchCandidateStaticReportListingSuccess,
+  unselectCandidateCustomViewFailure,
+  unselectCandidateCustomViewSuccess,
 } from "./action";
 import {
   getCandidates,
@@ -97,6 +108,9 @@ import {
   deleteCandidates,
   getCandidateCustomViewById,
   editCandidateCustomViewById,
+  getCandidateStaticReportCount,
+  getCandidateStaticReportListing,
+  unSelectAllCandidateCustomView
 } from "../../helpers/backend_helper";
 import {
   setCandidateId,
@@ -642,6 +656,39 @@ function* workEditCandidateCustomViewById(action) {
   }
 }
 
+function* workFetchCandidateStaticReportCount(action) {
+  try {
+    const response = yield call(getCandidateStaticReportCount, action.payload);
+    yield put(fetchCandidateStaticReportCountSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCandidateStaticReportCountFailure(error));
+  }
+}
+
+function* workFetchCandidateStaticReportListing(action) {
+  try {
+    const response = yield call(
+      getCandidateStaticReportListing,
+      action.payload
+    );
+    yield put(fetchCandidateStaticReportListingSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCandidateStaticReportListingFailure(error));
+  }
+}
+
+// Unselect Custom View
+function* workUnselectCandidateCustomView() {
+  try {
+    yield call(unSelectAllCandidateCustomView);
+    yield put(unselectCandidateCustomViewSuccess());
+    toast.success("Candidate default custom view selected");
+  } catch (error) {
+    yield put(unselectCandidateCustomViewFailure(error));
+    toast.error("Error unselecting candidate custom view!");
+  }
+}
+
 export default function* watchFetchCandidateSaga() {
   yield takeEvery(POST_CANDIDATE, workPostCandidate);
   yield takeEvery(PUT_CANDIDATE, workPutCandidate);
@@ -671,5 +718,17 @@ export default function* watchFetchCandidateSaga() {
   yield takeEvery(
     EDIT_CANDIDATE_CUSTOM_VIEW_BY_ID,
     workEditCandidateCustomViewById
+  );
+  yield takeEvery(
+    FETCH_CANDIDATE_STATIC_REPORT_COUNT,
+    workFetchCandidateStaticReportCount
+  );
+  yield takeEvery(
+    FETCH_CANDIDATE_STATIC_REPORT_LISTING,
+    workFetchCandidateStaticReportListing
+  );
+  yield takeEvery(
+    UNSELECT_CANDIDATE_CUSTOM_VIEW,
+    workUnselectCandidateCustomView
   );
 }

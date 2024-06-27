@@ -376,7 +376,7 @@ const JobListing = () => {
                   </DropdownItem>
                 )}
                 {/* Clone Button */}
-                {checkAnyRole([Role.ADMIN]) && (
+                {checkAnyRole([Role.ADMIN, Role.SUPER_ADMIN]) && (
                   <DropdownItem>
                     <span onClick={() => handleCloneJob(data)}>
                       <div className="d-flex  align-items-center gap-2">

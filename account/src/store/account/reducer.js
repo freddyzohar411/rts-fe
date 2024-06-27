@@ -53,6 +53,9 @@ import {
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_SUCCESS,
   EDIT_ACCOUNT_CUSTOM_VIEW_BY_ID_FAILURE,
   RESET_ACCOUNTS,
+  UNSELECT_ACCOUNT_CUSTOM_VIEW,
+  UNSELECT_ACCOUNT_CUSTOM_VIEW_SUCCESS,
+  UNSELECT_ACCOUNT_CUSTOM_VIEW_FAILURE
 } from "./actionTypes";
 
 import {
@@ -424,6 +427,31 @@ const AccountReducer = (state = initialState, action) => {
         ...state,
         accounts: [],
         accountsMeta: {},
+      };
+    case UNSELECT_ACCOUNT_CUSTOM_VIEW:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case UNSELECT_ACCOUNT_CUSTOM_VIEW_SUCCESS:
+      const newAccountCustomViews = state.accountCustomViews.map((view) => {
+        if (view?.selected === true) {
+          view.selected = false;
+        }
+        return view;
+      });
+      return {
+        ...state,
+        loading: false,
+        accountCustomViews: newAccountCustomViews,
+      };
+    case UNSELECT_ACCOUNT_CUSTOM_VIEW_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMsg: action.payload,
       };
     default:
       return state;

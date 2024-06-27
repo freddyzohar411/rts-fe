@@ -556,6 +556,7 @@ const EditorElement2 = ({
   function cleanUpContent(content) {
     // Replace invisible space characters with a regular space
     return content.replace(/[\u00A0\u200B\u200C\u200D\u202F\uFEFF]/g, " ");
+    return content
   }
 
   return (

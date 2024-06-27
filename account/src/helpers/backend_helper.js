@@ -114,3 +114,7 @@ export const editAccountCustomViewById = (id, data) =>
     `${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/customView/edit/${id}`,
     data
   );
+
+// Unselect all custom view
+export const unselectAllCustomView = () =>
+  api.put(`${ACCOUNT_URL}${BASE_ACCOUNT_CUSTOM_VIEW}/customView/unselect-all`);
