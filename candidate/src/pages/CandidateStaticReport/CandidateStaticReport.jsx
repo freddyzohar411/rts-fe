@@ -68,65 +68,83 @@ function CandidateStaticReport() {
       },
       {
         header: "Job Title",
-        name: "jobTitle",
+        name: "job.jobSubmissionData.jobTitle",
         sort: true,
-        sortValue: "candidate.candidate_submission_data.firstName",
+        sortValue: "job.title",
         expand: true,
         render: (data) => (
           <div>
-            <Link
-              className="text-decoration-underline"
-              to={`/jobs/${data?.job?.id}/snapshot`}
+            <a
+              className="text-decoration-underline cursor-pointer"
+              onClick={() => {
+                const win = window.open(
+                  `/jobs/${data?.job?.id}/snapshot`,
+                  "_blank"
+                );
+                win.focus();
+              }}
               style={{ color: "#0a56ae" }}
             >
               {data?.job?.jobSubmissionData?.jobTitle}
-            </Link>
+            </a>
           </div>
         ),
       },
       {
         header: "Pulse Job ID",
-        name: "candidateName",
+        name: "job.jobSubmissionData.jobId",
         sort: true,
-        sortValue: "jobs.job_submission_data.jobId",
+        sortValue: "job.job_submission_data.jobId",
         expand: true,
         render: (data) => (
           <div>
-            <Link
-              className="text-decoration-underline"
-              to={`/jobs/${data?.job?.id}/snapshot`}
+            <a
+              className="text-decoration-underline cursor-pointer"
+              onClick={() => {
+                const win = window.open(
+                  `/jobs/${data?.job?.id}/snapshot`,
+                  "_blank"
+                );
+                win.focus();
+              }}
               style={{ color: "#0a56ae" }}
             >
               {data?.job?.jobSubmissionData?.jobId
                 ? data?.job?.jobSubmissionData?.jobId
                 : "-"}
-            </Link>
+            </a>
           </div>
         ),
       },
       ...customConfig,
       {
         header: "Candidate Name",
-        name: "candidateName",
+        name: "candidate.candidateSubmissionData.firstName",
         sort: true,
         sortValue: "candidate.candidate_submission_data.firstName",
         expand: true,
         render: (data) => (
           <div>
-            <Link
-              className="text-decoration-underline"
-              to={`/candidates/${data?.candidate?.id}/snapshot`}
+            <a
+              className="text-decoration-underline cursor-pointer"
+              onClick={() => {
+                const win = window.open(
+                  `/candidates/${data?.candidate?.id}/snapshot`,
+                  "_blank"
+                );
+                win.focus();
+              }}
               style={{ color: "#0a56ae" }}
             >
               {data?.candidate?.candidateSubmissionData?.firstName}{" "}
               {data?.candidate?.candidateSubmissionData?.lastName}
-            </Link>
+            </a>
           </div>
         ),
       },
       {
         header: "Current Candidate Status",
-        name: "data.subStepName",
+        name: "subStepName",
         sort: true,
         sortValue: "sub_step_name",
         expand: true,

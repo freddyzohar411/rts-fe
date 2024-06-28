@@ -199,7 +199,7 @@ const JobDocument = ({ jobId, view }) => {
     }
   };
 
-  document.title = "Job Creation | RTS";
+  document.title = "Job | RTS";
 
   return (
     <Form
