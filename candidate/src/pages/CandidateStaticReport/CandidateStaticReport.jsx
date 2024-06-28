@@ -6,8 +6,6 @@ import {
   CANDIDATE_STATIC_MANDATORY_OPTIONS,
 } from "./CandidateStaticConstants";
 import "./CandidateStaticReport.scss";
-import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
-import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 import { useSelector, useDispatch } from "react-redux";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import {
@@ -157,6 +155,9 @@ function CandidateStaticReport() {
         break;
       case "Rejected":
         jobCount = candidateStaticReportCount.rejectedCount ?? 0;
+        break;
+      case "No Submission":
+        jobCount = candidateStaticReportCount.noSubmissionsCount ?? 0;
         break;
       default:
         jobCount = 0;
