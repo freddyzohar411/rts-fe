@@ -16,7 +16,7 @@ import {
 import DynamicTableWrapper from "./DynamicTableWrapper";
 
 function CandidateStaticReport() {
-  document.title = "Candidate Static Report | RTS";
+  document.title = "Overview Static Report | RTS";
 
   const dispatch = useDispatch();
   const candidateStaticReportCount = useSelector(

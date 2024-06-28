@@ -231,12 +231,6 @@ const Navdata = () => {
       },
       stateVariables: isCandidates,
       subItems: [
-        checkAllPermission([...Permission.SETTING_ALL]) && {
-          id: "candidatesReport",
-          label: "Overview Report",
-          link: "/candidates/job-report",
-          parentId: "candidates",
-        },
         checkAllPermission([Permission.CANDIDATE_READ]) && {
           id: "allCandidates",
           label: "All Candidates",
@@ -252,34 +246,6 @@ const Navdata = () => {
       ].filter(Boolean),
     },
 
-    // Reports
-    // {
-    //   id: "reports",
-    //   label: "Reports",
-    //   icon: "ri-bar-chart-grouped-fill",
-    //   link: "/#",
-    //   click: function (e) {
-    //     e.preventDefault();
-    //     setIsReports(!isReports);
-    //     setIscurrentState("Reports");
-    //     updateIconSidebar(e);
-    //   },
-    //   stateVariables: isReports,
-    //   subItems: [
-    //     {
-    //       id: "allReports",
-    //       label: "All Reports",
-    //       link: "/reports",
-    //       parentId: "reports",
-    //     },
-    //     {
-    //       id: "newReport",
-    //       label: "Create New Report",
-    //       link: "/report/report-creation",
-    //       parentId: "reports",
-    //     },
-    //   ],
-    // },
 
     // Settings
     checkAllPermission([...Permission.SETTING_ALL]) && {
@@ -321,7 +287,32 @@ const Navdata = () => {
         // },
       ].filter(Boolean),
     },
-  ].filter(Boolean);
+
+    
+    // Reports
+    checkAllPermission([...Permission.SETTING_ALL]) && {
+      id: "reports",
+      label: "Reports",
+      icon: "ri-bar-chart-grouped-fill",
+      link: "/#",
+      click: function (e) {
+        e.preventDefault();
+        setIsReports(!isReports);
+        setIscurrentState("Reports");
+        updateIconSidebar(e);
+      },
+      stateVariables: isReports,
+      subItems: [
+        {
+          id: "overviewReports",
+          label: "Overview Report",
+          link: "/reports/job-report",
+          parentId: "reports",
+        },
+      ],
+    },
+  ].filter(Boolean)
+  
   return <React.Fragment>{menuItems}</React.Fragment>;
 };
 export default Navdata;
