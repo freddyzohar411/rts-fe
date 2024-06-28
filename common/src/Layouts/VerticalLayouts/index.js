@@ -204,23 +204,49 @@ const VerticalLayout = (props) => {
                         <React.Fragment key={key}>
                           {!subItem.isChildItem ? (
                             <li className="nav-item">
-                              <Link
-                                to={subItem.link ? subItem.link : "/#"}
-                                className="nav-link"
-                              >
-                                {props.t(subItem.label)}
-                                {subItem.badgeName ? (
-                                  <span
-                                    className={
-                                      "badge badge-pill bg-" +
-                                      subItem.badgeColor
-                                    }
-                                    data-key="t-new"
-                                  >
-                                    {subItem.badgeName}
-                                  </span>
-                                ) : null}
-                              </Link>
+                              {props.t(subItem.label) === "Overview Report" ? (
+                                <a
+                                  className="nav-link cursor-pointer"
+                                  onClick={() => {
+                                    const win = window.open(
+                                      `/reports/job-report`,
+                                      "_blank"
+                                    );
+                                    win.focus();
+                                  }}
+                                >
+                                  {props.t(subItem.label)}
+                                  {subItem.badgeName ? (
+                                    <span
+                                      className={
+                                        "badge badge-pill bg-" +
+                                        subItem.badgeColor
+                                      }
+                                      data-key="t-new"
+                                    >
+                                      {subItem.badgeName}
+                                    </span>
+                                  ) : null}
+                                </a>
+                              ) : (
+                                <Link
+                                  to={subItem.link ? subItem.link : "/#"}
+                                  className="nav-link"
+                                >
+                                  {props.t(subItem.label)}
+                                  {subItem.badgeName ? (
+                                    <span
+                                      className={
+                                        "badge badge-pill bg-" +
+                                        subItem.badgeColor
+                                      }
+                                      data-key="t-new"
+                                    >
+                                      {subItem.badgeName}
+                                    </span>
+                                  ) : null}
+                                </Link>
+                              )}
                             </li>
                           ) : (
                             <li className="nav-item">
@@ -230,6 +256,7 @@ const VerticalLayout = (props) => {
                                 to="/#"
                                 data-bs-toggle="collapse"
                               >
+                                {" "}
                                 {props.t(subItem.label)}
                                 {subItem.badgeName ? (
                                   <span
