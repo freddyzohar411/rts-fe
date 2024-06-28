@@ -63,6 +63,7 @@ function DynamicTableWrapper(
                       </TooltipWrapper>
                       <TooltipWrapper tooltipText="Filter">
                         <Button
+                          hidden={true}
                           className="bg-white main-border-style"
                           onClick={() => setIsFilterOpen(!isFilterOpen)}
                         >
