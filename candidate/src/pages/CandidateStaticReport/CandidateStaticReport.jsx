@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Row, Col, Badge } from "reactstrap";
+import { Link } from "react-router-dom";
 import {
   staticColumns,
   CANDIDATE_STATIC_INITIAL_OPTIONS,
@@ -55,6 +56,54 @@ function CandidateStaticReport() {
   // User Setup
   const generateCandidateStaticReportConfig = (customConfig) => {
     return [
+      {
+        header: "Client Name",
+        name: "clientName",
+        sort: true,
+        sortValue: "job.job_submission_data.accountName",
+        expand: true,
+        render: (data) => (
+          <div>{data?.job?.jobSubmissionData?.accountName}</div>
+        ),
+      },
+      {
+        header: "Job Title",
+        name: "jobTitle",
+        sort: true,
+        sortValue: "candidate.candidate_submission_data.firstName",
+        expand: true,
+        render: (data) => (
+          <div>
+            <Link
+              className="text-decoration-underline"
+              to={`/jobs/${data?.job?.id}/snapshot`}
+              style={{ color: "#0a56ae" }}
+            >
+              {data?.job?.jobSubmissionData?.jobTitle}
+            </Link>
+          </div>
+        ),
+      },
+      {
+        header: "Pulse Job ID",
+        name: "candidateName",
+        sort: true,
+        sortValue: "jobs.job_submission_data.jobId",
+        expand: true,
+        render: (data) => (
+          <div>
+            <Link
+              className="text-decoration-underline"
+              to={`/jobs/${data?.job?.id}/snapshot`}
+              style={{ color: "#0a56ae" }}
+            >
+              {data?.job?.jobSubmissionData?.jobId
+                ? data?.job?.jobSubmissionData?.jobId
+                : "-"}
+            </Link>
+          </div>
+        ),
+      },
       ...customConfig,
       {
         header: "Candidate Name",
@@ -64,20 +113,26 @@ function CandidateStaticReport() {
         expand: true,
         render: (data) => (
           <div>
-            {data?.candidate?.candidateSubmissionData?.firstName}{" "}
-            {data?.candidate?.candidateSubmissionData?.lastName}
+            <Link
+              className="text-decoration-underline"
+              to={`/candidates/${data?.candidate?.id}/snapshot`}
+              style={{ color: "#0a56ae" }}
+            >
+              {data?.candidate?.candidateSubmissionData?.firstName}{" "}
+              {data?.candidate?.candidateSubmissionData?.lastName}
+            </Link>
           </div>
         ),
       },
       {
         header: "Current Candidate Status",
         name: "data.subStepName",
-        sort: false,
-        sortValue: "subStepName",
+        sort: true,
+        sortValue: "sub_step_name",
         expand: true,
         render: (data) => (
           <Badge color={getBadgeColour(data?.subStepName)}>
-            {data?.subStepName}
+            {data?.subStepName ? data?.subStepName : "N/A"}
           </Badge>
         ),
       },

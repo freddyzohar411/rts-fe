@@ -13,27 +13,6 @@ export const staticColumns = [
 
 export const CANDIDATE_STATIC_INITIAL_OPTIONS = [
   {
-    sortValue: "job.job_submission_data.accountName",
-    label: "Client Name",
-    value: "job.jobSubmissionData.accountName",
-    sort: true,
-    expand: true,
-  },
-  {
-    sortValue: "job.job_submission_data.jobTitle",
-    label: "Job Title",
-    value: "job.jobSubmissionData.jobTitle",
-    sort: true,
-    expand: true,
-  },
-  {
-    sortValue: "job.job_submission_data.jobId",
-    label: "Pulse Job ID",
-    value: "job.jobSubmissionData.jobId",
-    sort: true,
-    expand: true,
-  },
-  {
     sortValue: "job.job_submission_data.accountOwner",
     label: "Sales Person",
     value: "job.jobSubmissionData.accountOwner",
