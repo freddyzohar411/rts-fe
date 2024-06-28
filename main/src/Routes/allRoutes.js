@@ -111,7 +111,7 @@ const authProtectedRoutes = [
   },
   { path: "/candidates/custom-view", component: <CandidateCustomView /> },
   { path: "/candidates/custom-view/:id", component: <CandidateCustomView /> },
-  { path: "/candidates/job-report", component: <CandidateStaticReport /> },
+  { path: "/reports/job-report", component: <CandidateStaticReport /> },
 
   // Account
   {
