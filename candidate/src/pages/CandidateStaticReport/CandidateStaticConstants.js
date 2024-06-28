@@ -41,8 +41,7 @@ export const CANDIDATE_STATIC_INITIAL_OPTIONS = [
     expand: true,
   },
   {
-    // sortValue: "createdByName",
-    sortValue: "users.firstName",
+    sortValue: "users.first_name",
     label: "Recruiter",
     value: "createdByName",
     sort: true,

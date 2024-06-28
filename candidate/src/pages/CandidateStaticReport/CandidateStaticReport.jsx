@@ -6,8 +6,6 @@ import {
   CANDIDATE_STATIC_MANDATORY_OPTIONS,
 } from "./CandidateStaticConstants";
 import "./CandidateStaticReport.scss";
-import TableRowsPerPageWithNav from "@workspace/common/src/Components/DynamicTable/TableRowsPerPageWithNav";
-import TableItemDisplay from "@workspace/common/src/Components/DynamicTable/TableItemDisplay";
 import { useSelector, useDispatch } from "react-redux";
 import { DynamicTableHelper, useTableHook } from "@workspace/common";
 import {
