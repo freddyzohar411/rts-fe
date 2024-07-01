@@ -180,7 +180,7 @@ const JobCreation = () => {
     }
   };
 
-  document.title = "Job Creation | RTS";
+  document.title = "Job | RTS";
 
   return (
     <div>
